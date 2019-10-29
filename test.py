@@ -31,35 +31,6 @@ def setSetting(code: str, value: str):
 #newvalues = { "$set": { "value": {'from_date': datetime.datetime(2019, 10, 27).timestamp(), 'to_date': None}} } 
 #u = settings.update_one(myquery, newvalues)
 
-setting = getSetting('REPORT_KILLERS')
-from_date = setting.get('from_date')
-to_date = setting.get('to_date')
-
-#if (not from_date):
-from_date = (datetime.datetime(2019, 1, 1) + datetime.timedelta(minutes=180)).timestamp() 
-
-if (not to_date):
-    to_date = (datetime.datetime.now() + datetime.timedelta(minutes=180)).timestamp()
-
-print(from_date)
-print(to_date)
-
-# registered_users.insert_one({'accuracy': '120', 'agility': '475', 'armor': '270', 'band': 'Артхаус', 'charisma': '151', 'damage': '1014', 'dzen': 0, 'force': '670', 'fraction': '⚙️Убежище 4', 'health': '675', 'hunger': '13', 'loacation': '👣0км.', 'login': 'XyTop_2', 'name': 'Arkа', 'stamina': '18', 'timeBan': None, 'timeUpdate': 1571635229, 'status': None})
-
-for x in battle.find({
-                                    "$and" : [
-                                        { 
-                                            "date": {
-                                                '$gte': from_date,
-                                                '$lt': to_date
-                                                    }       
-                                        },
-                                        {
-                                            "band": 'Артхаус'   
-                                        }]
-                                }):                                                 
-    print(x)
-
 # competition.remove()
 # competition.insert_one({'login': 'GonzikBenzyavsky', 'chat': 497065022, 'date': 1571401667.250403, 'state': 'READY', 'name': 'Кирилл', 'health': '665', 'damage': '995', 'armor': '227', 'accuracy': '120', 'agility': '452', 'charisma': '151', 'bm': 2383, 'strategy': ['⚔ Нападение', '😎 Провокация', '🛡 Защита'], 'band':'🎩 Городские'})
 # competition.insert_one({'login': 'GonzikBenzyavsky1', 'chat': 497065022, 'date': 1571401667.250403, 'state': 'READY', 'name': 'Сергей', 'health': '665', 'damage': '1000', 'armor': '150', 'accuracy': '120', 'agility': '452', 'charisma': '151', 'bm': 2383, 'strategy': ['⚔ Нападение', '😎 Провокация', '🛡 Защита'], 'band':'🎩 Городские'})
