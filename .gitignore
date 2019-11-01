@@ -3775,3 +3775,17 @@ venv/Scripts/chardetect.exe
 venv/Scripts/f2py.exe
 test.py
 
+backups/first_backup/jugidb/battle.bson
+backups/first_backup/jugidb/battle.metadata.json
+backups/first_backup/jugidb/competition.bson
+backups/first_backup/jugidb/competition.metadata.json
+backups/first_backup/jugidb/settings.bson
+backups/first_backup/jugidb/settings.metadata.json
+backups/first_backup/jugidb/try_counter.bson
+backups/first_backup/jugidb/try_counter.metadata.json
+backups/first_backup/jugidb/users.bson
+backups/first_backup/jugidb/users.metadata.json
+backups/first_backup/jugidb/wariors.bson
+backups/first_backup/jugidb/wariors.metadata.json
+ssl/ssl-bundle.crt
+ssl/thegangsters.key
