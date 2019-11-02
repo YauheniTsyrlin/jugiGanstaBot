@@ -1210,10 +1210,8 @@ def main_loop():
                 call('mv /home/godfather/foo/*.py /home/godfather/jugiGanstaBot', shell=True)
                 logger.info('remove /foo')
                 call('rm -rf /home/godfather/foo', shell=True)
-                logger.info('stopping bot')
-                call('sudo systemctl stop bot', shell=True)
-                logger.info('starting bot')
-                call('sudo systemctl start bot', shell=True)
+                logger.info('restar bot')
+                call('sudo systemctl restart bot', shell=True)
                 logger.info('OK')
                 return web.Response()
             else:
