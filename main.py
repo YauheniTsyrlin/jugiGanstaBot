@@ -1201,11 +1201,15 @@ def main_loop():
 
         async def commit(request):
             logger.info('getCommit')
+            if request.match_info.get('token') == bot.token:
+                request_body_dict = await request.json()
+                logger.info('doCommit: ' + request_body_dict['repository']['full_name'])
+                return web.Response()
+            else:
+                return web.Response(status=403)
 
-        app.router.add_post('/commit/', commit)
+        app.router.add_route('*', '/{token}/commit', commit, name='commit')
         app.router.add_post('/{token}/', handle)
-        
-
         
         # Remove webhook, it fails sometimes the set if there is a previous webhook
         bot.remove_webhook()
