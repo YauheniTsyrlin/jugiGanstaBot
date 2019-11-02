@@ -711,7 +711,7 @@ def main_message(message):
 
     if (isOurBandUserLogin(message.from_user.username)):
         userIAm = getUserByLogin(message.from_user.username)
-
+        #write_json(message.json)
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
         if not privateChat:
             markup.add('Джу, 📋 Отчет')
@@ -830,6 +830,17 @@ def main_message(message):
                             else:
                                 bot.reply_to(message, text='У тебя пустой статус... Чё надо?... \nСпроси - "Джу, как установить статус?', reply_markup=markup)
                             break
+                    elif 'capture' == response.split(':')[1]:
+                            # jugi:capture:$bands:$Dangeon:$time
+                            report = f'<b>Захват!</b> {response.split(":")[4]} {response.split(":")[3]}'
+                            for registered_user in registered_users.find({"band": f"{response.split(':')[2]}"}):
+                                user = users.importUser(registered_user)
+                                report = report + f'\n@{user.getLogin()}'
+                            report = report + '\n\nНе опаздываем!' 
+                            msg = send_messages_big(message.chat.id, text=report, reply_markup=markup)
+                            if not privateChat:
+                                bot.pin_chat_message(message.chat.id, msg.message_id)
+
                     elif 'sticker' == response.split(':')[1]:
                         #jugi:sticker:CAADAgADawgAAm4y2AABx_tlRP2FVS8WBA:Ми-ми-ми
                         photo = response.split(':')[2]
@@ -954,7 +965,7 @@ def main_message(message):
                         report = report + f'\n' 
                         report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
                         
-                        send_messages_big(message.chat.id, text=report, reply_markup=markup )
+                        send_messages_big(message.chat.id, text=report, reply_markup=markup)
                         #bot.reply_to(message, text=report, reply_markup=markup)
                 else:
                     bot.reply_to(message, text=response, reply_markup=markup)
@@ -1173,14 +1184,16 @@ def fight_job():
 def send_messages_big(chat_id: str, text: str, reply_markup=None):
     strings = text.split('\n')
     tmp = ''
+    msg = None
     for s in strings:
         if len(tmp + s) < 4000:
             tmp = tmp + s+'\n'
         else: 
-            bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
+            msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
             tmp = s + '\n'
 
-    bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
+    msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
+    return msg
 
 def main_loop():
     if (config.POLLING):

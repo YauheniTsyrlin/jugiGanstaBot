@@ -3793,3 +3793,4 @@ config.py
 __pycache__/config.cpython-37.pyc
 __pycache__/users.cpython-37.pyc
 __pycache__/wariors.cpython-37.pyc
+pips.json
