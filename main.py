@@ -838,7 +838,7 @@ def main_message(message):
                         bot.send_sticker(message.chat.id, photo)   
                     elif 'rating' == response.split(':')[1]:
                         report = ''
-                        report = report + f'🏆ТОП 5 УБИЙЦ 🤟*{userIAm.getBand()}*\n'
+                        report = report + f'🏆ТОП 5 УБИЙЦ 🤟<b>{userIAm.getBand()}</b>\n'
                         report = report + '\n'
                         setting = getSetting('REPORT_KILLERS')
                         from_date = setting.get('from_date')
@@ -889,7 +889,7 @@ def main_message(message):
                                 emoji = ''
                             
                             if user_name == message.from_user.first_name:
-                                user_name = f'*{user_name}*'
+                                user_name = f'<b>{user_name}</b>'
                                 findInWinner = i
 
                             if i <= 5: report = report + f'{i}. {emoji}{user_name}: {d.get("count")}\n' 
@@ -926,7 +926,6 @@ def main_message(message):
 
                         findInLoser = 0
                         i = 0
-                        print(1)
                         for d in dresult:
                             user_name = d.get("_id")  
                             if not isOurUserName(user_name): continue
@@ -942,7 +941,7 @@ def main_message(message):
                                 emoji = ''
 
                             if user_name == message.from_user.first_name:
-                                user_name = f'*{user_name}*'
+                                user_name = f'<b>{user_name}</b>'
                                 findInLoser = i
 
                             if i <= 5: report = report + f'{i}. {emoji}{user_name}: {d.get("count")}\n' 
@@ -996,7 +995,7 @@ def fight():
     first = band1
     second = band2
 
-    bot.send_message(fighter.get('chat'), text=f'Банда *{band1[0].get("band")}* воспользовалась неожиданностью и напала первой!', parse_mode='markdown')
+    bot.send_message(fighter.get('chat'), text=f'Банда <b>{band1[0].get("band")}</b> воспользовалась неожиданностью и напала первой!', parse_mode='HTML')
 
     killed = []
     j = 0
@@ -1014,8 +1013,8 @@ def fight():
         health2 = float(f2.get('health').split(' ')[0])
 
         doBreak = False
-        vs_log = '*⚔ ХОД БИТВЫ:*\n\n'
-        vs_log = f'❤{f1.get("health")} *{f1.get("band")[0:1]} {f1.get("name")}*\nvs\n❤{f2.get("health")} *{f2.get("band")[0:1]} {f2.get("name")}*\n\n'
+        vs_log = '<b>⚔ ХОД БИТВЫ:</b>\n\n'
+        vs_log = f'❤{f1.get("health")} <b>{f1.get("band")[0:1]} {f1.get("name")}</b>\nvs\n❤{f2.get("health")} <b>{f2.get("band")[0:1]} {f2.get("name")}</b>\n\n'
         damage = 0
 
         for i in range(0, 3):
@@ -1091,7 +1090,7 @@ def fight():
                 damage = dmg1-dmg2
                 health2 = health2 - damage
                 f2.update({'health': str(int(health2))})
-                vs_log = vs_log + f'{fight_str} ❤{f2.get("health")} 💥{str(int(damage))} *{f1.get("band")[0:1]} {f1.get("name")}* {getResponseDialogFlow("you_win")}\n'
+                vs_log = vs_log + f'{fight_str} ❤{f2.get("health")} 💥{str(int(damage))} <b>{f1.get("band")[0:1]} {f1.get("name")}</b> {getResponseDialogFlow("you_win")}\n'
                 if int(f2.get("health")) <= 0:
                     killed.append(f2)
                     second.remove(f2)
@@ -1104,7 +1103,7 @@ def fight():
                 damage = dmg2-dmg1
                 health1 = health1 - damage
                 f1.update({'health': str(int(health1))})
-                vs_log = vs_log + f'{fight_str} ❤{f1.get("health")} 💥{str(int(damage))} *{f2.get("band")[0:1]} {f2.get("name")}* {getResponseDialogFlow("you_win")}\n'
+                vs_log = vs_log + f'{fight_str} ❤{f1.get("health")} 💥{str(int(damage))} <b>{f2.get("band")[0:1]} {f2.get("name")}</b> {getResponseDialogFlow("you_win")}\n'
                 if int(f1.get("health")) <= 0:
                     killed.append(f1)
                     first.remove(f1)
@@ -1113,10 +1112,10 @@ def fight():
 
         if int(f1.get('health')) <= 0:
                 vs_log = vs_log + f'\n'
-                vs_log = vs_log + f'☠️ {f1.get("health")} *{f1.get("band")[0:1]} {f1.get("name")}* {getResponseDialogFlow("you_deadman")}\n'
+                vs_log = vs_log + f'☠️ {f1.get("health")} <b>{f1.get("band")[0:1]} {f1.get("name")}</b> {getResponseDialogFlow("you_deadman")}\n'
         elif int(f2.get('health')) <= 0:
                 vs_log = vs_log + f'\n'
-                vs_log = vs_log + f'☠️ {f2.get("health")} *{f2.get("band")[0:1]} {f2.get("name")}* {getResponseDialogFlow("you_deadman")}\n'
+                vs_log = vs_log + f'☠️ {f2.get("health")} <b>{f2.get("band")[0:1]} {f2.get("name")}</b> {getResponseDialogFlow("you_deadman")}\n'
         else:
                 vs_log = vs_log + f'\n'
                 vs_log = vs_log + f'{getResponseDialogFlow("draw_competition")}\n'
@@ -1125,7 +1124,7 @@ def fight():
         send_messages_big(chat_id = f2.get('chat'), text=vs_log)
         time.sleep(5)
 
-    fight_log = '*ИТОГИ БОЯ:*\n\n'
+    fight_log = '<b>ИТОГИ БОЯ:</b>\n\n'
  
     winners = []
     if len(first) == 0:
@@ -1134,11 +1133,11 @@ def fight():
         winners = first
     
     if (len(winners)>0):
-        fight_log = fight_log + f'Победила банда *{winners[0].get("band")}*\n'
+        fight_log = fight_log + f'Победила банда <b>{winners[0].get("band")}</b>\n'
         m = 0
         for winFigther in winners:
             m = m + 1
-            fight_log = fight_log + f'{m}. ❤{winFigther.get("health")} *{winFigther.get("band")[0:1]} {winFigther.get("name")}* \n'
+            fight_log = fight_log + f'{m}. ❤{winFigther.get("health")} <b>{winFigther.get("band")[0:1]} {winFigther.get("name")}</b> \n'
     else:
         fight_log = fight_log + f'ВСЕ УМЕРЛИ!\n'
 
@@ -1146,7 +1145,7 @@ def fight():
     z = 0
     for deadman in killed:
         z = z+1
-        fight_log = fight_log + f'{z}. ☠️{deadman.get("health")} *{deadman.get("band")[0:1]} {deadman.get("name")}* убит бойцом *{deadman.get("killedBy")}*\n'
+        fight_log = fight_log + f'{z}. ☠️{deadman.get("health")} <b>{deadman.get("band")[0:1]} {deadman.get("name")}</b> убит бойцом <b>{deadman.get("killedBy")}</b>\n'
 
     fight_log = fight_log + f'\n'
     fight_log = fight_log + '⏰ ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(datetime.datetime.now().timestamp())) +'\n'
@@ -1178,10 +1177,10 @@ def send_messages_big(chat_id: str, text: str, reply_markup=None):
         if len(tmp + s) < 4000:
             tmp = tmp + s+'\n'
         else: 
-            bot.send_message(chat_id, text=tmp, parse_mode='markdown', reply_markup=reply_markup)
+            bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
             tmp = s + '\n'
 
-    bot.send_message(chat_id, text=tmp, parse_mode='markdown', reply_markup=reply_markup)
+    bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
 
 def main_loop():
     if (config.POLLING):
