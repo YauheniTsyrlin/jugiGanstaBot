@@ -19,6 +19,7 @@ from datetime import timedelta
 
 import threading
 from multiprocessing import Process
+from subprocess import call
 
 import sys
 import apiai, json
@@ -1204,6 +1205,8 @@ def main_loop():
             if request.match_info.get('token') == bot.token:
                 request_body_dict = await request.json()
                 logger.info('doCommit: ' + request_body_dict['repository']['full_name'])
+                call('git clone https://github.com/gonzikbenzyavsky/jugiGanstaBot.git /home/godfather/foo; mv /home/godfather/foo/*.py /home/godfather/jugiGanstaBot; rm -rf /home/godfather/foo', shell=True)
+                call('sudo systemctl stop bot; sudo systemctl start bot', shell=True)
                 return web.Response()
             else:
                 return web.Response(status=403)
