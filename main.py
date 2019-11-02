@@ -646,7 +646,6 @@ def ring_message(message: Message):
 
     bot.send_message(message.chat.id, text=usersOnCompetition, reply_markup=getButtonsMenu(list_buttons) ) 
 
-
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
@@ -1199,7 +1198,15 @@ def main_loop():
                 return web.Response()
             else:
                 return web.Response(status=403)
+
+        async def commit(request):
+            logger.info('getCommit')
+
+        app.router.add_post('/commit/', commit)
         app.router.add_post('/{token}/', handle)
+        
+
+        
         # Remove webhook, it fails sometimes the set if there is a previous webhook
         bot.remove_webhook()
         # Set webhook
