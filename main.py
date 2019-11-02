@@ -1220,7 +1220,7 @@ def main_loop():
 if __name__ == '__main__': 
     try:
         proccess = Process(target=fight_job, args=())
-        proccess.start()
+        proccess.start() # Start new thread
 
         main_loop()
         
