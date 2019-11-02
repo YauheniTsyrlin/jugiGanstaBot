@@ -3789,3 +3789,4 @@ backups/first_backup/jugidb/wariors.bson
 backups/first_backup/jugidb/wariors.metadata.json
 ssl/ssl-bundle.crt
 ssl/thegangsters.key
+config.py
