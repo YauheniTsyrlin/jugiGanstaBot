@@ -1201,12 +1201,20 @@ def main_loop():
                 return web.Response(status=403)
 
         async def commit(request):
-            logger.info('getCommit')
+            logger.info('getCommit from webHook gitHub')
             if request.match_info.get('token') == bot.token:
                 request_body_dict = await request.json()
-                logger.info('doCommit: ' + request_body_dict['repository']['full_name'])
-                call('git clone https://github.com/gonzikbenzyavsky/jugiGanstaBot.git /home/godfather/foo; mv /home/godfather/foo/*.py /home/godfather/jugiGanstaBot; rm -rf /home/godfather/foo', shell=True)
-                call('sudo systemctl stop bot; sudo systemctl start bot', shell=True)
+                logger.info('clone to /foo repository : ' + request_body_dict['repository']['full_name'])
+                call('git clone https://github.com/gonzikbenzyavsky/jugiGanstaBot.git /home/godfather/foo', shell=True)
+                logger.info('moving *.py to jugiGanstaBot')
+                call('mv /home/godfather/foo/*.py /home/godfather/jugiGanstaBot', shell=True)
+                logger.info('remove /foo')
+                call('rm -rf /home/godfather/foo', shell=True)
+                logger.info('stopping bot')
+                call('sudo systemctl stop bot', shell=True)
+                logger.info('starting bot')
+                call('sudo systemctl start bot', shell=True)
+                logger.info('OK')
                 return web.Response()
             else:
                 return web.Response(status=403)
