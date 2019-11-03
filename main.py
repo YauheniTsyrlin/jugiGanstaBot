@@ -16,6 +16,7 @@ from telebot.types import Message
 import time
 import datetime
 from datetime import timedelta
+from dateutil.parser import parse
 
 import threading
 from multiprocessing import Process
@@ -650,13 +651,17 @@ def ring_message(message: Message):
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
-    #write_json(message.json)
+    write_json(message.json)
     privateChat = ('private' in message.chat.type)
-    callJugi = (privateChat or message.text.lower().startswith('джу'))
+    callJugi = (privateChat 
+                            or message.text.lower().startswith('джу') 
+                            or (message.reply_to_message 
+                                and message.reply_to_message.from_user.is_bot 
+                                and message.reply_to_message.from_user.username in ('FriendsBrotherBot', 'JugiGanstaBot') )
+                )
 
     findUser = isOurUserLogin(message.from_user.username)
     
-
     if not findUser:
         r = random.random()
         if (r <= float(getSetting('PROBABILITY_I_DONT_NOW'))):
@@ -831,12 +836,17 @@ def main_message(message):
                                 bot.reply_to(message, text='У тебя пустой статус... Чё надо?... \nСпроси - "Джу, как установить статус?', reply_markup=markup)
                             break
                     elif 'capture' == response.split(':')[1]:
+                            #   0    1        2       3     4
                             # jugi:capture:$bands:$Dangeon:$time
-                            report = f'<b>Захват!</b> {response.split(":")[4]} {response.split(":")[3]}'
-                            for registered_user in registered_users.find({"band": f"{response.split(':')[2]}"}):
+                            time_str = response.split(response.split(":")[3])[1][1:]
+                            dt = parse(time_str)
+                            time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
+
+                            report = f'<b>Захват!</b> {response.split(":")[2]} {time_str} <b>{response.split(":")[3]}</b>\n'
+                            for registered_user in registered_users.find({"band": f"{response.split(':')[2][1:]}"}):
                                 user = users.importUser(registered_user)
                                 report = report + f'\n@{user.getLogin()}'
-                            report = report + '\n\nНе опаздываем!' 
+                            report = report + '\n\n<b>Не опаздываем!</b>' 
                             msg = send_messages_big(message.chat.id, text=report, reply_markup=markup)
                             if not privateChat:
                                 bot.pin_chat_message(message.chat.id, msg.message_id)
