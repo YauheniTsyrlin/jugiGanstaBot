@@ -14,7 +14,7 @@ from telebot import types
 from telebot.types import Message
 
 import time
-import datetime
+from datetime import datetime
 from datetime import timedelta
 from dateutil.parser import parse
 
@@ -29,6 +29,7 @@ import requests
 import random
 
 import pymongo
+from bson.objectid import ObjectId
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["jugidb"]
@@ -37,7 +38,7 @@ registered_wariors = mydb["wariors"]
 battle      = mydb["battle"]
 competition = mydb["competition"]
 settings    = mydb["settings"]
-
+pending_messages = mydb["pending_messages"]
 
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
@@ -118,7 +119,6 @@ def getButtonsMenu(list_buttons):
         groups_names.append(types.KeyboardButton(f'{group}'))
     markup.add(*groups_names)
     return markup
-
 
 def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
     menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
@@ -550,7 +550,7 @@ def register_message(message: Message):
         u = getUserByLogin(message.from_user.username)
         competition.insert_one({'login': message.from_user.username, 
                                 'chat': message.chat.id,
-                                'date': datetime.datetime.now().timestamp(), 
+                                'date': datetime.now().timestamp(), 
                                 'state': 'WAIT',
                                 'name': u.getName(),
                                 'health': u.getHealth(),
@@ -644,7 +644,7 @@ def ring_message(message: Message):
         usersOnCompetition = usersOnCompetition + '\nНачать бой /fight\n' 
     
     usersOnCompetition = usersOnCompetition + '\n' 
-    usersOnCompetition = usersOnCompetition + '⏰ ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(datetime.datetime.now().timestamp())) +'\n'
+    usersOnCompetition = usersOnCompetition + '⏰ ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(datetime.now().timestamp())) +'\n'
 
     bot.send_message(message.chat.id, text=usersOnCompetition, reply_markup=getButtonsMenu(list_buttons) ) 
 
@@ -712,7 +712,6 @@ def main_message(message):
         for warior in ww:
             updateWarior(warior, message)
         return
-
 
     if (isOurBandUserLogin(message.from_user.username)):
         userIAm = getUserByLogin(message.from_user.username)
@@ -850,6 +849,31 @@ def main_message(message):
                             msg = send_messages_big(message.chat.id, text=report, reply_markup=markup)
                             if not privateChat:
                                 bot.pin_chat_message(message.chat.id, msg.message_id)
+                    elif 'remind' == response.split(':')[1]:
+                        # jugi:remind:2019-11-04T17:13:00+03:00
+                        time_str = response.split(response.split(":")[1])[1][1:]
+                        dt = parse(time_str)
+                        if (dt.timestamp() < datetime.now().timestamp()):
+                            msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('timeisout'), reply_markup=markup)
+                            return
+
+                        reply_message = None
+                        if message.reply_to_message:
+                            reply_message = message.reply_to_message.json
+
+                        #logger.info(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(dt.timestamp())))
+                        #logger.info(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(datetime.now().timestamp())))
+
+                        pending_messages.insert_one({ 
+                            'chat_id': message.chat.id,
+                            'reply_message': reply_message,
+                            'create_date': datetime.now().timestamp(), 
+                            'state': 'WAIT',
+                            'pending_date': dt.timestamp(),
+                            'dialog_flow_text': 'remindme',
+                            'text': None})
+                        
+                        msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'), reply_markup=markup)
 
                     elif 'sticker' == response.split(':')[1]:
                         #jugi:sticker:CAADAgADawgAAm4y2AABx_tlRP2FVS8WBA:Ми-ми-ми
@@ -866,10 +890,10 @@ def main_message(message):
                         to_date = setting.get('to_date')
 
                         if (not from_date):
-                            from_date = (datetime.datetime(2019, 1, 1)).timestamp() 
+                            from_date = (datetime(2019, 1, 1)).timestamp() 
 
                         if (not to_date):
-                            to_date = (datetime.datetime.now() + datetime.timedelta(minutes=180)).timestamp()
+                            to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
 
                         dresult = battle.aggregate([
                             {   "$match": {
@@ -982,6 +1006,35 @@ def main_message(message):
             else:
                 bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
         return
+
+def send_messages_big(chat_id: str, text: str, reply_markup=None):
+    strings = text.split('\n')
+    tmp = ''
+    msg = None
+    for s in strings:
+        if len(tmp + s) < 4000:
+            tmp = tmp + s +'\n'
+        else: 
+            msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
+            tmp = s + '\n'
+
+    msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
+    return msg
+
+def reply_to_big(message: str, text: str, reply_markup=None):
+    strings = text.split('\n')
+    tmp = ''
+    msg = types.Message.de_json(message)
+
+    for s in strings:
+        if len(tmp + s) < 4000:
+            tmp = tmp + s +'\n'
+        else: 
+            result = bot.reply_to(msg, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
+            tmp = s + '\n'
+
+    result = bot.reply_to(msg, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
+    return result
 
 def fight():
     logger.info('Calculate fight')
@@ -1169,7 +1222,7 @@ def fight():
         fight_log = fight_log + f'{z}. ☠️{deadman.get("health")} <b>{deadman.get("band")[0:1]} {deadman.get("name")}</b> убит бойцом <b>{deadman.get("killedBy")}</b>\n'
 
     fight_log = fight_log + f'\n'
-    fight_log = fight_log + '⏰ ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(datetime.datetime.now().timestamp())) +'\n'
+    fight_log = fight_log + '⏰ ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(datetime.now().timestamp())) +'\n'
 
     for fighter in competition.find({'state': 'FIGHT'}):
         send_messages_big(chat_id = fighter.get('chat'), text=fight_log)
@@ -1186,24 +1239,57 @@ def fight():
         newvalues = { '$set': { 'state': 'CANCEL', 'health': winner.get('health') } }
         u = competition.update_one(myquery, newvalues)        
 
+def pending_message():
+    ids = []
+    for pending_message in pending_messages.find(
+            {
+                '$and' : [
+                            {
+                                'state': f'WAIT'   
+                            }
+                            ,
+                            { 
+                                'pending_date': {
+                                    '$lt': datetime.now().timestamp()
+                                        }       
+                            }
+                        ]
+            }
+        ):
+        # _id        # create_date        # state        # pending_date
+        # reply_message_id        # chat_id        # dialog_flow_text        # text
+
+        text = pending_message.get('text')
+        if pending_message.get('dialog_flow_text'):
+            text = getResponseDialogFlow(pending_message.get('dialog_flow_text'))
+        # logger.info(pending_message.get('_id'))
+        # logger.info(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(pending_message.get('pending_date'))))
+        # if (pending_message.get('pending_date') < datetime.now().timestamp()):
+
+        
+        if pending_message.get('reply_message'):
+            reply_to_big(pending_message.get('reply_message'), text, None)
+        else:
+            send_messages_big(pending_message.get('chat_id'), text, None)
+
+        ids.append(pending_message.get('_id')) 
+
+    for id_str in ids:
+        myquery = {"_id": ObjectId(id_str)}
+        newvalues = { "$set": { "state": 'CANCEL'} }
+        u = pending_messages.update_one(myquery, newvalues)
+
+# 20 secund
 def fight_job():
     while True:
         fight()
         time.sleep(20)
 
-def send_messages_big(chat_id: str, text: str, reply_markup=None):
-    strings = text.split('\n')
-    tmp = ''
-    msg = None
-    for s in strings:
-        if len(tmp + s) < 4000:
-            tmp = tmp + s+'\n'
-        else: 
-            msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
-            tmp = s + '\n'
-
-    msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
-    return msg
+# 5 secund
+def pending_job():
+    while True:
+        pending_message()
+        time.sleep(5)
 
 def main_loop():
     if (config.POLLING):
@@ -1263,6 +1349,9 @@ if __name__ == '__main__':
     try:
         proccess = Process(target=fight_job, args=())
         proccess.start() # Start new thread
+
+        proccessPending_messages = Process(target=pending_job, args=())
+        proccessPending_messages.start() # Start new thread
 
         main_loop()
         
