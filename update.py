@@ -91,8 +91,22 @@ for x in settings.find():
     print(x)
 
 print("#==========================#")              
-print("#         USERS            #")              
+print("#         USERS            #")    
+print("#    update loacation      #")                        
 print("#==========================#")
+
+for x in registered_users.find():
+    registered_users.update(
+        { 'login': x.get('login')},
+        { '$unset': { 'loacation': ''} }
+    )
+
+for x in registered_users.find():
+    registered_users.update(
+        { 'login': x.get('login')},
+        { '$set': { 'location': None} }
+    )
+
 # registered_users.remove()            
 # registered_users.insert_one({'accuracy': '120', 'agility': '475', 'armor': '270', 'band': 'Артхаус', 'charisma': '151', 'damage': '1014', 'dzen': 0, 'force': '670', 'fraction': '⚙️Убежище 4', 'health': '675', 'hunger': '13', 'loacation': '👣0км.', 'login': 'GonzikBenzyavsky', 'name': 'Кирилл', 'stamina': '18', 'timeBan': None, 'timeUpdate': 1571635229, 'status': None})
 # registered_users.insert_one({'accuracy': '72', 'agility': '401', 'armor': '227', 'band': 'Энтропия', 'charisma': '130', 'damage': '757', 'dzen': 0, 'force': '479', 'fraction': '🔪Головорезы', 'health': '471', 'hunger': '5', 'loacation': '👣11км.', 'login': 'Innok27', 'name': 'Innok27', 'stamina': '29', 'timeBan': None, 'timeUpdate': 1571694768, 'status': None})

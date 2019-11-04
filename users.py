@@ -2,6 +2,7 @@ import json
 import datetime
 import time
 from datetime import datetime
+from datetime import timedelta
 
 def getUser(login, registered_users):
     for registered_user in registered_users.find({"login": f"{login}"}):
@@ -36,8 +37,10 @@ def updateUser(newUser, oldUser):
         oldUser.agility = newUser.agility
     if newUser.stamina:
         oldUser.stamina = newUser.stamina
-    if newUser.loacation:
-        oldUser.loacation = newUser.loacation
+    if newUser.loсation:
+        oldUser.loсation = newUser.loсation
+    if newUser.timeZone:
+        oldUser.timeZone = newUser.timeZone
     if newUser.dzen:
         oldUser.dzen = newUser.dzen
     if newUser.timeUpdate:
@@ -62,7 +65,10 @@ def importUser(registered_user):
         u.charisma       = registered_user['charisma']
         u.agility        = registered_user['agility']
         u.stamina        = registered_user['stamina']
-        u.loacation      = registered_user['loacation']
+        if (registered_user.get('location')):    
+            u.location     = registered_user['location']
+        if (registered_user.get('timeZone')):    
+            u.timeZone     = registered_user['timeZone']
         if (registered_user.get('dzen')):
             u.dzen        = registered_user['dzen']
         if (registered_user.get('timeBan')):
@@ -74,8 +80,6 @@ def importUser(registered_user):
         return u
 
 class User(object):
-    """docstring"""
-
     def __init__(self, login, date, text):
         i = 0
         self.login = login
@@ -84,7 +88,9 @@ class User(object):
         self.status = None
         self.dzen = 0
         self.band = None
-        
+        self.location = None
+        self.timeZone = None
+        self.timeBan  = None
 
         strings = text.split('\n')
         isEquipequipment = False
@@ -121,17 +127,12 @@ class User(object):
             # 11 - |�🔋Выносливость: 8/16 /ref|
             if ('Выносливость' in strings[i]):
                 self.setStamina(strings[i].split(':')[1].split('/')[1].strip())
-            # 12 - |�📍Палаточный лагерь,👣👣44км. |
-            if ('км.' in strings[i]):
-                self.setLoacation(strings[i].split(',')[1].strip())
             if ('🏵' in strings[i]):
                 dzen_tmp = strings[i][1:2].strip()
                 if dzen_tmp == '':
                     self.setDzen(0)
                 elif (int(dzen_tmp) >=2):
                     self.setDzen(str(int(dzen_tmp)-1))
-                
-            # print(str(i)+' - |'+s+'|')
             i=i+1
 
     def toJSON(self):
@@ -150,9 +151,16 @@ class User(object):
         string = ''
         string = string + f'┌{self.name}\n'  
         string = string + f'├🏷 {self.login}\n'
-        string = string + f'├{self.fraction}\n' 
+        string = string + f'├{self.fraction}\n'
+        
         if self.band:
             string = string + f'├🤟Банда: {self.band}\n'
+        
+        if self.location:
+            string = string + f'├📍{self.location}\n'
+        else:
+            string = string + f'├📍 Скажи Джу: Я живу в ...\n'
+
         if self.status:
             string = string + f'└😏 Статус: {self.status}\n'
         else:
@@ -169,6 +177,7 @@ class User(object):
         if self.timeBan:
             if self.timeBan > datetime.datetime.now().timestamp():
                 string = string + '☠️ Забанен до ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.timeBan)) +'\n'  
+        print(string)
         return string
 
     def getLogin(self):
@@ -235,10 +244,21 @@ class User(object):
     def getStamina(self):
         return self.stamina
 
-    def setLoacation(self, loacation):
-        self.loacation = loacation  
-    def getLoacation(self):
-        return self.loacation
+    def setLocation(self, location):
+        self.location = location  
+    def getLocation(self):
+        try:
+            return self.location
+        except:
+            return None
+
+    def setTimeZone(self, timeZone):
+        self.timeZone = timeZone  
+    def getTimeZone(self):
+        try:
+            return self.timeZone
+        except:
+            return None
 
     def setDzen(self, dzen):
         self.dzen = dzen  

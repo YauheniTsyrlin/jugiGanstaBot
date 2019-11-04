@@ -7,7 +7,10 @@ import wariors
 
 import logging
 import ssl
+
 from aiohttp import web
+from yandex_geocoder import Client
+
 import telebot
 from telebot import apihelper
 from telebot import types
@@ -17,6 +20,7 @@ import time
 from datetime import datetime
 from datetime import timedelta
 from dateutil.parser import parse
+import timezonefinder, pytz
 
 import threading
 from multiprocessing import Process
@@ -92,6 +96,14 @@ def getUserByLogin(login: str):
     for user in list(USERS_ARR):
         if login == user.getLogin(): return user
     return None
+
+def updateUser(newuser: users.User):
+    newvalues = { "$set": json.loads(newuser.toJSON()) }
+    registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
+
+    USERS_ARR = []
+    for x in registered_users.find():
+        USERS_ARR.append(users.importUser(x))
 
 def setSetting(login: str, code: str, value: str):
     if (isAdmin(login)):
@@ -715,6 +727,7 @@ def main_message(message):
 
     if (isOurBandUserLogin(message.from_user.username)):
         userIAm = getUserByLogin(message.from_user.username)
+
         #write_json(message.json)
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
         if not privateChat:
@@ -775,6 +788,7 @@ def main_message(message):
             name = message.text.split('профиль @')[1].strip()
             for x in registered_wariors.find({'name':f'{name}'}):
                 warior = wariors.importWarior(x)
+
                 if (warior and warior.photo):
                     bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=markup)
                 else:
@@ -819,7 +833,7 @@ def main_message(message):
                     if 'ping' == response.split(':')[1]:
                         # Собираем всех пользоватлей с бандой Х
                         string = f'{message.from_user.first_name} просит собраться банду {response.split(":")[2]}:'
-                        for registered_user in registered_users.find({"band": f"{response.split(':')[2]}"}):
+                        for registered_user in registered_users.find({"band": f"{response.split(':')[2][1:]}"}):
                             user = users.importUser(registered_user)
                             string = string + f'\n@{user.getLogin()}'
                         if ('@' in string):    
@@ -851,8 +865,18 @@ def main_message(message):
                                 bot.pin_chat_message(message.chat.id, msg.message_id)
                     elif 'remind' == response.split(':')[1]:
                         # jugi:remind:2019-11-04T17:13:00+03:00
+
+                        if not userIAm.getLocation():
+                            bot.reply_to(message, text='Я не знаю из какого ты города. Напиши мне "Я из Одессы" или "Я из Москвы" и этого будет достаточно. Иначе, я буду думать, что ты живешь во временном поясе по Гринвичу, а это +3 часа к Москве, +2 к Киеву и т.д. И ты не сможешь просить меня напомнить о чем-либо!')
+                            return
+
                         time_str = response.split(response.split(":")[1])[1][1:]
                         dt = parse(time_str)
+                        
+                        tz = datetime.strptime(userIAm.getTimeZone(),"%H:%M:%S")
+                        dt = dt - timedelta(days=tz.day, seconds=tz.second, microseconds=tz.microsecond,
+                                    milliseconds=0, minutes=tz.minute, hours=tz.hour, weeks=0)
+
                         if (dt.timestamp() < datetime.now().timestamp()):
                             msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('timeisout'), reply_markup=markup)
                             return
@@ -874,13 +898,34 @@ def main_message(message):
                             'text': None})
                         
                         msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'), reply_markup=markup)
-
                     elif 'sticker' == response.split(':')[1]:
                         #jugi:sticker:CAADAgADawgAAm4y2AABx_tlRP2FVS8WBA:Ми-ми-ми
                         photo = response.split(':')[2]
                         text = response.split(':')[3]
                         bot.send_message(message.chat.id, text=text)   
                         bot.send_sticker(message.chat.id, photo)   
+                    
+                    elif 'setlocation' == response.split(':')[1]:
+                        #jugi:setlocation:Москва
+                        Client.PARAMS = {"format": "json", "apikey": config.YANDEX_GEOCODING_API_KEY}
+                        location = Client.coordinates(response.split(':')[2])
+                        if location:
+                            tf = timezonefinder.TimezoneFinder()
+                            timezone_str = tf.certain_timezone_at(lat=float(location[1]), lng=float(location[0]))
+                            if timezone_str is None:
+                                bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
+                            else:
+                                # Display the current time in that time zone
+                                timezone = pytz.timezone(timezone_str)
+                                dt = datetime.utcnow()
+                                userIAm.setLocation(response.split(':')[2])
+                                userIAm.setTimeZone(str(timezone.utcoffset(dt)))
+                                updateUser(userIAm)
+                                bot.reply_to(message, text='Круто! Это ' + str(timezone.utcoffset(dt)) + ' к Гринвичу!', reply_markup=markup)
+
+                        else:
+                            bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
+                        
                     elif 'rating' == response.split(':')[1]:
                         report = ''
                         report = report + f'🏆ТОП 5 УБИЙЦ 🤟<b>{userIAm.getBand()}</b>\n'
@@ -1262,22 +1307,18 @@ def pending_message():
         text = pending_message.get('text')
         if pending_message.get('dialog_flow_text'):
             text = getResponseDialogFlow(pending_message.get('dialog_flow_text'))
-        # logger.info(pending_message.get('_id'))
-        # logger.info(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(pending_message.get('pending_date'))))
-        # if (pending_message.get('pending_date') < datetime.now().timestamp()):
-
         
         if pending_message.get('reply_message'):
             reply_to_big(pending_message.get('reply_message'), text, None)
         else:
             send_messages_big(pending_message.get('chat_id'), text, None)
-
         ids.append(pending_message.get('_id')) 
 
     for id_str in ids:
         myquery = {"_id": ObjectId(id_str)}
         newvalues = { "$set": { "state": 'CANCEL'} }
         u = pending_messages.update_one(myquery, newvalues)
+
 
 # 20 secund
 def fight_job():
