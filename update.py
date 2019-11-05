@@ -95,17 +95,17 @@ print("#         USERS            #")
 print("#    update loacation      #")                        
 print("#==========================#")
 
-for x in registered_users.find():
-    registered_users.update(
-        { 'login': x.get('login')},
-        { '$unset': { 'loacation': ''} }
-    )
+# for x in registered_users.find():
+#     registered_users.update(
+#         { 'login': x.get('login')},
+#         { '$unset': { 'loacation': ''} }
+#     )
 
-for x in registered_users.find():
-    registered_users.update(
-        { 'login': x.get('login')},
-        { '$set': { 'location': None} }
-    )
+# for x in registered_users.find():
+#     registered_users.update(
+#         { 'login': x.get('login')},
+#         { '$set': { 'location': None} }
+#     )
 
 # registered_users.remove()            
 # registered_users.insert_one({'accuracy': '120', 'agility': '475', 'armor': '270', 'band': 'Артхаус', 'charisma': '151', 'damage': '1014', 'dzen': 0, 'force': '670', 'fraction': '⚙️Убежище 4', 'health': '675', 'hunger': '13', 'loacation': '👣0км.', 'login': 'GonzikBenzyavsky', 'name': 'Кирилл', 'stamina': '18', 'timeBan': None, 'timeUpdate': 1571635229, 'status': None})

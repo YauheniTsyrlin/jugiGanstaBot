@@ -15,6 +15,8 @@ import telebot
 from telebot import apihelper
 from telebot import types
 from telebot.types import Message
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+
 
 import time
 from datetime import datetime
@@ -860,9 +862,16 @@ def main_message(message):
                                 user = users.importUser(registered_user)
                                 report = report + f'\n@{user.getLogin()}'
                             report = report + '\n\n<b>Не опаздываем!</b>' 
-                            msg = send_messages_big(message.chat.id, text=report, reply_markup=markup)
+
+                            markupinline = InlineKeyboardMarkup()
+                            markupinline.row_width = 2
+                            markupinline.add(InlineKeyboardButton("Иду!", callback_data="capture_yes"),
+                            InlineKeyboardButton("Нахер!", callback_data="capture_no"))
+
+                            msg = send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
                             if not privateChat:
                                 bot.pin_chat_message(message.chat.id, msg.message_id)
+
                     elif 'remind' == response.split(':')[1]:
                         # jugi:remind:2019-11-04T17:13:00+03:00
                         if not userIAm.getLocation():
@@ -1042,6 +1051,50 @@ def main_message(message):
             else:
                 bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
         return
+
+def insert_dash(string, index, char):
+    return string[:index] + char + string[index:]
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_query(call):
+    if call.data in ("capture_yes", "capture_no"):
+        markupinline = InlineKeyboardMarkup()
+        markupinline.row_width = 2
+        markupinline.add(InlineKeyboardButton("Иду!", callback_data="capture_yes"),
+        InlineKeyboardButton("Нахер!", callback_data="capture_no"))
+        text = call.message.text
+        
+        # right = 0
+        # for z in call.message.entities:
+
+        #     if z.type == 'bold':
+        #         print(z.offset)
+        #         print(z.offset + z.length)
+        #         print('=================')
+        #         print("+"+ str(right))
+        #         print('=================')
+        #         print(z.offset + right)
+        #         print(z.offset + z.length + right)
+        #         print('-----------------')
+
+        #         text = insert_dash( text, z.offset + right, '<b>')
+        #         right = right + 3
+        #         text = insert_dash( text, z.offset + z.length + right, '</b>')
+        #         right = right + 4
+        #         print (text)   
+        #         print('++++++++++++++')
+
+        if call.data == "capture_yes" :
+            bot.answer_callback_query(call.id, "Ты записался в добровольцы!")
+            text = text.replace(f'@{call.from_user.username}', f'<b>@{call.from_user.username}</b>')
+
+        elif call.data == "capture_no":
+            bot.answer_callback_query(call.id, "Сыкло!")
+            text = text.replace(f'<b>@{call.from_user.username}</b>', f'@{call.from_user.username}')
+
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+
+
 
 def send_messages_big(chat_id: str, text: str, reply_markup=None):
     strings = text.split('\n')
@@ -1292,8 +1345,8 @@ def pending_message():
                         ]
             }
         ):
-        #logger.info(datetime.now().timestamp())
-        #logger.info(pending_message.get('pending_date'))
+        # logger.info(datetime.now().timestamp())
+        # logger.info(pending_message.get('pending_date'))
         # logger.info(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(datetime.now().timestamp())))
         # logger.info(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(pending_message.get('pending_date'))))
         # logger.info('-===========================-')
