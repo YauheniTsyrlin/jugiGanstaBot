@@ -865,18 +865,14 @@ def main_message(message):
                                 bot.pin_chat_message(message.chat.id, msg.message_id)
                     elif 'remind' == response.split(':')[1]:
                         # jugi:remind:2019-11-04T17:13:00+03:00
-
                         if not userIAm.getLocation():
                             bot.reply_to(message, text='Я не знаю из какого ты города. Напиши мне "Я из Одессы" или "Я из Москвы" и этого будет достаточно. Иначе, я буду думать, что ты живешь во временном поясе по Гринвичу, а это +3 часа к Москве, +2 к Киеву и т.д. И ты не сможешь просить меня напомнить о чем-либо!')
                             return
 
                         time_str = response.split(response.split(":")[1])[1][1:]
                         dt = parse(time_str)
-                        
                         tz = datetime.strptime(userIAm.getTimeZone(),"%H:%M:%S")
-                        dt = dt - timedelta(days=tz.day, seconds=tz.second, microseconds=tz.microsecond,
-                                    milliseconds=0, minutes=tz.minute, hours=tz.hour, weeks=0)
-
+                        dt = dt - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
                         if (dt.timestamp() < datetime.now().timestamp()):
                             msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('timeisout'), reply_markup=markup)
                             return
@@ -884,9 +880,6 @@ def main_message(message):
                         reply_message = None
                         if message.reply_to_message:
                             reply_message = message.reply_to_message.json
-
-                        #logger.info(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(dt.timestamp())))
-                        #logger.info(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(datetime.now().timestamp())))
 
                         pending_messages.insert_one({ 
                             'chat_id': message.chat.id,
@@ -904,7 +897,6 @@ def main_message(message):
                         text = response.split(':')[3]
                         bot.send_message(message.chat.id, text=text)   
                         bot.send_sticker(message.chat.id, photo)   
-                    
                     elif 'setlocation' == response.split(':')[1]:
                         #jugi:setlocation:Москва
                         Client.PARAMS = {"format": "json", "apikey": config.YANDEX_GEOCODING_API_KEY}
@@ -925,7 +917,6 @@ def main_message(message):
 
                         else:
                             bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
-                        
                     elif 'rating' == response.split(':')[1]:
                         report = ''
                         report = report + f'🏆ТОП 5 УБИЙЦ 🤟<b>{userIAm.getBand()}</b>\n'
@@ -1294,13 +1285,24 @@ def pending_message():
                             }
                             ,
                             { 
-                                'pending_date': {
-                                    '$lt': datetime.now().timestamp()
-                                        }       
+                               'pending_date': {
+                                   '$lt': datetime.now().timestamp()
+                                       }       
                             }
                         ]
             }
         ):
+        #logger.info(datetime.now().timestamp())
+        #logger.info(pending_message.get('pending_date'))
+        # logger.info(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(datetime.now().timestamp())))
+        # logger.info(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(pending_message.get('pending_date'))))
+        # logger.info('-===========================-')
+        # if (datetime.now().timestamp() > pending_message.get('pending_date')):
+        #     logger.info('Send message')
+        #     pass
+        # else:
+        #     continue
+     
         # _id        # create_date        # state        # pending_date
         # reply_message_id        # chat_id        # dialog_flow_text        # text
 
