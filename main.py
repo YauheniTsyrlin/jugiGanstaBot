@@ -726,6 +726,19 @@ def main_message(message):
         for warior in ww:
             updateWarior(warior, message)
         return
+    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '/accept' in message.text and '/decline' in message.text):
+        #write_json(message.json)
+        if isOurBandUserLogin(message.from_user.username):
+            warior = wariors.getWarior(message.text.split('👤')[1].split(' из ')[0], registered_wariors)
+            if warior == None:
+                bot.reply_to(message, text='Ничего о нем не знаю!', reply_markup=None)
+            elif (warior and warior.photo):
+                bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=None)
+            else:
+                bot.reply_to(message, text=warior.getProfile(), reply_markup=None)
+        else:
+            bot.reply_to(message, text=getResponseDialogFlow('i_dont_know_you'), reply_markup=None)
+        return
 
     if (isOurBandUserLogin(message.from_user.username)):
         userIAm = getUserByLogin(message.from_user.username)
@@ -871,7 +884,6 @@ def main_message(message):
                             msg = send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
                             if not privateChat:
                                 bot.pin_chat_message(message.chat.id, msg.message_id)
-
                     elif 'remind' == response.split(':')[1]:
                         # jugi:remind:2019-11-04T17:13:00+03:00
                         if not userIAm.getLocation():
@@ -1045,7 +1057,6 @@ def main_message(message):
                         report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
                         
                         send_messages_big(message.chat.id, text=report, reply_markup=markup)
-                        #bot.reply_to(message, text=report, reply_markup=markup)
                 else:
                     bot.reply_to(message, text=response, reply_markup=markup)
             else:
@@ -1062,27 +1073,23 @@ def callback_query(call):
         markupinline.row_width = 2
         markupinline.add(InlineKeyboardButton("Иду!", callback_data="capture_yes"),
         InlineKeyboardButton("Нахер!", callback_data="capture_no"))
+        boldstring = []
         text = call.message.text
-        
-        # right = 0
-        # for z in call.message.entities:
 
-        #     if z.type == 'bold':
-        #         print(z.offset)
-        #         print(z.offset + z.length)
-        #         print('=================')
-        #         print("+"+ str(right))
-        #         print('=================')
-        #         print(z.offset + right)
-        #         print(z.offset + z.length + right)
-        #         print('-----------------')
+        # print(text)
 
-        #         text = insert_dash( text, z.offset + right, '<b>')
-        #         right = right + 3
-        #         text = insert_dash( text, z.offset + z.length + right, '</b>')
-        #         right = right + 4
-        #         print (text)   
-        #         print('++++++++++++++')
+        # for s in call.message.entities:
+        #     print(s)
+        #     if s.type == 'bold':
+        #         print(s)
+        #         print(text[s.offset : s.offset+s.length])
+                
+        #         boldstring.append(text[s.offset : s.offset+s.length])
+
+        # for z in boldstring:
+        #     print(z)
+        #     print(z.decode('ascii') )
+        #     #text = text.replace(z, f'<b>{z}</b>')
 
         if call.data == "capture_yes" :
             bot.answer_callback_query(call.id, "Ты записался в добровольцы!")
@@ -1345,20 +1352,6 @@ def pending_message():
                         ]
             }
         ):
-        # logger.info(datetime.now().timestamp())
-        # logger.info(pending_message.get('pending_date'))
-        # logger.info(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(datetime.now().timestamp())))
-        # logger.info(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(pending_message.get('pending_date'))))
-        # logger.info('-===========================-')
-        # if (datetime.now().timestamp() > pending_message.get('pending_date')):
-        #     logger.info('Send message')
-        #     pass
-        # else:
-        #     continue
-     
-        # _id        # create_date        # state        # pending_date
-        # reply_message_id        # chat_id        # dialog_flow_text        # text
-
         text = pending_message.get('text')
         if pending_message.get('dialog_flow_text'):
             text = getResponseDialogFlow(pending_message.get('dialog_flow_text'))
@@ -1373,7 +1366,6 @@ def pending_message():
         myquery = {"_id": ObjectId(id_str)}
         newvalues = { "$set": { "state": 'CANCEL'} }
         u = pending_messages.update_one(myquery, newvalues)
-
 
 # 20 secund
 def fight_job():

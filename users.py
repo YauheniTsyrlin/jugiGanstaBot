@@ -37,9 +37,9 @@ def updateUser(newUser, oldUser):
         oldUser.agility = newUser.agility
     if newUser.stamina:
         oldUser.stamina = newUser.stamina
-    if newUser.loсation:
+    if hasattr('loсation', newUser):
         oldUser.loсation = newUser.loсation
-    if newUser.timeZone:
+    if hasattr('timeZone', newUser):
         oldUser.timeZone = newUser.timeZone
     if newUser.dzen:
         oldUser.dzen = newUser.dzen
