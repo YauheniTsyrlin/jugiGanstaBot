@@ -692,7 +692,6 @@ def main_message(message):
             if privateChat:
                 bot.reply_to(message, text=getResponseDialogFlow('getpip'))
 
-        time.sleep(3)
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
             user = users.User(message.from_user.username, message.forward_date, message.text)
             if privateChat and (message.from_user.first_name != user.getName()):

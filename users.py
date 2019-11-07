@@ -113,17 +113,23 @@ class User(object):
                 self.setHunger(strings[i].split(':')[1].split('%')[0].strip())
             if ('Урон' in strings[i]):
                 self.setDamage(strings[i].split(':')[1].split(' ')[1].strip())
+            
+            print('strings[i]: ' + strings[i])
+            print('not isEquipequipment: ' + str(not isEquipequipment))
+            print('Броня in strings[i]: ' + str('Броня' in strings[i]))
+            print('--------------------')
+
             if (not isEquipequipment) and ('Броня' in strings[i]):
-                self.setArmor(strings[i].split(':')[2].split(' ')[0].strip())
+                self.setArmor(strings[i].split(':')[2].split(' ')[1].strip())
             if ('Сила' in strings[i]):
                 self.setForce(strings[i].split(':')[1].split('🎯')[0].strip())
             if ('Меткость' in strings[i]):
-                self.setAccuracy(strings[i].split(':')[2].split(' ')[0].strip())
+                self.setAccuracy(strings[i].split(':')[2].split(' ')[1].strip())
             # 9 - |🗣Харизма: 80 ��🏽🏽‍♂️Ловкость: 318|
             if ('Харизма' in strings[i]):
                 self.setCharisma(strings[i].split(' ')[1].strip())
             if ('Ловкость' in strings[i]):
-                self.setAgility(strings[i].split(':')[2].split(' ')[0].strip())
+                self.setAgility(strings[i].split(':')[2].split(' ')[1].strip())
             # 11 - |�🔋Выносливость: 8/16 /ref|
             if ('Выносливость' in strings[i]):
                 self.setStamina(strings[i].split(':')[1].split('/')[1].strip())
@@ -177,7 +183,6 @@ class User(object):
         if self.timeBan:
             if self.timeBan > datetime.datetime.now().timestamp():
                 string = string + '☠️ Забанен до ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.timeBan)) +'\n'  
-        print(string)
         return string
 
     def getLogin(self):
