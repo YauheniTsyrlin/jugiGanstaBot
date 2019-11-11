@@ -673,7 +673,7 @@ def ring_message(message: Message):
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
-    write_json(message.json)
+    #write_json(message.json)
     privateChat = ('private' in message.chat.type)
     callJugi = (privateChat 
                             or message.text.lower().startswith('джу') 
