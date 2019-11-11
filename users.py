@@ -4,6 +4,10 @@ import time
 from datetime import datetime
 from datetime import timedelta
 
+def deEmojify(inputString):
+    ''' Delete emoji'''
+    return inputString.encode('ascii', 'ignore').decode('ascii')
+
 def getUser(login, registered_users):
     for registered_user in registered_users.find({"login": f"{login}"}):
         user = importUser(registered_user)
@@ -113,11 +117,6 @@ class User(object):
                 self.setHunger(strings[i].split(':')[1].split('%')[0].strip())
             if ('Урон' in strings[i]):
                 self.setDamage(strings[i].split(':')[1].split(' ')[1].strip())
-            
-            print('strings[i]: ' + strings[i])
-            print('not isEquipequipment: ' + str(not isEquipequipment))
-            print('Броня in strings[i]: ' + str('Броня' in strings[i]))
-            print('--------------------')
 
             if (not isEquipequipment) and ('Броня' in strings[i]):
                 self.setArmor(strings[i].split(':')[2].split(' ')[1].strip())
@@ -189,7 +188,7 @@ class User(object):
         return self.login
 
     def setName(self, name):
-        self.name = name
+        self.name = deEmojify(name)
     def getName(self):
         return self.name
 

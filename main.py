@@ -58,6 +58,9 @@ SETTINGS_ARR = [] # Зарегистрированные настройки
 for setting in settings.find():
     SETTINGS_ARR.append(setting)
 
+def deEmojify(inputString):
+    ''' Delete emoji'''
+    return inputString.encode('ascii', 'ignore').decode('ascii')
 
 def getSetting(code: str):
     """ Получение настройки """
@@ -153,6 +156,11 @@ def getResponseDialogFlow(text):
     request.lang = 'ru' # На каком языке будет послан запрос
     request.session_id = 'BatlabAIBot' # ID Сессии диалога (нужно, чтобы потом учить бота)
     request.query = text # Посылаем запрос к ИИ с сообщением от юзера
+    
+    # contextStr = '[{"name":"sss", "lifespan":1, "parameters":{"s": "1"}}]';
+    # contextObj = json.loads(contextStr);
+    # request.contexts = contextObj
+    # print(request.contexts)
     responseJson = json.loads(request.getresponse().read().decode('utf-8'))
     response = responseJson['result']['fulfillment']['speech'] # Разбираем JSON и вытаскиваем ответ
     # Если есть ответ от бота - присылаем юзеру, если нет - бот его не понял
@@ -665,7 +673,7 @@ def ring_message(message: Message):
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
-    #write_json(message.json)
+    write_json(message.json)
     privateChat = ('private' in message.chat.type)
     callJugi = (privateChat 
                             or message.text.lower().startswith('джу') 
@@ -694,7 +702,7 @@ def main_message(message):
 
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
             user = users.User(message.from_user.username, message.forward_date, message.text)
-            if privateChat and (message.from_user.first_name != user.getName()):
+            if privateChat and (deEmojify(message.from_user.first_name) != user.getName()):
                 if not findUser: bot.reply_to(message, text=getResponseDialogFlow('change_name'))
                 if not findUser: bot.send_chat_action(message.chat.id, 'typing')
                 if not findUser: time.sleep(3)
@@ -738,7 +746,6 @@ def main_message(message):
         else:
             bot.reply_to(message, text=getResponseDialogFlow('i_dont_know_you'), reply_markup=None)
         return
-
     if (isOurBandUserLogin(message.from_user.username)):
         userIAm = getUserByLogin(message.from_user.username)
 
@@ -757,10 +764,15 @@ def main_message(message):
             elif ('тост' in message.text.lower()):
                 type_joke = 16  
             bot.send_chat_action(message.chat.id, 'typing')
-            time.sleep(3)
             r = requests.get(f'{config.ANECDOT_URL}={type_joke}')
             bot.reply_to(message, r.text[12:-2], reply_markup=markup)
         
+        elif (callJugi 
+                    and message.text 
+                    and ('залёт' in message.text.lower() or 'залет' in message.text.lower())
+                ):
+            pass
+
         elif (callJugi and 'статус ' in message.text.lower() and ' @' in message.text):
             login = message.text.split('@')[1].split(' ')[0].strip()
             
@@ -799,7 +811,7 @@ def main_message(message):
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_go_in_lk'), reply_markup=markup)
                 return
 
-            name = message.text.split('профиль @')[1].strip()
+            name = deEmojify(message.text.split('профиль @')[1].strip())
             for x in registered_wariors.find({'name':f'{name}'}):
                 warior = wariors.importWarior(x)
 
@@ -846,7 +858,7 @@ def main_message(message):
                     #jugi:ping:Артхаус)
                     if 'ping' == response.split(':')[1]:
                         # Собираем всех пользоватлей с бандой Х
-                        string = f'{message.from_user.first_name} просит собраться банду {response.split(":")[2]}:'
+                        string = f'{deEmojify(message.from_user.first_name)} просит собраться банду {response.split(":")[2]}:'
                         for registered_user in registered_users.find({"band": f"{response.split(':')[2][1:]}"}):
                             user = users.importUser(registered_user)
                             string = string + f'\n@{user.getLogin()}'
@@ -989,7 +1001,7 @@ def main_message(message):
                             else:
                                 emoji = ''
                             
-                            if user_name == message.from_user.first_name:
+                            if user_name == deEmojify(message.from_user.first_name):
                                 user_name = f'<b>{user_name}</b>'
                                 findInWinner = i
 
@@ -1041,7 +1053,7 @@ def main_message(message):
                             else:
                                 emoji = ''
 
-                            if user_name == message.from_user.first_name:
+                            if user_name == deEmojify(message.from_user.first_name):
                                 user_name = f'<b>{user_name}</b>'
                                 findInLoser = i
 
@@ -1099,8 +1111,6 @@ def callback_query(call):
             text = text.replace(f'<b>@{call.from_user.username}</b>', f'@{call.from_user.username}')
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
-
-
 
 def send_messages_big(chat_id: str, text: str, reply_markup=None):
     strings = text.split('\n')
