@@ -4,6 +4,7 @@
 import config
 import users 
 import wariors
+import tools
 
 import logging
 import ssl
@@ -57,10 +58,6 @@ for x in registered_wariors.find():
 SETTINGS_ARR = [] # Зарегистрированные настройки
 for setting in settings.find():
     SETTINGS_ARR.append(setting)
-
-def deEmojify(inputString):
-    ''' Delete emoji'''
-    return inputString.encode('ascii', 'ignore').decode('ascii')
 
 def getSetting(code: str):
     """ Получение настройки """
@@ -702,7 +699,7 @@ def main_message(message):
 
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
             user = users.User(message.from_user.username, message.forward_date, message.text)
-            if privateChat and (deEmojify(message.from_user.first_name) != user.getName()):
+            if privateChat and (tools.deEmojify(message.from_user.first_name) != user.getName()):
                 if not findUser: bot.reply_to(message, text=getResponseDialogFlow('change_name'))
                 if not findUser: bot.send_chat_action(message.chat.id, 'typing')
                 if not findUser: time.sleep(3)
@@ -811,7 +808,7 @@ def main_message(message):
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_go_in_lk'), reply_markup=markup)
                 return
 
-            name = deEmojify(message.text.split('профиль @')[1].strip())
+            name = tools.deEmojify(message.text.split('профиль @')[1].strip())
             for x in registered_wariors.find({'name':f'{name}'}):
                 warior = wariors.importWarior(x)
 
@@ -858,7 +855,7 @@ def main_message(message):
                     #jugi:ping:Артхаус)
                     if 'ping' == response.split(':')[1]:
                         # Собираем всех пользоватлей с бандой Х
-                        string = f'{deEmojify(message.from_user.first_name)} просит собраться банду {response.split(":")[2]}:'
+                        string = f'{tools.deEmojify(message.from_user.first_name)} просит собраться банду {response.split(":")[2]}:'
                         for registered_user in registered_users.find({"band": f"{response.split(':')[2][1:]}"}):
                             user = users.importUser(registered_user)
                             string = string + f'\n@{user.getLogin()}'
@@ -1001,7 +998,7 @@ def main_message(message):
                             else:
                                 emoji = ''
                             
-                            if user_name == deEmojify(message.from_user.first_name):
+                            if user_name == tools.deEmojify(message.from_user.first_name):
                                 user_name = f'<b>{user_name}</b>'
                                 findInWinner = i
 
@@ -1053,7 +1050,7 @@ def main_message(message):
                             else:
                                 emoji = ''
 
-                            if user_name == deEmojify(message.from_user.first_name):
+                            if user_name == tools.deEmojify(message.from_user.first_name):
                                 user_name = f'<b>{user_name}</b>'
                                 findInLoser = i
 

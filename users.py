@@ -3,10 +3,7 @@ import datetime
 import time
 from datetime import datetime
 from datetime import timedelta
-
-def deEmojify(inputString):
-    ''' Delete emoji'''
-    return inputString.encode('ascii', 'ignore').decode('ascii')
+import tools
 
 def getUser(login, registered_users):
     for registered_user in registered_users.find({"login": f"{login}"}):
@@ -188,7 +185,7 @@ class User(object):
         return self.login
 
     def setName(self, name):
-        self.name = deEmojify(name)
+        self.name = tools.deEmojify(name)
     def getName(self):
         return self.name
 

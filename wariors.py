@@ -1,10 +1,7 @@
 import json
 import datetime
 import time
-
-def deEmojify(inputString):
-    ''' Delete emoji'''
-    return inputString.encode('ascii', 'ignore').decode('ascii')
+import tools
 
 def mergeWariors(warior, wariorToUpdate):
 
@@ -64,7 +61,7 @@ def mergeWariors(warior, wariorToUpdate):
     return wariorToUpdate
 
 def getWarior(name, wariors):
-    for w in wariors.find({"name": f"{deEmojify(name)}"}):
+    for w in wariors.find({"name": f"{tools.deEmojify(name)}"}):
         warior = importWarior(w)
         return warior
 
@@ -204,7 +201,7 @@ class Warior(object):
     def __init__(self, name, date, text, photo):
         strings = text.split('\n')
  
-        self.name = deEmojify(name)
+        self.name = tools.deEmojify(name)
         self.band = None
         self.goat = None
         self.fraction = None
@@ -360,7 +357,7 @@ class Warior(object):
         return string
 
     def setName(self, name):
-        self.name = deEmojify(name)
+        self.name = tools.deEmojify(name)
     def getName(self):
         return self.name
 
