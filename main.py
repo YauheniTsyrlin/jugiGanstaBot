@@ -926,6 +926,15 @@ def main_message(message):
                         text = response.split(':')[3]
                         bot.send_message(message.chat.id, text=text)   
                         bot.send_sticker(message.chat.id, photo)   
+                    elif 'tobeornottoby' == response.split(':')[1]:
+                        #jugi:tobeornottoby
+                        r = random.random()
+                        if (r <= 0.5):
+                            bot.send_message(message.chat.id, text='Быть, епта!')
+                        else:
+                            bot.send_message(message.chat.id, text='ХЗ, я бы не рискнул...')
+  
+                        
                     elif 'setlocation' == response.split(':')[1]:
                         #jugi:setlocation:Москва
                         Client.PARAMS = {"format": "json", "apikey": config.YANDEX_GEOCODING_API_KEY}
