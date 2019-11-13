@@ -748,7 +748,7 @@ def main_message(message):
         #write_json(message.json)
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
         if not privateChat:
-            markup.add('Джу, 📋 Отчет')
+            markup.add('Джу, 📋 Отчет', 'Джу, Профиль')
         else:
             markup.add('📋 Отчет', '🤼 В ринг')
             markup.add('Профиль')
@@ -829,10 +829,6 @@ def main_message(message):
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_huinya'), reply_markup=markup)
 
         elif (callJugi and 'профиль' in message.text.lower()):
-            if not privateChat:
-                bot.reply_to(message, text=getResponseDialogFlow('shot_message_go_in_lk'), reply_markup=markup)
-                return
-
             bot.send_chat_action(message.chat.id, 'typing')
             user = users.getUser(message.from_user.username, registered_users)
             if user:
