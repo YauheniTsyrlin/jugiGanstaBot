@@ -27,7 +27,6 @@ import timezonefinder, pytz
 
 import threading
 from multiprocessing import Process
-from subprocess import call
 
 import sys
 import json
@@ -1415,24 +1414,6 @@ def main_loop():
             else:
                 return web.Response(status=403)
 
-        async def commit(request):
-            logger.info('getCommit from webHook gitHub')
-            if request.match_info.get('token') == bot.token:
-                request_body_dict = await request.json()
-                logger.info('clone to /foo repository : ' + request_body_dict['repository']['full_name'])
-                call('git clone https://github.com/gonzikbenzyavsky/jugiGanstaBot.git /home/godfather/foo', shell=True)
-                logger.info('moving *.py to jugiGanstaBot')
-                call('mv /home/godfather/foo/*.py /home/godfather/jugiGanstaBot', shell=True)
-                logger.info('remove /foo')
-                call('rm -rf /home/godfather/foo', shell=True)
-                logger.info('restar bot')
-                call('sudo systemctl restart bot', shell=True)
-                logger.info('OK')
-                return web.Response()
-            else:
-                return web.Response(status=403)
-
-        app.router.add_route('*', '/{token}/commit', commit, name='commit')
         app.router.add_post('/{token}/', handle)
         
         # Remove webhook, it fails sometimes the set if there is a previous webhook
