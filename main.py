@@ -803,9 +803,9 @@ def main_message(message):
             bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'), reply_markup=markup)
             
         elif (callJugi and 'профиль @' in message.text.lower()):
-            if not privateChat:
-                bot.reply_to(message, text=getResponseDialogFlow('shot_message_go_in_lk'), reply_markup=markup)
-                return
+            # if not privateChat:
+            #     bot.reply_to(message, text=getResponseDialogFlow('shot_message_go_in_lk'), reply_markup=markup)
+            #     return
 
             name = tools.deEmojify(message.text.split('профиль @')[1].strip())
             for x in registered_wariors.find({'name':f'{name}'}):
