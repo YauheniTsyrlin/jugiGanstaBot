@@ -98,6 +98,11 @@ def getUserByLogin(login: str):
         if login == user.getLogin(): return user
     return None
 
+def getUserByName(name: str):
+    for user in list(USERS_ARR):
+        if name == user.getName(): return user
+    return None
+
 def updateUser(newuser: users.User):
     newvalues = { "$set": json.loads(newuser.toJSON()) }
     registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
@@ -679,7 +684,8 @@ def main_message(message):
                 )
 
     findUser = isOurUserLogin(message.from_user.username)
-    
+    userIAm = getUserByLogin(message.from_user.username)
+
     if not findUser:
         r = random.random()
         if (r <= float(getSetting('PROBABILITY_I_DONT_NOW'))):
@@ -708,8 +714,7 @@ def main_message(message):
                 x = registered_users.insert_one(json.loads(user.toJSON()))
             else:
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
-                newvalues = { "$set": json.loads(updatedUser.toJSON()) }
-                registered_users.update_one({"login": f"{user.getLogin()}"}, newvalues)
+                updateUser(updatedUser)
 
             if privateChat:
                 bot.reply_to(message, text=getResponseDialogFlow('setpip'))
@@ -743,7 +748,7 @@ def main_message(message):
             bot.reply_to(message, text=getResponseDialogFlow('i_dont_know_you'), reply_markup=None)
         return
     if (isOurBandUserLogin(message.from_user.username)):
-        userIAm = getUserByLogin(message.from_user.username)
+        
 
         #write_json(message.json)
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
@@ -808,6 +813,13 @@ def main_message(message):
             #     return
 
             name = tools.deEmojify(message.text.split('профиль @')[1].strip())
+            if (isOurUserName(name)):
+                user = getUserByName(name)
+                if user:
+                    bot.reply_to(message, text=user.getProfile(), reply_markup=markup)
+
+
+
             for x in registered_wariors.find({'name':f'{name}'}):
                 warior = wariors.importWarior(x)
 
