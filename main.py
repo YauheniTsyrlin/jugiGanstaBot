@@ -17,7 +17,7 @@ from telebot import apihelper
 from telebot import types
 from telebot.types import Message
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-
+import apiai
 
 import time
 from datetime import datetime
@@ -30,7 +30,7 @@ from multiprocessing import Process
 from subprocess import call
 
 import sys
-import apiai, json
+import json
 import requests
 
 import random
@@ -898,7 +898,7 @@ def main_message(message):
                             bot.reply_to(message, text='Я не знаю из какого ты города. Напиши мне "Я из Одессы" или "Я из Москвы" и этого будет достаточно. Иначе, я буду думать, что ты живешь во временном поясе по Гринвичу, а это +3 часа к Москве, +2 к Киеву и т.д. И ты не сможешь просить меня напомнить о чем-либо!')
                             return
                         if not userIAm.getTimeZone():
-                            bot.reply_to(message, text='Вроде, город знаю, а временную зону забыл. Напиши мне еще раз "Я из Одессы" или "Я из Москвы"!')
+                            bot.reply_to(message, text='Вроде, город знаю, а временную зону забыл. Напиши мне еще раз "Я из Одессы" или "Я из Москвы"!` ')
                             return
                                                 
                         time_str = response.split(response.split(":")[1])[1][1:]
