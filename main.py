@@ -1085,7 +1085,10 @@ def main_message(message):
                         
                         send_messages_big(message.chat.id, text=report, reply_markup=markup)
                 else:
-                    bot.reply_to(message, text=response, reply_markup=markup)
+                    try:
+                        bot.reply_to(message, text=response, reply_markup=markup)
+                    except:
+                        logger.info("Error!")
             else:
                 bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
         return
