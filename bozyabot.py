@@ -67,7 +67,7 @@ def main_loop():
     # Remove webhook, it fails sometimes the set if there is a previous webhook
     bot.remove_webhook()
     # Set webhook
-    bot.set_webhook(url=config.WEBHOOK_URL_BASE + config.WEBHOOK_URL_PATH,
+    bot.set_webhook(url=config.WEBHOOK_URL_BASE_BOZYA + config.WEBHOOK_URL_PATH,
                     certificate=open(config.WEBHOOK_SSL_CERT, 'r'))
     # Build ssl context
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
@@ -76,7 +76,7 @@ def main_loop():
     web.run_app(
         app,
         host=config.WEBHOOK_LISTEN,
-        port=9443,
+        port=WEBHOOK_PORT_BOZYA,
         ssl_context=context,
     )
 
