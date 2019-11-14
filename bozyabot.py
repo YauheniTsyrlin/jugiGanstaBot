@@ -76,7 +76,7 @@ def main_loop():
     web.run_app(
         app,
         host=config.WEBHOOK_LISTEN,
-        port=WEBHOOK_PORT_BOZYA,
+        port=config.WEBHOOK_PORT_BOZYA,
         ssl_context=context,
     )
 
