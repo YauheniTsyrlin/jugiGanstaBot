@@ -9,6 +9,7 @@ def getUser(login, registered_users):
     for registered_user in registered_users.find({"login": f"{login}"}):
         user = importUser(registered_user)
         return user
+    return None
 
 def updateUser(newUser, oldUser):
     if oldUser == None:
