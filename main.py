@@ -854,6 +854,8 @@ def main_message(message):
                     bot.send_photo(message.chat.id, warior.photo, user.getProfile(), reply_markup=markup)
                 else:
                     bot.reply_to(message, text=user.getProfile(), reply_markup=markup)
+                if (user.getRaid()):
+                    msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_raid'), reply_markup=markup)
             else:
                 bot.reply_to(message, text='С твоим профилем какая-то беда... Звони в поддержку пип-боев!', reply_markup=markup)
 
