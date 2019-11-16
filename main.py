@@ -870,7 +870,7 @@ def main_message(message):
             updateUser(None)
             
             myquery = { "name": f"{login}" }
-            war = wariors.delete_one(myquery)
+            war = registered_wariors.delete_one(myquery)
 
             bot.reply_to(message, text=f'{login} уволен нафиг! Удалено {doc.deleted_count} записей в дневнике бандитов и {war.deleted_count} в дневнике боев!', reply_markup=markup)
 
