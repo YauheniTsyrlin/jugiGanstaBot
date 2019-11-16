@@ -887,6 +887,30 @@ def main_message(message):
                             else:
                                 bot.reply_to(message, text='У тебя пустой статус... Чё надо?... \nСпроси - "Джу, как установить статус?', reply_markup=markup)
                             break
+                    elif 'rade' == response.split(':')[1]:
+                            #   0    1        2         3     
+                            # jugi:rade:$radelocation:$time
+                            time_str = response.split(response.split(":")[3])[1][1:]
+                            dt = parse(time_str)
+                            time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
+                            time_remind_str = str(dt.hour-1).zfill(2)+':'+str(dt.minute+30).zfill(2)
+
+                            report = f'<b>Рейд!</b> {response.split(":")[2]} {time_str} <b>{response.split(":")[2]}</b>\n'
+                            # for registered_user in registered_users.find({"band": f"{response.split(':')[2][1:]}"}):
+                            #     user = users.importUser(registered_user)
+                            #     report = report + f'\n@{user.getLogin()}'
+                            report = report + '\n\n<b>Не опаздываем!</b>' 
+
+                            # markupinline = InlineKeyboardMarkup()
+                            # markupinline.row_width = 2
+                            # markupinline.add(InlineKeyboardButton("Иду!", callback_data="capture_yes"),
+                            # InlineKeyboardButton("Нахер!", callback_data="capture_no"))
+
+                            msg = send_messages_big(message.chat.id, text=report, reply_markup=None)
+                            if not privateChat:
+                                bot.pin_chat_message(message.chat.id, msg.message_id)
+                            msg = send_messages_big(message.chat.id, text='Напомнить в '+time_remind_str, reply_markup=None)
+
                     elif 'capture' == response.split(':')[1]:
                             #   0    1        2       3     4
                             # jugi:capture:$bands:$Dangeon:$time
