@@ -862,14 +862,17 @@ def main_message(message):
                 return
 
             login = message.text.split('@')[1].strip()
-            user = getUserByLogin(login)
-            if user:
-                myquery = { "login": f"{login}" }
-                registered_users.delete_one(myquery)
-                updateUser(None)
-                bot.reply_to(message, text=f'{login} уволен нафиг!', reply_markup=markup)
-            else:
-                bot.reply_to(message, text=f'{login} не найден!', reply_markup=markup)
+            # user = getUserByLogin(login)
+            #if user:
+            myquery = { "login": f"{login}" }
+            doc = registered_users.delete_one(myquery)
+            
+            updateUser(None)
+            
+            myquery = { "name": f"{login}" }
+            war = wariors.delete_one(myquery)
+
+            bot.reply_to(message, text=f'{login} уволен нафиг! Удалено {doc.deleted_count} записей в дневнике бандитов и {war.deleted_count} в дневнике боев!', reply_markup=markup)
 
         elif (callJugi and 'профиль' in message.text.lower()):
             user = users.getUser(message.from_user.username, registered_users)
