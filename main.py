@@ -70,37 +70,37 @@ for adm in list(getSetting('ADMINISTRATOR')):
 
 def isAdmin(login: str):
     for adm in list(ADMIN_ARR):
-        if login == adm: return True
+        if login.lower() == adm.lower(): return True
     return False
 
 def isOurUserName(name: str):
     for user in list(USERS_ARR):
-        if name == user.getName(): return True
+        if name.lower() == user.getName().lower(): return True
     return False
 
 def isOurUserLogin(login: str):
     for user in list(USERS_ARR):
-        if login == user.getLogin(): 
+        if login.lower() == user.getLogin().lower(): 
             return True
     return False
 
 def isOurBandUserLogin(login: str):
     for user in list(USERS_ARR):
-        if login == user.getLogin():
+        if login.lower() == user.getLogin().lower():
             for band in getSetting('OUR_BAND'):
-                if user.getBand() and band.get('band') == user.getBand():
+                if user.getBand() and band.get('band').lower() == user.getBand().lower():
                     return True
             break
     return False
 
 def getUserByLogin(login: str):
     for user in list(USERS_ARR):
-        if login == user.getLogin(): return user
+        if login.lower() == user.getLogin().lower(): return user
     return None
 
 def getUserByName(name: str):
     for user in list(USERS_ARR):
-        if name == user.getName(): return user
+        if name.lower() == user.getName().lower(): return user
     return None
 
 def updateUser(newuser: users.User):
@@ -812,13 +812,14 @@ def main_message(message):
             #     bot.reply_to(message, text=getResponseDialogFlow('shot_message_go_in_lk'), reply_markup=markup)
             #     return
 
-            name = tools.deEmojify(message.text.split('профиль @')[1].strip())
-            if (isOurUserName(name)):
-                user = getUserByName(name)
+            name = tools.deEmojify(message.text.lower().split('профиль @')[1].strip())
+            login = message.text.lower().split('профиль @')[1].strip()
+            if (isOurUserName(name) or isOurUserLogin(login)):
+                user = getUserByLogin(login)
+                if not user:
+                    user = getUserByName(name)
                 if user:
                     bot.reply_to(message, text=user.getProfile(), reply_markup=markup)
-
-
 
             for x in registered_wariors.find({'name':f'{name}'}):
                 warior = wariors.importWarior(x)
