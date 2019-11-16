@@ -856,7 +856,7 @@ def main_message(message):
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=markup)
                 return
 
-            login = message.text.split('уволить @')[1].strip()
+            login = message.text.split('@')[1].strip()
             user = getUserByLogin(login)
             if user:
                 myquery = { "login": f"{login}" }
