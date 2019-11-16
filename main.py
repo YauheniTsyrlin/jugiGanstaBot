@@ -107,8 +107,11 @@ def getUserByName(name: str):
     return None
 
 def updateUser(newuser: users.User):
-    newvalues = { "$set": json.loads(newuser.toJSON()) }
-    registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
+    if newuser == None:
+        pass
+    else:
+        newvalues = { "$set": json.loads(newuser.toJSON()) }
+        registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
 
     USERS_ARR = []
     for x in registered_users.find():
@@ -847,6 +850,22 @@ def main_message(message):
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'), reply_markup=markup)
             else: 
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_huinya'), reply_markup=markup)
+
+        elif (callJugi and 'уволить @' in message.text.lower()):
+            if not isAdmin(message.from_user.username):
+                bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=markup)
+                return
+
+            login = message.text.lower().split('уволить @')[1].strip()
+            user = getUserByLogin(login)
+            if user:
+                myquery = { "login": f"{login}" }
+                registered_users.delete_one(myquery)
+                updateUser(None)
+                
+                bot.reply_to(message, text=f'{login} уволен нафиг!', reply_markup=markup)
+            else:
+                bot.reply_to(message, text=f'{login} не найден!', reply_markup=markup)
 
         elif (callJugi and 'профиль' in message.text.lower()):
             user = users.getUser(message.from_user.username, registered_users)
