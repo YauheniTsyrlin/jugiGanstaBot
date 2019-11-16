@@ -909,7 +909,7 @@ def main_message(message):
                             msg = send_messages_big(message.chat.id, text=report, reply_markup=None)
                             if not privateChat:
                                 bot.pin_chat_message(message.chat.id, msg.message_id)
-                            msg = send_messages_big(message.chat.id, text='Напомнить в '+time_remind_str, reply_markup=None)
+                            #msg = send_messages_big(message.chat.id, text='Напомнить в '+time_remind_str+'?', reply_markup=None)
 
                     elif 'capture' == response.split(':')[1]:
                             #   0    1        2       3     4
