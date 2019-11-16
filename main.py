@@ -80,8 +80,11 @@ def isOurUserName(name: str):
 
 def isOurUserLogin(login: str):
     for user in list(USERS_ARR):
-        if login.lower() == user.getLogin().lower(): 
-            return True
+        try:
+            if login.lower() == user.getLogin().lower(): 
+                return True
+        except:
+            pass        
     return False
 
 def isOurBandUserLogin(login: str):
