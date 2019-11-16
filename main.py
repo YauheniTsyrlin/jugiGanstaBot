@@ -842,8 +842,11 @@ def main_message(message):
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_huinya'), reply_markup=markup)
 
         elif (callJugi and 'профиль' in message.text.lower()):
-            bot.send_chat_action(message.chat.id, 'typing')
+            #bot.send_chat_action(message.chat.id, 'typing')
+            logger.info('get profile ' + message.from_user.username)
             user = users.getUser(message.from_user.username, registered_users)
+            logger.info('user : ' + user.toJSON())
+
             if user:
                 warior = wariors.getWarior(user.getName(), registered_wariors)
                 if (warior and warior.photo):
