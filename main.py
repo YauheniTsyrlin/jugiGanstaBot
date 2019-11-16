@@ -823,7 +823,7 @@ def main_message(message):
             #     return
 
             name = tools.deEmojify(message.text.lower().split('профиль @')[1].strip())
-            login = message.text.lower().split('профиль @')[1].strip()
+            login = message.text.split('профиль @')[1].strip()
             if (isOurUserName(name) or isOurUserLogin(login)):
                 user = getUserByLogin(login)
                 if not user:
@@ -856,13 +856,12 @@ def main_message(message):
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=markup)
                 return
 
-            login = message.text.lower().split('уволить @')[1].strip()
+            login = message.text.split('уволить @')[1].strip()
             user = getUserByLogin(login)
             if user:
                 myquery = { "login": f"{login}" }
                 registered_users.delete_one(myquery)
                 updateUser(None)
-                
                 bot.reply_to(message, text=f'{login} уволен нафиг!', reply_markup=markup)
             else:
                 bot.reply_to(message, text=f'{login} не найден!', reply_markup=markup)
