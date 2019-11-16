@@ -95,7 +95,10 @@ def isOurBandUserLogin(login: str):
 
 def getUserByLogin(login: str):
     for user in list(USERS_ARR):
-        if login.lower() == user.getLogin().lower(): return user
+        try:
+            if login.lower() == user.getLogin().lower(): return user
+        except:
+            pass
     return None
 
 def getUserByName(name: str):
@@ -747,9 +750,8 @@ def main_message(message):
         else:
             bot.reply_to(message, text=getResponseDialogFlow('i_dont_know_you'), reply_markup=None)
         return
-    if (isOurBandUserLogin(message.from_user.username)):
-        
 
+    if (isOurBandUserLogin(message.from_user.username)):
         #write_json(message.json)
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
         if not privateChat:

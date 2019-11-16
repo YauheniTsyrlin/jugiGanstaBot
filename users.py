@@ -154,6 +154,13 @@ class User(object):
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, 
             sort_keys=True, indent=4)
+    
+    def getTimeByUserTimeZone(self, date: datetime.timestamp):
+        dt = datetime.fromtimestamp(date)
+        if self.getTimeZone():
+            tz = datetime.strptime(self.getTimeZone(),"%H:%M:%S")
+            dt = dt + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+        return dt.timestamp()
 
     def getBm(self):
         stat = int(self.damage) + int(self.accuracy) + int(self.health) + int(self.charisma) + int(self.agility)
@@ -191,10 +198,10 @@ class User(object):
         string = string + f'└🏋️‍♂️ Вес на рейде: {self.getRaidWeight()}\n'
         string = string + f'\n'
 
-        string = string + '⏰ ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.timeUpdate)) +'\n'
+        string = string + '⏰ ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeUpdate))) +'\n'
         if self.timeBan:
             if self.timeBan > datetime.datetime.now().timestamp():
-                string = string + '☠️ Забанен до ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.timeBan)) +'\n'  
+                string = string + '☠️ Забанен до ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeBan))) +'\n'  
         return string
 
     def getLogin(self):
