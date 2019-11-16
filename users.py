@@ -141,8 +141,8 @@ class User(object):
             if ('Выносливость' in strings[i]):
                 self.setStamina(strings[i].split(':')[1].split('/')[1].strip())
             if ('📍' in strings[i] and '👊' in strings[i]):
-                raidlocation = strings[i].split('👣')[1].split('км.')[0]
-                raid = strings[i].split('📍')[1].split('👊')[0].strip()
+                self.raidlocation = strings[i].split('👣')[1].split('км.')[0]
+                self.raid = strings[i].split('📍')[1].split('👊')[0].strip()
             if ('🏵' in strings[i]):
                 dzen_tmp = strings[i][1:2].strip()
                 if dzen_tmp == '':
