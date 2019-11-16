@@ -767,7 +767,9 @@ def main_message(message):
             bot.send_chat_action(message.chat.id, 'typing')
             r = requests.get(f'{config.ANECDOT_URL}={type_joke}')
             bot.reply_to(message, r.text[12:-2], reply_markup=markup)
-        
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # TO DO!
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         elif (callJugi 
                     and message.text 
                     and ('залёт' in message.text.lower() or 'залет' in message.text.lower())
@@ -793,7 +795,10 @@ def main_message(message):
             else:
                 registered_users.update_one({"login": f"{login}"}, newvalues)
                 bot.reply_to(message, text='✅ Готово')
- 
+        
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # TO DO!
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
         elif ( callJugi and 'верси' in message.text.lower()):
             bot.reply_to(message, text=getResponseDialogFlow('last_version'), reply_markup=markup)
 
@@ -842,11 +847,7 @@ def main_message(message):
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_huinya'), reply_markup=markup)
 
         elif (callJugi and 'профиль' in message.text.lower()):
-            #bot.send_chat_action(message.chat.id, 'typing')
-            logger.info('get profile ' + message.from_user.username)
             user = users.getUser(message.from_user.username, registered_users)
-            logger.info('user : ' + user.toJSON())
-
             if user:
                 warior = wariors.getWarior(user.getName(), registered_wariors)
                 if (warior and warior.photo):

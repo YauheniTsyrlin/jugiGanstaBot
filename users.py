@@ -42,6 +42,10 @@ def updateUser(newUser, oldUser):
         oldUser.loсation = newUser.loсation
     if hasattr(newUser, 'timeZone'):
         oldUser.timeZone = newUser.timeZone
+    if hasattr(newUser, 'raid'):
+        oldUser.raid = newUser.raid
+    if hasattr(newUser, 'raidlocation'):
+        oldUser.raidlocation = newUser.raidlocation
     if newUser.dzen:
         oldUser.dzen = newUser.dzen
     if newUser.timeUpdate:
@@ -78,6 +82,10 @@ def importUser(registered_user):
             u.timeUpdate     = registered_user['timeUpdate']
         if (registered_user.get('status')):    
             u.status     = registered_user['status']
+        if (registered_user.get('raid')):    
+            u.raid     = registered_user['raid']
+        if (registered_user.get('raidlocation')):    
+            u.raidlocation     = registered_user['raidlocation']
         return u
 
 class User(object):
@@ -92,6 +100,8 @@ class User(object):
         self.location = None
         self.timeZone = None
         self.timeBan  = None
+        self.raid = None
+        self.raidlocation = None
 
         strings = text.split('\n')
         isEquipequipment = False
@@ -129,6 +139,9 @@ class User(object):
             # 11 - |�🔋Выносливость: 8/16 /ref|
             if ('Выносливость' in strings[i]):
                 self.setStamina(strings[i].split(':')[1].split('/')[1].strip())
+            if ('📍' in strings[i] and '👊' in strings[i]):
+                raidlocation = strings[i].split('👣')[1].split('км.')[0]
+                raid = strings[i].split('📍')[1].split('👊')[0].strip()
             if ('🏵' in strings[i]):
                 dzen_tmp = strings[i][1:2].strip()
                 if dzen_tmp == '':
@@ -172,6 +185,8 @@ class User(object):
         string = string + f'├⚔ {self.damage}|🛡{self.armor}|🏵{self.dzen}|\n'  
         string = string + f'├💪 {self.force}|🔫{self.accuracy}|❤{self.health}|\n'
         string = string + f'├🗣 {self.charisma}|🤸🏽‍{self.agility}|🔋{self.stamina}|\n'
+        if self.raid:
+            string = string + f'├👊 {self.raid}\n'
         string = string + f'└🏋️‍♂️ Вес на рейде: {self.getRaidWeight()}\n'
         string = string + f'\n'
 
@@ -265,6 +280,16 @@ class User(object):
         self.dzen = dzen  
     def getDzen(self):
         return self.dzen
+
+    def setRaid(self, raid):
+        self.raid = raid  
+    def getRaid(self):
+        return self.raid
+
+    def setRaidLocation(self, raidlocation):
+        self.raidlocation = raidlocation  
+    def getRaidLocation(self):
+        return self.raidlocation
 
     def setStatus(self, status):
         self.status = status  
