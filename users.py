@@ -14,9 +14,7 @@ def getUser(login, registered_users):
 def updateUser(newUser, oldUser):
     if oldUser == None:
         return newUser
-    logger.info(newUser.toJSON())
-    logger.info("new vs old")
-    logger.info(newUser.toJSON())
+
     if newUser.name:
         oldUser.name = newUser.name
     if newUser.fraction:
@@ -57,6 +55,10 @@ def updateUser(newUser, oldUser):
         oldUser.dzen = newUser.dzen
     if newUser.timeUpdate:
         oldUser.timeUpdate = newUser.timeUpdate
+    
+    logger.info(newUser.toJSON())
+    logger.info("new vs old")
+    logger.info(newUser.toJSON())
 
     return oldUser
 
