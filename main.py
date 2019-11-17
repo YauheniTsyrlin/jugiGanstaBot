@@ -725,6 +725,7 @@ def main_message(message):
             if findUser==False:   
                 USERS_ARR.append(user)
                 x = registered_users.insert_one(json.loads(user.toJSON()))
+                updateUser(user)
             else:
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
                 updateUser(updatedUser)

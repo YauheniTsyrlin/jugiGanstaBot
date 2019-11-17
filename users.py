@@ -55,10 +55,6 @@ def updateUser(newUser, oldUser):
         oldUser.dzen = newUser.dzen
     if newUser.timeUpdate:
         oldUser.timeUpdate = newUser.timeUpdate
-    
-    print(newUser.toJSON())
-    print("new vs old")
-    print(oldUser.toJSON())
 
     return oldUser
 
