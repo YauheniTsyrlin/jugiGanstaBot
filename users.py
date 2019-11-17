@@ -40,17 +40,22 @@ def updateUser(newUser, oldUser):
     if newUser.stamina:
         oldUser.stamina = newUser.stamina
     if hasattr(newUser, 'loсation'):
-        oldUser.loсation = newUser.loсation
+        if newUser.loсation:
+            oldUser.loсation = newUser.loсation
     if hasattr(newUser, 'timeZone'):
-        oldUser.timeZone = newUser.timeZone
+        if newUser.timeZone:
+            oldUser.timeZone = newUser.timeZone
     if hasattr(newUser, 'raid'):
-        oldUser.raid = newUser.raid
+        if newUser.raid:
+            oldUser.raid = newUser.raid
     if hasattr(newUser, 'raidlocation'):
-        oldUser.raidlocation = newUser.raidlocation
+        if newUser.raidlocation:
+            oldUser.raidlocation = newUser.raidlocation
     if newUser.dzen:
         oldUser.dzen = newUser.dzen
     if newUser.timeUpdate:
         oldUser.timeUpdate = newUser.timeUpdate
+
     return oldUser
 
 def importUser(registered_user):
@@ -180,10 +185,10 @@ class User(object):
             string = string + f'├🤟Банда: {self.band}\n'
         
         if self.location:
-            timeZone = 'Gmt+0:00'
+            timeZone = 'Gmt+00:00'
             if self.timeZone:
                 tz = datetime.strptime(self.timeZone,"%H:%M:%S")
-                timeZone = f'Gmt+{tz.hour}:{tz.minute}'
+                timeZone = f'Gmt+{str(tz.hour).zfill(2)}:{str(tz.minute).zfill(2)}'
             string = string + f'├📍{self.location}|⏰{timeZone}\n'
         else:
             string = string + f'├📍 Скажи Джу: Я живу в ...\n'
