@@ -180,7 +180,10 @@ class User(object):
             string = string + f'├🤟Банда: {self.band}\n'
         
         if self.location:
-            string = string + f'├📍{self.location}\n'
+            timeZone = self.timeZone
+            if timeZone is None:
+                timeZone = '+0:00:00'
+            string = string + f'├📍{self.location}|⏰{timeZone}\n'
         else:
             string = string + f'├📍 Скажи Джу: Я живу в ...\n'
 
