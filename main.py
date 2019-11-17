@@ -1157,6 +1157,9 @@ def main_message(message):
             else:
                 bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
         return
+    else:
+        bot.reply_to(message, text=getResponseDialogFlow('you_dont_our_band_gangster'))
+        return
 
 def insert_dash(string, index, char):
     return string[:index] + char + string[index:]
