@@ -684,6 +684,10 @@ def ring_message(message: Message):
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
     #write_json(message.json)
+    logger.info('message.from_user.username: '+message.from_user.username)
+    logger.info('message.text: 'message.text)
+    
+    
     privateChat = ('private' in message.chat.type)
     callJugi = (privateChat 
                             or message.text.lower().startswith('джу') 
@@ -694,7 +698,8 @@ def main_message(message):
 
     findUser = isOurUserLogin(message.from_user.username)
     userIAm = getUserByLogin(message.from_user.username)
-
+    logger.info('findUser: ' + str(findUser))
+    
     if not findUser:
         r = random.random()
         if (r <= float(getSetting('PROBABILITY_I_DONT_NOW'))):
@@ -753,6 +758,7 @@ def main_message(message):
             bot.reply_to(message, text=getResponseDialogFlow('i_dont_know_you'), reply_markup=None)
         return
 
+    logger.info('isOurBandUserLogin: '+str(isOurBandUserLogin(message.from_user.username)))
     if (isOurBandUserLogin(message.from_user.username)):
         #write_json(message.json)
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
