@@ -89,11 +89,14 @@ def isOurUserLogin(login: str):
 
 def isOurBandUserLogin(login: str):
     for user in list(USERS_ARR):
-        if login.lower() == user.getLogin().lower():
-            for band in getSetting('OUR_BAND'):
-                if user.getBand() and band.get('band').lower() == user.getBand().lower():
-                    return True
-            break
+        try:
+            if login.lower() == user.getLogin().lower():
+                for band in getSetting('OUR_BAND'):
+                    if user.getBand() and band.get('band').lower() == user.getBand().lower():
+                        return True
+                break
+        except:
+            pass
     return False
 
 def getUserByLogin(login: str):
