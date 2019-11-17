@@ -713,10 +713,6 @@ def main_message(message):
 
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
             user = users.User(message.from_user.username, message.forward_date, message.text)
-            if privateChat and (tools.deEmojify(message.from_user.first_name) != user.getName()):
-                if not findUser: bot.reply_to(message, text=getResponseDialogFlow('change_name'))
-                if not findUser: bot.send_chat_action(message.chat.id, 'typing')
-                if not findUser: time.sleep(3)
 
             if findUser==False:   
                 USERS_ARR.append(user)
