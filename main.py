@@ -688,7 +688,7 @@ def ring_message(message: Message):
 def main_message(message):
     #write_json(message.json)
     logger.info('message.from_user.username: '+message.from_user.username)
-    logger.info('message.text: 'message.text)
+    logger.info('message.text: ' + message.text)
     
     
     privateChat = ('private' in message.chat.type)
