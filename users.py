@@ -185,10 +185,10 @@ class User(object):
             string = string + f'├🤟Банда: {self.band}\n'
         
         if self.location:
-            timeZone = 'Gmt+00:00'
+            timeZone = '+00:00'
             if self.timeZone:
                 tz = datetime.strptime(self.timeZone,"%H:%M:%S")
-                timeZone = f'Gmt+{str(tz.hour).zfill(2)}:{str(tz.minute).zfill(2)}'
+                timeZone = f'+{str(tz.hour).zfill(2)}:{str(tz.minute).zfill(2)}'
             string = string + f'├📍{self.location}|⏰{timeZone}\n'
         else:
             string = string + f'├📍 Скажи Джу: Я живу в ...\n'
