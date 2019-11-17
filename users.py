@@ -56,9 +56,9 @@ def updateUser(newUser, oldUser):
     if newUser.timeUpdate:
         oldUser.timeUpdate = newUser.timeUpdate
     
-    logger.info(newUser.toJSON())
-    logger.info("new vs old")
-    logger.info(newUser.toJSON())
+    print(newUser.toJSON())
+    print("new vs old")
+    print(oldUser.toJSON())
 
     return oldUser
 
