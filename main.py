@@ -809,7 +809,8 @@ def main_message(message):
             else:
                 registered_users.update_one({"login": f"{login}"}, newvalues)
                 bot.reply_to(message, text='✅ Готово')
-        
+            
+            updateUser(None)
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         # TO DO!
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
