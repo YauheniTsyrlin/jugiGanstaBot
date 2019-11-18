@@ -134,14 +134,14 @@ class User(object):
             if (not isEquipequipment) and ('Броня' in strings[i]):
                 self.setArmor(strings[i].split(':')[2].split(' ')[1].strip())
             if ('Сила' in strings[i]):
-                self.setForce(strings[i].split(':')[1].split('🎯')[0].strip())
+                self.setForce(strings[i].split(':')[1].split('🎯')[0].split(' ')[0].strip())
             if ('Меткость' in strings[i]):
-                self.setAccuracy(strings[i].split(':')[2].split(' ')[1].strip())
+                self.setAccuracy(strings[i].split(':')[2].split(' ')[1].split(' ')[0].strip())
             # 9 - |🗣Харизма: 80 ��🏽🏽‍♂️Ловкость: 318|
             if ('Харизма' in strings[i]):
-                self.setCharisma(strings[i].split(' ')[1].strip())
+                self.setCharisma(strings[i].split(' ')[1].split(' ')[0].strip())
             if ('Ловкость' in strings[i]):
-                self.setAgility(strings[i].split(':')[2].split(' ')[1].strip())
+                self.setAgility(strings[i].split(':')[2].split(' ')[1].split(' ')[0].strip())
             # 11 - |�🔋Выносливость: 8/16 /ref|
             if ('Выносливость' in strings[i]):
                 self.setStamina(strings[i].split(':')[1].split('/')[1].strip())
