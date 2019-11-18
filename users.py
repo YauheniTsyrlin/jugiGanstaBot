@@ -141,7 +141,7 @@ class User(object):
             if ('Харизма' in strings[i]):
                 self.setCharisma(strings[i].split(' ')[1].split(' ')[0].strip())
             if ('Ловкость' in strings[i]):
-                self.setAgility(strings[i].split(':')[2].split(' ')[1].split(' ')[0].strip())
+                self.setAgility(strings[i].split(':')[2].split(' ')[1].split('(')[0].strip())
             # 11 - |�🔋Выносливость: 8/16 /ref|
             if ('Выносливость' in strings[i]):
                 self.setStamina(strings[i].split(':')[1].split('/')[1].strip())
