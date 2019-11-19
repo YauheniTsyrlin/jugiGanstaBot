@@ -134,7 +134,7 @@ class User(object):
             if (not isEquipequipment) and ('Броня' in strings[i]):
                 self.setArmor(strings[i].split(':')[2].split(' ')[1].strip())
             if ('Сила' in strings[i]):
-                self.setForce(strings[i].split(':')[1].split('🎯')[0].split(' ')[0].strip())
+                self.setForce(strings[i].split(':')[1].split('🎯')[0].split(' ')[1].strip())
             if ('Меткость' in strings[i]):
                 self.setAccuracy(strings[i].split(':')[2].split(' ')[1].split(' ')[0].strip())
             # 9 - |🗣Харизма: 80 ��🏽🏽‍♂️Ловкость: 318|
@@ -155,6 +155,7 @@ class User(object):
                 elif (int(dzen_tmp) >=2):
                     self.setDzen(str(int(dzen_tmp)-1))
             i=i+1
+        #print(self.toJSON())
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, 
