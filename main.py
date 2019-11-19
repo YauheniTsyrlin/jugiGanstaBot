@@ -720,8 +720,15 @@ def main_message(message):
                 bot.reply_to(message, text=getResponseDialogFlow('getpip'))
 
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
-            user = users.User(message.from_user.username, message.forward_date, message.text)
 
+            if 'ТОП ИГРОКОВ:' in message.text:
+                ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
+                for warior in ww:
+                    updateWarior(warior, message)
+                bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+                return
+
+            user = users.User(message.from_user.username, message.forward_date, message.text)
             if findUser==False:   
                 USERS_ARR.append(user)
                 x = registered_users.insert_one(json.loads(user.toJSON()))

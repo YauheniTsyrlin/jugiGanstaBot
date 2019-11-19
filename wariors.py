@@ -130,6 +130,23 @@ def fromPhotoToWarioirs(date, text, photo):
     result.append(warior)
     return result
 
+
+def fromTopToWariorsBM(forward_date, message, wariors):
+    result = []
+    strings = message.text.split('\n')
+    i = 0
+    for s in strings:
+        if ('Счет: ' in strings[i] ):
+            name = strings[i-1].split('. ')[1].split(' [')[0].strip()
+            bm = strings[i].split('Счет: ')[1].strip()
+            
+            for w in wariors.find({"name": f"{tools.deEmojify(name)}"}):
+                warior = Warior(name, message.forward_date, "", None)
+                warior.setBm(bm)
+                result.append(warior)
+    return result
+
+
 def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
     
     def getUserByLogin(login: str):
