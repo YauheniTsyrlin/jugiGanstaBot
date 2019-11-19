@@ -722,8 +722,10 @@ def main_message(message):
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
 
             if 'ТОП ИГРОКОВ:' in message.text:
+                print('ТОП ИГРОКОВ!!!!')
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
                 for warior in ww:
+                    print(warior)
                     updateWarior(warior, message)
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
                 return

@@ -136,14 +136,16 @@ def fromTopToWariorsBM(forward_date, message, wariors):
     strings = message.text.split('\n')
     i = 0
     for s in strings:
+
         if ('Счет: ' in strings[i] ):
             name = strings[i-1].split('. ')[1].split(' [')[0].strip()
             bm = strings[i].split('Счет: ')[1].strip()
-            
+            print(name + "|" + str(bm))
             for w in wariors.find({"name": f"{tools.deEmojify(name)}"}):
                 warior = Warior(name, message.forward_date, "", None)
                 warior.setBm(bm)
                 result.append(warior)
+        i = i + 1
     return result
 
 
@@ -289,7 +291,7 @@ class Warior(object):
     
     def getProfileSmall(self):
         string = ''
-       
+        
         if (not self.band) or (self.band == 'NO_BAND'):
             string = string + f'┌{self.fraction.split(" ")[0].strip()} 🤘(без банды)'
         else:
@@ -322,6 +324,7 @@ class Warior(object):
         return string
 
     def getProfile(self):
+        print('getProfile')
         string = ''
         string = string + f'┌{self.name}\n'  
         if self.fraction:
@@ -371,6 +374,7 @@ class Warior(object):
         string = string + '\n'
 
         string = string + '⏰ ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.timeUpdate)) +'\n'
+        #print(string)
         return string
 
     def setName(self, name):
