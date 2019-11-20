@@ -731,8 +731,7 @@ def main_message(message):
                 return
 
             logger.info('📟Пип-бой 3000!')
-            #user = users.User(message.from_user.username, message.forward_date, message.text)
-            user = users.User('Gromnsk', message.forward_date, message.text)
+            user = users.User(message.from_user.username, message.forward_date, message.text)
 
             if findUser==False:   
                 #USERS_ARR.append(user)
