@@ -114,13 +114,19 @@ def getUserByName(name: str):
 
 def updateUser(newuser: users.User):
     if newuser == None:
+        logger.info('newuser == None')
         pass
     else:
         newvalues = { "$set": json.loads(newuser.toJSON()) }
-        registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
+        logger.info(f'update User {newuser.getLogin()}')
+        logger.info(newvalues)
+        z = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
+        logger.info(str(z.modified_count) + "|" + newuser.getLogin())
+        logger.info('ok')
 
-    USERS_ARR = []
+    USERS_ARR.clear()
     for x in registered_users.find():
+        #print(x)
         USERS_ARR.append(users.importUser(x))
 
 def setSetting(login: str, code: str, value: str):
@@ -133,7 +139,7 @@ def setSetting(login: str, code: str, value: str):
     newvalues = { "$set": { "value": json.loads(value) } }
     u = settings.update_one(myquery, newvalues)
 
-    SETTINGS_ARR = [] # Зарегистрированные настройки
+    SETTINGS_ARR.clear() # Зарегистрированные настройки
     for setting in settings.find():
         SETTINGS_ARR.append(setting)
     return True
@@ -741,6 +747,8 @@ def main_message(message):
             else:
                 logger.info('update user '+user.getLogin())
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
+                logger.info(user.toJSON())
+                
                 updateUser(updatedUser)
 
             if privateChat:
