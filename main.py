@@ -730,12 +730,16 @@ def main_message(message):
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
                 return
 
+            logger.info('📟Пип-бой 3000!')
             user = users.User(message.from_user.username, message.forward_date, message.text)
+
             if findUser==False:   
-                USERS_ARR.append(user)
+                #USERS_ARR.append(user)
                 x = registered_users.insert_one(json.loads(user.toJSON()))
-                updateUser(user)
+                logger.info('add user '+user.getLogin())
+                updateUser(None)
             else:
+                logger.info('update user '+user.getLogin())
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
                 updateUser(updatedUser)
 
@@ -880,6 +884,7 @@ def main_message(message):
             login = message.text.split('@')[1].strip()
             # user = getUserByLogin(login)
             #if user:
+            logger.info('Увольняем  '+login)
             myquery = { "login": f"{login}" }
             doc = registered_users.delete_one(myquery)
             
