@@ -900,8 +900,10 @@ def main_message(message):
             
             myquery = { "name": f"{login}" }
             war = registered_wariors.delete_one(myquery)
-
-            bot.reply_to(message, text=f'{login} уволен нафиг! Удалено {doc.deleted_count} записей в дневнике бандитов и {war.deleted_count} в дневнике боев!', reply_markup=markup)
+            if doc.deleted_count == 0:
+                bot.reply_to(message, text=f'{login} не найден в бандитах! Удалено {war.deleted_count} в дневнике боев!', reply_markup=markup)
+            else:                 
+                bot.reply_to(message, text=f'{login} уволен нафиг! Удалено {doc.deleted_count} записей в дневнике бандитов и {war.deleted_count} в дневнике боев!', reply_markup=markup)
 
         elif (callJugi and 'профиль' in message.text.lower()):
             user = users.getUser(message.from_user.username, registered_users)
