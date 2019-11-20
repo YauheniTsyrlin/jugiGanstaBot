@@ -155,7 +155,7 @@ class User(object):
                 elif (int(dzen_tmp) >=2):
                     self.setDzen(str(int(dzen_tmp)-1))
             i=i+1
-        print(self.toJSON())
+        #print(self.toJSON())
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, 
