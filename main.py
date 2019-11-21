@@ -861,7 +861,7 @@ def main_message(message):
             
         elif (callJugi and 'профиль @' in message.text.lower()):
             
-            if not isInlineAccess(inline_query.from_user.username):
+            if not isInlineAccess(message.from_user.username):
                 bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=markup)
                 return
 
