@@ -771,7 +771,7 @@ def main_message(message):
                     else:
                         x = registered_wariors.insert_one(json.loads(warior.toJSON()))
                         logger.info('add warior '+warior.getName())
-                        updateWarior(None)
+                        update_wariors(None)
 
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
                 return
