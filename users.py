@@ -46,11 +46,9 @@ def updateUser(newUser, oldUser):
         if newUser.timeZone:
             oldUser.timeZone = newUser.timeZone
     if hasattr(newUser, 'raid'):
-        if newUser.raid:
-            oldUser.raid = newUser.raid
+        oldUser.raid = newUser.raid
     if hasattr(newUser, 'raidlocation'):
-        if newUser.raidlocation:
-            oldUser.raidlocation = newUser.raidlocation
+        oldUser.raidlocation = newUser.raidlocation
     if newUser.dzen:
         oldUser.dzen = newUser.dzen
     if newUser.timeUpdate:
