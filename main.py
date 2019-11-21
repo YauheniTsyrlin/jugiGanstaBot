@@ -124,6 +124,27 @@ def getUserByName(name: str):
         if name.lower() == user.getName().lower(): return user
     return None
 
+def isKnownWarior(name: str):
+    for warior in list(WARIORS_ARR):
+        if warior.getName() and name.lower() == warior.getName().lower(): return True
+    return False
+
+def update_wariors(newwariors: wariors.Warior):
+    if newwariors == None:
+        logger.info('newwariors == None')
+        pass
+    else:
+        newvalues = { "$set": json.loads(newwariors.toJSON()) }
+        logger.info(f'update Warior {newwariors.getName()}')
+        logger.info(newvalues)
+        z = registered_wariors.update_one({"name": f"{newwariors.getName()}"}, newvalues)
+        logger.info(str(z.modified_count) + "|" + newwariors.getName())
+        logger.info('ok')
+
+    WARIORS_ARR.clear()
+    for x in registered_wariors.find():
+        WARIORS_ARR.append(wariors.importWarior(x))
+
 def updateUser(newuser: users.User):
     if newuser == None:
         logger.info('newuser == None')
@@ -262,6 +283,8 @@ def updateWarior(warior: wariors.Warior, message: Message):
             newvalues = { "$set": json.loads(updatedWarior.toJSON()) }
             registered_wariors.update_one({"name": f"{warior.getName()}"}, newvalues)
             
+            update_wariors(updatedWarior)
+
             if privateChat:
                 if not findinUsers: 
                     if (updatedWarior and updatedWarior.photo):
@@ -272,7 +295,7 @@ def updateWarior(warior: wariors.Warior, message: Message):
                 if not findinUsers:
                     bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
         else:
-            WARIORS_ARR.append(warior)
+            #WARIORS_ARR.append(warior)
             registered_wariors.insert_one(json.loads(warior.toJSON()))
             if privateChat:
                 if not findinUsers: 
@@ -280,6 +303,7 @@ def updateWarior(warior: wariors.Warior, message: Message):
                     bot.reply_to(message, text=warior.getProfile())
             else:
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+            update_wariors(None)
 
 # Handle all other messages
 @bot.message_handler(content_types=["photo"])
@@ -742,8 +766,13 @@ def main_message(message):
                 print('ТОП ИГРОКОВ!!!!')
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
                 for warior in ww:
-                    print(warior)
-                    updateWarior(warior, message)
+                    if isKnownWarior(warior.getName()):
+                        updateWarior(warior, message)
+                    else:
+                        x = registered_wariors.insert_one(json.loads(warior.toJSON()))
+                        logger.info('add warior '+warior.getName())
+                        updateWarior(None)
+
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
                 return
 
