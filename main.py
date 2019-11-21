@@ -860,20 +860,23 @@ def main_message(message):
             bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'), reply_markup=markup)
             
         elif (callJugi and 'профиль @' in message.text.lower()):
-            if not isAdmin(message.from_user.username):
-                bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=markup)
+            
+            if not isInlineAccess(inline_query.from_user.username):
+                bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=markup)
                 return
 
             name = tools.deEmojify(message.text.split('@')[1].strip())
-            login = message.text.split('@')[1].strip()
-            if (isOurUserName(name) or isOurUserLogin(login)):
-                user = getUserByLogin(login)
-                if not user:
-                    user = getUserByName(name)
-                if user:
-                    bot.reply_to(message, text=user.getProfile(), reply_markup=markup)
-            else:
-                bot.reply_to(message, text=f'В базе зарегистрированнных бандитов {login} не найден', reply_markup=markup)
+
+            if isAdmin(message.from_user.username):
+                login = message.text.split('@')[1].strip()
+                if (isOurUserName(name) or isOurUserLogin(login)):
+                    user = getUserByLogin(login)
+                    if not user:
+                        user = getUserByName(name)
+                    if user:
+                        bot.reply_to(message, text=user.getProfile(), reply_markup=markup)
+                else:
+                    bot.reply_to(message, text=f'В базе зарегистрированнных бандитов {login} не найден', reply_markup=markup)
 
             for x in registered_wariors.find({'name':f'{name}'}):
                 warior = wariors.importWarior(x)

@@ -76,7 +76,9 @@ if (not result):
         'value': 
             [{'band': 'Артхаус'},
              {'band': 'Энтропия'},
-             {'band': 'без банды'}]   
+             {'band': 'без банды'},
+             {'band': 'Crewname'},
+             {'band': 'FgoatUpd'}]   
              })     
 
 
@@ -100,7 +102,9 @@ myquery = { "code": 'BANDS_INLINE_WARIORS' }
 newvalues = { "$set": { "value": 
             [{'band': 'Артхаус'},
              {'band': 'Энтропия'},
-             {'band': 'без банды'}]
+             {'band': 'без банды'},
+             {'band': 'Crewname'},
+             {'band': 'FgoatUpd'}]
              } } 
 u = settings.update_one(myquery, newvalues)
 
