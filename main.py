@@ -87,6 +87,18 @@ def isOurUserLogin(login: str):
             pass        
     return False
 
+def isInlineAccess(login: str):
+    for user in list(USERS_ARR):
+        try:
+            if login.lower() == user.getLogin().lower():
+                for band in getSetting('BANDS_INLINE_WARIORS'):
+                    if user.getBand() and band.get('band').lower() == user.getBand().lower():
+                        return True
+                break
+        except:
+            pass
+    return False
+
 def isOurBandUserLogin(login: str):
     for user in list(USERS_ARR):
         try:
@@ -196,7 +208,7 @@ def send_welcome_and_dismiss(message):
 # Handle all other messages
 @bot.inline_handler(lambda query: query.query)
 def default_query(inline_query):
-    if not isOurBandUserLogin(inline_query.from_user.username):
+    if not isInlineAccess(inline_query.from_user.username):
         r = types.InlineQueryResultArticle(id=0, title = 'Хрена надо? Ты не из наших банд!', input_message_content=types.InputTextMessageContent(getResponseDialogFlow('i_dont_know_you')), description=getResponseDialogFlow('i_dont_know_you'))
         bot.answer_inline_query(inline_query.id, [r], cache_time=3060)
         return
