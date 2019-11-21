@@ -141,10 +141,10 @@ def fromTopToWariorsBM(forward_date, message, wariors):
             name = strings[i-1].split('. ')[1].split(' [')[0].strip()
             bm = strings[i].split('Счет: ')[1].strip()
             print(name + "|" + str(bm))
-            for w in wariors.find({"name": f"{tools.deEmojify(name)}"}):
-                warior = Warior(name, message.forward_date, "", None)
-                warior.setBm(bm)
-                result.append(warior)
+            #for w in wariors.find({"name": f"{tools.deEmojify(name)}"}):
+            warior = Warior(name, message.forward_date, "", None)
+            warior.setBm(bm)
+            result.append(warior)
         i = i + 1
     return result
 
