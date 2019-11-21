@@ -726,7 +726,6 @@ def main_message(message):
                 bot.reply_to(message, text=getResponseDialogFlow('getpip'))
 
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
-
             if 'ТОП ИГРОКОВ:' in message.text:
                 print('ТОП ИГРОКОВ!!!!')
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
@@ -895,7 +894,7 @@ def main_message(message):
             logger.info('Увольняем  '+login)
             myquery = { "login": f"{login}" }
             doc = registered_users.delete_one(myquery)
-            
+             
             updateUser(None)
             
             myquery = { "name": f"{login}" }
