@@ -147,9 +147,9 @@ class User(object):
 
             # 9 - |🗣Харизма: 80 ��🏽🏽‍♂️Ловкость: 318(+30)|
             if ('Харизма' in strings[i]):
-                self.setCharisma(int(strings[i].split(': ')[1].split('🤸‍♀️')[0].split('(+')[0].strip()))
+                self.setCharisma(int(strings[i].split(': ')[1].split(' ')[0].split('(+')[0].strip()))
                 if '(+' in strings[i]:
-                    self.setCharisma(int(self.getCharisma()) + int(strings[i].split(': ')[1].split('🤸‍♀️')[0].split('(+')[1].split(')')[0].strip()))
+                    self.setCharisma(int(self.getCharisma()) + int(strings[i].split(': ')[1].split('(+')[1].split(')')[0].strip()))
 
             if ('Ловкость' in strings[i]):
                 self.setAgility(int(strings[i].split(':')[2].split('(+')[0].strip()))
