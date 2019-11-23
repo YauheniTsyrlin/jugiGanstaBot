@@ -125,33 +125,50 @@ class User(object):
                     self.setFraction(strings[i-1].split(',')[1].strip())
 
             if ('Голод' in strings[i]):
-                self.setHunger(strings[i].split(':')[1].split('%')[0].strip())
+                self.setHunger(int(strings[i].split(':')[1].split('%')[0].strip()))
             if ('Урон' in strings[i]):
-                self.setDamage(strings[i].split(':')[1].split(' ')[1].strip())
+                self.setDamage(int(strings[i].split(':')[1].split(' ')[1].strip()))
 
             if (not isEquipequipment) and ('Броня' in strings[i]):
-                self.setArmor(strings[i].split(':')[2].split(' ')[1].strip())
+                #'armor': '145 (+30)'
+                self.setArmor(int(strings[i].split(':')[2].split('(+')[0].strip()))
+                if '(+' in strings[i]:
+                    self.setArmor(int(self.getArmor()) + int(strings[i].split(':')[2].split('(+')[1].split(')')[0].strip()))
+
             if ('Сила' in strings[i]):
-                self.setForce(strings[i].split(':')[1].split('🎯')[0].split(' ')[1].strip())
+                self.setForce(int(strings[i].split(':')[1].split('🎯')[0].split('(+')[0].strip()))
+                if '(+' in strings[i]:
+                    self.setForce(int(self.getForce()) + int(strings[i].split(':')[1].split('🎯')[0].split('(+')[1].split(')')[0].strip()))
+
             if ('Меткость' in strings[i]):
-                self.setAccuracy(strings[i].split(':')[2].split(' ')[1].split(' ')[0].strip())
-            # 9 - |🗣Харизма: 80 ��🏽🏽‍♂️Ловкость: 318|
+                self.setAccuracy(int(strings[i].split(':')[2].split('(+')[0].strip()))
+                if '(+' in strings[i]:
+                    self.setAccuracy(int(self.getAccuracy()) + int(strings[i].split(':')[2].split('(+')[1].split(')')[0].strip()))
+
+            # 9 - |🗣Харизма: 80 ��🏽🏽‍♂️Ловкость: 318(+30)|
             if ('Харизма' in strings[i]):
-                self.setCharisma(strings[i].split(' ')[1].split(' ')[0].strip())
+                self.setCharisma(int(strings[i].split(': ')[1].split('🤸‍♀️')[0].split('(+')[0].strip()))
+                if '(+' in strings[i]:
+                    self.setCharisma(int(self.getCharisma()) + int(strings[i].split(': ')[1].split('🤸‍♀️')[0].split('(+')[1].split(')')[0].strip()))
+
             if ('Ловкость' in strings[i]):
-                self.setAgility(strings[i].split(':')[2].split(' ')[1].split('(')[0].strip())
+                self.setAgility(int(strings[i].split(':')[2].split('(+')[0].strip()))
+                if '(+' in strings[i]:
+                    self.setAgility(int(self.getAgility()) + int(strings[i].split(':')[2].split('(+')[1].split(')')[0].strip()))
+
+
             # 11 - |�🔋Выносливость: 8/16 /ref|
             if ('Выносливость' in strings[i]):
-                self.setStamina(strings[i].split(':')[1].split('/')[1].strip())
+                self.setStamina(int(strings[i].split(':')[1].split('/')[1].strip()))
             if ('📍' in strings[i] and '👊' in strings[i]):
-                self.raidlocation = strings[i].split('👣')[1].split('км.')[0]
+                self.raidlocation = int(strings[i].split('👣')[1].split('км.')[0])
                 self.raid = strings[i].split('📍')[1].split('👊')[0].strip()
             if ('🏵' in strings[i]):
                 dzen_tmp = strings[i][1:2].strip()
                 if dzen_tmp == '':
                     self.setDzen(0)
                 elif (int(dzen_tmp) >=2):
-                    self.setDzen(str(int(dzen_tmp)-1))
+                    self.setDzen(int(dzen_tmp)-1)
             i=i+1
         #print(self.toJSON())
 
