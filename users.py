@@ -183,8 +183,17 @@ class User(object):
             dt = dt + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
         return dt.timestamp()
 
+    def normalize(string):
+        try:
+            return int(string)
+        except:
+            if '(+' in str(string):
+                return int(string.split('(+')[0].strip()) + int(string.split('(+')[1].split(')')[0].strip())
+
     def getBm(self):
-        stat = int(self.damage) + int(self.accuracy) + int(self.health) + int(self.charisma) + int(self.agility)
+        if '+' in self.damage
+
+        stat = normalize(self.damage) + normalize(self.accuracy) + normalize(self.health) + normalize(self.charisma) + normalize(self.agility)
         return int(stat)
 
     def getRaidWeight(self):
