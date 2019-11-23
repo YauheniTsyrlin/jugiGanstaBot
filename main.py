@@ -963,7 +963,7 @@ def main_message(message):
                             usersarr.append(registered_user)
 
                         for user_tmp in sorted(usersarr, key = lambda i: i['weight'], reverse=True):
-                            string = string + f'\n🏋️‍♂️{user_tmp["weight"]} @{user_tmp["login"]}'
+                            string = string + f'\n🏋️‍♂️{user_tmp["weight"]} @{user_tmp["login"]} {user_tmp["name"]}'
 
                         if ('@' in string):    
                             bot.reply_to(message, text=string, reply_markup=markup)
@@ -1015,7 +1015,7 @@ def main_message(message):
                                 usersarr.append(registered_user)
 
                             for user_tmp in sorted(usersarr, key = lambda i: i['weight'], reverse=True):
-                                report = report + f'\n🏋️‍♂️{user_tmp["weight"]} @{user_tmp["login"]}'
+                                report = report + f'\n🏋️‍♂️{user_tmp["weight"]} @{user_tmp["login"]} {user_tmp["name"]}'
                                 
                             report = report + '\n\n<b>Не опаздываем!</b>' 
 
