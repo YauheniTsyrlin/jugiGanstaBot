@@ -46,6 +46,10 @@ competition = mydb["competition"]
 settings    = mydb["settings"]
 pending_messages = mydb["pending_messages"]
 
+logger = telebot.logger
+telebot.logger.setLevel(logging.INFO)
+bot = telebot.TeleBot(config.TOKEN)
+
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
     USERS_ARR.append(users.importUser(x))
@@ -73,12 +77,12 @@ def isAdmin(login: str):
         if login.lower() == adm.lower(): return True
     return False
 
-def isOurUserName(name: str):
+def isRegisteredUserName(name: str):
     for user in list(USERS_ARR):
         if name.lower() == user.getName().lower(): return True
     return False
 
-def isOurUserLogin(login: str):
+def isRegisteredUserLogin(login: str):
     for user in list(USERS_ARR):
         try:
             if login.lower() == user.getLogin().lower(): 
@@ -87,16 +91,35 @@ def isOurUserLogin(login: str):
             pass        
     return False
 
-def isInlineAccess(login: str):
-    for user in list(USERS_ARR):
-        try:
-            if login.lower() == user.getLogin().lower():
-                for band in getSetting('BANDS_INLINE_WARIORS'):
-                    if user.getBand() and band.get('band').lower() == user.getBand().lower():
-                        return True
-                break
-        except:
-            pass
+def getMyBands(login: str):
+    user = getUserByLogin(login)
+    if not user:
+        return None
+
+    for goat in getSetting('GOATS_BANDS'):
+        for band in goat['bands']:
+            if user.getBand() and user.getBand().lower() == band.lower():
+                return goat['bands']
+
+    return None        
+
+def isUsersBand(login: str, band: str):
+    bands = getMyBands(login)
+    if bands == None: 
+        return False
+    if band in bands:
+        return True
+    return False
+
+def hasAccessToWariors(login: str):
+    user = getUserByLogin(login)
+    if not user:
+        return False
+
+    for band in getSetting('BANDS_ACCESS_WARIORS'):
+        if user.getBand() and band.get('band').lower() == user.getBand().lower():
+            return True
+
     return False
 
 def isOurBandUserLogin(login: str):
@@ -177,10 +200,6 @@ def setSetting(login: str, code: str, value: str):
         SETTINGS_ARR.append(setting)
     return True
 
-logger = telebot.logger
-telebot.logger.setLevel(logging.INFO)
-bot = telebot.TeleBot(config.TOKEN)
-
 def getButtonsMenu(list_buttons):
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
     groups_names = []
@@ -229,7 +248,7 @@ def send_welcome_and_dismiss(message):
 # Handle all other messages
 @bot.inline_handler(lambda query: query.query)
 def default_query(inline_query):
-    if not isInlineAccess(inline_query.from_user.username):
+    if not hasAccessToWariors(inline_query.from_user.username):
         r = types.InlineQueryResultArticle(id=0, title = 'Хрена надо? Ты не из наших банд!', input_message_content=types.InputTextMessageContent(getResponseDialogFlow('i_dont_know_you')), description=getResponseDialogFlow('i_dont_know_you'))
         bot.answer_inline_query(inline_query.id, [r], cache_time=3060)
         return
@@ -601,7 +620,7 @@ def band_message(message: Message):
 def register_message(message: Message):
     
     list_buttons = []
-    if not isOurUserLogin(message.from_user.username):
+    if not isRegisteredUserLogin(message.from_user.username):
         list_buttons.append('⚔️ Записаться на бой')
         list_buttons.append('🤼 В ринг')
         bot.send_message(message.chat.id, text='Я тебя не знаю! Брось мне свои пип-бой или иди нафиг!', reply_markup=getButtonsMenu(list_buttons))
@@ -741,7 +760,7 @@ def main_message(message):
                                 and message.reply_to_message.from_user.username in ('FriendsBrotherBot', 'JugiGanstaBot') )
                 )
 
-    findUser = isOurUserLogin(message.from_user.username)
+    findUser = isRegisteredUserLogin(message.from_user.username)
     userIAm = getUserByLogin(message.from_user.username)
     logger.info('findUser: ' + str(findUser))
     
@@ -757,20 +776,20 @@ def main_message(message):
             'ПРИПАСЫ В РЮКЗАКЕ' not in message.text and 
             'РЕСУРСЫ и ХЛАМ' not in message.text ):
         # write_json(message.json)
-        if not findUser: 
-            if privateChat:
-                bot.reply_to(message, text=getResponseDialogFlow('getpip'))
+        # if not findUser: 
+        #     if privateChat:
+        #         bot.reply_to(message, text=getResponseDialogFlow('getpip'))
 
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
             if 'ТОП ИГРОКОВ:' in message.text:
-                print('ТОП ИГРОКОВ!!!!')
+                logger.info('ТОП ИГРОКОВ!!!!')
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
                 for warior in ww:
                     if isKnownWarior(warior.getName()):
                         updateWarior(warior, message)
                     else:
                         x = registered_wariors.insert_one(json.loads(warior.toJSON()))
-                        logger.info('add warior '+warior.getName())
+                        logger.info('Add warior: ' + warior.getName())
                         update_wariors(None)
 
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
@@ -780,15 +799,12 @@ def main_message(message):
             user = users.User(message.from_user.username, message.forward_date, message.text)
 
             if findUser==False:   
-                #USERS_ARR.append(user)
+                logger.info('Add user: ' + user.getLogin())
                 x = registered_users.insert_one(json.loads(user.toJSON()))
-                logger.info('add user '+user.getLogin())
                 updateUser(None)
             else:
-                logger.info('update user '+user.getLogin())
+                logger.info('Update user:' + user.getLogin())
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
-                logger.info(user.toJSON())
-                
                 updateUser(updatedUser)
 
             if privateChat:
@@ -811,7 +827,7 @@ def main_message(message):
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '/accept' in message.text and '/decline' in message.text):
         #write_json(message.json)
-        if isOurBandUserLogin(message.from_user.username):
+        if hasAccessToWariors(message.from_user.username):
             warior = wariors.getWarior(message.text.split('👤')[1].split(' из ')[0], registered_wariors)
             if warior == None:
                 bot.reply_to(message, text='Ничего о нем не знаю!', reply_markup=None)
@@ -820,11 +836,10 @@ def main_message(message):
             else:
                 bot.reply_to(message, text=warior.getProfile(), reply_markup=None)
         else:
-            bot.reply_to(message, text=getResponseDialogFlow('i_dont_know_you'), reply_markup=None)
+            bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
         return
 
-    logger.info('isOurBandUserLogin: '+str(isOurBandUserLogin(message.from_user.username)))
-    if (isOurBandUserLogin(message.from_user.username)):
+    if hasAccessToWariors(message.from_user.username):
         #write_json(message.json)
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
         if not privateChat:
@@ -866,39 +881,19 @@ def main_message(message):
             newvalues = { "$set": { "status": message.text.split(login)[1].strip() } }
             if not findLogin:
                 registered_users.update_one({"login": f"{message.from_user.username}"}, newvalues)
-                bot.reply_to(message, reply_markup=markup, text="Из-за свой криворкукости ты вьебал статус самому себе. Теперь твой статус '" + message.text.split(login)[1].strip() + "'")
+                bot.reply_to(message, reply_markup=markup, text="Из-за своей криворкукости ты вьебал статус самому себе. Теперь твой статус '" + message.text.split(login)[1].strip() + "'")
             else:
                 registered_users.update_one({"login": f"{login}"}, newvalues)
                 bot.reply_to(message, text='✅ Готово')
             
             updateUser(None)
-        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        # TO DO!
-        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-        elif ( callJugi and 'верси' in message.text.lower()):
-            bot.reply_to(message, text=getResponseDialogFlow('last_version'), reply_markup=markup)
-
-        elif (callJugi and 'бросить вызов @' in message.text.lower()):
-            # if not privateChat:
-            #     bot.reply_to(message, text=getResponseDialogFlow('shot_message_go_in_lk'))
-            #     return
-
-            login = message.text.lower().split('бросить вызов @')[1].split(' ')[0].strip()
-            
-
-            bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'), reply_markup=markup)
             
         elif (callJugi and 'профиль @' in message.text.lower()):
-            
-            if not isInlineAccess(message.from_user.username):
-                bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=markup)
-                return
 
             name = tools.deEmojify(message.text.split('@')[1].strip())
-
             if isAdmin(message.from_user.username):
                 login = message.text.split('@')[1].strip()
-                if (isOurUserName(name) or isOurUserLogin(login)):
+                if (isRegisteredUserName(name) or isRegisteredUserLogin(login)):
                     user = getUserByLogin(login)
                     if not user:
                         user = getUserByName(name)
@@ -909,23 +904,10 @@ def main_message(message):
 
             for x in registered_wariors.find({'name':f'{name}'}):
                 warior = wariors.importWarior(x)
-
                 if (warior and warior.photo):
                     bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=markup)
                 else:
                     bot.reply_to(message, text=warior.getProfile(), reply_markup=markup)
-        
-        elif (callJugi and 'настройка @' in message.text):
-            if not privateChat:
-                bot.reply_to(message, text=getResponseDialogFlow('shot_message_go_in_lk'), reply_markup=markup)
-                return
- 
-            settingCode = message.text.lower().split('настройка @')[1].split(' ')[0].strip()
-            settingValue = message.text.lower().split('настройка @')[1].split(' ')[1].strip()
-            if setSetting(message.from_user.username, settingCode, settingValue):
-                bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'), reply_markup=markup)
-            else: 
-                bot.reply_to(message, text=getResponseDialogFlow('shot_message_huinya'), reply_markup=markup)
 
         elif (callJugi and 'уволить @' in message.text.lower()):
             if not isAdmin(message.from_user.username):
@@ -933,12 +915,9 @@ def main_message(message):
                 return
 
             login = message.text.split('@')[1].strip()
-            # user = getUserByLogin(login)
-            #if user:
             logger.info('Увольняем  '+login)
             myquery = { "login": f"{login}" }
             doc = registered_users.delete_one(myquery)
-             
             updateUser(None)
             
             myquery = { "name": f"{login}" }
@@ -956,8 +935,8 @@ def main_message(message):
                     bot.send_photo(message.chat.id, warior.photo, user.getProfile(), reply_markup=markup)
                 else:
                     bot.reply_to(message, text=user.getProfile(), reply_markup=markup)
-                if (user.getRaid()):
-                    msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_raid'), reply_markup=markup)
+                # if (user.getRaid()):
+                #     msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_raid'), reply_markup=markup)
             else:
                 bot.reply_to(message, text='С твоим профилем какая-то беда... Звони в поддержку пип-боев!', reply_markup=markup)
 
@@ -968,25 +947,22 @@ def main_message(message):
             response = getResponseDialogFlow(text)
             if response:
                 if (response.startswith('jugi:')):
-                    #jugi:ping:Артхаус)
+                    #jugi:ping:Артхаус
                     if 'ping' == response.split(':')[1]:
                         # Собираем всех пользоватлей с бандой Х
+                        band = response.split(':')[2][1:]
+                        if not isUsersBand(message.from_user.username, band):
+                            bot.reply_to(message, text=f'Ты просил собраться банду {response.split(':')[2]}\n' + getResponseDialogFlow('not_right_band'), reply_markup=markup)
+                            return
+
                         string = f'{tools.deEmojify(message.from_user.first_name)} просит собраться банду {response.split(":")[2]}:'
-                        for registered_user in registered_users.find({"band": f"{response.split(':')[2][1:]}"}):
+                        for registered_user in registered_users.find({"band": f"{band}"}):
                             user = users.importUser(registered_user)
                             string = string + f'\n@{user.getLogin()}'
                         if ('@' in string):    
                             bot.reply_to(message, text=string, reply_markup=markup)
                         else:
                             bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
-                    elif 'status' == response.split(':')[1]:
-                        for registered_user in registered_users.find({"login": f'{message.from_user.username}'}):
-                            user = users.importUser(registered_user)
-                            if user.getStatus():
-                                bot.reply_to(message, text=user.getStatus(), reply_markup=markup)
-                            else:
-                                bot.reply_to(message, text='У тебя пустой статус... Чё надо?... \nСпроси - "Джу, как установить статус?', reply_markup=markup)
-                            break
                     elif 'rade' == response.split(':')[1]:
                             #   0    1        2         3     
                             # jugi:rade:$radelocation:$time
@@ -1015,12 +991,17 @@ def main_message(message):
                     elif 'capture' == response.split(':')[1]:
                             #   0    1        2       3     4
                             # jugi:capture:$bands:$Dangeon:$time
+                            band = response.split(':')[2][1:]
+                            if not isUsersBand(message.from_user.username, band):
+                                bot.reply_to(message, text=f'Ты пытался созвать на захват банду {response.split(':')[2]}\n' + getResponseDialogFlow('not_right_band'), reply_markup=markup)
+                                return  
+
                             time_str = response.split(response.split(":")[3])[1][1:]
                             dt = parse(time_str)
                             time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
 
                             report = f'<b>Захват!</b> {response.split(":")[2]} {time_str} <b>{response.split(":")[3]}</b>\n'
-                            for registered_user in registered_users.find({"band": f"{response.split(':')[2][1:]}"}):
+                            for registered_user in registered_users.find({"band": f"{band}"}):
                                 user = users.importUser(registered_user)
                                 report = report + f'\n@{user.getLogin()}'
                             report = report + '\n\n<b>Не опаздываем!</b>' 
@@ -1077,8 +1058,7 @@ def main_message(message):
                             bot.send_message(message.chat.id, text='Быть, епта!')
                         else:
                             bot.send_message(message.chat.id, text='ХЗ, я бы не рискнул...')
-  
-                        
+
                     elif 'setlocation' == response.split(':')[1]:
                         #jugi:setlocation:Москва
                         Client.PARAMS = {"format": "json", "apikey": config.YANDEX_GEOCODING_API_KEY}
@@ -1139,7 +1119,7 @@ def main_message(message):
                         i = 0
                         for d in dresult:
                             user_name = d.get("_id")   
-                            if not isOurUserName(user_name): continue
+                            if not isRegisteredUserName(user_name): continue
 
                             i = i + 1
                             if i == 1:
@@ -1191,7 +1171,7 @@ def main_message(message):
                         i = 0
                         for d in dresult:
                             user_name = d.get("_id")  
-                            if not isOurUserName(user_name): continue
+                            if not isRegisteredUserName(user_name): continue
                             
                             i = i + 1
                             if i == 1:

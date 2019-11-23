@@ -62,25 +62,30 @@ if (not result):
     settings.insert_one({
         'code': 'OUR_BAND', 
         'description': 'Банды, имеющие право пользоваться Джу', 
-        'value': 
-            [{'band': 'Артхаус'},
-             {'band': 'Энтропия'}]   
+        'value': ''   
              })             
 
-result = settings.find_one({'code': 'BANDS_INLINE_WARIORS'})
+
+myquery = {'code': 'BANDS_INLINE_WARIORS'}
+sett = settings.delete_one(myquery)
+
+result = settings.find_one({'code': 'BANDS_ACCESS_WARIORS'})
 if (not result):
-    print('Not Find setting. Insert BANDS_INLINE_WARIORS')
+    print('Not Find setting. Insert BANDS_ACCESS_WARIORS')
     settings.insert_one({
-        'code': 'BANDS_INLINE_WARIORS', 
+        'code': 'BANDS_ACCESS_WARIORS', 
         'description': 'Банды, имеющие право пользоваться inline сервисом wariors', 
-        'value': 
-            [{'band': 'Артхаус'},
-             {'band': 'Энтропия'},
-             {'band': 'без банды'},
-             {'band': 'Crewname'},
-             {'band': 'FgoatUpd'}]   
+        'value': ''   
              })     
 
+result = settings.find_one({'code': 'GOATS_BANDS'})
+if (not result):
+    print('Not Find setting. Insert GOATS_BANDS')
+    settings.insert_one({
+        'code': 'GOATS_BANDS', 
+        'description': ' Козлы и их Банды, имеющие право пользоваться Джу', 
+        'value': ''   
+             })   
 
 print("#==========================#")              
 print("#         SETTINGS         #")              
@@ -98,7 +103,9 @@ newvalues = { "$set": { "value":
              } } 
 u = settings.update_one(myquery, newvalues)
 
-myquery = { "code": 'BANDS_INLINE_WARIORS' }
+
+
+myquery = { "code": 'BANDS_ACCESS_WARIORS' }
 newvalues = { "$set": { "value": 
             [{'band': 'Артхаус'},
              {'band': 'Энтропия'},
@@ -107,6 +114,22 @@ newvalues = { "$set": { "value":
              {'band': 'FgoatUpd'}]
              } } 
 u = settings.update_one(myquery, newvalues)
+
+myquery = { "code": 'GOATS_BANDS' }
+newvalues = { "$set": 
+                { "value": 
+                    [
+                        { 'name': 'Adaptation', 
+                          'bands' : ['Артхаус','Энтропия']
+                        },
+                        { 'name': 'faggoat', 
+                          'bands' : ['без банды','Crewname','FgoatUpd']
+                        }
+                    ]   
+                } 
+            } 
+u = settings.update_one(myquery, newvalues)
+
 
 for x in settings.find():
     print(x)
