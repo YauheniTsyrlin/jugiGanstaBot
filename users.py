@@ -191,8 +191,6 @@ class User(object):
                 return int(string.split('(+')[0].strip()) + int(string.split('(+')[1].split(')')[0].strip())
 
     def getBm(self):
-        if '+' in self.damage
-
         stat = normalize(self.damage) + normalize(self.accuracy) + normalize(self.health) + normalize(self.charisma) + normalize(self.agility)
         return int(stat)
 
