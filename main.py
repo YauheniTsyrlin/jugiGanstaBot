@@ -149,7 +149,6 @@ def getUserByName(name: str):
 
 def getWariorByName(name: str):
     name = tools.deEmojify(name)
-    logger.info('name: ' + name)
     for warior in list(WARIORS_ARR):
         if name == warior.getName(): 
             return warior
@@ -851,16 +850,20 @@ def main_message(message):
         if hasAccessToWariors(message.from_user.username):
             strings = message.text.split('\n')
             i = 0
+            find = False
             for s in strings:
                 if '|' in strings[i]:
                     name = strings[i].split('|')[0][1:].strip()
                     warior = getWariorByName(name)
                     if warior:
+                        find = True
                         if warior.photo:
                             bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=None)
                         else:
                             bot.reply_to(message, text=warior.getProfile(), reply_markup=None)
                 i = i + 1
+            if not find:
+                bot.reply_to(message, text='Не нашел никого!', reply_markup=None)
         else:
             bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
         return
