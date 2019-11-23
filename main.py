@@ -147,6 +147,13 @@ def getUserByName(name: str):
         if name.lower() == user.getName().lower(): return user
     return None
 
+def getWariorByName(name: str):
+    name = tools.deEmojify(name)
+    for warior in list(WARIORS_ARR):
+        if warior.getName() and name == warior.getName(): 
+            return warior
+    return None
+
 def isKnownWarior(name: str):
     for warior in list(WARIORS_ARR):
         if warior.getName() and name.lower() == warior.getName().lower(): return True
@@ -296,7 +303,7 @@ def updateWarior(warior: wariors.Warior, message: Message):
 
         if findWariors:
             # TODO Проверить, что нет более поздней версии бойца
-            wariorToUpdate = wariors.getWarior(warior.getName(), registered_wariors)
+            wariorToUpdate = getWariorByName(warior.getName())
             updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
 
             newvalues = { "$set": json.loads(updatedWarior.toJSON()) }
@@ -828,13 +835,31 @@ def main_message(message):
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '/accept' in message.text and '/decline' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
-            warior = wariors.getWarior(message.text.split('👤')[1].split(' из ')[0], registered_wariors)
+            warior = getWariorByName(message.text.split('👤')[1].split(' из ')[0])
             if warior == None:
                 bot.reply_to(message, text='Ничего о нем не знаю!', reply_markup=None)
             elif (warior and warior.photo):
                 bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=None)
             else:
                 bot.reply_to(message, text=warior.getProfile(), reply_markup=None)
+        else:
+            bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
+        return
+    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты оценил обстановку вокруг.' in message.text and 'Рядом кто-то есть.' in message.text):
+        #write_json(message.json)
+        if hasAccessToWariors(message.from_user.username):
+            strings = message.text.split('\n')
+            i = 0
+            for s in strings:
+                if '|' in strings[i]:
+                    name = strings[i].split('|')[0][1:].strip()
+                    warior = getWariorByName(name)
+                    if warior:
+                        if warior.photo:
+                            bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=None)
+                        else:
+                            bot.reply_to(message, text=warior.getProfile(), reply_markup=None)
+                i = i + 1
         else:
             bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
         return
@@ -930,7 +955,7 @@ def main_message(message):
         elif (callJugi and 'профиль' in message.text.lower()):
             user = users.getUser(message.from_user.username, registered_users)
             if user:
-                warior = wariors.getWarior(user.getName(), registered_wariors)
+                warior = getWariorByName(user.getName())
                 if (warior and warior.photo):
                     bot.send_photo(message.chat.id, warior.photo, user.getProfile(), reply_markup=markup)
                 else:
