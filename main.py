@@ -956,9 +956,15 @@ def main_message(message):
                             return
 
                         string = f'{tools.deEmojify(message.from_user.first_name)} просит собраться банду {response.split(":")[2]}:'
+                        usersarr = []
                         for registered_user in registered_users.find({"band": f"{band}"}):
                             user = users.importUser(registered_user)
-                            string = string + f'\n@{user.getLogin()}'
+                            registered_user.update({'weight': user.getRaidWeight()})
+                            usersarr.append(registered_user)
+
+                        for user_tmp in sorted(usersarr, key = lambda i: i['weight'], reverse=True):
+                            string = string + f'\n🏋️‍♂️{user_tmp["weight"]} @{user_tmp["login"]}'
+
                         if ('@' in string):    
                             bot.reply_to(message, text=string, reply_markup=markup)
                         else:
@@ -1001,9 +1007,16 @@ def main_message(message):
                             time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
 
                             report = f'<b>Захват!</b> {response.split(":")[2]} {time_str} <b>{response.split(":")[3]}</b>\n'
+                            
+                            usersarr = []
                             for registered_user in registered_users.find({"band": f"{band}"}):
                                 user = users.importUser(registered_user)
-                                report = report + f'\n@{user.getLogin()}'
+                                registered_user.update({'weight': user.getRaidWeight()})
+                                usersarr.append(registered_user)
+
+                            for user_tmp in sorted(usersarr, key = lambda i: i['weight'], reverse=True):
+                                report = report + f'\n🏋️‍♂️{user_tmp["weight"]} @{user_tmp["login"]}'
+                                
                             report = report + '\n\n<b>Не опаздываем!</b>' 
 
                             markupinline = InlineKeyboardMarkup()
