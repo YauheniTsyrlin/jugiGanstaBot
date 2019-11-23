@@ -952,7 +952,7 @@ def main_message(message):
                         # Собираем всех пользоватлей с бандой Х
                         band = response.split(':')[2][1:]
                         if not isUsersBand(message.from_user.username, band):
-                            bot.reply_to(message, text=f'Ты просил собраться банду {response.split(':')[2]}\n' + getResponseDialogFlow('not_right_band'), reply_markup=markup)
+                            bot.reply_to(message, text=f'Ты просил собраться банду {response.split(":")[2]}\n' + getResponseDialogFlow('not_right_band'), reply_markup=markup)
                             return
 
                         string = f'{tools.deEmojify(message.from_user.first_name)} просит собраться банду {response.split(":")[2]}:'
@@ -993,7 +993,7 @@ def main_message(message):
                             # jugi:capture:$bands:$Dangeon:$time
                             band = response.split(':')[2][1:]
                             if not isUsersBand(message.from_user.username, band):
-                                bot.reply_to(message, text=f'Ты пытался созвать на захват банду {response.split(':')[2]}\n' + getResponseDialogFlow('not_right_band'), reply_markup=markup)
+                                bot.reply_to(message, text=f'Ты пытался созвать на захват банду {response.split(":")[2]}\n' + getResponseDialogFlow('not_right_band'), reply_markup=markup)
                                 return  
 
                             time_str = response.split(response.split(":")[3])[1][1:]
