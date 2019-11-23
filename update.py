@@ -1,7 +1,6 @@
 import pymongo
 import json
 import datetime
-import main
 
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
