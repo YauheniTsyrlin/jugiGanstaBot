@@ -5,6 +5,13 @@ from datetime import datetime
 from datetime import timedelta
 import tools
 
+def normalize(string):
+    try:
+        return int(string)
+    except:
+        if '(+' in str(string):
+            return int(string.split('(+')[0].strip()) + int(string.split('(+')[1].split(')')[0].strip())
+            
 def getUser(login, registered_users):
     for registered_user in registered_users.find({"login": f"{login}"}):
         user = importUser(registered_user)
@@ -182,13 +189,6 @@ class User(object):
             tz = datetime.strptime(self.getTimeZone(),"%H:%M:%S")
             dt = dt + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
         return dt.timestamp()
-
-    def normalize(string):
-        try:
-            return int(string)
-        except:
-            if '(+' in str(string):
-                return int(string.split('(+')[0].strip()) + int(string.split('(+')[1].split(')')[0].strip())
 
     def getBm(self):
         stat = normalize(self.damage) + normalize(self.accuracy) + normalize(self.health) + normalize(self.charisma) + normalize(self.agility)
