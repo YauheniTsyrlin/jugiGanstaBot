@@ -149,8 +149,9 @@ def getUserByName(name: str):
 
 def getWariorByName(name: str):
     name = tools.deEmojify(name)
+    logger.info('name: ' + name)
     for warior in list(WARIORS_ARR):
-        if warior.getName() and name == warior.getName(): 
+        if name == warior.getName(): 
             return warior
     return None
 
