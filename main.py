@@ -1026,9 +1026,9 @@ def main_message(message):
                             report = report + '\n\n<b>Не опаздываем!</b>' 
 
                             markupinline = InlineKeyboardMarkup()
-                            markupinline.row_width = 2
-                            markupinline.add(InlineKeyboardButton("Иду!", callback_data="capture_yes"),
-                            InlineKeyboardButton("Нахер!", callback_data="capture_no"))
+                            # markupinline.row_width = 2
+                            # markupinline.add(InlineKeyboardButton("Иду!", callback_data="capture_yes"),
+                            # InlineKeyboardButton("Нахер!", callback_data="capture_no"))
 
                             msg = send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
                             if not privateChat:

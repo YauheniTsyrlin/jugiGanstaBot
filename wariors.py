@@ -130,6 +130,19 @@ def fromPhotoToWarioirs(date, text, photo):
     result.append(warior)
     return result
 
+def getFractionFromString(string: str):
+    fraction = None
+    if ('⚙️' in string):
+        fraction = '⚙️Убежище 4'
+    elif ('🔪' in string):
+        fraction = '🔪Головорезы'
+    elif ('💣' in string):
+        fraction = '💣Мегатонна'
+    elif ('⚛️' in string):
+        fraction = '⚛️Республика'
+    elif ('👙' in string):
+        fraction = '👙Клуб бикини'  
+    return fraction
 
 def fromTopToWariorsBM(forward_date, message, wariors):
     result = []
@@ -139,11 +152,13 @@ def fromTopToWariorsBM(forward_date, message, wariors):
 
         if ('Счет: ' in strings[i] ):
             name = strings[i-1].split('. ')[1].split(' [')[0].strip()
+            fraction = getFractionFromString(strings[i-1].split(' [')[1].split(']')[0])
             bm = strings[i].split('Счет: ')[1].strip()
-            print(name + "|" + str(bm))
-            #for w in wariors.find({"name": f"{tools.deEmojify(name)}"}):
+
+         
             warior = Warior(name, message.forward_date, "", None)
             warior.setBm(bm)
+            warior.setFraction(fraction)
             result.append(warior)
         i = i + 1
     return result
@@ -291,7 +306,9 @@ class Warior(object):
     
     def getProfileSmall(self):
         string = ''
-        
+        if not self.fraction:
+            self.fraction = 'Без фракции '
+
         if (not self.band) or (self.band == 'NO_BAND'):
             string = string + f'┌{self.fraction.split(" ")[0].strip()} 🤘(без банды)'
         else:
@@ -324,7 +341,6 @@ class Warior(object):
         return string
 
     def getProfile(self):
-        print('getProfile')
         string = ''
         string = string + f'┌{self.name}\n'  
         if self.fraction:
