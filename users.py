@@ -6,6 +6,8 @@ from datetime import timedelta
 import tools
 
 def normalize(string):
+    if not string:
+        return int(0)
     try:
         return int(string)
     except:
