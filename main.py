@@ -856,9 +856,9 @@ def main_message(message):
                     if '⚙️' in strings[i]:
                         logger.info('1 Find Emoji ⚙️')
 
-                    name = tools.deEmojify(strings[i])
-                    name = name.replace('⚙️', '').replace('🔪', '').replace('💣', '').replace('⚛️', '').replace('👙', '')
-                    name = name.split('|')[0].strip()
+                    #name = tools.deEmojify(strings[i])
+                    name = name.replace('⚙️', '|').replace('🔪', '|').replace('💣', '|').replace('⚛️', '|').replace('👙', '|')
+                    name = name.split('|')[1].strip()
                     if '⚙️' in name:
                         logger.info('2 Find Emoji ⚙️')
 
