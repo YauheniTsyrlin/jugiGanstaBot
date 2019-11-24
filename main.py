@@ -861,9 +861,9 @@ def main_message(message):
                         logger.info('Find: |' + name + '|')
                         find = True
                         if warior.photo:
-                            bot.send_photo(message.chat.id, warior.photo, warior.getProfileSmall(), reply_markup=None)
+                            bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=None)
                         else:
-                            bot.reply_to(message, text=warior.getProfileSmall(), reply_markup=None)
+                            bot.reply_to(message, text=warior.getProfile(), reply_markup=None)
                 i = i + 1
             if not find:
                 bot.reply_to(message, text='Не нашел никого!', reply_markup=None)
