@@ -855,7 +855,9 @@ def main_message(message):
                 if '|' in strings[i]:
                     name = strings[i].split('|')[0][1:].strip()
                     warior = getWariorByName(name)
+                    logger.info('Looking warior: |' + name + '|')
                     if warior:
+                        logger.info('Find: |' + name + '|')
                         find = True
                         if warior.photo:
                             bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=None)
