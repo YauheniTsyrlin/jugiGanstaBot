@@ -854,8 +854,8 @@ def main_message(message):
             for s in strings:
                 if '|' in strings[i]:
                     name = strings[i]
-                    name = name.replace('⚙️', '|').replace('🔪', '|').replace('💣', '|').replace('⚛️', '|').replace('👙', '|')
-                    name = name.split('|')[1].strip()
+                    name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
+                    name = name.split('@')[1].split('|')[0].strip()
                     warior = getWariorByName(name)
                     if warior:
                         find = True
@@ -866,6 +866,64 @@ def main_message(message):
                 i = i + 1
             if not find:
                 bot.reply_to(message, text='Не нашел никого!', reply_markup=None)
+        else:
+            bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
+        return
+    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Панель банды.' in message.text):
+        #write_json(message.json)
+        if hasAccessToWariors(message.from_user.username):
+            strings = message.text.split('\n')
+            i = 0
+            band = ''
+            allrw = 0
+            allcounter = 0
+            onraderw = 0
+            onradecounter = 0
+            report = 'Информация о рейдерах!\n'
+            fuckupraderw = 0
+            fuckupusersReport = ''
+
+            # 🤘👊🏅
+            for s in strings:
+                if '🏅' in strings[i] and '🤘' in strings[i]:
+                    band = strings[i].split('🤘')[1].split('🏅')[0].strip()
+                    if not isUsersBand(message.from_user.username, band):
+                        bot.reply_to(message, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow('not_right_band'), reply_markup=None)
+                        return
+
+                if '👂' in strings[i]:
+                    name = strings[i]
+                    name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
+                    name = name.split('@')[1].split('👂')[0].strip()
+                    u = getUserByName(name)
+
+                    if u:
+                        allrw = allrw + u.getRaidWeight()
+                        allcounter = allcounter + 1
+                        if '👊' in strings[i]:
+                            onraderw = onraderw + u.getRaidWeight()
+                            u.setRaidLocation(int(strings[i].split('👊')[1].split('km')[0]))
+                            updateUser(u)
+                            onradecounter = onradecounter + 1
+                        else:
+                            fuckupraderw = fuckupraderw + u.getRaidWeight()
+                            if '📍' in strings[i]:
+                                pass # u.setRaidLocation(int(strings[i].split('📍')[1].split('km')[0]))
+                            fuckupusersReport = fuckupusersReport + f'🏋️‍♂️{u.getRaidWeight()} @{u.getLogin()} \n' 
+                    else:
+                        pass # bot.reply_to(message, text=f'А это кто!? {name}\nПочему я его не знаю!?', reply_markup=None)
+                i = i + 1
+            
+            report = report + '\n' 
+            report = report + f'На рейде бандитов: {onradecounter}/{allcounter}\n'
+            report = report + f'Боевая мощь: {onraderw}/{allrw} {str(int(onraderw/allrw*100))}%\n'
+            report = report + '\n'
+            report = report + 'Бандиты в проёбе:\n'
+            report = report + fuckupusersReport
+
+            bot.reply_to(message, text=report, reply_markup=None)
+
+
         else:
             bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
         return
@@ -1001,8 +1059,13 @@ def main_message(message):
                         else:
                             bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
                     elif 'rade' == response.split(':')[1]:
+                            if not isAdmin(message.from_user.username):
+                                bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=markup)
+                                return
+
                             #   0    1        2         3     
                             # jugi:rade:$radelocation:$time
+                            # print(response.split(response.split(":")[2])[1][1:])
                             time_str = response.split(response.split(":")[2])[1][1:]
                             dt = parse(time_str)
                             time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
@@ -1323,7 +1386,7 @@ def reply_to_big(message: str, text: str, reply_markup=None):
     return result
 
 def fight():
-    logger.info('Calculate fight')
+    #logger.info('Calculate fight')
 
     bands = ['🎩 Городские', '🐇 Мертвые кролики']
     figthers_rabbit = []
@@ -1557,6 +1620,10 @@ def pending_message():
         newvalues = { "$set": { "state": 'CANCEL'} }
         u = pending_messages.update_one(myquery, newvalues)
 
+def rade():
+    pass
+
+
 # 20 secund
 def fight_job():
     while True:
@@ -1568,6 +1635,12 @@ def pending_job():
     while True:
         pending_message()
         time.sleep(5)
+
+# 10 secund
+def rade_job():
+    while True:
+        rade()
+        time.sleep(10)
 
 def main_loop():
     if (config.POLLING):
@@ -1612,6 +1685,9 @@ if __name__ == '__main__':
 
         proccessPending_messages = Process(target=pending_job, args=())
         proccessPending_messages.start() # Start new thread
+
+        proccessRade = Process(target=rade_job, args=())
+        proccessRade.start() # Start new thread
 
         main_loop()
         

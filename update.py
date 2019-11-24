@@ -118,7 +118,7 @@ myquery = { "code": 'GOATS_BANDS' }
 newvalues = { "$set": 
                 { "value": 
                     [
-                        { 'name': 'Adaptation', 
+                        { 'name': 'АdaptationǁȺǁ', 
                           'bands' : ['Артхаус','Энтропия']
                         },
                         { 'name': 'faggoat', 
