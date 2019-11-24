@@ -857,7 +857,7 @@ def main_message(message):
                     name = name.split('|')[0].strip()
                     #name = name.replace('⚙️', '').replace('🔪', '').replace('💣', '').replace('⚛️', '').replace('👙', '')
                     warior = getWariorByName(name)
-                    logger.info('Looking warior: |' + name + '|')
+                    logger.info('Looking warior with name: |' + name + '|')
                     if warior:
                         logger.info('Find: |' + name + '|')
                         find = True
