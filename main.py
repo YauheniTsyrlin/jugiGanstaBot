@@ -223,7 +223,7 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
         menu.append(footer_buttons)
     return menu
 
-def write_json(data, filename = "./pips.json"):
+def write_json(data, filename = "/home/godfather/jugiGanstaBot/pips.json"):
     with open(filename, 'a', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
@@ -846,7 +846,7 @@ def main_message(message):
             bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты оценил обстановку вокруг.' in message.text and 'Рядом кто-то есть.' in message.text):
-        #write_json(message.json)
+        write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
             strings = message.text.split('\n')
             i = 0
