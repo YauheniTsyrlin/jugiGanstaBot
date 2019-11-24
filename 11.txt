@@ -1,0 +1,555 @@
+{'_id': ObjectId('5db044577d2a35465765c5cb'), 'login': 'artiomse', 'date': 1571832919.083163, 'winnerWarior': 'Tanelda', 'loseWarior': 'artiomse'}
+{'_id': ObjectId('5db044577d2a35465765c5cc'), 'login': 'artiomse', 'date': 1571832919.09139, 'winnerWarior': 'artiomse', 'loseWarior': 'PainAndHatred'}
+{'_id': ObjectId('5db044fd4bdacd6b8678fd3c'), 'login': 'XyTop_2', 'date': 1571833085.83266, 'winnerWarior': 'Eviltw stfu', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db044fe4bdacd6b8678fd3e'), 'login': 'XyTop_2', 'date': 1571833086.978101, 'winnerWarior': 'Shkvarkoman', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db0485091d6b3154853d4bf'), 'login': 'GonzikBenzyavsky', 'date': 1571833936.089928, 'winnerWarior': 'artiomse', 'loseWarior': 'Franki'}
+{'_id': ObjectId('5db0487391d6b3154853d4c1'), 'login': 'GonzikBenzyavsky', 'date': 1571833971.516341, 'winnerWarior': '🏎 big_zmei', 'loseWarior': 'QurReq'}
+{'_id': ObjectId('5db04be691d6b3154853d4c5'), 'login': 'Gromnsk', 'date': 1571834854.860647, 'winnerWarior': 'Gromnsk', 'loseWarior': 'MLada'}
+{'_id': ObjectId('5db0507190fc4900a9a1ffd5'), 'login': 'GonzikBenzyavsky', 'date': 1571836017.208742, 'winnerWarior': 'Gromnsk', 'loseWarior': 'BananaCompote ŇṼ'}
+{'_id': ObjectId('5db070f45d39850db704a679'), 'login': 'B0oka', 'date': 1571844340.061664, 'winnerWarior': 'Blackprincer', 'loseWarior': 'B0oka'}
+{'_id': ObjectId('5db0a13e5d39850db704a67e'), 'login': 'NorthDragoN', 'date': 1571856702.563384, 'winnerWarior': 'Mstitel', 'loseWarior': 'Дмитрий'}
+{'_id': ObjectId('5db0b63fe215b8d43516547b'), 'login': 'GonzikBenzyavsky', 'date': 1571236203.272932, 'winnerWarior': 'Kolder112', 'loseWarior': 'NiceTry_noCigar'}
+{'_id': ObjectId('5db0b63fe215b8d43516547c'), 'login': 'NorthDragoN', 'date': 1571238354.116366, 'winnerWarior': 'LikeSmile', 'loseWarior': 'Дмитрий'}
+{'_id': ObjectId('5db0b63fe215b8d43516547d'), 'login': 'Art_Zank', 'date': 1571239503.401004, 'winnerWarior': 'Lidsky', 'loseWarior': 'Dadrok'}
+{'_id': ObjectId('5db0b63fe215b8d43516547e'), 'login': 'GonzikBenzyavsky', 'date': 1571241267.46355, 'winnerWarior': 'Красивое Имя', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d43516547f'), 'login': 'Dostoevskiy_Fedor', 'date': 1571242662.391866, 'winnerWarior': 'XxXJAGAXxX', 'loseWarior': 'Титан'}
+{'_id': ObjectId('5db0b63fe215b8d435165480'), 'login': 'GonzikBenzyavsky', 'date': 1571246231.338308, 'winnerWarior': 'ХопХейЛалаей ŇṼ', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d435165481'), 'login': 'GonzikBenzyavsky', 'date': 1571246262.89254, 'winnerWarior': '🌚 PoT3akpou ŇṼ', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db0b63fe215b8d435165482'), 'login': 'artiomse', 'date': 1571246683.717642, 'winnerWarior': 'artiomse', 'loseWarior': 'Пивло'}
+{'_id': ObjectId('5db0b63fe215b8d435165483'), 'login': 'artiomse', 'date': 1571250567.189881, 'winnerWarior': 'rotoyo', 'loseWarior': 'artiomse'}
+{'_id': ObjectId('5db0b63fe215b8d435165484'), 'login': 'Gromnsk', 'date': 1571283241.35779, 'winnerWarior': 'ησλყღթak', 'loseWarior': 'Gromnsk'}
+{'_id': ObjectId('5db0b63fe215b8d435165485'), 'login': 'GonzikBenzyavsky', 'date': 1571291866.702269, 'winnerWarior': 'oxwordmc', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d435165486'), 'login': 'GonzikBenzyavsky', 'date': 1571294426.641811, 'winnerWarior': 'Кирилл', 'loseWarior': 'mFrolov'}
+{'_id': ObjectId('5db0b63fe215b8d435165487'), 'login': 'GonzikBenzyavsky', 'date': 1571297845.994525, 'winnerWarior': 'Кирилл', 'loseWarior': 'lisfi'}
+{'_id': ObjectId('5db0b63fe215b8d435165488'), 'login': 'GonzikBenzyavsky', 'date': 1571301628.897026, 'winnerWarior': 'Кирилл', 'loseWarior': 'Dadrok'}
+{'_id': ObjectId('5db0b63fe215b8d435165489'), 'login': 'NorthDragoN', 'date': 1571302888.80073, 'winnerWarior': 'Дмитрий', 'loseWarior': 'Тайпан Жестокая'}
+{'_id': ObjectId('5db0b63fe215b8d43516548a'), 'login': 'QurReq', 'date': 1571303310.326101, 'winnerWarior': 'Shkvarkoman', 'loseWarior': 'QurReq'}
+{'_id': ObjectId('5db0b63fe215b8d43516548b'), 'login': 'GonzikBenzyavsky', 'date': 1571304323.605605, 'winnerWarior': '\U0001f92cEBASOS DESTROYER', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d43516548c'), 'login': 'GonzikBenzyavsky', 'date': 1571305750.875265, 'winnerWarior': 'myakishh', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d43516548d'), 'login': 'XyTop_2', 'date': 1571311790.399244, 'winnerWarior': 'Лютый', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db0b63fe215b8d43516548e'), 'login': 'XyTop_2', 'date': 1571321195.575356, 'winnerWarior': 'Arkа', 'loseWarior': 'God_eater_90'}
+{'_id': ObjectId('5db0b63fe215b8d43516548f'), 'login': 'GonzikBenzyavsky', 'date': 1571337202.757966, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d435165490'), 'login': 'GonzikBenzyavsky', 'date': 1571345863.393463, 'winnerWarior': 'Ghost👻', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d435165491'), 'login': 'olehme', 'date': 1571388507.11234, 'winnerWarior': 'I7cux37', 'loseWarior': 'olehme'}
+{'_id': ObjectId('5db0b63fe215b8d435165492'), 'login': 'Gromnsk', 'date': 1571388859.321401, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Gromnsk'}
+{'_id': ObjectId('5db0b63fe215b8d435165493'), 'login': 'Art_Zank', 'date': 1571390866.234456, 'winnerWarior': 'Lidsky', 'loseWarior': 'lisfi'}
+{'_id': ObjectId('5db0b63fe215b8d435165494'), 'login': 'XyTop_2', 'date': 1571394417.017029, 'winnerWarior': 'Arkа', 'loseWarior': 'Электрофорез'}
+{'_id': ObjectId('5db0b63fe215b8d435165495'), 'login': 'artiomse', 'date': 1571394705.584076, 'winnerWarior': 'Iulian', 'loseWarior': 'artiomse'}
+{'_id': ObjectId('5db0b63fe215b8d435165496'), 'login': 'NiceTry_noCigar', 'date': 1571398323.176977, 'winnerWarior': 'NiceTry_noCigar', 'loseWarior': 'Твоя Паранойя'}
+{'_id': ObjectId('5db0b63fe215b8d435165497'), 'login': 'Gromnsk', 'date': 1571398998.637975, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d435165498'), 'login': 'NiceTry_noCigar', 'date': 1571399486.483291, 'winnerWarior': 'NiceTry_noCigar', 'loseWarior': 'Pavel Gus ŇṼ'}
+{'_id': ObjectId('5db0b63fe215b8d435165499'), 'login': 'NiceTry_noCigar', 'date': 1571399982.24335, 'winnerWarior': 'АдмиралГенерал', 'loseWarior': 'NiceTry_noCigar'}
+{'_id': ObjectId('5db0b63fe215b8d43516549a'), 'login': 'Art_Zank', 'date': 1571408101.293235, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Lidsky'}
+{'_id': ObjectId('5db0b63fe215b8d43516549b'), 'login': 'GonzikBenzyavsky', 'date': 1571414216.847867, 'winnerWarior': 'Тρąп Нãцūū', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d43516549c'), 'login': 'olehme', 'date': 1571415952.182019, 'winnerWarior': 'Radzhiv', 'loseWarior': 'olehme'}
+{'_id': ObjectId('5db0b63fe215b8d43516549d'), 'login': 'Gromnsk', 'date': 1571417279.809443, 'winnerWarior': 'Esperansa', 'loseWarior': 'Gromnsk'}
+{'_id': ObjectId('5db0b63fe215b8d43516549e'), 'login': 'GonzikBenzyavsky', 'date': 1571418002.558206, 'winnerWarior': 'Жаксон', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d43516549f'), 'login': 'Dostoevskiy_Fedor', 'date': 1571418526.410768, 'winnerWarior': 'Press F to PR', 'loseWarior': 'Титан'}
+{'_id': ObjectId('5db0b63fe215b8d4351654a0'), 'login': 'XyTop_2', 'date': 1571418795.449643, 'winnerWarior': 'dannerinho', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db0b63fe215b8d4351654a1'), 'login': 'NorthDragoN', 'date': 1571423949.451073, 'winnerWarior': 'Дмитрий', 'loseWarior': 'Bogdan'}
+{'_id': ObjectId('5db0b63fe215b8d4351654a2'), 'login': 'artiomse', 'date': 1571429065.083805, 'winnerWarior': 'Rushka', 'loseWarior': 'artiomse'}
+{'_id': ObjectId('5db0b63fe215b8d4351654a3'), 'login': 'GonzikBenzyavsky', 'date': 1571466476.560115, 'winnerWarior': 'Ирина', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d4351654a4'), 'login': 'artiomse', 'date': 1571471336.57303, 'winnerWarior': 'AНОНИMНЫЙ AЛKAШ', 'loseWarior': 'artiomse'}
+{'_id': ObjectId('5db0b63fe215b8d4351654a5'), 'login': 'Dostoevskiy_Fedor', 'date': 1571488029.938795, 'winnerWarior': 'Титан', 'loseWarior': 'PainAndHatred'}
+{'_id': ObjectId('5db0b63fe215b8d4351654a6'), 'login': 'Dostoevskiy_Fedor', 'date': 1571488177.778314, 'winnerWarior': 'Титан', 'loseWarior': '𝐁𝐥𝐚𝐜𝐤𝐒𝐏𝐞𝐞𝐃'}
+{'_id': ObjectId('5db0b63fe215b8d4351654a7'), 'login': 'XyTop_2', 'date': 1571494934.09816, 'winnerWarior': 'Arkа', 'loseWarior': 'lopastik'}
+{'_id': ObjectId('5db0b63fe215b8d4351654a8'), 'login': 'XyTop_2', 'date': 1571561981.966616, 'winnerWarior': 'Ivan', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db0b63fe215b8d4351654a9'), 'login': 'GonzikBenzyavsky', 'date': 1571561997.515785, 'winnerWarior': 'Retif77', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d4351654aa'), 'login': 'Gromnsk', 'date': 1571561998.394179, 'winnerWarior': 'Gromnsk', 'loseWarior': '𝖘𝖆𝖘𝖙𝖊𝖗 𝖓𝖛'}
+{'_id': ObjectId('5db0b63fe215b8d4351654ab'), 'login': 'GonzikBenzyavsky', 'date': 1571562042.280725, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d4351654ac'), 'login': 'GonzikBenzyavsky', 'date': 1571562042.550285, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Молчун'}
+{'_id': ObjectId('5db0b63fe215b8d4351654ad'), 'login': 'XyTop_2', 'date': 1571562042.799884, 'winnerWarior': 'Arkа', 'loseWarior': 'Ogre ВХ'}
+{'_id': ObjectId('5db0b63fe215b8d4351654ae'), 'login': 'GonzikBenzyavsky', 'date': 1571562043.785888, 'winnerWarior': 'өлім әкелетін', 'loseWarior': 'Титан'}
+{'_id': ObjectId('5db0b63fe215b8d4351654af'), 'login': 'GonzikBenzyavsky', 'date': 1571562045.388504, 'winnerWarior': 'ησλყღթak', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d4351654b0'), 'login': 'GonzikBenzyavsky', 'date': 1571588872.364745, 'winnerWarior': 'Тайпан Жестокая', 'loseWarior': 'Gromnsk'}
+{'_id': ObjectId('5db0b63fe215b8d4351654b1'), 'login': 'Gromnsk', 'date': 1571588873.879147, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Молчун'}
+{'_id': ObjectId('5db0b63fe215b8d4351654b2'), 'login': 'Dostoevskiy_Fedor', 'date': 1571591160.46994, 'winnerWarior': 'Golodniy', 'loseWarior': 'Титан'}
+{'_id': ObjectId('5db0b63fe215b8d4351654b3'), 'login': 'Gromnsk', 'date': 1571592507.680193, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Молчун'}
+{'_id': ObjectId('5db0b63fe215b8d4351654b4'), 'login': 'Gromnsk', 'date': 1571592508.79029, 'winnerWarior': 'Тайпан Жестокая', 'loseWarior': 'Gromnsk'}
+{'_id': ObjectId('5db0b63fe215b8d4351654b5'), 'login': 'Gromnsk', 'date': 1571600637.923915, 'winnerWarior': 'Тайпан Жестокая', 'loseWarior': 'Gromnsk'}
+{'_id': ObjectId('5db0b63fe215b8d4351654b6'), 'login': 'Gromnsk', 'date': 1571600637.932114, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Молчун'}
+{'_id': ObjectId('5db0b63fe215b8d4351654b7'), 'login': 'Dostoevskiy_Fedor', 'date': 1571600639.423207, 'winnerWarior': 'Golodniy', 'loseWarior': 'Титан'}
+{'_id': ObjectId('5db0b63fe215b8d4351654b8'), 'login': 'QurReq', 'date': 1571601873.626607, 'winnerWarior': 'QurReq', 'loseWarior': 'Дядя Duck ŇṼ'}
+{'_id': ObjectId('5db0b63fe215b8d4351654b9'), 'login': 'XyTop_2', 'date': 1571601877.233854, 'winnerWarior': 'Дядя gakatas ŇṼ', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db0b63fe215b8d4351654ba'), 'login': 'AlluZef', 'date': 1571601881.293685, 'winnerWarior': 'iojigg', 'loseWarior': 'AlluZef'}
+{'_id': ObjectId('5db0b63fe215b8d4351654bb'), 'login': 'miashas', 'date': 1571602303.540317, 'winnerWarior': 'miashas', 'loseWarior': 'matthew_grygan'}
+{'_id': ObjectId('5db0b63fe215b8d4351654bc'), 'login': 'miashas', 'date': 1571634704.01879, 'winnerWarior': 'miashas', 'loseWarior': 'forest'}
+{'_id': ObjectId('5db0b63fe215b8d4351654bd'), 'login': 'Dostoevskiy_Fedor', 'date': 1571639136.213481, 'winnerWarior': 'lisfi', 'loseWarior': 'Титан'}
+{'_id': ObjectId('5db0b63fe215b8d4351654be'), 'login': 'B0oka', 'date': 1571640015.735503, 'winnerWarior': 'ησλყღթak', 'loseWarior': 'B0oka'}
+{'_id': ObjectId('5db0b63fe215b8d4351654bf'), 'login': 'Innok27', 'date': 1571653581.09087, 'winnerWarior': 'Innok27', 'loseWarior': 'Оценочка'}
+{'_id': ObjectId('5db0b63fe215b8d4351654c0'), 'login': 'B0oka', 'date': 1571653667.439713, 'winnerWarior': 'B0oka', 'loseWarior': 'Dadrok'}
+{'_id': ObjectId('5db0b63fe215b8d4351654c1'), 'login': 'Dostoevskiy_Fedor', 'date': 1571661326.260294, 'winnerWarior': 'Титан', 'loseWarior': 'Sovertkov'}
+{'_id': ObjectId('5db0b63fe215b8d4351654c2'), 'login': 'Dostoevskiy_Fedor', 'date': 1571671683.393446, 'winnerWarior': 'Титан', 'loseWarior': 'srachello'}
+{'_id': ObjectId('5db0b63fe215b8d4351654c3'), 'login': 'Gromnsk', 'date': 1571677933.728699, 'winnerWarior': 'myakishh', 'loseWarior': 'Gromnsk'}
+{'_id': ObjectId('5db0b63fe215b8d4351654c4'), 'login': 'XyTop_2', 'date': 1571680703.990718, 'winnerWarior': 'Tipun', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db0b63fe215b8d4351654c5'), 'login': 'GonzikBenzyavsky', 'date': 1571680978.56388, 'winnerWarior': 'Retif77', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d4351654c6'), 'login': 'XyTop_2', 'date': 1571683234.022072, 'winnerWarior': 'Rizasto BX', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db0b63fe215b8d4351654c7'), 'login': 'GonzikBenzyavsky', 'date': 1571687125.750976, 'winnerWarior': 'Kolder112', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d4351654c8'), 'login': 'AlluZef', 'date': 1571698461.801531, 'winnerWarior': 'AlluZef', 'loseWarior': 'Gewells'}
+{'_id': ObjectId('5db0b63fe215b8d4351654c9'), 'login': 'XyTop_2', 'date': 1571719661.248371, 'winnerWarior': 'Arkа', 'loseWarior': 'Дядя Divnaia ŇṼ'}
+{'_id': ObjectId('5db0b63fe215b8d4351654ca'), 'login': 'GonzikBenzyavsky', 'date': 1571725716.759968, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0b63fe215b8d4351654cb'), 'login': 'artiomse', 'date': 1571726924.54427, 'winnerWarior': 'Shinigami', 'loseWarior': 'artiomse'}
+{'_id': ObjectId('5db0b63fe215b8d4351654cc'), 'login': 'artiomse', 'date': 1571731243.09857, 'winnerWarior': 'Paul', 'loseWarior': 'artiomse'}
+{'_id': ObjectId('5db0b63fe215b8d4351654cd'), 'login': 'GonzikBenzyavsky', 'date': 1571732619.3757, 'winnerWarior': 'Blackprincer', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db0d1bf9eb3efb5bbf8799d'), 'login': 'trimprim', 'date': 1571869119.030967, 'winnerWarior': 'ALT', 'loseWarior': 'Nastya_Jdanova'}
+{'_id': ObjectId('5db13f099eb3efb5bbf879a1'), 'login': 'B0oka', 'date': 1571897097.73945, 'winnerWarior': 'Greifeld🏎', 'loseWarior': 'B0oka'}
+{'_id': ObjectId('5db13ff99eb3efb5bbf879a3'), 'login': 'Dandel1on', 'date': 1571897337.274599, 'winnerWarior': 'Fire_spreading_all_around', 'loseWarior': 'Dedushka ŇṼ'}
+{'_id': ObjectId('5db1443b9eb3efb5bbf879a6'), 'login': 'GonzikBenzyavsky', 'date': 1571898427.874679, 'winnerWarior': 'viid', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db14c619eb3efb5bbf879a8'), 'login': 'GonzikBenzyavsky', 'date': 1571900513.240984, 'winnerWarior': '🏎 D𝕒𝕣𝕜 A𝕟𝕘𝕖𝕝', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db155599eb3efb5bbf879aa'), 'login': 'miashas', 'date': 1571902809.340259, 'winnerWarior': 'LEYFER', 'loseWarior': 'miashas'}
+{'_id': ObjectId('5db185ac9eb3efb5bbf879b2'), 'login': 'XyTop_2', 'date': 1571915180.233804, 'winnerWarior': 'Markus🏎', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db19ec8a84b78d40f3c23d2'), 'login': 'Art_Zank', 'date': 1571921608.341873, 'winnerWarior': 'Lidsky', 'loseWarior': 'Dm'}
+{'_id': ObjectId('5db1c1d448ee86155c61057f'), 'login': 'GonzikBenzyavsky', 'date': 1571930580.016922, 'winnerWarior': 'Кирилл', 'loseWarior': 'Дядя Duck ŇṼ'}
+{'_id': ObjectId('5db1cb9c48ee86155c610581'), 'login': 'GonzikBenzyavsky', 'date': 1571933084.633886, 'winnerWarior': 'Kolder112', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db1d65648ee86155c610583'), 'login': 'GonzikBenzyavsky', 'date': 1571935830.987179, 'winnerWarior': 'Кирилл', 'loseWarior': 'FlödyZ'}
+{'_id': ObjectId('5db1dd4248ee86155c610587'), 'login': 'GonzikBenzyavsky', 'date': 1571937602.101052, 'winnerWarior': 'Кирилл', 'loseWarior': 'Денис'}
+{'_id': ObjectId('5db288ffbef86f8c2175d126'), 'login': 'GonzikBenzyavsky', 'date': 1571981567.478915, 'winnerWarior': 'Кирилл', 'loseWarior': '🏎 big_zmei'}
+{'_id': ObjectId('5db29322bef86f8c2175d127'), 'login': 'Gromnsk', 'date': 1571984162.765614, 'winnerWarior': 'Gromnsk', 'loseWarior': 'viid'}
+{'_id': ObjectId('5db2953ebef86f8c2175d128'), 'login': 'GonzikBenzyavsky', 'date': 1571984702.671058, 'winnerWarior': 'ИЛЬИЧ', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db29c48bef86f8c2175d12a'), 'login': 'Gromnsk', 'date': 1571986504.725264, 'winnerWarior': 'lifeishardbutcool', 'loseWarior': 'Gromnsk'}
+{'_id': ObjectId('5db2b1d3bef86f8c2175d12c'), 'login': 'GonzikBenzyavsky', 'date': 1571992019.73882, 'winnerWarior': 'Кирилл', 'loseWarior': 'I7cux37'}
+{'_id': ObjectId('5db2b92fbef86f8c2175d12e'), 'login': 'Art_Zank', 'date': 1571993903.6666, 'winnerWarior': 'Lidsky', 'loseWarior': 'Rushka'}
+{'_id': ObjectId('5db2c029bef86f8c2175d132'), 'login': 'XyTop_2', 'date': 1571995689.025399, 'winnerWarior': 'Kottonik', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db2dcff50747f7d9d5f3c1f'), 'login': 'GonzikBenzyavsky', 'date': 1572003071.768579, 'winnerWarior': 'Кирилл', 'loseWarior': 'I7cux37'}
+{'_id': ObjectId('5db2e85950747f7d9d5f3c21'), 'login': 'Art_Zank', 'date': 1572005977.943878, 'winnerWarior': 'БиоWусор', 'loseWarior': 'Lidsky'}
+{'_id': ObjectId('5db2ea0250747f7d9d5f3c23'), 'login': 'GonzikBenzyavsky', 'date': 1572006402.703737, 'winnerWarior': 'oxwordmc', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db30539cd0bce63dd70d6cc'), 'login': 'GonzikBenzyavsky', 'date': 1572013369.637335, 'winnerWarior': 'MMM', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db30883cd0bce63dd70d6d0'), 'login': 'XyTop_2', 'date': 1572014211.178438, 'winnerWarior': 'Raven', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db30d82cd0bce63dd70d6d4'), 'login': 'GonzikBenzyavsky', 'date': 1572015490.427326, 'winnerWarior': 'Chebit', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db32676cd0bce63dd70d6d9'), 'login': 'GonzikBenzyavsky', 'date': 1572021878.839494, 'winnerWarior': 'Твоя Паранойя', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db32ae0cd0bce63dd70d6db'), 'login': 'GonzikBenzyavsky', 'date': 1572023008.769742, 'winnerWarior': 'Емеля Нации', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db32d0dcd0bce63dd70d6dc'), 'login': 'GonzikBenzyavsky', 'date': 1572023565.921038, 'winnerWarior': 'Кирилл', 'loseWarior': 'Емеля Нации'}
+{'_id': ObjectId('5db336abfb7b59882db37739'), 'login': 'miashas', 'date': 1572026027.088235, 'winnerWarior': 'miashas', 'loseWarior': 'чорт'}
+{'_id': ObjectId('5db34d1cfb7b59882db3773f'), 'login': 'Gromnsk', 'date': 1572031772.467668, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Электрофорез'}
+{'_id': ObjectId('5db34fbffb7b59882db37740'), 'login': 'trimprim', 'date': 1572032447.265101, 'winnerWarior': 'ALT', 'loseWarior': 'Настя'}
+{'_id': ObjectId('5db36e13ec0820c63ad37146'), 'login': 'XyTop_2', 'date': 1572040211.917954, 'winnerWarior': 'Arkа', 'loseWarior': 'ilfkrylov'}
+{'_id': ObjectId('5db37ddeec0820c63ad37148'), 'login': 'AlluZef', 'date': 1572044254.698532, 'winnerWarior': 'Настя', 'loseWarior': 'AlluZef'}
+{'_id': ObjectId('5db3f4eeec0820c63ad37158'), 'login': 'Gromnsk', 'date': 1572074734.496052, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Емеля Нации'}
+{'_id': ObjectId('5db3fb0aec0820c63ad37159'), 'login': 'Gromnsk', 'date': 1572076298.128754, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Денис'}
+{'_id': ObjectId('5db42982ec0820c63ad37161'), 'login': 'Gromnsk', 'date': 1572088194.69076, 'winnerWarior': 'myakishh', 'loseWarior': 'Gromnsk'}
+{'_id': ObjectId('5db45c7aec0820c63ad37163'), 'login': 'NorthDragoN', 'date': 1572101242.163598, 'winnerWarior': 'Дмитрий', 'loseWarior': 'OrangeKaktus'}
+{'_id': ObjectId('5db46227ec0820c63ad37164'), 'login': 'GonzikBenzyavsky', 'date': 1572102695.466757, 'winnerWarior': 'BACDAFUCUP ŇṼ', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db469c3ec0820c63ad37166'), 'login': 'XyTop_2', 'date': 1572104643.280706, 'winnerWarior': 'Mei_Ling_Zhou', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db47dafec0820c63ad37168'), 'login': 'artiomse', 'date': 1572109743.518914, 'winnerWarior': 'myakishh', 'loseWarior': 'artiomse'}
+{'_id': ObjectId('5db4831aec0820c63ad37169'), 'login': 'artiomse', 'date': 1572111130.74296, 'winnerWarior': 'Faradenza', 'loseWarior': 'artiomse'}
+{'_id': ObjectId('5db48d33ec0820c63ad3716b'), 'login': 'NorthDragoN', 'date': 1572113715.396437, 'winnerWarior': 'Дмитрий', 'loseWarior': 'night_randevouare'}
+{'_id': ObjectId('5db492a3ec0820c63ad3716e'), 'login': 'GonzikBenzyavsky', 'date': 1572115107.458109, 'winnerWarior': 'Кирилл', 'loseWarior': 'Faradenza'}
+{'_id': ObjectId('5db499adec0820c63ad3716f'), 'login': 'XyTop_2', 'date': 1572116909.164004, 'winnerWarior': 'Arkа', 'loseWarior': 'PainAndHatred'}
+{'_id': ObjectId('5db4a095ec0820c63ad37171'), 'login': 'GonzikBenzyavsky', 'date': 1572118677.018168, 'winnerWarior': 'Blackprincer', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db4a97dec0820c63ad37172'), 'login': 'GonzikBenzyavsky', 'date': 1572120957.798802, 'winnerWarior': 'Кирилл', 'loseWarior': 'Iulian'}
+{'_id': ObjectId('5db4afbcec0820c63ad37175'), 'login': 'GonzikBenzyavsky', 'date': 1572122556.1554, 'winnerWarior': 'Кирилл', 'loseWarior': 'Obskurus'}
+{'_id': ObjectId('5db5228dec0820c63ad37183'), 'login': 'Gromnsk', 'date': 1572151949.896879, 'winnerWarior': 'Дядя Убийца ŇṼ', 'loseWarior': 'Gromnsk'}
+{'_id': ObjectId('5db563b4ec0820c63ad3718c'), 'login': 'GonzikBenzyavsky', 'date': 1572168628.734185, 'winnerWarior': 'myakishh', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db56e58ec0820c63ad3718e'), 'login': 'XyTop_2', 'date': 1572171352.153258, 'winnerWarior': 'myakishh', 'loseWarior': 'Arkа'}
+{'_id': ObjectId('5db57493ec0820c63ad3718f'), 'login': 'GonzikBenzyavsky', 'date': 1572172947.626115, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'Кирилл'}
+{'_id': ObjectId('5db5823cec0820c63ad37193'), 'login': 'Gromnsk', 'date': 1572176444.225452, 'winnerWarior': 'myakishh', 'loseWarior': 'Gromnsk'}
+{'_id': ObjectId('5db585d57d14fdfd137aa5c9'), 'login': 'GonzikBenzyavsky', 'date': 1572177365.656286, 'winnerWarior': 'myakishh', 'loseWarior': 'Arkа', 'band': 'Артхаус'}
+{'_id': ObjectId('5db5b251e0b3b44b0b65f3fc'), 'login': 'XyTop_2', 'date': 1572188681, 'winnerWarior': 'Arkа', 'loseWarior': 'WestMoscow', 'band': 'Энтропия'}
+{'_id': ObjectId('5db5ce21e0b3b44b0b65f3fd'), 'login': 'GonzikBenzyavsky', 'date': 1572195841, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5db5f0f8e0b3b44b0b65f400'), 'login': 'NorthDragoN', 'date': 1572204734, 'winnerWarior': '\U0001f9d4🏻Дядя Фёдор ŇṼ 🌇', 'loseWarior': 'Дмитрий', 'band': 'Артхаус'}
+{'_id': ObjectId('5db6d6ece0b3b44b0b65f40d'), 'login': 'GonzikBenzyavsky', 'date': 1572263639, 'winnerWarior': 'Кирилл', 'loseWarior': '🕓Время пить чай', 'band': 'Артхаус'}
+{'_id': ObjectId('5db6d9e4e0b3b44b0b65f40f'), 'login': 'miashas', 'date': 1572264386, 'winnerWarior': 'miashas', 'loseWarior': 'ALT', 'band': 'Артхаус'}
+{'_id': ObjectId('5db6e50be0b3b44b0b65f411'), 'login': 'GonzikBenzyavsky', 'date': 1572267231, 'winnerWarior': 'Кирилл', 'loseWarior': 'Franki BX', 'band': 'Артхаус'}
+{'_id': ObjectId('5db6fe95e0b3b44b0b65f419'), 'login': 'artiomse', 'date': 1572273775, 'winnerWarior': 'artiomse', 'loseWarior': 'Vladuxmaestro', 'band': 'Неизвестна /me'}
+{'_id': ObjectId('5db72860e0b3b44b0b65f41b'), 'login': 'GonzikBenzyavsky', 'date': 1572281833, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5db752a7e0b3b44b0b65f41e'), 'login': 'XyTop_2', 'date': 1572295279, 'winnerWarior': 'Arkа', 'loseWarior': 'mFrolov', 'band': 'Энтропия'}
+{'_id': ObjectId('5db77a3fe0b3b44b0b65f41f'), 'login': None, 'date': 1572305438, 'winnerWarior': 'srachello', 'loseWarior': 'KamchaCat', 'band': None}
+{'_id': ObjectId('5db7b65ce0b3b44b0b65f421'), 'login': 'miashas', 'date': 1572320810, 'winnerWarior': 'miashas', 'loseWarior': 'fromangliya', 'band': 'Артхаус'}
+{'_id': ObjectId('5db7bda4e0b3b44b0b65f422'), 'login': 'GonzikBenzyavsky', 'date': 1572288722, 'winnerWarior': 'Смертник', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5db7ca0be0b3b44b0b65f424'), 'login': 'GonzikBenzyavsky', 'date': 1572325358, 'winnerWarior': 'ホJustDenツ', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5db7e134e0b3b44b0b65f427'), 'login': 'Art_Zank', 'date': 1572331791, 'winnerWarior': 'Franki BX', 'loseWarior': 'Lidsky', 'band': 'Артхаус'}
+{'_id': ObjectId('5db7ec3ee0b3b44b0b65f428'), 'login': 'Art_Zank', 'date': 1572334605, 'winnerWarior': 'Sovertkov', 'loseWarior': 'Lidsky', 'band': 'Артхаус'}
+{'_id': ObjectId('5db7fb18e0b3b44b0b65f42b'), 'login': 'Gromnsk', 'date': 1572338445, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Дядя Divnaia ŇṼ', 'band': 'Энтропия'}
+{'_id': ObjectId('5db80f98e0b3b44b0b65f42e'), 'login': 'GonzikBenzyavsky', 'date': 1569852130, 'winnerWarior': 'Кирилл', 'loseWarior': 'Viktoriya_Sizko', 'band': 'Артхаус'}
+{'_id': ObjectId('5db81a72e0b3b44b0b65f430'), 'login': 'XyTop_2', 'date': 1572346399, 'winnerWarior': 'Mei_Ling_Zhou', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5db82a5fe0b3b44b0b65f431'), 'login': 'GonzikBenzyavsky', 'date': 1572349325, 'winnerWarior': 'Mstitel', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5db83b09e0b3b44b0b65f433'), 'login': 'GonzikBenzyavsky', 'date': 1572354493, 'winnerWarior': 'myakishh', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5db83ed9e0b3b44b0b65f434'), 'login': 'GonzikBenzyavsky', 'date': 1572355717, 'winnerWarior': 'Кирилл', 'loseWarior': 'Дядя Duck ŇṼ', 'band': 'Артхаус'}
+{'_id': ObjectId('5db8481de0b3b44b0b65f435'), 'login': 'AlluZef', 'date': 1572358049, 'winnerWarior': 'AlluZef', 'loseWarior': 'чорт', 'band': 'Энтропия'}
+{'_id': ObjectId('5db8535fe0b3b44b0b65f436'), 'login': 'GonzikBenzyavsky', 'date': 1572359134, 'winnerWarior': 'milkSaYfer', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5db86495e0b3b44b0b65f438'), 'login': 'XyTop_2', 'date': 1572365240, 'winnerWarior': 'ХопХейЛалаей ŇṼ', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5db88a2be0b3b44b0b65f43a'), 'login': 'GonzikBenzyavsky', 'date': 1572374997, 'winnerWarior': 'Faradenza', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5db8999de0b3b44b0b65f43b'), 'login': 'Chuya_N_a_k_a_h_a_r_a', 'date': 1572372300, 'winnerWarior': 'Титан', 'loseWarior': 'Твоя Паранойя', 'band': 'Артхаус'}
+{'_id': ObjectId('5db8999de0b3b44b0b65f43c'), 'login': 'Chuya_N_a_k_a_h_a_r_a', 'date': 1572372654, 'winnerWarior': 'Sofionius', 'loseWarior': 'Титан', 'band': 'Артхаус'}
+{'_id': ObjectId('5db92892e0b3b44b0b65f43f'), 'login': 'Gromnsk', 'date': 1572415602, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Tatjana', 'band': 'Энтропия'}
+{'_id': ObjectId('5db92b71e0b3b44b0b65f441'), 'login': 'Gromnsk', 'date': 1572416221, 'winnerWarior': '𝕹𝖎𝖌𝖍𝖙 𝖇𝖊𝖆𝖘𝖙', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5db95d99c72d42c9a15c35ec'), 'login': 'Gromnsk', 'date': 1572427290, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Sshiki', 'band': 'Энтропия'}
+{'_id': ObjectId('5db95fcfc72d42c9a15c35ed'), 'login': 'Gromnsk', 'date': 1572429757, 'winnerWarior': 'Владимир', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbb2b78dc3062636fd654c0'), 'login': 'Art_Zank', 'date': 1572448735, 'winnerWarior': 'Lidsky', 'loseWarior': 'rocknrolla_777', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbb2b7ddc3062636fd654c2'), 'login': None, 'date': 1572473635, 'winnerWarior': 'srachello', 'loseWarior': 'чорт', 'band': None}
+{'_id': ObjectId('5dbb2b7fdc3062636fd654c3'), 'login': 'Gromnsk', 'date': 1572500443, 'winnerWarior': 'ησλყღթak', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbb2b80dc3062636fd654c4'), 'login': 'QurReq', 'date': 1572501653, 'winnerWarior': 'lbeads', 'loseWarior': 'QurReq', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbb2b85dc3062636fd654c6'), 'login': 'XyTop_2', 'date': 1572505836, 'winnerWarior': 'Arkа', 'loseWarior': 'I7cux37', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbb2b85dc3062636fd654c8'), 'login': 'XyTop_2', 'date': 1572506842, 'winnerWarior': 'Arkа', 'loseWarior': 'evgtlt', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbb4350dc3062636fd654ca'), 'login': 'GonzikBenzyavsky', 'date': 1572553538, 'winnerWarior': '𝔇𝔬𝔪𝔦𝔫𝔲𝔰 𝔦𝔫𝔣𝔢𝔯𝔫𝔲𝔰', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbb4429dc3062636fd654cc'), 'login': 'XyTop_2', 'date': 1572553519, 'winnerWarior': 'Arkа', 'loseWarior': 'Tatjana', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbb6224dc3062636fd654cd'), 'login': None, 'date': 1572561010, 'winnerWarior': 'srachello', 'loseWarior': 'Djozex', 'band': None}
+{'_id': ObjectId('5dbb6e87dc3062636fd654cf'), 'login': None, 'date': 1572564421, 'winnerWarior': 'Viktoriya_Sizko', 'loseWarior': 'srachello', 'band': None}
+{'_id': ObjectId('5dbb7f28dc3062636fd654d0'), 'login': 'Gromnsk', 'date': 1572568858, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Красивое Имя', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbbe30bdc3062636fd654d1'), 'login': 'GonzikBenzyavsky', 'date': 1572594395, 'winnerWarior': 'Кирилл', 'loseWarior': 'Dadrok', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbbf965dc3062636fd654d3'), 'login': 'Gromnsk', 'date': 1572600148, 'winnerWarior': 'Ночная Фурия', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbbfb20dc3062636fd654d5'), 'login': 'XyTop_2', 'date': 1572600574, 'winnerWarior': '𝕷𝖊𝖓𝖆 𝖛𝖔𝖑𝖈𝖍𝖔𝖓𝖔𝖐', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbbff4ddc3062636fd654d8'), 'login': 'NiceTry_noCigar', 'date': 1572601653, 'winnerWarior': 'Polina', 'loseWarior': 'NiceTry_noCigar', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbc0b06dc3062636fd654da'), 'login': 'GonzikBenzyavsky', 'date': 1572604413, 'winnerWarior': 'toxagsm', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbc290bdc3062636fd654dd'), 'login': 'GonzikBenzyavsky', 'date': 1572612251, 'winnerWarior': 'AKBИЛЛА', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbc30c5dc3062636fd654de'), 'login': 'GonzikBenzyavsky', 'date': 1572614288, 'winnerWarior': 'ИЛЬИЧ', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbc3147dc3062636fd654df'), 'login': 'XyTop_2', 'date': 1572613487, 'winnerWarior': 'АдмиралГенерал', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbc49dfdc3062636fd654e0'), 'login': 'Gromnsk', 'date': 1572620755, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Kolder112', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbc9e436c8241745d688385'), 'login': 'artiomse', 'date': 1572632173, 'winnerWarior': 'Drakonda', 'loseWarior': 'artiomse', 'band': 'Неизвестна /me'}
+{'_id': ObjectId('5dbc9e446c8241745d688386'), 'login': 'Gromnsk', 'date': 1572629377, 'winnerWarior': 'Владимир', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbc9e456c8241745d688388'), 'login': 'NiceTry_noCigar', 'date': 1572636477, 'winnerWarior': 'bēłwh1spēr ⵓBXⵓ', 'loseWarior': 'NiceTry_noCigar', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbd0c3e7b793791bbc7a6ae'), 'login': 'Gromnsk', 'date': 1572670477, 'winnerWarior': 'Тρąп Нãцūū', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbd29197b793791bbc7a6af'), 'login': 'XyTop_2', 'date': 1572677861, 'winnerWarior': '💛 @Alex_Fenya 💛', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbd43017b793791bbc7a6b1'), 'login': 'GonzikBenzyavsky', 'date': 1572684491, 'winnerWarior': 'Тётя ЛеДонна ŇṼ', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbd45137b793791bbc7a6b2'), 'login': 'GonzikBenzyavsky', 'date': 1572685058, 'winnerWarior': 'ХопХейЛалаей ŇṼ', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbd51fdc1e32589a733a99e'), 'login': 'GonzikBenzyavsky', 'date': 1572688362, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbd67d71395acb772f42116'), 'login': 'GonzikBenzyavsky', 'date': 1572693348, 'winnerWarior': 'Кирилл', 'loseWarior': 'Pavel Gus ŇṼ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbd73265aac520ea22ebbee'), 'login': 'GonzikBenzyavsky', 'date': 1572696515, 'winnerWarior': 'Тётя ЛеДонна ŇṼ', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbd94138cfcd27c8725973f'), 'login': 'GonzikBenzyavsky', 'date': 1572702816, 'winnerWarior': 'Кирилл', 'loseWarior': 'MMM', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbd94148cfcd27c87259740'), 'login': 'XyTop_2', 'date': 1572704920, 'winnerWarior': 'Arkа', 'loseWarior': 'Электрофорез', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbd97ca13aeb33c1e4b7620'), 'login': 'XyTop_2', 'date': 1572706214, 'winnerWarior': 'Arkа', 'loseWarior': 'Rushka', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbdbd8ad88a70e3f5c7087a'), 'login': 'XyTop_2', 'date': 1572715878, 'winnerWarior': 'Arkа', 'loseWarior': 'Laughing_Bright', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbdbed22539683f25a6f42d'), 'login': 'GonzikBenzyavsky', 'date': 1572713380, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbdd542900fbd5f09473f58'), 'login': 'GonzikBenzyavsky', 'date': 1572720885, 'winnerWarior': 'myakishh', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbdedba68b08f931ca04148'), 'login': 'GonzikBenzyavsky', 'date': 1572728181, 'winnerWarior': 'myakishh', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbdf05068b08f931ca0414a'), 'login': 'XyTop_2', 'date': 1572728867, 'winnerWarior': 'Абаддон', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbe9182374d22916cb569e9'), 'login': 'XyTop_2', 'date': 1572770137, 'winnerWarior': 'Nikita', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbeaba7374d22916cb569ea'), 'login': 'XyTop_2', 'date': 1572776796, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbeddd8374d22916cb569ec'), 'login': 'GonzikBenzyavsky', 'date': 1572789687, 'winnerWarior': 'Кирилл', 'loseWarior': 'Djozex', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbee7d0374d22916cb569ed'), 'login': 'GonzikBenzyavsky', 'date': 1572792250, 'winnerWarior': 'Franki BX', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbeedcf374d22916cb569ee'), 'login': 'GonzikBenzyavsky', 'date': 1572793786, 'winnerWarior': 'ησλყღթak', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbef269374d22916cb569f0'), 'login': 'GonzikBenzyavsky', 'date': 1572794970, 'winnerWarior': 'Кирилл', 'loseWarior': 'Pavel Gus ŇṼ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbef31c374d22916cb569f1'), 'login': 'Hermia_Nerbne', 'date': 1572795094, 'winnerWarior': 'Гермия Нербне', 'loseWarior': 'DonPablo13337', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbf32e7374d22916cb569f6'), 'login': 'GonzikBenzyavsky', 'date': 1572811465, 'winnerWarior': '✴️ Murloc', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbf37a3e4eaa6b63af91b32'), 'login': 'Ian_reger', 'date': 1572812693, 'winnerWarior': 'Ian_reger', 'loseWarior': 'Dm', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbf3a27e4eaa6b63af91b34'), 'login': 'GonzikBenzyavsky', 'date': 1572813337, 'winnerWarior': 'Кирилл', 'loseWarior': 'ИЛЬИЧ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dbf3a75e4eaa6b63af91b35'), 'login': 'ryp9i', 'date': 1572813281, 'winnerWarior': 'ryp9i', 'loseWarior': 'MMM', 'band': 'Энтропия'}
+{'_id': ObjectId('5dbff8c44120e402ff04d818'), 'login': 'GonzikBenzyavsky', 'date': 1572862126, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc008914120e402ff04d819'), 'login': 'XyTop_2', 'date': 1572866155, 'winnerWarior': 'dannerinho', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc01e154120e402ff04d81a'), 'login': 'Gromnsk', 'date': 1572871683, 'winnerWarior': 'Ogre ВХ', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc04c904120e402ff04d81c'), 'login': 'XyTop_2', 'date': 1572883557, 'winnerWarior': 'Arkа', 'loseWarior': 'TimurT', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc05a124120e402ff04d81d'), 'login': 'Gromnsk', 'date': 1572887049, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Sovertkov', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc05ae34120e402ff04d81e'), 'login': 'Gromnsk', 'date': 1572887259, 'winnerWarior': 'Gromnsk', 'loseWarior': 'DogMyCats', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc074644120e402ff04d820'), 'login': 'Hermia_Nerbne', 'date': 1572892952, 'winnerWarior': 'Гермия Нербне', 'loseWarior': 'MmoonFox', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc141ddbc3c465d9a4b5acc'), 'login': 'Gromnsk', 'date': 1572946145, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Delete accaunt', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc14aad551d12cb419d3043'), 'login': 'Gromnsk', 'date': 1572948637, 'winnerWarior': 'Gromnsk', 'loseWarior': '𝐁𝐥𝐚𝐜𝐤𝐒𝐏𝐞𝐞𝐃', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc14d2f551d12cb419d3044'), 'login': 'Gromnsk', 'date': 1572949287, 'winnerWarior': 'Gromnsk', 'loseWarior': 'ĘŘŔØŖ', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc152aa22e91ef611ab7e5b'), 'login': 'Gromnsk', 'date': 1572950685, 'winnerWarior': 'Dadrok', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc155ef22e91ef611ab7e5c'), 'login': 'GonzikBenzyavsky', 'date': 1572950941, 'winnerWarior': 'ησλყღթak', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc15ef422e91ef611ab7e5d'), 'login': 'XyTop_2', 'date': 1572953767, 'winnerWarior': 'Arkа', 'loseWarior': 'OrangeKaktus', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc1699ae422caa6a6a105d1'), 'login': 'XyTop_2', 'date': 1572956020, 'winnerWarior': 'Твой друг', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc18b9260e6d17d7324be07'), 'login': 'Gromnsk', 'date': 1572965251, 'winnerWarior': 'AKBИЛЛА', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc1989460e6d17d7324be0a'), 'login': 'XyTop_2', 'date': 1572968575, 'winnerWarior': 'ησλყღթak', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc19ade60e6d17d7324be0b'), 'login': 'Gromnsk', 'date': 1572969171, 'winnerWarior': 'Gromnsk', 'loseWarior': 'milkSaYfer', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc1bb1560e6d17d7324be0d'), 'login': 'XyTop_2', 'date': 1572977414, 'winnerWarior': 'Arkа', 'loseWarior': 'Кирилл', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc1c0c160e6d17d7324be0f'), 'login': 'miashas', 'date': 1572978690, 'winnerWarior': 'miashas', 'loseWarior': 'Роман', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc1c752d8f91470d02402cd'), 'login': 'GonzikBenzyavsky', 'date': 1572980535, 'winnerWarior': 'Кирилл', 'loseWarior': 'Красивое Имя', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc268dea61cabc4dccb5fdb'), 'login': 'Gromnsk', 'date': 1573021890, 'winnerWarior': 'Ogre ВХ', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc2705db985995b96d7b2ab'), 'login': 'Gromnsk', 'date': 1573023822, 'winnerWarior': 'myakishh', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc27f7db985995b96d7b2ac'), 'login': 'AlluZef', 'date': 1573027687, 'winnerWarior': 'AlluZef', 'loseWarior': 'Алексей', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc2999eb985995b96d7b2ad'), 'login': 'Gromnsk', 'date': 1573034364, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc29fa2b985995b96d7b2af'), 'login': 'Gromnsk', 'date': 1573035914, 'winnerWarior': 'Mironische1', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc2b44ab985995b96d7b2b0'), 'login': 'Gromnsk', 'date': 1573041182, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Faust_a', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc2b4beb985995b96d7b2b2'), 'login': 'Gromnsk', 'date': 1573041333, 'winnerWarior': 'Gromnsk', 'loseWarior': 'zerocount', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc2b616b985995b96d7b2b4'), 'login': 'Gromnsk', 'date': 1573041523, 'winnerWarior': 'Gromnsk', 'loseWarior': 'BananaCompote ŇṼ', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc2beeab985995b96d7b2b5'), 'login': 'Gromnsk', 'date': 1573043929, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Кирилл', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc2bf1bb985995b96d7b2b6'), 'login': 'Gromnsk', 'date': 1573043982, 'winnerWarior': 'Дядя gakatas ŇṼ', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc2d7deb985995b96d7b2b8'), 'login': 'Gromnsk', 'date': 1573050210, 'winnerWarior': 'Raven', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc2de0ab985995b96d7b2b9'), 'login': 'Gromnsk', 'date': 1573051818, 'winnerWarior': 'АдмиралГенерал', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc2de9ab985995b96d7b2ba'), 'login': 'Art_Zank', 'date': 1573052031, 'winnerWarior': 'Lidsky', 'loseWarior': 'finalistx', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc3087fb985995b96d7b2be'), 'login': 'XyTop_2', 'date': 1573062728, 'winnerWarior': 'MetalZ', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc3110bb985995b96d7b2c0'), 'login': 'XyTop_2', 'date': 1573064930, 'winnerWarior': 'Arkа', 'loseWarior': 'fet33', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc32eddb985995b96d7b2c1'), 'login': None, 'date': 1573072579, 'winnerWarior': 'srachello', 'loseWarior': 'Arsen', 'band': None}
+{'_id': ObjectId('5dc3b9d5b985995b96d7b2c4'), 'login': 'Hermia_Nerbne', 'date': 1573107839, 'winnerWarior': 'Hellshit666', 'loseWarior': 'Гермия Нербне', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc3dfefb985995b96d7b2c6'), 'login': 'Gromnsk', 'date': 1573117924, 'winnerWarior': 'Fantomas', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc3f220b985995b96d7b2c8'), 'login': 'NiceTry_noCigar', 'date': 1573122565, 'winnerWarior': 'NiceTry_noCigar', 'loseWarior': 'DRATANYAN ŇṼ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc3fdc0b985995b96d7b2ca'), 'login': 'artiomse', 'date': 1573125548, 'winnerWarior': 'artiomse', 'loseWarior': 'Pavel Gus ŇṼ', 'band': 'Неизвестна /me'}
+{'_id': ObjectId('5dc4015eb985995b96d7b2cb'), 'login': 'XyTop_2', 'date': 1573126468, 'winnerWarior': 'Arkа', 'loseWarior': '𝖘𝖆𝖘𝖙𝖊𝖗 𝖓𝖛', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc40a42b985995b96d7b2cc'), 'login': 'Gromnsk', 'date': 1573128672, 'winnerWarior': 'Ogre ВХ', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc4149db985995b96d7b2ce'), 'login': 'XyTop_2', 'date': 1573131380, 'winnerWarior': 'AndRonin', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc43276b985995b96d7b2cf'), 'login': 'Gromnsk', 'date': 1573139037, 'winnerWarior': '𝔇𝔬𝔪𝔦𝔫𝔲𝔰 𝔦𝔫𝔣𝔢𝔯𝔫𝔲𝔰', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc45533b985995b96d7b2d0'), 'login': 'Gromnsk', 'date': 1573147935, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Faradenza', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc4592fb985995b96d7b2d1'), 'login': 'Hermia_Nerbne', 'date': 1573148774, 'winnerWarior': 'Гермия Нербне', 'loseWarior': 'MmoonFox', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc469d4b985995b96d7b2d3'), 'login': 'GonzikBenzyavsky', 'date': 1573152237, 'winnerWarior': 'AndRonin', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc46f40b985995b96d7b2d4'), 'login': 'XyTop_2', 'date': 1573154560, 'winnerWarior': 'AKBИЛЛА', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc476749594156529489d27'), 'login': 'Hermia_Nerbne', 'date': 1573156376, 'winnerWarior': 'Гермия Нербне', 'loseWarior': 'Stas', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc478509594156529489d29'), 'login': 'GonzikBenzyavsky', 'date': 1573156912, 'winnerWarior': '...', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc4b06fb39292f4cf49ecb7'), 'login': 'Hermia_Nerbne', 'date': 1573171279, 'winnerWarior': 'Гермия Нербне', 'loseWarior': 'EvanSmith', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc4fa97b39292f4cf49ecba'), 'login': 'Gromnsk', 'date': 1573189836, 'winnerWarior': 'LikeSmile', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc5257db39292f4cf49ecbe'), 'login': 'NorthDragoN', 'date': 1573201225, 'winnerWarior': 'Дмитрий', 'loseWarior': 'Ibra🐍', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc56ae4b39292f4cf49ecc0'), 'login': 'GonzikBenzyavsky', 'date': 1573219025, 'winnerWarior': 'Кирилл', 'loseWarior': 'Ursa BX', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc58189b39292f4cf49ecc2'), 'login': 'NorthDragoN', 'date': 1573224798, 'winnerWarior': 'Nortrton1747ᴮᵡ', 'loseWarior': 'Дмитрий', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc58608b39292f4cf49ecc5'), 'login': 'XyTop_2', 'date': 1573225929, 'winnerWarior': 'Arkа', 'loseWarior': 'Фёрст Нэйм', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc597eeb39292f4cf49ecc6'), 'login': 'Gromnsk', 'date': 1573230551, 'winnerWarior': '🌚 PoT3akpou ŇṼ', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc5b048b39292f4cf49ecc9'), 'login': 'GonzikBenzyavsky', 'date': 1573236787, 'winnerWarior': 'Кирилл', 'loseWarior': 'Brainyak', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc5b077b39292f4cf49ecca'), 'login': 'XyTop_2', 'date': 1573236677, 'winnerWarior': '🌚 PoT3akpou ŇṼ', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc5d726b39292f4cf49ecce'), 'login': 'AlluZef', 'date': 1573246681, 'winnerWarior': 'AlluZef', 'loseWarior': 'Оператор Артем', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc66385b39292f4cf49eccf'), 'login': 'Gromnsk', 'date': 1573282655, 'winnerWarior': 'Твоя мамка 🍝42', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc67e08b39292f4cf49ecd2'), 'login': 'QurReq', 'date': 1551104325, 'winnerWarior': 'QurReq', 'loseWarior': 'Умничка Нации', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc67f62b39292f4cf49ecd4'), 'login': 'Gromnsk', 'date': 1571984126, 'winnerWarior': 'Gromnsk', 'loseWarior': 'viid', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc682e3b39292f4cf49ecd6'), 'login': 'Gromnsk', 'date': 1573290614, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Viktoriya_Sizko', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc685dfb39292f4cf49ecd7'), 'login': 'Gromnsk', 'date': 1573291472, 'winnerWarior': 'MetalZ', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc6a35eb39292f4cf49ecdb'), 'login': 'artiomse', 'date': 1573298983, 'winnerWarior': 'Симон', 'loseWarior': 'artiomse', 'band': 'Неизвестна /me'}
+{'_id': ObjectId('5dc6a841b39292f4cf49ecdd'), 'login': 'NiceTry_noCigar', 'date': 1573300257, 'winnerWarior': 'NiceTry_noCigar', 'loseWarior': 'Красивое Имя', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc6bd1bb39292f4cf49ece0'), 'login': 'Oldc0ck', 'date': 1573303771, 'winnerWarior': 'Sovertkov', 'loseWarior': 'srachello', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc6d9f2b39292f4cf49ece6'), 'login': 'GonzikBenzyavsky', 'date': 1573312985, 'winnerWarior': 'Владимир', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc6dc9eb39292f4cf49ece9'), 'login': 'NorthDragoN', 'date': 1573313672, 'winnerWarior': 'Дмитрий', 'loseWarior': 'Alex', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc71fdcb39292f4cf49ecf0'), 'login': 'XyTop_2', 'date': 1573330869, 'winnerWarior': 'Kenny McCormick', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc7fa7ab39292f4cf49ecf4'), 'login': 'GonzikBenzyavsky', 'date': 1573386829, 'winnerWarior': 'Господин Пес', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc818fcb39292f4cf49ecf8'), 'login': 'Hermia_Nerbne', 'date': 1573394338, 'winnerWarior': 'Гермия Нербне', 'loseWarior': 'fedbrodo', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc819e2b39292f4cf49ecfa'), 'login': 'Hermia_Nerbne', 'date': 1573394895, 'winnerWarior': 'Гермия Нербне', 'loseWarior': 'Digzzzy', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc82612b39292f4cf49ecfe'), 'login': 'XyTop_2', 'date': 1573398010, 'winnerWarior': 'Arkа', 'loseWarior': 'Дядя Duck ŇṼ', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc84188b39292f4cf49ecff'), 'login': 'GonzikBenzyavsky', 'date': 1573404950, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc84834b39292f4cf49ed00'), 'login': 'GonzikBenzyavsky', 'date': 1573406150, 'winnerWarior': 'Тρąп Нãцūū', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc852d3b39292f4cf49ed01'), 'login': 'XyTop_2', 'date': 1573409450, 'winnerWarior': 'Господин Пес', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc8eac7b39292f4cf49ed02'), 'login': 'GonzikBenzyavsky', 'date': 1573447826, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc8f47cb39292f4cf49ed03'), 'login': 'GonzikBenzyavsky', 'date': 1573450747, 'winnerWarior': 'yTKaMyTKa BX', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc9824fb39292f4cf49ed07'), 'login': 'GonzikBenzyavsky', 'date': 1573487149, 'winnerWarior': 'Кирилл', 'loseWarior': 'Топтун ŇṼ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc9a5a6b39292f4cf49ed0a'), 'login': 'GonzikBenzyavsky', 'date': 1573496209, 'winnerWarior': 'Кирилл', 'loseWarior': 'Golodniy', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc9aceeb39292f4cf49ed0c'), 'login': 'GonzikBenzyavsky', 'date': 1573498083, 'winnerWarior': 'Кирилл', 'loseWarior': 'Abyrvalgh', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc9b46735c267abaef1ac8d'), 'login': 'GonzikBenzyavsky', 'date': 1573236677, 'winnerWarior': ' PoT3akpou ', 'loseWarior': 'Ark', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc9b830f824541d963deaf0'), 'login': 'GonzikBenzyavsky', 'date': 1573236677, 'winnerWarior': ' PoT3akpou ŇṼ', 'loseWarior': 'Arkа', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc9ba8364d26adce1ae93c7'), 'login': 'Hermia_Nerbne', 'date': 1573500927, 'winnerWarior': 'Гермия Нербне', 'loseWarior': 'АнтиПустошь', 'band': 'Артхаус'}
+{'_id': ObjectId('5dc9c0b1edc9132e69b4af67'), 'login': 'XyTop_2', 'date': 1573503105, 'winnerWarior': 'BananaCompote ŇṼ', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dc9e6d4edc9132e69b4af69'), 'login': 'Hermia_Nerbne', 'date': 1573512866, 'winnerWarior': 'DRauC2', 'loseWarior': 'Гермия Нербне', 'band': 'Артхаус'}
+{'_id': ObjectId('5dca393fedc9132e69b4af6b'), 'login': 'Gromnsk', 'date': 1573533997, 'winnerWarior': 'Sergeyweb39', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dca4d06edc9132e69b4af6e'), 'login': 'XyTop_2', 'date': 1573539052, 'winnerWarior': 'Аидзен 悪魔', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dca4d93edc9132e69b4af6f'), 'login': 'B0oka', 'date': 1573537397, 'winnerWarior': 'ilfkrylov', 'loseWarior': 'B0oka', 'band': 'Энтропия'}
+{'_id': ObjectId('5dca858fedc9132e69b4af70'), 'login': 'NorthDragoN', 'date': 1573553493, 'winnerWarior': 'Дмитрий', 'loseWarior': '𝕹𝖎𝖌𝖍𝖙 𝖇𝖊𝖆𝖘𝖙', 'band': 'Энтропия'}
+{'_id': ObjectId('5dca9ee8edc9132e69b4af71'), 'login': 'XyTop_2', 'date': 1573554779, 'winnerWarior': 'По полям', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcaa455edc9132e69b4af73'), 'login': 'Art_Zank', 'date': 1573559262, 'winnerWarior': 'Рукколка', 'loseWarior': 'Lidsky', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcac03aedc9132e69b4af74'), 'login': 'XyTop_2', 'date': 1573568559, 'winnerWarior': 'lbeads', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcae174edc9132e69b4af75'), 'login': 'Hermia_Nerbne', 'date': 1573577024, 'winnerWarior': 'Dedushka ŇṼ', 'loseWarior': 'Гермия Нербне', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcae824edc9132e69b4af77'), 'login': 'Gromnsk', 'date': 1573578780, 'winnerWarior': 'Mr Jackson', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcaf84cedc9132e69b4af7a'), 'login': 'Hermia_Nerbne', 'date': 1573582764, 'winnerWarior': 'Гермия Нербне', 'loseWarior': 'NeU5er', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcb010d366ede187eaa0ffd'), 'login': 'Hermia_Nerbne', 'date': 1573585021, 'winnerWarior': 'Digzzzy', 'loseWarior': 'Гермия Нербне', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcb0ca0366ede187eaa0ffe'), 'login': 'GonzikBenzyavsky', 'date': 1573588050, 'winnerWarior': 'AlluZef', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcb1450366ede187eaa1002'), 'login': 'GonzikBenzyavsky', 'date': 1573590020, 'winnerWarior': 'oxwordmc', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcb2165366ede187eaa1003'), 'login': 'Oldc0ck', 'date': 1573593423, 'winnerWarior': 'LubovTV1811', 'loseWarior': 'srachello', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcb25c5366ede187eaa1005'), 'login': 'AlluZef', 'date': 1573594554, 'winnerWarior': 'LubovTV1811', 'loseWarior': 'AlluZef', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcbafe1366ede187eaa1006'), 'login': 'NorthDragoN', 'date': 1573629899, 'winnerWarior': 'Дмитрий', 'loseWarior': 'Abyrvalgh', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcbe6e8366ede187eaa1007'), 'login': 'Gromnsk', 'date': 1573643993, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Электрофорез', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcc1977366ede187eaa1009'), 'login': 'GonzikBenzyavsky', 'date': 1573655403, 'winnerWarior': 'Господин Пес', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcc26ae366ede187eaa100a'), 'login': 'GonzikBenzyavsky', 'date': 1573660251, 'winnerWarior': 'Рукколка', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcc2ab5366ede187eaa100b'), 'login': 'Gromnsk', 'date': 1573661223, 'winnerWarior': 'myakishh', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcc2f25366ede187eaa100c'), 'login': 'Hermia_Nerbne', 'date': 1573662208, 'winnerWarior': 'Матвей', 'loseWarior': 'Гермия Нербне', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcc3b22366ede187eaa1010'), 'login': 'GonzikBenzyavsky', 'date': 1573664978, 'winnerWarior': 'БАД ᴮᵡ', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcc4dab83ec19d7d01ae09e'), 'login': 'GonzikBenzyavsky', 'date': 1573668957, 'winnerWarior': 'Кирилл', 'loseWarior': 'Orrrk', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcc6fae75f398bbbbdaf88f'), 'login': 'artiomse', 'date': 1573678909, 'winnerWarior': 'artiomse', 'loseWarior': 'Красивое Имя', 'band': 'Неизвестна /me'}
+{'_id': ObjectId('5dcc97f375f398bbbbdaf890'), 'login': 'trimprim', 'date': 1573688833, 'winnerWarior': 'Manajchilla', 'loseWarior': 'ALT', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcce96d75f398bbbbdaf892'), 'login': 'GonzikBenzyavsky', 'date': 1573710171, 'winnerWarior': 'Кирилл', 'loseWarior': 'Алексей', 'band': 'Артхаус'}
+{'_id': ObjectId('5dccf91b75f398bbbbdaf893'), 'login': 'AlluZef', 'date': 1573709951, 'winnerWarior': 'Alien Cake', 'loseWarior': 'AlluZef', 'band': 'Энтропия'}
+{'_id': ObjectId('5dccf95375f398bbbbdaf895'), 'login': 'Gromnsk', 'date': 1573714250, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Stalker26', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcd084e75f398bbbbdaf896'), 'login': 'Gromnsk', 'date': 1573718073, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Артур', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcd102375f398bbbbdaf898'), 'login': 'GonzikBenzyavsky', 'date': 1573719829, 'winnerWarior': 'Ry', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcd1df375f398bbbbdaf89b'), 'login': 'XyTop_2', 'date': 1573722518, 'winnerWarior': 'lbeads', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcd41a675f398bbbbdaf89c'), 'login': 'Gromnsk', 'date': 1573732376, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcd46d775f398bbbbdaf89d'), 'login': 'XyTop_2', 'date': 1573734072, 'winnerWarior': 'Arkа', 'loseWarior': 'Obskurus', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcd5e3875f398bbbbdaf89e'), 'login': 'Gromnsk', 'date': 1573740074, 'winnerWarior': 'CrusaderˍSora BX', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcd7b6f75f398bbbbdaf89f'), 'login': 'GonzikBenzyavsky', 'date': 1573747360, 'winnerWarior': 'Кирилл', 'loseWarior': 'Sergeant ŇṼ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcd86bf75f398bbbbdaf8a1'), 'login': 'Hermia_Nerbne', 'date': 1573750452, 'winnerWarior': 'Гермия Нербне', 'loseWarior': 'Дракон Нации', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcda80773fdf4cd3fb6e2d0'), 'login': 'XyTop_2', 'date': 1573758943, 'winnerWarior': 'Тρąп Нãцūū', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dce540773fdf4cd3fb6e2d2'), 'login': 'Gromnsk', 'date': 1573802993, 'winnerWarior': 'Nikita', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dce699873fdf4cd3fb6e2d5'), 'login': 'Gromnsk', 'date': 1573808514, 'winnerWarior': 'АдмиралГенерал', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dce751173fdf4cd3fb6e2d6'), 'login': 'GonzikBenzyavsky', 'date': 1573810899, 'winnerWarior': 'I7cux37', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dce8a2f73fdf4cd3fb6e2d8'), 'login': 'Gromnsk', 'date': 1573816866, 'winnerWarior': 'Gromnsk', 'loseWarior': 'TimurT', 'band': 'Энтропия'}
+{'_id': ObjectId('5dce95b773fdf4cd3fb6e2da'), 'login': 'Hermia_Nerbne', 'date': 1573819789, 'winnerWarior': 'Гермия Нербне', 'loseWarior': 'Kaileena', 'band': 'Артхаус'}
+{'_id': ObjectId('5dceb82473fdf4cd3fb6e2de'), 'login': 'XyTop_2', 'date': 1573828580, 'winnerWarior': 'Arkа', 'loseWarior': 'KaShMaR 1ВХ1', 'band': 'Энтропия'}
+{'_id': ObjectId('5dced3e773fdf4cd3fb6e2df'), 'login': 'XyTop_2', 'date': 1573835721, 'winnerWarior': 'Кусяка ВХ', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcedabb73fdf4cd3fb6e2e1'), 'login': 'Gromnsk', 'date': 1573837475, 'winnerWarior': 'Gromnsk', 'loseWarior': 'GantzZz', 'band': 'Энтропия'}
+{'_id': ObjectId('5dceee1873fdf4cd3fb6e2e3'), 'login': 'XyTop_2', 'date': 1573842418, 'winnerWarior': 'Sergeant ŇṼ', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcf00c573fdf4cd3fb6e2e6'), 'login': 'NorthDragoN', 'date': 1573847190, 'winnerWarior': 'Дмитрий', 'loseWarior': 'Sergeant ŇṼ', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcf138b73fdf4cd3fb6e2e7'), 'login': 'XyTop_2', 'date': 1573851977, 'winnerWarior': 'Botanicula', 'loseWarior': 'Arkа', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcf76ab73fdf4cd3fb6e2ea'), 'login': 'Gromnsk', 'date': 1573877412, 'winnerWarior': 'Gromnsk', 'loseWarior': 'LubovTV1811', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcf8c3673fdf4cd3fb6e2eb'), 'login': 'artiomse', 'date': 1573882874, 'winnerWarior': 'artiomse', 'loseWarior': 'Симон', 'band': 'Неизвестна /me'}
+{'_id': ObjectId('5dcfa00573fdf4cd3fb6e2ec'), 'login': 'Gromnsk', 'date': 1573887958, 'winnerWarior': 'Gromnsk', 'loseWarior': 'LubovTV1811', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcfae3a73fdf4cd3fb6e2ed'), 'login': 'GonzikBenzyavsky', 'date': 1573891362, 'winnerWarior': 'ホJustDenツ', 'loseWarior': 'Кирилл', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcfcab3c8edbeef00a086bc'), 'login': 'GonzikBenzyavsky', 'date': 1573898872, 'winnerWarior': 'East Penguin ŇṼ', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcfd094fba75e39b90da889'), 'login': 'GonzikBenzyavsky', 'date': 1573900415, 'winnerWarior': ' PoT3akpou ŇṼ', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dcfd81335f3f9a262b260a2'), 'login': 'Gromnsk', 'date': 1573902341, 'winnerWarior': 'Sergeyweb39', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dcffe9ff97187ae594dfd9e'), 'login': 'AlluZef', 'date': 1573912177, 'winnerWarior': 'Djozex', 'loseWarior': 'AlluZef', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd002b9f97187ae594dfd9f'), 'login': 'Gromnsk', 'date': 1573913266, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Blackprincer', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd0056af97187ae594dfda0'), 'login': 'Gromnsk', 'date': 1573913939, 'winnerWarior': 'Sergeant ŇṼ', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd01b11f97187ae594dfda1'), 'login': 'GonzikBenzyavsky', 'date': 1573919489, 'winnerWarior': 'КириллǁȺǁ', 'loseWarior': 'UmbraEx', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd02800f97187ae594dfda3'), 'login': 'GonzikBenzyavsky', 'date': 1573920858, 'winnerWarior': 'Dadrok', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd03b39f97187ae594dfda4'), 'login': 'GonzikBenzyavsky', 'date': 1573924322, 'winnerWarior': 'Гермия Нербне', 'loseWarior': 'DaisyBellTrot', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd14961fe2aef20575ffafd'), 'login': 'GonzikBenzyavsky', 'date': 1573984573, 'winnerWarior': ' PoT3akpou ŇṼ', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd1498cfe2aef20575ffafe'), 'login': 'GonzikBenzyavsky', 'date': 1573991206, 'winnerWarior': 'MetalZ', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd17210bc3220b3314742dd'), 'login': 'XyTop_2', 'date': 1574007144, 'winnerWarior': 'Ночная Фурия', 'loseWarior': 'XyTopǁȺǁ', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd1757bbc3220b3314742df'), 'login': 'rocknrolla_777', 'date': 1574008147, 'winnerWarior': 'Iulian', 'loseWarior': 'rocknrolla_777', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd18c729c3775fc1486636f'), 'login': 'AlluZef', 'date': 1574012841, 'winnerWarior': 'AlluZef', 'loseWarior': 'DRauC2', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd1abba6f18253d67ddee02'), 'login': 'miashas', 'date': 1574021638, 'winnerWarior': 'miashasǁȺǁ', 'loseWarior': 'Djozex', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd1f4b26f18253d67ddee04'), 'login': 'Gromnsk', 'date': 1574040728, 'winnerWarior': 'MetalZ', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd207856f18253d67ddee05'), 'login': 'Oldc0ck', 'date': 1574045555, 'winnerWarior': 'srachello', 'loseWarior': 'musavisalov', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd24b3c6f18253d67ddee08'), 'login': 'AlluZef', 'date': 1574059881, 'winnerWarior': '2167', 'loseWarior': 'ǁȺǁlluZef', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd24b966f18253d67ddee0b'), 'login': 'GonzikBenzyavsky', 'date': 1574062799, 'winnerWarior': 'Красивое Имя', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd25bcf6f18253d67ddee0c'), 'login': 'Gromnsk', 'date': 1574066607, 'winnerWarior': 'ホTallisツ', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd273176f18253d67ddee0e'), 'login': 'Gromnsk', 'date': 1574073100, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Golodniy', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd279156f18253d67ddee0f'), 'login': 'Gromnsk', 'date': 1574074625, 'winnerWarior': 'Ego Sum Rеx', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd27f2c6f18253d67ddee11'), 'login': 'wildcucumber', 'date': 1574075976, 'winnerWarior': 'CrusaderˍSora BX', 'loseWarior': 'wildcucumber', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd298586f18253d67ddee13'), 'login': 'GonzikBenzyavsky', 'date': 1574082614, 'winnerWarior': 'КириллǁȺǁ', 'loseWarior': 'Rushka', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd2bdf36f18253d67ddee14'), 'login': 'artiomse', 'date': 1574092247, 'winnerWarior': 'ǁȺǁrtiomse', 'loseWarior': 'Dadrok', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd2ce8c6f18253d67ddee15'), 'login': 'artiomse', 'date': 1574096505, 'winnerWarior': 'ǁȺǁrtiomse', 'loseWarior': 'Симон', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd2da9b6f18253d67ddee16'), 'login': 'XyTop_2', 'date': 1574099564, 'winnerWarior': 'XyTopǁȺǁ', 'loseWarior': 'sshilin', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd2e62c6f18253d67ddee17'), 'login': 'XyTop_2', 'date': 1574102537, 'winnerWarior': 'XyTopǁȺǁ', 'loseWarior': 'MetalZ', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd2f645f2c0fefeec1c7a9e'), 'login': 'GonzikBenzyavsky', 'date': 1574106664, 'winnerWarior': 'I7cux37', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd2fa8af2c0fefeec1c7aa0'), 'login': 'artiomse', 'date': 1574107749, 'winnerWarior': 'ǁȺǁrtiomse', 'loseWarior': 'Красивое Имя', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd2fedaf2c0fefeec1c7aa1'), 'login': 'GonzikBenzyavsky', 'date': 1574108754, 'winnerWarior': 'Господин Пес', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd3718ff2c0fefeec1c7aa3'), 'login': 'Gromnsk', 'date': 1574138234, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Красивое Имя', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd38d6bf2c0fefeec1c7aa4'), 'login': 'Gromnsk', 'date': 1574145360, 'winnerWarior': 'Ogre ВХ', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd3af93f2c0fefeec1c7aa5'), 'login': 'GonzikBenzyavsky', 'date': 1574154096, 'winnerWarior': 'Headless', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd3b3b7f2c0fefeec1c7aa6'), 'login': 'Gromnsk', 'date': 1574154887, 'winnerWarior': 'K_orvin', 'loseWarior': 'Gromnsk', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd3baadf2c0fefeec1c7aa8'), 'login': 'GonzikBenzyavsky', 'date': 1574156947, 'winnerWarior': 'WestMoscow', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd3c0aef2c0fefeec1c7aa9'), 'login': 'GonzikBenzyavsky', 'date': 1574158474, 'winnerWarior': 'Кусяка ВХ', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd3cf6df2c0fefeec1c7aaa'), 'login': 'AlluZef', 'date': 1574160319, 'winnerWarior': 'teranoboy', 'loseWarior': 'ǁȺǁlluZef', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd3e4def2c0fefeec1c7aac'), 'login': 'B0oka', 'date': 1574167735, 'winnerWarior': 'toxagsm', 'loseWarior': 'B0oka', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd40eaaf2c0fefeec1c7aad'), 'login': 'GonzikBenzyavsky', 'date': 1574177885, 'winnerWarior': 'КириллǁȺǁ', 'loseWarior': 'Lidsky', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd410d7f2c0fefeec1c7aae'), 'login': 'GonzikBenzyavsky', 'date': 1574178989, 'winnerWarior': 'Апт', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd42d11f2c0fefeec1c7ab0'), 'login': 'GonzikBenzyavsky', 'date': 1574186206, 'winnerWarior': 'КириллǁȺǁ', 'loseWarior': 'Brainyak', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd4c314c09a68a6c84bad2c'), 'login': 'GonzikBenzyavsky', 'date': 1574224593, 'winnerWarior': 'КириллǁȺǁ', 'loseWarior': 'Dadrok', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd4c7a4c09a68a6c84bad2d'), 'login': 'Gromnsk', 'date': 1574225335, 'winnerWarior': 'ホJustDenツ', 'loseWarior': 'Gromnsk', 'band': 'Нет'}
+{'_id': ObjectId('5dd4df3dc09a68a6c84bad2e'), 'login': 'GonzikBenzyavsky', 'date': 1574231208, 'winnerWarior': 'Garik', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd50fa2c09a68a6c84bad31'), 'login': 'B0oka', 'date': 1574244172, 'winnerWarior': 'B0oka', 'loseWarior': 'Sofionius', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd545e9c09a68a6c84bad34'), 'login': 'B0oka', 'date': 1574256140, 'winnerWarior': 'East Penguin ŇṼ', 'loseWarior': 'B0oka', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd56075c09a68a6c84bad35'), 'login': 'XyTop_2', 'date': 1574264857, 'winnerWarior': 'sshilin', 'loseWarior': 'XyTopǁȺǁ', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd5747dc09a68a6c84bad36'), 'login': 'GonzikBenzyavsky', 'date': 1574269997, 'winnerWarior': 'Sergeant ŇṼ', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd586d6048091ba2a1a80c5'), 'login': 'GonzikBenzyavsky', 'date': 1574274152, 'winnerWarior': 'Дядя gakatas ŇṼ', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd632d7995960f418624def'), 'login': 'GonzikBenzyavsky', 'date': 1574318681, 'winnerWarior': 'Дядя Серёжа ŇṼ', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd63c18995960f418624df0'), 'login': 'GonzikBenzyavsky', 'date': 1574320924, 'winnerWarior': 'Тётя ЛеДонна ŇṼ', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd64109995960f418624df1'), 'login': 'Hermia_Nerbne', 'date': 1574322430, 'winnerWarior': 'Гермия Нербне', 'loseWarior': 'Артём', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd65a1d995960f418624df3'), 'login': 'Art_Zank', 'date': 1574328241, 'winnerWarior': 'Lidsky', 'loseWarior': 'InfERnuZzZ ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd65b26995960f418624df5'), 'login': 'GonzikBenzyavsky', 'date': 1574327767, 'winnerWarior': 'mFrolov', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd6674a995960f418624df7'), 'login': 'GonzikBenzyavsky', 'date': 1574331625, 'winnerWarior': 'Господин Пес', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd67378995960f418624df8'), 'login': 'Gromnsk', 'date': 1574335333, 'winnerWarior': '', 'loseWarior': 'Gromnsk', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd6853d995960f418624dfb'), 'login': 'GonzikBenzyavsky', 'date': 1574339670, 'winnerWarior': 'Rushka', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd69891995960f418624dfc'), 'login': 'GonzikBenzyavsky', 'date': 1574344793, 'winnerWarior': 'Алкаш в запое ŇṼ', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd6995b995960f418624dfe'), 'login': 'artiomse', 'date': 1574345030, 'winnerWarior': 'ǁȺǁrtiomse', 'loseWarior': 'EternalTilt', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd69e39995960f418624e00'), 'login': 'Gromnsk', 'date': 1574346197, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'Gromnsk', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd6b7ac995960f418624e01'), 'login': 'DeadChild', 'date': 1574352650, 'winnerWarior': 'DeadChild', 'loseWarior': 'Топтун ŇṼ', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd6bbf3995960f418624e02'), 'login': 'DeadChild', 'date': 1574353889, 'winnerWarior': 'DeadChild', 'loseWarior': 'Wolf Rey', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd6f657820c70661d9c5b3d'), 'login': 'WestMoscow', 'date': 1574360374, 'winnerWarior': '𝕷𝖊𝖓𝖆 𝖛𝖔𝖑𝖈𝖍𝖔𝖓𝖔𝖐', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f657820c70661d9c5b3e'), 'login': 'WestMoscow', 'date': 1574362471, 'winnerWarior': ' big_zmei', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f7f8820c70661d9c5b40'), 'login': 'WestMoscow', 'date': 1573459014, 'winnerWarior': 'ホTallisツ', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f7f8820c70661d9c5b41'), 'login': 'WestMoscow', 'date': 1573569080, 'winnerWarior': 'LikeSmile', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f7f8820c70661d9c5b42'), 'login': 'WestMoscow', 'date': 1573766284, 'winnerWarior': 'DOC_KMS', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f7f8820c70661d9c5b43'), 'login': 'WestMoscow', 'date': 1574074435, 'winnerWarior': 'Ego Sum Rеx', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f7f8820c70661d9c5b44'), 'login': 'WestMoscow', 'date': 1573729986, 'winnerWarior': 'Ирина', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f7f8820c70661d9c5b45'), 'login': 'WestMoscow', 'date': 1574357536, 'winnerWarior': 'Пeтрович', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f7f8820c70661d9c5b47'), 'login': 'WestMoscow', 'date': 1574270171, 'winnerWarior': 'OMEGA', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f959a26904dd3053842f'), 'login': 'WestMoscow', 'date': 1569765578, 'winnerWarior': 'Lena_volchonok_15', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95aa26904dd30538430'), 'login': 'WestMoscow', 'date': 1569952153, 'winnerWarior': 'ХопХейЛалалей ŇṼ', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95aa26904dd30538432'), 'login': 'WestMoscow', 'date': 1570196243, 'winnerWarior': 'myakishh', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95aa26904dd30538433'), 'login': 'WestMoscow', 'date': 1570975188, 'winnerWarior': 'Sergeant ŇṼ', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95aa26904dd30538434'), 'login': 'WestMoscow', 'date': 1570787776, 'winnerWarior': 'myakishh', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95aa26904dd30538435'), 'login': 'WestMoscow', 'date': 1570107254, 'winnerWarior': 'myakishh', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95aa26904dd30538436'), 'login': 'WestMoscow', 'date': 1570189334, 'winnerWarior': 'Evil Arich', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95aa26904dd30538437'), 'login': 'WestMoscow', 'date': 1572357715, 'winnerWarior': 'MetalZ', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95aa26904dd30538438'), 'login': 'WestMoscow', 'date': 1572626348, 'winnerWarior': 'Sergeyweb39', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95aa26904dd30538439'), 'login': 'WestMoscow', 'date': 1570276745, 'winnerWarior': 'sshilin', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ba26904dd3053843a'), 'login': 'WestMoscow', 'date': 1570042876, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Arkа', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ba26904dd3053843b'), 'login': 'WestMoscow', 'date': 1571731672, 'winnerWarior': 'Lena_volchonok_15', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ba26904dd3053843c'), 'login': 'WestMoscow', 'date': 1572235604, 'winnerWarior': ' big_zmei', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ba26904dd3053843d'), 'login': 'WestMoscow', 'date': 1572252671, 'winnerWarior': 'myakishh', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ba26904dd3053843e'), 'login': 'WestMoscow', 'date': 1573809486, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ba26904dd3053843f'), 'login': 'WestMoscow', 'date': 1570618362, 'winnerWarior': 'Электрофорез', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ba26904dd30538440'), 'login': 'WestMoscow', 'date': 1572520688, 'winnerWarior': 'Ночная Фурия', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ba26904dd30538441'), 'login': 'WestMoscow', 'date': 1571165211, 'winnerWarior': 'myakishh', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ba26904dd30538442'), 'login': 'WestMoscow', 'date': 1571314627, 'winnerWarior': 'sshilin', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ba26904dd30538443'), 'login': 'WestMoscow', 'date': 1571423341, 'winnerWarior': 'АдмиралГенерал', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ca26904dd30538444'), 'login': 'WestMoscow', 'date': 1571408501, 'winnerWarior': 'myakishh', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ca26904dd30538445'), 'login': 'WestMoscow', 'date': 1571477404, 'winnerWarior': 'dannerinho', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ca26904dd30538446'), 'login': 'WestMoscow', 'date': 1571571905, 'winnerWarior': 'Тρąп Нãцūū', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ca26904dd30538447'), 'login': 'WestMoscow', 'date': 1571905834, 'winnerWarior': '𝔙𝔲𝔩𝔭𝔢𝔰ℑ𝔫𝔠𝔲𝔩𝔱𝔞 𝔑𝔙', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ca26904dd30538449'), 'login': 'WestMoscow', 'date': 1572436373, 'winnerWarior': 'ХопХейЛалаей ŇṼ', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ca26904dd3053844a'), 'login': 'WestMoscow', 'date': 1572717191, 'winnerWarior': 'АдмиралГенерал', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95ca26904dd3053844b'), 'login': 'WestMoscow', 'date': 1572514606, 'winnerWarior': 'RusSamurai52', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95fa26904dd3053844d'), 'login': 'WestMoscow', 'date': 1572977520, 'winnerWarior': 'myakishh', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95fa26904dd3053844f'), 'login': 'WestMoscow', 'date': 1573050825, 'winnerWarior': 'LikeSmile', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95fa26904dd3053844e'), 'login': 'WestMoscow', 'date': 1573117516, 'winnerWarior': 'Fantomas', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95fa26904dd30538450'), 'login': 'WestMoscow', 'date': 1570089862, 'winnerWarior': 'Дядя Серёжа ŇṼ', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95fa26904dd30538451'), 'login': 'WestMoscow', 'date': 1570694194, 'winnerWarior': 'ХопХейЛалалей ŇṼ', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f95fa26904dd30538452'), 'login': 'WestMoscow', 'date': 1571438280, 'winnerWarior': 'Psγcoma', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f960a26904dd30538453'), 'login': 'WestMoscow', 'date': 1571583530, 'winnerWarior': ' D𝕒𝕣𝕜 A𝕟𝕘𝕖𝕝', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f960a26904dd30538455'), 'login': 'WestMoscow', 'date': 1571741189, 'winnerWarior': 'Shkvarkoman', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f960a26904dd30538456'), 'login': 'WestMoscow', 'date': 1571995254, 'winnerWarior': ' big_zmei', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f960a26904dd30538457'), 'login': 'WestMoscow', 'date': 1572780653, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f960a26904dd30538458'), 'login': 'WestMoscow', 'date': 1573032126, 'winnerWarior': 'Ogre ВХ', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6f960a26904dd30538459'), 'login': 'WestMoscow', 'date': 1573049239, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc42a26904dd3053845a'), 'login': 'WestMoscow', 'date': 1570441163, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Кирилл', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc42a26904dd3053845b'), 'login': 'WestMoscow', 'date': 1570695000, 'winnerWarior': 'WestMoscow', 'loseWarior': 'BananaCompote ŇṼ', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc43a26904dd3053845c'), 'login': 'WestMoscow', 'date': 1571375691, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Дядя Divnaia ŇṼ', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc43a26904dd3053845d'), 'login': 'WestMoscow', 'date': 1571297204, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Franki', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc43a26904dd3053845f'), 'login': 'WestMoscow', 'date': 1570975082, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Tsume', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc43a26904dd30538461'), 'login': 'WestMoscow', 'date': 1570892883, 'winnerWarior': 'WestMoscow', 'loseWarior': 'artiomse', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc43a26904dd30538462'), 'login': 'WestMoscow', 'date': 1571725685, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Кирилл', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc43a26904dd30538463'), 'login': 'WestMoscow', 'date': 1571854983, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Ankelwarp', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc43a26904dd30538465'), 'login': 'WestMoscow', 'date': 1571821024, 'winnerWarior': 'WestMoscow', 'loseWarior': ' big_zmei', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc43a26904dd30538466'), 'login': 'WestMoscow', 'date': 1571037454, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Lesnyk', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc44a26904dd30538468'), 'login': 'WestMoscow', 'date': 1571079464, 'winnerWarior': 'WestMoscow', 'loseWarior': 'DimHell', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc44a26904dd3053846a'), 'login': 'WestMoscow', 'date': 1571930959, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Ирина', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc44a26904dd3053846b'), 'login': 'WestMoscow', 'date': 1572507480, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Дмитрий', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc44a26904dd3053846c'), 'login': 'WestMoscow', 'date': 1572518350, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Тётя ЛеДонна ŇṼ', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc44a26904dd3053846d'), 'login': 'WestMoscow', 'date': 1572529153, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Franki BX', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc44a26904dd3053846e'), 'login': 'WestMoscow', 'date': 1571406730, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Yelo4k4', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc44a26904dd30538470'), 'login': 'WestMoscow', 'date': 1571331221, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Эрагон', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc45a26904dd30538472'), 'login': 'WestMoscow', 'date': 1571643802, 'winnerWarior': 'WestMoscow', 'loseWarior': 'По полям', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc45a26904dd30538473'), 'login': 'WestMoscow', 'date': 1571410173, 'winnerWarior': 'WestMoscow', 'loseWarior': 'sshilin', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc45a26904dd30538474'), 'login': 'WestMoscow', 'date': 1571736545, 'winnerWarior': 'WestMoscow', 'loseWarior': 'myakishh', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc45a26904dd30538475'), 'login': 'WestMoscow', 'date': 1572004174, 'winnerWarior': 'WestMoscow', 'loseWarior': 'AНОНИMНЫЙ AЛKAШ', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc45a26904dd30538476'), 'login': 'WestMoscow', 'date': 1570698318, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Mikhail_MGO', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc45a26904dd30538477'), 'login': 'WestMoscow', 'date': 1571378410, 'winnerWarior': 'WestMoscow', 'loseWarior': ' big_zmei', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc45a26904dd30538478'), 'login': 'WestMoscow', 'date': 1571382560, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Lesnyk', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc45a26904dd30538479'), 'login': 'WestMoscow', 'date': 1572887616, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Alex', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc48a26904dd3053847a'), 'login': 'WestMoscow', 'date': 1572930854, 'winnerWarior': 'WestMoscow', 'loseWarior': ' big_zmei', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc48a26904dd3053847b'), 'login': 'WestMoscow', 'date': 1573024956, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Дядя Duck ŇṼ', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd3053847c'), 'login': 'WestMoscow', 'date': 1571993992, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Tatjana', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd3053847d'), 'login': 'WestMoscow', 'date': 1572254126, 'winnerWarior': 'WestMoscow', 'loseWarior': ' big_zmei', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd3053847e'), 'login': 'WestMoscow', 'date': 1572211383, 'winnerWarior': 'WestMoscow', 'loseWarior': 'myakishh', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd3053847f'), 'login': 'WestMoscow', 'date': 1572213681, 'winnerWarior': 'WestMoscow', 'loseWarior': 'myakishh', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd30538480'), 'login': 'WestMoscow', 'date': 1572519771, 'winnerWarior': 'WestMoscow', 'loseWarior': 'myakishh', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd30538481'), 'login': 'WestMoscow', 'date': 1573399843, 'winnerWarior': 'WestMoscow', 'loseWarior': 'ИЛЬИЧ', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd30538482'), 'login': 'WestMoscow', 'date': 1573471622, 'winnerWarior': 'WestMoscow', 'loseWarior': ' big_zmei', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd30538483'), 'login': 'WestMoscow', 'date': 1573737513, 'winnerWarior': 'WestMoscow', 'loseWarior': 'WhereAreMyBallz', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd30538485'), 'login': 'WestMoscow', 'date': 1573812544, 'winnerWarior': 'WestMoscow', 'loseWarior': 'DRATANYAN ŇṼ', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd30538486'), 'login': 'WestMoscow', 'date': 1570750009, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Дядя Duck ŇṼ', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd30538487'), 'login': 'WestMoscow', 'date': 1573813216, 'winnerWarior': 'WestMoscow', 'loseWarior': 'I7cux37', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd30538488'), 'login': 'WestMoscow', 'date': 1571224280, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Yelo4k4', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd30538489'), 'login': 'WestMoscow', 'date': 1571241008, 'winnerWarior': 'WestMoscow', 'loseWarior': 'I7cux37', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd3053848a'), 'login': 'WestMoscow', 'date': 1574161798, 'winnerWarior': 'WestMoscow', 'loseWarior': 'КириллǁȺǁ', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc49a26904dd3053848b'), 'login': 'WestMoscow', 'date': 1574318256, 'winnerWarior': 'WestMoscow', 'loseWarior': 'FlödyZ', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc4aa26904dd3053848d'), 'login': 'WestMoscow', 'date': 1574355279, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Манная каша', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc4aa26904dd3053848f'), 'login': 'WestMoscow', 'date': 1572526972, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Кирилл', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc4aa26904dd30538490'), 'login': 'WestMoscow', 'date': 1571337175, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Кирилл', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc4aa26904dd30538491'), 'login': 'WestMoscow', 'date': 1571382718, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Franki', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc4aa26904dd30538492'), 'login': 'WestMoscow', 'date': 1571387512, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Gromnsk', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc4aa26904dd30538493'), 'login': 'WestMoscow', 'date': 1571406450, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Lidsky', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc4aa26904dd30538494'), 'login': 'WestMoscow', 'date': 1571635419, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Ankelwarp', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc4aa26904dd30538495'), 'login': 'WestMoscow', 'date': 1571979647, 'winnerWarior': 'WestMoscow', 'loseWarior': 'BananaCompote ŇṼ', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc4aa26904dd30538496'), 'login': 'WestMoscow', 'date': 1572189668, 'winnerWarior': 'WestMoscow', 'loseWarior': 'BananaCompote ŇṼ', 'band': 'без банды'}
+{'_id': ObjectId('5dd6fc4aa26904dd30538497'), 'login': 'WestMoscow', 'date': 1572328852, 'winnerWarior': 'WestMoscow', 'loseWarior': ' big_zmei', 'band': 'без банды'}
+{'_id': ObjectId('5dd709ed3e11e0ab98d24910'), 'login': 'WestMoscow', 'date': 1574373852, 'winnerWarior': 'Blackprincer', 'loseWarior': 'WestMoscow', 'band': 'без банды'}
+{'_id': ObjectId('5dd783653e11e0ab98d24912'), 'login': 'artiomse', 'date': 1574404299, 'winnerWarior': 'Дядя Duck ŇṼ', 'loseWarior': 'ǁȺǁrtiomse', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd7836b3e11e0ab98d24913'), 'login': 'Art_Zank', 'date': 1574404409, 'winnerWarior': 'Dadrok', 'loseWarior': 'Lidsky', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd7847c3e11e0ab98d24914'), 'login': 'WestMoscow', 'date': 1574405207, 'winnerWarior': 'WestMoscow', 'loseWarior': 'Stella', 'band': 'без банды'}
+{'_id': ObjectId('5dd7aa033e11e0ab98d24919'), 'login': 'Gromnsk', 'date': 1574414781, 'winnerWarior': 'Mpak ВХ', 'loseWarior': 'Gromnsk', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd7b0cf3e11e0ab98d2491a'), 'login': 'Gromnsk', 'date': 1574416564, 'winnerWarior': 'Дядя Фёдор ŇṼ ', 'loseWarior': 'Gromnsk', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd7c50f3e11e0ab98d2491c'), 'login': 'XyTop_2', 'date': 1574421746, 'winnerWarior': 'Nortrton1747ᴮᵡ', 'loseWarior': 'XyTopǁȺǁ', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd7d5f92581d170d821ecd2'), 'login': 'Gromnsk', 'date': 1574425937, 'winnerWarior': 'Апт', 'loseWarior': 'Gromnsk', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd7f1622581d170d821ecd8'), 'login': 'DeadChild', 'date': 1574432630, 'winnerWarior': 'Delete accaunt', 'loseWarior': 'DeadChild', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd80f722581d170d821ecdf'), 'login': 'still_wsd', 'date': 1574440776, 'winnerWarior': 'Апт', 'loseWarior': 'Нурсултан', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd849cf2581d170d821ece4'), 'login': 'XyTop_2', 'date': 1574455686, 'winnerWarior': 'XyTopǁȺǁ', 'loseWarior': 'oxwordmc', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd85b9b2581d170d821ece9'), 'login': 'trimprim', 'date': 1574460295, 'winnerWarior': 'ALTǁȺǁ', 'loseWarior': 'fromangliya', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd8690b2581d170d821eceb'), 'login': 'trimprim', 'date': 1574463733, 'winnerWarior': 'ALTǁȺǁ', 'loseWarior': 'MAVR', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd8f1a5eba14915108eed03'), 'login': 'Gromnsk', 'date': 1574498690, 'winnerWarior': 'Gromnsk', 'loseWarior': 'Franki BX', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd8fb5feba14915108eed04'), 'login': 'GonzikBenzyavsky', 'date': 1574501168, 'winnerWarior': 'Апт', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd9073338f772491f459b96'), 'login': 'GonzikBenzyavsky', 'date': 1574504226, 'winnerWarior': '', 'loseWarior': '', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd90e4a38f772491f459b97'), 'login': 'GonzikBenzyavsky', 'date': 1574506036, 'winnerWarior': 'Kolder112', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd9282338f772491f459b98'), 'login': 'GonzikBenzyavsky', 'date': 1574512632, 'winnerWarior': 'КириллǁȺǁ', 'loseWarior': 'Rushka', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd938b938f772491f459b99'), 'login': 'NorthDragoN', 'date': 1574516869, 'winnerWarior': 'Алексей', 'loseWarior': 'ǁȺǁДмитрийǁȺǁ', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd93b9938f772491f459b9b'), 'login': 'GonzikBenzyavsky', 'date': 1574517646, 'winnerWarior': 'КириллǁȺǁ', 'loseWarior': 'EternalTilt', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd93c5938f772491f459b9c'), 'login': 'GonzikBenzyavsky', 'date': 1574517842, 'winnerWarior': 'КириллǁȺǁ', 'loseWarior': 'Gallardo', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd94f6438f772491f459b9e'), 'login': 'triple6ixx', 'date': 1574522715, 'winnerWarior': 'Triple6ixGodǁȺǁ', 'loseWarior': 'AintThatFunny', 'band': 'Артхаус'}
+{'_id': ObjectId('5dd98f4942a12e71c64b8097'), 'login': 'XyTop_2', 'date': 1574539035, 'winnerWarior': 'XyTopǁȺǁ', 'loseWarior': 'Diver', 'band': 'Энтропия'}
+{'_id': ObjectId('5dd9a0cac9eeac59d122d145'), 'login': 'rocknrolla_777', 'date': 1574543471, 'winnerWarior': 'rocknrolla_777', 'loseWarior': 'B0r0da', 'band': 'Артхаус'}
+{'_id': ObjectId('5dda2dc694838abb94278319'), 'login': 'GonzikBenzyavsky', 'date': 1574579632, 'winnerWarior': 'mFrolov', 'loseWarior': 'КириллǁȺǁ', 'band': 'Артхаус'}
+

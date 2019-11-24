@@ -1338,9 +1338,9 @@ def fight():
             figthers_urban.append(fighter)
         if fighter.get('band') == '🐇 Мертвые кролики':
             figthers_rabbit.append(fighter)
-        if max_damage < int(fighter.get('damage').split(' ')[0]): max_damage = int(fighter.get('damage').split(' ')[0])
-        if max_armor < int(fighter.get('armor').split(' ')[0]): max_armor = int(fighter.get('armor').split(' ')[0])
-        if min_damage > int(fighter.get('damage').split(' ')[0]): min_damage = int(fighter.get('damage').split(' ')[0])
+        if max_damage < int(str(fighter.get('damage')).split(' ')[0]): max_damage = int(str(fighter.get('damage')).split(' ')[0])
+        if max_armor < int(str(fighter.get('armor')).split(' ')[0]): max_armor = int(str(fighter.get('armor')).split(' ')[0])
+        if min_damage > int(str(fighter.get('damage')).split(' ')[0]): min_damage = int(str(fighter.get('damage')).split(' ')[0])
         findFighters = True
 
     if not findFighters:

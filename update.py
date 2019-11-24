@@ -157,5 +157,5 @@ print("#==========================#")
 print("#==========================#")              
 print("#         BATTLE           #")              
 print("#==========================#")
-for x in battle.find():
-    print(x)
+# for x in battle.find():
+#     print(x)
