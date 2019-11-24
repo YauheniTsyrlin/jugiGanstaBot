@@ -854,8 +854,8 @@ def main_message(message):
             for s in strings:
                 if '|' in strings[i]:
                     name = tools.deEmojify(strings[i])
+                    name = name.replace('⚙️', '').replace('🔪', '').replace('💣', '').replace('⚛️', '').replace('👙', '')
                     name = name.split('|')[0].strip()
-                    #name = name.replace('⚙️', '').replace('🔪', '').replace('💣', '').replace('⚛️', '').replace('👙', '')
                     warior = getWariorByName(name)
                     logger.info('Looking warior with name: |' + name + '|')
                     if warior:
