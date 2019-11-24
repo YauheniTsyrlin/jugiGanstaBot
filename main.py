@@ -223,7 +223,7 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
         menu.append(footer_buttons)
     return menu
 
-def write_json(data, filename = "/home/godfather/jugiGanstaBot/pips.json"):
+def write_json(data, filename = "./pips.json"):
     with open(filename, 'a', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
@@ -846,16 +846,22 @@ def main_message(message):
             bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты оценил обстановку вокруг.' in message.text and 'Рядом кто-то есть.' in message.text):
-        write_json(message.json)
+        #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
             strings = message.text.split('\n')
             i = 0
             find = False
             for s in strings:
                 if '|' in strings[i]:
+                    if '⚙️' in strings[i]:
+                        logger.info('1 Find Emoji ⚙️')
+
                     name = tools.deEmojify(strings[i])
                     name = name.replace('⚙️', '').replace('🔪', '').replace('💣', '').replace('⚛️', '').replace('👙', '')
                     name = name.split('|')[0].strip()
+                    if '⚙️' in name:
+                        logger.info('2 Find Emoji ⚙️')
+
                     warior = getWariorByName(name)
                     logger.info('Looking warior with name: |' + name + '|')
                     if warior:
