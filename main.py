@@ -853,19 +853,11 @@ def main_message(message):
             find = False
             for s in strings:
                 if '|' in strings[i]:
-                    if '⚙️' in strings[i]:
-                        logger.info('1 Find Emoji ⚙️')
-
                     name = strings[i]
                     name = name.replace('⚙️', '|').replace('🔪', '|').replace('💣', '|').replace('⚛️', '|').replace('👙', '|')
                     name = name.split('|')[1].strip()
-                    if '⚙️' in name:
-                        logger.info('2 Find Emoji ⚙️')
-
                     warior = getWariorByName(name)
-                    logger.info('Looking warior with name: |' + name + '|')
                     if warior:
-                        logger.info('Find: |' + name + '|')
                         find = True
                         if warior.photo:
                             bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=None)
