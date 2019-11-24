@@ -1381,11 +1381,11 @@ def fight():
             strategy1 = f1.get('strategy')[i]
             strategy2 = f2.get('strategy')[i]
 
-            damage1 = float(f1.get('damage').split(' ')[0])
-            damage2 = float(f2.get('damage').split(' ')[0])
+            damage1 = float(str(f1.get('damage')).split(' ')[0])
+            damage2 = float(str(f2.get('damage')).split(' ')[0])
 
-            armor1 = float(f1.get('armor').split(' ')[0])
-            armor2 = float(f2.get('armor').split(' ')[0])
+            armor1 = float(str(f1.get('armor')).split(' ')[0])
+            armor2 = float(str(f2.get('armor')).split(' ')[0])
             fight_str = ''
 
 
