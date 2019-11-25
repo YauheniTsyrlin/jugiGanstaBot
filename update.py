@@ -65,9 +65,6 @@ if (not result):
              })             
 
 
-myquery = {'code': 'BANDS_INLINE_WARIORS'}
-sett = settings.delete_one(myquery)
-
 result = settings.find_one({'code': 'BANDS_ACCESS_WARIORS'})
 if (not result):
     print('Not Find setting. Insert BANDS_ACCESS_WARIORS')
@@ -76,6 +73,7 @@ if (not result):
         'description': 'Банды, имеющие право пользоваться inline сервисом wariors', 
         'value': ''   
              })     
+
 
 result = settings.find_one({'code': 'GOATS_BANDS'})
 if (not result):
@@ -95,14 +93,18 @@ newvalues = { "$set": { "value": {'from_date': datetime.datetime(2019, 10, 27).t
 u = settings.update_one(myquery, newvalues)
 
 
-myquery = { "code": 'OUR_BAND' }
+myquery = { "code": 'ADMINISTRATOR' }
 newvalues = { "$set": { "value": 
-            [{'band': 'Артхаус'},
-             {'band': 'Энтропия'}]
+            [{'login': 'GonzikBenzyavsky'},
+             {'login': 'Innok27'}]
              } } 
 u = settings.update_one(myquery, newvalues)
 
+myquery = {'code': 'OUR_BAND'}
+sett = settings.delete_one(myquery)
 
+myquery = {'code': 'BANDS_INLINE_WARIORS'}
+sett = settings.delete_one(myquery)
 
 myquery = { "code": 'BANDS_ACCESS_WARIORS' }
 newvalues = { "$set": { "value": 

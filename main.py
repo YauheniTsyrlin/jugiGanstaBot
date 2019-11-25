@@ -45,6 +45,7 @@ battle      = mydb["battle"]
 competition = mydb["competition"]
 settings    = mydb["settings"]
 pending_messages = mydb["pending_messages"]
+rades       = mydb["rades"]
 
 logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
@@ -102,6 +103,18 @@ def getMyBands(login: str):
                 return goat['bands']
 
     return None        
+
+def getMyGoat(login: str):
+    user = getUserByLogin(login)
+    if not user:
+        return None
+
+    for goat in getSetting('GOATS_BANDS'):
+        for band in goat['bands']:
+            if user.getBand() and user.getBand().lower() == band.lower():
+                return goat['name']
+
+    return None 
 
 def isUsersBand(login: str, band: str):
     bands = getMyBands(login)
@@ -174,6 +187,31 @@ def update_wariors(newwariors: wariors.Warior):
     WARIORS_ARR.clear()
     for x in registered_wariors.find():
         WARIORS_ARR.append(wariors.importWarior(x))
+
+def get_rade_plan(rade_date, goat):
+    plan_for_date = 'План рейдов на ' + time.strftime("%d-%m-%Y", time.gmtime( rade_date.timestamp() )) + '\n'
+    find = False
+    for rade in rades.find({
+                                '$and' : 
+                                [
+                                    {
+                                        'rade_date': {
+                                        '$gte': (rade_date.replace(hour=0, minute=0, second=0, microsecond=0)).timestamp(),
+                                        '$lt': (rade_date.replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
+                                        }},
+                                    {
+                                        'goat': goat
+                                    }
+                                ]
+                            }):
+        t = dt = datetime.fromtimestamp(rade.get('rade_date') ) 
+        plan_for_date = plan_for_date + str(t.hour).zfill(2)+':'+str(t.minute).zfill(2) + ' ' + rade.get('rade_text') + '\n'
+        find = True
+
+    if find == False:
+        plan_for_date = plan_for_date + 'Нет запланированных рейдов'
+
+    return plan_for_date
 
 def updateUser(newuser: users.User):
     if newuser == None:
@@ -1058,35 +1096,81 @@ def main_message(message):
                             bot.reply_to(message, text=string, reply_markup=markup)
                         else:
                             bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
+                    elif 'planrade' == response.split(':')[1]:
+                        # jugi:planrade:$time
+                        goat = getMyGoat(message.from_user.username)
+                        rade_date = parse(response.split(response.split(":")[1])[1][1:])
+
+                        plan_str = get_rade_plan(rade_date, goat)
+                        msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=None)
+
                     elif 'rade' == response.split(':')[1]:
                             if not isAdmin(message.from_user.username):
                                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=markup)
                                 return
-
+                            goat = getMyGoat(message.from_user.username)
                             #   0    1        2         3     
                             # jugi:rade:$radelocation:$time
-                            # print(response.split(response.split(":")[2])[1][1:])
-                            time_str = response.split(response.split(":")[2])[1][1:]
-                            dt = parse(time_str)
-                            time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
+                            rade_date = parse(response.split(response.split(":")[2])[1][1:])
+                            if rade_date.hour not in (1, 9, 17):
+                                bot.reply_to(message, text='Рейды проходят только в 1:00, 9:00, 17:00!\nУкажи правильное время!', reply_markup=markup)
+                                return 
+
+                            # Проверка на будущую дату
+                            tz = datetime.strptime('03:00:00',"%H:%M:%S")
+                            dt = rade_date - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+                            if (dt.timestamp() < datetime.now().timestamp()):
+                                msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('timeisout'), reply_markup=markup)
+                                return
+
+                            rade_text = response.split(":")[2]
+                            rade_location = int(response.split(":")[2].split('📍')[1].split('км')[0].strip())
+
+                            if privateChat:
+                                bot.reply_to(message, text='Напоминания для рейда будут приходить только в этот чат!\nЧтобы их увидели все - запланируй рейд в групповом чате!', reply_markup=markup)
+
+                            myquery = { 
+                                        "rade_date": rade_date.timestamp(), 
+                                        "goat": goat
+                                    }
+                            newvalues = { "$set": { 
+                                            'rade_date': rade_date.timestamp(),
+                                            'rade_text': rade_text,
+                                            'rade_location': rade_location,
+                                            'state': 'WAIT',
+                                            'chat_id': message.chat.id,
+                                            'login': message.from_user.username,
+                                            'goat': goat
+                                        } } 
+                            u = rades.update_one(myquery, newvalues)
+                            if u.matched_count == 0:
+                                rades.insert_one({ 
+                                    'create_date': datetime.now().timestamp(), 
+                                    'rade_date': rade_date.timestamp(),
+                                    'rade_text': rade_text,
+                                    'rade_location': rade_location,
+                                    'state': 'WAIT',
+                                    'chat_id': message.chat.id,
+                                    'login': message.from_user.username,
+                                    'goat': goat})
                             
-                            time_remind_str = str(dt.hour-1).zfill(2)+':'+str(dt.minute+30).zfill(2)
-
-                            report = f'<b>Рейд!</b> {time_str} <b>{response.split(":")[2]}</b>\n'
-                            # for registered_user in registered_users.find({"band": f"{response.split(':')[2][1:]}"}):
-                            #     user = users.importUser(registered_user)
-                            #     report = report + f'\n@{user.getLogin()}'
-                            report = report + '\n<b>Не опаздываем!</b>' 
-
-                            # markupinline = InlineKeyboardMarkup()
-                            # markupinline.row_width = 2
-                            # markupinline.add(InlineKeyboardButton("Иду!", callback_data="capture_yes"),
-                            # InlineKeyboardButton("Нахер!", callback_data="capture_no"))
-
-                            msg = send_messages_big(message.chat.id, text=report, reply_markup=None)
-                            if not privateChat:
-                                bot.pin_chat_message(message.chat.id, msg.message_id)
-                            #msg = send_messages_big(message.chat.id, text='Напомнить в '+time_remind_str+'?', reply_markup=None)
+                            plan_str = get_rade_plan(rade_date, goat)
+                            msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=None)
+                            
+                            
+                            # time_str = response.split(response.split(":")[2])[1][1:]
+                            # dt = parse(time_str)
+                            # time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
+                            # time_remind_str = str(dt.hour-1).zfill(2)+':'+str(dt.minute+30).zfill(2)
+                            # report = f'<b>Рейд!</b> {time_str} <b>{response.split(":")[2]}</b>\n🐐<b>{getMyGoat(message.from_user.username)}</b>\n'
+                            # # for registered_user in registered_users.find({"band": f"{response.split(':')[2][1:]}"}):
+                            # #     user = users.importUser(registered_user)
+                            # #     report = report + f'\n@{user.getLogin()}'
+                            # report = report + '\n<b>Не опаздываем!</b>' 
+                            # msg = send_messages_big(message.chat.id, text=report, reply_markup=None)
+                            # if not privateChat:
+                            #     bot.pin_chat_message(message.chat.id, msg.message_id)
+                            # #msg = send_messages_big(message.chat.id, text='Напомнить в '+time_remind_str+'?', reply_markup=None)
 
                     elif 'capture' == response.split(':')[1]:
                             #   0    1        2       3     4
