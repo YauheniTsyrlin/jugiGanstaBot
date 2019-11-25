@@ -96,7 +96,8 @@ u = settings.update_one(myquery, newvalues)
 myquery = { "code": 'ADMINISTRATOR' }
 newvalues = { "$set": { "value": 
             [{'login': 'GonzikBenzyavsky'},
-             {'login': 'Innok27'}]
+             {'login': 'Innok27'},
+             {'login': 'WestMoscow'}]
              } } 
 u = settings.update_one(myquery, newvalues)
 
