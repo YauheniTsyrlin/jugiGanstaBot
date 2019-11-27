@@ -1002,7 +1002,7 @@ def main_message(message):
                 for fu in fuckupusers:
                     counter = counter + 1
                     fusers.append(fu)
-                    fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()} {spliter}{fu.getRaidLocation()}км\n' 
+                    fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()} 📍{fu.getRaidLocation()}км\n' 
                     if counter % 4 == 0:
                         send_messages_big(message.chat.id, text=fuckupusersReport, reply_markup=None)
                         fusers = []
