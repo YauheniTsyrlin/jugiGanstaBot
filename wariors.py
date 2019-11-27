@@ -307,12 +307,15 @@ class Warior(object):
     def getProfileSmall(self):
         string = ''
         if not self.fraction:
-            self.fraction = 'Без фракции '
+            self.fraction = ''
 
         if (not self.band) or (self.band == 'NO_BAND'):
             string = string + f'┌{self.fraction.split(" ")[0].strip()} 🤘(без банды)'
         else:
             string = string + f'┌{self.fraction.split(" ")[0].strip()}'
+        
+        if self.goat:
+            string = string + f' 🐐: {self.goat}'
 
         if self.bm:
             if not self.bm == 0:
@@ -321,22 +324,17 @@ class Warior(object):
 
         if self.enemy_armor:
             if self.damage:
-                string = string + f'└💥{self.damage} при 🛡 {self.enemy_armor}'
+                string = string + f'├💥{self.damage} при 🛡 {self.enemy_armor}'
             else:
                 pass
         else:
             if self.damage:
-                string = string + f'└💥{self.damage}' 
+                string = string + f'├💥{self.damage}' 
 
         if self.health:
                 string = string + f'├❤{self.health}'
         else: 
             pass
-
-        if self.kills:          
-            string = string + f'├☠️{self.kills}'
-        else:
-            string = string + f'├☠️0'
 
         return string
 

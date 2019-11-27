@@ -172,10 +172,10 @@ def getWariorFraction(string: str):
     elif (string.startswith('👙')):
         return '👙Клуб бикини'
 
-def getWariorByName(name: str):
+def getWariorByName(name: str, fraction: str):
     name = tools.deEmojify(name)
     for warior in list(WARIORS_ARR):
-        if name == warior.getName(): 
+        if name == warior.getName() and fraction == warior.getFraction(): 
             return warior
     return None
 
@@ -353,7 +353,7 @@ def updateWarior(warior: wariors.Warior, message: Message):
 
         if findWariors:
             # TODO Проверить, что нет более поздней версии бойца
-            wariorToUpdate = getWariorByName(warior.getName())
+            wariorToUpdate = getWariorByName(warior.getName(), warior.getFraction())
             updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
 
             newvalues = { "$set": json.loads(updatedWarior.toJSON()) }
@@ -885,7 +885,8 @@ def main_message(message):
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '/accept' in message.text and '/decline' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
-            warior = getWariorByName(message.text.split('👤')[1].split(' из ')[0])
+            fraction = message.text.split(' из ')[1].strip()
+            warior = getWariorByName(message.text.split('👤')[1].split(' из ')[0], fraction)
             if warior == None:
                 bot.reply_to(message, text='Ничего о нем не знаю!', reply_markup=None)
             elif (warior and warior.photo):
@@ -905,16 +906,20 @@ def main_message(message):
             for s in strings:
                 if '|' in strings[i]:
                     name = strings[i]
+                    fraction = getWariorFraction(strings[i])
                     name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
                     name = name.split('@')[1].split('|')[0].strip()
-                    warior = getWariorByName(name)
+                    warior = getWariorByName(name, fraction)
                     if warior:
                         find = True
-                        report = report + f'\n'
-                        bot.reply_to(message, text=warior.getProfile(), reply_markup=None)
+                        report = report + f'{warior.getProfileSmall()}\n'
+                        
                 i = i + 1
+            
             if not find:
                 bot.reply_to(message, text='Не нашел никого!', reply_markup=None)
+            else:
+                bot.reply_to(message, text=report, reply_markup=None)
         else:
             bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
         return
@@ -1119,7 +1124,7 @@ def main_message(message):
         elif (callJugi and 'профиль' in message.text.lower()):
             user = users.getUser(message.from_user.username, registered_users)
             if user:
-                warior = getWariorByName(user.getName())
+                warior = getWariorByName(user.getName(), user.getFraction())
                 if (warior and warior.photo):
                     bot.send_photo(message.chat.id, warior.photo, user.getProfile(), reply_markup=markup)
                 else:
