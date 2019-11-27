@@ -941,6 +941,7 @@ def main_message(message):
                     u = getUserByName(name)
 
                     spliter = ''
+                    km = ''
                     if '📍' in strings[i]:
                         km =  (strings[i].split('📍')[1].split('km')[0].strip())
                         spliter = '📍'
