@@ -917,9 +917,14 @@ def main_message(message):
             allcounter = 0
             onraderw = 0
             onradecounter = 0
+            onradeReport = ''
             report = 'Информация о рейдерах!\n'
             fuckupraderw = 0
+            fuckupradecounter = 0
             fuckupusersReport = ''
+            fuckupusers = []
+            alianusersReport = ''
+            aliancounter = 0
 
             # 🤘👊🏅
             for s in strings:
@@ -935,6 +940,15 @@ def main_message(message):
                     name = name.split('@')[1].split('👂')[0].strip()
                     u = getUserByName(name)
 
+                    spliter = ''
+                    if '📍' in strings[i]:
+                        km =  (strings[i].split('📍')[1].split('km')[0].strip())
+                        spliter = '📍'
+                        # u.setRaidLocation(int())
+                    elif '👟' in strings[i]:
+                        km =  int(strings[i].split('👟')[1].split('km')[0].strip())
+                        spliter = '👟'
+
                     if u:
                         allrw = allrw + u.getRaidWeight()
                         allcounter = allcounter + 1
@@ -943,25 +957,57 @@ def main_message(message):
                             u.setRaidLocation(int(strings[i].split('👊')[1].split('km')[0]))
                             updateUser(u)
                             onradecounter = onradecounter + 1
+                            onradeReport = onradeReport + f'{onradecounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n'
+
                         else:
                             fuckupraderw = fuckupraderw + u.getRaidWeight()
-                            if '📍' in strings[i]:
-                                pass # u.setRaidLocation(int(strings[i].split('📍')[1].split('km')[0]))
-                            fuckupusersReport = fuckupusersReport + f'🏋️‍♂️{u.getRaidWeight()} @{u.getLogin()} \n' 
+                            fuckupradecounter = fuckupradecounter + 1
+                            fuckupusers.append(u)
+                            fuckupusersReport = fuckupusersReport + f'{fuckupradecounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n' 
                     else:
-                        pass # bot.reply_to(message, text=f'А это кто!? {name}\nПочему я его не знаю!?', reply_markup=None)
+                        aliancounter  = aliancounter + 1
+                        alianusersReport = alianusersReport + f'{aliancounter}. {name} {spliter}{km}км\n'
+                        
                 i = i + 1
             
-            report = report + '\n' 
-            report = report + f'На рейде бандитов: {onradecounter}/{allcounter}\n'
-            report = report + f'Боевая мощь: {onraderw}/{allrw} {str(int(onraderw/allrw*100))}%\n'
+            report = report + f'🤘 <b>{band}</b>\n\n' 
+            if onradecounter > 0:
+                report = report + f'🧘‍♂️ на рейде: <b>{onradecounter}/{allcounter}</b>\n'
+                report = report + onradeReport
+                report = report + f'\n<b>Общий вес</b>: 🏋️‍♂️{onraderw}/{allrw} <b>{str(int(onraderw/allrw*100))}%</b>\n'
             report = report + '\n'
-            report = report + 'Бандиты в проёбе:\n'
-            report = report + fuckupusersReport
+            if fuckupraderw > 0:
+                report = report + '🐢 <b>Бандиты в проёбе</b>:\n'
+                report = report + fuckupusersReport
+            report = report + '\n'
+            if alianusersReport == '':
+                pass
+            else:
+                report = report + '🐀 <b>Крысы в банде</b> (нет регистрации):\n'
+                report = report + alianusersReport
+            
+            if onradecounter > 0:
+                bot.delete_message(message.chat.id, message.message_id)
+                send_messages_big(message.chat.id, text=report, reply_markup=None)
+                
+                # Пингуем
+                counter = 0
+                fusers = []
+                fuckupusersReport = '🐢 <b>Бандиты! Шевилити бусиками!</b>\n\n'
+                for fu in fuckupusers:
+                    counter = counter + 1
+                    fusers.append(fu)
+                    fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()} {spliter}{km}км\n' 
+                    if counter % 4 == 0:
+                        send_messages_big(message.chat.id, text=fuckupusersReport, reply_markup=None)
+                        fusers = []
+                        fuckupusersReport = '🐢 <b>Бандиты! Шевилити бусиками!</b>\n\n'
 
-            bot.reply_to(message, text=report, reply_markup=None)
+                if len(fusers) > 0:
+                    send_messages_big(message.chat.id, text=fuckupusersReport, reply_markup=None)
 
-
+            else:
+                bot.reply_to(message, text=getResponseDialogFlow('no_one_on_rade'), reply_markup=None)
         else:
             bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
         return

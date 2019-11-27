@@ -89,7 +89,7 @@ print("#         SETTINGS         #")
 print("#==========================#")              
 
 myquery = { "code": 'REPORT_KILLERS' }
-newvalues = { "$set": { "value": {'from_date': datetime.datetime(2019, 10, 27).timestamp(), 'to_date': None}} } 
+newvalues = { "$set": { "value": {'from_date': datetime.datetime(2019, 11, 27, 10, 45, 0).timestamp(), 'to_date': None}} } 
 u = settings.update_one(myquery, newvalues)
 
 
