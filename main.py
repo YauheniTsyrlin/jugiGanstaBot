@@ -998,7 +998,7 @@ def main_message(message):
                 # Пингуем
                 counter = 0
                 fusers = []
-                fuckupusersReport = '🐢 <b>Бандиты! Шевилити бусиками!</b>\n\n'
+                fuckupusersReport = '🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n\n'
                 for fu in fuckupusers:
                     counter = counter + 1
                     fusers.append(fu)
@@ -1006,7 +1006,7 @@ def main_message(message):
                     if counter % 4 == 0:
                         send_messages_big(message.chat.id, text=fuckupusersReport, reply_markup=None)
                         fusers = []
-                        fuckupusersReport = '🐢 <b>Бандиты! Шевилити бусиками!</b>\n\n'
+                        fuckupusersReport = '🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n\n'
 
                 if len(fusers) > 0:
                     send_messages_big(message.chat.id, text=fuckupusersReport, reply_markup=None)
