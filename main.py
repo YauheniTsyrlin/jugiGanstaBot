@@ -160,6 +160,18 @@ def getUserByName(name: str):
         if name.lower().strip() == user.getName().lower().strip(): return user
     return None
 
+def getWariorFraction(string: str):
+    if (string.startswith('⚙️')):
+        return '⚙️Убежище 4'
+    elif (string.startswith('🔪')):
+        return '🔪Головорезы'
+    elif (string.startswith('💣')):
+        return '💣Мегатонна'
+    elif (string.startswith('⚛️')):
+        return '⚛️Республика'
+    elif (string.startswith('👙')):
+        return '👙Клуб бикини'
+
 def getWariorByName(name: str):
     name = tools.deEmojify(name)
     for warior in list(WARIORS_ARR):
@@ -889,6 +901,7 @@ def main_message(message):
             strings = message.text.split('\n')
             i = 0
             find = False
+            report = ''
             for s in strings:
                 if '|' in strings[i]:
                     name = strings[i]
@@ -897,10 +910,8 @@ def main_message(message):
                     warior = getWariorByName(name)
                     if warior:
                         find = True
-                        if warior.photo:
-                            bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=None)
-                        else:
-                            bot.reply_to(message, text=warior.getProfile(), reply_markup=None)
+                        report = report + f'\n'
+                        bot.reply_to(message, text=warior.getProfile(), reply_markup=None)
                 i = i + 1
             if not find:
                 bot.reply_to(message, text='Не нашел никого!', reply_markup=None)
@@ -991,7 +1002,7 @@ def main_message(message):
                 report = report + '🐀 <b>Крысы в банде</b> (нет регистрации):\n'
                 report = report + alianusersReport
             
-            if onradecounter > 0:
+            if onradecounter > 0 or aliancounter > 0:
                 bot.delete_message(message.chat.id, message.message_id)
                 send_messages_big(message.chat.id, text=report, reply_markup=None)
                 
