@@ -336,7 +336,7 @@ class Warior(object):
                 string = string + f'├❤{self.health}'
         else: 
             pass
-        string = string + f'└ {self.name}'
+        string = string + f'└ {self.name}\n'
         return string
 
     def getProfile(self):
