@@ -977,7 +977,7 @@ def main_message(message):
             
             report = report + f'🤘 <b>{band}</b>\n\n' 
             if onradecounter > 0:
-                report = report + f'🧘‍♂️ на рейде: <b>{onradecounter}/{allcounter}</b>\n'
+                report = report + f'🧘‍♂️ <b>на рейде</b>: <b>{onradecounter}/{allcounter}</b>\n'
                 report = report + onradeReport
                 report = report + f'\n<b>Общий вес</b>: 🏋️‍♂️{onraderw}/{allrw} <b>{str(int(onraderw/allrw*100))}%</b>\n'
             report = report + '\n'
@@ -998,7 +998,7 @@ def main_message(message):
                 # Пингуем
                 counter = 0
                 fusers = []
-                fuckupusersReport = '🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n\n'
+                fuckupusersReport = f'🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n\n'
                 for fu in fuckupusers:
                     counter = counter + 1
                     fusers.append(fu)
@@ -1006,7 +1006,7 @@ def main_message(message):
                     if counter % 4 == 0:
                         send_messages_big(message.chat.id, text=fuckupusersReport, reply_markup=None)
                         fusers = []
-                        fuckupusersReport = '🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n\n'
+                        fuckupusersReport = f'🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n\n'
 
                 if len(fusers) > 0:
                     send_messages_big(message.chat.id, text=fuckupusersReport, reply_markup=None)
