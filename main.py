@@ -957,9 +957,9 @@ def main_message(message):
                     if u:
                         allrw = allrw + u.getRaidWeight()
                         allcounter = allcounter + 1
+                        u.setRaidLocation(km)
                         if '👊' in strings[i]:
                             onraderw = onraderw + u.getRaidWeight()
-                            u.setRaidLocation(int(strings[i].split('👊')[1].split('km')[0]))
                             updateUser(u)
                             onradecounter = onradecounter + 1
                             onradeReport = onradeReport + f'{onradecounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n'
@@ -1002,7 +1002,7 @@ def main_message(message):
                 for fu in fuckupusers:
                     counter = counter + 1
                     fusers.append(fu)
-                    fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()} {spliter}{km}км\n' 
+                    fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()} {spliter}{fu.getRaidLocation()}км\n' 
                     if counter % 4 == 0:
                         send_messages_big(message.chat.id, text=fuckupusersReport, reply_markup=None)
                         fusers = []
