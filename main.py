@@ -157,7 +157,7 @@ def getUserByLogin(login: str):
 
 def getUserByName(name: str):
     for user in list(USERS_ARR):
-        if name.lower() == user.getName().lower(): return user
+        if name.lower().strip() == user.getName().lower().strip(): return user
     return None
 
 def getWariorByName(name: str):
