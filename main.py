@@ -945,10 +945,14 @@ def main_message(message):
                     if '📍' in strings[i]:
                         km =  (strings[i].split('📍')[1].split('km')[0].strip())
                         spliter = '📍'
-                        # u.setRaidLocation(int())
+
                     elif '👟' in strings[i]:
                         km =  int(strings[i].split('👟')[1].split('km')[0].strip())
                         spliter = '👟'
+                    else:
+                        km =  int(strings[i].split('👊')[1].split('km')[0].strip())
+                        spliter = '👊'
+
 
                     if u:
                         allrw = allrw + u.getRaidWeight()
