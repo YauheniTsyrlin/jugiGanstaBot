@@ -929,6 +929,17 @@ def main_message(message):
         else:
             bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
         return
+    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
+        #write_json(message.json)
+        if hasAccessToWariors(message.from_user.username):
+            u = getUserByLogin(message.from_user.username)
+            u.setRaidLocation(0)
+            updateUser(u)
+            bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+        else:
+            bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
+        return
+
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Панель банды.' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
