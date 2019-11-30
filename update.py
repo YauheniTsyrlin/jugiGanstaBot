@@ -84,6 +84,15 @@ if (not result):
         'value': ''   
              })   
 
+result = settings.find_one({'code': 'BAN_USERS'})
+if (not result):
+    print('Not Find setting. Insert BAN_USERS')
+    settings.insert_one({
+        'code': 'BAN_USERS', 
+        'description': ' Пользователи, чьи сообщения Джу будет заменять', 
+        'value': ''   
+             }) 
+
 print("#==========================#")              
 print("#         SETTINGS         #")              
 print("#==========================#")              
@@ -131,7 +140,6 @@ newvalues = { "$set":
                 } 
             } 
 u = settings.update_one(myquery, newvalues)
-
 
 for x in settings.find():
     print(x)

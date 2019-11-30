@@ -245,10 +245,7 @@ def updateUser(newuser: users.User):
         #print(x)
         USERS_ARR.append(users.importUser(x))
 
-def setSetting(login: str, code: str, value: str):
-    if (isAdmin(login)):
-        pass
-    else: return False
+def setSetting(code: str, value: str):
 
     """ Сохранение настройки """
     myquery = { "code": code }
@@ -807,7 +804,10 @@ def main_message(message):
     logger.info('message.from_user.username: '+message.from_user.username)
     logger.info('message.text: ' + message.text)
     
-    
+    if getSetting('BAN_USERS') and getSetting('BAN_USERS') == message.from_user.username:
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=getResponseDialogFlow('user_banned'), reply_markup=None)
+
     privateChat = ('private' in message.chat.type)
     callJugi = (privateChat 
                             or message.text.lower().startswith('джу') 
@@ -1109,6 +1109,14 @@ def main_message(message):
                     bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=markup)
                 else:
                     bot.reply_to(message, text=warior.getProfile(), reply_markup=markup)
+        elif (callJugi and 'бан @' in message.text.lower()):
+            if not isAdmin(message.from_user.username):
+                bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=None)
+                return
+
+            login = message.text.split('@')[1].strip()
+            setSetting('BAN_USERS', login)
+            bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'), reply_markup=None)
 
         elif (callJugi and 'уволить @' in message.text.lower()):
             if not isAdmin(message.from_user.username):
