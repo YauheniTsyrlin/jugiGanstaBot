@@ -804,7 +804,7 @@ def main_message(message):
     logger.info('message.from_user.username: '+message.from_user.username)
     logger.info('message.text: ' + message.text)
     
-    if getSetting('BAN_USERS') and getSetting('BAN_USERS') == message.from_user.username:
+    if getSetting('BAN_USERS') and message.from_user.username in getSetting('BAN_USERS'):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=getResponseDialogFlow('user_banned'), reply_markup=None)
 
