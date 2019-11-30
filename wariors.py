@@ -393,8 +393,8 @@ class Warior(object):
         if second_string == '└':
             second_string = '└...'
         else:
-            second_string + second_string + '\n'
-             
+            second_string = second_string + '\n'
+
         return first_string + '\n' + string + '\n' + second_string
 
     def getProfile(self):
