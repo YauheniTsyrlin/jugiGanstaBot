@@ -1808,6 +1808,12 @@ def rade():
     now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
     
     logger.info('check rade time: now ' + str(now_date))
+    
+    if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second < 16:
+        for goat in getSetting('GOATS_BANDS'):
+            for band in goat.get('bands'):
+                send_messages_big(goat.get('chat'), text=f'Джу, собери {band}\nСкоро рейд!', reply_markup=None)
+
     if now_date.hour in (1, 9, 17) and now_date.minute in (0, 100) and now_date.second < 16:
         logger.info('Rade time now!')
         goats = []
