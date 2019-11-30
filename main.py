@@ -249,7 +249,7 @@ def setSetting(code: str, value: str):
 
     """ Сохранение настройки """
     myquery = { "code": code }
-    newvalues = { "$set": { "value": json.loads(value) } }
+    newvalues = { "$set": { "value": json.dumps(value) } }
     u = settings.update_one(myquery, newvalues)
 
     SETTINGS_ARR.clear() # Зарегистрированные настройки
