@@ -834,10 +834,6 @@ def main_message(message):
             'СОДЕРЖИМОЕ РЮКЗАКА' not in message.text and 
             'ПРИПАСЫ В РЮКЗАКЕ' not in message.text and 
             'РЕСУРСЫ и ХЛАМ' not in message.text ):
-        # write_json(message.json)
-        # if not findUser: 
-        #     if privateChat:
-        #         bot.reply_to(message, text=getResponseDialogFlow('getpip'))
 
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
             if 'ТОП ИГРОКОВ:' in message.text:
@@ -889,7 +885,7 @@ def main_message(message):
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '/accept' in message.text and '/decline' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
-            fraction = message.text.split(' из ')[1].strip()
+            fraction = getWariorFraction(message.text.split(' из ')[1].strip())
             warior = getWariorByName(message.text.split('👤')[1].split(' из ')[0], fraction)
             if warior == None:
                 bot.reply_to(message, text='Ничего о нем не знаю!', reply_markup=None)
