@@ -131,10 +131,12 @@ newvalues = { "$set":
                 { "value": 
                     [
                         { 'name': 'АdaptationǁȺǁ', 
-                          'bands' : ['Артхаус','Энтропия']
+                          'bands': ['Артхаус','Энтропия'],
+                          'chat': -1001354871311 
                         },
                         { 'name': 'faggoat', 
-                          'bands' : ['без банды','Crewname','FgoatUpd']
+                          'bands' : ['без банды','Crewname','FgoatUpd'],
+                          'chat': -1001411359669 
                         }
                     ]   
                 } 

@@ -188,15 +188,10 @@ def isKnownWarior(name: str):
 
 def update_wariors(newwariors: wariors.Warior):
     if newwariors == None:
-        logger.info('newwariors == None')
         pass
     else:
         newvalues = { "$set": json.loads(newwariors.toJSON()) }
-        logger.info(f'update Warior {newwariors.getName()}')
-        logger.info(newvalues)
         z = registered_wariors.update_one({"name": f"{newwariors.getName()}"}, newvalues)
-        logger.info(str(z.modified_count) + "|" + newwariors.getName())
-        logger.info('ok')
 
     WARIORS_ARR.clear()
     for x in registered_wariors.find():
@@ -218,7 +213,7 @@ def get_rade_plan(rade_date, goat):
                                     }
                                 ]
                             }):
-        t = dt = datetime.fromtimestamp(rade.get('rade_date') ) 
+        t = datetime.fromtimestamp(rade.get('rade_date') ) 
         plan_for_date = plan_for_date + str(t.hour).zfill(2)+':'+str(t.minute).zfill(2) + ' ' + rade.get('rade_text') + '\n'
         find = True
 
@@ -920,8 +915,9 @@ def main_message(message):
                     live = int(strings[i].split('...И еще')[1].split('выживших')[0].strip())
                     counter = counter + live
                 i = i + 1
+            if counter > 0:
+                report = report + f'...И еще {str(counter)} выживших.'
             
-            report = report + f'...И еще {str(counter)} выживших.'
             if not find:
                 bot.reply_to(message, text='Не нашел никого!', reply_markup=None)
             else:
@@ -1196,7 +1192,6 @@ def main_message(message):
 
                         if len(pingusers) > 0:
                             send_messages_big(message.chat.id, text=first_string + report, reply_markup=None)
-
                     elif 'planrade' == response.split(':')[1]:
                         # jugi:planrade:$time
                         goat = getMyGoat(message.from_user.username)
@@ -1204,7 +1199,6 @@ def main_message(message):
 
                         plan_str = get_rade_plan(rade_date, goat)
                         msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=None)
-
                     elif 'rade' == response.split(':')[1]:
                             if not isAdmin(message.from_user.username):
                                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=markup)
@@ -1356,7 +1350,6 @@ def main_message(message):
                             bot.send_message(message.chat.id, text='Быть, епта!')
                         else:
                             bot.send_message(message.chat.id, text='ХЗ, я бы не рискнул...')
-
                     elif 'setlocation' == response.split(':')[1]:
                         #jugi:setlocation:Москва
                         Client.PARAMS = {"format": "json", "apikey": config.YANDEX_GEOCODING_API_KEY}
@@ -1373,7 +1366,7 @@ def main_message(message):
                                 userIAm.setLocation(response.split(':')[2])
                                 userIAm.setTimeZone(str(timezone.utcoffset(dt)))
                                 updateUser(userIAm)
-                                bot.reply_to(message, text='Круто! Это ' + str(timezone.utcoffset(dt)) + ' к Гринвичу!', reply_markup=markup)
+                                bot.reply_to(message, text='Круто!\nЭто ' + str(timezone.utcoffset(dt)) + ' к Гринвичу!', reply_markup=markup)
 
                         else:
                             bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
@@ -1811,7 +1804,54 @@ def pending_message():
         u = pending_messages.update_one(myquery, newvalues)
 
 def rade():
-    pass
+    tz = datetime.strptime('03:00:00',"%H:%M:%S")
+    now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+    
+    logger.info('check rade time: now ' + str(now_date))
+    if now_date.hour in (1, 9, 17) and now_date.minute in (0, 100) and now_date.second < 16:
+        logger.info('Rade time now!')
+        goats = []
+        for goat in getSetting('GOATS_BANDS'):
+            goat_report = {}
+            goat_report.update({'name': goat.get('name')})
+            goat_report.update({'chat': goat.get('chat')})
+            goat_report.update({'bands': []})
+
+            for band in goat.get('bands'):
+                band_arr = {}
+                band_arr.update({'name': band})
+                band_arr.update({'weight_all': 0})
+                band_arr.update({'weight_on_rade': 0})
+                band_arr.update({'counter_all': 0})
+                band_arr.update({'counter_on_rade': 0})
+
+                for user in list(USERS_ARR):
+                    # Обрабатываем по козлам
+                    if user.getBand() == band:
+                        band_arr.update({'weight_all': band_arr.get('weight_all') + user.getRaidWeight()})
+                        band_arr.update({'counter_all': band_arr.get('counter_all') + 1}) 
+                        if user.getRaidLocation():
+                            band_arr.update({'weight_on_rade': band_arr.get('weight_on_rade') + user.getRaidWeight()})
+                            band_arr.update({'counter_on_rade': band_arr.get('counter_on_rade') + 1}) 
+                goat_report.get('bands').append(band_arr)
+            goats.append(goat_report)
+
+        for goat in goats:
+            report = f'🐐{goat.get("name")}\n\n'
+            for bands in goat.get('bands'):
+                report = report + f'🤟{bands.get("name")}\n'
+                if bands.get("weight_all") > 0:
+                    report = report + f'👤{bands.get("counter_on_rade")}/{bands.get("counter_all")} 🏋️‍♂️{bands.get("weight_on_rade")}/{bands.get("weight_all")} {str(int(bands.get("weight_on_rade")/bands.get("weight_all")*100))}%\n'
+                else:
+                    report = report + f'👤{bands.get("counter_on_rade")}/{bands.get("counter_all")} 🏋️‍♂️0%\n'
+                report = report + f'\n'
+            send_messages_big(goat.get('chat'), text=report, reply_markup=None)
+
+        for x in registered_users.find():
+            registered_users.update(
+                { 'login': x.get('login')},
+                { '$set': { 'raidlocation': None} }
+            )
 
 
 # 20 secund
@@ -1830,7 +1870,7 @@ def pending_job():
 def rade_job():
     while True:
         rade()
-        time.sleep(10)
+        time.sleep(15)
 
 def main_loop():
     if (config.POLLING):
