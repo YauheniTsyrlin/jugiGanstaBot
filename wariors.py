@@ -304,40 +304,95 @@ class Warior(object):
         return json.dumps(self, default=lambda o: o.__dict__, 
             sort_keys=True, indent=4)
     
-    def getProfileSmall(self):
-        string = ''
+    def getFractionSmall(self):
+        if (self.fraction.startswith('⚙️')):
+            return '⚙️'
+        elif (self.fraction.startswith('🔪')):
+            return '🔪'
+        elif (self.fraction.startswith('💣')):
+            return '💣'
+        elif (self.fraction.startswith('⚛️')):
+            return '⚛️'
+        elif (self.fraction.startswith('👙')):
+            return '👙'
+
+    def getProfileInline(self):
+        string = '┌'
+
         if self.goat:
-            string = string + f'┌🐐: {self.goat}'
+            string = string + f'🐐{self.goat}'
+
+        band = ''
         if (not self.band) or (self.band == 'NO_BAND'):
-            pass
+            band = 'без банды'
         else:
-            string = string + f'├🤘: {self.band}'
+            band = self.band
         
-        if string == '':
-            s = '┌'
+        if string == '┌':
+            string = string + f'🤘{band}'
         else:
-            string = string + '\n'
-            s = '├'
+            string = string + f'|🤘{band}'
+        
+
+        second_string = '└'
+
+        if self.health:
+            second_string = second_string + f'❤{self.health}'
 
         if self.bm:
             if not self.bm == 0:
-                string = string + f'{s}📯: {self.bm}' 
+                second_string = second_string + f'📯{self.bm}' 
 
         if self.enemy_armor:
             if self.damage:
-                string = string + f'├💥{self.damage} при 🛡 {self.enemy_armor}'
+                second_string = second_string + f'💥{self.damage} при 🛡{self.enemy_armor}'
             else:
                 pass
         else:
             if self.damage:
-                string = string + f'├💥{self.damage}' 
+                second_string = second_string + f'💥{self.damage}' 
+        if second_string == '└':
+            second_string = '└...'
+        return string + '\n' + second_string
+
+    def getProfileSmall(self):
+        first_string = f'┌{self.getFractionSmall()}{self.name}'
+        
+        string = '├'
+        if self.goat:
+            string = string + f'🐐{self.goat}'
+        band = ''
+        if (not self.band) or (self.band == 'NO_BAND'):
+            band = 'без банды'
+        else:
+            band = self.band
+        
+        if string == '├':
+            string = string + f'🤘{band}'
+        else:
+            string = string + f'\n├🤘{band}'
+        
+
+        second_string = '└'
 
         if self.health:
-                string = string + f'├❤{self.health}'
-        else: 
-            pass
-        string = string + f'\n└ {self.name}\n'
-        return string
+            second_string = second_string + f'❤{self.health}'
+
+        if self.bm:
+            if not self.bm == 0:
+                second_string = second_string + f'📯{self.bm}' 
+
+        if self.enemy_armor:
+            if self.damage:
+                second_string = second_string + f'💥{self.damage} при 🛡{self.enemy_armor}'
+            else:
+                pass
+        else:
+            if self.damage:
+                second_string = second_string + f'💥{self.damage}' 
+        if second_string == '└':
+            second_string = '└...'
+        return first_string + '\n' + string + '\n' + second_string
 
     def getProfile(self):
         string = ''

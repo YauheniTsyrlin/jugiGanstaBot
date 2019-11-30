@@ -172,6 +172,9 @@ def getWariorFraction(string: str):
     elif (string.startswith('👙')):
         return '👙Клуб бикини'
 
+
+
+
 def getWariorByName(name: str, fraction: str):
     name = tools.deEmojify(name)
     for warior in list(WARIORS_ARR):
@@ -318,17 +321,12 @@ def default_query(inline_query):
                     {'band':{'$regex':inline_query.query, '$options':'i'}}]
                 }):
                 warior = wariors.importWarior(x)
-                band = ''
-                if warior.getBand(): 
-                    band = ' 🤟' + warior.getBand()
-                    if warior.getBand() == 'NO_BAND':
-                        band = ''
-
-                r = types.InlineQueryResultArticle(id=i, title = warior.getName() + f'{band}',  input_message_content=types.InputTextMessageContent('Джу, профиль @'+warior.getName()), description=warior.getProfileSmall())
+                r = types.InlineQueryResultArticle(id=i, title = f'{warior.getFractionSmall()}{warior.getName()}',  
+                                                            input_message_content=types.InputTextMessageContent('Джу, профиль @'+warior.getName()), 
+                                                            description=warior.getProfileInline())
                 result.append(r)
                 i = i + 1
-                #if i>4 : break
-            bot.answer_inline_query(inline_query.id, result, cache_time=60)
+            bot.answer_inline_query(inline_query.id, result, cache_time=30)
     except Exception as e:
         print(e)
 
@@ -903,6 +901,7 @@ def main_message(message):
             i = 0
             find = False
             report = ''
+            counter = 0
             for s in strings:
                 if '|' in strings[i]:
                     name = strings[i]
@@ -913,9 +912,14 @@ def main_message(message):
                     if warior:
                         find = True
                         report = report + f'{warior.getProfileSmall()}\n'
-                        
+                    else:
+                        counter = counter + 1    
+                if '...И еще' in strings[i]:
+                    live = int(strings[i].split('...И еще')[1].split('выживших')[0].strip())
+                    counter = counter + live
                 i = i + 1
             
+            report = report + f'...И еще {str(counter)} выживших.'
             if not find:
                 bot.reply_to(message, text='Не нашел никого!', reply_markup=None)
             else:
@@ -1146,23 +1150,32 @@ def main_message(message):
                         # Собираем всех пользоватлей с бандой Х
                         band = response.split(':')[2][1:]
                         if not isUsersBand(message.from_user.username, band):
-                            bot.reply_to(message, text=f'Ты просил собраться банду {response.split(":")[2]}\n' + getResponseDialogFlow('not_right_band'), reply_markup=markup)
+                            bot.reply_to(message, text=f'Ты просил собраться банду{response.split(":")[2]}\n' + getResponseDialogFlow('not_right_band'), reply_markup=markup)
                             return
 
-                        string = f'{tools.deEmojify(message.from_user.first_name)} просит собраться банду {response.split(":")[2]}:'
+                        first_string = f'{tools.deEmojify(message.from_user.first_name)} просит собраться банду\n<b>{response.split(":")[2]}</b>:\n'
                         usersarr = []
                         for registered_user in registered_users.find({"band": f"{band}"}):
                             user = users.importUser(registered_user)
                             registered_user.update({'weight': user.getRaidWeight()})
                             usersarr.append(registered_user)
 
-                        for user_tmp in sorted(usersarr, key = lambda i: i['weight'], reverse=True):
-                            string = string + f'\n🏋️‍♂️{user_tmp["weight"]} @{user_tmp["login"]} {user_tmp["name"]}'
+                        # Пингуем
+                        counter = 0
+                        pingusers = []
+                        report = f''
+                        for pu in sorted(usersarr, key = lambda i: i['weight'], reverse=True):
+                            counter = counter + 1
+                            pingusers.append(pu)
+                            report = report + f'{counter}. @{pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
+                            if counter % 4 == 0:
+                                send_messages_big(message.chat.id, text=first_string + report, reply_markup=None)
+                                pingusers = []
+                                report = f''
 
-                        if ('@' in string):    
-                            bot.reply_to(message, text=string, reply_markup=markup)
-                        else:
-                            bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
+                        if len(pingusers) > 0:
+                            send_messages_big(message.chat.id, text=first_string + report, reply_markup=None)
+
                     elif 'planrade' == response.split(':')[1]:
                         # jugi:planrade:$time
                         goat = getMyGoat(message.from_user.username)
@@ -1251,7 +1264,7 @@ def main_message(message):
                             dt = parse(time_str)
                             time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
 
-                            report = f'<b>Захват!</b> {response.split(":")[2]} {time_str} <b>{response.split(":")[3]}</b>\n'
+                            first_string = f'<b>Захват!</b> {response.split(":")[2]} {time_str} <b>{response.split(":")[3]}</b>\n'
                             
                             usersarr = []
                             for registered_user in registered_users.find({"band": f"{band}"}):
@@ -1259,17 +1272,22 @@ def main_message(message):
                                 registered_user.update({'weight': user.getRaidWeight()})
                                 usersarr.append(registered_user)
 
-                            for user_tmp in sorted(usersarr, key = lambda i: i['weight'], reverse=True):
-                                report = report + f'\n🏋️‍♂️{user_tmp["weight"]} @{user_tmp["login"]} {user_tmp["name"]}'
-                                
-                            report = report + '\n\n<b>Не опаздываем!</b>' 
+                            # Пингуем
+                            counter = 0
+                            pingusers = []
+                            report = f''
+                            for pu in sorted(usersarr, key = lambda i: i['weight'], reverse=True):
+                                counter = counter + 1
+                                pingusers.append(pu)
+                                report = report + f'{counter}. @{pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
+                                if counter % 4 == 0:
+                                    send_messages_big(message.chat.id, text=first_string + report, reply_markup=None)
+                                    pingusers = []
+                                    report = f''
 
-                            markupinline = InlineKeyboardMarkup()
-                            # markupinline.row_width = 2
-                            # markupinline.add(InlineKeyboardButton("Иду!", callback_data="capture_yes"),
-                            # InlineKeyboardButton("Нахер!", callback_data="capture_no"))
+                            if len(pingusers) > 0:
+                                send_messages_big(message.chat.id, text=first_string + report, reply_markup=None)
 
-                            msg = send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
                             if not privateChat:
                                 bot.pin_chat_message(message.chat.id, msg.message_id)
                     elif 'remind' == response.split(':')[1]:
