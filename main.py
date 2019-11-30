@@ -79,6 +79,8 @@ def isAdmin(login: str):
     return False
 
 def isRegisteredUserName(name: str):
+    name = tools.deEmojify(name)
+
     for user in list(USERS_ARR):
         if name.lower() == user.getName().lower(): return True
     return False
@@ -172,9 +174,6 @@ def getWariorFraction(string: str):
     elif (string.startswith('👙')):
         return '👙Клуб бикини'
 
-
-
-
 def getWariorByName(name: str, fraction: str):
     name = tools.deEmojify(name)
     for warior in list(WARIORS_ARR):
@@ -242,7 +241,6 @@ def updateUser(newuser: users.User):
 
     USERS_ARR.clear()
     for x in registered_users.find():
-        #print(x)
         USERS_ARR.append(users.importUser(x))
 
 def setSetting(code: str, value: str):
@@ -334,12 +332,7 @@ def send_welcome(message):
     if response:
         bot.send_message(message.chat.id, text=response)
 
-def updateWarior(warior: wariors.Warior, message: Message):
-        privateChat = ('private' in message.chat.type)
-        findinUsers = False
-        for user_in in list(USERS_ARR):
-            if (user_in.getName() == warior.getName()):
-                findinUsers = True
+def updateWarior(warior: wariors.Warior):
 
         findWariors = False
         for warior_in in list(WARIORS_ARR):
@@ -356,24 +349,8 @@ def updateWarior(warior: wariors.Warior, message: Message):
             
             update_wariors(updatedWarior)
 
-            # if privateChat:
-            #     if not findinUsers: 
-            #         if (updatedWarior and updatedWarior.photo):
-            #             bot.send_photo(message.chat.id, updatedWarior.photo, updatedWarior.getProfile())
-            #         else:
-            #             bot.reply_to(message, text=updatedWarior.getProfile())
-            # else:
-            #     if not findinUsers:
-            #         bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
         else:
-            #WARIORS_ARR.append(warior)
             registered_wariors.insert_one(json.loads(warior.toJSON()))
-            # if privateChat:
-            #     if not findinUsers: 
-            #         bot.reply_to(message, text=getResponseDialogFlow('new_warior'))
-            #         bot.reply_to(message, text=warior.getProfile())
-            # else:
-            #     bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
             update_wariors(None)
 
 # Handle all other messages
@@ -381,10 +358,25 @@ def updateWarior(warior: wariors.Warior, message: Message):
 def get_message_photo(message):
     #write_json(message.json)
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
+        
+        privateChat = ('private' in message.chat.type)
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
+        wariorShow = None
         for warior in ww:
-            updateWarior(warior, message)
-        bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+            updateWarior(warior)
+            if not isRegisteredUserName(warior.getName()):
+                wariorShow = warior
+        
+        if privateChat:
+            if not wariorShow == None: 
+                if (wariorShow and wariorShow.photo):
+                    bot.send_photo(message.chat.id, wariorShow.photo, wariorShow.getProfile())
+                else:
+                    bot.reply_to(message, text=wariorShow.getProfile())
+            else:
+                bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+        else:
+            bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
     
     if getSetting('BAN_USERS') and message.from_user.username in getSetting('BAN_USERS'):
         bot.delete_message(message.chat.id, message.message_id)
@@ -853,7 +845,7 @@ def main_message(message):
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
                 for warior in ww:
                     if isKnownWarior(warior.getName()):
-                        updateWarior(warior, message)
+                        updateWarior(warior)
                     else:
                         x = registered_wariors.insert_one(json.loads(warior.toJSON()))
                         logger.info('Add warior: ' + warior.getName())
@@ -890,8 +882,8 @@ def main_message(message):
             bot.reply_to(message, text=getResponseDialogFlow('dublicate'))
             return
         for warior in ww:
-            updateWarior(warior, message)
-
+            updateWarior(warior)
+        
         bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '/accept' in message.text and '/decline' in message.text):
