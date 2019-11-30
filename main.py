@@ -385,11 +385,21 @@ def get_message_photo(message):
         for warior in ww:
             updateWarior(warior, message)
         bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+    
+    if getSetting('BAN_USERS') and message.from_user.username in getSetting('BAN_USERS'):
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то показать, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
+        return
 
 # Handle all other messages
 @bot.message_handler(content_types=["sticker"])
 def get_message_stiker(message):
     #write_json(message.json)
+    if getSetting('BAN_USERS') and message.from_user.username in getSetting('BAN_USERS'):
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то показать, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
+        return
+
     privateChat = ('private' in message.chat.type)
     if privateChat:
         bot.reply_to(message, text=message.sticker.file_id)
@@ -807,6 +817,7 @@ def main_message(message):
     if getSetting('BAN_USERS') and message.from_user.username in getSetting('BAN_USERS'):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то сказать, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
+        return
 
     privateChat = ('private' in message.chat.type)
     callJugi = (privateChat 
