@@ -1852,6 +1852,7 @@ def rade():
                 { 'login': x.get('login')},
                 { '$set': { 'raidlocation': None} }
             )
+        updateUser(None)
 
 
 # 20 secund
