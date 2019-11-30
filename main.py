@@ -806,7 +806,7 @@ def main_message(message):
     
     if getSetting('BAN_USERS') and message.from_user.username in getSetting('BAN_USERS'):
         bot.delete_message(message.chat.id, message.message_id)
-        send_messages_big(message.chat.id, text=getResponseDialogFlow('user_banned'), reply_markup=None)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то сказать, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
 
     privateChat = ('private' in message.chat.type)
     callJugi = (privateChat 
