@@ -392,6 +392,9 @@ class Warior(object):
                 second_string = second_string + f'💥{self.damage}' 
         if second_string == '└':
             second_string = '└...'
+        else:
+            second_string + second_string + '\n'
+             
         return first_string + '\n' + string + '\n' + second_string
 
     def getProfile(self):
