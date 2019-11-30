@@ -1254,7 +1254,8 @@ def main_message(message):
                             # if not privateChat:
                             #     bot.pin_chat_message(message.chat.id, msg.message_id)
                             # #msg = send_messages_big(message.chat.id, text='Напомнить в '+time_remind_str+'?', reply_markup=None)
-
+                    elif 'getchat' == response.split(':')[1]:
+                        bot.reply_to(message, text=f'Id чата {message.chat.id}', reply_markup=None)
                     elif 'capture' == response.split(':')[1]:
                             #   0    1        2       3     4
                             # jugi:capture:$bands:$Dangeon:$time
@@ -1487,7 +1488,6 @@ def main_message(message):
         return
     else:
         logger.info(getResponseDialogFlow('you_dont_our_band_gangster'))
-        #bot.reply_to(message, text=getResponseDialogFlow('you_dont_our_band_gangster'))
         return
 
 def insert_dash(string, index, char):
