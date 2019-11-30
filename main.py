@@ -359,24 +359,24 @@ def updateWarior(warior: wariors.Warior, message: Message):
             
             update_wariors(updatedWarior)
 
-            if privateChat:
-                if not findinUsers: 
-                    if (updatedWarior and updatedWarior.photo):
-                        bot.send_photo(message.chat.id, updatedWarior.photo, updatedWarior.getProfile())
-                    else:
-                        bot.reply_to(message, text=updatedWarior.getProfile())
-            else:
-                if not findinUsers:
-                    bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+            # if privateChat:
+            #     if not findinUsers: 
+            #         if (updatedWarior and updatedWarior.photo):
+            #             bot.send_photo(message.chat.id, updatedWarior.photo, updatedWarior.getProfile())
+            #         else:
+            #             bot.reply_to(message, text=updatedWarior.getProfile())
+            # else:
+            #     if not findinUsers:
+            #         bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
         else:
             #WARIORS_ARR.append(warior)
             registered_wariors.insert_one(json.loads(warior.toJSON()))
-            if privateChat:
-                if not findinUsers: 
-                    bot.reply_to(message, text=getResponseDialogFlow('new_warior'))
-                    bot.reply_to(message, text=warior.getProfile())
-            else:
-                bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+            # if privateChat:
+            #     if not findinUsers: 
+            #         bot.reply_to(message, text=getResponseDialogFlow('new_warior'))
+            #         bot.reply_to(message, text=warior.getProfile())
+            # else:
+            #     bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
             update_wariors(None)
 
 # Handle all other messages
@@ -387,6 +387,7 @@ def get_message_photo(message):
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
         for warior in ww:
             updateWarior(warior, message)
+        bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
 
 # Handle all other messages
 @bot.message_handler(content_types=["sticker"])
@@ -879,6 +880,8 @@ def main_message(message):
             return
         for warior in ww:
             updateWarior(warior, message)
+
+        bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '/accept' in message.text and '/decline' in message.text):
         #write_json(message.json)
@@ -1023,7 +1026,7 @@ def main_message(message):
                     counter = counter + 1
                     fusers.append(fu)
                     fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()} 📍{fu.getRaidLocation()}км\n' 
-                    if counter % 4 == 0:
+                    if counter % 5 == 0:
                         send_messages_big(message.chat.id, text=fuckupusersReport, reply_markup=None)
                         fusers = []
                         fuckupusersReport = f'🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n\n'
@@ -1168,7 +1171,7 @@ def main_message(message):
                             counter = counter + 1
                             pingusers.append(pu)
                             report = report + f'{counter}. @{pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
-                            if counter % 4 == 0:
+                            if counter % 5 == 0:
                                 send_messages_big(message.chat.id, text=first_string + report, reply_markup=None)
                                 pingusers = []
                                 report = f''
@@ -1280,7 +1283,7 @@ def main_message(message):
                                 counter = counter + 1
                                 pingusers.append(pu)
                                 report = report + f'{counter}. @{pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
-                                if counter % 4 == 0:
+                                if counter % 5 == 0:
                                     send_messages_big(message.chat.id, text=first_string + report, reply_markup=None)
                                     pingusers = []
                                     report = f''
