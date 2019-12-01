@@ -165,7 +165,6 @@ class User(object):
                 if '(+' in strings[i]:
                     self.setAgility(int(self.getAgility()) + int(strings[i].split(':')[2].split('(+')[1].split(')')[0].strip()))
 
-
             # 11 - |�🔋Выносливость: 8/16 /ref|
             if ('Выносливость' in strings[i]):
                 self.setStamina(int(strings[i].split(':')[1].split('/')[1].strip()))

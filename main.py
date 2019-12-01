@@ -94,6 +94,19 @@ def isRegisteredUserLogin(login: str):
             pass        
     return False
 
+def isGoatBoss(login: str):
+    for goat in getSetting('GOATS_BANDS'):
+        if goat['boss'] == login:
+            return True
+    return False
+
+def isBandBoss(login: str):
+    for goat in getSetting('GOATS_BANDS'):
+        for band in goat['bands']:
+            if band['boss'] == login:
+                return True
+    return False
+
 def getMyBands(login: str):
     user = getUserByLogin(login)
     if not user:
@@ -842,39 +855,31 @@ def main_message(message):
 
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
             if 'ТОП ИГРОКОВ:' in message.text:
-                logger.info('ТОП ИГРОКОВ!!!!')
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
                 for warior in ww:
                     if isKnownWarior(warior.getName()):
                         updateWarior(warior)
                     else:
                         x = registered_wariors.insert_one(json.loads(warior.toJSON()))
-                        logger.info('Add warior: ' + warior.getName())
                         update_wariors(None)
-
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
                 return
 
-            logger.info('📟Пип-бой 3000!')
             user = users.User(message.from_user.username, message.forward_date, message.text)
 
             if findUser==False:   
-                logger.info('Add user: ' + user.getLogin())
                 x = registered_users.insert_one(json.loads(user.toJSON()))
                 updateUser(None)
             else:
-                logger.info('Update user:' + user.getLogin())
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
                 updateUser(updatedUser)
-
             if privateChat:
                 bot.reply_to(message, text=getResponseDialogFlow('setpip'))
             else:
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
 
         else:
-            bot.reply_to(message, text=getResponseDialogFlow('deceive'))
-        
+            bot.reply_to(message, text=getResponseDialogFlow('deceive')) 
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'FIGHT!' in message.text):
         #write_json(message.json)
@@ -945,7 +950,6 @@ def main_message(message):
         else:
             bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
         return
-
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Панель банды.' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
@@ -1084,9 +1088,11 @@ def main_message(message):
         # TO DO!
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         elif (callJugi 
+                    and message.reply_to_message
                     and message.text 
                     and ('залёт' in message.text.lower() or 'залет' in message.text.lower())
                 ):
+                
             pass
 
         elif (callJugi and 'статус ' in message.text.lower() and ' @' in message.text):
@@ -1133,18 +1139,31 @@ def main_message(message):
                     bot.reply_to(message, text=warior.getProfile(), reply_markup=markup)
                     
         elif (callJugi and 'уволить @' in message.text.lower()):
-            if not isAdmin(message.from_user.username):
-                bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=markup)
+            if not isGoatBoss(message.from_user.username):
+                bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_goat_boss'), reply_markup=markup)
                 return
 
             login = message.text.split('@')[1].strip()
-            logger.info('Увольняем  '+login)
+            user = getUserByLogin(login)
+            if not user:
+                bot.reply_to(message, text=f'Нет бандита с логином {login}!', reply_markup=None)
+                return
+
+            if not user.getBand():
+                bot.reply_to(message, text=f'У бандита {login} нет банды!', reply_markup=None)
+                return
+
+            if not isUsersBand(message.from_user.username, user.getBand()):
+                bot.reply_to(message, text=f'Бандит {login} не из банд твоего козла!', reply_markup=None)
+                return
+
             myquery = { "login": f"{login}" }
             doc = registered_users.delete_one(myquery)
             updateUser(None)
             
             myquery = { "name": f"{login}" }
             war = registered_wariors.delete_one(myquery)
+            
             if doc.deleted_count == 0:
                 bot.reply_to(message, text=f'{login} не найден в бандитах! Удалено {war.deleted_count} в дневнике боев!', reply_markup=markup)
             else:                 
@@ -1226,9 +1245,9 @@ def main_message(message):
                             bot.reply_to(message, text=f'У бандита {login} нет банды!', reply_markup=None)
                             return
 
-                        if not user.getBand() in getMyBands(message.from_user.username):
+                        if not isUsersBand(message.from_user.username, user.getBand()):
                             if not isAdmin(message.from_user.username):
-                                bot.reply_to(message, text=f'Бандит {login} не из вашей банды!', reply_markup=None)
+                                bot.reply_to(message, text=f'Бандит {login} не из банд твоего козла!', reply_markup=None)
                                 return
 
                         time_str = response.split(response.split(':')[2])[1][1:]
@@ -1255,8 +1274,8 @@ def main_message(message):
                         user = getUserByLogin(user.getLogin())
                         bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}', reply_markup=None)
                     elif 'rade' == response.split(':')[1]:
-                            if not isAdmin(message.from_user.username):
-                                bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=markup)
+                            if not isGoatBoss(message.from_user.username):
+                                bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_goat_boss'), reply_markup=markup)
                                 return
                             goat = getMyGoat(message.from_user.username)
                             #   0    1        2         3     
