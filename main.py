@@ -1062,8 +1062,14 @@ def main_message(message):
             elif ('тост' in message.text.lower()):
                 type_joke = 16  
             bot.send_chat_action(message.chat.id, 'typing')
-            r = requests.get(f'{config.ANECDOT_URL}={type_joke}')
-            bot.reply_to(message, r.text[12:-2], reply_markup=markup)
+            report = ''
+            try:
+                r = requests.get(f'{config.ANECDOT_URL}={type_joke}', verify=False, timeout=7)
+                report = r.text[12:-2]
+            except:
+                report = 'Чёт я приуныл... Ничего в голову не идет... Давай позже.'
+            
+            bot.reply_to(message, report, reply_markup=markup)
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         # TO DO!
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1115,21 +1121,21 @@ def main_message(message):
                     bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=markup)
                 else:
                     bot.reply_to(message, text=warior.getProfile(), reply_markup=markup)
-        elif (callJugi and 'бан @' in message.text.lower()):
-            if not isAdmin(message.from_user.username):
-                bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=None)
-                return
+        # elif (callJugi and 'бан @' in message.text.lower()):
+        #     if not isAdmin(message.from_user.username):
+        #         bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=None)
+        #         return
                 
-            login = message.text.split('@')[1].strip()
-            logins = []
-            if login in '':
-                setSetting('BAN_USERS', logins)
-            else:
-                logins = json.loads(getSetting('BAN_USERS'))
-                logins.append(login) 
-                setSetting('BAN_USERS', logins)
+        #     login = message.text.split('@')[1].strip()
+        #     logins = []
+        #     if login in '':
+        #         setSetting('BAN_USERS', logins)
+        #     else:
+        #         logins = json.loads(getSetting('BAN_USERS'))
+        #         logins.append(login) 
+        #         setSetting('BAN_USERS', logins)
             
-            bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'), reply_markup=None)
+        #     bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'), reply_markup=None)
 
         elif (callJugi and 'уволить @' in message.text.lower()):
             if not isAdmin(message.from_user.username):
@@ -1206,6 +1212,46 @@ def main_message(message):
 
                         plan_str = get_rade_plan(rade_date, goat)
                         msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=None)
+                    elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
+                        if not isAdmin(message.from_user.username):
+                            bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=None)
+                            return
+                        # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
+                        ban = ('ban' == response.split(':')[1])
+                        login = response.split(':')[2]
+                        login = login.replace('@','').split(' ')[0].strip()
+                        
+                        user = getUserByLogin(login)
+                        if not user:
+                            bot.reply_to(message, text=f'Нет бандита с логином {login}!', reply_markup=None)
+                            return
+
+                        if not user.getBand() or not getMyBands(user.getBand()):
+                            bot.reply_to(message, text=f'Бандит {login} на из вашей банды!', reply_markup=None)
+                            return
+
+                        time_str = response.split(response.split(':')[2])[1][1:]
+
+                        report = ''
+                        if ban:
+                            report = 'Забанен '
+                        else:
+                            report = 'Разбанен '
+                        
+                        report = report + f'{user.getName()}\n' + time_str
+
+
+                        # logins = []
+                        # if login in '':
+                        #     setSetting('BAN_USERS', logins)
+                        # else:
+                        #     logins = json.loads(getSetting('BAN_USERS'))
+                        #     logins.append(login) 
+                        #     setSetting('BAN_USERS', logins)
+                        
+                        bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}', reply_markup=None)
+
+
                     elif 'rade' == response.split(':')[1]:
                             if not isAdmin(message.from_user.username):
                                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=markup)
