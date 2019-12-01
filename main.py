@@ -1178,9 +1178,7 @@ def main_message(message):
             text = message.text 
             if text.lower().startswith('джу'):
                 text = message.text[3:]
-            print(text)
             response = getResponseDialogFlow(text)
-            print(response)
             if response:
                 if (response.startswith('jugi:')):
                     #jugi:ping:Артхаус
@@ -1259,7 +1257,7 @@ def main_message(message):
                         report = ''
                         if ban:
                             user.setTimeBan(date_for.timestamp())
-                            report = f'{user.getName()} забанен нахрен до\n⏰{time.strftime("%d-%m-%Y %H:%M:%S", date_for)}'
+                            report = f'{user.getName()} забанен нахрен до\n'+'⏰' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(date_for))
                         else:
                             user.setTimeBan(None)
                             report = f'{user.getName()} разбанен. Говори, дорогой!'
