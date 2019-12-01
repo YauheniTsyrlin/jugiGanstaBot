@@ -177,13 +177,8 @@ def isUserBan(login: str):
     userIAm = getUserByLogin(login)
     if userIAm:
         if userIAm.getTimeBan():
-            t = datetime.fromtimestamp(userIAm.getTimeBan()) 
-            logger.info(f'ban user t == {t}')
-            logger.info(f'ban user t == {datetime.now()}')
-
             tz = datetime.strptime('03:00:00',"%H:%M:%S")
             date_for = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
-
             if date_for.timestamp() < userIAm.getTimeBan():
                 return True
             else:
@@ -365,6 +360,12 @@ def updateWarior(warior: wariors.Warior):
 @bot.message_handler(content_types=["photo"])
 def get_message_photo(message):
     #write_json(message.json)
+
+    if isUserBan(message.from_user.username):
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то показать, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
+        return
+
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
         
         privateChat = ('private' in message.chat.type)
@@ -386,10 +387,7 @@ def get_message_photo(message):
         else:
             bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
     
-    if isUserBan(message.from_user.username):
-        bot.delete_message(message.chat.id, message.message_id)
-        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то сказать, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
-        return
+
 
 # Handle all other messages
 @bot.message_handler(content_types=["sticker"])
@@ -397,7 +395,7 @@ def get_message_stiker(message):
     #write_json(message.json)
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
-        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то сказать, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то стикернуть, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
         return
 
     privateChat = ('private' in message.chat.type)
@@ -1244,8 +1242,7 @@ def main_message(message):
                                 bot.reply_to(message, text=f'Не определен период блокировки!', reply_markup=None)
                                 return
                             try:
-                                tz = datetime.strptime('03:00:00',"%H:%M:%S")
-                                date_for = parse(time_str.split('/')[1].strip())# - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+                                date_for = parse(time_str.split('/')[1].strip())
                             except:
                                 bot.reply_to(message, text=f'Не смог распознать дату блокировки!', reply_markup=None)
                                 return
