@@ -1130,7 +1130,7 @@ def main_message(message):
                     bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=markup)
                 else:
                     bot.reply_to(message, text=warior.getProfile(), reply_markup=markup)
-
+                    
         elif (callJugi and 'уволить @' in message.text.lower()):
             if not isAdmin(message.from_user.username):
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=markup)
@@ -1239,7 +1239,7 @@ def main_message(message):
                                 return
                             try:
                                 tz = datetime.strptime('03:00:00',"%H:%M:%S")
-                                date_for = parse(time_str.split('/')[1].strip()) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+                                date_for = parse(time_str.split('/')[1].strip())# - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
                             except:
                                 bot.reply_to(message, text=f'Не смог распознать дату блокировки!', reply_markup=None)
                                 return
