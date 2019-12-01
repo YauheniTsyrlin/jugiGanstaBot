@@ -357,6 +357,14 @@ def updateWarior(warior: wariors.Warior):
             update_wariors(None)
 
 # Handle all other messages
+@bot.message_handler(content_types=['document'])
+def get_message_photo(message):
+    if isUserBan(message.from_user.username):
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то показать, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
+        return
+
+# Handle all other messages
 @bot.message_handler(content_types=["photo"])
 def get_message_photo(message):
     #write_json(message.json)
