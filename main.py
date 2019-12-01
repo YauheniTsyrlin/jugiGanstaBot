@@ -1240,8 +1240,9 @@ def main_message(message):
                             return
 
                         if not user.getBand() in getMyBands(message.from_user.username):
-                            bot.reply_to(message, text=f'Бандит {login} не из вашей банды!', reply_markup=None)
-                            return
+                            if not isAdmin(message.from_user.username):
+                                bot.reply_to(message, text=f'Бандит {login} не из вашей банды!', reply_markup=None)
+                                return
 
                         time_str = response.split(response.split(':')[2])[1][1:]
                         date_for = None
@@ -1258,7 +1259,7 @@ def main_message(message):
                         report = ''
                         if ban:
                             user.setTimeBan(date_for.timestamp())
-                            report = f'{user.getName()} забанен нахрен до {date_for}'
+                            report = f'{user.getName()} забанен нахрен до\n⏰{time.strftime("%d-%m-%Y %H:%M:%S", date_for)}'
                         else:
                             user.setTimeBan(None)
                             report = f'{user.getName()} разбанен. Говори, дорогой!'
