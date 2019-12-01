@@ -944,8 +944,9 @@ def main_message(message):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
             u = getUserByLogin(message.from_user.username)
-            u.setRaidLocation(0)
+            u.setRaidLocation(1000)
             updateUser(u)
+            t = getUserByLogin(message.from_user.username)
             bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
         else:
             bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
@@ -1231,14 +1232,14 @@ def main_message(message):
                         if not isAdmin(message.from_user.username):
                             bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=None)
                             return
-                        goat = response.split(':')[2]
 
-                        if not getMyGoat(message.from_user.username) == goat:
+                        goatName = response.split(':')[2]
+                        if not getMyGoat(message.from_user.username) == goatName:
                             bot.reply_to(message, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'), reply_markup=markup)
                             return
 
                         for goat in getSetting('GOATS_BANDS'):
-                            if goat['name'] == goat:
+                            if goatName == goat.get('name'):
                                 report = radeReport(goat)
                                 send_messages_big(message.chat.id, text=report, reply_markup=None)
 
@@ -1943,8 +1944,8 @@ def radeReport(goat):
                     band_arr.update({'counter_on_rade': band_arr.get('counter_on_rade') + 1}) 
         goat_report.get('bands').append(band_arr)
 
-    report = f'🐐<b>{goat.get("name")}</b>\n\n'
-    for bands in goat.get('bands'):
+    report = f'🐐<b>{goat_report.get("name")}</b>\n\n'
+    for bands in goat_report.get('bands'):
         report = report + f'🤟<b>{bands.get("name")}</b>\n'
         if bands.get("weight_all") > 0:
             report = report + f'👤{bands.get("counter_on_rade")}/{bands.get("counter_all")} 🏋️‍♂️{bands.get("weight_on_rade")}/{bands.get("weight_all")} <b>{str(int(bands.get("weight_on_rade")/bands.get("weight_all")*100))}</b>%\n'
