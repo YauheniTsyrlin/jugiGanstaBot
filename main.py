@@ -794,7 +794,10 @@ def isUserBan(login: str):
     userIAm = getUserByLogin(login)
     if userIAm:
         if userIAm.getTimeBan():
-            if datetime.now().timestamp() < userIAm.getTimeBan():
+            tz = datetime.strptime('03:00:00',"%H:%M:%S")
+            date_for = datetime.now() - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+
+            if date_for.timestamp() < userIAm.getTimeBan():
                 return True
             else:
                 userIAm.setTimeBan(None)
