@@ -55,14 +55,14 @@ if (not result):
         'value': 0.3   
              })
 
-result = settings.find_one({'code': 'OUR_BAND'})
-if (not result):
-    print('Not Find setting. Insert OUR_BAND')
-    settings.insert_one({
-        'code': 'OUR_BAND', 
-        'description': 'Банды, имеющие право пользоваться Джу', 
-        'value': ''   
-             })             
+# result = settings.find_one({'code': 'OUR_BAND'})
+# if (not result):
+#     print('Not Find setting. Insert OUR_BAND')
+#     settings.insert_one({
+#         'code': 'OUR_BAND', 
+#         'description': 'Банды, имеющие право пользоваться Джу', 
+#         'value': ''   
+#              })             
 
 
 result = settings.find_one({'code': 'BANDS_ACCESS_WARIORS'})
@@ -84,14 +84,14 @@ if (not result):
         'value': ''   
              })   
 
-result = settings.find_one({'code': 'BAN_USERS'})
-if (not result):
-    print('Not Find setting. Insert BAN_USERS')
-    settings.insert_one({
-        'code': 'BAN_USERS', 
-        'description': ' Пользователи, чьи сообщения Джу будет заменять', 
-        'value': ''   
-             }) 
+# result = settings.find_one({'code': 'BAN_USERS'})
+# if (not result):
+#     print('Not Find setting. Insert BAN_USERS')
+#     settings.insert_one({
+#         'code': 'BAN_USERS', 
+#         'description': ' Пользователи, чьи сообщения Джу будет заменять', 
+#         'value': ''   
+#              }) 
 
 print("#==========================#")              
 print("#         SETTINGS         #")              
@@ -111,6 +111,9 @@ newvalues = { "$set": { "value":
 u = settings.update_one(myquery, newvalues)
 
 myquery = {'code': 'OUR_BAND'}
+sett = settings.delete_one(myquery)
+
+myquery = {'code': 'BAN_USERS'}
 sett = settings.delete_one(myquery)
 
 myquery = {'code': 'BANDS_INLINE_WARIORS'}
