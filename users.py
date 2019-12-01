@@ -340,7 +340,7 @@ class User(object):
         
 # ------------------------------------------
     def setTimeBan(self, timeBan):
-        self.isBanned = timeBan  
+        self.timeBan = timeBan  
     def getTimeBan(self):
         return self.timeBan
 

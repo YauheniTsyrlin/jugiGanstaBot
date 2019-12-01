@@ -162,18 +162,27 @@ def getUserByName(name: str):
         if name.lower().strip() == user.getName().lower().strip(): return user
     return None
 
+def updateUser(newuser: users.User):
+    if newuser == None:
+        pass
+    else:
+        newvalues = { "$set": json.loads(newuser.toJSON()) }
+        z = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
+
+    USERS_ARR.clear()
+    for x in registered_users.find():
+        USERS_ARR.append(users.importUser(x))
+
 def isUserBan(login: str):
     userIAm = getUserByLogin(login)
     if userIAm:
-        logger.info('ban user == Yes')
-        logger.info(f'ban user == {userIAm.getTimeBan()}')
         if userIAm.getTimeBan():
             t = datetime.fromtimestamp(userIAm.getTimeBan()) 
             logger.info(f'ban user t == {t}')
             logger.info(f'ban user t == {datetime.now()}')
 
             tz = datetime.strptime('03:00:00',"%H:%M:%S")
-            date_for = datetime.now() - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+            date_for = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
 
             if date_for.timestamp() < userIAm.getTimeBan():
                 return True
@@ -241,17 +250,6 @@ def get_rade_plan(rade_date, goat):
         plan_for_date = plan_for_date + 'Нет запланированных рейдов'
 
     return plan_for_date
-
-def updateUser(newuser: users.User):
-    if newuser == None:
-        pass
-    else:
-        newvalues = { "$set": json.loads(newuser.toJSON()) }
-        z = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
-
-    USERS_ARR.clear()
-    for x in registered_users.find():
-        USERS_ARR.append(users.importUser(x))
 
 def setSetting(code: str, value: str):
 
@@ -1259,9 +1257,9 @@ def main_message(message):
                         else:
                             user.setTimeBan(None)
                             report = f'{user.getName()} разбанен. Говори, дорогой!'
-
                         updateUser(user)
 
+                        user = getUserByLogin(user.getLogin())
                         bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}', reply_markup=None)
 
 
