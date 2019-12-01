@@ -166,11 +166,12 @@ def isUserBan(login: str):
     userIAm = getUserByLogin(login)
     if userIAm:
         logger.info('ban user == Yes')
+        logger.info(f'ban user == {userIAm.getTimeBan()}')
         if userIAm.getTimeBan():
             t = datetime.fromtimestamp(userIAm.getTimeBan()) 
             logger.info(f'ban user t == {t}')
             logger.info(f'ban user t == {datetime.now()}')
-            
+
             tz = datetime.strptime('03:00:00',"%H:%M:%S")
             date_for = datetime.now() - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
 
