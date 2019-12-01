@@ -1233,7 +1233,7 @@ def main_message(message):
                             return
                         goat = response.split(':')[2]
 
-                        if not getMyGoat() == goat:
+                        if not getMyGoat(message.from_user.username) == goat:
                             bot.reply_to(message, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'), reply_markup=markup)
                             return
 
