@@ -101,7 +101,7 @@ def getMyBands(login: str):
 
     for goat in getSetting('GOATS_BANDS'):
         for band in goat['bands']:
-            if user.getBand() and user.getBand().lower() == band.lower():
+            if user.getBand() and user.getBand().lower() == band.get('name').lower():
                 return goat['bands']
 
     return None        
@@ -113,7 +113,7 @@ def getMyGoat(login: str):
 
     for goat in getSetting('GOATS_BANDS'):
         for band in goat['bands']:
-            if user.getBand() and user.getBand().lower() == band.lower():
+            if user.getBand() and user.getBand().lower() == band.get('name').lower():
                 return goat['name']
 
     return None 
@@ -122,8 +122,9 @@ def isUsersBand(login: str, band: str):
     bands = getMyBands(login)
     if bands == None: 
         return False
-    if band in bands:
-        return True
+    for b in bands:
+        if b.get('name') == band:
+            return True
     return False
 
 def hasAccessToWariors(login: str):
@@ -135,18 +136,6 @@ def hasAccessToWariors(login: str):
         if user.getBand() and band.get('band').lower() == user.getBand().lower():
             return True
 
-    return False
-
-def isOurBandUserLogin(login: str):
-    for user in list(USERS_ARR):
-        try:
-            if login.lower() == user.getLogin().lower():
-                for band in getSetting('OUR_BAND'):
-                    if user.getBand() and band.get('band').lower() == user.getBand().lower():
-                        return True
-                break
-        except:
-            pass
     return False
 
 def getUserByLogin(login: str):
@@ -1265,8 +1254,6 @@ def main_message(message):
 
                         user = getUserByLogin(user.getLogin())
                         bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}', reply_markup=None)
-
-
                     elif 'rade' == response.split(':')[1]:
                             if not isAdmin(message.from_user.username):
                                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=markup)
@@ -1877,10 +1864,10 @@ def rade():
     
     logger.info('check rade time: now ' + str(now_date))
     
-    if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second < 16:
+    if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second < 15:
         for goat in getSetting('GOATS_BANDS'):
             for band in goat.get('bands'):
-                send_messages_big(goat.get('chat'), text=f'Джу, собери {band}\nСкоро рейд!', reply_markup=None)
+                send_messages_big(goat.get('chat'), text=f'Джу, собери {band.get("name")}\nСкоро рейд!', reply_markup=None)
 
     if now_date.hour in (1, 9, 17) and now_date.minute in (0, 100) and now_date.second < 16:
         logger.info('Rade time now!')
@@ -1893,7 +1880,7 @@ def rade():
 
             for band in goat.get('bands'):
                 band_arr = {}
-                band_arr.update({'name': band})
+                band_arr.update({'name': band.get('name')})
                 band_arr.update({'weight_all': 0})
                 band_arr.update({'weight_on_rade': 0})
                 band_arr.update({'counter_all': 0})
@@ -1901,7 +1888,7 @@ def rade():
 
                 for user in list(USERS_ARR):
                     # Обрабатываем по козлам
-                    if user.getBand() == band:
+                    if user.getBand() == band.get('name'):
                         band_arr.update({'weight_all': band_arr.get('weight_all') + user.getRaidWeight()})
                         band_arr.update({'counter_all': band_arr.get('counter_all') + 1}) 
                         if user.getRaidLocation():

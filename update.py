@@ -24,7 +24,6 @@ def setSetting(login: str, code: str, value: str):
     newvalues = { "$set": { "value": value } }
     u = settings.update_one(myquery, newvalues)
 
-
 result = settings.find_one({'code': 'REPORT_KILLERS'})
 if (not result):
     print('Not Find setting. Insert REPORT_KILLERS')
@@ -53,17 +52,7 @@ if (not result):
         'code': 'PROBABILITY_I_DONT_NOW', 
         'description': 'Вероятность того, бот спросит, кто ты такой', 
         'value': 0.3   
-             })
-
-# result = settings.find_one({'code': 'OUR_BAND'})
-# if (not result):
-#     print('Not Find setting. Insert OUR_BAND')
-#     settings.insert_one({
-#         'code': 'OUR_BAND', 
-#         'description': 'Банды, имеющие право пользоваться Джу', 
-#         'value': ''   
-#              })             
-
+             })  
 
 result = settings.find_one({'code': 'BANDS_ACCESS_WARIORS'})
 if (not result):
@@ -84,15 +73,6 @@ if (not result):
         'value': ''   
              })   
 
-# result = settings.find_one({'code': 'BAN_USERS'})
-# if (not result):
-#     print('Not Find setting. Insert BAN_USERS')
-#     settings.insert_one({
-#         'code': 'BAN_USERS', 
-#         'description': ' Пользователи, чьи сообщения Джу будет заменять', 
-#         'value': ''   
-#              }) 
-
 print("#==========================#")              
 print("#         SETTINGS         #")              
 print("#==========================#")              
@@ -100,7 +80,6 @@ print("#==========================#")
 myquery = { "code": 'REPORT_KILLERS' }
 newvalues = { "$set": { "value": {'from_date': datetime.datetime(2019, 11, 27, 10, 45, 0).timestamp(), 'to_date': None}} } 
 u = settings.update_one(myquery, newvalues)
-
 
 myquery = { "code": 'ADMINISTRATOR' }
 newvalues = { "$set": { "value": 
@@ -133,13 +112,41 @@ myquery = { "code": 'GOATS_BANDS' }
 newvalues = { "$set": 
                 { "value": 
                     [
-                        { 'name': 'АdaptationǁȺǁ', 
-                          'bands': ['Артхаус','Энтропия'],
-                          'chat': -1001354871311 
+                        { 
+                            'name': 'АdaptationǁȺǁ',
+                            'boss': 'Innok27', 
+                            'bands': 
+                                    [
+                                        {
+                                            'name': 'Артхаус',
+                                            'boss': 'GonzikBenzyavsky'
+                                        },
+                                        {
+                                            'name': 'Энтропия',
+                                            'boss': 'Innok27'
+                                        }
+                                    ],
+                            'chat': -1001354871311 
                         },
-                        { 'name': 'faggoat', 
-                          'bands' : ['без банды','Crewname','FgoatUpd'],
-                          'chat': -1001411359669 
+                        { 
+                            'name': 'faggoat',
+                            'boss': 'WestMoscow', 
+                            'bands': 
+                                    [
+                                        {
+                                            'name': 'без банды',
+                                            'boss': 'WestMoscow'
+                                        },
+                                        {
+                                            'name': 'Crewname',
+                                            'boss': 'WestMoscow'
+                                        },
+                                        {
+                                            'name': 'FgoatUpd',
+                                            'boss': 'WestMoscow'
+                                        }
+                                    ],
+                            'chat': -1001411359669 
                         }
                     ]   
                 } 
