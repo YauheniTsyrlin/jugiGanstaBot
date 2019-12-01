@@ -1119,9 +1119,16 @@ def main_message(message):
             if not isAdmin(message.from_user.username):
                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=None)
                 return
-
+                
             login = message.text.split('@')[1].strip()
-            setSetting('BAN_USERS', login)
+            logins = []
+            if login in '':
+                setSetting('BAN_USERS', logins)
+            else:
+                logins = json.loads(getSetting('BAN_USERS'))
+                logins.append(login) 
+                setSetting('BAN_USERS', logins)
+            
             bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'), reply_markup=None)
 
         elif (callJugi and 'уволить @' in message.text.lower()):
