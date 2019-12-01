@@ -1092,9 +1092,9 @@ def main_message(message):
                     and message.text 
                     and ('залёт' in message.text.lower() or 'залет' in message.text.lower())
                 ):
-                
-            pass
 
+                pass
+                
         elif (callJugi and 'статус ' in message.text.lower() and ' @' in message.text):
             login = message.text.split('@')[1].split(' ')[0].strip()
             
@@ -1163,7 +1163,7 @@ def main_message(message):
             
             myquery = { "name": f"{login}" }
             war = registered_wariors.delete_one(myquery)
-            
+
             if doc.deleted_count == 0:
                 bot.reply_to(message, text=f'{login} не найден в бандитах! Удалено {war.deleted_count} в дневнике боев!', reply_markup=markup)
             else:                 
@@ -1226,6 +1226,22 @@ def main_message(message):
 
                         plan_str = get_rade_plan(rade_date, goat)
                         msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=None)
+                    elif 'onrade' == response.split(':')[1]:
+                        # jugi:onrade:$goat
+                        if not isAdmin(message.from_user.username):
+                            bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=None)
+                            return
+                        goat = response.split(':')[2]
+
+                        if not getMyGoat() == goat:
+                            bot.reply_to(message, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'), reply_markup=markup)
+                            return
+
+                        for goat in getSetting('GOATS_BANDS'):
+                            if goat['name'] == goat:
+                                report = radeReport(goat)
+                                send_messages_big(message.chat.id, text=report, reply_markup=None)
+
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
                         # if not isAdmin(message.from_user.username):
                         #     bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=None)
@@ -1274,72 +1290,72 @@ def main_message(message):
                         user = getUserByLogin(user.getLogin())
                         bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}', reply_markup=None)
                     elif 'rade' == response.split(':')[1]:
-                            if not isGoatBoss(message.from_user.username):
-                                bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_goat_boss'), reply_markup=markup)
-                                return
-                            goat = getMyGoat(message.from_user.username)
-                            #   0    1        2         3     
-                            # jugi:rade:$radelocation:$time
-                            rade_date = parse(response.split(response.split(":")[2])[1][1:])
-                            if rade_date.hour not in (1, 9, 17):
-                                bot.reply_to(message, text='Рейды проходят только в 1:00, 9:00, 17:00!\nУкажи правильное время!', reply_markup=markup)
-                                return 
+                        if not isGoatBoss(message.from_user.username):
+                            bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_goat_boss'), reply_markup=markup)
+                            return
+                        goat = getMyGoat(message.from_user.username)
+                        #   0    1        2         3     
+                        # jugi:rade:$radelocation:$time
+                        rade_date = parse(response.split(response.split(":")[2])[1][1:])
+                        if rade_date.hour not in (1, 9, 17):
+                            bot.reply_to(message, text='Рейды проходят только в 1:00, 9:00, 17:00!\nУкажи правильное время!', reply_markup=markup)
+                            return 
 
-                            # Проверка на будущую дату
-                            tz = datetime.strptime('03:00:00',"%H:%M:%S")
-                            dt = rade_date - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
-                            if (dt.timestamp() < datetime.now().timestamp()):
-                                msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('timeisout'), reply_markup=markup)
-                                return
+                        # Проверка на будущую дату
+                        tz = datetime.strptime('03:00:00',"%H:%M:%S")
+                        dt = rade_date - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+                        if (dt.timestamp() < datetime.now().timestamp()):
+                            msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('timeisout'), reply_markup=markup)
+                            return
 
-                            rade_text = response.split(":")[2]
-                            rade_location = int(response.split(":")[2].split('📍')[1].split('км')[0].strip())
+                        rade_text = response.split(":")[2]
+                        rade_location = int(response.split(":")[2].split('📍')[1].split('км')[0].strip())
 
-                            if privateChat:
-                                bot.reply_to(message, text='Напоминания для рейда будут приходить только в этот чат!\nЧтобы их увидели все - запланируй рейд в групповом чате!', reply_markup=markup)
+                        if privateChat:
+                            bot.reply_to(message, text='Напоминания для рейда будут приходить только в этот чат!\nЧтобы их увидели все - запланируй рейд в групповом чате!', reply_markup=markup)
 
-                            myquery = { 
-                                        "rade_date": rade_date.timestamp(), 
-                                        "goat": goat
-                                    }
-                            newvalues = { "$set": { 
-                                            'rade_date': rade_date.timestamp(),
-                                            'rade_text': rade_text,
-                                            'rade_location': rade_location,
-                                            'state': 'WAIT',
-                                            'chat_id': message.chat.id,
-                                            'login': message.from_user.username,
-                                            'goat': goat
-                                        } } 
-                            u = rades.update_one(myquery, newvalues)
-                            if u.matched_count == 0:
-                                rades.insert_one({ 
-                                    'create_date': datetime.now().timestamp(), 
-                                    'rade_date': rade_date.timestamp(),
-                                    'rade_text': rade_text,
-                                    'rade_location': rade_location,
-                                    'state': 'WAIT',
-                                    'chat_id': message.chat.id,
-                                    'login': message.from_user.username,
-                                    'goat': goat})
-                            
-                            plan_str = get_rade_plan(rade_date, goat)
-                            msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=None)
-                            
-                            
-                            # time_str = response.split(response.split(":")[2])[1][1:]
-                            # dt = parse(time_str)
-                            # time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
-                            # time_remind_str = str(dt.hour-1).zfill(2)+':'+str(dt.minute+30).zfill(2)
-                            # report = f'<b>Рейд!</b> {time_str} <b>{response.split(":")[2]}</b>\n🐐<b>{getMyGoat(message.from_user.username)}</b>\n'
-                            # # for registered_user in registered_users.find({"band": f"{response.split(':')[2][1:]}"}):
-                            # #     user = users.importUser(registered_user)
-                            # #     report = report + f'\n@{user.getLogin()}'
-                            # report = report + '\n<b>Не опаздываем!</b>' 
-                            # msg = send_messages_big(message.chat.id, text=report, reply_markup=None)
-                            # if not privateChat:
-                            #     bot.pin_chat_message(message.chat.id, msg.message_id)
-                            # #msg = send_messages_big(message.chat.id, text='Напомнить в '+time_remind_str+'?', reply_markup=None)
+                        myquery = { 
+                                    "rade_date": rade_date.timestamp(), 
+                                    "goat": goat
+                                }
+                        newvalues = { "$set": { 
+                                        'rade_date': rade_date.timestamp(),
+                                        'rade_text': rade_text,
+                                        'rade_location': rade_location,
+                                        'state': 'WAIT',
+                                        'chat_id': message.chat.id,
+                                        'login': message.from_user.username,
+                                        'goat': goat
+                                    } } 
+                        u = rades.update_one(myquery, newvalues)
+                        if u.matched_count == 0:
+                            rades.insert_one({ 
+                                'create_date': datetime.now().timestamp(), 
+                                'rade_date': rade_date.timestamp(),
+                                'rade_text': rade_text,
+                                'rade_location': rade_location,
+                                'state': 'WAIT',
+                                'chat_id': message.chat.id,
+                                'login': message.from_user.username,
+                                'goat': goat})
+                        
+                        plan_str = get_rade_plan(rade_date, goat)
+                        msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=None)
+                        
+                        
+                        # time_str = response.split(response.split(":")[2])[1][1:]
+                        # dt = parse(time_str)
+                        # time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
+                        # time_remind_str = str(dt.hour-1).zfill(2)+':'+str(dt.minute+30).zfill(2)
+                        # report = f'<b>Рейд!</b> {time_str} <b>{response.split(":")[2]}</b>\n🐐<b>{getMyGoat(message.from_user.username)}</b>\n'
+                        # # for registered_user in registered_users.find({"band": f"{response.split(':')[2][1:]}"}):
+                        # #     user = users.importUser(registered_user)
+                        # #     report = report + f'\n@{user.getLogin()}'
+                        # report = report + '\n<b>Не опаздываем!</b>' 
+                        # msg = send_messages_big(message.chat.id, text=report, reply_markup=None)
+                        # if not privateChat:
+                        #     bot.pin_chat_message(message.chat.id, msg.message_id)
+                        # #msg = send_messages_big(message.chat.id, text='Напомнить в '+time_remind_str+'?', reply_markup=None)
                     elif 'getchat' == response.split(':')[1]:
                         bot.reply_to(message, text=f'Id чата {message.chat.id}', reply_markup=None)
                     elif 'capture' == response.split(':')[1]:
@@ -1890,42 +1906,10 @@ def rade():
 
     if now_date.hour in (1, 9, 17) and now_date.minute in (0, 100) and now_date.second < 16:
         logger.info('Rade time now!')
-        goats = []
+
         for goat in getSetting('GOATS_BANDS'):
-            goat_report = {}
-            goat_report.update({'name': goat.get('name')})
-            goat_report.update({'chat': goat.get('chat')})
-            goat_report.update({'bands': []})
-
-            for band in goat.get('bands'):
-                band_arr = {}
-                band_arr.update({'name': band.get('name')})
-                band_arr.update({'weight_all': 0})
-                band_arr.update({'weight_on_rade': 0})
-                band_arr.update({'counter_all': 0})
-                band_arr.update({'counter_on_rade': 0})
-
-                for user in list(USERS_ARR):
-                    # Обрабатываем по козлам
-                    if user.getBand() == band.get('name'):
-                        band_arr.update({'weight_all': band_arr.get('weight_all') + user.getRaidWeight()})
-                        band_arr.update({'counter_all': band_arr.get('counter_all') + 1}) 
-                        if user.getRaidLocation():
-                            band_arr.update({'weight_on_rade': band_arr.get('weight_on_rade') + user.getRaidWeight()})
-                            band_arr.update({'counter_on_rade': band_arr.get('counter_on_rade') + 1}) 
-                goat_report.get('bands').append(band_arr)
-            goats.append(goat_report)
-
-        for goat in goats:
-            report = f'🐐{goat.get("name")}\n\n'
-            for bands in goat.get('bands'):
-                report = report + f'🤟{bands.get("name")}\n'
-                if bands.get("weight_all") > 0:
-                    report = report + f'👤{bands.get("counter_on_rade")}/{bands.get("counter_all")} 🏋️‍♂️{bands.get("weight_on_rade")}/{bands.get("weight_all")} {str(int(bands.get("weight_on_rade")/bands.get("weight_all")*100))}%\n'
-                else:
-                    report = report + f'👤{bands.get("counter_on_rade")}/{bands.get("counter_all")} 🏋️‍♂️0%\n'
-                report = report + f'\n'
-            send_messages_big(goat.get('chat'), text=report, reply_markup=None)
+            report = radeReport(goat)
+            send_messages_big(goat['chat'], text=report, reply_markup=None)
 
         for x in registered_users.find():
             registered_users.update(
@@ -1934,6 +1918,40 @@ def rade():
             )
         updateUser(None)
 
+def radeReport(goat):
+
+    goat_report = {}
+    goat_report.update({'name': goat.get('name')})
+    goat_report.update({'chat': goat.get('chat')})
+    goat_report.update({'bands': []})
+
+    for band in goat.get('bands'):
+        band_arr = {}
+        band_arr.update({'name': band.get('name')})
+        band_arr.update({'weight_all': 0})
+        band_arr.update({'weight_on_rade': 0})
+        band_arr.update({'counter_all': 0})
+        band_arr.update({'counter_on_rade': 0})
+
+        for user in list(USERS_ARR):
+            # Обрабатываем по козлам
+            if user.getBand() == band.get('name'):
+                band_arr.update({'weight_all': band_arr.get('weight_all') + user.getRaidWeight()})
+                band_arr.update({'counter_all': band_arr.get('counter_all') + 1}) 
+                if user.getRaidLocation():
+                    band_arr.update({'weight_on_rade': band_arr.get('weight_on_rade') + user.getRaidWeight()})
+                    band_arr.update({'counter_on_rade': band_arr.get('counter_on_rade') + 1}) 
+        goat_report.get('bands').append(band_arr)
+
+    report = f'🐐<b>{goat.get("name")}</b>\n\n'
+    for bands in goat.get('bands'):
+        report = report + f'🤟<b>{bands.get("name")}</b>\n'
+        if bands.get("weight_all") > 0:
+            report = report + f'👤{bands.get("counter_on_rade")}/{bands.get("counter_all")} 🏋️‍♂️{bands.get("weight_on_rade")}/{bands.get("weight_all")} <b>{str(int(bands.get("weight_on_rade")/bands.get("weight_all")*100))}</b>%\n'
+        else:
+            report = report + f'👤{bands.get("counter_on_rade")}/{bands.get("counter_all")} 🏋️‍♂️<b>0</b>%\n'
+        report = report + f'\n'
+    return report
 
 # 20 secund
 def fight_job():
