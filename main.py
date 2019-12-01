@@ -1172,7 +1172,9 @@ def main_message(message):
             text = message.text 
             if text.lower().startswith('джу'):
                 text = message.text[3:]
+            print(text)
             response = getResponseDialogFlow(text)
+            print(response)
             if response:
                 if (response.startswith('jugi:')):
                     #jugi:ping:Артхаус
