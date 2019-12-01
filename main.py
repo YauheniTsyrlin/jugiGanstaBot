@@ -162,6 +162,25 @@ def getUserByName(name: str):
         if name.lower().strip() == user.getName().lower().strip(): return user
     return None
 
+def isUserBan(login: str):
+    userIAm = getUserByLogin(login)
+    if userIAm:
+        logger.info('ban user == Yes')
+        if userIAm.getTimeBan():
+            t = datetime.fromtimestamp(userIAm.getTimeBan()) 
+            logger.info(f'ban user t == {t}')
+            logger.info(f'ban user t == {datetime.now()}')
+            
+            tz = datetime.strptime('03:00:00',"%H:%M:%S")
+            date_for = datetime.now() - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+
+            if date_for.timestamp() < userIAm.getTimeBan():
+                return True
+            else:
+                userIAm.setTimeBan(None)
+                updateUser(userIAm)
+    return False
+
 def getWariorFraction(string: str):
     if (string.startswith('⚙️')):
         return '⚙️Убежище 4'
@@ -224,7 +243,6 @@ def get_rade_plan(rade_date, goat):
 
 def updateUser(newuser: users.User):
     if newuser == None:
-        logger.info('newuser == None')
         pass
     else:
         newvalues = { "$set": json.loads(newuser.toJSON()) }
@@ -789,20 +807,6 @@ def ring_message(message: Message):
     usersOnCompetition = usersOnCompetition + '⏰ ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(datetime.now().timestamp())) +'\n'
 
     bot.send_message(message.chat.id, text=usersOnCompetition, reply_markup=getButtonsMenu(list_buttons) ) 
-
-def isUserBan(login: str):
-    userIAm = getUserByLogin(login)
-    if userIAm:
-        if userIAm.getTimeBan():
-            tz = datetime.strptime('03:00:00',"%H:%M:%S")
-            date_for = datetime.now() - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
-
-            if date_for.timestamp() < userIAm.getTimeBan():
-                return True
-            else:
-                userIAm.setTimeBan(None)
-                updateUser(userIAm)
-    return False
 
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
