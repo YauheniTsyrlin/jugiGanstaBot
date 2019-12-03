@@ -1982,21 +1982,18 @@ def main_loop():
         app = web.Application()
         # Process webhook calls
         async def handle(request):
-            if request.match_info.get('token') == bot.token:
-                request_body_dict = await request.json()
-                update = telebot.types.Update.de_json(request_body_dict)
-                bot.process_new_updates([update])
-                return web.Response()
-            else:
-                return web.Response(status=403)
+            request_body_dict = await request.json()
+            update = telebot.types.Update.de_json(request_body_dict)
+            bot.process_new_updates([update])
+            return web.Response()
 
-        app.router.add_post('/{token}/', handle)
+
+        app.router.add_post('/', handle)
         
         # Remove webhook, it fails sometimes the set if there is a previous webhook
         bot.remove_webhook()
         # Set webhook
-        bot.set_webhook(url=config.WEBHOOK_URL_BASE + config.WEBHOOK_URL_PATH,
-                        certificate=open(config.WEBHOOK_SSL_CERT, 'r'))
+        bot.set_webhook(url=f"https://{config.WEBHOOK_HOST}/bot/{str(config.WEBHOOK_PORT)[3:4]}")
         # Build ssl context
         context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
         context.load_cert_chain(config.WEBHOOK_SSL_CERT, config.WEBHOOK_SSL_PRIV)
@@ -2005,7 +2002,7 @@ def main_loop():
             app,
             host=config.WEBHOOK_LISTEN,
             port=config.WEBHOOK_PORT,
-            ssl_context=context,
+            ssl_context=context
         )
 
 if __name__ == '__main__': 
