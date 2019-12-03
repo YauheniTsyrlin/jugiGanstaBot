@@ -1900,27 +1900,27 @@ def rade():
     
     logger.info('check rade time: now ' + str(now_date))
     
-    if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second < 15:
-        for goat in getSetting('GOATS_BANDS'):
-            for band in goat.get('bands'):
-                send_messages_big(goat.get('chat'), text=f'Джу, собери {band.get("name")}\nСкоро рейд!', reply_markup=None)
-
-    if now_date.hour in (1, 9, 17) and now_date.minute in (0, 100) and now_date.second < 16:
-        logger.info('Rade time now!')
-
+    if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second <= 15:
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
-            send_messages_big(goat['chat'], text=report, reply_markup=None)
+            send_messages_big(goat['chat'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report, reply_markup=None)
 
+    if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second <= 15:
+        logger.info('Rade time now!')
+        for goat in getSetting('GOATS_BANDS'):
+            report = radeReport(goat)
+            send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report, reply_markup=None)
+        
+        logger.info('Send reports to goat!')
         for x in registered_users.find():
             registered_users.update(
                 { 'login': x.get('login')},
                 { '$set': { 'raidlocation': None} }
             )
+        logger.info('Clear rade location!')
         updateUser(None)
 
 def radeReport(goat):
-
     goat_report = {}
     goat_report.update({'name': goat.get('name')})
     goat_report.update({'chat': goat.get('chat')})
