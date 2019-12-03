@@ -73,7 +73,7 @@ def main_loop():
     web.run_app(
         app,
         host=bozya_config.WEBHOOK_LISTEN,
-        port=bozya_config.config.WEBHOOK_PORT,
+        port=bozya_config.WEBHOOK_PORT,
         ssl_context=context
     )
 
