@@ -1,4 +1,4 @@
-import config
+import bozya_config
 
 import logging
 import ssl
@@ -17,12 +17,12 @@ import requests
 
 logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
-bot = telebot.TeleBot(config.TOKEN_BOZYA)
+bot = telebot.TeleBot(bozya_config.TOKEN)
 
 def getResponseDialogFlow(text):
     if '' == text.strip():
         text = 'голос!'
-    request = apiai.ApiAI(config.AI_TOKEN_BOZYA).text_request() # Токен API к Dialogflow
+    request = apiai.ApiAI(bozya_config.AI_TOKEN).text_request() # Токен API к Dialogflow
     request.lang = 'ru' # На каком языке будет послан запрос
     request.session_id = 'BatlabAIBot' # ID Сессии диалога (нужно, чтобы потом учить бота)
     request.query = text # Посылаем запрос к ИИ с сообщением от юзера
@@ -54,30 +54,27 @@ def main_loop():
     app = web.Application()
     # Process webhook calls
     async def handle(request):
-        if request.match_info.get('token') == bot.token:
-            request_body_dict = await request.json()
-            update = telebot.types.Update.de_json(request_body_dict)
-            bot.process_new_updates([update])
-            return web.Response()
-        else:
-            return web.Response(status=403)
+        request_body_dict = await request.json()
+        update = telebot.types.Update.de_json(request_body_dict)
+        bot.process_new_updates([update])
+        return web.Response()
 
-    app.router.add_post('/{token}/', handle)
+
+    app.router.add_post('/', handle)
     
     # Remove webhook, it fails sometimes the set if there is a previous webhook
     bot.remove_webhook()
     # Set webhook
-    bot.set_webhook(url=config.WEBHOOK_URL_BASE_BOZYA + config.WEBHOOK_URL_PATH,
-                    certificate=open(config.WEBHOOK_SSL_CERT, 'r'))
+    bot.set_webhook(url="https://{}/bot/{}".format(bozya_config.WEBHOOK_LISTEN, bozya_config.WEBHOOK_PORT[3:1]))
     # Build ssl context
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    context.load_cert_chain(config.WEBHOOK_SSL_CERT, config.WEBHOOK_SSL_PRIV)
+    context.load_cert_chain(bozya_config.WEBHOOK_SSL_CERT, bozya_config.WEBHOOK_SSL_PRIV)
     # Start aiohttp server
     web.run_app(
         app,
-        host=config.WEBHOOK_LISTEN,
-        port=config.WEBHOOK_PORT_BOZYA,
-        ssl_context=context,
+        host=bozya_config.WEBHOOK_LISTEN,
+        port=bozya_config.config.WEBHOOK_PORT,
+        ssl_context=context
     )
 
 if __name__ == '__main__': 
