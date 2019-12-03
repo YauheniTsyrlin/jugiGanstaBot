@@ -65,7 +65,7 @@ def main_loop():
     # Remove webhook, it fails sometimes the set if there is a previous webhook
     bot.remove_webhook()
     # Set webhook
-    bot.set_webhook(url="https://{}/bot/{}".format(bozya_config.WEBHOOK_LISTEN, str(bozya_config.WEBHOOK_PORT)[3:4]))
+    bot.set_webhook(url=f"https://{bozya_config.WEBHOOK_LISTEN}/bot/{str(bozya_config.WEBHOOK_PORT)[3:4])}")
     # Build ssl context
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
     context.load_cert_chain(bozya_config.WEBHOOK_SSL_CERT, bozya_config.WEBHOOK_SSL_PRIV)
