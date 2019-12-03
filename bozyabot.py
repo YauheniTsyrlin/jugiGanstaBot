@@ -46,8 +46,9 @@ def main_message(message):
         text = message.text 
         if text.lower().startswith('бозя'):
             text = message.text[4:]
-
+        logger.info(f'Request: {text}')
         response = getResponseDialogFlow(text)
+        logger.info(f'Response: {response}')
         bot.reply_to(message, text=response)
 
 def main_loop():

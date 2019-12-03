@@ -161,11 +161,11 @@ print("#         USERS            #")
 print("#    update loacation      #")                        
 print("#==========================#")
 
-for x in registered_users.find():
-    registered_users.update(
-        { 'login': x.get('login')},
-        { '$set': { 'raidlocation': None} }
-    )
+# for x in registered_users.find():
+#     registered_users.update(
+#         { 'login': x.get('login')},
+#         { '$set': { 'raidlocation': None} }
+#     )
 
 # for x in registered_users.find():
 #     registered_users.update(
