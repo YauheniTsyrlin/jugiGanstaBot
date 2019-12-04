@@ -1068,6 +1068,7 @@ def main_message(message):
         else:
             markup.add('📋 Отчет', '🤼 В ринг')
             markup.add('Профиль')
+        markup = None
         
         if (callJugi and (message.text and ('анекдот' in message.text.lower() or 'тост' in message.text.lower()))) :
             type_joke = 11
