@@ -1582,7 +1582,7 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=report, reply_markup=markup)
                 else:
                     try:
-                        send_messages_big(message.chat.id, text=response, reply_markup=markup)
+                        send_messages_big(message.chat.id, text='...'+response, reply_markup=markup)
                     except:
                         logger.info("Error!")
             else:
