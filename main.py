@@ -391,11 +391,11 @@ def get_message_photo(message):
                 if (wariorShow and wariorShow.photo):
                     bot.send_photo(message.chat.id, wariorShow.photo, wariorShow.getProfile())
                 else:
-                    bot.reply_to(message, text=wariorShow.getProfile())
+                    send_messages_big(message.chat.id, text=wariorShow.getProfile())
             else:
-                bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
         else:
-            bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
     
 
 
@@ -410,7 +410,7 @@ def get_message_stiker(message):
 
     privateChat = ('private' in message.chat.type)
     if privateChat:
-        bot.reply_to(message, text=message.sticker.file_id)
+        send_messages_big(message.chat.id, text=message.sticker.file_id)
 
 # Handle '/fight'
 @bot.message_handler(commands=['fight'])
@@ -844,7 +844,7 @@ def main_message(message):
     if not findUser:
         r = random.random()
         if (r <= float(getSetting('PROBABILITY_I_DONT_NOW'))):
-            bot.reply_to(message, text=getResponseDialogFlow('i_dont_know_you'))
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('i_dont_know_you'))
 
     if (message.text.startswith('📟Пип-бой 3000') and 
             '/killdrone' not in message.text and 
@@ -862,7 +862,7 @@ def main_message(message):
                     else:
                         x = registered_wariors.insert_one(json.loads(warior.toJSON()))
                         update_wariors(None)
-                bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                 return
 
             user = users.User(message.from_user.username, message.forward_date, message.text)
@@ -874,23 +874,23 @@ def main_message(message):
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
                 updateUser(updatedUser)
             if privateChat:
-                bot.reply_to(message, text=getResponseDialogFlow('setpip'))
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('setpip'))
             else:
-                bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
 
         else:
-            bot.reply_to(message, text=getResponseDialogFlow('deceive')) 
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive')) 
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'FIGHT!' in message.text):
         #write_json(message.json)
         ww = wariors.fromFightToWarioirs(message.forward_date, message, USERS_ARR, battle)
         if ww == None:
-            bot.reply_to(message, text=getResponseDialogFlow('dublicate'))
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('dublicate'))
             return
         for warior in ww:
             updateWarior(warior)
         
-        bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+        send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '/accept' in message.text and '/decline' in message.text):
         #write_json(message.json)
@@ -898,13 +898,13 @@ def main_message(message):
             fraction = getWariorFraction(message.text.split(' из ')[1].strip())
             warior = getWariorByName(message.text.split('👤')[1].split(' из ')[0], fraction)
             if warior == None:
-                bot.reply_to(message, text='Ничего о нем не знаю!', reply_markup=None)
+                send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
             elif (warior and warior.photo):
-                bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=None)
+                bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
             else:
-                bot.reply_to(message, text=warior.getProfile(), reply_markup=None)
+                send_messages_big(message.chat.id, text=warior.getProfile())
         else:
-            bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_you_cant'))
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты оценил обстановку вокруг.' in message.text and 'Рядом кто-то есть.' in message.text):
         #write_json(message.json)
@@ -934,11 +934,11 @@ def main_message(message):
                 report = report + f'...И еще {str(counter)} выживших.'
             
             if not find:
-                bot.reply_to(message, text='Не нашел никого!', reply_markup=None)
+                send_messages_big(message.chat.id, text='Не нашел никого!', reply_markup=None)
             else:
-                bot.reply_to(message, text=report, reply_markup=None)
+                send_messages_big(message.chat.id, text=report)
         else:
-            bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_you_cant'))
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
         #write_json(message.json)
@@ -946,9 +946,9 @@ def main_message(message):
             u = getUserByLogin(message.from_user.username)
             u.setRaidLocation(1000)
             updateUser(u)
-            bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
         else:
-            bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_you_cant'))
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Панель банды.' in message.text):
         #write_json(message.json)
@@ -974,7 +974,7 @@ def main_message(message):
                 if '🏅' in strings[i] and '🤘' in strings[i]:
                     band = strings[i].split('🤘')[1].split('🏅')[0].strip()
                     if not isUsersBand(message.from_user.username, band):
-                        bot.reply_to(message, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow('not_right_band'), reply_markup=None)
+                        send_messages_big(message.chat.id, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow('not_right_band'))
                         return
 
                 if '👂' in strings[i]:
@@ -1055,9 +1055,9 @@ def main_message(message):
                     send_messages_big(message.chat.id, text=fuckupusersReport, reply_markup=None)
 
             else:
-                bot.reply_to(message, text=getResponseDialogFlow('no_one_on_rade'), reply_markup=None)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('no_one_on_rade'))
         else:
-            bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_you_cant'))
         return
 
     if hasAccessToWariors(message.from_user.username):
@@ -1068,7 +1068,6 @@ def main_message(message):
         else:
             markup.add('📋 Отчет', '🤼 В ринг')
             markup.add('Профиль')
-        markup = None
         
         if (callJugi and (message.text and ('анекдот' in message.text.lower() or 'тост' in message.text.lower()))) :
             type_joke = 11
@@ -1084,7 +1083,7 @@ def main_message(message):
             except:
                 report = 'Чёт я приуныл... Ничего в голову не идет... Давай позже.'
             
-            bot.reply_to(message, report, reply_markup=markup)
+            send_messages_big(message.chat.id, report, reply_markup=markup)
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         # TO DO!
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1111,10 +1110,10 @@ def main_message(message):
             newvalues = { "$set": { "status": message.text.split(login)[1].strip() } }
             if not findLogin:
                 registered_users.update_one({"login": f"{message.from_user.username}"}, newvalues)
-                bot.reply_to(message, reply_markup=markup, text="Из-за своей криворкукости ты вьебал статус самому себе. Теперь твой статус '" + message.text.split(login)[1].strip() + "'")
+                send_messages_big(message.chat.id, reply_markup=markup, text="Из-за своей криворкукости ты вьебал статус самому себе. Теперь твой статус '" + message.text.split(login)[1].strip() + "'")
             else:
                 registered_users.update_one({"login": f"{login}"}, newvalues)
-                bot.reply_to(message, text='✅ Готово')
+                send_messages_big(message.chat.id, text='✅ Готово')
             
             updateUser(None)
             
@@ -1128,34 +1127,34 @@ def main_message(message):
                     if not user:
                         user = getUserByName(name)
                     if user:
-                        bot.reply_to(message, text=user.getProfile(), reply_markup=markup)
+                        send_messages_big(message.chat.id, text=user.getProfile(), reply_markup=markup)
                 else:
-                    bot.reply_to(message, text=f'В базе зарегистрированнных бандитов {login} не найден', reply_markup=markup)
+                    send_messages_big(message.chat.id, text=f'В базе зарегистрированнных бандитов {login} не найден', reply_markup=markup)
 
             for x in registered_wariors.find({'name':f'{name}'}):
                 warior = wariors.importWarior(x)
                 if (warior and warior.photo):
                     bot.send_photo(message.chat.id, warior.photo, warior.getProfile(), reply_markup=markup)
                 else:
-                    bot.reply_to(message, text=warior.getProfile(), reply_markup=markup)
+                    send_messages_big(message.chat.id, text=warior.getProfile(), reply_markup=markup)
                     
         elif (callJugi and 'уволить @' in message.text.lower()):
             if not isGoatBoss(message.from_user.username):
-                bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_goat_boss'), reply_markup=markup)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_goat_boss'), reply_markup=markup)
                 return
 
             login = message.text.split('@')[1].strip()
             user = getUserByLogin(login)
             if not user:
-                bot.reply_to(message, text=f'Нет бандита с логином {login}!', reply_markup=None)
+                send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!', reply_markup=None)
                 return
 
             if not user.getBand():
-                bot.reply_to(message, text=f'У бандита {login} нет банды!', reply_markup=None)
+                send_messages_big(message.chat.id, text=f'У бандита {login} нет банды!', reply_markup=None)
                 return
 
             if not isUsersBand(message.from_user.username, user.getBand()):
-                bot.reply_to(message, text=f'Бандит {login} не из банд твоего козла!', reply_markup=None)
+                send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!', reply_markup=None)
                 return
 
             myquery = { "login": f"{login}" }
@@ -1166,9 +1165,9 @@ def main_message(message):
             war = registered_wariors.delete_one(myquery)
 
             if doc.deleted_count == 0:
-                bot.reply_to(message, text=f'{login} не найден в бандитах! Удалено {war.deleted_count} в дневнике боев!', reply_markup=markup)
+                send_messages_big(message.chat.id, text=f'{login} не найден в бандитах! Удалено {war.deleted_count} в дневнике боев!', reply_markup=markup)
             else:                 
-                bot.reply_to(message, text=f'{login} уволен нафиг! Удалено {doc.deleted_count} записей в дневнике бандитов и {war.deleted_count} в дневнике боев!', reply_markup=markup)
+                send_messages_big(message.chat.id, text=f'{login} уволен нафиг! Удалено {doc.deleted_count} записей в дневнике бандитов и {war.deleted_count} в дневнике боев!', reply_markup=markup)
 
         elif (callJugi and 'профиль' in message.text.lower()):
             user = users.getUser(message.from_user.username, registered_users)
@@ -1177,11 +1176,9 @@ def main_message(message):
                 if (warior and warior.photo):
                     bot.send_photo(message.chat.id, warior.photo, user.getProfile(), reply_markup=markup)
                 else:
-                    bot.reply_to(message, text=user.getProfile(), reply_markup=markup)
-                # if (user.getRaid()):
-                #     msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_raid'), reply_markup=markup)
+                    send_messages_big(message.chat.id, text=user.getProfile(), reply_markup=markup)
             else:
-                bot.reply_to(message, text='С твоим профилем какая-то беда... Звони в поддержку пип-боев!', reply_markup=markup)
+                send_messages_big(message.chat.id, text='С твоим профилем какая-то беда... Звони в поддержку пип-боев!', reply_markup=markup)
 
         elif callJugi:
             text = message.text 
@@ -1195,7 +1192,7 @@ def main_message(message):
                         # Собираем всех пользоватлей с бандой Х
                         band = response.split(':')[2][1:]
                         if not isUsersBand(message.from_user.username, band):
-                            bot.reply_to(message, text=f'Ты просил собраться банду{response.split(":")[2]}\n' + getResponseDialogFlow('not_right_band'), reply_markup=markup)
+                            send_messages_big(message.chat.id, text=f'Ты просил собраться банду{response.split(":")[2]}\n' + getResponseDialogFlow('not_right_band'), reply_markup=markup)
                             return
 
                         first_string = f'{tools.deEmojify(message.from_user.first_name)} просит собраться банду\n<b>{response.split(":")[2]}</b>:\n'
@@ -1230,12 +1227,12 @@ def main_message(message):
                     elif 'onrade' == response.split(':')[1]:
                         # jugi:onrade:$goat
                         if not isAdmin(message.from_user.username):
-                            bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=None)
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'), reply_markup=None)
                             return
 
                         goatName = response.split(':')[2]
                         if not getMyGoat(message.from_user.username) == goatName:
-                            bot.reply_to(message, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'), reply_markup=markup)
+                            send_messages_big(message.chat.id, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'), reply_markup=markup)
                             return
 
                         for goat in getSetting('GOATS_BANDS'):
@@ -1255,28 +1252,28 @@ def main_message(message):
                         
                         user = getUserByLogin(login)
                         if not user:
-                            bot.reply_to(message, text=f'Нет бандита с логином {login}!', reply_markup=None)
+                            send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!', reply_markup=None)
                             return
 
                         if not user.getBand():
-                            bot.reply_to(message, text=f'У бандита {login} нет банды!', reply_markup=None)
+                            send_messages_big(message.chat.id, text=f'У бандита {login} нет банды!', reply_markup=None)
                             return
 
                         if not isUsersBand(message.from_user.username, user.getBand()):
                             if not isAdmin(message.from_user.username):
-                                bot.reply_to(message, text=f'Бандит {login} не из банд твоего козла!', reply_markup=None)
+                                send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!', reply_markup=None)
                                 return
 
                         time_str = response.split(response.split(':')[2])[1][1:]
                         date_for = None
                         if ban:
                             if not '/' in time_str:
-                                bot.reply_to(message, text=f'Не определен период блокировки!', reply_markup=None)
+                                send_messages_big(message.chat.id, text=f'Не определен период блокировки!', reply_markup=None)
                                 return
                             try:
                                 date_for = parse(time_str.split('/')[1].strip())
                             except:
-                                bot.reply_to(message, text=f'Не смог распознать дату блокировки!', reply_markup=None)
+                                send_messages_big(message.chat.id, text=f'Не смог распознать дату блокировки!', reply_markup=None)
                                 return
 
                         report = ''
@@ -1289,12 +1286,12 @@ def main_message(message):
                         updateUser(user)
 
                         user = getUserByLogin(user.getLogin())
-                        bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}', reply_markup=None)
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}', reply_markup=None)
                     elif 'rade' == response.split(':')[1]:
                         if isGoatBoss(message.from_user.username) or isAdmin(message.from_user.username):
                             pass
                         else:
-                            bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_goat_boss'), reply_markup=markup)
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_goat_boss'), reply_markup=markup)
                             return
                         
                         goat = getMyGoat(message.from_user.username)
@@ -1302,7 +1299,7 @@ def main_message(message):
                         # jugi:rade:$radelocation:$time
                         rade_date = parse(response.split(response.split(":")[2])[1][1:])
                         if rade_date.hour not in (1, 9, 17):
-                            bot.reply_to(message, text='Рейды проходят только в 1:00, 9:00, 17:00!\nУкажи правильное время!', reply_markup=markup)
+                            send_messages_big(message.chat.id, text='Рейды проходят только в 1:00, 9:00, 17:00!\nУкажи правильное время!', reply_markup=markup)
                             return 
 
                         # Проверка на будущую дату
@@ -1316,7 +1313,7 @@ def main_message(message):
                         rade_location = int(response.split(":")[2].split('📍')[1].split('км')[0].strip())
 
                         if privateChat:
-                            bot.reply_to(message, text='Напоминания для рейда будут приходить только в этот чат!\nЧтобы их увидели все - запланируй рейд в групповом чате!', reply_markup=markup)
+                            send_messages_big(message.chat.id, text='Напоминания для рейда будут приходить только в этот чат!\nЧтобы их увидели все - запланируй рейд в групповом чате!', reply_markup=markup)
 
                         myquery = { 
                                     "rade_date": rade_date.timestamp(), 
@@ -1361,13 +1358,13 @@ def main_message(message):
                         #     bot.pin_chat_message(message.chat.id, msg.message_id)
                         # #msg = send_messages_big(message.chat.id, text='Напомнить в '+time_remind_str+'?', reply_markup=None)
                     elif 'getchat' == response.split(':')[1]:
-                        bot.reply_to(message, text=f'Id чата {message.chat.id}', reply_markup=None)
+                        send_messages_big(message.chat.id, text=f'Id чата {message.chat.id}', reply_markup=None)
                     elif 'capture' == response.split(':')[1]:
                             #   0    1        2       3     4
                             # jugi:capture:$bands:$Dangeon:$time
                             band = response.split(':')[2][1:]
                             if not isUsersBand(message.from_user.username, band):
-                                bot.reply_to(message, text=f'Ты пытался созвать на захват банду {response.split(":")[2]}\n' + getResponseDialogFlow('not_right_band'), reply_markup=markup)
+                                send_messages_big(message.chat.id, text=f'Ты пытался созвать на захват банду {response.split(":")[2]}\n' + getResponseDialogFlow('not_right_band'), reply_markup=markup)
                                 return  
 
                             time_str = response.split(response.split(":")[3])[1][1:]
@@ -1403,10 +1400,10 @@ def main_message(message):
                     elif 'remind' == response.split(':')[1]:
                         # jugi:remind:2019-11-04T17:13:00+03:00
                         if not userIAm.getLocation():
-                            bot.reply_to(message, text='Я не знаю из какого ты города. Напиши мне "Я из Одессы" или "Я из Москвы" и этого будет достаточно. Иначе, я буду думать, что ты живешь во временном поясе по Гринвичу, а это +3 часа к Москве, +2 к Киеву и т.д. И ты не сможешь просить меня напомнить о чем-либо!')
+                            send_messages_big(message.chat.id, text='Я не знаю из какого ты города. Напиши мне "Я из Одессы" или "Я из Москвы" и этого будет достаточно. Иначе, я буду думать, что ты живешь во временном поясе по Гринвичу, а это +3 часа к Москве, +2 к Киеву и т.д. И ты не сможешь просить меня напомнить о чем-либо!')
                             return
                         if not userIAm.getTimeZone():
-                            bot.reply_to(message, text='Вроде, город знаю, а временную зону забыл. Напиши мне еще раз "Я из Одессы" или "Я из Москвы"!` ')
+                            send_messages_big(message.chat.id, text='Вроде, город знаю, а временную зону забыл. Напиши мне еще раз "Я из Одессы" или "Я из Москвы"!` ')
                             return
                                                 
                         time_str = response.split(response.split(":")[1])[1][1:]
@@ -1452,7 +1449,7 @@ def main_message(message):
                             tf = timezonefinder.TimezoneFinder()
                             timezone_str = tf.certain_timezone_at(lat=float(location[1]), lng=float(location[0]))
                             if timezone_str is None:
-                                bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
+                                send_messages_big(message.chat.id, text=getResponseDialogFlow('understand'), reply_markup=markup)
                             else:
                                 # Display the current time in that time zone
                                 timezone = pytz.timezone(timezone_str)
@@ -1460,10 +1457,10 @@ def main_message(message):
                                 userIAm.setLocation(response.split(':')[2])
                                 userIAm.setTimeZone(str(timezone.utcoffset(dt)))
                                 updateUser(userIAm)
-                                bot.reply_to(message, text='Круто!\nЭто ' + str(timezone.utcoffset(dt)) + ' к Гринвичу!', reply_markup=markup)
+                                send_messages_big(message.chat.id, text='Круто!\nЭто ' + str(timezone.utcoffset(dt)) + ' к Гринвичу!', reply_markup=markup)
 
                         else:
-                            bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow('understand'), reply_markup=markup)
                     elif 'rating' == response.split(':')[1]:
                         report = ''
                         report = report + f'🏆ТОП 5 УБИЙЦ 🤟<b>{userIAm.getBand()}</b>\n'
@@ -1585,11 +1582,11 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=report, reply_markup=markup)
                 else:
                     try:
-                        bot.reply_to(message, text=response, reply_markup=markup)
+                        send_messages_big(message.chat.id, text=response, reply_markup=markup)
                     except:
                         logger.info("Error!")
             else:
-                bot.reply_to(message, text=getResponseDialogFlow('understand'), reply_markup=markup)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('understand'), reply_markup=markup)
         return
     else:
         logger.info(getResponseDialogFlow('you_dont_our_band_gangster'))
@@ -1647,7 +1644,7 @@ def send_messages_big(chat_id: str, text: str, reply_markup=None):
     msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
     return msg
 
-def reply_to_big(message: str, text: str, reply_markup=None):
+def reply_to_big(message: str, text: str):
     strings = text.split('\n')
     tmp = ''
     msg = types.Message.de_json(message)
@@ -1656,10 +1653,10 @@ def reply_to_big(message: str, text: str, reply_markup=None):
         if len(tmp + s) < 4000:
             tmp = tmp + s +'\n'
         else: 
-            result = bot.reply_to(msg, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
+            result = bot.reply_to(msg, text=tmp, parse_mode='HTML')
             tmp = s + '\n'
 
-    result = bot.reply_to(msg, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
+    result = bot.reply_to(msg, text=tmp, parse_mode='HTML')
     return result
 
 def fight():
@@ -1887,7 +1884,7 @@ def pending_message():
             text = getResponseDialogFlow(pending_message.get('dialog_flow_text'))
         
         if pending_message.get('reply_message'):
-            reply_to_big(pending_message.get('reply_message'), text, None)
+            reply_to_big(pending_message.get('reply_message'), text)
         else:
             send_messages_big(pending_message.get('chat_id'), text, None)
         ids.append(pending_message.get('_id')) 
