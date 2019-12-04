@@ -946,7 +946,6 @@ def main_message(message):
             u = getUserByLogin(message.from_user.username)
             u.setRaidLocation(1000)
             updateUser(u)
-            t = getUserByLogin(message.from_user.username)
             bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs'))
         else:
             bot.reply_to(message, text=getResponseDialogFlow('shot_you_cant'), reply_markup=None)
@@ -1291,9 +1290,12 @@ def main_message(message):
                         user = getUserByLogin(user.getLogin())
                         bot.reply_to(message, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}', reply_markup=None)
                     elif 'rade' == response.split(':')[1]:
-                        if not isGoatBoss(message.from_user.username):
+                        if isGoatBoss(message.from_user.username) or isAdmin(message.from_user.username):
+                            pass
+                        else:
                             bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_goat_boss'), reply_markup=markup)
                             return
+                        
                         goat = getMyGoat(message.from_user.username)
                         #   0    1        2         3     
                         # jugi:rade:$radelocation:$time
@@ -1898,8 +1900,11 @@ def rade():
     tz = datetime.strptime('03:00:00',"%H:%M:%S")
     now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
     
+    #497065022 goat['chat']
+
     logger.info('check rade time: now ' + str(now_date))
     
+    #if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second <= 15:
     if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second <= 15:
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
