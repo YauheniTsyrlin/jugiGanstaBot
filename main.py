@@ -1064,9 +1064,9 @@ def main_message(message):
         #write_json(message.json)
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
         if not privateChat:
-            markup.add('Джу, 📋 Отчет', 'Джу, Профиль', f'Джу, план рейда')
+            markup.add('Джу, 📋 Отчет', 'Джу, 📜 Профиль', f'Джу, ⏰ план рейда')
         else:
-            markup.add('📋 Отчет', 'Профиль', '🤼 В ринг', f'План рейда')
+            markup.add('📋 Отчет', '📜 Профиль', '🤼 В ринг', f'⏰ План рейда')
         
 
         if (callJugi and (message.text and ('анекдот' in message.text.lower() or 'тост' in message.text.lower()))) :
