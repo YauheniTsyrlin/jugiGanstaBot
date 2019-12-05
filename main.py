@@ -1906,13 +1906,13 @@ def rade():
     if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second <= 15:
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
-            send_messages_big(goat['chat'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report, reply_markup=None)
+            send_messages_big(497065022, text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report, reply_markup=None)
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second <= 15:
         logger.info('Rade time now!')
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
-            send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report, reply_markup=None)
+            send_messages_big(497065022, text='<b>Результаты рейда</b>\n' + report, reply_markup=None)
         
         logger.info('Send reports to goat!')
         for x in registered_users.find():
