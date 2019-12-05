@@ -1648,7 +1648,7 @@ def send_messages_big(chat_id: str, text: str, reply_markup=None):
             msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
             tmp = s + '\n'
 
-    msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
+    msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup, disable_notification = True)
     return msg
 
 def reply_to_big(message: str, text: str):
