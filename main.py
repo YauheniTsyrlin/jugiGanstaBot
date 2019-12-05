@@ -1254,7 +1254,10 @@ def main_message(message):
                             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
                             return
 
-                        goatName = response.split(':')[2]
+                        goatName = response.split(':')[2].strip()
+                        if goatName == '*':
+                            goatName = getMyGoat(message.from_user.username)
+
                         if not getMyGoat(message.from_user.username) == goatName:
                             send_messages_big(message.chat.id, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'))
                             return
@@ -1923,7 +1926,8 @@ def rade():
     tz = datetime.strptime('03:00:00',"%H:%M:%S")
     now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
     
-    #497065022 goat['chat']
+    # 497065022 goat['chat'] Джу
+    # 
 
     logger.info('check rade time: now ' + str(now_date))
     
