@@ -1976,9 +1976,9 @@ def radeReport(goat):
                 if user.getRaidLocation():
                     band_arr.update({'weight_on_rade': band_arr.get('weight_on_rade') + user.getRaidWeight()})
                     band_arr.update({'counter_on_rade': band_arr.get('counter_on_rade') + 1}) 
-                    band_arr.update({'usersonrade': band_arr.get('usersonrade').append(user) })
+                    band_arr.get('usersonrade').append(user)
                 else:
-                    band_arr.update({'usersoffrade': band_arr.get('usersoffrade').append(user) })
+                    band_arr.get('usersoffrade').append(user)
         goat_report.get('bands').append(band_arr)
 
     report = f'🐐<b>{goat_report.get("name")}</b>\n\n'
@@ -1991,7 +1991,7 @@ def radeReport(goat):
         report = report + f'\n'
         report = report + f'На позиции:\n'
         for u in bands.get("usersoffrade"):
-            report = u.getLogin()
+            report = report + u.getLogin() + '\n'
         report = report + f'\n'
     return report
 
