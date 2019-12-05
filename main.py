@@ -1990,9 +1990,15 @@ def radeReport(goat):
             report = report + f'👤{bands.get("counter_on_rade")}/{bands.get("counter_all")} 🏋️‍♂️<b>0</b>%\n'
         report = report + f'\n'
         report = report + f'На позиции:\n'
+        for u in bands.get("usersonrade"):
+            report = report + u.getLogin() + ' - ' + str(u.getRaidLocation()) + '\n'
+        report = report + f'\n'
+
+        report = report + f'В проёбе:\n'
         for u in bands.get("usersoffrade"):
             report = report + u.getLogin() + ' - ' + str(u.getRaidLocation()) + '\n'
         report = report + f'\n'
+
     return report
 
 # 20 secund
