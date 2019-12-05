@@ -1250,9 +1250,9 @@ def main_message(message):
                         msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=markup)
                     elif 'onrade' == response.split(':')[1]:
                         # jugi:onrade:$goat
-                        if not isAdmin(message.from_user.username):
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
-                            return
+                        # if not isAdmin(message.from_user.username):
+                        #     send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
+                        #     return
 
                         goatName = response.split(':')[2].strip()
                         if goatName == '*':
@@ -1965,6 +1965,8 @@ def radeReport(goat):
         band_arr.update({'weight_on_rade': 0})
         band_arr.update({'counter_all': 0})
         band_arr.update({'counter_on_rade': 0})
+        band_arr.update({'usersonrade': []})
+        band_arr.update({'usersoffrade': []})
 
         for user in list(USERS_ARR):
             # Обрабатываем по козлам
@@ -1974,6 +1976,9 @@ def radeReport(goat):
                 if user.getRaidLocation():
                     band_arr.update({'weight_on_rade': band_arr.get('weight_on_rade') + user.getRaidWeight()})
                     band_arr.update({'counter_on_rade': band_arr.get('counter_on_rade') + 1}) 
+                    band_arr.update({'usersonrade': band_arr.get('usersonrade').append(user) })
+                else:
+                    band_arr.update({'usersoffrade': band_arr.get('usersoffrade').append(user) })
         goat_report.get('bands').append(band_arr)
 
     report = f'🐐<b>{goat_report.get("name")}</b>\n\n'
@@ -1983,6 +1988,10 @@ def radeReport(goat):
             report = report + f'👤{bands.get("counter_on_rade")}/{bands.get("counter_all")} 🏋️‍♂️{bands.get("weight_on_rade")}/{bands.get("weight_all")} <b>{str(int(bands.get("weight_on_rade")/bands.get("weight_all")*100))}</b>%\n'
         else:
             report = report + f'👤{bands.get("counter_on_rade")}/{bands.get("counter_all")} 🏋️‍♂️<b>0</b>%\n'
+        report = report + f'\n'
+        report = report + f'На позиции:\n'
+        for u in bands.get("usersoffrade"):
+            report = u.getLogin()
         report = report + f'\n'
     return report
 
