@@ -1991,7 +1991,7 @@ def radeReport(goat):
         report = report + f'\n'
         report = report + f'На позиции:\n'
         for u in bands.get("usersoffrade"):
-            report = report + u.getLogin() + '\n'
+            report = report + u.getLogin() + ' - ' + str(u.getRadeLocation()) + '\n'
         report = report + f'\n'
     return report
 
