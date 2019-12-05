@@ -146,6 +146,15 @@ def getMyGoat(login: str):
 
     return None 
 
+def getGoatBands(goatName: str):
+    for goat in getSetting('GOATS_BANDS'):
+        if goat.get('name') == goatName:
+            bands = []
+            for band in goat['bands']:
+                bands.append(band.get('name'))
+            return bands
+    return None 
+
 def isUsersBand(login: str, band: str):
     bands = getMyBands(login)
     if bands == None: 
@@ -1266,7 +1275,25 @@ def main_message(message):
                             if goatName == goat.get('name'):
                                 report = radeReport(goat)
                                 send_messages_big(message.chat.id, text=report)
+                    elif 'clearrade' == response.split(':')[1]:
+                        # jugi:clearrade:*
+                        if not isAdmin(message.from_user.username):
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
+                            return
 
+                        goatName = response.split(':')[2].strip()
+                        if goatName == '*':
+                            goatName = getMyGoat(message.from_user.username)
+
+                        if not getMyGoat(message.from_user.username) == goatName:
+                            send_messages_big(message.chat.id, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'))
+                            return
+                        registered_users.update_many(
+                            {'band':{'$in':getGoatBands(goatName)}},
+                            { '$set': { 'raidlocation': None} }
+                        )
+                        updateUser(None)
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))        
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
                         # if not isAdmin(message.from_user.username):
                         #     bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'))
@@ -1942,16 +1969,13 @@ def rade():
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
             send_messages_big(497065022, text='<b>Результаты рейда</b>\n' + report, reply_markup=None)
-        
-        logger.info('Send reports to goat!')
-        for x in registered_users.find():
-            registered_users.update(
-                { 'login': x.get('login')},
+
+            registered_users.update_many(
+                {'band':{'$in':getGoatBands(goat.get('name'))}},
                 { '$set': { 'raidlocation': None} }
             )
-        logger.info('Clear rade location!')
-        updateUser(None)
-
+            updateUser(None)
+        
 def radeReport(goat):
     goat_report = {}
     goat_report.update({'name': goat.get('name')})
