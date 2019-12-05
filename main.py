@@ -116,8 +116,23 @@ def getMyBands(login: str):
         for band in goat['bands']:
             if user.getBand() and user.getBand().lower() == band.get('name').lower():
                 return goat['bands']
-
     return None        
+
+def getMyBandsName(login: str):
+    user = getUserByLogin(login)
+    if not user:
+        return None
+    
+    for goat in getSetting('GOATS_BANDS'):
+        find = False
+        bands = []
+        for band in goat['bands']:
+            bands.append(band.get('name'))
+            if user.getBand() and user.getBand().lower() == band.get('name').lower():
+                find = True
+        if find:
+            return bands
+    return None     
 
 def getMyGoat(login: str):
     user = getUserByLogin(login)
@@ -1472,7 +1487,7 @@ def main_message(message):
                             send_messages_big(message.chat.id, text=getResponseDialogFlow('understand'))
                     elif 'rating' == response.split(':')[1]:
                         report = ''
-                        report = report + f'🏆ТОП 5 УБИЙЦ 🤟<b>{userIAm.getBand()}</b>\n'
+                        report = report + f'🏆ТОП 5 УБИЙЦ 🐐<b>{getMyGoat(userIAm.getLogin())}</b>\n'
                         report = report + '\n'
                         setting = getSetting('REPORT_KILLERS')
                         from_date = setting.get('from_date')
@@ -1494,7 +1509,7 @@ def main_message(message):
                                                     }       
                                         },
                                         {
-                                            "band": userIAm.getBand()   
+                                            "band": {'$in': getMyBandsName(userIAm.getLogin())}   
                                         }]
                                 }
                             }, 
@@ -1546,7 +1561,7 @@ def main_message(message):
                                                     }       
                                         },
                                         {
-                                            "band": userIAm.getBand()   
+                                            "band": {'$in': getMyBandsName(userIAm.getLogin())}    
                                         }]
                                 } 
                             }, 
