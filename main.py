@@ -1229,7 +1229,7 @@ def main_message(message):
                         rade_date = parse(response.split(response.split(":")[1])[1][1:])
 
                         plan_str = get_rade_plan(rade_date, goat)
-                        msg = send_messages_big(message.chat.id, text=plan_str)
+                        msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=markup)
                     elif 'onrade' == response.split(':')[1]:
                         # jugi:onrade:$goat
                         if not isAdmin(message.from_user.username):
