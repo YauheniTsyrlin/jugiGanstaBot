@@ -1062,17 +1062,11 @@ def main_message(message):
 
     if hasAccessToWariors(message.from_user.username):
         #write_json(message.json)
-        plan_date = 'сегодня'
-        tz = datetime.strptime('03:00:00',"%H:%M:%S")
-        now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
-        if now_date.hour > 17:
-            plan_date = 'завтра'
-
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
         if not privateChat:
-            markup.add('Джу, 📋 Отчет', 'Джу, Профиль', f'Джу, план рейда на {plan_date}')
+            markup.add('Джу, 📋 Отчет', 'Джу, Профиль', f'Джу, план рейда')
         else:
-            markup.add('📋 Отчет', 'Профиль', '🤼 В ринг', f'План рейда на {plan_date}')
+            markup.add('📋 Отчет', 'Профиль', '🤼 В ринг', f'План рейда')
         
 
         if (callJugi and (message.text and ('анекдот' in message.text.lower() or 'тост' in message.text.lower()))) :
@@ -1224,9 +1218,18 @@ def main_message(message):
                         if len(pingusers) > 0:
                             send_messages_big(message.chat.id, text=first_string + report)
                     elif 'planrade' == response.split(':')[1]:
-                        # jugi:planrade:$time
+                        # jugi:planrade:$date
                         goat = getMyGoat(message.from_user.username)
-                        rade_date = parse(response.split(response.split(":")[1])[1][1:])
+
+                        if response.split(response.split(":")[1])[1][1:].strip() == '*':
+                            tz = datetime.strptime('03:00:00',"%H:%M:%S")
+                            plan_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+                            if plan_date.hour > 17:
+                                rade_date = plan_date + timedelta(days=1)
+                            else:
+                                rade_date = plan_date
+                        else:
+                            rade_date = parse(response.split(response.split(":")[1])[1][1:])
 
                         plan_str = get_rade_plan(rade_date, goat)
                         msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=markup)
@@ -1648,7 +1651,7 @@ def send_messages_big(chat_id: str, text: str, reply_markup=None):
             msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
             tmp = s + '\n'
 
-    msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup, disable_notification = True)
+    msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
     return msg
 
 def reply_to_big(message: str, text: str):
