@@ -1062,12 +1062,12 @@ def main_message(message):
 
     if hasAccessToWariors(message.from_user.username):
         #write_json(message.json)
-        markup = types.ReplyKeyboardMarkup(one_time_keyboard=False, row_width=2, resize_keyboard=True)
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
         if not privateChat:
             markup.add('Джу, 📋 Отчет', 'Джу, Профиль')
         else:
-            markup.add('📋 Отчет', '🤼 В ринг')
-            markup.add('Профиль')
+            markup.add('📋 Отчет', '🤼 В ринг', 'Профиль')
+
         
         if (callJugi and (message.text and ('анекдот' in message.text.lower() or 'тост' in message.text.lower()))) :
             type_joke = 11
