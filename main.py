@@ -1582,11 +1582,12 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=report, reply_markup=markup)
                 else:
                     try:
+                        
                         send_messages_big(message.chat.id, text='...'+response, reply_markup=markup)
                     except:
                         logger.info("Error!")
             else:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow('understand'), reply_markup=markup)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('understand'), reply_markup=None)
         return
     else:
         logger.info(getResponseDialogFlow('you_dont_our_band_gangster'))
