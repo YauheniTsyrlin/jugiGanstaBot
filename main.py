@@ -1062,7 +1062,7 @@ def main_message(message):
 
     if hasAccessToWariors(message.from_user.username):
         #write_json(message.json)
-        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=False, row_width=2, resize_keyboard=False)
         if not privateChat:
             markup.add('Джу, 📋 Отчет', 'Джу, Профиль')
         else:
