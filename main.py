@@ -1067,7 +1067,7 @@ def main_message(message):
             markup.add('Джу, 📋 Отчет', 'Джу, Профиль')
         else:
             markup.add('📋 Отчет', '🤼 В ринг', 'Профиль')
-
+        markup = None
         
         if (callJugi and (message.text and ('анекдот' in message.text.lower() or 'тост' in message.text.lower()))) :
             type_joke = 11
@@ -1587,7 +1587,7 @@ def main_message(message):
                     except:
                         logger.info("Error!")
             else:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow('understand'), reply_markup=None)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('understand'), reply_markup=markup)
         return
     else:
         logger.info(getResponseDialogFlow('you_dont_our_band_gangster'))
