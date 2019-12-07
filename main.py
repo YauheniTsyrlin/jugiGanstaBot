@@ -1022,6 +1022,12 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow('not_right_band'))
                         return
 
+                registered_users.update_many(
+                    {'band': band},
+                    { '$set': { 'raidlocation': None} }
+                )
+                updateUser(None)
+
                 if '👂' in strings[i]:
                     name = strings[i]
                     name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
@@ -1307,8 +1313,10 @@ def main_message(message):
                             goatName = getMyGoat(message.from_user.username)
 
                         if not getMyGoat(message.from_user.username) == goatName:
-                            send_messages_big(message.chat.id, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'))
-                            return
+                            if not isAdmin(message.from_user.username):
+                                send_messages_big(message.chat.id, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'))
+                                return
+
                         registered_users.update_many(
                             {'band':{'$in':getGoatBands(goatName)}},
                             { '$set': { 'raidlocation': None} }
@@ -1975,26 +1983,27 @@ def rade():
     now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
     
     # 497065022 goat['chat'] Джу
-    # 
+    # goat['chat']
 
     logger.info('check rade time: now ' + str(now_date))
     
     if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second <= 15:
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
-            send_messages_big(goat['chat'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
+            send_messages_big(497065022, text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second <= 15:
         logger.info('Rade time now!')
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
-            send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report)
-
+            send_messages_big(497065022, text='<b>Результаты рейда</b>\n' + report)
+        
+        for goat in getSetting('GOATS_BANDS'):
             registered_users.update_many(
                 {'band':{'$in':getGoatBands(goat.get('name'))}},
                 { '$set': { 'raidlocation': None} }
             )
-            updateUser(None)
+        updateUser(None)
         
 def radeReport(goat):
     goat_report = {}
@@ -2033,15 +2042,22 @@ def radeReport(goat):
         else:
             report = report + f'👤{bands.get("counter_on_rade")}/{bands.get("counter_all")} 🏋️‍♂️<b>0</b>%\n'
         report = report + f'\n'
-        # report = report + f'На позиции:\n'
-        # for u in bands.get("usersonrade"):
-        #     report = report + u.getLogin() + ' - ' + str(u.getRaidLocation()) + '\n'
-        # report = report + f'\n'
 
-        # report = report + f'В проёбе:\n'
-        # for u in bands.get("usersoffrade"):
-        #     report = report + u.getLogin() + ' - ' + str(u.getRaidLocation()) + '\n'
-        # report = report + f'\n'
+        if len(bands.get("usersonrade")):
+            report = report + f'🧘‍♂️ <b>на рейде</b>:\n'
+            counter = 0            
+            for u in bands.get("usersonrade"):
+                counter = counter + 1
+                report = report + f'{counter}. @{u.getLogin()} 📍{u.getRaidLocation()}км\n'
+            report = report + f'\n'
+
+        if len(bands.get("usersoffrade")):
+            counter = 0
+            report = report + f'🐢 <b>Бандиты в проёбе</b>:\n'
+            for u in bands.get("usersoffrade"):
+                counter = counter + 1
+                report = report + f'{counter}. @{u.getLogin()}\n'
+            report = report + f'\n'
 
     return report
 
