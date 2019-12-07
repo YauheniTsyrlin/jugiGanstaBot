@@ -846,6 +846,12 @@ def main_message(message):
     logger.info('message.from_user.username: '+message.from_user.username)
     logger.info('message.text: ' + message.text)
 
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+    if not privateChat:
+        markup.add('Джу, 📋 Отчет', 'Джу, 📜 Профиль', f'Джу, ⏰ план рейда')
+    else:
+        markup.add('📋 Отчет', '📜 Профиль', '🤼 В ринг', f'⏰ План рейда')
+
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то сказать, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
@@ -989,7 +995,7 @@ def main_message(message):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
             u = getUserByLogin(message.from_user.username)
-            u.setRaidLocation(1000)
+            u.setRaidLocation(0)
             updateUser(u)
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
         else:
@@ -1113,13 +1119,6 @@ def main_message(message):
 
     if hasAccessToWariors(message.from_user.username):
         #write_json(message.json)
-        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
-        if not privateChat:
-            markup.add('Джу, 📋 Отчет', 'Джу, 📜 Профиль', f'Джу, ⏰ план рейда')
-        else:
-            markup.add('📋 Отчет', '📜 Профиль', '🤼 В ринг', f'⏰ План рейда')
-        
-
         if (callJugi and (message.text and ('анекдот' in message.text.lower() or 'тост' in message.text.lower()))) :
             type_joke = 11
             if ('анекдот' in message.text.lower()):
