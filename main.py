@@ -846,12 +846,6 @@ def main_message(message):
     logger.info('message.from_user.username: '+message.from_user.username)
     logger.info('message.text: ' + message.text)
 
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
-    if not privateChat:
-        markup.add('Джу, 📋 Отчет', 'Джу, 📜 Профиль', f'Джу, ⏰ план рейда')
-    else:
-        markup.add('📋 Отчет', '📜 Профиль', '🤼 В ринг', f'⏰ План рейда')
-
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то сказать, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
@@ -871,6 +865,12 @@ def main_message(message):
 
     logger.info('findUser: ' + str(findUser))
     
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+    if not privateChat:
+        markup.add('Джу, 📋 Отчет', 'Джу, 📜 Профиль', f'Джу, ⏰ план рейда')
+    else:
+        markup.add('📋 Отчет', '📜 Профиль', '🤼 В ринг', f'⏰ План рейда')
+
     if not findUser:
         r = random.random()
         if (r <= float(getSetting('PROBABILITY_I_DONT_NOW'))):
