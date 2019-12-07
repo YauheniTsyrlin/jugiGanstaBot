@@ -250,6 +250,7 @@ def update_wariors(newwariors: wariors.Warior):
 def get_rade_plan(rade_date, goat):
     plan_for_date = 'План рейдов на ' + time.strftime("%d-%m-%Y", time.gmtime( rade_date.timestamp() )) + '\n'
     find = False
+    raids = []
     for rade in rades.find({
                                 '$and' : 
                                 [
@@ -1020,6 +1021,12 @@ def main_message(message):
             alianusersReport = ''
             aliancounter = 0
 
+            registered_users.update_many(
+                {'band': band},
+                { '$set': { 'raidlocation': None} }
+            )
+            updateUser(None)
+            
             # 🤘👊🏅
             for s in strings:
                 if '🏅' in strings[i] and '🤘' in strings[i]:
@@ -1027,12 +1034,6 @@ def main_message(message):
                     if not isUsersBand(message.from_user.username, band):
                         send_messages_big(message.chat.id, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow('not_right_band'))
                         return
-
-                registered_users.update_many(
-                    {'band': band},
-                    { '$set': { 'raidlocation': None} }
-                )
-                updateUser(None)
 
                 if '👂' in strings[i]:
                     name = strings[i]
@@ -1301,6 +1302,7 @@ def main_message(message):
                             if goatName == goat.get('name'):
                                 report = radeReport(goat)
                                 send_messages_big(message.chat.id, text=report)
+
                     elif 'clearrade' == response.split(':')[1]:
                         # jugi:clearrade:*
                         if not isAdmin(message.from_user.username):
