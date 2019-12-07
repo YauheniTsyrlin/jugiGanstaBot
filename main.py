@@ -203,7 +203,7 @@ def isUserBan(login: str):
     userIAm = getUserByLogin(login)
     if userIAm:
         if userIAm.getTimeBan():
-            tz = datetime.strptime('03:00:00',"%H:%M:%S")
+            tz = config.SERVER_MSK_DIFF
             date_for = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
             if date_for.timestamp() < userIAm.getTimeBan():
                 return True
@@ -1246,7 +1246,7 @@ def main_message(message):
                         goat = getMyGoat(message.from_user.username)
 
                         if response.split(response.split(":")[1])[1][1:].strip() == '*':
-                            tz = datetime.strptime('03:00:00',"%H:%M:%S")
+                            tz = config.SERVER_MSK_DIFF
                             plan_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
                             if plan_date.hour > 17:
                                 rade_date = plan_date + timedelta(days=1)
@@ -1357,7 +1357,7 @@ def main_message(message):
                             return 
 
                         # Проверка на будущую дату
-                        tz = datetime.strptime('03:00:00',"%H:%M:%S")
+                        tz = config.SERVER_MSK_DIFF
                         dt = rade_date - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
                         if (dt.timestamp() < datetime.now().timestamp()):
                             msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('timeisout'))
@@ -1452,7 +1452,7 @@ def main_message(message):
                             if not privateChat:
                                 bot.pin_chat_message(message.chat.id, msg.message_id)
                     elif 'remind' == response.split(':')[1]:
-                        # jugi:remind:2019-11-04T17:13:00+03:00
+                        # jugi:remind:2019-11-04T17:12:00+02:00
                         if not userIAm.getLocation():
                             send_messages_big(message.chat.id, text='Я не знаю из какого ты города. Напиши мне "Я из Одессы" или "Я из Москвы" и этого будет достаточно. Иначе, я буду думать, что ты живешь во временном поясе по Гринвичу, а это +3 часа к Москве, +2 к Киеву и т.д. И ты не сможешь просить меня напомнить о чем-либо!')
                             return
@@ -1950,7 +1950,7 @@ def pending_message():
         u = pending_messages.update_one(myquery, newvalues)
 
 def rade():
-    tz = datetime.strptime('03:00:00',"%H:%M:%S")
+    tz = config.SERVER_MSK_DIFF
     now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
     
     # 497065022 goat['chat'] Джу
@@ -1967,7 +1967,7 @@ def rade():
         logger.info('Rade time now!')
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
-            send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report, reply_markup=None)
+            send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report)
 
             registered_users.update_many(
                 {'band':{'$in':getGoatBands(goat.get('name'))}},
