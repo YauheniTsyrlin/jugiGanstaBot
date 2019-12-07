@@ -938,6 +938,9 @@ def main_message(message):
             find = False
             report = ''
             counter = 0
+            report_goat_info = ''
+            goats = []
+
             for s in strings:
                 if '|' in strings[i]:
                     name = strings[i]
@@ -946,6 +949,19 @@ def main_message(message):
                     name = name.split('@')[1].split('|')[0].strip()
                     warior = getWariorByName(name, fraction)
                     if warior:
+                        if warior.getGoat():
+                            findGoat = False
+                            for g in goats:
+                                if g['name'] == warior.getGoat():
+                                   g.update({'counter': g['counter']+1})
+                                   findGoat = True
+                            
+                            if not findGoat:
+                                goat = {}
+                                goat.update({'counter': 1})
+                                goat.update({'name': warior.getGoat()})
+                                goats.append(goat)
+
                         find = True
                         report = report + f'{warior.getProfileSmall()}\n'
                     else:
@@ -957,10 +973,15 @@ def main_message(message):
             if counter > 0:
                 report = report + f'...И еще {str(counter)} выживших.'
             
+            if len(goats) > 0:
+                for goat in goats:
+                    report_goat_info = report_goat_info + f'🐐 {goat["name"]}: <b>{goat["counter"]}</b>\n'
+                report_goat_info = report_goat_info + '\n'
+
             if not find:
                 send_messages_big(message.chat.id, text='Не нашел никого!')
             else:
-                send_messages_big(message.chat.id, text=report)
+                send_messages_big(message.chat.id, text=report_goat_info + report)
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_you_cant'))
         return
