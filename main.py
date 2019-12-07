@@ -1021,11 +1021,7 @@ def main_message(message):
             alianusersReport = ''
             aliancounter = 0
 
-            registered_users.update_many(
-                {'band': band},
-                { '$set': { 'raidlocation': None} }
-            )
-            updateUser(None)
+
             
             # 🤘👊🏅
             for s in strings:
@@ -1034,6 +1030,11 @@ def main_message(message):
                     if not isUsersBand(message.from_user.username, band):
                         send_messages_big(message.chat.id, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow('not_right_band'))
                         return
+                    registered_users.update_many(
+                        {'band': band},
+                        { '$set': { 'raidlocation': None} }
+                    )
+                    updateUser(None)
 
                 if '👂' in strings[i]:
                     name = strings[i]
