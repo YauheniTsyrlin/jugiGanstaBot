@@ -2039,8 +2039,6 @@ def radeReport(goat):
                             }):
         if datetime.fromtimestamp(rade.get('rade_date')).hour == hour:
             planed_rade_location = rade.get('rade_location')
-            logger.info(f'FIND')
-
 
     goat_report = {}
     goat_report.update({'name': goat.get('name')})
@@ -2094,14 +2092,14 @@ def radeReport(goat):
                 report = report + f'{counter}. {u.getName()} 📍{location}км\n'
             report = report + f'\n'
 
-        if len(bands.get("usersoffrade")):
-            counter = 0
-            report = report + f'🐢 <b>Бандиты в проёбе</b>:\n'
-            for u in bands.get("usersoffrade"):
-                counter = counter + 1
-                report = report + f'{counter}. {u.getName()}\n'
-            report = report + f'\n'
-
+        # if len(bands.get("usersoffrade")):
+        #     counter = 0
+        #     report = report + f'🐢 <b>Бандиты в проёбе</b>:\n'
+        #     for u in bands.get("usersoffrade"):
+        #         counter = counter + 1
+        #         report = report + f'{counter}. {u.getName()}\n'
+        #     report = report + f'\n'
+        ping_on_reade(bands.get("usersoffrade"), 497065022)
     return report
 
 # 20 secund
