@@ -1300,7 +1300,6 @@ def main_message(message):
                             if goatName == goat.get('name'):
                                 report = radeReport(goat)
                                 send_messages_big(message.chat.id, text=report)
-
                     elif 'clearrade' == response.split(':')[1]:
                         # jugi:clearrade:*
                         if not isAdmin(message.from_user.username):
@@ -2006,6 +2005,40 @@ def rade():
         updateUser(None)
         
 def radeReport(goat):
+
+    tz = config.SERVER_MSK_DIFF
+    plan_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+    rade_date = plan_date
+    hour = rade_date.hour
+    planed_rade_location = None
+
+    if plan_date.hour >= 17:
+        rade_date = rade_date + timedelta(days=1)
+    
+    if rade_date.hour >=1 and rade_date.hour <9:
+        hour = 9
+    elif rade_date.hour >=9 and rade_date.hour <17:
+        hour = 17
+    if rade_date.hour >=17 and rade_date.hour <1:
+        hour = 1
+    
+    for rade in rades.find({
+                                '$and' : 
+                                [
+                                    {
+                                        'rade_date': {
+                                        '$gte': (rade_date.replace(hour=0, minute=0, second=0, microsecond=0)).timestamp(),
+                                        '$lt': (rade_date.replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
+                                        }},
+                                    {
+                                        'goat': goat
+                                    }
+                                ]
+                            }):
+        if datetime.fromtimestamp(rade.get('rade_date')).hour == hour:
+            planed_rade_location = rade.get('rade_location')
+
+
     goat_report = {}
     goat_report.update({'name': goat.get('name')})
     goat_report.update({'chat': goat.get('chat')})
@@ -2052,6 +2085,9 @@ def radeReport(goat):
                 location = str(u.getRaidLocation())
                 if u.getRaidLocation() == 1:
                     location = '?'
+                if planed_rade_location:
+                    if planed_rade_location == u.getRaidLocation():
+                        location = '✔️' + location
                 report = report + f'{counter}. @{u.getLogin()} 📍{location}км\n'
             report = report + f'\n'
 
