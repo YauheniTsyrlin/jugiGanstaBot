@@ -195,7 +195,7 @@ def updateUser(newuser: users.User):
         newvalues = { "$set": json.loads(newuser.toJSON()) }
         z = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
 
-    USERS_ARR.clear()
+    USERS_ARR = []
     for x in registered_users.find():
         USERS_ARR.append(users.importUser(x))
 
