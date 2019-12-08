@@ -1204,7 +1204,7 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=f'У бандита {login} нет банды!')
                 return
 
-            if not isUsersBand(message.from_user.username, user.getBand()):
+            if user.getBand() and not isUsersBand(message.from_user.username, user.getBand()):
                 send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
                 return
 
