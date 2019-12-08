@@ -2021,12 +2021,13 @@ def radeReport(goat):
         band_arr.update({'usersonrade': []})
         band_arr.update({'usersoffrade': []})
 
+
         for user in list(USERS_ARR):
             # Обрабатываем по козлам
-            if user.getBand() == band.get('name'):
+            if user.getBand() and user.getBand() == band.get('name'):
                 band_arr.update({'weight_all': band_arr.get('weight_all') + user.getRaidWeight()})
                 band_arr.update({'counter_all': band_arr.get('counter_all') + 1}) 
-                if not user.getRaidLocation() == None :
+                if user.getRaidLocation():
                     band_arr.update({'weight_on_rade': band_arr.get('weight_on_rade') + user.getRaidWeight()})
                     band_arr.update({'counter_on_rade': band_arr.get('counter_on_rade') + 1}) 
                     band_arr.get('usersonrade').append(user)
