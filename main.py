@@ -1068,7 +1068,6 @@ def main_message(message):
                         else:
                             fuckupraderw = fuckupraderw + u.getRaidWeight()
                             fuckupradecounter = fuckupradecounter + 1
-                            u.update({'real_location': km})
                             fuckupusers.append(u)
                             fuckupusersReport = fuckupusersReport + f'{fuckupradecounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n' 
                     else:
@@ -1097,22 +1096,7 @@ def main_message(message):
                 bot.delete_message(message.chat.id, message.message_id)
                 send_messages_big(message.chat.id, text=report)
                 
-                # Пингуем
-                counter = 0
-                fusers = []
-                fuckupusersReport = f'🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n\n'
-                for fu in fuckupusers:
-                    counter = counter + 1
-                    fusers.append(fu)
-                    fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()} 📍{fu.get("real_location")}км\n' 
-                    if counter % 5 == 0:
-                        send_messages_big(message.chat.id, text=fuckupusersReport)
-                        fusers = []
-                        fuckupusersReport = f'🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n\n'
-
-                if len(fusers) > 0:
-                    send_messages_big(message.chat.id, text=fuckupusersReport)
-
+                ping_on_reade(fuckupusers, message.chat.id)
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('no_one_on_rade'))
         else:
@@ -1976,6 +1960,23 @@ def pending_message():
         myquery = {"_id": ObjectId(id_str)}
         newvalues = { "$set": { "state": 'CANCEL'} }
         u = pending_messages.update_one(myquery, newvalues)
+
+def ping_on_reade(fuckupusers, chat_id):
+    # Пингуем
+    counter = 0
+    fusers = []
+    fuckupusersReport = f'🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n\n'
+    for fu in fuckupusers:
+        counter = counter + 1
+        fusers.append(fu)
+        fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()}\n' 
+        if counter % 5 == 0:
+            send_messages_big(chat_id, text=fuckupusersReport)
+            fusers = []
+            fuckupusersReport = f'🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n\n'
+
+    if len(fusers) > 0:
+        send_messages_big(chat_id, text=fuckupusersReport)
 
 def rade():
     tz = config.SERVER_MSK_DIFF
