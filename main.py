@@ -2032,7 +2032,7 @@ def radeReport(goat):
                                         '$lt': (rade_date.replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
                                         }},
                                     {
-                                        'goat': goat
+                                        'goat': goat.get('name')
                                     }
                                 ]
                             }):
