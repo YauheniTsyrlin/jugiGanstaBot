@@ -1200,13 +1200,10 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
                 return
 
-            if not user.getBand():
-                send_messages_big(message.chat.id, text=f'У бандита {login} нет банды!')
-                return
-
-            if user.getBand() and not isUsersBand(message.from_user.username, user.getBand()):
-                send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
-                return
+            if not isAdmin(message.from_user.username):
+                if not isUsersBand(message.from_user.username, user.getBand()):
+                    send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
+                    return
 
             myquery = { "login": f"{login}" }
             doc = registered_users.delete_one(myquery)
