@@ -1963,9 +1963,12 @@ def pending_message():
 
 def ping_on_reade(fuckupusers, chat_id):
     # Пингуем
+    if len(fuckupusers) == 0:
+        return
+
     counter = 0
     fusers = []
-    fuckupusersReport = f'🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n\n'
+    fuckupusersReport = f'🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n🤟<b>{fuckupusers[0].getBand()}</b>\n'
     for fu in fuckupusers:
         counter = counter + 1
         fusers.append(fu)
