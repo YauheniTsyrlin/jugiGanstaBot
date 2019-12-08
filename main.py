@@ -1063,8 +1063,6 @@ def main_message(message):
                             u.setRaidLocation(km)
                             updateUser(u)
                             onradecounter = onradecounter + 1
-                            if km == 1:
-                                km = '?'
                             onradeReport = onradeReport + f'{onradecounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n'
 
                         else:
@@ -2051,7 +2049,10 @@ def radeReport(goat):
             counter = 0            
             for u in bands.get("usersonrade"):
                 counter = counter + 1
-                report = report + f'{counter}. @{u.getLogin()} 📍{u.getRaidLocation()}км\n'
+                location = str(user.getRaidLocation())
+                if u.getRaidLocation() == 1:
+                    location = '?'
+                report = report + f'{counter}. @{u.getLogin()} 📍{location}км\n'
             report = report + f'\n'
 
         if len(bands.get("usersoffrade")):
