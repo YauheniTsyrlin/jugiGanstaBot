@@ -2021,7 +2021,8 @@ def radeReport(goat):
         hour = 17
     if rade_date.hour >=17 or rade_date.hour <1:
         hour = 1
-    print(f'{hour}')
+    logger.info(f'hour: {hour}')
+
     for rade in rades.find({
                                 '$and' : 
                                 [
@@ -2035,10 +2036,11 @@ def radeReport(goat):
                                     }
                                 ]
                             }):
-        print(str(datetime.fromtimestamp(rade.get('rade_date')).hour))                  
+        logger.info(f'rade_date.hour: {datetime.fromtimestamp(rade.get("rade_date")).hour}')
+            
         if datetime.fromtimestamp(rade.get('rade_date')).hour == hour:
             planed_rade_location = rade.get('rade_location')
-            print('FIND')
+            logger.info(f'FIND')
 
 
     goat_report = {}
