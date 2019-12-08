@@ -1068,6 +1068,7 @@ def main_message(message):
                         else:
                             fuckupraderw = fuckupraderw + u.getRaidWeight()
                             fuckupradecounter = fuckupradecounter + 1
+                            u.update({'real_location': km})
                             fuckupusers.append(u)
                             fuckupusersReport = fuckupusersReport + f'{fuckupradecounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n' 
                     else:
@@ -1103,7 +1104,7 @@ def main_message(message):
                 for fu in fuckupusers:
                     counter = counter + 1
                     fusers.append(fu)
-                    fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()} 📍{fu.getRaidLocation()}км\n' 
+                    fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()} 📍{fu.get("real_location")}км\n' 
                     if counter % 5 == 0:
                         send_messages_big(message.chat.id, text=fuckupusersReport)
                         fusers = []
@@ -2021,7 +2022,6 @@ def radeReport(goat):
         hour = 17
     if rade_date.hour >=17 or rade_date.hour <1:
         hour = 1
-    logger.info(f'hour: {hour}')
 
     for rade in rades.find({
                                 '$and' : 
@@ -2036,8 +2036,6 @@ def radeReport(goat):
                                     }
                                 ]
                             }):
-        logger.info(f'rade_date.hour: {datetime.fromtimestamp(rade.get("rade_date")).hour}')
-            
         if datetime.fromtimestamp(rade.get('rade_date')).hour == hour:
             planed_rade_location = rade.get('rade_location')
             logger.info(f'FIND')
@@ -2092,7 +2090,7 @@ def radeReport(goat):
                 if planed_rade_location:
                     if planed_rade_location == u.getRaidLocation():
                         location = '✔️' + location
-                report = report + f'{counter}. @{u.getLogin()} 📍{location}км\n'
+                report = report + f'{counter}. {u.getName()} 📍{location}км\n'
             report = report + f'\n'
 
         if len(bands.get("usersoffrade")):
@@ -2100,7 +2098,7 @@ def radeReport(goat):
             report = report + f'🐢 <b>Бандиты в проёбе</b>:\n'
             for u in bands.get("usersoffrade"):
                 counter = counter + 1
-                report = report + f'{counter}. @{u.getLogin()}\n'
+                report = report + f'{counter}. {u.getName()}\n'
             report = report + f'\n'
 
     return report
