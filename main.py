@@ -1976,7 +1976,7 @@ def ping_on_reade(fuckupusers, chat_id):
         if counter % 5 == 0:
             send_messages_big(chat_id, text=fuckupusersReport)
             fusers = []
-            fuckupusersReport = f'🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n\n'
+            fuckupusersReport = f'🐢 <b>Бандиты! {getResponseDialogFlow("rade_motivation")}</b>\n🤟<b>{fuckupusers[0].getBand()}</b>\n'
 
     if len(fusers) > 0:
         send_messages_big(chat_id, text=fuckupusersReport)
@@ -1993,14 +1993,14 @@ def rade():
     if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second <= 15:
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
-            send_messages_big(497065022, text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
+            send_messages_big(goat['chat'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second <= 15:
         logger.info('Rade time now!')
 
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
-            send_messages_big(497065022, text='<b>Результаты рейда</b>\n' + report)
+            send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report)
         
         for goat in getSetting('GOATS_BANDS'):
             registered_users.update_many(
@@ -2102,7 +2102,7 @@ def radeReport(goat):
         #         counter = counter + 1
         #         report = report + f'{counter}. {u.getName()}\n'
         #     report = report + f'\n'
-        ping_on_reade(bands.get("usersoffrade"), 497065022)
+        ping_on_reade(bands.get("usersoffrade"), goat['chat'])
     return report
 
 # 20 secund
