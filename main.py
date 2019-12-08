@@ -996,7 +996,7 @@ def main_message(message):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
             u = getUserByLogin(message.from_user.username)
-            u.setRaidLocation(0)
+            u.setRaidLocation(1)
             updateUser(u)
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
         else:
