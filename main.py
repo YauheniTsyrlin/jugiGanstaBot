@@ -1057,9 +1057,10 @@ def main_message(message):
                     if u:
                         allrw = allrw + u.getRaidWeight()
                         allcounter = allcounter + 1
-                        u.setRaidLocation(km)
+                        
                         if '👊' in strings[i]:
                             onraderw = onraderw + u.getRaidWeight()
+                            u.setRaidLocation(km)
                             updateUser(u)
                             onradecounter = onradecounter + 1
                             onradeReport = onradeReport + f'{onradecounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n'
