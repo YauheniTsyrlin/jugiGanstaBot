@@ -1190,8 +1190,9 @@ def main_message(message):
                     
         elif (callJugi and 'уволить @' in message.text.lower()):
             if not isGoatBoss(message.from_user.username):
-                send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_goat_boss'))
-                return
+                if not isAdmin(message.from_user.username):
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_goat_boss'))
+                    return
 
             login = message.text.split('@')[1].strip()
             user = getUserByLogin(login)
