@@ -1043,7 +1043,7 @@ def main_message(message):
                     spliter = ''
                     km = ''
                     if '📍' in strings[i]:
-                        km =  (strings[i].split('📍')[1].split('km')[0].strip())
+                        km =  int(strings[i].split('📍')[1].split('km')[0].strip())
                         spliter = '📍'
 
                     elif '👟' in strings[i]:
@@ -1063,6 +1063,8 @@ def main_message(message):
                             u.setRaidLocation(km)
                             updateUser(u)
                             onradecounter = onradecounter + 1
+                            if km == 1:
+                                km = '?'
                             onradeReport = onradeReport + f'{onradecounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n'
 
                         else:
