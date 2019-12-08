@@ -2049,7 +2049,7 @@ def radeReport(goat):
             counter = 0            
             for u in bands.get("usersonrade"):
                 counter = counter + 1
-                location = str(user.getRaidLocation())
+                location = str(u.getRaidLocation())
                 if u.getRaidLocation() == 1:
                     location = '?'
                 report = report + f'{counter}. @{u.getLogin()} 📍{location}км\n'
