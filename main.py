@@ -1021,8 +1021,6 @@ def main_message(message):
             alianusersReport = ''
             aliancounter = 0
 
-
-            
             # 🤘👊🏅
             for s in strings:
                 if '🏅' in strings[i] and '🤘' in strings[i]:
@@ -2028,7 +2026,7 @@ def radeReport(goat):
             if user.getBand() == band.get('name'):
                 band_arr.update({'weight_all': band_arr.get('weight_all') + user.getRaidWeight()})
                 band_arr.update({'counter_all': band_arr.get('counter_all') + 1}) 
-                if user.getRaidLocation():
+                if not user.getRaidLocation() == None :
                     band_arr.update({'weight_on_rade': band_arr.get('weight_on_rade') + user.getRaidWeight()})
                     band_arr.update({'counter_on_rade': band_arr.get('counter_on_rade') + 1}) 
                     band_arr.get('usersonrade').append(user)
