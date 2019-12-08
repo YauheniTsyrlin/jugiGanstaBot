@@ -1992,6 +1992,7 @@ def rade():
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second <= 15:
         logger.info('Rade time now!')
+        updateUser(None)
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
             send_messages_big(497065022, text='<b>Результаты рейда</b>\n' + report)
