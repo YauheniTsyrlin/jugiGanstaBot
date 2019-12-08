@@ -2019,9 +2019,9 @@ def radeReport(goat):
         hour = 9
     elif rade_date.hour >=9 and rade_date.hour <17:
         hour = 17
-    if rade_date.hour >=17 and rade_date.hour <1:
+    if rade_date.hour >=17 or rade_date.hour <1:
         hour = 1
-    
+    print(f'{hour}')
     for rade in rades.find({
                                 '$and' : 
                                 [
@@ -2035,8 +2035,10 @@ def radeReport(goat):
                                     }
                                 ]
                             }):
+        print(str(datetime.fromtimestamp(rade.get('rade_date')).hour))                  
         if datetime.fromtimestamp(rade.get('rade_date')).hour == hour:
             planed_rade_location = rade.get('rade_location')
+            print('FIND')
 
 
     goat_report = {}
