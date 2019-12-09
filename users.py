@@ -67,8 +67,6 @@ def updateUser(newUser, oldUser):
 
 def importUser(registered_user):
         u = User(registered_user['login'], registered_user['timeUpdate'],'')
-        if not registered_user['raidlocation'] == None:
-            print(registered_user['login'] + ':' + str(registered_user['raidlocation']))
 
         u.login          = registered_user['login']
         u.name           = registered_user['name']
@@ -100,7 +98,8 @@ def importUser(registered_user):
             u.status     = registered_user['status']
         if (registered_user.get('raid')):    
             u.raid     = registered_user['raid']
-        u.raidlocation     = registered_user['raidlocation']
+
+        u.setRaidLocation(registered_user['raidlocation'])
 
         return u
 

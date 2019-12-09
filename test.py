@@ -117,7 +117,12 @@ def radeReport(goat):
 print('\n======== radeReport ==========\n')
 for goat in getSetting('GOATS_BANDS'):
     report = radeReport(goat)
-    print(report)
+    # print(report)
+
+for b in getGoatBands('АdaptationǁȺǁ'):
+    print(b)
+for x in registered_users.find({'band':{'$in':getGoatBands('АdaptationǁȺǁ')}}):
+    print(x['name'])
 
 # for goat in getSetting('GOATS_BANDS'):
 #     registered_users.update_many(

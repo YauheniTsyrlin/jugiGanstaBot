@@ -195,7 +195,7 @@ def updateUser(newuser: users.User):
         newvalues = { "$set": json.loads(newuser.toJSON()) }
         z = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
 
-    USERS_ARR = []
+    USERS_ARR.clear()
     for x in registered_users.find():
         USERS_ARR.append(users.importUser(x))
 
@@ -1096,7 +1096,7 @@ def main_message(message):
                 bot.delete_message(message.chat.id, message.message_id)
                 send_messages_big(message.chat.id, text=report)
                 
-                ping_on_reade(fuckupusers, message.chat.id)
+                # ping_on_reade(fuckupusers, message.chat.id)
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('no_one_on_rade'))
         else:
@@ -1208,7 +1208,10 @@ def main_message(message):
             if user:
                 warior = getWariorByName(user.getName(), user.getFraction())
                 if (warior and warior.photo):
-                    bot.send_photo(message.chat.id, warior.photo, user.getProfile())
+                    try:
+                        bot.send_photo(message.chat.id, warior.photo, user.getProfile())
+                    except:
+                        send_messages_big(message.chat.id, text=user.getProfile())
                 else:
                     send_messages_big(message.chat.id, text=user.getProfile())
             else:
@@ -1285,6 +1288,7 @@ def main_message(message):
                             if goatName == goat.get('name'):
                                 report = radeReport(goat)
                                 send_messages_big(message.chat.id, text=report)
+
                     elif 'clearrade' == response.split(':')[1]:
                         # jugi:clearrade:*
                         if not isAdmin(message.from_user.username):
@@ -1299,11 +1303,11 @@ def main_message(message):
                             if not isAdmin(message.from_user.username):
                                 send_messages_big(message.chat.id, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'))
                                 return
-
                         registered_users.update_many(
                             {'band':{'$in':getGoatBands(goatName)}},
                             { '$set': { 'raidlocation': None} }
                         )
+
                         updateUser(None)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))        
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
@@ -1993,14 +1997,14 @@ def rade():
     if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second <= 15:
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
-            send_messages_big(goat['chat'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
+            send_messages_big(497065022, text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second <= 15:
         logger.info('Rade time now!')
 
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
-            send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report)
+            send_messages_big(497065022, text='<b>Результаты рейда</b>\n' + report)
         
         for goat in getSetting('GOATS_BANDS'):
             registered_users.update_many(
@@ -2102,7 +2106,8 @@ def radeReport(goat):
         #         counter = counter + 1
         #         report = report + f'{counter}. {u.getName()}\n'
         #     report = report + f'\n'
-        ping_on_reade(bands.get("usersoffrade"), goat['chat'])
+        # goat['chat']
+        ping_on_reade(bands.get("usersoffrade"), 497065022)
     return report
 
 # 20 secund
