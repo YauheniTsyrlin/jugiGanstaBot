@@ -1998,7 +1998,7 @@ def rade():
     if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second <= 15:
         updateUser(None)
         for goat in getSetting('GOATS_BANDS'):
-            report = radeReport(goat)
+            report = radeReport(goat, True)
             send_messages_big(goat['chat'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second <= 15:
@@ -2016,7 +2016,7 @@ def rade():
             )
         updateUser(None)
         
-def radeReport(goat):
+def radeReport(goat, ping=False):
 
     tz = config.SERVER_MSK_DIFF
     plan_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
@@ -2101,16 +2101,8 @@ def radeReport(goat):
                         location = '✔️' + location
                 report = report + f'{counter}. {u.getName()} 📍{location}км\n'
             report = report + f'\n'
-
-        # if len(bands.get("usersoffrade")):
-        #     counter = 0
-        #     report = report + f'🐢 <b>Бандиты в проёбе</b>:\n'
-        #     for u in bands.get("usersoffrade"):
-        #         counter = counter + 1
-        #         report = report + f'{counter}. {u.getName()}\n'
-        #     report = report + f'\n'
-        # goat['chat'] 497065022
-        ping_on_reade(bands.get("usersoffrade"), goat['chat'] )
+        if ping:
+            ping_on_reade(bands.get("usersoffrade"), goat['chat'] )
     return report
 
 # 20 secund
