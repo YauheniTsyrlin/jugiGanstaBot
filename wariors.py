@@ -356,7 +356,7 @@ class Warior(object):
         return string + '\n' + second_string
 
     def getProfileSmall(self):
-        first_string = f'┌{self.getFractionSmall()}{tools.getTimeEmoji(self.timeUpdate)} {self.name}'
+        first_string = f'┌{tools.getTimeEmoji(self.timeUpdate)}{self.getFractionSmall()} {self.name}'
         
         string = '├'
         if self.goat:
