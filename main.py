@@ -51,6 +51,7 @@ logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
 bot = telebot.TeleBot(config.TOKEN)
 
+print(1)
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
     USERS_ARR.append(users.importUser(x))
@@ -1995,19 +1996,14 @@ def rade():
     logger.info('check rade time: now ' + str(now_date))
     
     if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second <= 15:
-        USERS_ARR.clear()
-        for x in registered_users.find():
-            USERS_ARR.append(users.importUser(x))
-
+        updateUser(None)
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
             send_messages_big(goat['chat'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second <= 15:
         logger.info('Rade time now!')
-        USERS_ARR.clear()
-        for x in registered_users.find():
-            USERS_ARR.append(users.importUser(x))
+        updateUser(None)
 
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
@@ -2113,8 +2109,8 @@ def radeReport(goat):
         #         counter = counter + 1
         #         report = report + f'{counter}. {u.getName()}\n'
         #     report = report + f'\n'
-        # goat['chat']
-        ping_on_reade(bands.get("usersoffrade"), 497065022)
+        # goat['chat'] 497065022
+        ping_on_reade(bands.get("usersoffrade"), goat['chat'] )
     return report
 
 # 20 secund
@@ -2170,7 +2166,6 @@ def main_loop():
 
 if __name__ == '__main__': 
     try:
-        main_loop()
         proccess = Process(target=fight_job, args=())
         proccess.start() # Start new thread
 
@@ -2178,7 +2173,9 @@ if __name__ == '__main__':
         proccessPending_messages.start() # Start new thread
 
         proccessRade = Process(target=rade_job, args=())
-        proccessRade.start() # Start new thread       
+        proccessRade.start() # Start new thread 
+
+        main_loop()      
     except KeyboardInterrupt:
         print('\nExiting by user request.\n')
         sys.exit(0)
