@@ -372,7 +372,9 @@ class Warior(object):
                 string = string + f'🤘{band}'
             else:
                 string = string + f'\n├🤘{band}'
-        
+        if string == '├':
+            string = ''
+
 
         second_string = '└'
 
