@@ -8,12 +8,12 @@ def deEmojify(inputString):
 
 def getTimeEmoji(time):
     if time > (datetime.now() - timedelta(days=7)).timestamp():
-        return '1👶'
+        return '👶'
     elif time > (datetime.now() - timedelta(days=14)).timestamp():
-        return '2👦'
+        return '👦'
     elif time > (datetime.now() - timedelta(days=28)).timestamp():
-        return '3👨'
+        return '👨'
     elif time > (datetime.now() - timedelta(days=56)).timestamp():
-        return '4👨‍🦳'
+        return '👨‍🦳'
     else:
-        return '5👴'
+        return '👴'

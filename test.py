@@ -117,22 +117,10 @@ def radeReport(goat):
 
 print('\n======== radeReport ==========\n')
 
-print(
-        tools.getTimeEmoji((datetime.now() - timedelta(days=0)).timestamp())
-    )
+s = '🗣Харизма: 210 🤸🏽<U+200D>♂️Ловкость: 210(+50)'
+print(int(25) + int(s.split(': ')[1].split('(+')[1].split(')')[0].strip()))
 
-print(
-        tools.getTimeEmoji((datetime.now() - timedelta(days=9)).timestamp())
-    )
-print(
-        tools.getTimeEmoji((datetime.now() - timedelta(days=20)).timestamp())
-    )
-print(
-        tools.getTimeEmoji((datetime.now() - timedelta(days=40)).timestamp())
-    )
-print(
-        tools.getTimeEmoji((datetime.now() - timedelta(days=70)).timestamp())
-    )
+
 # for goat in getSetting('GOATS_BANDS'):
 #     report = radeReport(goat)
 #     # print(report)
