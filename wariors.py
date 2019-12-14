@@ -372,9 +372,11 @@ class Warior(object):
                 string = string + f'🤘{band}'
             else:
                 string = string + f'\n├🤘{band}'
+        
         if string == '├':
             string = ''
-
+        else:
+            string = string + '\n'
 
         second_string = '└'
 
@@ -399,7 +401,7 @@ class Warior(object):
         else:
             second_string = second_string + '\n'
 
-        return first_string + '\n' + string + '\n' + second_string
+        return first_string + '\n' + string + second_string
 
     def getProfile(self):
         string = ''
