@@ -37,7 +37,7 @@ import random
 import pymongo
 from bson.objectid import ObjectId
 
-myclient = pymongo.MongoClient(f"mongodb://{config.WEBHOOK_HOST}:27017/")
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["jugidb"]
 registered_users = mydb["users"]
 registered_wariors = mydb["wariors"]
