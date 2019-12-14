@@ -356,21 +356,22 @@ class Warior(object):
         return string + '\n' + second_string
 
     def getProfileSmall(self):
-        first_string = f'┌{self.getFractionSmall()}{self.name}'
+        first_string = f'┌{self.getFractionSmall()}{tools.getTimeEmoji(self.timeUpdate)} {self.name}'
         
         string = '├'
         if self.goat:
             string = string + f'🐐{self.goat}'
         band = ''
         if (not self.band) or (self.band == 'NO_BAND'):
-            band = ''
+            band = None
         else:
             band = self.band
         
-        if string == '├':
-            string = string + f'🤘{band}'
-        else:
-            string = string + f'\n├🤘{band}'
+        if (band):
+            if string == '├':
+                string = string + f'🤘{band}'
+            else:
+                string = string + f'\n├🤘{band}'
         
 
         second_string = '└'
@@ -390,6 +391,7 @@ class Warior(object):
         else:
             if self.damage:
                 second_string = second_string + f'💥{self.damage}' 
+        
         if second_string == '└':
             second_string = '└...'
         else:
