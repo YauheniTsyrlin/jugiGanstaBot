@@ -324,7 +324,7 @@ class Warior(object):
 
         band = ''
         if (not self.band) or (self.band == 'NO_BAND'):
-            band = 'без банды'
+            band = ''
         else:
             band = self.band
         
@@ -363,7 +363,7 @@ class Warior(object):
             string = string + f'🐐{self.goat}'
         band = ''
         if (not self.band) or (self.band == 'NO_BAND'):
-            band = 'без банды'
+            band = ''
         else:
             band = self.band
         
@@ -446,8 +446,7 @@ class Warior(object):
 
         string = string + '\n'
 
-        string = string + '⏰ ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.timeUpdate)) +'\n'
-        #print(string)
+        string = string + f'⏰{tools.getTimeEmoji(self.timeUpdate)} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.timeUpdate)) +'\n'
         return string
 
     def setName(self, name):

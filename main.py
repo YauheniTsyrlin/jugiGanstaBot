@@ -51,7 +51,6 @@ logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
 bot = telebot.TeleBot(config.TOKEN)
 
-print(1)
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
     USERS_ARR.append(users.importUser(x))

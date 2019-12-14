@@ -233,7 +233,7 @@ class User(object):
         string = string + f'└🏋️‍♂️ Вес на рейде: {self.getRaidWeight()}\n'
         string = string + f'\n'
 
-        string = string + '⏰ ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeUpdate))) +'\n'
+        string = string + f'⏰{tools.getTimeEmoji(self.timeUpdate)} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeUpdate))) +'\n'
         if self.timeBan:
             if self.timeBan > datetime.datetime.now().timestamp():
                 string = string + '☠️ Забанен до ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeBan))) +'\n'  

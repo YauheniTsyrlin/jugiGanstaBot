@@ -5,6 +5,7 @@ from dateutil.parser import parse
 from bson.objectid import ObjectId
 import pymongo
 import config
+import tools
 import json
 import sys
 
@@ -115,14 +116,31 @@ def radeReport(goat):
 
 
 print('\n======== radeReport ==========\n')
-for goat in getSetting('GOATS_BANDS'):
-    report = radeReport(goat)
-    # print(report)
 
-for b in getGoatBands('АdaptationǁȺǁ'):
-    print(b)
-for x in registered_users.find({'band':{'$in':getGoatBands('АdaptationǁȺǁ')}}):
-    print(x['name'])
+print(
+        tools.getTimeEmoji((datetime.now() - timedelta(days=0)).timestamp())
+    )
+
+print(
+        tools.getTimeEmoji((datetime.now() - timedelta(days=9)).timestamp())
+    )
+print(
+        tools.getTimeEmoji((datetime.now() - timedelta(days=20)).timestamp())
+    )
+print(
+        tools.getTimeEmoji((datetime.now() - timedelta(days=40)).timestamp())
+    )
+print(
+        tools.getTimeEmoji((datetime.now() - timedelta(days=70)).timestamp())
+    )
+# for goat in getSetting('GOATS_BANDS'):
+#     report = radeReport(goat)
+#     # print(report)
+
+# for b in getGoatBands('АdaptationǁȺǁ'):
+#     print(b)
+# for x in registered_users.find({'band':{'$in':getGoatBands('АdaptationǁȺǁ')}}):
+#     print(x['name'])
 
 # for goat in getSetting('GOATS_BANDS'):
 #     registered_users.update_many(
