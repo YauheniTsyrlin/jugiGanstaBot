@@ -80,7 +80,7 @@ print("#==========================#")
 myquery = { "code": 'REPORT_KILLERS' }
 newvalues = { "$set": { "value": 
                     {
-                        'from_date': datetime.datetime(2019, 12, 4, 18, 0, 0).timestamp(), 
+                        'from_date': datetime.datetime(2019, 12, 15, 12, 0, 0).timestamp(), 
                         'to_date': None
                     }
                 } 
