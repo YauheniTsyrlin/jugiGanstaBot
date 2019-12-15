@@ -24,6 +24,8 @@ def main_loop():
             call('mv /home/godfather/foo/*.py /home/godfather/jugiGanstaBot', shell=True)
             logger.info('remove /foo')
             call('rm -rf /home/godfather/foo', shell=True)
+            logger.info('update jugidb')
+            call('/home/godfather/jugiGanstaBot/updexec.sh', shell=True)
             logger.info('restar bot Jugi')
             call('sudo systemctl restart bot', shell=True)
             logger.info('OK bot')
