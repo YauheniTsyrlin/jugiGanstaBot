@@ -236,16 +236,17 @@ def getWariorByName(name: str, fraction: str):
             return warior
     return None
 
-def isKnownWarior(name: str):
+def isKnownWarior(name: str, fraction: str):
     for warior in list(WARIORS_ARR):
-        if warior.getName() and name.lower() == warior.getName().lower(): return True
+        if warior.getName() and name.lower() == warior.getName().lower() and warior.getFraction() == fraction: 
+            return True
     return False
 
 def update_warior(warior: wariors.Warior):
     if warior == None:
         pass
     else:
-        if isKnownWarior(warior.getName()):
+        if isKnownWarior(warior.getName(), warior.getFraction()):
             wariorToUpdate = getWariorByName(warior.getName(), warior.getFraction())
             updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
 

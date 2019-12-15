@@ -4,7 +4,6 @@ import time
 import tools
 
 def mergeWariors(warior, wariorToUpdate):
-
     if (warior.damage):
         if wariorToUpdate.damage:
             wariorToUpdate.damage = warior.damage
