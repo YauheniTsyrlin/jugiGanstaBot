@@ -58,6 +58,9 @@ def mergeWariors(warior, wariorToUpdate):
     if (warior.goat):
         wariorToUpdate.goat = warior.goat
 
+    if (warior.timeUpdate):
+        wariorToUpdate.timeUpdate = warior.timeUpdate
+
     return wariorToUpdate
 
 def getWarior(name, wariors):

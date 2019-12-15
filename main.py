@@ -236,17 +236,26 @@ def isKnownWarior(name: str):
         if warior.getName() and name.lower() == warior.getName().lower(): return True
     return False
 
-def update_wariors(newwariors: wariors.Warior):
-    if newwariors == None:
+def update_warior(warior: wariors.Warior):
+    if warior == None:
         pass
     else:
-        newvalues = { "$set": json.loads(newwariors.toJSON()) }
-        z = registered_wariors.update_one({"name": f"{newwariors.getName()}"}, newvalues)
+        if isKnownWarior(warior.getName()):
+            wariorToUpdate = getWariorByName(warior.getName(), warior.getFraction())
+            updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
+
+            newvalues = { "$set": json.loads(updatedWarior.toJSON()) }
+            z = registered_wariors.update_one({
+                "name": f"{updatedWarior.getName()}", 
+                "fraction": f"{updatedWarior.getFraction()}"
+                }, newvalues)
+        else:
+            registered_wariors.insert_one(json.loads(warior.toJSON()))
 
     WARIORS_ARR.clear()
     for x in registered_wariors.find():
         WARIORS_ARR.append(wariors.importWarior(x))
-
+        
 def get_rade_plan(rade_date, goat):
     plan_for_date = 'План рейдов на ' + time.strftime("%d-%m-%Y", time.gmtime( rade_date.timestamp() )) + '\n'
     find = False
@@ -362,27 +371,6 @@ def send_welcome(message):
     if response:
         bot.send_message(message.chat.id, text=response)
 
-def updateWarior(warior: wariors.Warior):
-
-        findWariors = False
-        for warior_in in list(WARIORS_ARR):
-            if (warior_in.getName() == warior.getName()):
-                findWariors = True
-
-        if findWariors:
-            # TODO Проверить, что нет более поздней версии бойца
-            wariorToUpdate = getWariorByName(warior.getName(), warior.getFraction())
-            updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
-
-            newvalues = { "$set": json.loads(updatedWarior.toJSON()) }
-            registered_wariors.update_one({"name": f"{warior.getName()}"}, newvalues)
-            
-            update_wariors(updatedWarior)
-
-        else:
-            registered_wariors.insert_one(json.loads(warior.toJSON()))
-            update_wariors(None)
-
 # Handle all other messages
 @bot.message_handler(content_types=['document'])
 def get_message_photo(message):
@@ -407,7 +395,9 @@ def get_message_photo(message):
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
         wariorShow = None
         for warior in ww:
-            updateWarior(warior)
+            s = f'⏰{tools.getTimeEmoji(warior.getTimeUpdate())} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(warior.getTimeUpdate()))
+            print(warior.getName() + ' ' + s)
+            update_warior(warior)
             if not isRegisteredUserName(warior.getName()):
                 wariorShow = warior
         
@@ -888,11 +878,8 @@ def main_message(message):
             if 'ТОП ИГРОКОВ:' in message.text:
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
                 for warior in ww:
-                    if isKnownWarior(warior.getName()):
-                        updateWarior(warior)
-                    else:
-                        x = registered_wariors.insert_one(json.loads(warior.toJSON()))
-                        update_wariors(None)
+                    update_warior(warior)
+
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                 return
 
@@ -919,7 +906,7 @@ def main_message(message):
             send_messages_big(message.chat.id, text=getResponseDialogFlow('dublicate'))
             return
         for warior in ww:
-            updateWarior(warior)
+            update_warior(warior)
         
         send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
         return
@@ -1170,7 +1157,10 @@ def main_message(message):
             for x in registered_wariors.find({'name':f'{name}'}):
                 warior = wariors.importWarior(x)
                 if (warior and warior.photo):
-                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                    try:
+                        bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                    except:
+                        send_messages_big(message.chat.id, text=warior.getProfile())
                 else:
                     send_messages_big(message.chat.id, text=warior.getProfile())
                     
