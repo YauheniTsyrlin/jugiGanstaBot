@@ -2103,7 +2103,8 @@ def radeReport(goat, ping=False):
                 report = report + f'{counter}. {u.getName()} 📍{location}км\n'
             report = report + f'\n'
         if ping:
-            ping_on_reade(bands.get("usersoffrade"), goat['chat'] )
+            if goat.get('ping'):
+                ping_on_reade(bands.get("usersoffrade"), goat['chat'] )
     return report
 
 # 20 secund
