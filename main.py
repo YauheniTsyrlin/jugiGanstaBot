@@ -2036,6 +2036,7 @@ def getPlanedRaidLocation(goatName: str):
     raidNone = {}
     raidNone.update({'rade_date': (raid_date.replace(hour=hour, minute=0, second=0, microsecond=0)).timestamp()})
     raidNone.update({'rade_location': None})
+    raidNone.update({'rade_text': None})
 
     for raid in plan_raids.find({
                                 '$and' : 
@@ -2069,6 +2070,7 @@ def saveRaidResult(goat):
                 row.update({'band': band.get('name')})
                 row.update({'goat': goat.get('name')})
                 row.update({'planed_location': location})
+                row.update({'planed_location_text': raid.get('rade_text')})
                 row.update({'user_location': None})
                 row.update({'on_raid': False})
                 row.update({'on_planed_location': False})
@@ -2081,7 +2083,9 @@ def saveRaidResult(goat):
 
 def radeReport(goat, ping=False):
 
-    planed_raid_location = getPlanedRaidLocation(goat.get('name')).get['rade_location']
+    raidInfo = getPlanedRaidLocation(goat.get('name'))
+    planed_raid_location = raidInfo.get['rade_location']
+    planed_raid_location_text = raidInfo.get['rade_text']
     goat_report = {}
     goat_report.update({'name': goat.get('name')})
     goat_report.update({'chat': goat.get('chat')})
@@ -2111,7 +2115,11 @@ def radeReport(goat, ping=False):
                     band_arr.get('usersoffrade').append(user)
         goat_report.get('bands').append(band_arr)
 
-    report = f'🐐<b>{goat_report.get("name")}</b>\n\n'
+    report = f'🐐<b>{goat_report.get("name")}</b>\n'
+    if planed_raid_location_text:
+        report = report + f'{planed_raid_location_text}\n'
+    report = report + '\n'
+    
     for bands in goat_report.get('bands'):
         report = report + f'🤟<b>{bands.get("name")}</b>\n'
         if bands.get("weight_all") > 0:
