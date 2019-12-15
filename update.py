@@ -78,15 +78,29 @@ print("#         SETTINGS         #")
 print("#==========================#")              
 
 myquery = { "code": 'REPORT_KILLERS' }
-newvalues = { "$set": { "value": {'from_date': datetime.datetime(2019, 12, 4, 18, 0, 0).timestamp(), 'to_date': None}} } 
+newvalues = { "$set": { "value": 
+                    {
+                        'from_date': datetime.datetime(2019, 12, 4, 18, 0, 0).timestamp(), 
+                        'to_date': None
+                    }
+                } 
+            } 
 u = settings.update_one(myquery, newvalues)
 
 myquery = { "code": 'ADMINISTRATOR' }
 newvalues = { "$set": { "value": 
-            [{'login': 'GonzikBenzyavsky'},
-             {'login': 'Innok27'},
-             {'login': 'WestMoscow'}]
-             } } 
+            [
+                {
+                    'login': 'GonzikBenzyavsky',
+                    'chat' : 497065022
+                },
+                {
+                    'login': 'Innok27',
+                    'chat' : None
+                }
+            ]
+        } } 
+             
 u = settings.update_one(myquery, newvalues)
 
 myquery = {'code': 'OUR_BAND'}

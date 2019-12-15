@@ -71,12 +71,17 @@ def getSetting(code: str):
 
 ADMIN_ARR = []
 for adm in list(getSetting('ADMINISTRATOR')):
-    ADMIN_ARR.append(adm.get('login'))
+    ADMIN_ARR.append(adm)
 
 def isAdmin(login: str):
     for adm in list(ADMIN_ARR):
-        if login.lower() == adm.lower(): return True
+        if login.lower() == adm.get('login').lower(): return True
     return False
+
+def getAdminChat(login: str):
+    for adm in list(ADMIN_ARR):
+        if login.lower() == adm.get('login').lower(): return adm.get('chat')
+    return None
 
 def isRegisteredUserName(name: str):
     name = tools.deEmojify(name)
@@ -888,6 +893,7 @@ def main_message(message):
             if findUser==False:   
                 x = registered_users.insert_one(json.loads(user.toJSON()))
                 updateUser(None)
+                send_message_to_admin(f'⚠️Внимание! Зарегистрировался новый пользователь.\n {user.getProfile()}')
             else:
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
                 updateUser(updatedUser)
@@ -1704,6 +1710,11 @@ def send_messages_big(chat_id: str, text: str, reply_markup=None):
 
     msg = bot.send_message(chat_id, text=tmp, parse_mode='HTML', reply_markup=reply_markup)
     return msg
+
+def send_message_to_admin(text: str):
+    for adm in ADMIN_ARR:
+        if adm.get('chat'):
+            send_messages_big(adm.get('chat'), text)
 
 def reply_to_big(message: str, text: str):
     strings = text.split('\n')
