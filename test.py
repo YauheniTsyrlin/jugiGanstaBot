@@ -32,10 +32,14 @@ SETTINGS_ARR = [] # Зарегистрированные настройки
 for setting in settings.find():
     SETTINGS_ARR.append(setting)
 
-def getSetting(code: str):
+def getSetting(code: str, name=None):
     """ Получение настройки """
     result = settings.find_one({'code': code})
     if (result):
+        if name:
+            for arr in result.get('value'):
+                if arr['name'] == name:
+                    return arr['value'] 
         return result.get('value') 
 
 def setSetting(code: str, value: str):
@@ -180,9 +184,10 @@ def saveRaidResult(goat):
 
 print('\n======== radeReport ==========\n')
 
-#report_raids.remove()
-for goat in getSetting('GOATS_BANDS'):
-    saveRaidResult(goat)
+print(f"{getSetting('PROBABILITY','I_DONT_KNOW_YOU')}")
+# #report_raids.remove()
+# for goat in getSetting('GOATS_BANDS'):
+#     saveRaidResult(goat)
 
 # for goat in getSetting('GOATS_BANDS'): 1576447200
 #     report = radeReport(goat)

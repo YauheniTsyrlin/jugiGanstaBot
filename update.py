@@ -2,7 +2,6 @@ import pymongo
 import json
 import datetime
 
-
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 
 mydb = myclient["jugidb"]
@@ -24,15 +23,32 @@ def setSetting(login: str, code: str, value: str):
     newvalues = { "$set": { "value": value } }
     u = settings.update_one(myquery, newvalues)
 
-result = settings.find_one({'code': 'REPORT_KILLERS'})
+# ==================================================
+myquery = {'code': 'OUR_BAND'}
+sett = settings.delete_one(myquery)
+
+myquery = {'code': 'BAN_USERS'}
+sett = settings.delete_one(myquery)
+
+myquery = {'code': 'BANDS_INLINE_WARIORS'}
+sett = settings.delete_one(myquery)
+
+myquery = {'code': 'REPORT_KILLERS'}
+sett = settings.delete_one(myquery)
+
+myquery = {'code': 'PROBABILITY_I_DONT_NOW'}
+sett = settings.delete_one(myquery)
+
+# ==================================================
+
+result = settings.find_one({'code': 'REPORTS'})
 if (not result):
-    print('Not Find setting. Insert REPORT_KILLERS')
+    print('Not Find setting. Insert REPORTS')
     settings.insert_one({
-        'code': 'REPORT_KILLERS', 
-        'description': 'Дата начала отчета, Дата завершения отчета', 
-        'value': {
-            'from_date': None, 
-            'to_date': None}})
+        'code': 'REPORTS', 
+        'description': 'Даты для отчетов', 
+        'value': ''
+    })
 
 result = settings.find_one({'code': 'ADMINISTRATOR'})
 if (not result):
@@ -45,13 +61,13 @@ if (not result):
              {'login': 'Innok27'}]   
              })
 
-result = settings.find_one({'code': 'PROBABILITY_I_DONT_NOW'})
+result = settings.find_one({'code': 'PROBABILITY'})
 if (not result):
     print('Not Find setting. Insert probability')
     settings.insert_one({
-        'code': 'PROBABILITY_I_DONT_NOW', 
-        'description': 'Вероятность того, бот спросит, кто ты такой', 
-        'value': 0.3   
+        'code': 'PROBABILITY', 
+        'description': 'Вероятности', 
+        'value': ''   
              })  
 
 result = settings.find_one({'code': 'BANDS_ACCESS_WARIORS'})
@@ -63,7 +79,6 @@ if (not result):
         'value': ''   
              })     
 
-
 result = settings.find_one({'code': 'GOATS_BANDS'})
 if (not result):
     print('Not Find setting. Insert GOATS_BANDS')
@@ -74,15 +89,43 @@ if (not result):
              })   
 
 print("#==========================#")              
-print("#         SETTINGS         #")              
+print("#     UPDATE SETTINGS      #")              
 print("#==========================#")              
 
-myquery = { "code": 'REPORT_KILLERS' }
+myquery = { "code": 'PROBABILITY' }
 newvalues = { "$set": { "value": 
-                    {
-                        'from_date': datetime.datetime(2019, 12, 15, 12, 0, 0).timestamp(), 
-                        'to_date': None
-                    }
+                    [
+                        {
+                            'name': 'I_DONT_KNOW_YOU',
+                            'value': 0.3
+                        },
+                        {
+                            'name': 'TO_BE_OR_NOT',
+                            'value': 0.5
+                        }
+                    ]
+                } 
+            } 
+u = settings.update_one(myquery, newvalues)
+
+myquery = { "code": 'REPORTS' }
+newvalues = { "$set": { "value": 
+                    [
+                        {
+                            'name': 'KILLERS',
+                            'value': {
+                                'from_date': datetime.datetime(2019, 12, 15, 12, 0, 0).timestamp(), 
+                                'to_date': None
+                            }
+                        },
+                        {
+                            'name': 'RAIDS',
+                            'value': {
+                                'from_date': datetime.datetime(2019, 12, 15, 23, 0, 0).timestamp(), 
+                                'to_date': None
+                            }
+                        }
+                    ]
                 } 
             } 
 u = settings.update_one(myquery, newvalues)
@@ -102,15 +145,6 @@ newvalues = { "$set": { "value":
         } } 
              
 u = settings.update_one(myquery, newvalues)
-
-myquery = {'code': 'OUR_BAND'}
-sett = settings.delete_one(myquery)
-
-myquery = {'code': 'BAN_USERS'}
-sett = settings.delete_one(myquery)
-
-myquery = {'code': 'BANDS_INLINE_WARIORS'}
-sett = settings.delete_one(myquery)
 
 myquery = { "code": 'BANDS_ACCESS_WARIORS' }
 newvalues = { "$set": { "value": 

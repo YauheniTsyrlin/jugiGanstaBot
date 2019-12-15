@@ -64,10 +64,14 @@ SETTINGS_ARR = [] # Зарегистрированные настройки
 for setting in settings.find():
     SETTINGS_ARR.append(setting)
 
-def getSetting(code: str):
+def getSetting(code: str, name=None):
     """ Получение настройки """
     result = settings.find_one({'code': code})
     if (result):
+        if name:
+            for arr in result.get('value'):
+                if arr['name'] == name:
+                    return arr['value'] 
         return result.get('value') 
 
 ADMIN_ARR = []
@@ -870,7 +874,7 @@ def main_message(message):
 
     if not findUser:
         r = random.random()
-        if (r <= float(getSetting('PROBABILITY_I_DONT_NOW'))):
+        if (r <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
             send_messages_big(message.chat.id, text=getResponseDialogFlow('i_dont_know_you'))
 
     if (message.text.startswith('📟Пип-бой 3000') and 
@@ -1532,7 +1536,7 @@ def main_message(message):
                         report = ''
                         report = report + f'🏆ТОП 5 УБИЙЦ 🐐<b>{getMyGoat(userIAm.getLogin())}</b>\n'
                         report = report + '\n'
-                        setting = getSetting('REPORT_KILLERS')
+                        setting = getSetting('REPORTS','KILLERS')
                         from_date = setting.get('from_date')
                         to_date = setting.get('to_date')
 
