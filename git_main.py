@@ -44,7 +44,7 @@ def main_loop():
     # Start aiohttp server
     web.run_app(
         app,
-        host=config.WEBHOOK_LISTEN,
+        host=config.WEBHOOK_HOST,
         port=8444,
         ssl_context=context,
     )
