@@ -2084,8 +2084,8 @@ def saveRaidResult(goat):
 def radeReport(goat, ping=False):
 
     raidInfo = getPlanedRaidLocation(goat.get('name'))
-    planed_raid_location = raidInfo.get['rade_location']
-    planed_raid_location_text = raidInfo.get['rade_text']
+    planed_raid_location = raidInfo['rade_location']
+    planed_raid_location_text = raidInfo['rade_text']
     goat_report = {}
     goat_report.update({'name': goat.get('name')})
     goat_report.update({'chat': goat.get('chat')})
