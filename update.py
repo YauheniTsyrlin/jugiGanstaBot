@@ -129,7 +129,6 @@ newvalues = { "$set":
                         { 
                             'name': 'АdaptationǁȺǁ',
                             'boss': 'Innok27', 
-                            'ping': True, 
                             'bands': 
                                     [
                                         {
@@ -146,7 +145,6 @@ newvalues = { "$set":
                         { 
                             'name': 'faggoat',
                             'boss': 'WestMoscow', 
-                            'ping': False, 
                             'bands': 
                                     [
                                         {

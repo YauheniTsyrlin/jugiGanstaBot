@@ -41,11 +41,12 @@ myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["jugidb"]
 registered_users = mydb["users"]
 registered_wariors = mydb["wariors"]
-battle      = mydb["battle"]
-competition = mydb["competition"]
-settings    = mydb["settings"]
+battle          = mydb["battle"]
+competition     = mydb["competition"]
+settings        = mydb["settings"]
 pending_messages = mydb["pending_messages"]
-rades       = mydb["rades"]
+plan_raids      = mydb["rades"]
+report_raids    = mydb["report_raids"]
 
 logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
@@ -262,25 +263,24 @@ def update_warior(warior: wariors.Warior):
     for x in registered_wariors.find():
         WARIORS_ARR.append(wariors.importWarior(x))
         
-def get_rade_plan(rade_date, goat):
-    plan_for_date = 'План рейдов на ' + time.strftime("%d-%m-%Y", time.gmtime( rade_date.timestamp() )) + '\n'
+def get_raid_plan(raid_date, goat):
+    plan_for_date = 'План рейдов на ' + time.strftime("%d-%m-%Y", time.gmtime( raid_date.timestamp() )) + '\n'
     find = False
-    raids = []
-    for rade in rades.find({
+    for raid in plan_raids.find({
                                 '$and' : 
                                 [
                                     {
                                         'rade_date': {
-                                        '$gte': (rade_date.replace(hour=0, minute=0, second=0, microsecond=0)).timestamp(),
-                                        '$lt': (rade_date.replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
+                                        '$gte': (raid_date.replace(hour=0, minute=0, second=0, microsecond=0)).timestamp(),
+                                        '$lt': (raid_date.replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
                                         }},
                                     {
                                         'goat': goat
                                     }
                                 ]
                             }):
-        t = datetime.fromtimestamp(rade.get('rade_date') ) 
-        plan_for_date = plan_for_date + str(t.hour).zfill(2)+':'+str(t.minute).zfill(2) + ' ' + rade.get('rade_text') + '\n'
+        t = datetime.fromtimestamp(raid.get('rade_date') ) 
+        plan_for_date = plan_for_date + str(t.hour).zfill(2)+':'+str(t.minute).zfill(2) + ' ' + raid.get('rade_text') + '\n'
         find = True
 
     if find == False:
@@ -1004,12 +1004,12 @@ def main_message(message):
             band = ''
             allrw = 0
             allcounter = 0
-            onraderw = 0
-            onradecounter = 0
-            onradeReport = ''
+            onraidrw = 0
+            onraidcounter = 0
+            onraidReport = ''
             report = 'Информация о рейдерах!\n'
-            fuckupraderw = 0
-            fuckupradecounter = 0
+            fuckupraidrw = 0
+            fuckupraidcounter = 0
             fuckupusersReport = ''
             fuckupusers = []
             alianusersReport = ''
@@ -1053,17 +1053,17 @@ def main_message(message):
                         allcounter = allcounter + 1
                         
                         if '👊' in strings[i]:
-                            onraderw = onraderw + u.getRaidWeight()
+                            onraidrw = onraidrw + u.getRaidWeight()
                             u.setRaidLocation(km)
                             updateUser(u)
-                            onradecounter = onradecounter + 1
-                            onradeReport = onradeReport + f'{onradecounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n'
+                            onraidcounter = onraidcounter + 1
+                            onraidReport = onraidReport + f'{onraidcounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n'
 
                         else:
-                            fuckupraderw = fuckupraderw + u.getRaidWeight()
-                            fuckupradecounter = fuckupradecounter + 1
+                            fuckupraidrw = fuckupraidrw + u.getRaidWeight()
+                            fuckupraidcounter = fuckupraidcounter + 1
                             fuckupusers.append(u)
-                            fuckupusersReport = fuckupusersReport + f'{fuckupradecounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n' 
+                            fuckupusersReport = fuckupusersReport + f'{fuckupraidcounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n' 
                     else:
                         aliancounter  = aliancounter + 1
                         alianusersReport = alianusersReport + f'{aliancounter}. {name} {spliter}{km}км\n'
@@ -1071,12 +1071,12 @@ def main_message(message):
                 i = i + 1
             
             report = report + f'🤘 <b>{band}</b>\n\n' 
-            if onradecounter > 0:
-                report = report + f'🧘‍♂️ <b>на рейде</b>: <b>{onradecounter}/{allcounter}</b>\n'
-                report = report + onradeReport
-                report = report + f'\n<b>Общий вес</b>: 🏋️‍♂️{onraderw}/{allrw} <b>{str(int(onraderw/allrw*100))}%</b>\n'
+            if onraidcounter > 0:
+                report = report + f'🧘‍♂️ <b>на рейде</b>: <b>{onraidcounter}/{allcounter}</b>\n'
+                report = report + onraidReport
+                report = report + f'\n<b>Общий вес</b>: 🏋️‍♂️{onraidrw}/{allrw} <b>{str(int(onraidrw/allrw*100))}%</b>\n'
             report = report + '\n'
-            if fuckupraderw > 0:
+            if fuckupraidrw > 0:
                 report = report + '🐢 <b>Бандиты в проёбе</b>:\n'
                 report = report + fuckupusersReport
             report = report + '\n'
@@ -1086,7 +1086,7 @@ def main_message(message):
                 report = report + '🐀 <b>Крысы в банде</b> (нет регистрации):\n'
                 report = report + alianusersReport
             
-            if onradecounter > 0 or aliancounter > 0:
+            if onraidcounter > 0 or aliancounter > 0:
                 bot.delete_message(message.chat.id, message.message_id)
                 send_messages_big(message.chat.id, text=report)
                 
@@ -1259,13 +1259,13 @@ def main_message(message):
                             tz = config.SERVER_MSK_DIFF
                             plan_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
                             if plan_date.hour > 17:
-                                rade_date = plan_date + timedelta(days=1)
+                                raid_date = plan_date + timedelta(days=1)
                             else:
-                                rade_date = plan_date
+                                raid_date = plan_date
                         else:
-                            rade_date = parse(response.split(response.split(":")[1])[1][1:])
+                            raid_date = parse(response.split(response.split(":")[1])[1][1:])
 
-                        plan_str = get_rade_plan(rade_date, goat)
+                        plan_str = get_raid_plan(raid_date, goat)
                         msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=markup)
                     elif 'onrade' == response.split(':')[1]:
                         # jugi:onrade:$goat
@@ -1364,14 +1364,14 @@ def main_message(message):
                         goat = getMyGoat(message.from_user.username)
                         #   0    1        2         3     
                         # jugi:rade:$radelocation:$time
-                        rade_date = parse(response.split(response.split(":")[2])[1][1:])
-                        if rade_date.hour not in (1, 9, 17):
+                        raid_date = parse(response.split(response.split(":")[2])[1][1:])
+                        if raid_date.hour not in (1, 9, 17):
                             send_messages_big(message.chat.id, text='Рейды проходят только в 1:00, 9:00, 17:00!\nУкажи правильное время!')
                             return 
 
                         # Проверка на будущую дату
                         tz = config.SERVER_MSK_DIFF
-                        dt = rade_date - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+                        dt = raid_date - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
                         if (dt.timestamp() < datetime.now().timestamp()):
                             msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('timeisout'))
                             return
@@ -1383,11 +1383,11 @@ def main_message(message):
                             send_messages_big(message.chat.id, text='Напоминания для рейда будут приходить только в этот чат!\nЧтобы их увидели все - запланируй рейд в групповом чате!')
 
                         myquery = { 
-                                    "rade_date": rade_date.timestamp(), 
+                                    "rade_date": raid_date.timestamp(), 
                                     "goat": goat
                                 }
                         newvalues = { "$set": { 
-                                        'rade_date': rade_date.timestamp(),
+                                        'rade_date': raid_date.timestamp(),
                                         'rade_text': rade_text,
                                         'rade_location': rade_location,
                                         'state': 'WAIT',
@@ -1395,11 +1395,11 @@ def main_message(message):
                                         'login': message.from_user.username,
                                         'goat': goat
                                     } } 
-                        u = rades.update_one(myquery, newvalues)
+                        u = plan_raids.update_one(myquery, newvalues)
                         if u.matched_count == 0:
-                            rades.insert_one({ 
+                            plan_raids.insert_one({ 
                                 'create_date': datetime.now().timestamp(), 
-                                'rade_date': rade_date.timestamp(),
+                                'rade_date': raid_date.timestamp(),
                                 'rade_text': rade_text,
                                 'rade_location': rade_location,
                                 'state': 'WAIT',
@@ -1407,7 +1407,7 @@ def main_message(message):
                                 'login': message.from_user.username,
                                 'goat': goat})
                         
-                        plan_str = get_rade_plan(rade_date, goat)
+                        plan_str = get_raid_plan(raid_date, goat)
                         msg = send_messages_big(message.chat.id, text=plan_str)
                         
                         
@@ -2009,7 +2009,8 @@ def rade():
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
             send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report)
-        
+            saveRaidResult(goat)
+
         for goat in getSetting('GOATS_BANDS'):
             registered_users.update_many(
                 {'band':{'$in':getGoatBands(goat.get('name'))}},
@@ -2017,40 +2018,70 @@ def rade():
             )
         updateUser(None)
         
-def radeReport(goat, ping=False):
-
+def getPlanedRaidLocation(goatName: str):
     tz = config.SERVER_MSK_DIFF
-    plan_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
-    rade_date = plan_date
-    hour = rade_date.hour
-    planed_rade_location = None
+    raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+    hour = raid_date.hour
 
-    if plan_date.hour >= 17:
-        rade_date = rade_date + timedelta(days=1)
-    
-    if rade_date.hour >=1 and rade_date.hour <9:
+    if raid_date.hour >= 17:
+        raid_date = raid_date + timedelta(days=1)
+
+    if raid_date.hour >=1 and raid_date.hour <9:
         hour = 9
-    elif rade_date.hour >=9 and rade_date.hour <17:
+    elif raid_date.hour >=9 and raid_date.hour <17:
         hour = 17
-    if rade_date.hour >=17 or rade_date.hour <1:
+    if raid_date.hour >=17 or raid_date.hour <1:
         hour = 1
 
-    for rade in rades.find({
+    raidNone = {}
+    raidNone.update({'rade_date': (raid_date.replace(hour=hour, minute=0, second=0, microsecond=0)).timestamp()})
+    raidNone.update({'rade_location': None})
+
+    for raid in plan_raids.find({
                                 '$and' : 
                                 [
                                     {
                                         'rade_date': {
-                                        '$gte': (rade_date.replace(hour=0, minute=0, second=0, microsecond=0)).timestamp(),
-                                        '$lt': (rade_date.replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
+                                        '$gte': (raid_date.replace(hour=0, minute=0, second=0, microsecond=0)).timestamp(),
+                                        '$lt': (raid_date.replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
                                         }},
                                     {
-                                        'goat': goat.get('name')
+                                        'goat': goatName
                                     }
                                 ]
                             }):
-        if datetime.fromtimestamp(rade.get('rade_date')).hour == hour:
-            planed_rade_location = rade.get('rade_location')
+        if datetime.fromtimestamp(raid.get('rade_date')).hour == hour:
+            return raid
+    return raidNone
 
+def saveRaidResult(goat):
+    raid = getPlanedRaidLocation(goat['name'])
+    location = raid.get('rade_location')
+    raiddate = raid.get('rade_date')
+
+    for band in goat.get('bands'):
+        for user in list(USERS_ARR):
+            # Обрабатываем по бандам
+            if user.getBand() and user.getBand() == band.get('name'):
+                row = {}
+                row.update({'date': raiddate})
+                row.update({'login': user.getLogin()})
+                row.update({'band': band.get('name')})
+                row.update({'goat': goat.get('name')})
+                row.update({'planed_location': location})
+                row.update({'user_location': None})
+                row.update({'on_raid': False})
+                row.update({'on_planed_location': False})
+                if user.getRaidLocation():
+                    row.update({'on_raid': True}) 
+                    row.update({'user_location': user.getRaidLocation()})    
+                    if location and user.getRaidLocation() == location:
+                        row.update({'planed_location': True})
+                report_raids.insert_one(row)
+
+def radeReport(goat, ping=False):
+
+    planed_raid_location = getPlanedRaidLocation(goat.get('name')).get['rade_location']
     goat_report = {}
     goat_report.update({'name': goat.get('name')})
     goat_report.update({'chat': goat.get('chat')})
@@ -2097,13 +2128,13 @@ def radeReport(goat, ping=False):
                 location = str(u.getRaidLocation())
                 if u.getRaidLocation() == 1:
                     location = '?'
-                if planed_rade_location:
-                    if planed_rade_location == u.getRaidLocation():
+                if planed_raid_location:
+                    if planed_raid_location == u.getRaidLocation():
                         location = '✔️' + location
                 report = report + f'{counter}. {u.getName()} 📍{location}км\n'
             report = report + f'\n'
         if ping:
-            if goat.get('ping'):
+            if planed_raid_location:
                 ping_on_reade(bands.get("usersoffrade"), goat['chat'] )
     return report
 

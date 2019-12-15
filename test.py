@@ -21,6 +21,8 @@ battle      = mydb["battle"]
 competition = mydb["competition"]
 settings    = mydb["settings"]
 pending_messages = mydb["pending_messages"]
+plan_raids      = mydb["rades"]
+report_raids    = mydb["report_raids"]
 
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
@@ -114,11 +116,75 @@ def radeReport(goat):
 
     return report
 
+def getPlanedRaidLocation(goatName: str):
+    tz = config.SERVER_MSK_DIFF
+    raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+    hour = raid_date.hour
+
+    if raid_date.hour >= 17:
+        raid_date = raid_date + timedelta(days=1)
+
+
+    if raid_date.hour >=1 and raid_date.hour <9:
+        hour = 9
+    elif raid_date.hour >=9 and raid_date.hour <17:
+        hour = 17
+    if raid_date.hour >=17 or raid_date.hour <1:
+        hour = 1
+
+    raidNone = {}
+    raidNone.update({'rade_date': (raid_date.replace(hour=hour, minute=0, second=0, microsecond=0)).timestamp()})
+    raidNone.update({'rade_location': None})
+
+    for raid in plan_raids.find({
+                                '$and' : 
+                                [
+                                    {
+                                        'rade_date': {
+                                        '$gte': (raid_date.replace(hour=0, minute=0, second=0, microsecond=0)).timestamp(),
+                                        '$lt': (raid_date.replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
+                                        }},
+                                    {
+                                        'goat': goatName
+                                    }
+                                ]
+                            }):
+        if datetime.fromtimestamp(raid.get('rade_date')).hour == hour:
+            return raid
+    return raidNone
+
+def saveRaidResult(goat):
+    raid = getPlanedRaidLocation(goat['name'])
+    location = raid.get('rade_location')
+    raiddate = raid.get('rade_date')
+
+    for band in goat.get('bands'):
+        for user in list(USERS_ARR):
+            # Обрабатываем по бандам
+            if user.getBand() and user.getBand() == band.get('name'):
+                row = {}
+                row.update({'date': raiddate})
+                row.update({'login': user.getLogin()})
+                row.update({'band': band.get('name')})
+                row.update({'goat': goat.get('name')})
+                row.update({'planed_location': location})
+                row.update({'user_location': None})
+                row.update({'on_raid': False})
+                row.update({'on_planed_location': False})
+                if user.getRaidLocation():
+                    row.update({'on_raid': True}) 
+                    row.update({'user_location': user.getRaidLocation()})    
+                    if location and user.getRaidLocation() == location:
+                        row.update({'planed_location': True})
+                report_raids.insert_one(row)
 
 print('\n======== radeReport ==========\n')
 
+#report_raids.remove()
+for goat in getSetting('GOATS_BANDS'):
+    saveRaidResult(goat)
 
-# for goat in getSetting('GOATS_BANDS'):
+# for goat in getSetting('GOATS_BANDS'): 1576447200
 #     report = radeReport(goat)
 #     # print(report)
 
