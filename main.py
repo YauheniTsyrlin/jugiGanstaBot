@@ -2270,6 +2270,9 @@ def statistic(goatName: str):
             name = user.getName().strip()
         report = report + f'{count} {name} \n'
 
+    report = report + f'\n' 
+    report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
+
     return report                                 
 
 # 20 secund
