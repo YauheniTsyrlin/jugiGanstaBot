@@ -186,7 +186,7 @@ newvalues = { "$set":
                                             'boss': 'WestMoscow'
                                         },
                                         {
-                                            'name': 'Crewname',
+                                            'name': 'crewname',
                                             'boss': 'WestMoscow'
                                         },
                                         {
