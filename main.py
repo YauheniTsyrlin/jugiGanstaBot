@@ -1292,8 +1292,9 @@ def main_message(message):
                     elif 'statistic' == response.split(':')[1]:
                         # jugi:statistic:*
                         if not isGoatBoss(message.from_user.username):
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
-                            return
+                            if not isAdmin(message.from_user.username):
+                                send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
+                                return
 
                         goatName = response.split(':')[2].strip()
                         if goatName == '*':
