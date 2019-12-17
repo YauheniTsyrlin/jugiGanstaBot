@@ -2221,9 +2221,12 @@ def statistic(goatName: str):
     ])
 
     for d in dresult:
-        user = getUserByLogin(d.get("_id"))
+        name = d.get("_id")
+        user = getUserByLogin(name)
         count = d.get("count")
-        report = report + f'{count} {user.getName().strip()} \n'
+        if user:
+            name = user.getName().strip()
+        report = report + f'{count} {name} \n'
 
     dresult = report_raids.aggregate([
         {   "$match": {
@@ -2263,7 +2266,6 @@ def statistic(goatName: str):
         name = d.get("_id")
         user = getUserByLogin(name)
         count = d.get("count")
-        
         if user:
             name = user.getName().strip()
         report = report + f'{count} {name} \n'
