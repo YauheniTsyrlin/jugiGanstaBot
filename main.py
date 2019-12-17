@@ -2258,11 +2258,15 @@ def statistic(goatName: str):
         }
     ])
 
-    report = report + f'🦥 <b>Хренейдеры</b>:\n'
+    report = report + f'\n🤬 <b>Хренейдеры</b>:\n'
     for d in dresult:
-        user = getUserByLogin(d.get("_id"))
+        name = d.get("_id")
+        user = getUserByLogin(name)
         count = d.get("count")
-        report = report + f'{count} {user.getName().strip()} \n'
+        
+        if user:
+            name = user.getName().strip()
+        report = report + f'{count} {name} \n'
 
     return report                                 
 
