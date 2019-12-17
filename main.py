@@ -2186,39 +2186,39 @@ def statistic(goatName: str):
     if (not to_date):
         to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
 
-    dresult = report_raids.aggregate([
-        {   "$match": {
-                "$and" : [
-                    { 
-                        "date": {
-                            '$gte': from_date,
-                            '$lt': to_date
-                                }       
-                    },
-                    {
-                        "band": {'$in': getGoatBands(goatName)}   
-                    }
-                ]
-            }
-        }, 
-        {   
-            "$group": 
-                {
-                    "_id": "$date",
-                    "count": 
-                        {
-                            "$sum": 1
-                        }
-                }
-        },    
-        {   
-            "$sort" : { "count" : -1 } 
-        }
-    ])
+    # dresult = report_raids.aggregate([
+    #     {   "$match": {
+    #             "$and" : [
+    #                 { 
+    #                     "date": {
+    #                         '$gte': from_date,
+    #                         '$lt': to_date
+    #                             }       
+    #                 },
+    #                 {
+    #                     "band": {'$in': getGoatBands(goatName)}   
+    #                 }
+    #             ]
+    #         }
+    #     }, 
+    #     {   
+    #         "$group": 
+    #             {
+    #                 "_id": "$date",
+    #                 "count": 
+    #                     {
+    #                         "$sum": 1
+    #                     }
+    #             }
+    #     },    
+    #     {   
+    #         "$sort" : { "count" : -1 } 
+    #     }
+    # ])
 
-    for d in dresult:
-        count = d.get("count")
-        report = report + f'Было {count} рейдов\n'
+    # for d in dresult:
+    #     count = d.get("count")
+    #     report = report + f'Было {count} рейдов\n'
  
     dresult = report_raids.aggregate([
         {   "$match": {
