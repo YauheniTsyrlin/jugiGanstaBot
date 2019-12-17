@@ -991,7 +991,7 @@ def main_message(message):
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_you_cant'))
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
-        #write_json(message.json)
+        write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
             u = getUserByLogin(message.from_user.username)
             u.setRaidLocation(1)
@@ -1289,7 +1289,23 @@ def main_message(message):
                             if goatName == goat.get('name'):
                                 report = radeReport(goat)
                                 send_messages_big(message.chat.id, text=report)
+                    elif 'statistic' == response.split(':')[1]:
+                        # jugi:statistic:*
+                        if not isGoatBoss(message.from_user.username):
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
+                            return
 
+                        goatName = response.split(':')[2].strip()
+                        if goatName == '*':
+                            goatName = getMyGoat(message.from_user.username)
+
+                        if not getMyGoat(message.from_user.username) == goatName:
+                            if not isAdmin(message.from_user.username):
+                                send_messages_big(message.chat.id, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'))
+                                return
+
+                        report = statistic(goatName)
+                        send_messages_big(message.chat.id, text=report) 
                     elif 'clearrade' == response.split(':')[1]:
                         # jugi:clearrade:*
                         if not isAdmin(message.from_user.username):
@@ -2009,12 +2025,14 @@ def rade():
     if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second <= 15:
         logger.info('Rade time now!')
         updateUser(None)
-
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
             send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report)
             saveRaidResult(goat)
 
+    if now_date.hour in (1, 9, 17) and now_date.minute == 10 and now_date.second <= 15:
+        updateUser(None)
+        saveRaidResult(goat)
         for goat in getSetting('GOATS_BANDS'):
             registered_users.update_many(
                 {'band':{'$in':getGoatBands(goat.get('name'))}},
@@ -2083,7 +2101,10 @@ def saveRaidResult(goat):
                     row.update({'user_location': user.getRaidLocation()})    
                     if location and user.getRaidLocation() == location:
                         row.update({'planed_location': True})
-                report_raids.insert_one(row)
+                newvalues = { "$set": row }
+                result = report_raids.update_one({"login": f"{user.getLogin()}", 'date': raiddate}, newvalues)
+                if result.matched_count < 1:
+                    report_raids.insert_one(row)
 
 def radeReport(goat, ping=False):
 
@@ -2149,6 +2170,100 @@ def radeReport(goat, ping=False):
             if planed_raid_location:
                 ping_on_reade(bands.get("usersoffrade"), goat['chat'] )
     return report
+
+def statistic(goatName: str):
+    report = f'🐐<b>{goatName}</b>\n\n'
+    report = report + f'🧘‍♂️ <b>Рейдеры</b>:\n'
+
+    setting = getSetting('REPORTS','RAIDS')
+    from_date = setting.get('from_date')
+    to_date = setting.get('to_date')
+
+    if (not from_date):
+        from_date = (datetime(2019, 1, 1)).timestamp() 
+
+    if (not to_date):
+        to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
+
+    #for band in getGoatBands(goatName):    
+    dresult = report_raids.aggregate([
+        {   "$match": {
+                "$and" : [
+                    { 
+                        "date": {
+                            '$gte': from_date,
+                            '$lt': to_date
+                                }       
+                    },
+                    {
+                        "band": {'$in': getGoatBands(goatName)}   
+                    },
+                    {
+                        "on_raid": True
+                    }
+                ]
+            }
+        }, 
+        {   
+            "$group": 
+                {
+                    "_id": "$login",
+                    "count": 
+                        {
+                            "$sum": 1
+                        }
+                }
+        },    
+        {   
+            "$sort" : { "count" : -1 } 
+        }
+    ])
+
+    for d in dresult:
+        user = getUserByLogin(d.get("_id"))
+        count = d.get("count")
+        report = report + f'{count} {user.getName().strip()} \n'
+
+    dresult = report_raids.aggregate([
+        {   "$match": {
+                "$and" : [
+                    { 
+                        "date": {
+                            '$gte': from_date,
+                            '$lt': to_date
+                                }       
+                    },
+                    {
+                        "band": {'$in': getGoatBands(goatName)}   
+                    },
+                    {
+                        "on_raid": False
+                    }
+                ]
+            }
+        }, 
+        {   
+            "$group": 
+                {
+                    "_id": "$login",
+                    "count": 
+                        {
+                            "$sum": 1
+                        }
+                }
+        },    
+        {   
+            "$sort" : { "count" : -1 } 
+        }
+    ])
+
+    report = report + f'🦥 <b>Хренейдеры</b>:\n'
+    for d in dresult:
+        user = getUserByLogin(d.get("_id"))
+        count = d.get("count")
+        report = report + f'{count} {user.getName().strip()} \n'
+
+    return report                                 
 
 # 20 secund
 def fight_job():

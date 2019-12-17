@@ -54,6 +54,14 @@ def setSetting(code: str, value: str):
         SETTINGS_ARR.append(setting)
     return True
 
+def getUserByLogin(login: str):
+    for user in list(USERS_ARR):
+        try:
+            if login.lower() == user.getLogin().lower(): return user
+        except:
+            pass
+    return None
+
 def getGoatBands(goatName: str):
     for goat in getSetting('GOATS_BANDS'):
         if goat.get('name') == goatName:
@@ -172,6 +180,7 @@ def saveRaidResult(goat):
                 row.update({'band': band.get('name')})
                 row.update({'goat': goat.get('name')})
                 row.update({'planed_location': location})
+                row.update({'planed_location_text': raid.get('rade_text')})
                 row.update({'user_location': None})
                 row.update({'on_raid': False})
                 row.update({'on_planed_location': False})
@@ -180,14 +189,112 @@ def saveRaidResult(goat):
                     row.update({'user_location': user.getRaidLocation()})    
                     if location and user.getRaidLocation() == location:
                         row.update({'planed_location': True})
-                report_raids.insert_one(row)
+                newvalues = { "$set": row }
+                result = report_raids.update_one({"login": f"{user.getLogin()}", 'date': raiddate}, newvalues)
+                if result.matched_count < 1:
+                    report_raids.insert_one(row)
+
+def statistic(goatName: str):
+    report = ''
+    setting = getSetting('REPORTS','RAIDS')
+    from_date = setting.get('from_date')
+    to_date = setting.get('to_date')
+
+    if (not from_date):
+        from_date = (datetime(2019, 1, 1)).timestamp() 
+
+    if (not to_date):
+        to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
+
+    #for band in getGoatBands(goatName):    
+    dresult = report_raids.aggregate([
+        {   "$match": {
+                "$and" : [
+                    { 
+                        "date": {
+                            '$gte': from_date,
+                            '$lt': to_date
+                                }       
+                    },
+                    {
+                        "band": {'$in': getGoatBands(goatName)}   
+                    },
+                    {
+                        "on_raid": True
+                    }
+                ]
+            }
+        }, 
+        {   
+            "$group": 
+                {
+                    "_id": "$login",
+                    "count": 
+                        {
+                            "$sum": 1
+                        }
+                }
+        },    
+        {   
+            "$sort" : { "count" : -1 } 
+        }
+    ])
+
+    for d in dresult:
+        user = getUserByLogin(d.get("_id"))
+        count = d.get("count")
+        report = report + f'{count} {user.getName().strip()} \n'
+
+    dresult = report_raids.aggregate([
+        {   "$match": {
+                "$and" : [
+                    { 
+                        "date": {
+                            '$gte': from_date,
+                            '$lt': to_date
+                                }       
+                    },
+                    {
+                        "band": {'$in': getGoatBands(goatName)}   
+                    },
+                    {
+                        "on_raid": False
+                    }
+                ]
+            }
+        }, 
+        {   
+            "$group": 
+                {
+                    "_id": "$login",
+                    "count": 
+                        {
+                            "$sum": 1
+                        }
+                }
+        },    
+        {   
+            "$sort" : { "count" : -1 } 
+        }
+    ])
+
+    report = report + f'=================\n'
+    for d in dresult:
+        user = getUserByLogin(d.get("_id"))
+        count = d.get("count")
+        report = report + f'{count} {user.getName().strip()} \n'
+
+    return report           
 
 print('\n======== radeReport ==========\n')
 
-print(f"{getSetting('PROBABILITY','I_DONT_KNOW_YOU')}")
+# for ts in (1575922314, 1576610657, 1576070150, 1576078889, 1576100043, 1576156614, 1576533127):
+#     print(f"{datetime.fromtimestamp(ts)}")
+
 # #report_raids.remove()
-# for goat in getSetting('GOATS_BANDS'):
-#     saveRaidResult(goat)
+for goat in getSetting('GOATS_BANDS'):
+    #saveRaidResult(goat)
+    print(statistic(goat['name']))
 
 # for goat in getSetting('GOATS_BANDS'): 1576447200
 #     report = radeReport(goat)
