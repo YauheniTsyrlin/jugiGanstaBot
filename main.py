@@ -2031,9 +2031,6 @@ def rade():
             send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report)
             saveRaidResult(goat)
 
-    if now_date.hour in (1, 9, 17) and now_date.minute == 10 and now_date.second <= 15:
-        updateUser(None)
-        saveRaidResult(goat)
         for goat in getSetting('GOATS_BANDS'):
             registered_users.update_many(
                 {'band':{'$in':getGoatBands(goat.get('name'))}},
@@ -2102,10 +2099,10 @@ def saveRaidResult(goat):
                     row.update({'user_location': user.getRaidLocation()})    
                     if location and user.getRaidLocation() == location:
                         row.update({'planed_location': True})
-                newvalues = { "$set": row }
-                result = report_raids.update_one({"login": f"{user.getLogin()}", 'date': raiddate}, newvalues)
-                if result.matched_count < 1:
-                    report_raids.insert_one(row)
+                # newvalues = { "$set": row }
+                # result = report_raids.update_one({"login": f"{user.getLogin()}", 'date': raiddate}, newvalues)
+                # if result.matched_count < 1:
+                report_raids.insert_one(row)
 
 def radeReport(goat, ping=False):
 
