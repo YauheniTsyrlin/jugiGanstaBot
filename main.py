@@ -33,6 +33,7 @@ import json
 import requests
 
 import random
+from random import randrange
 
 import pymongo
 from bson.objectid import ObjectId
@@ -2038,20 +2039,26 @@ def rade():
             )
         updateUser(None)
         
-def getPlanedRaidLocation(goatName: str):
+def getPlanedRaidLocation(goatName: str, lastRaid = False):
     tz = config.SERVER_MSK_DIFF
     raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
     hour = raid_date.hour
 
-    if raid_date.hour >= 17:
+    if not lastRaid and raid_date.hour >= 17:
         raid_date = raid_date + timedelta(days=1)
 
     if raid_date.hour >=1 and raid_date.hour <9:
         hour = 9
+        if lastRaid:
+            hour = 1
     elif raid_date.hour >=9 and raid_date.hour <17:
         hour = 17
+        if lastRaid:
+            hour = 9
     if raid_date.hour >=17 or raid_date.hour <1:
         hour = 1
+        if lastRaid:
+            hour = 17
 
     raidNone = {}
     raidNone.update({'rade_date': (raid_date.replace(hour=hour, minute=0, second=0, microsecond=0)).timestamp()})
@@ -2076,7 +2083,7 @@ def getPlanedRaidLocation(goatName: str):
     return raidNone
 
 def saveRaidResult(goat):
-    raid = getPlanedRaidLocation(goat['name'])
+    raid = getPlanedRaidLocation(goat['name'], lastRaid=True)
     location = raid.get('rade_location')
     raiddate = raid.get('rade_date')
 

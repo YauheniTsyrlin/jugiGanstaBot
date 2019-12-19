@@ -96,12 +96,19 @@ myquery = { "code": 'PROBABILITY' }
 newvalues = { "$set": { "value": 
                     [
                         {
+                            # Вероятность
                             'name': 'I_DONT_KNOW_YOU',
                             'value': 0.3
                         },
                         {
+                            # Вероятность
                             'name': 'TO_BE_OR_NOT',
                             'value': 0.5
+                        },
+                        {
+                            # Range
+                            'name': 'FUNY_BAN',
+                            'value': 100
                         }
                     ]
                 } 
@@ -121,7 +128,7 @@ newvalues = { "$set": { "value":
                         {
                             'name': 'RAIDS',
                             'value': {
-                                'from_date': datetime.datetime(2019, 12, 15, 23, 0, 0).timestamp(), 
+                                'from_date': datetime.datetime(2019, 12, 19, 21, 0, 0).timestamp(), 
                                 'to_date': None
                             }
                         }
