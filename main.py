@@ -2332,7 +2332,8 @@ def statistic(goatName: str):
         name = d.get("_id")
         count = d.get("count")
         if isGoatBoss(name):
-            report_boss = report_boss + f'Еще наш босс специально не пришел на {count} рейдов, потому что был зянят переписью хренейредоров, забивших на общие цели! Это, надеюсь, всем понятно?!\n'
+            report_boss = report_boss + f'Еще наш босс не был на некоторых рейдах, потому что был зянят переписью хренейредоров, забивших на общие цели! Это, надеюсь, всем понятно?!\n'
+            report_boss = '\n'+report_boss
             continue
         user = getUserByLogin(name)
         
