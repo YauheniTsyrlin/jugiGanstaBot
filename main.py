@@ -1128,6 +1128,10 @@ def main_message(message):
                     and ('это залёт' in message.text.lower() or 'это залет' in message.text.lower())
                 ):
             login = message.reply_to_message.from_user.username
+
+            if config.BOT_LOGIN == login:
+                login = message.from_user.username
+
             user = getUserByLogin(login)
             if not user:
                 send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
