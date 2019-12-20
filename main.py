@@ -1142,8 +1142,8 @@ def main_message(message):
                     send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
                     return
             sec = int(randrange(int(getSetting('PROBABILITY','FUNY_BAN'))))
-
-            ban_date = datetime.now() + timedelta(seconds=sec)
+            tz = config.SERVER_MSK_DIFF
+            ban_date = datetime.now() + timedelta(seconds=sec, hours=tz.hour())
             user.setTimeBan(ban_date.timestamp())
             report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно!'
             updateUser(user)
