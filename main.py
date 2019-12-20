@@ -1143,7 +1143,8 @@ def main_message(message):
                     return
             sec = int(randrange(int(getSetting('PROBABILITY','FUNY_BAN'))))
             tz = config.SERVER_MSK_DIFF
-            ban_date = datetime.now() + timedelta(seconds=sec, hours=tz.hour())
+            ban_date = datetime.now() + timedelta(seconds=sec, hours=tz.hour)
+            
             user.setTimeBan(ban_date.timestamp())
             report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно!'
             updateUser(user)
