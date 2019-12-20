@@ -850,7 +850,11 @@ def main_message(message):
 
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
-        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то сказать, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
+        user = getUserByLogin(message.from_user.username)
+        name = message.from_user.username
+        if user:
+            name = user.getName()
+        send_messages_big(message.chat.id, text=f'{name} хотел что-то сказать, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
         return
 
 
@@ -884,7 +888,6 @@ def main_message(message):
             'СОДЕРЖИМОЕ РЮКЗАКА' not in message.text and 
             'ПРИПАСЫ В РЮКЗАКЕ' not in message.text and 
             'РЕСУРСЫ и ХЛАМ' not in message.text ):
-
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
             if 'ТОП ИГРОКОВ:' in message.text:
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
@@ -893,9 +896,7 @@ def main_message(message):
 
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                 return
-
             user = users.User(message.from_user.username, message.forward_date, message.text)
-
             if findUser==False:   
                 x = registered_users.insert_one(json.loads(user.toJSON()))
                 updateUser(None)
@@ -907,7 +908,6 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('setpip'))
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
-
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive')) 
         return
@@ -1125,11 +1125,30 @@ def main_message(message):
         elif (callJugi 
                     and message.reply_to_message
                     and message.text 
-                    and ('залёт' in message.text.lower() or 'залет' in message.text.lower())
+                    and ('это залёт' in message.text.lower() or 'это залет' in message.text.lower())
                 ):
+            login = message.reply_to_message.from_user.username
+            user = getUserByLogin(login)
+            if not user:
+                send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
+                return
 
-                pass
-                
+            if not user.getBand():
+                send_messages_big(message.chat.id, text=f'У бандита {login} нет банды!')
+                return
+
+            if not isUsersBand(message.from_user.username, user.getBand()):
+                if not isAdmin(message.from_user.username):
+                    send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
+                    return
+            sec = int(randrange(int(getSetting('PROBABILITY','FUNY_BAN'))))
+
+            ban_date = datetime.now() + timedelta(seconds=sec)
+            user.setTimeBan(ban_date.timestamp())
+            report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно!'
+            updateUser(user)
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}')
+    
         elif (callJugi and 'статус ' in message.text.lower() and ' @' in message.text):
             login = message.text.split('@')[1].split(' ')[0].strip()
             
@@ -1696,7 +1715,6 @@ def callback_query(call):
         text = call.message.text
 
         # print(text)
-
         # for s in call.message.entities:
         #     print(s)
         #     if s.type == 'bold':
