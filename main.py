@@ -2331,8 +2331,8 @@ def statistic(goatName: str):
     for d in dresult:
         name = d.get("_id")
         count = d.get("count")
-        if isBandBoss(name):
-            report_boss = report_boss + f'Еще наш босс {name} специально не пришел на {count} рейдов, потому что был зянят переписью хренейредоров, забивших на общие цели! Это, надеюсь, всем понятно?!\n'
+        if isGoatBoss(name):
+            report_boss = report_boss + f'Еще наш босс специально не пришел на {count} рейдов, потому что был зянят переписью хренейредоров, забивших на общие цели! Это, надеюсь, всем понятно?!\n'
             continue
         user = getUserByLogin(name)
         
