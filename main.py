@@ -1541,7 +1541,7 @@ def main_message(message):
                             'text': None})
                         
                         msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
-                    elif 'sticker' == response.split(':')[1]:
+                    elif 'sticker' == response.split(':')[1]: 
                         #jugi:sticker:CAADAgADawgAAm4y2AABx_tlRP2FVS8WBA:Ми-ми-ми
                         photo = response.split(':')[2]
                         text = response.split(':')[3]
@@ -2279,11 +2279,17 @@ def statistic(goatName: str):
             "$sort" : { "count" : -1 } 
         }
     ])
-
+    
+    report_boss = ''
     for d in dresult:
         name = d.get("_id")
         user = getUserByLogin(name)
         count = d.get("count")
+
+        if isGoatBoss(name):
+            report_boss = f'😎 наш босс <b>{user.getName()}</b> посетил рейды {count} раз. Скажите за это ему "Спасибо" при встрече.\n'
+            continue
+        
         if user:
             name = user.getName().strip()
         report = report + f'{count} {name} \n'
@@ -2324,13 +2330,17 @@ def statistic(goatName: str):
     report = report + f'\n🤬 <b>Хренейдеры</b>:\n'
     for d in dresult:
         name = d.get("_id")
-        user = getUserByLogin(name)
         count = d.get("count")
+        if isBandBoss(name):
+            report_boss = report_boss + f'Еще наш босс специально не пришел на {count} рейдов, потому что был зянят переписью хренейредоров, забивших на общие цели! Это, надеюсь, всем понятно?!\n'
+            continue
+        user = getUserByLogin(name)
+        
         if user:
             name = user.getName().strip()
         report = report + f'{count} {name} \n'
 
-    report = report + f'\n' 
+    report = report + report_boss + f'\n' 
     report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
 
     return report                                 
