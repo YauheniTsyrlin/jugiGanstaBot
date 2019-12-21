@@ -2225,7 +2225,7 @@ def statistic(goatName: str):
                     }
                 ]})
 
-    report = report + f'Было <b>{len(dresult)}</b> рейдов\n'
+    report =  f'👊<b>{len(dresult)}</b> рейдов\n' + report
 
     dresult = report_raids.aggregate([
         {   "$match": {
