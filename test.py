@@ -200,11 +200,24 @@ def statistic(goatName: str):
     from_date = setting.get('from_date')
     to_date = setting.get('to_date')
 
-    if (not from_date):
-        from_date = (datetime(2019, 1, 1)).timestamp() 
+    #if (not from_date):
+    from_date = (datetime(2019, 1, 1)).timestamp() 
 
     if (not to_date):
         to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
+
+    dresult = report_raids.distinct('date', {"$and" : [
+                    { 
+                        "date": {
+                            '$gte': from_date,
+                            '$lt': to_date
+                                }       
+                    },
+                    {
+                        "band": {'$in': getGoatBands(goatName)}   
+                    }
+                ]})
+    print(str(len(dresult)))
 
     #for band in getGoatBands(goatName):    
     dresult = report_raids.aggregate([
