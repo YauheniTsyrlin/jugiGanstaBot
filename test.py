@@ -62,6 +62,12 @@ def getUserByLogin(login: str):
             pass
     return None
 
+def isGoatBoss(login: str):
+    for goat in getSetting('GOATS_BANDS'):
+        if goat['boss'] == login:
+            return True
+    return False
+
 def getGoatBands(goatName: str):
     for goat in getSetting('GOATS_BANDS'):
         if goat.get('name') == goatName:
@@ -195,13 +201,15 @@ def saveRaidResult(goat):
                     report_raids.insert_one(row)
 
 def statistic(goatName: str):
-    report = ''
+    report = f'🐐<b>{goatName}</b>\n\n'
+    report = report + f'🧘‍♂️ <b>Рейдеры</b>:\n'
+
     setting = getSetting('REPORTS','RAIDS')
     from_date = setting.get('from_date')
     to_date = setting.get('to_date')
 
-    #if (not from_date):
-    from_date = (datetime(2019, 1, 1)).timestamp() 
+    if (not from_date):
+        from_date = (datetime(2019, 1, 1)).timestamp() 
 
     if (not to_date):
         to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
@@ -212,14 +220,29 @@ def statistic(goatName: str):
                             '$gte': from_date,
                             '$lt': to_date
                                 }       
+                    }
+                ]})
+    for d in dresult:
+        print(str(datetime.fromtimestamp(d)))
+
+    for x in report_raids.find({"$and" : [
+                    { 
+                        "date": {
+                            '$gte': from_date,
+                            '$lt': to_date
+                                }       
                     },
                     {
                         "band": {'$in': getGoatBands(goatName)}   
+                    },
+                    {
+                        "login": "Ilya_Belyaev"
                     }
-                ]})
-    print(str(len(dresult)))
+                ]}):
+        print(x["login"]+ " " + str(x["date"]) + str(datetime.fromtimestamp(x["date"])))
 
-    #for band in getGoatBands(goatName):    
+    report =  f'👊<b>{len(dresult)}</b> рейдов\n' + report
+
     dresult = report_raids.aggregate([
         {   "$match": {
                 "$and" : [
@@ -252,11 +275,20 @@ def statistic(goatName: str):
             "$sort" : { "count" : -1 } 
         }
     ])
-
+    
+    report_boss = ''
     for d in dresult:
-        user = getUserByLogin(d.get("_id"))
+        name = d.get("_id")
+        user = getUserByLogin(name)
         count = d.get("count")
-        report = report + f'{count} {user.getName().strip()} \n'
+
+        if isGoatBoss(name):
+            report_boss = f'😎 наш босс <b>{user.getName()}</b> посетил рейды {count} раз. Скажите за это ему "Спасибо!" при встрече.\n'
+            continue
+        
+        if user:
+            name = user.getName().strip()
+        report = report + f'{count} {name} \n'
 
     dresult = report_raids.aggregate([
         {   "$match": {
@@ -291,13 +323,25 @@ def statistic(goatName: str):
         }
     ])
 
-    report = report + f'=================\n'
+    report = report + f'\n🤬 <b>Хренейдеры</b>:\n'
     for d in dresult:
-        user = getUserByLogin(d.get("_id"))
+        name = d.get("_id")
         count = d.get("count")
-        report = report + f'{count} {user.getName().strip()} \n'
+        if isGoatBoss(name):
+            report_boss = report_boss + f'Еще наш босс не был на некоторых рейдах, потому что был зянят переписью хренейредоров, забивших на общие цели! Это, надеюсь, всем понятно?!\n'
+            report_boss = '\n'+report_boss
+            continue
+        user = getUserByLogin(name)
+        
+        if user:
+            name = user.getName().strip()
+        report = report + f'{count} {name} \n'
 
-    return report           
+    report = report + report_boss + f'\n' 
+    report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
+
+    return report                                 
+        
 
 print('\n======== radeReport ==========\n')
 

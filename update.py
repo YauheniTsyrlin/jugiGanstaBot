@@ -128,7 +128,7 @@ newvalues = { "$set": { "value":
                         {
                             'name': 'RAIDS',
                             'value': {
-                                'from_date': datetime.datetime(2019, 12, 19, 21, 0, 0).timestamp(), 
+                                'from_date': datetime.datetime(2019, 12, 20, 5, 0, 0).timestamp(), 
                                 'to_date': None
                             }
                         }
