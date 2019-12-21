@@ -10,6 +10,7 @@ try_counters = mydb["try_counter"]
 registered_wariors = mydb["wariors"]
 battle = mydb["battle"]
 settings = mydb["settings"]
+report_raids    = mydb["report_raids"]
 
 def getSetting(code: str):
     """ Получение настройки """
@@ -128,7 +129,7 @@ newvalues = { "$set": { "value":
                         {
                             'name': 'RAIDS',
                             'value': {
-                                'from_date': datetime.datetime(2019, 12, 20, 5, 0, 0).timestamp(), 
+                                'from_date': datetime.datetime(2019, 12, 19, 23, 0, 0).timestamp(), 
                                 'to_date': None
                             }
                         }
@@ -212,8 +213,14 @@ for x in settings.find():
     print(x)
 
 print("#==========================#")              
+print("#         RAIDS            #")    
+print("#==========================#")
+
+x = report_raids.delete_many({'date':1576947600.0});
+x = report_raids.delete_many({'date':1576803600.0});
+
+print("#==========================#")              
 print("#         USERS            #")    
-print("#    update loacation      #")                        
 print("#==========================#")
 
 # for x in registered_users.find():

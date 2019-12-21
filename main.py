@@ -2041,19 +2041,20 @@ def rade():
 
     logger.info('check rade time: now ' + str(now_date))
     
-    if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second <= 15:
+    if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second < 15:
         updateUser(None)
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat, True)
             send_messages_big(goat['chat'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
 
-    if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second <= 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second < 15:
         logger.info('Rade time now!')
         updateUser(None)
         for goat in getSetting('GOATS_BANDS'):
             report = radeReport(goat)
             send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report)
             saveRaidResult(goat)
+            statistic(goat['name'])
 
         for goat in getSetting('GOATS_BANDS'):
             registered_users.update_many(
@@ -2106,6 +2107,7 @@ def getPlanedRaidLocation(goatName: str, lastRaid = False):
     return raidNone
 
 def saveRaidResult(goat):
+    logger.info(f"saveRaidResult : {goat.get('name')}")
     raid = getPlanedRaidLocation(goat['name'], lastRaid=True)
     location = raid.get('rade_location')
     raiddate = raid.get('rade_date')
@@ -2129,10 +2131,10 @@ def saveRaidResult(goat):
                     row.update({'user_location': user.getRaidLocation()})    
                     if location and user.getRaidLocation() == location:
                         row.update({'planed_location': True})
-                # newvalues = { "$set": row }
-                # result = report_raids.update_one({"login": f"{user.getLogin()}", 'date': raiddate}, newvalues)
-                # if result.matched_count < 1:
-                report_raids.insert_one(row)
+                newvalues = { "$set": row }
+                result = report_raids.update_one({"login": f"{user.getLogin()}", 'date': raiddate}, newvalues)
+                if result.matched_count < 1:
+                    report_raids.insert_one(row)
 
 def radeReport(goat, ping=False):
 

@@ -200,7 +200,7 @@ def saveRaidResult(goat):
                 if result.matched_count < 1:
                     report_raids.insert_one(row)
 
-def statistic(goatName: str):
+def statistic(goatName: str): 
     report = f'🐐<b>{goatName}</b>\n\n'
     report = report + f'🧘‍♂️ <b>Рейдеры</b>:\n'
 
@@ -208,8 +208,8 @@ def statistic(goatName: str):
     from_date = setting.get('from_date')
     to_date = setting.get('to_date')
 
-    if (not from_date):
-        from_date = (datetime(2019, 1, 1)).timestamp() 
+    #if (not from_date):
+    from_date = (datetime(2019, 1, 1)).timestamp() 
 
     if (not to_date):
         to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
@@ -344,6 +344,10 @@ def statistic(goatName: str):
         
 
 print('\n======== radeReport ==========\n')
+
+x = report_raids.delete_many({'date':1576947600.0});
+x = report_raids.delete_many({'date':1576803600.0});
+
 
 # for ts in (1575922314, 1576610657, 1576070150, 1576078889, 1576100043, 1576156614, 1576533127):
 #     print(f"{datetime.fromtimestamp(ts)}")
