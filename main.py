@@ -2246,7 +2246,8 @@ def statistic(goatName: str):
                     }
                 ]})
 
-    report =  f'👊<b>{len(dresult)}</b> рейдов\n' + report
+    raid_counter = len(dresult)
+    report =  f'👊<b>{raid_counter}</b> рейдов\n' + report
 
     dresult = report_raids.aggregate([
         {   "$match": {
@@ -2293,7 +2294,10 @@ def statistic(goatName: str):
         
         if user:
             name = user.getName().strip()
-        report = report + f'{count} {name} \n'
+        if raid_counter == count:
+            report = report + f'<b>{count} {name}</b>\n'
+        else:
+            report = report + f'{count} {name} \n'
 
     dresult = report_raids.aggregate([
         {   "$match": {
@@ -2333,14 +2337,17 @@ def statistic(goatName: str):
         name = d.get("_id")
         count = d.get("count")
         if isGoatBoss(name):
-            report_boss = report_boss + f'Еще наш босс не был на некоторых рейдах, потому что был зянят переписью хренейредоров, забивших на общие цели! Это, надеюсь, всем понятно?!\n'
+            report_boss = report_boss + f'Еще наш босс не был на некоторых рейдах, потому что был зянят переписью хренейдеров, забивших на общие цели! Это, надеюсь, всем понятно?!\n'
             report_boss = '\n'+report_boss
             continue
         user = getUserByLogin(name)
         
         if user:
             name = user.getName().strip()
-        report = report + f'{count} {name} \n'
+        if raid_counter == count:
+            report = report + f'<b>{count} {name}</b>\n'
+        else:
+            report = report + f'{count} {name} \n'
 
     report = report + report_boss + f'\n' 
     report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
