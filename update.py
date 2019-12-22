@@ -109,7 +109,7 @@ newvalues = { "$set": { "value":
                         {
                             # Range
                             'name': 'FUNY_BAN',
-                            'value': 100
+                            'value': 180
                         }
                     ]
                 } 
@@ -216,8 +216,8 @@ print("#==========================#")
 print("#         RAIDS            #")    
 print("#==========================#")
 
-x = report_raids.delete_many({'date':1576947600.0});
-x = report_raids.delete_many({'date':1576803600.0});
+# x = report_raids.delete_many({'date':1576947600.0});
+# x = report_raids.delete_many({'date':1576803600.0});
 
 print("#==========================#")              
 print("#         USERS            #")    

@@ -423,8 +423,6 @@ def get_message_photo(message):
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
     
-
-
 # Handle all other messages
 @bot.message_handler(content_types=["sticker"])
 def get_message_stiker(message):
@@ -877,10 +875,7 @@ def main_message(message):
     else:
         markup.add('📋 Отчет', '📜 Профиль', '🤼 В ринг', f'⏰ План рейда')
 
-    if not findUser:
-        r = random.random()
-        if (r <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
-            send_messages_big(message.chat.id, text=getResponseDialogFlow('i_dont_know_you'))
+
 
     if (message.text.startswith('📟Пип-бой 3000') and 
             '/killdrone' not in message.text and 
@@ -893,9 +888,13 @@ def main_message(message):
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
                 for warior in ww:
                     update_warior(warior)
-
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                 return
+            
+            if message.forward_date < datetime.now() - timedelta(minutes=5):
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive'))
+                return
+
             user = users.User(message.from_user.username, message.forward_date, message.text)
             if findUser==False:   
                 x = registered_users.insert_one(json.loads(user.toJSON()))
@@ -1101,6 +1100,11 @@ def main_message(message):
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_you_cant'))
         return
+
+    if not findUser:
+        r = random.random()
+        if (r <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('i_dont_know_you'))
 
     if hasAccessToWariors(message.from_user.username):
         #write_json(message.json)
@@ -2340,7 +2344,7 @@ def pending_job():
         pending_message()
         time.sleep(5)
 
-# 10 secund
+# 15 secund
 def rade_job():
     while True:
         rade()
