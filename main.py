@@ -2294,7 +2294,7 @@ def statistic(goatName: str):
         
         if user:
             name = user.getName().strip()
-        report = report + f'<b>{count} {name}</b>\n'
+        report = report + f'{count} {name}\n'
 
 
     dresult = report_raids.aggregate([
