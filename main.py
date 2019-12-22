@@ -849,7 +849,7 @@ def main_message(message):
 
     black_list = getSetting('BLACK_LIST', message.from_user.username)
     if black_list:
-        send_messages_big(message.chat.id, text=f'{message.from_user.username} заслужил пожиненный бан {black_list}', reply_markup=None)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} заслужил пожизненный бан {black_list}', reply_markup=None)
         send_message_to_admin(f'⚠️Внимание! \n {message.from_user.username} написал Джу:\n\n {message.text}')
         return
 
