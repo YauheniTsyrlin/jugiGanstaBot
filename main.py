@@ -1138,9 +1138,7 @@ def main_message(message):
                 report = 'Чёт я приуныл... Ничего в голову не идет... Давай позже.'
             
             send_messages_big(message.chat.id, report)
-        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        # TO DO!
-        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         elif (callJugi 
                     and message.reply_to_message
                     and message.text 
@@ -2329,22 +2327,43 @@ def statistic(goatName: str):
             "$sort" : { "count" : -1 } 
         }
     ])
+    
+    bad_raid_counter = raid_counter
+    hrenraid = []
 
     report = report + f'\n🤬 <b>Хренейдеры</b>:\n'
+    j = 0
     for d in dresult:
         name = d.get("_id")
         count = d.get("count")
+        if j == 0:
+            bad_raid_counter = count
+
         if isGoatBoss(name):
             report_boss = report_boss + f'Еще наш босс не был на некоторых рейдах, потому что был зянят переписью хренейдеров, забивших на общие цели! Это, надеюсь, всем понятно?!\n'
             report_boss = '\n'+report_boss
             continue
         user = getUserByLogin(name)
-        
+
         if user:
             name = user.getName().strip()
-        report = report + f'{count} {name} \n'
 
-    report = report + report_boss + f'\n' 
+        if bad_raid_counter == count:
+            hrenraid.append(f'{name} \n')
+        else:
+            report = report + f'{count} {name} \n'
+        j = j + 1
+
+    hrenraid_report = ''
+    i = 0
+    for s in hrenraid:
+        if i == 0:
+            hrenraid_report = f'\n🚪 <b>Кандидаты на выход</b>:\n'    
+        
+        hrenraid_report = hrenraid_report + s;
+        i = i + 1
+
+    report = report + hrenraid_report + report_boss + f'\n' 
     report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
 
     return report                                 
