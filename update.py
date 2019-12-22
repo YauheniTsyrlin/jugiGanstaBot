@@ -89,9 +89,36 @@ if (not result):
         'value': ''   
              })   
 
+result = settings.find_one({'code': 'BLACK_LIST'})
+if (not result):
+    print('Not Find setting. Insert BLACK_LIST')
+    settings.insert_one({
+        'code': 'BLACK_LIST', 
+        'description': ' Бандиты, которые пожизенно забанены', 
+        'value': ''   
+             })   
+
+
 print("#==========================#")              
 print("#     UPDATE SETTINGS      #")              
 print("#==========================#")              
+
+myquery = { "code": 'BLACK_LIST' }
+newvalues = { "$set": { "value": 
+                    [
+                        {
+                            'name': 've1es88',
+                            'value': 'За попытку скрытно бросить старый пип Джу.'
+                        },
+                        {
+                            'name': 'GonzikBenzyavsky',
+                            'value': '⚠️ За попытку скрытно бросить старый пип Джу.'
+                        }
+                        
+                    ]
+                } 
+            } 
+u = settings.update_one(myquery, newvalues)
 
 myquery = { "code": 'PROBABILITY' }
 newvalues = { "$set": { "value": 
