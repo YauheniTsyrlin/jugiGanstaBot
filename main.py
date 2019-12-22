@@ -2344,12 +2344,12 @@ def statistic(goatName: str):
             report_boss = '\n'+report_boss
             continue
         user = getUserByLogin(name)
-
+        login = name
         if user:
             name = user.getName().strip()
 
         if bad_raid_counter == count:
-            hrenraid.append(f'{name} \n')
+            hrenraid.append(f'@{login} {name}\n')
         else:
             report = report + f'{count} {name} \n'
         j = j + 1
