@@ -2283,6 +2283,7 @@ def statistic(goatName: str):
     ])
     
     report_boss = ''
+    first = True
     for d in dresult:
         name = d.get("_id")
         user = getUserByLogin(name)
@@ -2294,10 +2295,11 @@ def statistic(goatName: str):
         
         if user:
             name = user.getName().strip()
-        if raid_counter == count:
+        if first:
             report = report + f'<b>{count} {name}</b>\n'
         else:
             report = report + f'{count} {name} \n'
+        first = False
 
     dresult = report_raids.aggregate([
         {   "$match": {
@@ -2333,6 +2335,7 @@ def statistic(goatName: str):
     ])
 
     report = report + f'\n🤬 <b>Хренейдеры</b>:\n'
+    first = True
     for d in dresult:
         name = d.get("_id")
         count = d.get("count")
@@ -2344,11 +2347,12 @@ def statistic(goatName: str):
         
         if user:
             name = user.getName().strip()
-        if raid_counter == count:
+        if first:
             report = report + f'<b>{count} {name}</b>\n'
         else:
             report = report + f'{count} {name} \n'
-
+        first = False
+        
     report = report + report_boss + f'\n' 
     report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
 
