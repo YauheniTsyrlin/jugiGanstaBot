@@ -891,7 +891,7 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                 return
             
-            if message.forward_date < datetime.now() - timedelta(minutes=5):
+            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive'))
                 return
 
