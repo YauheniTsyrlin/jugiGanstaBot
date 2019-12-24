@@ -107,7 +107,7 @@ myquery = { "code": 'BLACK_LIST' }
 newvalues = { "$set": { "value": 
                     [
                         {
-                            'name': 've1es88',
+                            'name': '*******ve1es88',
                             'value': 'За попытку скрытно бросить старый пип Джу.'
                         }
                         
