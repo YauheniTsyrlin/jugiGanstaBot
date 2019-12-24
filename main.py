@@ -1425,9 +1425,9 @@ def main_message(message):
                             return
                         
                         goat = getMyGoat(message.from_user.username)
-                        #   0    1        2         3     
-                        # jugi:rade:$radelocation:$time
-                        raid_date = parse(response.split(response.split(":")[2])[1][1:])
+                        #   0    1        2         3        4     
+                        # jugi:rade:$radelocation:$bool:$date-time
+                        raid_date = parse(response.split(response.split(":")[3])[1][1:])
                         if raid_date.hour not in (1, 9, 17):
                             send_messages_big(message.chat.id, text='Рейды проходят только в 1:00, 9:00, 17:00!\nУкажи правильное время!')
                             return 
@@ -1442,51 +1442,40 @@ def main_message(message):
                         rade_text = response.split(":")[2]
                         rade_location = int(response.split(":")[2].split('📍')[1].split('км')[0].strip())
 
-                        if privateChat:
-                            send_messages_big(message.chat.id, text='Напоминания для рейда будут приходить только в этот чат!\nЧтобы их увидели все - запланируй рейд в групповом чате!')
+                        if eval(response.split(":")[3]):
+                            myquery = { 
+                                        "rade_date": raid_date.timestamp(), 
+                                        "goat": goat
+                                    }
+                            newvalues = { "$set": { 
+                                            'rade_date': raid_date.timestamp(),
+                                            'rade_text': rade_text,
+                                            'rade_location': rade_location,
+                                            'state': 'WAIT',
+                                            'chat_id': message.chat.id,
+                                            'login': message.from_user.username,
+                                            'goat': goat
+                                        } } 
+                            u = plan_raids.update_one(myquery, newvalues)
 
-                        myquery = { 
-                                    "rade_date": raid_date.timestamp(), 
-                                    "goat": goat
-                                }
-                        newvalues = { "$set": { 
-                                        'rade_date': raid_date.timestamp(),
-                                        'rade_text': rade_text,
-                                        'rade_location': rade_location,
-                                        'state': 'WAIT',
-                                        'chat_id': message.chat.id,
-                                        'login': message.from_user.username,
-                                        'goat': goat
-                                    } } 
-                        u = plan_raids.update_one(myquery, newvalues)
-                        if u.matched_count == 0:
-                            plan_raids.insert_one({ 
-                                'create_date': datetime.now().timestamp(), 
-                                'rade_date': raid_date.timestamp(),
-                                'rade_text': rade_text,
-                                'rade_location': rade_location,
-                                'state': 'WAIT',
-                                'chat_id': message.chat.id,
-                                'login': message.from_user.username,
-                                'goat': goat})
-                        
+                            if u.matched_count == 0:
+                                plan_raids.insert_one({ 
+                                    'create_date': datetime.now().timestamp(), 
+                                    'rade_date': raid_date.timestamp(),
+                                    'rade_text': rade_text,
+                                    'rade_location': rade_location,
+                                    'state': 'WAIT',
+                                    'chat_id': message.chat.id,
+                                    'login': message.from_user.username,
+                                    'goat': goat})
+                        else:
+                            plan_raids.delete_one({
+                                            'rade_date': raid_date.timestamp(),
+                                            })
+
                         plan_str = get_raid_plan(raid_date, goat)
                         msg = send_messages_big(message.chat.id, text=plan_str)
-                        
-                        
-                        # time_str = response.split(response.split(":")[2])[1][1:]
-                        # dt = parse(time_str)
-                        # time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
-                        # time_remind_str = str(dt.hour-1).zfill(2)+':'+str(dt.minute+30).zfill(2)
-                        # report = f'<b>Рейд!</b> {time_str} <b>{response.split(":")[2]}</b>\n🐐<b>{getMyGoat(message.from_user.username)}</b>\n'
-                        # # for registered_user in registered_users.find({"band": f"{response.split(':')[2][1:]}"}):
-                        # #     user = users.importUser(registered_user)
-                        # #     report = report + f'\n@{user.getLogin()}'
-                        # report = report + '\n<b>Не опаздываем!</b>' 
-                        # msg = send_messages_big(message.chat.id, text=report, reply_markup=None)
-                        # if not privateChat:
-                        #     bot.pin_chat_message(message.chat.id, msg.message_id)
-                        # #msg = send_messages_big(message.chat.id, text='Напомнить в '+time_remind_str+'?', reply_markup=None)
+                                                
                     elif 'getchat' == response.split(':')[1]:
                         send_messages_big(message.chat.id, text=f'Id чата {message.chat.id}')
                     elif 'capture' == response.split(':')[1]:
