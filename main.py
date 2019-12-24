@@ -1474,8 +1474,7 @@ def main_message(message):
                                             })
 
                         plan_str = get_raid_plan(raid_date, goat)
-                        msg = send_messages_big(message.chat.id, text=plan_str)
-                                                
+                        msg = send_messages_big(message.chat.id, text=plan_str)                                 
                     elif 'getchat' == response.split(':')[1]:
                         send_messages_big(message.chat.id, text=f'Id чата {message.chat.id}')
                     elif 'capture' == response.split(':')[1]:
@@ -2048,19 +2047,22 @@ def rade():
     logger.info('check rade time: now ' + str(now_date))
     
     if now_date.hour in (0, 8, 16) and now_date.minute in (30, 55) and now_date.second < 15:
+        
         updateUser(None)
         for goat in getSetting('GOATS_BANDS'):
-            report = radeReport(goat, True)
-            send_messages_big(goat['chat'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
+            if getPlanedRaidLocation(goat['name'], planRaid = True)['rade_location']:
+                report = radeReport(goat, True)
+                send_messages_big(goat['chat'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second < 15:
         logger.info('Rade time now!')
         updateUser(None)
         for goat in getSetting('GOATS_BANDS'):
-            report = radeReport(goat)
-            send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report)
-            saveRaidResult(goat)
-            statistic(goat['name'])
+            if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
+                report = radeReport(goat)
+                send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report)
+                saveRaidResult(goat)
+                statistic(goat['name'])
 
         for goat in getSetting('GOATS_BANDS'):
             registered_users.update_many(
@@ -2069,25 +2071,25 @@ def rade():
             )
         updateUser(None)
         
-def getPlanedRaidLocation(goatName: str, lastRaid = False):
+def getPlanedRaidLocation(goatName: str, planRaid = True):
     tz = config.SERVER_MSK_DIFF
     raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
     hour = raid_date.hour
 
-    if not lastRaid and raid_date.hour >= 17:
+    if planRaid and raid_date.hour >= 17:
         raid_date = raid_date + timedelta(days=1)
 
     if raid_date.hour >=1 and raid_date.hour <9:
         hour = 9
-        if lastRaid:
+        if not planRaid:
             hour = 1
     elif raid_date.hour >=9 and raid_date.hour <17:
         hour = 17
-        if lastRaid:
+        if not planRaid:
             hour = 9
     if raid_date.hour >=17 or raid_date.hour <1:
         hour = 1
-        if lastRaid:
+        if not planRaid:
             hour = 17
 
     raidNone = {}
@@ -2114,7 +2116,7 @@ def getPlanedRaidLocation(goatName: str, lastRaid = False):
 
 def saveRaidResult(goat):
     logger.info(f"saveRaidResult : {goat.get('name')}")
-    raid = getPlanedRaidLocation(goat['name'], lastRaid=True)
+    raid = getPlanedRaidLocation(goat['name'], planRaid=False)
     location = raid.get('rade_location')
     raiddate = raid.get('rade_date')
 
@@ -2230,6 +2232,9 @@ def statistic(goatName: str):
                     },
                     {
                         "band": {'$in': getGoatBands(goatName)}   
+                    },
+                    {
+                        "planed_location": {'$ne':None}   
                     }
                 ]})
 
@@ -2250,6 +2255,9 @@ def statistic(goatName: str):
                     },
                     {
                         "on_raid": True
+                    },
+                    {
+                        "planed_location": {'$ne':None}   
                     }
                 ]
             }
@@ -2298,6 +2306,9 @@ def statistic(goatName: str):
                     },
                     {
                         "on_raid": False
+                    },
+                    {
+                        "planed_location": {'$ne':None}   
                     }
                 ]
             }
