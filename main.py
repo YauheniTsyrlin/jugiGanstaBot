@@ -2046,11 +2046,16 @@ def rade():
 
     logger.info('check rade time: now ' + str(now_date))
     
-    if now_date.day == 28 and now_date.month == 12 and now_date.hour == 0 and now_date.minute in (0,1,2,3,4,5,6,7,8,9, 38,39,40) and now_date.second < 15:
+    if now_date.day == 1 and now_date.month == 1 and now_date.hour == 0 and now_date.minute in (0,10,15,20,25,35,35,50) and now_date.second < 15:
         for goat in getSetting('GOATS_BANDS'):
-            bot.send_message(goat['chat'], text='С новым годом!')
-            getSetting('STICKERS','NEW_YEAR')
-            bot.send_sticker(497065022, random.sample(getSetting('STICKERS','NEW_YEAR'), 1)[0]['value']) 
+            report = ''
+            try:
+                r = requests.get(f'{config.ANECDOT_URL}={16}', verify=False, timeout=7)
+                report = r.text[12:-2]
+            except:
+                report = 'Чёт я приуныл... Ничего в голову не идет... С новым годом!'
+            send_messages_big(goat['chat'], report)
+            bot.send_sticker(goat['chat'], random.sample(getSetting('STICKERS','NEW_YEAR'), 1)[0]['value']) 
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
         
