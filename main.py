@@ -2046,7 +2046,7 @@ def rade():
 
     logger.info('check rade time: now ' + str(now_date))
     
-    if now_date.day == 28 and now_date.month == 12 and now_date.hour == 0 and now_date.minute in (0,1,2,3,4,5,6,7,8,9) and now_date.second < 15:
+    if now_date.day == 28 and now_date.month == 12 and now_date.hour == 0 and now_date.minute in (0,1,2,3,4,5,6,7,8,9, 38,39,40) and now_date.second < 15:
         for goat in getSetting('GOATS_BANDS'):
             bot.send_message(goat['chat'], text='С новым годом!')
             getSetting('STICKERS','NEW_YEAR')
