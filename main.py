@@ -863,7 +863,6 @@ def main_message(message):
         send_messages_big(message.chat.id, text=f'{message.from_user.username} заслужил пожизненный бан {black_list}', reply_markup=None)
         send_message_to_admin(f'⚠️Внимание! \n {message.from_user.username} написал Джу:\n\n {message.text}')
         return
-
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
         user = getUserByLogin(message.from_user.username)
@@ -892,8 +891,6 @@ def main_message(message):
         markup.add('Джу, 📋 Отчет', 'Джу, 📜 Профиль', f'Джу, ⏰ план рейда')
     else:
         markup.add('📋 Отчет', '📜 Профиль', '🤼 В ринг', f'⏰ План рейда')
-
-
 
     if (message.text.startswith('📟Пип-бой 3000') and 
             '/killdrone' not in message.text and 
@@ -1131,6 +1128,18 @@ def main_message(message):
         r = random.random()
         if (r <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
             send_messages_big(message.chat.id, text=getResponseDialogFlow('i_dont_know_you'))
+
+    if 'грац' in message.text.lower():
+        bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_LOVE'), 1)[0]['value'])
+        return
+
+    if 'ура' in message.text.lower() or '))' in message.text.lower() or 'ахах' in message.text.lower() or 'ебать' in message.text.lower() or 'ебаать' in message.text.lower() or 'ебааать' in message.text.lower():
+        bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_LIKE'), 1)[0]['value'])
+        return
+    
+    if 'пиздец' in message.text.lower():
+        bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_DEAD'), 1)[0]['value'])
+        return
 
     if hasAccessToWariors(message.from_user.username):
         #write_json(message.json)

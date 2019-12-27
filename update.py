@@ -234,7 +234,69 @@ newvalues = { "$set": { "value":
                                     'value': 'CAADAgADKAAD29t-AAHTqBFpbSvY8xYE'
                                 }
                             ] 
-                        }
+                        },
+                        {
+                            'name': 'BOT_LOVE',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgADLgAD29t-AAHj7r1tLLx9rxYE'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': 'CAADAgADJgAD29t-AAF-dqsVA8i9LRYE'
+                                }
+                            ] 
+                        },
+                        {
+                            'name': 'BOT_FUCKOFF',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgADLQAD29t-AAFZ6winaM23ehYE'
+                                }
+                            ] 
+                        },
+                        {
+                            'name': 'BOT_LIKE',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgADKwAD29t-AAG92hgvlAcIAxYE'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': 'CAADAgADKgAD29t-AAFacpWXMyDGihYE'
+                                },
+                                {
+                                    'name': '3',
+                                    'value': 'CAADAgADLAAD29t-AAEZWj4hb9ADpRYE'
+                                }
+                            ] 
+                        },
+                        {
+                            'name': 'BOT_DEAD',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgADKQAD29t-AAFgFIcFdTXiDhYE'
+                                }
+                            ] 
+                        },
+                        {
+                            'name': 'BOT_LOOK',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgADJwAD29t-AAFc8IBFtdp6yxYE'
+                                }
+                            ] 
+                        }                        
                     ]
                 } 
             } 
