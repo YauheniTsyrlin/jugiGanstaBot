@@ -1129,7 +1129,7 @@ def main_message(message):
         if (r <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
             send_messages_big(message.chat.id, text=getResponseDialogFlow('i_dont_know_you'))
 
-    if 'грац' in message.text.lower():
+    if 'грац' in message.text.lower() or 'лол' in message.text.lower() or 'lol' in message.text.lower():
         bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_LOVE'), 1)[0]['value'])
         return
 
