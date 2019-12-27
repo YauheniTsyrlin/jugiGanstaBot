@@ -8,10 +8,12 @@ import config
 import tools
 import json
 import sys
+import random
 
 import users 
 import wariors
 import tools
+
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["jugidb"]
@@ -40,7 +42,8 @@ def getSetting(code: str, name=None):
             for arr in result.get('value'):
                 if arr['name'] == name:
                     return arr['value'] 
-        return result.get('value') 
+        else:
+            return result.get('value')
 
 def setSetting(code: str, value: str):
     
@@ -345,9 +348,9 @@ def statistic(goatName: str):
 
 print('\n======== radeReport ==========\n')
 
-x = report_raids.delete_many({'date':1576947600.0});
-x = report_raids.delete_many({'date':1576803600.0});
+print(random.sample(getSetting('STICKERS','NEW_YEAR'),1)[0]['value'])
 
+sys.exit(0)
 
 # for ts in (1575922314, 1576610657, 1576070150, 1576078889, 1576100043, 1576156614, 1576533127):
 #     print(f"{datetime.fromtimestamp(ts)}")

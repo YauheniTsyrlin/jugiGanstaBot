@@ -89,6 +89,16 @@ if (not result):
         'value': ''   
              })   
 
+
+result = settings.find_one({'code': 'STICKERS'})
+if (not result):
+    print('Not Find setting. Insert STICKERS')
+    settings.insert_one({
+        'code': 'STICKERS', 
+        'description': ' Стикеры', 
+        'value': ''   
+             })  
+
 result = settings.find_one({'code': 'BLACK_LIST'})
 if (not result):
     print('Not Find setting. Insert BLACK_LIST')
@@ -102,6 +112,123 @@ if (not result):
 print("#==========================#")              
 print("#     UPDATE SETTINGS      #")              
 print("#==========================#")              
+
+
+myquery = { "code": 'STICKERS' }
+newvalues = { "$set": { "value": 
+                    [
+                        {
+                            'name': 'NEW_YEAR',
+                            'value': 
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgADZQEAAiUDUg9wLtRNP5HEShYE'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': 'CAADAgADZAEAAiUDUg9eJr3T5SlzNRYE'
+                                },
+                                {
+                                    'name': '3',
+                                    'value': 'CAADAgADYwEAAiUDUg8xb6Oi5xhKIRYE'
+                                },
+                                {
+                                    'name': '4',
+                                    'value': 'CAADAgADYgEAAiUDUg-BPZaIyNkJcRYE'
+                                },
+                                {
+                                    'name': '5',
+                                    'value': 'CAADAgADYQEAAiUDUg_cspuyDXpmOhYE'
+                                },
+
+                                {
+                                    'name': '6',
+                                    'value': 'CAADAgADXwEAAiUDUg8Vng-FXAEjcRYE'
+                                },
+                                {
+                                    'name': '7',
+                                    'value': 'CAADAgADYAEAAiUDUg8_nsFTwZHrYxYE'
+                                },
+                                {
+                                    'name': '8',
+                                    'value': 'CAADAgADXgEAAiUDUg_LK-sPC_cJwBYE'
+                                },
+                                {
+                                    'name': '9',
+                                    'value': 'CAADAgADXQEAAiUDUg95Y2aMiIFtVxYE'
+                                },
+                                {
+                                    'name': '10',
+                                    'value': 'CAADAgADWwEAAiUDUg-MMerpYQqc5RYE'
+                                },
+
+                                {
+                                    'name': '11',
+                                    'value': 'CAADAgADWgEAAiUDUg95rJid1HvscBYE'
+                                },
+                                {
+                                    'name': '12',
+                                    'value': 'CAADAgADWQEAAiUDUg_OxLS7v_c4HRYE'
+                                },
+                                {
+                                    'name': '13',
+                                    'value': 'CAADAgADWQEAAiUDUg_OxLS7v_c4HRYE'
+                                },
+                                {
+                                    'name': '14',
+                                    'value': 'CAADAgADWAEAAiUDUg_kwTI7r9mCvBYE'
+                                },
+                                {
+                                    'name': '15',
+                                    'value': 'CAADAgADVwEAAiUDUg-uJRhLA-w2JBYE'
+                                },
+                                {
+                                    'name': '16',
+                                    'value': 'CAADAgADUgEAAiUDUg8m7BF7uCsezhYE'
+                                },
+                                {
+                                    'name': '17',
+                                    'value': 'CAADAgADUwEAAiUDUg_elJYAAaQFd3UWBA'
+                                },
+                                {
+                                    'name': '18',
+                                    'value': 'CAADAgADVAEAAiUDUg8ggQAB7ZuCZzsWBA'
+                                },
+                                {
+                                    'name': '19',
+                                    'value': 'CAADAgADVQEAAiUDUg8De_0X8Gk8SBYE'
+                                },
+                                {
+                                    'name': '20',
+                                    'value': 'CAADAgADVgEAAiUDUg8epYq-rDccuxYE'
+                                },
+                                {
+                                    'name': '21',
+                                    'value': 'CAADAgADUQEAAiUDUg8k4gRFGJ52WBYE'
+                                },
+                                {
+                                    'name': '22',
+                                    'value': 'CAADAgADUAEAAiUDUg-ySAOTHhuI3RYE'
+                                },
+                                {
+                                    'name': '23',
+                                    'value': 'CAADAgADTwEAAiUDUg-IvO3zAz1k8RYE'
+                                },
+                                {
+                                    'name': '24',
+                                    'value': 'CAADAgADTgEAAiUDUg8Hwc4KQsJGXRYE'
+                                },
+                                {
+                                    'name': '25',
+                                    'value': 'CAADAgADTQEAAiUDUg_LuVlnrID-hxYE'
+                                }                                
+                            ]
+                        }
+                    ]
+                } 
+            } 
+u = settings.update_one(myquery, newvalues)
 
 myquery = { "code": 'BLACK_LIST' }
 newvalues = { "$set": { "value": 
