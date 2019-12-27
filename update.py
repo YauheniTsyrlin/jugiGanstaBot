@@ -224,6 +224,16 @@ newvalues = { "$set": { "value":
                                     'value': 'CAADAgADTQEAAiUDUg_LuVlnrID-hxYE'
                                 }                                
                             ]
+                        },
+                        {
+                            'name': 'BOT_VOICE',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgADKAAD29t-AAHTqBFpbSvY8xYE'
+                                }
+                            ] 
                         }
                     ]
                 } 

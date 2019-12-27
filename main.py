@@ -437,6 +437,17 @@ def get_message_stiker(message):
     if privateChat:
         send_messages_big(message.chat.id, text=message.sticker.file_id)
 
+# Handle all other messages
+@bot.message_handler(content_types=["voice"])
+def get_message_stiker(message):
+    #write_json(message.json)
+    if isUserBan(message.from_user.username):
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то наговорить, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'))
+        return
+
+    bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_VOICE'), 1)[0]['value'])
+
 # Handle '/fight'
 @bot.message_handler(commands=['fight'])
 def send_welcome(message):
@@ -2046,6 +2057,7 @@ def rade():
 
     logger.info('check rade time: now ' + str(now_date))
     
+    # Новый год!
     if now_date.day == 1 and now_date.month == 1 and now_date.hour == 0 and now_date.minute in (0,10,15,20,25,35,35,50) and now_date.second < 15:
         for goat in getSetting('GOATS_BANDS'):
             report = ''
