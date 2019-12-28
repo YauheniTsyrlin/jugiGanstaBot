@@ -1573,7 +1573,7 @@ def main_message(message):
                         #jugi:sticker:CAADAgADawgAAm4y2AABx_tlRP2FVS8WBA:Ми-ми-ми:NEW_YEAR
                         
                         photo = response.split(':')[2]
-                        if response.split(':')[4]:
+                        if len(response.split(':')) > 4:
                             photo = random.sample(getSetting('STICKERS', response.split(':')[4]), 1)[0]['value']
                         text = response.split(':')[3]
                         if text:
