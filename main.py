@@ -1125,21 +1125,23 @@ def main_message(message):
         return
 
     if not findUser:
-        r = random.random()
-        if (r <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
+        if (random.random() <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
             send_messages_big(message.chat.id, text=getResponseDialogFlow('i_dont_know_you'))
 
     if 'грац' in message.text.lower() or 'лол' in message.text.lower() or 'lol' in message.text.lower():
-        bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_LOVE'), 1)[0]['value'])
-        return
+        if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
+            bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_LOVE'), 1)[0]['value'])
+            return
 
-    if 'ура' in message.text.lower() or '))' in message.text.lower() or 'ахах' in message.text.lower() or 'ебать' in message.text.lower() or 'ебаать' in message.text.lower() or 'ебааать' in message.text.lower():
-        bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_LIKE'), 1)[0]['value'])
-        return
+    if 'збс' in message.text.lower() or 'ура' in message.text.lower() or '))' in message.text.lower() or 'ахах' in message.text.lower() or 'ебать' in message.text.lower() or 'ебаать' in message.text.lower() or 'ебааать' in message.text.lower():
+        if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
+            bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_LIKE'), 1)[0]['value'])
+            return
     
     if 'пиздец' in message.text.lower():
-        bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_DEAD'), 1)[0]['value'])
-        return
+        if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
+            bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_DEAD'), 1)[0]['value'])
+            return
 
     if hasAccessToWariors(message.from_user.username):
         #write_json(message.json)
