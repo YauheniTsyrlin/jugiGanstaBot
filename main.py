@@ -1569,10 +1569,16 @@ def main_message(message):
                         
                         msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                     elif 'sticker' == response.split(':')[1]: 
-                        #jugi:sticker:CAADAgADawgAAm4y2AABx_tlRP2FVS8WBA:Ми-ми-ми
+                        # 0      1               2                          3        4
+                        #jugi:sticker:CAADAgADawgAAm4y2AABx_tlRP2FVS8WBA:Ми-ми-ми:NEW_YEAR
+                        
                         photo = response.split(':')[2]
+                        if response.split(':')[4]:
+                            photo = random.sample(getSetting('STICKERS', response.split(':')[4]), 1)[0]['value']
                         text = response.split(':')[3]
-                        bot.send_message(message.chat.id, text=text)   
+                        if text:
+                            bot.send_message(message.chat.id, text=text)   
+                        
                         bot.send_sticker(message.chat.id, photo)   
                     elif 'tobeornottoby' == response.split(':')[1]:
                         #jugi:tobeornottoby
