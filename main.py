@@ -1314,6 +1314,10 @@ def main_message(message):
 
                         if len(pingusers) > 0:
                             send_messages_big(message.chat.id, text=first_string + report)
+                    elif 'youbadbot' == response.split(':')[1]:
+                        # jugi:youbadbot
+                         
+                        msg = send_messages_big(message.chat.id, text=f'{userIAm.getName()}')
                     elif 'planrade' == response.split(':')[1]:
                         # jugi:planrade:$date
                         goat = getMyGoat(message.from_user.username)
@@ -1726,7 +1730,6 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=report)
                 else:
                     try:
-                        
                         send_messages_big(message.chat.id, text=response, reply_markup=markup)
                     except:
                         logger.info("Error!")
