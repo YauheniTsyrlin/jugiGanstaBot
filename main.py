@@ -1495,10 +1495,10 @@ def main_message(message):
                             #   0    1        2       3     4
                             # jugi:capture:$bands:$Dangeon:$time
                             band = response.split(':')[2][1:]
-                            if band == '*':
+                            if response.split(":")[2] == '*':
                                 band = userIAm.getBand()
                             if not isUsersBand(message.from_user.username, band):
-                                send_messages_big(message.chat.id, text=f'Ты пытался созвать на захват банду {response.split(":")[2]}\n' + getResponseDialogFlow('not_right_band'))
+                                send_messages_big(message.chat.id, text=f'Ты пытался созвать на захват банду {band}\n' + getResponseDialogFlow('not_right_band'))
                                 return  
 
                             time_str = response.split(response.split(":")[3])[1][1:]
