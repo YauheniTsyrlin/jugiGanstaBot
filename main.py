@@ -1505,7 +1505,7 @@ def main_message(message):
                             dt = parse(time_str)
                             time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
 
-                            first_string = f'<b>Захват!</b> {response.split(":")[2]} {time_str} <b>{response.split(":")[3]}</b>\n'
+                            first_string = f'<b>Захват!</b> {band} {time_str} <b>{response.split(":")[3]}</b>\n'
                             
                             usersarr = []
                             for registered_user in registered_users.find({"band": f"{band}"}):
