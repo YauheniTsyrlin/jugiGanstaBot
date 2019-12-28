@@ -337,7 +337,14 @@ newvalues = { "$set": { "value":
                             # Вероятность
                             'name': 'EMOTIONS',
                             'value': 0.33
+                        },
+                        {
+                            # Range
+                            'name': 'JUGI_BAD_BOT_BAN',
+                            'value': 600
                         }
+
+                        
                     ]
                 } 
             } 

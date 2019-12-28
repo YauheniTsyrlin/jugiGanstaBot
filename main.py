@@ -1316,8 +1316,13 @@ def main_message(message):
                             send_messages_big(message.chat.id, text=first_string + report)
                     elif 'youbadbot' == response.split(':')[1]:
                         # jugi:youbadbot
-                         
-                        msg = send_messages_big(message.chat.id, text=f'{userIAm.getName()}')
+                        sec = int(randrange(int(getSetting('PROBABILITY','JUGI_BAD_BOT_BAN'))))
+                        tz = config.SERVER_MSK_DIFF
+                        ban_date = datetime.now() + timedelta(seconds=sec, hours=tz.hour)
+                        userIAm.setTimeBan(ban_date.timestamp())
+                        report = f'{response.split(":")[2]}\n{userIAm.getName()} выписан бан! ⏰{sec} секунд(ы) в тишине научат тебя хорошему поведению!'
+                        updateUser(user)
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}')
                     elif 'planrade' == response.split(':')[1]:
                         # jugi:planrade:$date
                         goat = getMyGoat(message.from_user.username)
