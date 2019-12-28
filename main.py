@@ -1284,12 +1284,15 @@ def main_message(message):
                     #jugi:ping:Артхаус
                     if 'ping' == response.split(':')[1]:
                         # Собираем всех пользоватлей с бандой Х
-                        band = response.split(':')[2][1:]
+                        band = response.split(':')[2]
+                        if response.split(":")[2] == '*':
+                            band = userIAm.getBand()
+
                         if not isUsersBand(message.from_user.username, band):
-                            send_messages_big(message.chat.id, text=f'Ты просил собраться банду{response.split(":")[2]}\n' + getResponseDialogFlow('not_right_band'))
+                            send_messages_big(message.chat.id, text=f'Ты просил собраться банду 🤟{band}\n' + getResponseDialogFlow('not_right_band'))
                             return
 
-                        first_string = f'{tools.deEmojify(message.from_user.first_name)} просит собраться банду\n<b>{response.split(":")[2]}</b>:\n'
+                        first_string = f'{tools.deEmojify(message.from_user.first_name)} просит собраться банду\n<b>🤟{band}</b>:\n'
                         usersarr = []
                         for registered_user in registered_users.find({"band": f"{band}"}):
                             user = users.importUser(registered_user)
@@ -1499,7 +1502,7 @@ def main_message(message):
                                 band = userIAm.getBand()
                             
                             if not isUsersBand(message.from_user.username, band):
-                                send_messages_big(message.chat.id, text=f'Ты пытался созвать на захват банду {band}\n' + getResponseDialogFlow('not_right_band'))
+                                send_messages_big(message.chat.id, text=f'Ты пытался созвать на захват банду 🤟<b>{band}</b>\n' + getResponseDialogFlow('not_right_band'))
                                 return  
 
                             time_str = response.split(response.split(":")[3])[1][1:]
