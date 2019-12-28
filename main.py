@@ -1318,7 +1318,7 @@ def main_message(message):
                         # jugi:youbeautiful:text
                         photo = random.sample(getSetting('STICKERS', 'BOT_LOVE'), 1)[0]['value']
                         bot.send_sticker(message.chat.id, photo)
-                        send_messages_big(message.chat.id, text=f'\n{response.split(":")[2]}')
+                        send_messages_big(message.chat.id, text=f'{response.split(":")[2]}')
                     elif 'youbadbot' == response.split(':')[1]:
                         # jugi:youbadbot
                         sec = int(randrange(int(getSetting('PROBABILITY','JUGI_BAD_BOT_BAN'))))
