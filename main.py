@@ -1160,12 +1160,9 @@ def main_message(message):
                 report = 'Чёт я приуныл... Ничего в голову не идет... Давай позже.'
             
             send_messages_big(message.chat.id, report)
-
-        elif (callJugi 
+        elif (callJugi and ('это залёт' in message.text.lower() or 'это залет' in message.text.lower())
                     and message.reply_to_message
-                    and message.text 
-                    and ('это залёт' in message.text.lower() or 'это залет' in message.text.lower())
-                ):
+                    and message.text):
             login = message.reply_to_message.from_user.username
 
             if config.BOT_LOGIN == login:
@@ -1192,7 +1189,6 @@ def main_message(message):
             report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно!'
             updateUser(user)
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}')
-    
         elif (callJugi and 'статус ' in message.text.lower() and ' @' in message.text):
             login = message.text.split('@')[1].split(' ')[0].strip()
             
@@ -1214,7 +1210,6 @@ def main_message(message):
                 send_messages_big(message.chat.id, text='✅ Готово')
             
             updateUser(None)
-            
         elif (callJugi and 'профиль @' in message.text.lower()):
 
             name = tools.deEmojify(message.text.split('@')[1].strip())
@@ -1238,7 +1233,6 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=warior.getProfile())
                 else:
                     send_messages_big(message.chat.id, text=warior.getProfile())
-                    
         elif (callJugi and 'уволить @' in message.text.lower()):
             if not isGoatBoss(message.from_user.username):
                 if not isAdmin(message.from_user.username):
@@ -1267,7 +1261,6 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=f'{login} не найден в бандитах! Удалено {war.deleted_count} в дневнике боев!')
             else:                 
                 send_messages_big(message.chat.id, text=f'{login} уволен нафиг! Удалено {doc.deleted_count} записей в дневнике бандитов и {war.deleted_count} в дневнике боев!')
-
         elif (callJugi and 'профиль' in message.text.lower()):
             user = users.getUser(message.from_user.username, registered_users)
             if user:
@@ -1281,7 +1274,6 @@ def main_message(message):
                     send_messages_big(message.chat.id, text=user.getProfile())
             else:
                 send_messages_big(message.chat.id, text='С твоим профилем какая-то беда... Звони в поддержку пип-боев!')
-
         elif callJugi:
             text = message.text 
             if text.lower().startswith('джу'):
@@ -1503,6 +1495,8 @@ def main_message(message):
                             #   0    1        2       3     4
                             # jugi:capture:$bands:$Dangeon:$time
                             band = response.split(':')[2][1:]
+                            if band == '*':
+                                band = userIAm.getBand()
                             if not isUsersBand(message.from_user.username, band):
                                 send_messages_big(message.chat.id, text=f'Ты пытался созвать на захват банду {response.split(":")[2]}\n' + getResponseDialogFlow('not_right_band'))
                                 return  
