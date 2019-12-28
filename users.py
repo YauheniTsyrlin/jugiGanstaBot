@@ -174,11 +174,15 @@ class User(object):
                 self.raidlocation = int(strings[i].split('👣')[1].split('км.')[0])
                 self.raid = strings[i].split('📍')[1].split('👊')[0].strip()
             if ('🏵' in strings[i]):
-                dzen_tmp = strings[i][1:2].strip()
-                if dzen_tmp == '':
-                    self.setDzen(0)
-                elif (int(dzen_tmp) >=2):
-                    self.setDzen(int(dzen_tmp)-1)
+                if '/me' in text:
+                    self.setDzen(int(strings[i].count('🏵')))
+                else:
+                    dzen_tmp = strings[i][1:2].strip()
+                    if dzen_tmp == '':
+                        self.setDzen(0)
+                    elif (int(dzen_tmp) >=2):
+                        self.setDzen(int(dzen_tmp)-1)
+
             i=i+1
         #print(self.toJSON())
 
