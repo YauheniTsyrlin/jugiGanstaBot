@@ -1318,6 +1318,7 @@ def main_message(message):
                         # jugi:youbeautiful:text
                         logger.info('youbeautiful')
                         photo = random.sample(getSetting('STICKERS', 'BOT_LOVE'), 1)[0]['value']
+                        logger.info(photo)
                         bot.send_sticker(message.chat.id, photo)
                         send_messages_big(message.chat.id, text=f'{response.split(":")[2]}')
                     elif 'youbadbot' == response.split(':')[1]:
