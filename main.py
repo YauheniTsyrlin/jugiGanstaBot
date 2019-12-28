@@ -1320,9 +1320,13 @@ def main_message(message):
                         tz = config.SERVER_MSK_DIFF
                         ban_date = datetime.now() + timedelta(seconds=sec, hours=tz.hour)
                         userIAm.setTimeBan(ban_date.timestamp())
-                        report = f'{response.split(":")[2]}\n{userIAm.getName()} выписан бан! ⏰{sec} секунд(ы) в тишине научат тебя хорошему поведению!'
+
+                        report = f'<b>{response.split(":")[2]}</b>\n<b>{userIAm.getName()}</b> выписан бан! ⏰{sec} секунд(ы) в тишине научат тебя хорошему поведению!'
                         updateUser(userIAm)
-                        send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}')
+
+                        photo = random.sample(getSetting('STICKERS', 'BOT_FUCKOFF'), 1)[0]['value']
+                        bot.send_sticker(message.chat.id, photo)
+                        send_messages_big(message.chat.id, text=f'\n{report}')
                     elif 'planrade' == response.split(':')[1]:
                         # jugi:planrade:$date
                         goat = getMyGoat(message.from_user.username)
