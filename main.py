@@ -450,6 +450,7 @@ def get_message_stiker(message):
     if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
         bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_VOICE'), 1)[0]['value'])
 
+    bot.send_chat_action(message.chat.id, 'typing')
     file_info = bot.get_file(message.voice.file_id)
     file = requests.get(
         'https://api.telegram.org/file/bot{0}/{1}'.format(config.TOKEN, file_info.file_path))
