@@ -5,6 +5,7 @@ import config
 import users 
 import wariors
 import tools
+import speech
 
 import logging
 import ssl
@@ -446,7 +447,24 @@ def get_message_stiker(message):
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то наговорить, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'))
         return
 
-    bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_VOICE'), 1)[0]['value'])
+    if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
+        bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_VOICE'), 1)[0]['value'])
+
+    file_info = bot.get_file(message.voice.file_id)
+    file = requests.get(
+        'https://api.telegram.org/file/bot{0}/{1}'.format(config.TOKEN, file_info.file_path))
+
+    try:
+        # обращение к нашему новому модулю
+        text = speech.speech_to_text(bytes=file.content)
+    except speech.SpeechException:
+        # Обработка случая, когда распознавание не удалось
+        print('Сломались на голосе')
+        pass
+    else:
+        # Бизнес-логика
+        if text:
+            send_messages_big(message.chat.id, text=f'{message.from_user.username} 🗣: ' + text)
 
 # Handle '/fight'
 @bot.message_handler(commands=['fight'])
@@ -514,7 +532,6 @@ def ok_message(message: Message):
         newvalues = { '$set': { 'state': 'READY' } }
         u = competition.update_one(myquery, newvalues)
         bot.send_message(message.chat.id, text='Готово...', reply_markup=getButtonsMenu(list_buttons) )
-
 
 # 🎲'⚔ Нападение' '🛡 Защита' '😎 Провокация'
 @bot.message_handler(func=lambda message: message.text and message.text in ('⚔ Нападение', '🛡 Защита', '😎 Провокация')  and message.chat.type == 'private', content_types=['text'])
@@ -643,7 +660,6 @@ def strategy_message(message: Message):
         list_buttons.append('😎 Провокация')
         bot.send_message(message.chat.id, text='Выбирай', reply_markup=getButtonsMenu(list_buttons) )
 
-
 # 🎩 Городские or 🐇 Мертвые кролики
 @bot.message_handler(func=lambda message: message.text and message.text and message.text in ('🎩 Городские', '🐇 Мертвые кролики') and message.chat.type == 'private', content_types=['text'])
 def my_band_message(message: Message):
@@ -688,7 +704,6 @@ def my_band_message(message: Message):
             list_buttons.append('✅ Готово')
             bot.send_message(message.chat.id, text='Жми готов!', reply_markup=getButtonsMenu(list_buttons) )
 
-
 # ⚖️ Банда
 @bot.message_handler(func=lambda message: message.text and '⚖️ Банда' in message.text  and message.chat.type == 'private', content_types=['text'])
 def band_message(message: Message):
@@ -720,7 +735,6 @@ def band_message(message: Message):
             list_buttons.append('🎲 Стратегия')
             
         bot.send_message(message.chat.id, text='Выбирай!', reply_markup=getButtonsMenu(list_buttons) )
-
 
 # '⚔️ Записаться на бой'
 @bot.message_handler(func=lambda message: message.text and '⚔️ Записаться на бой' in message.text and message.chat.type == 'private', content_types=['text'])
@@ -926,7 +940,7 @@ def main_message(message):
             send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive')) 
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'FIGHT!' in message.text):
-        #write_json(message.json)
+
         ww = wariors.fromFightToWarioirs(message.forward_date, message, USERS_ARR, battle)
         if ww == None:
             send_messages_big(message.chat.id, text=getResponseDialogFlow('dublicate'))
@@ -1127,17 +1141,14 @@ def main_message(message):
     if not findUser:
         if (random.random() <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
             send_messages_big(message.chat.id, text=getResponseDialogFlow('i_dont_know_you'))
-
     if 'грац' in message.text.lower() or 'лол' in message.text.lower() or 'lol' in message.text.lower():
         if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_LOVE'), 1)[0]['value'])
             return
-
     if 'збс' in message.text.lower() or 'ура' in message.text.lower() or '))' in message.text.lower() or 'ахах' in message.text.lower() or 'ебать' in message.text.lower() or 'ебаать' in message.text.lower() or 'ебааать' in message.text.lower():
         if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_LIKE'), 1)[0]['value'])
             return
-    
     if 'пиздец' in message.text.lower():
         if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_DEAD'), 1)[0]['value'])
@@ -1316,9 +1327,7 @@ def main_message(message):
                             send_messages_big(message.chat.id, text=first_string + report)
                     elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
-                        logger.info('youbeautiful')
                         photo = random.sample(getSetting('STICKERS', 'BOT_LOVE'), 1)[0]['value']
-                        logger.info(photo)
                         bot.send_sticker(message.chat.id, photo)
                         send_messages_big(message.chat.id, text=f'{response.split(":")[2]}')
                     elif 'youbadbot' == response.split(':')[1]:

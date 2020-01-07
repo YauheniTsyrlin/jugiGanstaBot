@@ -186,6 +186,7 @@ def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
             result.append(w1)
             result.append(w2)
             fillResult = True
+
         if fillResult and (result[0].name in strings[i] and result[1].name in strings[i]):
             if (strings[i].startswith(result[0].name)):
                 result[0].kills = result[0].kills + 1
@@ -202,14 +203,10 @@ def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
         # TODO Проверить еще на банду
         if (user.getLogin() == message.forward_from.username and user.getName() == result[0].getName()):
             result[1].setEnemy_armor(user.getArmor())
-            
             break
         if (user.getLogin() == message.forward_from.username and user.getName() == result[1].getName()):
             result[0].setEnemy_armor(user.getArmor())
             break
-
-    # for user in list(USERS_ARR):
-    #     if (user.getLogin() == message.from_user.username and user.getName() == winnerName):
 
     isReplay = False
     for x in battle.find({'winnerWarior': winnerName, 'loseWarior': loserName, 'date': forward_date } ):
