@@ -447,9 +447,6 @@ def get_message_stiker(message):
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то наговорить, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'))
         return
 
-    if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
-        bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_VOICE'), 1)[0]['value'])
-
     bot.send_chat_action(message.chat.id, 'typing')
     file_info = bot.get_file(message.voice.file_id)
     file = requests.get(
@@ -468,7 +465,15 @@ def get_message_stiker(message):
             name = message.from_user.username
             if message.forward_from:
                 name = message.forward_from.username
+            user = getUserByLogin(name)
+            if user:
+                name = user.getName()
+                
             send_messages_big(message.chat.id, text=f'<b>{name}</b>🗣:\n' + text)
+            
+            if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
+                bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_VOICE'), 1)[0]['value'])
+
 
 # Handle '/fight'
 @bot.message_handler(commands=['fight'])

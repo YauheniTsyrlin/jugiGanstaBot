@@ -336,7 +336,7 @@ newvalues = { "$set": { "value":
                         {
                             # Вероятность
                             'name': 'EMOTIONS',
-                            'value': 0.25
+                            'value': 0.10
                         },
                         {
                             # Range
