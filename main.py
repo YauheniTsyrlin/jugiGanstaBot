@@ -465,9 +465,9 @@ def get_message_stiker(message):
     else:
         # Бизнес-логика
         if text:
-            name = message.from_user.username
-            if message.forward_from.username:
-                name = message.forward_from.username
+            # name = message.from_user.username
+            # if message.forward_from.username:
+            #     name = message.forward_from.username
             send_messages_big(message.chat.id, text=f'<b>{name}</b>🗣:\n' + text)
 
 # Handle '/fight'
