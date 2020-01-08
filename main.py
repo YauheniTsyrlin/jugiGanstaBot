@@ -467,7 +467,8 @@ def get_message_stiker(message):
             if user:
                 name = user.getName()
 
-            send_messages_big(message.chat.id, text=f'🗣<b>{name}</b>:\n' + text)
+            send_messages_big(message.chat.id, text=f'🗣<b>{name}</b>')
+            send_messages_big(message.chat.id, text=text)
             
             if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
                 bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_VOICE'), 1)[0]['value'])
