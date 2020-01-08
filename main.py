@@ -335,11 +335,6 @@ def getResponseDialogFlow(text):
     request.lang = 'ru' # На каком языке будет послан запрос
     request.session_id = 'BatlabAIBot' # ID Сессии диалога (нужно, чтобы потом учить бота)
     request.query = text # Посылаем запрос к ИИ с сообщением от юзера
-    
-    # contextStr = '[{"name":"sss", "lifespan":1, "parameters":{"s": "1"}}]';
-    # contextObj = json.loads(contextStr);
-    # request.contexts = contextObj
-    # print(request.contexts)
     responseJson = json.loads(request.getresponse().read().decode('utf-8'))
     response = responseJson['result']['fulfillment']['speech'] # Разбираем JSON и вытаскиваем ответ
     # Если есть ответ от бота - присылаем юзеру, если нет - бот его не понял
@@ -347,10 +342,12 @@ def getResponseDialogFlow(text):
 
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
 def send_welcome_and_dismiss(message):
-    bot.send_chat_action(message.chat.id, 'typing')
-    time.sleep(3)
+    
     response = getResponseDialogFlow(message.content_type)
     if response:
+        bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_NEW_MEMBER'), 1)[0]['value'])
+        bot.send_chat_action(message.chat.id, 'typing')
+        time.sleep(3)
         bot.send_message(message.chat.id, text=response)
 
 # Handle all other messages
@@ -487,7 +484,6 @@ def send_welcome(message):
     list_buttons = []
     isReady = True
     for cuser in competition.find({'login': message.from_user.username, 
-                                # 'chat': message.chat.id,   
                                 '$or': [
                                             {'state': 'WAIT'},
                                             {'state': 'READY'}]    
@@ -563,7 +559,6 @@ def chose_strategy_message(message: Message):
     isStrategy = False
     lenStr = 0
     for cuser in competition.find({'login': message.from_user.username, 
-                                # 'chat': message.chat.id,   
                                 '$or': [
                                             {'state': 'WAIT'},
                                             {'state': 'READY'}]    
@@ -611,7 +606,6 @@ def chose_strategy_message(message: Message):
     else: # 1 - 2
         real.append(message.text)
         myquery = {'login': message.from_user.username, 
-                                    # 'chat': message.chat.id,   
                                     '$or': [
                                                 {'state': 'WAIT'},
                                                 {'state': 'READY'}]    
@@ -651,7 +645,6 @@ def strategy_message(message: Message):
     isReplay = False
     isReady = False
     for cuser in competition.find({'login': message.from_user.username, 
-                                # 'chat': message.chat.id,   
                                 '$or': [
                                             {'state': 'WAIT'},
                                             {'state': 'READY'}]    
@@ -681,7 +674,6 @@ def my_band_message(message: Message):
     isStrategy = False
     isReady = False
     for cuser in competition.find({'login': message.from_user.username, 
-                                # 'chat': message.chat.id,   
                                 '$or': [
                                             {'state': 'WAIT'},
                                             {'state': 'READY'}]    
@@ -693,7 +685,6 @@ def my_band_message(message: Message):
             isReady = True
 
     myquery = {'login': message.from_user.username, 
-                                # 'chat': message.chat.id,   
                                 '$or': [
                                             {'state': 'WAIT'},
                                             {'state': 'READY'}]    
@@ -724,7 +715,6 @@ def band_message(message: Message):
     isReplay = False
     isBand = False
     for cuser in competition.find({'login': message.from_user.username, 
-                                # 'chat': message.chat.id,   
                                 '$or': [
                                             {'state': 'WAIT'},
                                             {'state': 'READY'}]    
@@ -760,7 +750,6 @@ def register_message(message: Message):
 
     isReplay = False
     for cuser in competition.find({'login': message.from_user.username, 
-                                # 'chat': message.chat.id,   
                                 '$or': [
                                             {'state': 'WAIT'},
                                             {'state': 'READY'},
@@ -814,7 +803,6 @@ def ring_message(message: Message):
     isReady = False
     isBand = False
     for cuser in competition.find({'login': message.from_user.username, 
-                                # 'chat': message.chat.id,   
                                 '$or': [
                                             {'state': 'WAIT'},
                                             {'state': 'READY'},
@@ -2105,9 +2093,6 @@ def ping_on_reade(fuckupusers, chat_id):
 def rade():
     tz = config.SERVER_MSK_DIFF
     now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
-    
-    # 497065022 goat['chat'] Джу
-    # goat['chat']
 
     logger.info('check rade time: now ' + str(now_date))
     
@@ -2120,8 +2105,8 @@ def rade():
                 report = r.text[12:-2]
             except:
                 report = 'Чёт я приуныл... Ничего в голову не идет... С новым годом!'
-            send_messages_big(goat['chat'], report)
-            bot.send_sticker(goat['chat'], random.sample(getSetting('STICKERS','NEW_YEAR'), 1)[0]['value']) 
+            send_messages_big(goat['chats']['raid'], report)
+            bot.send_sticker(goat['chats']['raid'], random.sample(getSetting('STICKERS','NEW_YEAR'), 1)[0]['value']) 
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
         
@@ -2129,7 +2114,7 @@ def rade():
         for goat in getSetting('GOATS_BANDS'):
             if getPlanedRaidLocation(goat['name'], planRaid = True)['rade_location']:
                 report = radeReport(goat, True)
-                send_messages_big(goat['chat'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
+                send_messages_big(goat['chats']['raid'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second < 15:
         logger.info('Rade time now!')
@@ -2137,7 +2122,7 @@ def rade():
         for goat in getSetting('GOATS_BANDS'):
             if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
                 report = radeReport(goat)
-                send_messages_big(goat['chat'], text='<b>Результаты рейда</b>\n' + report)
+                send_messages_big(goat['chats']['raid'], text='<b>Результаты рейда</b>\n' + report)
                 saveRaidResult(goat)
                 statistic(goat['name'])
 
@@ -2228,7 +2213,7 @@ def radeReport(goat, ping=False):
     planed_raid_location_text = raidInfo['rade_text']
     goat_report = {}
     goat_report.update({'name': goat.get('name')})
-    goat_report.update({'chat': goat.get('chat')})
+    goat_report.update({'chat': goat['chats']['raid']})
     goat_report.update({'bands': []})
 
     for band in goat.get('bands'):
@@ -2283,7 +2268,7 @@ def radeReport(goat, ping=False):
             report = report + f'\n'
         if ping:
             if planed_raid_location:
-                ping_on_reade(bands.get("usersoffrade"), goat['chat'] )
+                ping_on_reade(bands.get("usersoffrade"), goat['chats']['raid'] )
     return report
 
 def statistic(goatName: str):

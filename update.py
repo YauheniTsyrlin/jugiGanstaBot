@@ -296,7 +296,24 @@ newvalues = { "$set": { "value":
                                     'value': 'CAADAgADJwAD29t-AAFc8IBFtdp6yxYE'
                                 }
                             ] 
-                        }                        
+                        },
+                        {
+                            'name': 'BOT_NEW_MEMBER',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgAD3gADHqvRF44ChJs0J0IAARYE'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': 'CAADAgADRQADmFw8HIiMxKGRHpSlFgQ'
+                                }
+                            ] 
+                        }
+
+
+                                            
                     ]
                 } 
             } 
@@ -378,10 +395,6 @@ newvalues = { "$set": { "value":
                 {
                     'login': 'GonzikBenzyavsky',
                     'chat' : 497065022
-                },
-                {
-                    'login': 'Innok27',
-                    'chat' : None
                 }
             ]
         } } 
@@ -390,14 +403,16 @@ u = settings.update_one(myquery, newvalues)
 
 myquery = { "code": 'BANDS_ACCESS_WARIORS' }
 newvalues = { "$set": { "value": 
-            [{'band': 'Артхаус'},
-             {'band': 'Энтропия'},
-             {'band': 'без банды'},
-             {'band': 'Crewname'},
-             {'band': 'FgoatUpd'},
-             {'band': 'ЭнтрǁØǁпия'}
-             ]
-             } } 
+            [
+                {'band': 'Артхаус'},
+                {'band': 'Энтропия'},
+                {'band': 'без банды'},
+                {'band': 'Crewname'},
+                {'band': 'FgoatUpd'},
+                {'band': 'ЭнтрǁØǁпия'}
+            ]
+        } 
+    } 
 u = settings.update_one(myquery, newvalues)
 
 myquery = { "code": 'GOATS_BANDS' }
@@ -420,7 +435,11 @@ newvalues = { "$set":
                                             'boss': 'Innok27'
                                         }
                                     ],
-                            'chat': -1001354871311 
+                            'chats': 
+                                    {
+                                        'raid' : -1001354871311,
+                                        'flood' : -1001354871311
+                                    }   
                         },
                         { 
                             'name': 'FǁȺǁggǁØǁAT',
@@ -447,7 +466,11 @@ newvalues = { "$set":
                                             'boss': 'WestMoscow'
                                         }
                                     ],
-                            'chat': -1001411359669 
+                            'chats': 
+                                    {
+                                        'raid' : -1001326436156,
+                                        'flood' : -1001411359669
+                                    }
                         }
                     ]   
                 } 
