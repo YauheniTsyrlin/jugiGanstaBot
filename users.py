@@ -198,7 +198,7 @@ class User(object):
         return dt.timestamp()
 
     def getBm(self):
-        stat = normalize(self.damage) + normalize(self.accuracy) + normalize(self.health) + normalize(self.charisma) + normalize(self.agility)
+        stat = normalize(self.force) + normalize(self.accuracy) + normalize(self.health) + normalize(self.charisma) + normalize(self.agility)
         return int(stat)
 
     def getRaidWeight(self):
