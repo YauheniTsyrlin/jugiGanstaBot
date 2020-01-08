@@ -470,10 +470,13 @@ def get_message_stiker(message):
             send_messages_big(message.chat.id, text=f'🗣<b>{name}</b>')
             send_messages_big(message.chat.id, text=text)
             
+            message.text = text
+            main_message(message)
+
             if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
                 bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_VOICE'), 1)[0]['value'])
         else:
-            send_messages_big(message.chat.id, text=f'🗣<b>{name}</b> что-то сказал, но я ничего не понял!')
+            send_messages_big(message.chat.id, text=f'🗣<b>{message.from_user.username}</b> что-то сказал, но я ничего не понял!')
 
 # Handle '/fight'
 @bot.message_handler(commands=['fight'])
