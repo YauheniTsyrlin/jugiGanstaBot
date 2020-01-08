@@ -101,11 +101,12 @@ def importUser(registered_user):
             u.status     = registered_user['status']
         if (registered_user.get('raid')):    
             u.raid     = registered_user['raid']
-          
-        if registered_user['ping'] not None:
+
+        try:   
             u.ping = registered_user['ping']
-        else:
+        except:
             u.ping = True
+
         u.setRaidLocation(registered_user['raidlocation'])
 
         return u
