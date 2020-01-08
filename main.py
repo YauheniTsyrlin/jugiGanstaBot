@@ -1353,7 +1353,7 @@ def main_message(message):
                         user = getUserByLogin(message.from_user.username)
                         user.setPing(response.split(":")[2] == 'True')
                         updateUser(user)
-                        send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs') + ' ' + response + ' ' + str(response.split(":")[2] == 'True'))
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
 
                     elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
