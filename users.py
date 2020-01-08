@@ -62,6 +62,8 @@ def updateUser(newUser, oldUser):
         oldUser.dzen = newUser.dzen
     if newUser.timeUpdate:
         oldUser.timeUpdate = newUser.timeUpdate
+    if hasattr(newUser, 'ping'):
+        oldUser.ping = newUser.ping
 
     return oldUser
 
@@ -84,6 +86,7 @@ def importUser(registered_user):
         u.charisma       = registered_user['charisma']
         u.agility        = registered_user['agility']
         u.stamina        = registered_user['stamina']
+        
         if (registered_user.get('location')):    
             u.location     = registered_user['location']
         if (registered_user.get('timeZone')):    
@@ -98,7 +101,8 @@ def importUser(registered_user):
             u.status     = registered_user['status']
         if (registered_user.get('raid')):    
             u.raid     = registered_user['raid']
-
+        if (registered_user.get('ping')):       
+            u.ping           = registered_user['ping']
         u.setRaidLocation(registered_user['raidlocation'])
 
         return u
@@ -117,6 +121,7 @@ class User(object):
         self.timeBan  = None
         self.raid = None
         self.raidlocation = None
+        self.ping = True
 
         strings = text.split('\n')
         isEquipequipment = False
@@ -222,11 +227,18 @@ class User(object):
             string = string + f'├📍{self.location}|⏰{timeZone}\n'
         else:
             string = string + f'├📍 Скажи Джу: Я живу в ...\n'
-
+        
+        if self.ping:
+            string = string + f'├🔔 Пингуйте меня семеро!\n'
+        else:
+            string = string + f'├🔔 Нихт!\n'
+            
         if self.status:
             string = string + f'└😏 Статус: {self.status}\n'
         else:
             string = string + f'└😏 Статус: Пустынник\n'  
+
+
         string = string + f'\n'  
         string = string + f'┌📯 Боевая мощь: '+ str(self.getBm()) +'\n'  
         string = string + f'├⚔ {self.damage}|🛡{self.armor}|🏵{self.dzen}|\n'  
@@ -343,6 +355,11 @@ class User(object):
     def getStatus(self):
         return self.status
         
+    def setPing(self, ping):
+        self.ping = ping  
+    def isPing(self):
+        return self.ping
+
 # ------------------------------------------
     def setTimeBan(self, timeBan):
         self.timeBan = timeBan  

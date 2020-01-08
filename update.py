@@ -310,10 +310,17 @@ newvalues = { "$set": { "value":
                                     'value': 'CAADAgADRQADmFw8HIiMxKGRHpSlFgQ'
                                 }
                             ] 
-                        }
-
-
-                                            
+                        },
+                        {
+                            'name': 'BOT_FINGER_TYK',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgADHwAD8gQgFh9xxAnDN9D6FgQ'
+                                }
+                            ] 
+                        }                    
                     ]
                 } 
             } 
