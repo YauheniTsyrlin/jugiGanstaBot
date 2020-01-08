@@ -1301,17 +1301,26 @@ def main_message(message):
                         band = response.split(':')[2]
                         if response.split(":")[2] == '*':
                             band = userIAm.getBand()
-
-                        if not isUsersBand(message.from_user.username, band):
-                            send_messages_big(message.chat.id, text=f'Ты просил собраться банду 🤟{band}\n' + getResponseDialogFlow('not_right_band'))
-                            return
+                        if band == 'all':
+                            pass
+                        else:
+                            if not isUsersBand(message.from_user.username, band):
+                                send_messages_big(message.chat.id, text=f'Ты просил собраться банду 🤟{band}\n' + getResponseDialogFlow('not_right_band'))
+                                return
 
                         first_string = f'{tools.deEmojify(message.from_user.first_name)} просит собраться банду\n<b>🤟{band}</b>:\n'
                         usersarr = []
-                        for registered_user in registered_users.find({"band": f"{band}"}):
+
+                        for registered_user in registered_users.find():
                             user = users.importUser(registered_user)
                             registered_user.update({'weight': user.getRaidWeight()})
-                            usersarr.append(registered_user)
+                            
+                            if band=='all':
+                                if user.getBand() in getGoatBands(userIAm.getGoat()): 
+                                    usersarr.append(registered_user)
+                            else:
+                                if user.getBand() == band: 
+                                    usersarr.append(registered_user)
 
                         # Пингуем
                         counter = 0
