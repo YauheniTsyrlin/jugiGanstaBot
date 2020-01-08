@@ -228,10 +228,11 @@ class User(object):
         else:
             string = string + f'├📍 Скажи Джу: Я живу в ...\n'
         
-        if self.ping == True:
-            string = string + f'├🔔 Пингуйте меня семеро!\n'
-        else:
-            string = string + f'├🔔 Нихт!\n'
+        string = string + f'├🔔{self.ping}'
+        # if self.ping == True:
+        #     string = string + f'├🔔 Пингуйте меня семеро!\n'
+        # else:
+        #     string = string + f'├🔔 Нихт!\n'
             
         if self.status:
             string = string + f'└😏 Статус: {self.status}\n'
