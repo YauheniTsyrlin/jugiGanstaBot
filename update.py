@@ -394,7 +394,9 @@ newvalues = { "$set": { "value":
              {'band': 'Энтропия'},
              {'band': 'без банды'},
              {'band': 'Crewname'},
-             {'band': 'FgoatUpd'}]
+             {'band': 'FgoatUpd'},
+             {'band': 'ЭнтрǁØǁпия'}
+             ]
              } } 
 u = settings.update_one(myquery, newvalues)
 
@@ -404,7 +406,9 @@ newvalues = { "$set":
                     [
                         { 
                             'name': 'АdaptationǁȺǁ',
-                            'boss': 'Innok27', 
+                            'boss': [
+                                        'Innok27'
+                                    ], 
                             'bands': 
                                     [
                                         {
@@ -419,8 +423,11 @@ newvalues = { "$set":
                             'chat': -1001354871311 
                         },
                         { 
-                            'name': 'faggoat',
-                            'boss': 'WestMoscow', 
+                            'name': 'FǁȺǁggǁØǁAT',
+                            'boss': [
+                                        'WestMoscow',
+                                        'Innok27'
+                                    ],
                             'bands': 
                                     [
                                         {
@@ -433,6 +440,10 @@ newvalues = { "$set":
                                         },
                                         {
                                             'name': 'FgoatUpd',
+                                            'boss': 'WestMoscow'
+                                        },
+                                        {
+                                            'name': 'ЭнтрǁØǁпия',
                                             'boss': 'WestMoscow'
                                         }
                                     ],

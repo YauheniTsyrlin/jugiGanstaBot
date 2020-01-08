@@ -109,8 +109,9 @@ def isRegisteredUserLogin(login: str):
 
 def isGoatBoss(login: str):
     for goat in getSetting('GOATS_BANDS'):
-        if goat['boss'] == login:
-            return True
+        for boss in goat['boss']:
+            if boss == login:
+                return True
     return False
 
 def isBandBoss(login: str):
