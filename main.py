@@ -457,7 +457,7 @@ def get_message_stiker(message):
         text = speech.speech_to_text(bytes=file.content)
     except speech.SpeechException:
         # Обработка случая, когда распознавание не удалось
-        print('Сломались на голосе')
+        send_messages_big(message.chat.id, text=f'⚠️Внимание! 🗣 Произошла какая-то ошибка при разборе голосового сообщения!')
         pass
     else:
         # Бизнес-логика
@@ -468,12 +468,13 @@ def get_message_stiker(message):
             user = getUserByLogin(name)
             if user:
                 name = user.getName()
-                
-            send_messages_big(message.chat.id, text=f'<b>{name}</b>🗣:\n' + text)
+
+            send_messages_big(message.chat.id, text=f'🗣<b>{name}</b>:\n' + text)
             
             if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
                 bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_VOICE'), 1)[0]['value'])
-
+        else:
+            send_messages_big(message.chat.id, text=f'🗣<b>{name}</b> что-то сказал, но я ничего не понял!')
 
 # Handle '/fight'
 @bot.message_handler(commands=['fight'])

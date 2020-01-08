@@ -18,33 +18,15 @@ def speech_to_text(filename=None, bytes=None, request_id=uuid.uuid4().hex, topic
             bytes = file.read()
     if not bytes:
         raise Exception('Neither file name nor bytes provided.')
-
-    # Считывание блока байтов
-    chunks = read_chunks(CHUNK_SIZE, bytes)
-
-  
-    # connection.putheader('Transfer-Encoding', 'chunked')
-    # connection.putheader('Content-Type', 'audio/x-pcm;bit=16;rate=16000')
-    # connection.endheaders()
-
-    # # Отправка байтов блоками
-    # for chunk in chunks:
-    #     connection.send(('%s\r\n' % hex(len(chunk))[2:]).encode())
-    #     connection.send(chunk)
-    #     connection.send('\r\n'.encode())
-
-    # connection.send('0\r\n\r\n'.encode())
-    # response = connection.getresponse()
-    # print(bytes)
-    #headers={'Authorization': f'Bearer {YANDEX_SPEECH_TOKEN}', 'Transfer-Encoding': 'chunked', 'Content-Type': 'audio/x-pcm;bit=16;rate=16000'}
     
     headers={
-        'Authorization': f'Api-Key {YANDEX_SPEECH_KEY}', 
+        'Authorization': f'Api-Key {YANDEX_SPEECH_KEY}',
+        'Transfer-encoding':'chunked',
         'Content-Type': 'audio/x-pcm;bit=16;rate=16000'
         }
 
     url = f'https://stt.api.cloud.yandex.net/speech/v1/stt:recognize?lang={lang}&folderId={YANDEX_CLOUD_CATALOG}'
-    response = requests.post(url, data=bytes, headers=headers)
+    response = requests.post(url, data=read_chunks(CHUNK_SIZE, bytes), headers=headers)
 
     if response.status_code == 200:
         return response.json()['result']
