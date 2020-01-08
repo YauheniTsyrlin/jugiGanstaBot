@@ -101,8 +101,8 @@ def importUser(registered_user):
             u.status     = registered_user['status']
         if (registered_user.get('raid')):    
             u.raid     = registered_user['raid']
-        if (registered_user.get('ping')):       
-            u.ping           = registered_user['ping']
+          
+        u.ping              = registered_user['ping']
         u.setRaidLocation(registered_user['raidlocation'])
 
         return u
@@ -228,7 +228,7 @@ class User(object):
         else:
             string = string + f'├📍 Скажи Джу: Я живу в ...\n'
         
-        string = string + f'├🔔{self.ping}'
+        string = string + f'├🔔{self.ping}\n'
         # if self.ping == True:
         #     string = string + f'├🔔 Пингуйте меня семеро!\n'
         # else:
