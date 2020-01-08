@@ -1,7 +1,6 @@
 import uuid
 import requests
 
-from config import YANDEX_SPEECH_TOKEN
 from config import YANDEX_SPEECH_KEY
 from config import YANDEX_CLOUD_CATALOG
 
