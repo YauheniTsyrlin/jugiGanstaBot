@@ -1302,7 +1302,10 @@ def main_message(message):
                         if response.split(":")[2] == '*':
                             band = userIAm.getBand()
                         if band == 'all':
-                            pass
+                            if not isGoatBoss(message.from_user.username):
+                                if not isAdmin(message.from_user.username):
+                                    send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
+                                    return
                         else:
                             if not isUsersBand(message.from_user.username, band):
                                 send_messages_big(message.chat.id, text=f'Ты просил собраться банду 🤟{band}\n' + getResponseDialogFlow('not_right_band'))
