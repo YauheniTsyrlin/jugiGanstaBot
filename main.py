@@ -208,6 +208,7 @@ def updateUser(newuser: users.User):
     else:
         newvalues = { "$set": json.loads(newuser.toJSON()) }
         z = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
+        logger.info(newvalues)
 
     USERS_ARR.clear()
     for x in registered_users.find():
