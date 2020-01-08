@@ -272,7 +272,7 @@ def update_warior(warior: wariors.Warior):
         WARIORS_ARR.append(wariors.importWarior(x))
         
 def get_raid_plan(raid_date, goat):
-    plan_for_date = 'План рейдов на ' + time.strftime("%d-%m-%Y", time.gmtime( raid_date.timestamp() )) + '\n'
+    plan_for_date = f'🐐<b>{goat}</b>\nПлан рейдов на ' + time.strftime("%d-%m-%Y", time.gmtime( raid_date.timestamp() )) + '\n'
     find = False
     for raid in plan_raids.find({
                                 '$and' : 
@@ -342,7 +342,7 @@ def getResponseDialogFlow(text):
 
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
 def send_welcome_and_dismiss(message):
-    
+
     response = getResponseDialogFlow(message.content_type)
     if response:
         bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_NEW_MEMBER'), 1)[0]['value'])
