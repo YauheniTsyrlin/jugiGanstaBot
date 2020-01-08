@@ -11,7 +11,7 @@ import os
 CHUNK_SIZE = 1024 ** 2
 
 def speech_to_text(filename=None, bytes=None, request_id=uuid.uuid4().hex, topic='notes', lang='ru-RU',
-                   key=YANDEX_SPEECH_TOKEN):
+                   key=YANDEX_SPEECH_KEY):
     # Если передан файл
     if filename:
         with open(filename, 'br') as file:
