@@ -1322,13 +1322,13 @@ def main_message(message):
                         for registered_user in registered_users.find():
                             user = users.importUser(registered_user)
                             registered_user.update({'weight': user.getRaidWeight()})
-                            if user.isPing():
-                                if band=='all':
-                                    if user.getBand() in getGoatBands(getMyGoat(userIAm.getLogin())): 
-                                        usersarr.append(registered_user)
-                                else:
-                                    if user.getBand() == band: 
-                                        usersarr.append(registered_user)
+                            registered_user.update({'ping': user.isPing()})
+                            if band=='all':
+                                if user.getBand() in getGoatBands(getMyGoat(userIAm.getLogin())): 
+                                    usersarr.append(registered_user)
+                            else:
+                                if user.getBand() == band: 
+                                    usersarr.append(registered_user)
 
                         # Пингуем
                         counter = 0
@@ -1337,7 +1337,10 @@ def main_message(message):
                         for pu in sorted(usersarr, key = lambda i: i['weight'], reverse=True):
                             counter = counter + 1
                             pingusers.append(pu)
-                            report = report + f'{counter}. @{pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
+                            if pu["ping"] == True:
+                                report = report + f'{counter}. @{pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
+                            else:
+                                report = report + f'{counter}. {pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
                             if counter % 5 == 0:
                                 send_messages_big(message.chat.id, text=first_string + report)
                                 pingusers = []
