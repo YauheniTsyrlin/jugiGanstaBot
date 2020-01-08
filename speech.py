@@ -2,6 +2,7 @@ import uuid
 import requests
 
 from config import YANDEX_SPEECH_TOKEN
+from config import YANDEX_SPEECH_KEY
 from config import YANDEX_CLOUD_CATALOG
 
 import subprocess
@@ -38,7 +39,11 @@ def speech_to_text(filename=None, bytes=None, request_id=uuid.uuid4().hex, topic
     # print(bytes)
     #headers={'Authorization': f'Bearer {YANDEX_SPEECH_TOKEN}', 'Transfer-Encoding': 'chunked', 'Content-Type': 'audio/x-pcm;bit=16;rate=16000'}
     
-    headers={'Authorization': f'Bearer {YANDEX_SPEECH_TOKEN}', 'Content-Type': 'audio/x-pcm;bit=16;rate=16000'}
+    headers={
+        'Authorization': f'Api-Key {YANDEX_SPEECH_KEY}', 
+        'Content-Type': 'audio/x-pcm;bit=16;rate=16000'
+        }
+
     url = f'https://stt.api.cloud.yandex.net/speech/v1/stt:recognize?lang={lang}&folderId={YANDEX_CLOUD_CATALOG}'
     response = requests.post(url, data=bytes, headers=headers)
 
