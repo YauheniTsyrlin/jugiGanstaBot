@@ -102,7 +102,10 @@ def importUser(registered_user):
         if (registered_user.get('raid')):    
             u.raid     = registered_user['raid']
           
-        u.ping              = registered_user['ping']
+        if (registered_user.get('ping')):   
+            u.ping              = registered_user['ping']
+        else:
+            u.ping = True
         u.setRaidLocation(registered_user['raidlocation'])
 
         return u
