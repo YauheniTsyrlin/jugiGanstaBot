@@ -102,7 +102,7 @@ def importUser(registered_user):
         if (registered_user.get('raid')):    
             u.raid     = registered_user['raid']
           
-        if hasattr(registered_user, 'ping'):
+        if registered_user.get('ping') not None:
             u.ping = registered_user['ping']
         else:
             u.ping = True
