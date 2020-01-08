@@ -1316,7 +1316,7 @@ def main_message(message):
                             registered_user.update({'weight': user.getRaidWeight()})
                             
                             if band=='all':
-                                if user.getBand() in getGoatBands(userIAm.getGoat()): 
+                                if user.getBand() in getGoatBands(getMyGoat(userIAm.getLogin())): 
                                     usersarr.append(registered_user)
                             else:
                                 if user.getBand() == band: 
