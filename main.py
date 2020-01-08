@@ -1322,13 +1322,13 @@ def main_message(message):
                         for registered_user in registered_users.find():
                             user = users.importUser(registered_user)
                             registered_user.update({'weight': user.getRaidWeight()})
-                            
-                            if band=='all':
-                                if user.getBand() in getGoatBands(getMyGoat(userIAm.getLogin())): 
-                                    usersarr.append(registered_user)
-                            else:
-                                if user.getBand() == band: 
-                                    usersarr.append(registered_user)
+                            if user.isPing():
+                                if band=='all':
+                                    if user.getBand() in getGoatBands(getMyGoat(userIAm.getLogin())): 
+                                        usersarr.append(registered_user)
+                                else:
+                                    if user.getBand() == band: 
+                                        usersarr.append(registered_user)
 
                         # Пингуем
                         counter = 0
@@ -1570,8 +1570,9 @@ def main_message(message):
                             usersarr = []
                             for registered_user in registered_users.find({"band": f"{band}"}):
                                 user = users.importUser(registered_user)
-                                registered_user.update({'weight': user.getRaidWeight()})
-                                usersarr.append(registered_user)
+                                if user.isPing():
+                                    registered_user.update({'weight': user.getRaidWeight()})
+                                    usersarr.append(registered_user)
 
                             # Пингуем
                             counter = 0
@@ -2109,7 +2110,11 @@ def ping_on_reade(fuckupusers, chat_id):
     for fu in fuckupusers:
         counter = counter + 1
         fusers.append(fu)
-        fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()}\n' 
+        if fu.isPing():
+            fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()}\n'
+        else:
+            fuckupusersReport = fuckupusersReport + f'{counter}. {fu.getLogin()}\n'
+
         if counter % 5 == 0:
             send_messages_big(chat_id, text=fuckupusersReport)
             fusers = []
