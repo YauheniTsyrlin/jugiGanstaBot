@@ -1344,6 +1344,13 @@ def main_message(message):
 
                         if len(pingusers) > 0:
                             send_messages_big(message.chat.id, text=first_string + report)
+                    elif 'setping' == response.split(':')[1]:
+                        # jugi:setping:True
+                        user = getUserByLogin(message.from_user.username)
+                        user.setPing(response.split(":")[2])
+                        updateUser(user)
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
+
                     elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
                         photo = random.sample(getSetting('STICKERS', 'BOT_LOVE'), 1)[0]['value']
