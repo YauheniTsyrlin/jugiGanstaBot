@@ -230,34 +230,33 @@ class User(object):
                 timeZone = f'+{str(tz.hour).zfill(2)}:{str(tz.minute).zfill(2)}'
             string = string + f'├📍{self.location}|⏰{timeZone}\n'
         else:
-            string = string + f'├📍 Скажи Джу: Я живу в ...\n'
-        
-        string = string + f'├🔔{self.ping}\n'
-        # if self.ping == True:
-        #     string = string + f'├🔔 Пингуйте меня семеро!\n'
-        # else:
-        #     string = string + f'├🔔 Нихт!\n'
+            string = string + f'├📍Скажи Джу: Я живу в ...\n'
+
+        if self.ping == True:
+            string = string + f'├🔔Пингуйте меня семеро!\n'
+        else:
+            string = string + f'├🔕Нихт!\n'
             
         if self.status:
-            string = string + f'└😏 Статус: {self.status}\n'
+            string = string + f'└😏Статус: {self.status}\n'
         else:
-            string = string + f'└😏 Статус: Пустынник\n'  
+            string = string + f'└😏Статус: Пустынник\n'  
 
 
         string = string + f'\n'  
-        string = string + f'┌📯 Боевая мощь: '+ str(self.getBm()) +'\n'  
-        string = string + f'├⚔ {self.damage}|🛡{self.armor}|🏵{self.dzen}|\n'  
-        string = string + f'├💪 {self.force}|🔫{self.accuracy}|❤{self.health}|\n'
-        string = string + f'├🗣 {self.charisma}|🤸🏽‍{self.agility}|🔋{self.stamina}|\n'
+        string = string + f'┌📯Боевая мощь: '+ str(self.getBm()) +'\n'  
+        string = string + f'├⚔{self.damage}|🛡{self.armor}|🏵{self.dzen}|\n'  
+        string = string + f'├💪{self.force}|🔫{self.accuracy}|❤{self.health}|\n'
+        string = string + f'├🗣{self.charisma}|🤸🏽‍{self.agility}|🔋{self.stamina}|\n'
         if self.raid:
-            string = string + f'├👊 {self.raid}\n'
-        string = string + f'└🏋️‍♂️ Вес на рейде: {self.getRaidWeight()}\n'
+            string = string + f'├👊{self.raid}\n'
+        string = string + f'└🏋️‍♂️Вес на рейде: {self.getRaidWeight()}\n'
         string = string + f'\n'
 
         string = string + f'⏰{tools.getTimeEmoji(self.timeUpdate)} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeUpdate))) +'\n'
         if self.timeBan:
             if self.timeBan > datetime.datetime.now().timestamp():
-                string = string + '☠️ Забанен до ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeBan))) +'\n'  
+                string = string + '☠️Забанен до ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeBan))) +'\n'  
         return string
 
     def getLogin(self):
