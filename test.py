@@ -14,6 +14,7 @@ import users
 import wariors
 import tools
 
+from main import isAdmin
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["jugidb"]
@@ -348,8 +349,9 @@ def statistic(goatName: str):
 
 print('\n======== radeReport ==========\n')
 
-print(random.sample(getSetting('STICKERS','NEW_YEAR'),1)[0]['value'])
+#print(random.sample(getSetting('STICKERS','NEW_YEAR'),1)[0]['value'])
 
+print(isAdmin('111'))
 sys.exit(0)
 
 # for ts in (1575922314, 1576610657, 1576070150, 1576078889, 1576100043, 1576156614, 1576533127):

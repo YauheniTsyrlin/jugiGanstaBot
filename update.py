@@ -340,9 +340,25 @@ newvalues = { "$set": { "value":
                                     'value': 'CAADAgADDgYAAj6IGgu5HWcwB3TQVhYE'
                                 }
                             ] 
+                        },
+                        {
+                            'name': 'BOT_SALUTE',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgADtgADTptkAqpNYvdldSrYFgQ'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': 'CAADAgADKwAD8gQgFjLRhiYsCHQTFgQ'
+                                },
+                                {
+                                    'name': '3',
+                                    'value': 'CAADBQADlAMAAukKyAPXbNncxSnLkRYE'
+                                }
+                            ] 
                         }
-
-                                            
                     ]
                 } 
             } 
@@ -475,7 +491,8 @@ newvalues = { "$set":
                             'boss': [
                                         'WestMoscow',
                                         'Innok27',
-                                        'Viktoriya_Sizko'
+                                        'Viktoriya_Sizko',
+                                        'GonzikBenzyavsky'
                                     ],
                             'bands': 
                                     [

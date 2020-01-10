@@ -1165,7 +1165,10 @@ def main_message(message):
         if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_DA_PINDA'), 1)[0]['value'])
             return
-            
+    if 'тебя буквально размазали' in message.text.lower():
+        if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
+            bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_SALUTE'), 1)[0]['value'])
+            return       
 
     if hasAccessToWariors(message.from_user.username):
         #write_json(message.json)

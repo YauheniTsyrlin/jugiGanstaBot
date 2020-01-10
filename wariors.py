@@ -192,7 +192,9 @@ def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
                 result[0].kills = result[0].kills + 1
                 winnerName = result[0].name
                 loserName = result[1].name
+
             else:
+                
                 result[1].kills = result[1].kills + 1
                 winnerName = result[1].name
                 loserName = result[0].name
