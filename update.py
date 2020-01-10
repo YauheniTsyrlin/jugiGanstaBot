@@ -320,7 +320,19 @@ newvalues = { "$set": { "value":
                                     'value': 'CAADAgADHwAD8gQgFh9xxAnDN9D6FgQ'
                                 }
                             ] 
-                        }                    
+                        },
+                        {
+                            'name': 'BOT_DA_PINDA',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgADDgYAAj6IGgu5HWcwB3TQVhYE'
+                                }
+                            ] 
+                        }
+
+                                            
                     ]
                 } 
             } 
