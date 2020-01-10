@@ -1189,6 +1189,9 @@ def main_message(message):
                     and message.text):
             login = message.reply_to_message.from_user.username
 
+            if isGoatBoss(login) or isAdmin(login):
+                login = message.from_user.username
+
             if config.BOT_LOGIN == login:
                 login = message.from_user.username
 
@@ -1205,6 +1208,7 @@ def main_message(message):
                 if not isAdmin(message.from_user.username):
                     send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
                     return
+            
             sec = int(randrange(int(getSetting('PROBABILITY','FUNY_BAN'))))
             tz = config.SERVER_MSK_DIFF
             ban_date = datetime.now() + timedelta(seconds=sec, hours=tz.hour)
@@ -1314,7 +1318,7 @@ def main_message(message):
                         if band == 'all':
                             if not isGoatBoss(message.from_user.username):
                                 if not isAdmin(message.from_user.username):
-                                    send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
+                                    send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_goat_boss'))
                                     return
                         else:
                             if not isUsersBand(message.from_user.username, band):
@@ -1359,7 +1363,6 @@ def main_message(message):
                         user.setPing(response.split(":")[2] == 'True')
                         updateUser(user)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
-
                     elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
                         photo = random.sample(getSetting('STICKERS', 'BOT_LOVE'), 1)[0]['value']
@@ -1416,7 +1419,7 @@ def main_message(message):
                         # jugi:statistic:*
                         if not isGoatBoss(message.from_user.username):
                             if not isAdmin(message.from_user.username):
-                                send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
+                                send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_goat_boss'))
                                 return
 
                         goatName = response.split(':')[2].strip()
@@ -1452,14 +1455,17 @@ def main_message(message):
                         updateUser(None)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))        
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
-                        # if not isAdmin(message.from_user.username):
-                        #     bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_admin'))
-                        #     return
-
                         # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
                         ban = ('ban' == response.split(':')[1])
                         login = response.split(':')[2]
                         login = login.replace('@','').split(' ')[0].strip()
+
+                        if ban:
+                            if not isGoatBoss(message.from_user.username):
+                                if not isAdmin(message.from_user.username):
+                                    bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_goat_boss'))
+                                    return
+
                         
                         user = getUserByLogin(login)
                         if not user:

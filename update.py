@@ -308,7 +308,17 @@ newvalues = { "$set": { "value":
                                 {
                                     'name': '2',
                                     'value': 'CAADAgADRQADmFw8HIiMxKGRHpSlFgQ'
+                                },
+                                {
+                                    'name': '3',
+                                    'value': 'CAADAgADxT8AAuCjggd50ofpjPyNAAEWBA'
+                                },
+                                {
+                                    'name': '4',
+                                    'value': 'CAADAgADAQADkp8eEQpfUwLsF-b2FgQ'
                                 }
+                                
+                                
                             ] 
                         },
                         {
@@ -464,7 +474,8 @@ newvalues = { "$set":
                             'name': 'FǁȺǁggǁØǁAT',
                             'boss': [
                                         'WestMoscow',
-                                        'Innok27'
+                                        'Innok27',
+                                        'Viktoriya_Sizko'
                                     ],
                             'bands': 
                                     [
