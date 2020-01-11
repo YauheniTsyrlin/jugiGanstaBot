@@ -1216,7 +1216,7 @@ def main_message(message):
             tz = config.SERVER_MSK_DIFF
             ban_date = datetime.now() + timedelta(seconds=sec, hours=tz.hour)
             
-            user.setTimeBan(ban_date.timestamp())
+            user. (ban_date.timestamp())
             report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно!'
             updateUser(user)
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}')
@@ -1244,7 +1244,7 @@ def main_message(message):
         elif (callJugi and 'профиль @' in message.text.lower()):
 
             name = tools.deEmojify(message.text.split('@')[1].strip())
-            if isAdmin(message.from_user.username):
+            if isGoatBoss(message.from_user.username):
                 login = message.text.split('@')[1].strip()
                 if (isRegisteredUserName(name) or isRegisteredUserLogin(login)):
                     user = getUserByLogin(login)
