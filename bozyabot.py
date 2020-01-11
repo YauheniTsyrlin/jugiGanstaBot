@@ -49,8 +49,8 @@ def main_message(message):
         response = getResponseDialogFlow(text)
 
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
-        markup.add('1')
-        markup.add('2')
+        markup.add('бозя, 1')
+        markup.add('бозя, 2')
         bot.reply_to(message, text=response, reply_markup=markup)
 
 def main_loop():
