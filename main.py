@@ -1461,7 +1461,7 @@ def main_message(message):
                         # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
                         ban = ('ban' == response.split(':')[1])
                         login = response.split(':')[2]
-                        login = login.replace('@','').split(' ')[0].strip()
+                        login = login.split('@')[1].split(' ')[0].strip()
 
                         if ban:
                             if not isGoatBoss(message.from_user.username):
@@ -1487,14 +1487,18 @@ def main_message(message):
                         time_str = response.split(response.split(':')[2])[1][1:]
                         date_for = None
                         if ban:
-                            if not '/' in time_str:
-                                send_messages_big(message.chat.id, text=f'Не определен период блокировки!')
-                                return
-                            try:
-                                date_for = parse(time_str.split('/')[1].strip())
-                            except:
-                                send_messages_big(message.chat.id, text=f'Не смог распознать дату блокировки!')
-                                return
+                            if time_str == '*':
+                                tz = config.SERVER_MSK_DIFF
+                                date_for = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute+1, hours=tz.hour)
+                            else:
+                                if not '/' in time_str:
+                                    send_messages_big(message.chat.id, text=f'Не определен период блокировки!')
+                                    return
+                                try:
+                                    date_for = parse(time_str.split('/')[1].strip())
+                                except:
+                                    send_messages_big(message.chat.id, text=f'Не смог распознать дату блокировки!')
+                                    return
 
                         report = ''
                         if ban:

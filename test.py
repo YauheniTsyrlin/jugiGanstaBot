@@ -349,9 +349,12 @@ def statistic(goatName: str):
 
 print('\n======== radeReport ==========\n')
 
-#print(random.sample(getSetting('STICKERS','NEW_YEAR'),1)[0]['value'])
-
-print(isAdmin('111'))
+jsonA = {
+    "keyboard": [["Ti amo alla follia"], ["Mi spiace ma non fai per me"]], 
+    "one_time_keyboard": True,
+    "force_reply": True
+}
+print (jsonA)    
 sys.exit(0)
 
 # for ts in (1575922314, 1576610657, 1576070150, 1576078889, 1576100043, 1576156614, 1576533127):
