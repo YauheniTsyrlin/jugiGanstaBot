@@ -362,9 +362,17 @@ def default_query(inline_query):
     try:
             result = []
             i = 0
-            for x in registered_wariors.find({'$or':[
-                    {'name':{'$regex':inline_query.query, '$options':'i'}},
-                    {'band':{'$regex':inline_query.query, '$options':'i'}}]
+            for x in registered_wariors.find(
+                {'$or':
+                    [
+                        {'name':
+                            {'$regex':inline_query.query, '$options':'i'}
+                        },
+                        {'band':
+                            {'$regex':inline_query.query, '$options':'i'}
+                        }
+                    ],
+                    'timeUpdate':{'$gte': (datetime.now() - timedelta(days=28)).timestamp()  }
                 }):
                 warior = wariors.importWarior(x)
                 r = types.InlineQueryResultArticle(id=i, title = f'{warior.getFractionSmall()}{warior.getName()}',  
@@ -927,15 +935,21 @@ def main_message(message):
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive'))
                 return
-
+            
+            
             user = users.User(message.from_user.username, message.forward_date, message.text)
-            if findUser==False:   
-                x = registered_users.insert_one(json.loads(user.toJSON()))
-                updateUser(None)
-                send_message_to_admin(f'⚠️Внимание! Зарегистрировался новый пользователь.\n {user.getProfile()}')
+            if findUser==False:  
+                if 'Подробности /me' in message.text: 
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow('pip_me'))
+                    return
+                else:
+                    x = registered_users.insert_one(json.loads(user.toJSON()))
+                    updateUser(None)
+                    send_message_to_admin(f'⚠️Внимание! Зарегистрировался новый пользователь.\n {user.getProfile()}')
             else:
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
                 updateUser(updatedUser)
+                
             if privateChat:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('setpip'))
             else:

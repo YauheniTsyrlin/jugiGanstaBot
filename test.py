@@ -349,16 +349,32 @@ def statistic(goatName: str):
 
 print('\n======== radeReport ==========\n')
 
-jsonA = {
-    "keyboard": [["Ti amo alla follia"], ["Mi spiace ma non fai per me"]], 
-    "one_time_keyboard": True,
-    "force_reply": True
-}
-print (jsonA)    
+dresult = registered_wariors.aggregate([ 
+    # {   "$match": {
+    #             "$and" : [
+                    
+    #                     {'name':{'$regex':'rushk', '$options':'i'}}   
+    #                 ]
+    #         } 
+    # },
+    {   "$group": {
+        "_id": "$name", 
+        "count": {
+            "$sum": 1}}},
+        
+    {   "$sort" : { "count" : -1 } }
+    ])
+    
+for d in dresult:
+    user_name = d.get("_id") 
+    print(f'{d.get("count")} - {user_name}')  
+
 sys.exit(0)
 
-# for ts in (1575922314, 1576610657, 1576070150, 1576078889, 1576100043, 1576156614, 1576533127):
-#     print(f"{datetime.fromtimestamp(ts)}")
+
+for ts in (1576073221, 1577471475, 1577800962, 1578167033, 1578172834,  1578520116, 1578657846):
+    print(f"{datetime.fromtimestamp(ts)}")
+
 
 # #report_raids.remove()
 for goat in getSetting('GOATS_BANDS'):
