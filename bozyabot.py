@@ -46,10 +46,12 @@ def main_message(message):
         text = message.text 
         if text.lower().startswith('бозя'):
             text = message.text[4:]
-        logger.info(f'Request: {text}')
         response = getResponseDialogFlow(text)
-        logger.info(f'Response: {response}')
-        bot.reply_to(message, text=response)
+
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+        markup.add('1')
+        markup.add('2')
+        bot.reply_to(message, text=response, reply_markup=markup)
 
 def main_loop():
     app = web.Application()
