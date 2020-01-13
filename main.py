@@ -1258,7 +1258,7 @@ def main_message(message):
         elif (callJugi and 'профиль @' in message.text.lower()):
 
             name = tools.deEmojify(message.text.split('@')[1].strip())
-            if isAdmin(message.from_user.username):
+            if isGoatBoss(message.from_user.username):
                 login = message.text.split('@')[1].strip()
                 if (isRegisteredUserName(name) or isRegisteredUserLogin(login)):
                     user = getUserByLogin(login)
