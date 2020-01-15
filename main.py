@@ -1056,11 +1056,16 @@ def main_message(message):
                                         '$gte' : plan_date.timestamp()
                                     }, 
                                     'goat': goat}): 
-                            users_onraid = radeloc['users']
                             find = False
-                            for u in users_onraid:
-                                if u == message.from_user.username:
-                                    find = True
+                            try:
+                                users_onraid = radeloc['users']
+                                for u in users_onraid:
+                                    if u == message.from_user.username:
+                                        find = True
+                            except expression as identifier:
+                                pass
+
+
                             
                             if not find:
                                 markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
