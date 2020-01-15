@@ -1053,9 +1053,8 @@ def main_message(message):
 
                         for radeloc in plan_raids.find({
                                     'rade_date': { 
-                                        '$gte' : raid_date.timestamp()
+                                        '$gte' : plan_date.timestamp()
                                     }, 
-                                    
                                     'goat': goat}): 
                             users_onraid = radeloc['users']
                             find = False
