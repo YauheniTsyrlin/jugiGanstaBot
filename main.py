@@ -1052,7 +1052,10 @@ def main_message(message):
                         markupinline = InlineKeyboardMarkup()
 
                         for radeloc in plan_raids.find({
-                                    'rade_date': raid_date.timestamp(),
+                                    'rade_date': { 
+                                        '$gte' : raid_date.timestamp()
+                                    }, 
+                                    
                                     'goat': goat}): 
                             users_onraid = radeloc['users']
                             find = False
