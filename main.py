@@ -1062,7 +1062,7 @@ def main_message(message):
                                 for u in users_onraid:
                                     if u == message.from_user.username:
                                         find = True
-                            except expression as identifier:
+                            except:
                                 pass
 
 
