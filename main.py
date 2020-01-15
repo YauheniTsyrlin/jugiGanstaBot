@@ -273,8 +273,9 @@ def update_warior(warior: wariors.Warior):
         WARIORS_ARR.append(wariors.importWarior(x))
         
 def get_raid_plan(raid_date, goat):
-    plan_for_date = f'🐐<b>{goat}</b>\nПлан рейдов на ' + time.strftime("%d-%m-%Y", time.gmtime( raid_date.timestamp() )) + '\n'
+    plan_for_date = f'План рейдов на {time.strftime("%d.%m.%Y", time.gmtime( raid_date.timestamp() ))}\n🐐<b>{goat}</b>\n\n'
     find = False
+    time_str = None
     for raid in plan_raids.find({
                                 '$and' : 
                                 [
@@ -282,18 +283,34 @@ def get_raid_plan(raid_date, goat):
                                         'rade_date': {
                                         '$gte': (raid_date.replace(hour=0, minute=0, second=0, microsecond=0)).timestamp(),
                                         '$lt': (raid_date.replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
-                                        }},
+                                        }
+                                    },
                                     {
                                         'goat': goat
                                     }
                                 ]
                             }):
+
         t = datetime.fromtimestamp(raid.get('rade_date') ) 
-        plan_for_date = plan_for_date + str(t.hour).zfill(2)+':'+str(t.minute).zfill(2) + ' ' + raid.get('rade_text') + '\n'
+        if not (time_str == t):
+            plan_for_date = plan_for_date + f'<b>Рейд в {str(t.hour).zfill(2)}:{str(t.minute).zfill(2)}</b>\n'
+            time_str = t
+
+        plan_for_date = plan_for_date + f'{raid.get("rade_text")}\n'
+        users = raid.get("users")
+        if len(users) == 0:
+            plan_for_date = plan_for_date + f'    Никто не записался\n'
+        else:
+            i = 0
+            for u in users:
+                i = i + 1
+                reg_usr = getUserByLogin(u)
+                plan_for_date = plan_for_date + f'    {i}. {reg_usr.getName()}\n'
+        
         find = True
 
     if find == False:
-        plan_for_date = plan_for_date + 'Нет запланированных рейдов'
+        plan_for_date = plan_for_date + '<b>Нет запланированных рейдов</b>'
 
     return plan_for_date
 
@@ -1012,20 +1029,43 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=f'\n{report}')
                     elif 'planrade' == response.split(':')[1]:
                         # jugi:planrade:$date
+                        # ⚠️Пока проверяйте канал FǁȺǁggǁØǁAT_RAid
                         goat = getMyGoat(message.from_user.username)
 
+                        tz = config.SERVER_MSK_DIFF
+                        plan_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+                        raid_date = plan_date
+
                         if response.split(response.split(":")[1])[1][1:].strip() == '*':
-                            tz = config.SERVER_MSK_DIFF
-                            plan_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
-                            if plan_date.hour > 17:
-                                raid_date = plan_date + timedelta(days=1)
+                            raid_date = raid_date.replace(minute=0, second=0, microsecond=0)
+
+                            if plan_date.hour > 17 or plan_date.hour < 1:
+                                raid_date = raid_date + timedelta(days=1)
+                                raid_date = raid_date.replace(hour=1)
+                            elif plan_date.hour > 1 and plan_date.hour < 9:
+                                raid_date = raid_date.replace(hour=9)
                             else:
-                                raid_date = plan_date
+                                raid_date = raid_date.replace(hour=17)
                         else:
                             raid_date = parse(response.split(response.split(":")[1])[1][1:])
+                        
+                        markupinline = InlineKeyboardMarkup()
 
-                        plan_str = get_raid_plan(raid_date, goat)
-                        msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=markup)
+                        for radeloc in plan_raids.find({
+                                    'rade_date': raid_date.timestamp(),
+                                    'goat': goat}): 
+                            users_onraid = radeloc['users']
+                            find = False
+                            for u in users_onraid:
+                                if u == message.from_user.username:
+                                    find = True
+                            
+                            if not find:
+                                markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
+              
+                        text = get_raid_plan(raid_date, goat)
+
+                        msg = send_messages_big(message.chat.id, text=text, reply_markup=markupinline)
                     elif 'onrade' == response.split(':')[1]:
                         # jugi:onrade:$goat
                         # if not isAdmin(message.from_user.username):
@@ -1138,6 +1178,7 @@ def main_message(message):
                         user = getUserByLogin(user.getLogin())
                         send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}')
                     elif 'rade' == response.split(':')[1]:
+                        # jugi:rade:Госпиталь 🚷 📍24км:Старая фабрика 📍5км:*:True:2020-01-13T21:00:00
                         if isGoatBoss(message.from_user.username) or isAdmin(message.from_user.username):
                             pass
                         else:
@@ -1145,9 +1186,9 @@ def main_message(message):
                             return
                         
                         goat = getMyGoat(message.from_user.username)
-                        #   0    1        2         3        4     
-                        # jugi:rade:$radelocation:$bool:$date-time
-                        raid_date = parse(response.split(response.split(":")[3])[1][1:])
+                        #   0    1        2              3               4         5       6
+                        # jugi:rade:$radelocation1:$radelocation2:$radelocation3:$bool:$date-time
+                        raid_date = parse(response.split(response.split(":")[5])[1][1:])
                         if raid_date.hour not in (1, 9, 17):
                             send_messages_big(message.chat.id, text='Рейды проходят только в 1:00, 9:00, 17:00!\nУкажи правильное время!')
                             return 
@@ -1159,42 +1200,89 @@ def main_message(message):
                             msg = send_messages_big(message.chat.id, text=getResponseDialogFlow('timeisout'))
                             return
 
-                        rade_text = response.split(":")[2]
-                        rade_location = int(response.split(":")[2].split('📍')[1].split('км')[0].strip())
+                        markupinline = InlineKeyboardMarkup()
 
-                        if eval(response.split(":")[3]):
-                            myquery = { 
-                                        "rade_date": raid_date.timestamp(), 
-                                        "goat": goat
-                                    }
-                            newvalues = { "$set": { 
+                        if eval(response.split(":")[5]):
+                            radeloc_arr = []
+
+                            row = {}
+                            rade_text = response.split(":")[2]
+                            rade_location = int(response.split(":")[2].split('📍')[1].split('км')[0].strip())
+                            row.update({'rade_text': rade_text})
+                            row.update({'rade_location': rade_location})
+                            radeloc_arr.append(row)
+
+                            if response.split(":")[3] == '*':
+                                pass
+                            else:
+                                row = {}
+                                rade_text = response.split(":")[3]
+                                rade_location = int(response.split(":")[3].split('📍')[1].split('км')[0].strip())
+                                row.update({'rade_text': rade_text})
+                                row.update({'rade_location': rade_location})
+                                radeloc_arr.append(row)
+
+                            if response.split(":")[4] == '*':
+                                pass
+                            else:
+                                row = {}
+                                rade_text = response.split(":")[4]
+                                rade_location = int(response.split(":")[4].split('📍')[1].split('км')[0].strip())
+                                row.update({'rade_text': rade_text})
+                                row.update({'rade_location': rade_location})
+                                radeloc_arr.append(row)
+
+                            row = {}
+                            row.update({'rade_text': 'Не пойду никуда!'})
+                            row.update({'rade_location': 0})
+                            radeloc_arr.append(row)
+                        
+                        if eval(response.split(":")[5]):
+                            for radeloc in radeloc_arr:                                
+                                myquery = { 
                                             'rade_date': raid_date.timestamp(),
-                                            'rade_text': rade_text,
-                                            'rade_location': rade_location,
-                                            'state': 'WAIT',
-                                            'chat_id': message.chat.id,
-                                            'login': message.from_user.username,
+                                            'rade_location': radeloc['rade_location'],
                                             'goat': goat
-                                        } } 
-                            u = plan_raids.update_one(myquery, newvalues)
+                                        }
+                                newvalues = { "$set": { 
+                                                'rade_text': radeloc['rade_text'],
+                                            } } 
+                                u = plan_raids.update_one(myquery, newvalues)
 
-                            if u.matched_count == 0:
-                                plan_raids.insert_one({ 
-                                    'create_date': datetime.now().timestamp(), 
-                                    'rade_date': raid_date.timestamp(),
-                                    'rade_text': rade_text,
-                                    'rade_location': rade_location,
-                                    'state': 'WAIT',
-                                    'chat_id': message.chat.id,
-                                    'login': message.from_user.username,
-                                    'goat': goat})
+                                users_onraid = []
+                                if u.matched_count == 0:
+                                    plan_raids.insert_one({ 
+                                        'create_date': datetime.now().timestamp(), 
+                                        'rade_date': raid_date.timestamp(),
+                                        'rade_text': radeloc['rade_text'],
+                                        'rade_location': radeloc['rade_location'],
+                                        'state': 'WAIT',
+                                        'chat_id': message.chat.id,
+                                        'login': message.from_user.username,
+                                        'goat': goat,
+                                        'users': users_onraid})
                         else:
-                            plan_raids.delete_one({
+                            plan_raids.delete_many({
                                             'rade_date': raid_date.timestamp(),
+                                            'goat': goat
                                             })
 
                         plan_str = get_raid_plan(raid_date, goat)
-                        msg = send_messages_big(message.chat.id, text=plan_str)                                 
+
+                        #markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
+                        for radeloc in plan_raids.find({
+                                    'rade_date': raid_date.timestamp(),
+                                    'goat': goat}): 
+                            users_onraid = radeloc['users']
+                            find = False
+                            for u in users_onraid:
+                                if u == message.from_user.username:
+                                    find = True
+                            
+                            if not find:
+                                markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
+                                                    
+                        msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=markupinline)
                     elif 'getchat' == response.split(':')[1]:
                         send_messages_big(message.chat.id, text=f'Id чата {message.chat.id}')
                     elif 'capture' == response.split(':')[1]:
@@ -1442,37 +1530,70 @@ def main_message(message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
-    if call.data in ("capture_yes", "capture_no"):
-        markupinline = InlineKeyboardMarkup()
-        markupinline.row_width = 2
-        markupinline.add(InlineKeyboardButton("Иду!", callback_data="capture_yes"),
-        InlineKeyboardButton("Нахер!", callback_data="capture_no"))
-        boldstring = []
-        text = call.message.text
 
-        # print(text)
-        # for s in call.message.entities:
-        #     print(s)
-        #     if s.type == 'bold':
-        #         print(s)
-        #         print(text[s.offset : s.offset+s.length])
-                
-        #         boldstring.append(text[s.offset : s.offset+s.length])
+    goat = call.data.split('_')[3]
 
-        # for z in boldstring:
-        #     print(z)
-        #     print(z.decode('ascii') )
-        #     #text = text.replace(z, f'<b>{z}</b>')
+    if not goat == getMyGoat(call.from_user.username):
+        bot.answer_callback_query(call.id, "Это план не твоего козла!")
+        return
 
-        if call.data == "capture_yes" :
-            bot.answer_callback_query(call.id, "Ты записался в добровольцы!")
-            text = text.replace(f'@{call.from_user.username}', f'<b>@{call.from_user.username}</b>')
+    raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
+    raid_location = int(call.data.split('_')[1])
 
-        elif call.data == "capture_no":
-            bot.answer_callback_query(call.id, "Сыкло!")
-            text = text.replace(f'<b>@{call.from_user.username}</b>', f'@{call.from_user.username}')
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+    myquery = { 
+                'rade_date': raid_date.timestamp(),
+                'goat': goat
+            }
+            
+    markupinline = InlineKeyboardMarkup()
+
+    if call.data.startswith("capture_0"):
+        bot.answer_callback_query(call.id, "Сыкло!")
+    else:
+        bot.answer_callback_query(call.id, "Ты записался в добровольцы!")
+
+
+    users_onraid = []
+    for row in plan_raids.find(myquery):
+        users_onraid = row['users']
+        if row['rade_location'] == raid_location:
+            find_user = False
+            for u in users_onraid:
+                if call.from_user.username == u:
+                    find_user = True
+                    break
+            if not find_user:
+                users_onraid.append(call.from_user.username)
+        else:
+            for u in users_onraid:
+                if call.from_user.username == u:
+                    users_onraid.remove(call.from_user.username)
+    
+        newvalues = { "$set": { 
+                        'users': users_onraid
+                    }} 
+        u = plan_raids.update_one({ 
+                    'rade_date': raid_date.timestamp(),
+                    'rade_location': row["rade_location"],
+                    'goat': goat
+                }, newvalues)
+
+    for radeloc in plan_raids.find({
+                'rade_date': raid_date.timestamp(),
+                'goat': goat}): 
+        users_onraid = radeloc['users']
+        find = False
+        for u in users_onraid:
+            if u == call.from_user.username:
+                find = True
+        
+        if not find:
+            markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
+                                
+    text = get_raid_plan(raid_date, goat)
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+
 
 def send_messages_big(chat_id: str, text: str, reply_markup=None):
     strings = text.split('\n')
