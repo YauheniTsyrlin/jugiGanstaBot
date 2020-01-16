@@ -296,12 +296,12 @@ def get_raid_plan(raid_date, goat):
             time_str = t
 
         plan_for_date = plan_for_date + f'{raid.get("rade_text")}\n'
-        users = raid.get("users")
-        if users or len(users) == 0:
+        users_onraid = raid.get("users")
+        if users_onraid or len(users_onraid) == 0:
             plan_for_date = plan_for_date + f'    Никто не записался\n'
         else:
             i = 0
-            for u in users:
+            for u in users_onraid:
                 i = i + 1
                 reg_usr = getUserByLogin(u)
                 plan_for_date = plan_for_date + f'    {i}. {reg_usr.getName()}\n'
