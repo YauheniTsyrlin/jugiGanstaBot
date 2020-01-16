@@ -430,7 +430,7 @@ def send_welcome(message):
         markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда')
 
     if response:
-        bot.send_message(message.chat.id, text=response, markup=markup)
+        bot.send_message(message.chat.id, text=response, reply_markup=markup)
 
 # Handle document
 @bot.message_handler(content_types=['document'])
