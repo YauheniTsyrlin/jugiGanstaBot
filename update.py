@@ -310,7 +310,7 @@ newvalues = { "$set": { "value":
                                     'value': 'CAADAgADKAAD29t-AAHTqBFpbSvY8xYE'
                                 }
                             ] 
-                        },
+                        }
                         {
                             'name': 'BOT_LOVE',
                             'value':
@@ -370,6 +370,16 @@ newvalues = { "$set": { "value":
                                 {
                                     'name': '1',
                                     'value': 'CAADAgADJwAD29t-AAFc8IBFtdp6yxYE'
+                                }
+                            ] 
+                        },
+                        {
+                            'name': 'NEW_MEMBER_IMG',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'AgADAgADrawxG6IbCEkji2EgX1AGkeyDwQ8ABAEAAwIAA3kAAzw0AwABFgQ'
                                 }
                             ] 
                         },
