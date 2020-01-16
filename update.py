@@ -226,6 +226,82 @@ newvalues = { "$set": { "value":
                             ]
                         },
                         {
+                            'name': 'LOVE_DAY',
+                            'value': 
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgADVwMAAoe3Gh5fN2JO7jWn2RYE'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': 'CAADAgADWAMAAoe3Gh6pitv5db4FkRYE'
+                                },
+                                {
+                                    'name': '3',
+                                    'value': 'CAADAgADWQMAAoe3Gh5uz6P8gKqkNRYE'
+                                },
+                                {
+                                    'name': '4',
+                                    'value': 'CAADAgADWgMAAoe3Gh4eUR-h9SYeWxYE'
+                                },
+                                {
+                                    'name': '5',
+                                    'value': 'CAADAgADXAMAAoe3Gh4M8BxFfEUdqRYE'
+                                },
+
+                                {
+                                    'name': '6',
+                                    'value': 'CAADAgADXQMAAoe3Gh6twGryPCR3tRYE'
+                                },
+                                {
+                                    'name': '7',
+                                    'value': 'CAADAgADXgMAAoe3Gh5xCQI6xpkGXRYE'
+                                },
+                                {
+                                    'name': '8',
+                                    'value': 'CAADAQADyQADTNZnMNX19QPGYpuvFgQ'
+                                },
+                                {
+                                    'name': '9',
+                                    'value': 'CAADAQADyAADTNZnMK1RYUeWCxm_FgQ'
+                                },
+                                {
+                                    'name': '10',
+                                    'value': 'CAADAQADxwADTNZnMKFlT04S1hqcFgQ'
+                                },
+
+                                {
+                                    'name': '11',
+                                    'value': 'CAADAQADxgADTNZnMMFLbnRzfsOOFgQ'
+                                },
+                                {
+                                    'name': '12',
+                                    'value': 'CAADAQADxAADTNZnMElO0Tuc_g0fFgQ'
+                                },
+                                {
+                                    'name': '13',
+                                    'value': 'CAADAQADwwADTNZnMHa8oJvHTFqIFgQ'
+                                },
+                                {
+                                    'name': '14',
+                                    'value': 'CAADAQADwgADTNZnMNPfeHSSUMpxFgQ'
+                                },
+                                {
+                                    'name': '15',
+                                    'value': 'CAADAQADwQADTNZnMAxj6hRLhbl1FgQ'
+                                },
+                                {
+                                    'name': '16',
+                                    'value': 'CAADAQADwAADTNZnMLlDhK-nyCo1FgQ'
+                                },
+                                {
+                                    'name': '17',
+                                    'value': 'CAADAQADvwADTNZnMBTVM9xEDpvcFgQ'
+                                }                         
+                            ]
+                        },
+                        {
                             'name': 'BOT_VOICE',
                             'value':
                             [
@@ -399,6 +475,11 @@ newvalues = { "$set": { "value":
                             # Вероятность
                             'name': 'EMOTIONS',
                             'value': 0.10
+                        },
+                        {
+                            # Вероятность
+                            'name': 'YES',
+                            'value': 1.00
                         },
                         {
                             # Range

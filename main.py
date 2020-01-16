@@ -805,7 +805,7 @@ def main_message(message):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_FINGER_TYK'), 1)[0]['value'])
             return
     if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да!)' == message.text.lower():
-        if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
+        if (random.random() <= float(getSetting('PROBABILITY','YES'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_DA_PINDA'), 1)[0]['value'])
             return
     if 'тебя буквально размазали' in message.text.lower():
@@ -1300,7 +1300,7 @@ def main_message(message):
                                 band = userIAm.getBand()
                             
                             if not isUsersBand(message.from_user.username, band):
-                                send_messages_big(message.chat.id, text=f'Ты пытался созвать на захват банду 🤟<b>{band}</b>\n' + getResponseDialogFlow('not_right_band'))
+                                send_messages_big(message.chat.id, text=f'Ты пытался созвать на зах��ат банду 🤟<b>{band}</b>\n' + getResponseDialogFlow('not_right_band'))
                                 return  
 
                             time_str = response.split(response.split(":")[3])[1][1:]
@@ -1709,6 +1709,19 @@ def rade():
                 report = 'Чёт я приуныл... Ничего в голову не идет... С новым годом!'
             send_messages_big(goat['chats']['raid'], report)
             bot.send_sticker(goat['chats']['raid'], random.sample(getSetting('STICKERS','NEW_YEAR'), 1)[0]['value']) 
+
+    # 14 февраля!
+    if now_date.day == 14 and now_date.month == 2 and now_date.hour == 10 and now_date.minute in (0,10,15,20,25,35,35,50) and now_date.second < 15:
+        for goat in getSetting('GOATS_BANDS'):
+            report = ''
+            try:
+                r = requests.get(f'{config.ANECDOT_URL}={16}', verify=False, timeout=7)
+                report = r.text[12:-2]
+            except:
+                report = 'Чёт я приуныл... Ничего в голову не идет... С новым годом!'
+            send_messages_big(goat['chats']['flood'], report)
+            bot.send_sticker(goat['chats']['flood'], random.sample(getSetting('STICKERS','LOVE_DAY'), 1)[0]['value']) 
+
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
         
