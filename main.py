@@ -717,7 +717,7 @@ def main_message(message):
         if hasAccessToWariors(message.from_user.username):
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive'))
-                send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."'))
+                send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
                 return
 
             u = getUserByLogin(message.from_user.username)
