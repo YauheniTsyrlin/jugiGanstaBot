@@ -151,7 +151,7 @@ def getMyBandsName(login: str):
 def isGoatSecretChat(login: str, secretchat: str):
     goat = getMyGoat(login)
     if goat:
-        if ['chat']['secret'] == secretchat:
+        if goat['chat']['secret'] == secretchat:
             return True
     else:
         return False
