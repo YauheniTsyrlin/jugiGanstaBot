@@ -810,8 +810,8 @@ def main_message(message):
             return
     if 'нет' == message.text.lower() or 'нет!' == message.text.lower() or 'нет?' == message.text.lower() or 'нет!)' == message.text.lower():
         if (random.random() <= float(getSetting('PROBABILITY','NO_STICKER'))):
-        bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_NO_PINDA'), 1)[0]['value'])
-        return
+            bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_NO_PINDA'), 1)[0]['value'])
+            return
 
     if 'тебя буквально размазали' in message.text.lower():
         if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
