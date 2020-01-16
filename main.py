@@ -445,6 +445,8 @@ def get_message_photo(message):
 @bot.message_handler(content_types=["photo"])
 def get_message_photo(message):
     #write_json(message.json)
+    
+    privateChat = ('private' in message.chat.type)
 
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
@@ -452,8 +454,6 @@ def get_message_photo(message):
         return
 
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
-        
-        privateChat = ('private' in message.chat.type)
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
         wariorShow = None
         for warior in ww:
@@ -473,6 +473,9 @@ def get_message_photo(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
+    else:
+        if privateChat:
+            send_messages_big(message.chat.id, text=message.photo[len(message.photo)-1].file_id)
     
 # Handle sticker
 @bot.message_handler(content_types=["sticker"])
