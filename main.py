@@ -423,6 +423,7 @@ def default_query(inline_query):
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     response = getResponseDialogFlow('start')
+    privateChat = ('private' in message.chat.type)
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
     if not privateChat:
         markup.add('Джу, 📋 Отчет', 'Джу, 📜 Профиль', f'Джу, ⏰ план рейда')
