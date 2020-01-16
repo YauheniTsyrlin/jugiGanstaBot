@@ -297,7 +297,7 @@ def get_raid_plan(raid_date, goat):
 
         plan_for_date = plan_for_date + f'{raid.get("rade_text")}\n'
         users = raid.get("users")
-        if len(users) == 0:
+        if users or len(users) == 0:
             plan_for_date = plan_for_date + f'    Никто не записался\n'
         else:
             i = 0
