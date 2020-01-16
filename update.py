@@ -418,6 +418,16 @@ newvalues = { "$set": { "value":
                             ] 
                         },
                         {
+                            'name': 'BOT_NO_PINDA',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgADDwYAAj6IGguD0q7ZODC79RYE'
+                                }
+                            ] 
+                        },
+                        {
                             'name': 'BOT_SALUTE',
                             'value':
                             [
@@ -478,7 +488,12 @@ newvalues = { "$set": { "value":
                         },
                         {
                             # Вероятность
-                            'name': 'YES',
+                            'name': 'YES_STICKER',
+                            'value': 1.00
+                        },
+                        {
+                            # Вероятность
+                            'name': 'NO_STICKER',
                             'value': 1.00
                         },
                         {
@@ -597,7 +612,7 @@ newvalues = { "$set":
                             'chats': 
                                     {
                                         'raid' : -1001326436156,
-                                        'flood' : -1001411359669
+                                        'info' : -1001411359669
                                     }
                         }
                     ]   
