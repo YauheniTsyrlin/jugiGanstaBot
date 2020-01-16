@@ -146,9 +146,30 @@ def getMyBandsName(login: str):
                 find = True
         if find:
             return bands
-    return None     
+    return None
+
+def isGoatSecretChat(login: str, secretchat: str):
+    goat = getMyGoat(login)
+    if goat:
+        if ['chat']['secret'] == secretchat:
+            return True
+    else:
+        return False
+    return True
 
 def getMyGoat(login: str):
+    user = getUserByLogin(login)
+    if not user:
+        return None
+
+    for goat in getSetting('GOATS_BANDS'):
+        for band in goat['bands']:
+            if user.getBand() and user.getBand().lower() == band.get('name').lower():
+                return goat
+
+    return None 
+
+def getMyGoatName(login: str):
     user = getUserByLogin(login)
     if not user:
         return None
@@ -360,12 +381,9 @@ def getResponseDialogFlow(text):
 # Handle new_chat_members
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
 def send_welcome_and_dismiss(message):
-
     response = getResponseDialogFlow(message.content_type)
     if response:
         bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_NEW_MEMBER'), 1)[0]['value'])
-        bot.send_chat_action(message.chat.id, 'typing')
-        time.sleep(3)
         bot.send_message(message.chat.id, text=response)
 
 # Handle inline_handler
@@ -375,7 +393,7 @@ def default_query(inline_query):
         r = types.InlineQueryResultArticle(id=0, title = 'Хрена надо? Ты не из наших банд!', input_message_content=types.InputTextMessageContent(getResponseDialogFlow('i_dont_know_you')), description=getResponseDialogFlow('i_dont_know_you'))
         bot.answer_inline_query(inline_query.id, [r], cache_time=3060)
         return
-    
+
     try:
             result = []
             i = 0
@@ -775,8 +793,11 @@ def main_message(message):
                 report = report + alianusersReport
             
             if onraidcounter > 0 or aliancounter > 0:
-                bot.delete_message(message.chat.id, message.message_id)
-                send_messages_big(message.chat.id, text=report)
+                if isGoatSecretChat(message.from_user.username, message.chat.id):
+                    bot.delete_message(message.chat.id, message.message_id)
+                    send_messages_big(message.chat.id, text=report)
+                else:
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                 
                 # ping_on_reade(fuckupusers, message.chat.id)
             else:
@@ -889,6 +910,7 @@ def main_message(message):
                 send_messages_big(message.chat.id, text='✅ Готово')
             
             updateUser(None)
+
         elif (callJugi and 'профиль @' in message.text.lower()):
 
             name = tools.deEmojify(message.text.split('@')[1].strip())
@@ -940,7 +962,13 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=f'{login} не найден в бандитах! Удалено {war.deleted_count} в дневнике боев!')
             else:                 
                 send_messages_big(message.chat.id, text=f'{login} уволен нафиг! Удалено {doc.deleted_count} записей в дневнике бандитов и {war.deleted_count} в дневнике боев!')
-        elif (callJugi and 'профиль' in message.text.lower()):
+        elif (callJugi and 'профиль' in message.text.lower() ):
+            if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                pass
+            else:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_secretchat'))
+                return
+
             user = users.getUser(message.from_user.username, registered_users)
             if user:
                 warior = getWariorByName(user.getName(), user.getFraction())
@@ -962,6 +990,13 @@ def main_message(message):
                 if (response.startswith('jugi:')):
                     #jugi:ping:Артхаус
                     if 'ping' == response.split(':')[1]:
+
+                        if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                            pass
+                        else:
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_secretchat'))
+                            return
+
                         # Собираем всех пользоватлей с бандой Х
                         band = response.split(':')[2]
                         if response.split(":")[2] == '*':
@@ -984,7 +1019,7 @@ def main_message(message):
                             registered_user.update({'weight': user.getRaidWeight()})
                             registered_user.update({'ping': user.isPing()})
                             if band=='all':
-                                if user.getBand() in getGoatBands(getMyGoat(userIAm.getLogin())): 
+                                if user.getBand() in getGoatBands(getMyGoatName(userIAm.getLogin())): 
                                     usersarr.append(registered_user)
                             else:
                                 if user.getBand() == band: 
@@ -1034,8 +1069,14 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=f'\n{report}')
                     elif 'planrade' == response.split(':')[1]:
                         # jugi:planrade:$date
-                        # ⚠️Пока проверяйте канал FǁȺǁggǁØǁAT_RAid
-                        goat = getMyGoat(message.from_user.username)
+
+                        if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                            pass
+                        else:
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_secretchat'))
+                            return
+
+                        goat = getMyGoatName(message.from_user.username)
 
                         tz = config.SERVER_MSK_DIFF
                         plan_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
@@ -1083,12 +1124,17 @@ def main_message(message):
                         # if not isAdmin(message.from_user.username):
                         #     send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
                         #     return
+                        if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                            pass
+                        else:
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_secretchat'))
+                            return
 
                         goatName = response.split(':')[2].strip()
                         if goatName == '*':
-                            goatName = getMyGoat(message.from_user.username)
+                            goatName = getMyGoatName(message.from_user.username)
 
-                        if not getMyGoat(message.from_user.username) == goatName:
+                        if not getMyGoatName(message.from_user.username) == goatName:
                             send_messages_big(message.chat.id, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'))
                             return
 
@@ -1103,11 +1149,17 @@ def main_message(message):
                                 send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_goat_boss'))
                                 return
 
+                        if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                            pass
+                        else:
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_secretchat'))
+                            return
+
                         goatName = response.split(':')[2].strip()
                         if goatName == '*':
-                            goatName = getMyGoat(message.from_user.username)
+                            goatName = getMyGoatName(message.from_user.username)
 
-                        if not getMyGoat(message.from_user.username) == goatName:
+                        if not getMyGoatName(message.from_user.username) == goatName:
                             if not isAdmin(message.from_user.username):
                                 send_messages_big(message.chat.id, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'))
                                 return
@@ -1120,11 +1172,17 @@ def main_message(message):
                             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
                             return
 
+                        if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                            pass
+                        else:
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_secretchat'))
+                            return
+
                         goatName = response.split(':')[2].strip()
                         if goatName == '*':
-                            goatName = getMyGoat(message.from_user.username)
+                            goatName = getMyGoatName(message.from_user.username)
 
-                        if not getMyGoat(message.from_user.username) == goatName:
+                        if not getMyGoatName(message.from_user.username) == goatName:
                             if not isAdmin(message.from_user.username):
                                 send_messages_big(message.chat.id, text='Не твой козёл!\n' + getResponseDialogFlow('shot_you_cant'))
                                 return
@@ -1196,8 +1254,14 @@ def main_message(message):
                         else:
                             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_goat_boss'))
                             return
+
+                        if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                            pass
+                        else:
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_secretchat'))
+                            return
                         
-                        goat = getMyGoat(message.from_user.username)
+                        goat = getMyGoatName(message.from_user.username)
                         #   0    1        2              3               4         5       6
                         # jugi:rade:$radelocation1:$radelocation2:$radelocation3:$bool:$date-time
                         raid_date = parse(response.split(response.split(":")[5])[1][1:])
@@ -1305,8 +1369,14 @@ def main_message(message):
                                 band = userIAm.getBand()
                             
                             if not isUsersBand(message.from_user.username, band):
-                                send_messages_big(message.chat.id, text=f'Ты пытался созвать на зах��ат банду 🤟<b>{band}</b>\n' + getResponseDialogFlow('not_right_band'))
+                                send_messages_big(message.chat.id, text=f'Ты пытался созвать на захват банду 🤟<b>{band}</b>\n' + getResponseDialogFlow('not_right_band'))
                                 return  
+
+                            if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                                pass
+                            else:
+                                send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_secretchat'))
+                                return
 
                             time_str = response.split(response.split(":")[3])[1][1:]
                             dt = parse(time_str)
@@ -1410,8 +1480,14 @@ def main_message(message):
                         else:
                             send_messages_big(message.chat.id, text=getResponseDialogFlow('understand'))
                     elif 'rating' == response.split(':')[1]:
+                        if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                            pass
+                        else:
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_secretchat'))
+                            return
+
                         report = ''
-                        report = report + f'🏆ТОП 5 УБИЙЦ 🐐<b>{getMyGoat(userIAm.getLogin())}</b>\n'
+                        report = report + f'🏆ТОП 5 УБИЙЦ 🐐<b>{getMyGoatName(userIAm.getLogin())}</b>\n'
                         report = report + '\n'
                         setting = getSetting('REPORTS','KILLERS')
                         from_date = setting.get('from_date')
@@ -1545,7 +1621,7 @@ def callback_query(call):
 
     goat = call.data.split('_')[3]
 
-    if not goat == getMyGoat(call.from_user.username):
+    if not goat == getMyGoatName(call.from_user.username):
         bot.answer_callback_query(call.id, "Это план не твоего козла!")
         return
 
@@ -1712,8 +1788,8 @@ def rade():
                 report = r.text[12:-2]
             except:
                 report = 'Чёт я приуныл... Ничего в голову не идет... С новым годом!'
-            send_messages_big(goat['chats']['raid'], report)
-            bot.send_sticker(goat['chats']['raid'], random.sample(getSetting('STICKERS','NEW_YEAR'), 1)[0]['value']) 
+            send_messages_big(goat['chats']['info'], report)
+            bot.send_sticker(goat['chats']['info'], random.sample(getSetting('STICKERS','NEW_YEAR'), 1)[0]['value']) 
 
     # 14 февраля!
     if now_date.day == 14 and now_date.month == 2 and now_date.hour == 10 and now_date.minute in (0,10,15,20,25,35,35,50) and now_date.second < 15:
@@ -1724,8 +1800,8 @@ def rade():
                 report = r.text[12:-2]
             except:
                 report = 'Чёт я приуныл... Ничего в голову не идет... С новым годом!'
-            send_messages_big(goat['chats']['flood'], report)
-            bot.send_sticker(goat['chats']['flood'], random.sample(getSetting('STICKERS','LOVE_DAY'), 1)[0]['value']) 
+            send_messages_big(goat['chats']['info'], report)
+            bot.send_sticker(goat['chats']['info'], random.sample(getSetting('STICKERS','LOVE_DAY'), 1)[0]['value']) 
 
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
@@ -1734,7 +1810,7 @@ def rade():
         for goat in getSetting('GOATS_BANDS'):
             if getPlanedRaidLocation(goat['name'], planRaid = True)['rade_location']:
                 report = radeReport(goat, True)
-                send_messages_big(goat['chats']['raid'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
+                send_messages_big(goat['chats']['secret'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second < 15:
         logger.info('Rade time now!')
@@ -1742,7 +1818,7 @@ def rade():
         for goat in getSetting('GOATS_BANDS'):
             if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
                 report = radeReport(goat)
-                send_messages_big(goat['chats']['raid'], text='<b>Результаты рейда</b>\n' + report)
+                send_messages_big(goat['chats']['secret'], text='<b>Результаты рейда</b>\n' + report)
                 saveRaidResult(goat)
                 statistic(goat['name'])
 
@@ -1833,7 +1909,7 @@ def radeReport(goat, ping=False):
     planed_raid_location_text = raidInfo['rade_text']
     goat_report = {}
     goat_report.update({'name': goat.get('name')})
-    goat_report.update({'chat': goat['chats']['raid']})
+    goat_report.update({'chat': goat['chats']['secret']})
     goat_report.update({'bands': []})
 
     for band in goat.get('bands'):
@@ -1888,7 +1964,7 @@ def radeReport(goat, ping=False):
             report = report + f'\n'
         if ping:
             if planed_raid_location:
-                ping_on_reade(bands.get("usersoffrade"), goat['chats']['raid'] )
+                ping_on_reade(bands.get("usersoffrade"), goat['chats']['secret'] )
     return report
 
 def statistic(goatName: str):
