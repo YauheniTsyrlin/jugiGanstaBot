@@ -310,7 +310,7 @@ newvalues = { "$set": { "value":
                                     'value': 'CAADAgADKAAD29t-AAHTqBFpbSvY8xYE'
                                 }
                             ] 
-                        }
+                        },
                         {
                             'name': 'BOT_LOVE',
                             'value':
