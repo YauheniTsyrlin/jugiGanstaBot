@@ -259,7 +259,6 @@ def update_warior(warior: wariors.Warior):
         if isKnownWarior(warior.getName(), warior.getFraction()):
             wariorToUpdate = getWariorByName(warior.getName(), warior.getFraction())
             updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
-
             newvalues = { "$set": json.loads(updatedWarior.toJSON()) }
             z = registered_wariors.update_one({
                 "name": f"{updatedWarior.getName()}", 
@@ -558,6 +557,7 @@ def main_message(message):
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
                 for warior in ww:
                     update_warior(warior)
+                    print()
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                 return
             
@@ -804,7 +804,7 @@ def main_message(message):
         if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_FINGER_TYK'), 1)[0]['value'])
             return
-    if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да!)' == message.text.lower():
+    if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да?' == message.text.lower() or 'да!)' == message.text.lower():
         if (random.random() <= float(getSetting('PROBABILITY','YES'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_DA_PINDA'), 1)[0]['value'])
             return

@@ -530,7 +530,7 @@ u = settings.update_one(myquery, newvalues)
 myquery = { "code": 'BANDS_ACCESS_WARIORS' }
 newvalues = { "$set": { "value": 
             [
-                {'band': 'Артхаус'},
+                {'band': 'АртхǁȺǁус'},
                 {'band': 'Энтропия'},
                 {'band': 'без банды'},
                 {'band': 'Crewname'},
@@ -553,7 +553,7 @@ newvalues = { "$set":
                             'bands': 
                                     [
                                         {
-                                            'name': 'Артхаус',
+                                            'name': 'АртхǁȺǁус',
                                             'boss': 'GonzikBenzyavsky'
                                         },
                                         {

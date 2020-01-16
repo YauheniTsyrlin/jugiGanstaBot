@@ -349,32 +349,33 @@ def statistic(goatName: str):
 
 print('\n======== radeReport ==========\n')
 
-dresult = registered_wariors.aggregate([ 
-    # {   "$match": {
-    #             "$and" : [
+# dresult = registered_wariors.aggregate([ 
+#     # {   "$match": {
+#     #             "$and" : [
                     
-    #                     {'name':{'$regex':'rushk', '$options':'i'}}   
-    #                 ]
-    #         } 
-    # },
-    {   "$group": {
-        "_id": "$name", 
-        "count": {
-            "$sum": 1}}},
+#     #                     {'name':{'$regex':'rushk', '$options':'i'}}   
+#     #                 ]
+#     #         } 
+#     # },
+#     {   "$group": {
+#         "_id": "$name", 
+#         "count": {
+#             "$sum": 1}}},
         
-    {   "$sort" : { "count" : -1 } }
-    ])
+#     {   "$sort" : { "count" : -1 } }
+#     ])
     
-for d in dresult:
-    user_name = d.get("_id") 
-    print(f'{d.get("count")} - {user_name}')  
+# for d in dresult:
+#     user_name = d.get("_id") 
+#     print(f'{d.get("count")} - {user_name}')  
 
-sys.exit(0)
+# 
 
 
-for ts in (1576073221, 1577471475, 1577800962, 1578167033, 1578172834,  1578520116, 1578657846):
+for ts in (1579191477, 1579191477):
     print(f"{datetime.fromtimestamp(ts)}")
 
+sys.exit(0)
 
 # #report_raids.remove()
 for goat in getSetting('GOATS_BANDS'):
