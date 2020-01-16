@@ -423,8 +423,14 @@ def default_query(inline_query):
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     response = getResponseDialogFlow('start')
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+    if not privateChat:
+        markup.add('Джу, 📋 Отчет', 'Джу, 📜 Профиль', f'Джу, ⏰ план рейда')
+    else:
+        markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда')
+
     if response:
-        bot.send_message(message.chat.id, text=response)
+        bot.send_message(message.chat.id, text=response, markup=markup)
 
 # Handle document
 @bot.message_handler(content_types=['document'])
