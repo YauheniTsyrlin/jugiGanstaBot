@@ -698,11 +698,26 @@ def main_message(message):
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_you_cant'))
         return
+    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты уже записался.' in message.text):
+        #write_json(message.json)
+        if hasAccessToWariors(message.from_user.username):
+            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive'))
+                return
+
+            u = getUserByLogin(message.from_user.username)
+            u.setRaidLocation(1)
+            updateUser(u)
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
+        else:
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_you_cant'))
+        return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive'))
+                send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."'))
                 return
 
             u = getUserByLogin(message.from_user.username)
