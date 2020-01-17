@@ -479,7 +479,7 @@ newvalues = { "$set": { "value":
                         {
                             # Вероятность
                             'name': 'I_DONT_KNOW_YOU',
-                            'value': 0.3
+                            'value': 0.5
                         },
                         {
                             # Вероятность
@@ -505,6 +505,11 @@ newvalues = { "$set": { "value":
                             # Вероятность
                             'name': 'NO_STICKER',
                             'value': 1.00
+                        },
+                        {
+                            # Вероятность
+                            'name': 'YOU_PRIVATE_CHAT',
+                            'value': 0.5
                         },
                         {
                             # Range

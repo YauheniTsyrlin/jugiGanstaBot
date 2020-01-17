@@ -64,6 +64,11 @@ def updateUser(newUser, oldUser):
         oldUser.timeUpdate = newUser.timeUpdate
     if hasattr(newUser, 'ping'):
         oldUser.ping = newUser.ping
+    if hasattr(newUser, 'chat'):
+        oldUser.chat = newUser.chat
+    if hasattr(newUser, 'accessory'):
+        oldUser.accessory = newUser.accessory
+        
 
     return oldUser
 
@@ -107,6 +112,17 @@ def importUser(registered_user):
         except:
             u.ping = True
 
+        try:   
+            u.chat = registered_user['chat']
+        except:
+            u.chat = None
+
+        try:   
+            u.accessory = registered_user['accessory']
+        except:
+            u.accessory = []
+        
+
         u.setRaidLocation(registered_user['raidlocation'])
 
         return u
@@ -126,6 +142,8 @@ class User(object):
         self.raid = None
         self.raidlocation = None
         self.ping = True
+        self.chat = None
+        self.accessory = []
 
         strings = text.split('\n')
         isEquipequipment = False
@@ -236,7 +254,10 @@ class User(object):
             string = string + f'├🔔Пингуйте меня семеро!\n'
         else:
             string = string + f'├🔕Нихт!\n'
-            
+        
+        # if self.chat:
+        #     string = string + f'├🗣{self.chat}\n'
+
         if self.status:
             string = string + f'└😏Статус: {self.status}\n'
         else:
@@ -252,6 +273,14 @@ class User(object):
             string = string + f'├👊{self.raid}\n'
         string = string + f'└🏋️‍♂️Вес на рейде: {self.getRaidWeight()}\n'
         string = string + f'\n'
+
+        string = string + f'Аксессуары:\n'
+        if len(self.accessory) > 0:
+            for acc in self.accessory:
+                string = string + f'▫️ {acc}\n'
+            string = string + f'\n'
+        else:
+            string = string + f'▫️ У тебя ничего нет\n\n'
 
         string = string + f'⏰{tools.getTimeEmoji(self.timeUpdate)} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeUpdate))) +'\n'
         if self.timeBan:
@@ -363,6 +392,23 @@ class User(object):
         self.ping = ping  
     def isPing(self):
         return self.ping
+
+    def setChat(self, chat):
+        self.chat = chat  
+    def getChat(self):
+        return self.chat
+
+    def setAccessory(self, accessory):
+        self.accessory = accessory  
+    def getAccessory(self):
+        return self.accessory
+    def addAccessory(self, accessoryItem: str):
+        find = False
+        for acc in self.accessory:
+            if acc == accessoryItem:
+                find = True
+        if not find:
+            self.accessory.append(accessoryItem)
 
 # ------------------------------------------
     def setTimeBan(self, timeBan):

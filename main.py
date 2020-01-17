@@ -560,6 +560,28 @@ def main_message(message):
 
 
     privateChat = ('private' in message.chat.type)
+    userIAm = getUserByLogin(message.from_user.username)
+    
+    if privateChat:
+        if userIAm.getChat():
+            if userIAm.getChat() == message.chat.id:
+                pass
+            else:
+                userIAm.setChat(message.chat.id)
+                updateUser(userIAm)
+        else:
+            send_messages_big(message.chat.id, text='Поздравляю! Тебе выдали "📟 сломанный Пип-бой" и вытолкнули за дверь!')
+            userIAm.setChat(message.chat.id)
+            userIAm.addAccessory('📟 сломанный Пип-бой')
+            updateUser(userIAm)
+    else:
+        if userIAm.getChat():
+            pass
+        else:
+            if (random.random() <= float(getSetting('PROBABILITY','YOU_PRIVATE_CHAT'))):
+                bot.reply_to(message, text=getResponseDialogFlow('accessory_old_pipboy'), parse_mode='HTML')
+                return
+
     callJugi = (privateChat 
                             or message.text.lower().startswith('джу') 
                             or (message.reply_to_message 
@@ -567,16 +589,8 @@ def main_message(message):
                                 and message.reply_to_message.from_user.username in ('FriendsBrotherBot', 'JugiGanstaBot') )
                 )
 
-    findUser = isRegisteredUserLogin(message.from_user.username)
-    userIAm = getUserByLogin(message.from_user.username)
-
+    findUser = not (userIAm == None)
     logger.info('findUser: ' + str(findUser))
-    
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
-    if not privateChat:
-        markup.add('Джу, 📋 Отчет', 'Джу, 📜 Профиль', f'Джу, ⏰ план рейда')
-    else:
-        markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда')
 
     if (message.text.startswith('📟Пип-бой 3000') and 
             '/killdrone' not in message.text and 
@@ -835,9 +849,6 @@ def main_message(message):
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_you_cant'))
         return
 
-    if not findUser:
-        if (random.random() <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
-            send_messages_big(message.chat.id, text=getResponseDialogFlow('i_dont_know_you'))
     if 'грац' in message.text.lower() or 'лол' in message.text.lower() or 'lol' in message.text.lower():
         if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_LOVE'), 1)[0]['value'])
@@ -963,7 +974,7 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=warior.getProfile())
                 else:
                     send_messages_big(message.chat.id, text=warior.getProfile())
-        elif (callJugi and 'уволить @' in message.text.lower()):
+        elif callJugi and ('уволить @' in message.text.lower() or 'удалить @' in message.text.lower()):
             if not isGoatBoss(message.from_user.username):
                 if not isAdmin(message.from_user.username):
                     send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_goat_boss'))
@@ -1222,6 +1233,26 @@ def main_message(message):
 
                         updateUser(None)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))        
+                    
+                    elif 'toreward' == response.split(':')[1]:
+                        #jugi:toreward:$any:$accessory
+                        login = response.split(':')[2]
+                        login = login.split('@')[1].split(' ')[0].strip()
+
+                        if not isGoatBoss(message.from_user.username):
+                            if not isAdmin(message.from_user.username):
+                                bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_goat_boss'))
+                                return
+                                
+                        user = getUserByLogin(login)
+                        if not user:
+                            send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
+                            return
+
+                        user.addAccessory(response.split(':')[3])
+                        updateUser(user)
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs')) 
+                        
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
                         # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
                         ban = ('ban' == response.split(':')[1])
@@ -1642,8 +1673,9 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('understand'))
         return
     else:
-        logger.info(getResponseDialogFlow('you_dont_our_band_gangster'))
-        return
+        if (random.random() <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('you_dont_our_band_gangster'))
+
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
