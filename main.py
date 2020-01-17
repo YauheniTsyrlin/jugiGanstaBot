@@ -383,12 +383,13 @@ def getResponseDialogFlow(text):
 def send_welcome_and_dismiss(message):
     response = getResponseDialogFlow(message.content_type)
     if response:
-        goat = getMyGoat(message.from_user.username)
-        if goat and isGoatSecretChat(message.from_user.username):
-            bot.send_photo(message.chat.id, random.sample(getSetting('STICKERS','NEW_MEMBER_IMG'), 1)[0]['value'])
-
         bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_NEW_MEMBER'), 1)[0]['value'])
         bot.send_message(message.chat.id, text=response)
+        
+        goat = getMyGoat(message.from_user.username)
+        if goat and isGoatSecretChat(message.from_user.username, message.chat.id):
+            print('send photo')
+            bot.send_photo(message.chat.id, random.sample(getSetting('STICKERS','NEW_MEMBER_IMG'), 1)[0]['value'])
 
 # Handle inline_handler
 @bot.inline_handler(lambda query: query.query)
@@ -1252,7 +1253,7 @@ def main_message(message):
                         user.addAccessory(response.split(':')[3])
                         updateUser(user)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs')) 
-                        
+
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
                         # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
                         ban = ('ban' == response.split(':')[1])
