@@ -153,6 +153,8 @@ def isGoatSecretChat(login: str, secretchat: str):
     if goat:
         if goat['chats']['secret'] == secretchat:
             return True
+        else:
+            return False    
     else:
         return False
     return True
@@ -166,7 +168,6 @@ def getMyGoat(login: str):
         for band in goat['bands']:
             if user.getBand() and user.getBand().lower() == band.get('name').lower():
                 return goat
-
     return None 
 
 def getMyGoatName(login: str):
@@ -213,7 +214,8 @@ def hasAccessToWariors(login: str):
 def getUserByLogin(login: str):
     for user in list(USERS_ARR):
         try:
-            if login.lower() == user.getLogin().lower(): return user
+            if login.lower() == user.getLogin().lower(): 
+                return user
         except:
             pass
     return None
@@ -540,6 +542,7 @@ def get_message_stiker(message):
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
     #write_json(message.json)
+
     privateChat = ('private' in message.chat.type)
     logger.info(f'chat:{message.chat.id}:{privateChat}:{message.from_user.username} : {message.text}')
 
@@ -591,7 +594,6 @@ def main_message(message):
                                 and message.reply_to_message.from_user.is_bot 
                                 and message.reply_to_message.from_user.username in ('FriendsBrotherBot', 'JugiGanstaBot') )
                 )
-
     findUser = not (userIAm == None)
 
     if (message.text.startswith('📟Пип-бой 3000') and 
@@ -746,6 +748,7 @@ def main_message(message):
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Панель банды.' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
+
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive'))
                 return
@@ -770,9 +773,12 @@ def main_message(message):
             for s in strings:
                 if '🏅' in strings[i] and '🤘' in strings[i]:
                     band = strings[i].split('🤘')[1].split('🏅')[0].strip()
+                    
                     if not isUsersBand(message.from_user.username, band):
-                        send_messages_big(message.chat.id, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow('not_right_band'))
-                        return
+                        if not isGoatBoss(message.from_user.username):
+                            send_messages_big(message.chat.id, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow('not_right_band'))
+                            return
+                    
                     registered_users.update_many(
                         {'band': band},
                         { '$set': { 'raidlocation': None} }
@@ -867,22 +873,17 @@ def main_message(message):
         if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_FINGER_TYK'), 1)[0]['value'])
             return
-    
 
     if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да?' == message.text.lower() or 'да!)' == message.text.lower():
         if (random.random() <= float(getSetting('PROBABILITY','YES_STICKER'))):
-            if isGoatSecretChat(message.from_user.username, message.chat.id):
-                bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_SALUTE'), 1)[0]['value'])
-            else:
+            if not isGoatSecretChat(message.from_user.username, message.chat.id):
                 bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_DA_PINDA'), 1)[0]['value'])
-            return
+                return
     if 'нет' == message.text.lower() or 'нет!' == message.text.lower() or 'нет?' == message.text.lower() or 'нет!)' == message.text.lower():
         if (random.random() <= float(getSetting('PROBABILITY','NO_STICKER'))):
-            if isGoatSecretChat(message.from_user.username, message.chat.id):
-                bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_SALUTE'), 1)[0]['value'])
-            else:
+            if not isGoatSecretChat(message.from_user.username, message.chat.id):
                 bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_NO_PINDA'), 1)[0]['value'])
-            return
+                return
 
     if 'тебя буквально размазали' in message.text.lower():
         if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):

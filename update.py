@@ -659,13 +659,23 @@ newvalues = { "$set":
                                         {
                                             'name': 'ЭнтрǁØǁпия',
                                             'boss': 'WestMoscow'
+                                        },
+                                        {
+                                            'name': 'АртхǁȺǁус',
+                                            'boss': 'WestMoscow'
                                         }
                                     ],
+                            'chats_test': 
+                                    {
+                                        'secret' : -1001297175242,
+                                        'info' : -351796836
+                                    },
                             'chats': 
                                     {
                                         'secret' : -1001326436156,
                                         'info' : -1001377870371
                                     }
+
                         }
                     ]   
                 } 
