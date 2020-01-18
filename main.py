@@ -227,8 +227,20 @@ def updateUser(newuser: users.User):
     if newuser == None:
         pass
     else:
+
+        if (newuser.getLogin() == 'Sleidex'):
+            send_message_to_admin(f'Обновляем пользователя {newuser.getLogin()}')
+        
         newvalues = { "$set": json.loads(newuser.toJSON()) }
+
+        if (newuser.getLogin() == 'Sleidex'):
+            send_message_to_admin(f'Новые значения {newvalues}')
+
         z = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
+
+        if (newuser.getLogin() == 'Sleidex'):
+            send_message_to_admin(f'Обновили {z.modified_count}')
+
         #logger.info(newvalues)
 
     USERS_ARR.clear()
