@@ -376,7 +376,7 @@ print('\n======== radeReport ==========\n')
 #     print(f"{datetime.fromtimestamp(ts)}")
 
 report = ''
-jsonfind = json.loads('{"login":"GonzikBenzyavsky"}')
+jsonfind = json.loads('{"chat":{"$not":{"$exists": "true"}}}')
 for req in mydb["users"].find(jsonfind
                             ):
                                 value = req[f'login']

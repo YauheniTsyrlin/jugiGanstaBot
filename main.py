@@ -582,7 +582,6 @@ def main_message(message):
             if (random.random() <= float(getSetting('PROBABILITY','YOU_PRIVATE_CHAT'))):
                 bot.reply_to(message, text=getResponseDialogFlow('accessory_old_pipboy'), parse_mode='HTML')
 
-
     callJugi = (privateChat 
                             or message.text.lower().startswith('джу') 
                             or (message.reply_to_message 
@@ -1316,7 +1315,7 @@ def main_message(message):
                         # jugi:requests:$tables:$feilds:$filters
                         try:
                             report = ''
-                            jsonfind = json.loads(response.split(':')[4])
+                            jsonfind = json.loads(response.split(response.split(":")[4])[1][1:])
                             for req in mydb[response.split(':')[2]].find(jsonfind):
                                 value = req[f'response.split(":")[3]']
                                 report = report + f'{value}\n'
