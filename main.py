@@ -1315,6 +1315,7 @@ def main_message(message):
                         # jugi:requests:$tables:$feilds:$filters
                         try:
                             report = ''
+                            send_messages_big(message.chat.id, text=f'{response}')
                             filter_str = response.split(response.split(":")[3])[1][1:]
                             send_messages_big(message.chat.id, text=f'{filter_str}')
                             jsonfind = json.loads(filter_str)
