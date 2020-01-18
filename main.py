@@ -870,11 +870,11 @@ def main_message(message):
     
     if not isGoatSecretChat(userIAm.getLogin(), message.chat.id):
         if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да?' == message.text.lower() or 'да!)' == message.text.lower():
-            if (random.random() <= float(getSetting('PROBABILITY','YES_STICKER'))):
+            if (random.random() <= float(getSetting('PROBABILITY','BOT_SALUTE'))):
                 bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_DA_PINDA'), 1)[0]['value'])
                 return
         if 'нет' == message.text.lower() or 'нет!' == message.text.lower() or 'нет?' == message.text.lower() or 'нет!)' == message.text.lower():
-            if (random.random() <= float(getSetting('PROBABILITY','NO_STICKER'))):
+            if (random.random() <= float(getSetting('PROBABILITY','BOT_SALUTE'))):
                 bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_NO_PINDA'), 1)[0]['value'])
                 return
 
