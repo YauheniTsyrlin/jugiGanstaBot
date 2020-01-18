@@ -654,6 +654,7 @@ def main_message(message):
             
             
             user = users.User(message.from_user.username, message.forward_date, message.text)
+            user.setAccessory(userIAm.getAccessory()) # Костыль
             if findUser==False:  
                 if 'Подробности /me' in message.text: 
                     send_messages_big(message.chat.id, text=getResponseDialogFlow('pip_me'))
