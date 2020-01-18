@@ -868,15 +868,21 @@ def main_message(message):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_FINGER_TYK'), 1)[0]['value'])
             return
     
-    if not isGoatSecretChat(userIAm.getLogin(), message.chat.id):
-        if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да?' == message.text.lower() or 'да!)' == message.text.lower():
-            if (random.random() <= float(getSetting('PROBABILITY','BOT_SALUTE'))):
+
+    if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да?' == message.text.lower() or 'да!)' == message.text.lower():
+        if (random.random() <= float(getSetting('PROBABILITY','YES_STICKER'))):
+            if isGoatSecretChat(message.from_user.username, message.chat.id):
+                bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_SALUTE'), 1)[0]['value'])
+            else:
                 bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_DA_PINDA'), 1)[0]['value'])
-                return
-        if 'нет' == message.text.lower() or 'нет!' == message.text.lower() or 'нет?' == message.text.lower() or 'нет!)' == message.text.lower():
-            if (random.random() <= float(getSetting('PROBABILITY','BOT_SALUTE'))):
+            return
+    if 'нет' == message.text.lower() or 'нет!' == message.text.lower() or 'нет?' == message.text.lower() or 'нет!)' == message.text.lower():
+        if (random.random() <= float(getSetting('PROBABILITY','NO_STICKER'))):
+            if isGoatSecretChat(message.from_user.username, message.chat.id):
+                bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_SALUTE'), 1)[0]['value'])
+            else:
                 bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_NO_PINDA'), 1)[0]['value'])
-                return
+            return
 
     if 'тебя буквально размазали' in message.text.lower():
         if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
