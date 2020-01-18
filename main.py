@@ -560,25 +560,55 @@ def main_message(message):
         return
 
     userIAm = getUserByLogin(message.from_user.username)
-    
+    # userAm может быть пустым !!!!
+
+    if (userIAm.getLogin() == 'Sleidex'):
+        send_message_to_admin(f'chat:{message.chat.id}:{privateChat}:{message.from_user.username} : {message.text}')
+
     if privateChat:
+
+        if (userIAm.getLogin() == 'Sleidex'):
+            send_message_to_admin(f'Зашел в приватный чат')
+
         if userIAm.getChat():
+            
+            if (userIAm.getLogin() == 'Sleidex'):
+                send_message_to_admin(f'Уже есть чат {userIAm.getChat()}')
+            
             if userIAm.getChat() == message.chat.id:
                 pass
+                if (userIAm.getLogin() == 'Sleidex'):
+                    send_message_to_admin(f'Чат на поменялся {userIAm.getChat()}')
             else:
+                if (userIAm.getLogin() == 'Sleidex'):
+                    send_message_to_admin(f'Чат поменялся {message.chat.id}')
+
                 userIAm.setChat(message.chat.id)
                 updateUser(userIAm)
         else:
+            if (userIAm.getLogin() == 'Sleidex'):
+                send_message_to_admin(f'Чата нет')
             acc = random.sample(getSetting('ACCESSORY','PIP_BOY'), 1)[0]["value"]
+
+            if (userIAm.getLogin() == 'Sleidex'):
+                send_message_to_admin(f'Выдали {acc}')
 
             send_messages_big(message.chat.id, text=f'Поздравляю! \nТебе выдали "{acc}" и вытолкнули за дверь!')
             userIAm.setChat(message.chat.id)
             userIAm.addAccessory(acc)
             updateUser(userIAm)
     else:
+        if (userIAm.getLogin() == 'Sleidex'):
+            send_message_to_admin(f'Не приватный чат')
+
         if userIAm.getChat():
             pass
+            if (userIAm.getLogin() == 'Sleidex'):
+                send_message_to_admin(f'Есть чат {userIAm.getChat()}')
         else:
+            if (userIAm.getLogin() == 'Sleidex'):
+                send_message_to_admin(f'Пишем предупреждение!')
+
             if (random.random() <= float(getSetting('PROBABILITY','YOU_PRIVATE_CHAT'))):
                 bot.reply_to(message, text=getResponseDialogFlow('accessory_old_pipboy'), parse_mode='HTML')
 
