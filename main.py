@@ -1316,6 +1316,8 @@ def main_message(message):
                         try:
                             report = ''
                             jsonfind = json.loads(response.split(response.split(":")[4])[1][1:])
+                            send_messages_big(message.chat.id, text=f'{response.split(response.split(":")[4])[1][1:]}')
+
                             for req in mydb[response.split(':')[2]].find(jsonfind):
                                 value = req[f'response.split(":")[3]']
                                 report = report + f'{value}\n'
