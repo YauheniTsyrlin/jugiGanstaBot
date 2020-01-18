@@ -569,9 +569,22 @@ def main_message(message):
                 userIAm.setChat(message.chat.id)
                 updateUser(userIAm)
         else:
-            send_messages_big(message.chat.id, text='Поздравляю! Тебе выдали "📟 сломанный Пип-бой" и вытолкнули за дверь!')
+            accessorys = []
+            accessorys.append('📟 сломанный Пип-бой')
+            accessorys.append('📟 Пип-бой 2000')
+            accessorys.append('📟 антена от Пип-боя')
+            accessorys.append('📟 аккумулятор от Пип-боя')
+            accessorys.append('📟 игрушечный Пип-бой')
+            accessorys.append('📟 упаковка от Пип-боя')
+            accessorys.append('📟 запчасть от Пип-боя')
+            accessorys.append('📟 моделька Пип-боя')
+            accessorys.append('📟 болт от Пип-боя')
+            
+            acc = random.sample(accessorys, 1)[0]
+
+            send_messages_big(message.chat.id, text=f'Поздравляю! \nТебе выдали "{acc}" и вытолкнули за дверь!')
             userIAm.setChat(message.chat.id)
-            userIAm.addAccessory('📟 сломанный Пип-бой')
+            userIAm.addAccessory()
             updateUser(userIAm)
     else:
         if userIAm.getChat():
