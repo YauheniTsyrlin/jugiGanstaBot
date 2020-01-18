@@ -404,9 +404,9 @@ class User(object):
         return self.accessory
     def addAccessory(self, accessoryItem: str):
         find = False
-        if self.accessory = None:
+        if self.accessory == None:
             self.accessory = []
-            
+
         for acc in self.accessory:
             if acc == accessoryItem:
                 find = True
