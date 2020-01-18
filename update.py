@@ -635,28 +635,6 @@ newvalues = { "$set":
                 { "value": 
                     [
                         { 
-                            'name': 'АdaptationǁȺǁ',
-                            'boss': [
-                                        'Innok27'
-                                    ], 
-                            'bands': 
-                                    [
-                                        {
-                                            'name': 'АртхǁȺǁус',
-                                            'boss': 'GonzikBenzyavsky'
-                                        },
-                                        {
-                                            'name': 'Энтропия',
-                                            'boss': 'Innok27'
-                                        }
-                                    ],
-                            'chats': 
-                                    {
-                                        'secret' : -1001354871311,
-                                        'info' : -1001354871311
-                                    }   
-                        },
-                        { 
                             'name': 'FǁȺǁggǁØǁAT',
                             'boss': [
                                         'WestMoscow',
