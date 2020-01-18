@@ -545,7 +545,7 @@ def main_message(message):
 
     if message.from_user.username == None:
         return
-        
+
     black_list = getSetting('BLACK_LIST', message.from_user.username)
     if black_list:
         send_messages_big(message.chat.id, text=f'{message.from_user.username} заслужил пожизненный бан {black_list}', reply_markup=None)
@@ -1332,6 +1332,7 @@ def main_message(message):
                             else:
                                 send_messages_big(message.chat.id, text=f'{report}')
                         except Exception as e:
+                            send_messages_big(message.chat.id, text=f'Ошибка!')
                             send_messages_big(message.chat.id, text=f'{e}')
 
 
