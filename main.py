@@ -567,7 +567,7 @@ def main_message(message):
             if userIAm.getChat():
                 if userIAm.getChat() == message.chat.id:
                     pass
-            else:
+                else:
                     userIAm.setChat(message.chat.id)
                     updateUser(userIAm)
             else:
