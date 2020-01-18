@@ -99,6 +99,15 @@ if (not result):
         'value': ''   
              })  
 
+result = settings.find_one({'code': 'ACCESSORY'})
+if (not result):
+    print('Not Find setting. Insert ACCESSORY')
+    settings.insert_one({
+        'code': 'ACCESSORY', 
+        'description': ' Аксессуары', 
+        'value': ''   
+             })  
+
 result = settings.find_one({'code': 'BLACK_LIST'})
 if (not result):
     print('Not Find setting. Insert BLACK_LIST')
@@ -112,6 +121,56 @@ if (not result):
 print("#==========================#")              
 print("#     UPDATE SETTINGS      #")              
 print("#==========================#")              
+
+myquery = { "code": 'ACCESSORY' }
+newvalues = { "$set": { "value": 
+                    [
+                        {
+                            'name': 'PIP_BOY',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': '📟 Пип-бой 2000'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': '📟 антена от Пип-боя'
+                                },
+                                {
+                                    'name': '3',
+                                    'value': '📟 аккумулятор от Пип-боя'
+                                },
+                                {
+                                    'name': '4',
+                                    'value': '📟 игрушечный Пип-бой'
+                                },
+                                {
+                                    'name': '5',
+                                    'value': '📟 упаковка от Пип-боя'
+                                },
+                                {
+                                    'name': '6',
+                                    'value': '📟 запчасть от Пип-боя'
+                                },
+                                {
+                                    'name': '7',
+                                    'value': '📟 моделька Пип-боя'
+                                },
+                                {
+                                    'name': '7',
+                                    'value': '📟 сломанный Пип-бой'
+                                },
+                                {
+                                    'name': '7',
+                                    'value': '📟 болт от Пип-боя'
+                                }
+                            ] 
+                        }
+                    ]
+                } 
+            } 
+u = settings.update_one(myquery, newvalues)
 
 
 myquery = { "code": 'STICKERS' }

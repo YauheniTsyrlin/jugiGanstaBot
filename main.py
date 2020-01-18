@@ -569,22 +569,11 @@ def main_message(message):
                 userIAm.setChat(message.chat.id)
                 updateUser(userIAm)
         else:
-            accessorys = []
-            accessorys.append('📟 сломанный Пип-бой')
-            accessorys.append('📟 Пип-бой 2000')
-            accessorys.append('📟 антена от Пип-боя')
-            accessorys.append('📟 аккумулятор от Пип-боя')
-            accessorys.append('📟 игрушечный Пип-бой')
-            accessorys.append('📟 упаковка от Пип-боя')
-            accessorys.append('📟 запчасть от Пип-боя')
-            accessorys.append('📟 моделька Пип-боя')
-            accessorys.append('📟 болт от Пип-боя')
-            
-            acc = random.sample(accessorys, 1)[0]
+            acc = random.sample(getSetting('ACCESSORY','PIP_BOY'), 1)[0]["value"]
 
             send_messages_big(message.chat.id, text=f'Поздравляю! \nТебе выдали "{acc}" и вытолкнули за дверь!')
             userIAm.setChat(message.chat.id)
-            userIAm.addAccessory()
+            userIAm.addAccessory(acc)
             updateUser(userIAm)
     else:
         if userIAm.getChat():
@@ -602,7 +591,6 @@ def main_message(message):
                 )
 
     findUser = not (userIAm == None)
-    logger.info('findUser: ' + str(findUser))
 
     if (message.text.startswith('📟Пип-бой 3000') and 
             '/killdrone' not in message.text and 
