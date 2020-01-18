@@ -541,8 +541,8 @@ def get_message_stiker(message):
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
     #write_json(message.json)
-    logger.info('message.from_user.username: '+message.from_user.username)
-    logger.info('message.text: ' + message.text)
+    privateChat = ('private' in message.chat.type)
+    logger.info(f'chat:{message.chat.id}:{privateChat}:{message.from_user.username} : {message.text}')
 
     black_list = getSetting('BLACK_LIST', message.from_user.username)
     if black_list:
@@ -559,8 +559,6 @@ def main_message(message):
         send_messages_big(message.chat.id, text=f'{name} хотел что-то сказать, но у него получилось лишь:\n' + getResponseDialogFlow('user_banned'), reply_markup=None)
         return
 
-
-    privateChat = ('private' in message.chat.type)
     userIAm = getUserByLogin(message.from_user.username)
     
     if privateChat:
