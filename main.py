@@ -581,7 +581,7 @@ def main_message(message):
         else:
             if (random.random() <= float(getSetting('PROBABILITY','YOU_PRIVATE_CHAT'))):
                 bot.reply_to(message, text=getResponseDialogFlow('accessory_old_pipboy'), parse_mode='HTML')
-                return
+
 
     callJugi = (privateChat 
                             or message.text.lower().startswith('джу') 
