@@ -1311,12 +1311,12 @@ def main_message(message):
                         if not isAdmin(message.from_user.username):
                             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
                             return
-
+                        #   0     1        2       3
                         # jugi:requests:$tables:$feilds:$filters
                         try:
                             report = ''
                             jsonfind = json.loads(response.split(response.split(":")[3])[1][1:])
-                            send_messages_big(message.chat.id, text=f'{response.split(response.split(":")[4])[1][1:]}')
+                            send_messages_big(message.chat.id, text=f'{jsonfind}')
 
                             for req in mydb[response.split(':')[2]].find(jsonfind):
                                 value = req[f'response.split(":")[3]']
