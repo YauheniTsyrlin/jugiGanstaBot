@@ -372,9 +372,17 @@ print('\n======== radeReport ==========\n')
 # 
 
 
-for ts in (1579191477, 1579191477):
-    print(f"{datetime.fromtimestamp(ts)}")
+# for ts in (1579191477, 1579191477):
+#     print(f"{datetime.fromtimestamp(ts)}")
 
+report = ''
+jsonfind = json.loads('{"login":"GonzikBenzyavsky"}')
+for req in mydb["users"].find(jsonfind
+                            ):
+                                value = req[f'login']
+                                report = report + f'{value}\n'
+
+print(report)
 sys.exit(0)
 
 # #report_raids.remove()

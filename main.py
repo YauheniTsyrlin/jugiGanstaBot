@@ -1306,6 +1306,28 @@ def main_message(message):
 
                         user = getUserByLogin(user.getLogin())
                         send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs') + f'\n{report}')
+                    
+                    elif 'requests' == response.split(':')[1]:
+                        if not isAdmin(message.from_user.username):
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_admin'))
+                            return
+
+                        # jugi:requests:$tables:$feilds:$filters
+                        try:
+                            report = ''
+                            jsonfind = json.loads(response.split(':')[4])
+                            for req in mydb[response.split(':')[2]].find(jsonfind):
+                                value = req[f'response.split(":")[3]']
+                                report = report + f'{value}\n'
+                            
+                            if report == '':
+                                send_messages_big(message.chat.id, text=f'Ничего не найдено!')
+                            else:
+                                send_messages_big(message.chat.id, text=f'{report}')
+                        except Exception as e:
+                            send_messages_big(message.chat.id, text=f'{e}')
+
+
                     elif 'rade' == response.split(':')[1]:
                         # jugi:rade:Госпиталь 🚷 📍24км:Старая фабрика 📍5км:*:True:2020-01-13T21:00:00
                         if isGoatBoss(message.from_user.username) or isAdmin(message.from_user.username):
