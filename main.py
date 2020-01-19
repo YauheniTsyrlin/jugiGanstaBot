@@ -1287,10 +1287,10 @@ def main_message(message):
                         if not user:
                             send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
                             return
-
-                        user.addAccessory(response.split(':')[3])
+                        acc = response.split(':')[3]
+                        user.addAccessory(acc)
                         updateUser(user)
-                        send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs')) 
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow('new_accessory_add') + f'\n\n▫️ {acc}') 
 
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
                         # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
