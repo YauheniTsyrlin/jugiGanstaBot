@@ -497,6 +497,52 @@ newvalues = { "$set": { "value":
                             ] 
                         },
                         {
+                            'name': 'CENSORSHIP',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAADAgADfA4AAmOLRgzxiNhOjVmDPBYE'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': 'AgADAgADy60xG8QNIEmLFUZxY320f8pdyw4ABAEAAwIAA3kAA5MOAQABFgQ'
+                                },
+                                {
+                                    'name': '3',
+                                    'value': 'CAADAgADsgAD-6tWB5W7vi6ux7SnFgQ'
+                                },
+                                {
+                                    'name': '4',
+                                    'value': 'CAADAgADBgADCMJfFtQS7GCowxIKFgQ'
+                                },
+                                {
+                                    'name': '5',
+                                    'value': 'CAADAgAD4QIAAmX_kgpWiaS39GiDWxYE'
+                                },
+                                {
+                                    'name': '6',
+                                    'value': 'AgADAgADzq0xG8QNIEnthvJx7PnW9UWnwg8ABAEAAwIAA3gAA4tOAwABFgQ'
+                                },
+                                {
+                                    'name': '7',
+                                    'value': 'AgADAgADz60xG8QNIEltT1biwObh8ZdRyw4ABAEAAwIAA3kAA0UNAQABFgQ'
+                                },
+                                {
+                                    'name': '8',
+                                    'value': 'AgADAgAD0K0xG8QNIElRY5tmpYRk5D9pwQ8ABAEAAwIAA3kAAwZTAwABFgQ'
+                                },
+                                {
+                                    'name': '9',
+                                    'value': 'AgADAgAD0a0xG8QNIEkR-yip89sUUr5lXA8ABAEAAwIAA3gAA5xaBAABFgQ'
+                                },
+                                {
+                                    'name': '10',
+                                    'value': 'AgADAgAD0q0xG8QNIEn9XHNBn3JmP_B5wQ8ABAEAAwIAA3gAA6pLAwABFgQ'
+                                }
+                            ] 
+                        },
+                        {
                             'name': 'BOT_SALUTE',
                             'value':
                             [
@@ -514,6 +560,7 @@ newvalues = { "$set": { "value":
                                 }
                             ] 
                         }
+
                     ]
                 } 
             } 

@@ -379,6 +379,11 @@ def getResponseDialogFlow(text):
     # Если есть ответ от бота - присылаем юзеру, если нет - бот его не понял
     return response
 
+def censored(message):
+    bot.delete_message(message.chat.id, message.message_id)
+    bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','CENSORSHIP'), 1)[0]['value'])
+    send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_censorship'))
+
 # Handle new_chat_members
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
 def send_welcome_and_dismiss(message):
@@ -388,8 +393,7 @@ def send_welcome_and_dismiss(message):
         bot.send_message(message.chat.id, text=response)
         
         goat = getMyGoat(message.from_user.username)
-        if goat and isGoatSecretChat(message.from_user.username, message.chat.id):
-            print('send photo')
+        if isGoatSecretChat(message.from_user.username, message.chat.id):
             bot.send_photo(message.chat.id, random.sample(getSetting('STICKERS','NEW_MEMBER_IMG'), 1)[0]['value'])
 
 # Handle inline_handler
@@ -611,6 +615,11 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                 return
             
+            if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                pass
+            else:
+                censored(message)
+
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive'))
                 return
@@ -645,6 +654,12 @@ def main_message(message):
         for warior in ww:
             update_warior(warior)
         
+        if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+            pass
+        else:
+            censored(message)
+            return
+
         send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '/accept' in message.text and '/decline' in message.text):
@@ -652,12 +667,17 @@ def main_message(message):
         if hasAccessToWariors(message.from_user.username):
             fraction = getWariorFraction(message.text.split(' из ')[1].strip())
             warior = getWariorByName(message.text.split('👤')[1].split(' из ')[0], fraction)
-            if warior == None:
-                send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
-            elif (warior and warior.photo):
-                bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+
+            if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                if warior == None:
+                    send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
+                elif (warior and warior.photo):
+                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                else:
+                    send_messages_big(message.chat.id, text=warior.getProfile())
             else:
-                send_messages_big(message.chat.id, text=warior.getProfile())
+                censored(message)
+                return
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_you_cant'))
         return
@@ -708,6 +728,12 @@ def main_message(message):
                 for goat in goats:
                     report_goat_info = report_goat_info + f'🐐 {goat["name"]}: <b>{goat["counter"]}</b>\n'
                 report_goat_info = report_goat_info + '\n'
+
+            if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                pass
+            else:
+                censored(message)
+                return
 
             if not find:
                 send_messages_big(message.chat.id, text='Не нашел никого!')
@@ -848,7 +874,8 @@ def main_message(message):
                     bot.delete_message(message.chat.id, message.message_id)
                     send_messages_big(message.chat.id, text=report)
                 else:
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
+                    censored(message)
+                    #send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                 
                 # ping_on_reade(fuckupusers, message.chat.id)
             else:
