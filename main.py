@@ -774,8 +774,8 @@ def main_message(message):
                 if '🏅' in strings[i] and '🤘' in strings[i]:
                     band = strings[i].split('🤘')[1].split('🏅')[0].strip()
                     
-                    if not isUsersBand(message.from_user.username, band):
-                        if not isGoatBoss(message.from_user.username):
+                    if not isGoatBoss(message.from_user.username):
+                        if not isUsersBand(message.from_user.username, band):
                             send_messages_big(message.chat.id, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow('not_right_band'))
                             return
                     
@@ -1922,13 +1922,16 @@ def rade():
                 saveRaidResult(goat)
                 statistic(goat['name'])
 
+    if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
+        logger.info('Clear raid info!')
         for goat in getSetting('GOATS_BANDS'):
             registered_users.update_many(
                 {'band':{'$in':getGoatBands(goat.get('name'))}},
                 { '$set': { 'raidlocation': None} }
             )
         updateUser(None)
-        
+
+
 def getPlanedRaidLocation(goatName: str, planRaid = True):
     tz = config.SERVER_MSK_DIFF
     raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
