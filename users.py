@@ -63,18 +63,21 @@ def updateUser(newUser, oldUser):
     if newUser.timeUpdate:
         oldUser.timeUpdate = newUser.timeUpdate
     if hasattr(newUser, 'ping'):
-        oldUser.ping = newUser.ping
+        if newUser.ping == None:
+            pass
+        else:
+            oldUser.ping = newUser.ping
     if hasattr(newUser, 'chat'):
-        oldUser.chat = newUser.chat
+        if newUser.chat:
+            oldUser.chat = newUser.chat
     if hasattr(newUser, 'accessory'):
-        oldUser.accessory = newUser.accessory
-        
+        if newUser.accessory:
+            oldUser.accessory = newUser.accessory
 
     return oldUser
 
 def importUser(registered_user):
         u = User(registered_user['login'], registered_user['timeUpdate'],'')
-
         u.login          = registered_user['login']
         u.name           = registered_user['name']
         u.fraction       = registered_user['fraction']
@@ -91,7 +94,10 @@ def importUser(registered_user):
         u.charisma       = registered_user['charisma']
         u.agility        = registered_user['agility']
         u.stamina        = registered_user['stamina']
-        
+        try:
+            u.setPing(registered_user['ping'])
+        except:
+            u.setPing(True)
         if (registered_user.get('location')):    
             u.location     = registered_user['location']
         if (registered_user.get('timeZone')):    
@@ -106,25 +112,11 @@ def importUser(registered_user):
             u.status     = registered_user['status']
         if (registered_user.get('raid')):    
             u.raid     = registered_user['raid']
-
-        try:   
-            u.ping = registered_user['ping']
-        except:
-            u.ping = True
-
-        try:   
-            u.chat = registered_user['chat']
-        except:
-            u.chat = None
-
-        try:   
-            u.accessory = registered_user['accessory']
-        except:
-            u.accessory = []
-        
-
+        if (registered_user.get('chat')):    
+            u.chat     = registered_user['chat']
+        if (registered_user.get('accessory')):    
+            u.accessory     = registered_user['accessory']
         u.setRaidLocation(registered_user['raidlocation'])
-
         return u
 
 class User(object):
@@ -141,9 +133,9 @@ class User(object):
         self.timeBan  = None
         self.raid = None
         self.raidlocation = None
-        self.ping = True
+        self.ping = None
         self.chat = None
-        self.accessory = []
+        self.accessory = None
 
         strings = text.split('\n')
         isEquipequipment = False
@@ -211,7 +203,6 @@ class User(object):
                         self.setDzen(int(dzen_tmp)-1)
 
             i=i+1
-        #print(self.toJSON())
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, 
@@ -253,10 +244,10 @@ class User(object):
         if self.ping == True:
             string = string + f'├🔔Пингуйте меня семеро!\n'
         else:
-            string = string + f'├🔕Нихт!\n'
+            string = string + f'├🔕Нихт! {self.ping}\n'
         
-        # if self.chat:
-        #     string = string + f'├🗣{self.chat}\n'
+        if self.chat:
+            string = string + f'├🗣{self.chat}\n'
 
         if self.status:
             string = string + f'└😏Статус: {self.status}\n'
@@ -275,7 +266,7 @@ class User(object):
         string = string + f'\n'
 
         string = string + f'Аксессуары:\n'
-        if len(self.accessory) > 0:
+        if self.accessory and len(self.accessory) > 0:
             for acc in self.accessory:
                 string = string + f'▫️ {acc}\n'
             string = string + f'\n'
@@ -389,7 +380,7 @@ class User(object):
         return self.status
         
     def setPing(self, ping):
-        self.ping = ping  
+        self.ping = ping
     def isPing(self):
         return self.ping
 
@@ -403,10 +394,9 @@ class User(object):
     def getAccessory(self):
         return self.accessory
     def addAccessory(self, accessoryItem: str):
-        find = False
         if self.accessory == None:
             self.accessory = []
-
+        find = False
         for acc in self.accessory:
             if acc == accessoryItem:
                 find = True

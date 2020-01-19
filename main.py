@@ -231,7 +231,6 @@ def updateUser(newuser: users.User):
     else:
         newvalues = { "$set": json.loads(newuser.toJSON()) }
         z = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
-
     USERS_ARR.clear()
     for x in registered_users.find():
         USERS_ARR.append(users.importUser(x))
@@ -472,7 +471,6 @@ def get_message_photo(message):
         wariorShow = None
         for warior in ww:
             s = f'⏰{tools.getTimeEmoji(warior.getTimeUpdate())} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(warior.getTimeUpdate()))
-            print(warior.getName() + ' ' + s)
             update_warior(warior)
             if not isRegisteredUserName(warior.getName()):
                 wariorShow = warior
@@ -615,7 +613,6 @@ def main_message(message):
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
                 for warior in ww:
                     update_warior(warior)
-                    print()
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                 return
             
@@ -628,19 +625,21 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive'))
                 return
             
-            
             user = users.User(message.from_user.username, message.forward_date, message.text)
+            
             if findUser==False:  
                 if 'Подробности /me' in message.text: 
                     send_messages_big(message.chat.id, text=getResponseDialogFlow('pip_me'))
                     return
                 else:
+                    user.setPing(True)
                     x = registered_users.insert_one(json.loads(user.toJSON()))
                     updateUser(None)
                     send_message_to_admin(f'⚠️Внимание! Зарегистрировался новый пользователь.\n {user.getProfile()}')
             else:
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
                 updateUser(updatedUser)
+
                 
             if privateChat:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('setpip'))
@@ -900,7 +899,6 @@ def main_message(message):
         if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_FINGER_TYK'), 1)[0]['value'])
             return
-
     if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да?' == message.text.lower() or 'да!)' == message.text.lower():
         if (random.random() <= float(getSetting('PROBABILITY','YES_STICKER'))):
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
@@ -911,12 +909,17 @@ def main_message(message):
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
                 bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_NO_PINDA'), 1)[0]['value'])
                 return
-
     if 'тебя буквально размазали' in message.text.lower():
         if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_SALUTE'), 1)[0]['value'])
             return       
 
+
+    if privateChat and isGoatBoss(message.from_user.username) and message.reply_to_message:
+        if 'рассылка в НИИ' == message.text.lower():
+            send_messages_big(message.chat.id, message.reply_to_message.text)
+            return
+    
     if hasAccessToWariors(message.from_user.username):
         #write_json(message.json)
         if (callJugi and (message.text and ('анекдот' in message.text.lower() or 'тост' in message.text.lower()))) :
@@ -1046,7 +1049,6 @@ def main_message(message):
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_secretchat'))
                 return
-
             user = users.getUser(message.from_user.username, registered_users)
             if user:
                 warior = getWariorByName(user.getName(), user.getFraction())
@@ -1060,6 +1062,7 @@ def main_message(message):
             else:
                 send_messages_big(message.chat.id, text='С твоим профилем какая-то беда... Звони в поддержку пип-боев!')
         elif callJugi:
+
             text = message.text 
             if text.lower().startswith('джу'):
                 text = message.text[3:]
@@ -1068,7 +1071,6 @@ def main_message(message):
                 if (response.startswith('jugi:')):
                     #jugi:ping:Артхаус
                     if 'ping' == response.split(':')[1]:
-
                         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                             pass
                         else:
@@ -1126,6 +1128,7 @@ def main_message(message):
                         user = getUserByLogin(message.from_user.username)
                         user.setPing(response.split(":")[2] == 'True')
                         updateUser(user)
+                        user = getUserByLogin(message.from_user.username)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                     elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
@@ -1743,7 +1746,7 @@ def main_message(message):
             send_messages_big(message.chat.id, text=getResponseDialogFlow('you_dont_our_band_gangster'))
 
 
-@bot.callback_query_handler(func=lambda call: True)
+@bot.callback_query_handler(func=lambda call: call.data.startswith("capture_"))
 def callback_query(call):
 
     goat = call.data.split('_')[3]
