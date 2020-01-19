@@ -246,8 +246,8 @@ class User(object):
         else:
             string = string + f'├🔕Нихт! {self.ping}\n'
         
-        if self.chat:
-            string = string + f'├🗣{self.chat}\n'
+        # if self.chat:
+        #     string = string + f'├🗣{self.chat}\n'
 
         if self.status:
             string = string + f'└😏Статус: {self.status}\n'
