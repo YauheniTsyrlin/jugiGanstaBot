@@ -649,6 +649,10 @@ def main_message(message):
             send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive')) 
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'FIGHT!' in message.text):
+        if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+            pass
+        else:
+            censored(message)
 
         ww = wariors.fromFightToWarioirs(message.forward_date, message, USERS_ARR, battle)
         if ww == None:
@@ -656,12 +660,6 @@ def main_message(message):
             return
         for warior in ww:
             update_warior(warior)
-        
-        if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-            pass
-        else:
-            censored(message)
-            return
 
         send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
         return
