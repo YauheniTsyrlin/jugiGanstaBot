@@ -381,7 +381,11 @@ def getResponseDialogFlow(text):
 
 def censored(message):
     bot.delete_message(message.chat.id, message.message_id)
-    bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','CENSORSHIP'), 1)[0]['value'])
+    id = random.sample(getSetting('STICKERS','CENSORSHIP'), 1)[0]['value']
+    if len(id) > 40:
+        bot.send_photo(message.chat.id, id)
+    else:
+        bot.send_sticker(message.chat.id, id)
     send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_censorship'))
 
 # Handle new_chat_members
