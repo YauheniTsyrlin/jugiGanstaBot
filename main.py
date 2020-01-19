@@ -991,7 +991,7 @@ def main_message(message):
             updateUser(None)
 
         elif (callJugi and 'профиль @' in message.text.lower()):
-
+            
             name = tools.deEmojify(message.text.split('@')[1].strip())
             if isGoatBoss(message.from_user.username):
                 login = message.text.split('@')[1].strip()

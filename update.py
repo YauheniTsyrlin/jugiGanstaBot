@@ -700,7 +700,7 @@ newvalues = { "$set":
                                         'Innok27',
                                         'Viktoriya_Sizko',
                                         'EastMinsk',
-                                        'nik_stopka'
+                                        'nik_stopka',
                                         'GonzikBenzyavsky'
                                     ],
                             'bands': 
