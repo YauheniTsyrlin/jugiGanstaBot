@@ -672,16 +672,12 @@ def main_message(message):
             fraction = getWariorFraction(message.text.split(' из ')[1].strip())
             warior = getWariorByName(message.text.split('👤')[1].split(' из ')[0], fraction)
 
-            if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                if warior == None:
-                    send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
-                elif (warior and warior.photo):
-                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
-                else:
-                    send_messages_big(message.chat.id, text=warior.getProfile())
+            if warior == None:
+                send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
+            elif (warior and warior.photo):
+                bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
             else:
-                censored(message)
-                return
+                send_messages_big(message.chat.id, text=warior.getProfile())
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_you_cant'))
         return
@@ -733,11 +729,11 @@ def main_message(message):
                     report_goat_info = report_goat_info + f'🐐 {goat["name"]}: <b>{goat["counter"]}</b>\n'
                 report_goat_info = report_goat_info + '\n'
 
-            if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                pass
-            else:
-                censored(message)
-                return
+            # if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+            #     pass
+            # else:
+            #     censored(message)
+            #     return
 
             if not find:
                 send_messages_big(message.chat.id, text='Не нашел никого!')
