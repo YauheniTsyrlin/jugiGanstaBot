@@ -844,7 +844,7 @@ def main_message(message):
                 report = report + alianusersReport
             
             if onraidcounter > 0 or aliancounter > 0:
-                if isGoatSecretChat(message.from_user.username, message.chat.id):
+                if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
                     bot.delete_message(message.chat.id, message.message_id)
                     send_messages_big(message.chat.id, text=report)
                 else:
@@ -1905,7 +1905,6 @@ def rade():
 
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
-        
         updateUser(None)
         for goat in getSetting('GOATS_BANDS'):
             if getPlanedRaidLocation(goat['name'], planRaid = True)['rade_location']:
