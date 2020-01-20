@@ -1748,8 +1748,9 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('understand'))
         return
     else:
-        if (random.random() <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
-            send_messages_big(message.chat.id, text=getResponseDialogFlow('you_dont_our_band_gangster'))
+        if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+            if (random.random() <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('you_dont_our_band_gangster'))
 
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("capture_"))
