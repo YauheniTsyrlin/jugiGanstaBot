@@ -679,7 +679,7 @@ myquery = { "code": 'BANDS_ACCESS_WARIORS' }
 newvalues = { "$set": { "value": 
             [
                 {'band': 'АртхǁȺǁус'},
-                {'band': 'Энтропия'},
+                {'band': 'WestMoscǁØǁw'},
                 {'band': 'без банды'},
                 {'band': 'Crewname'},
                 {'band': 'FgoatUpd'},
@@ -710,20 +710,24 @@ newvalues = { "$set":
                                             'boss': 'WestMoscow'
                                         },
                                         {
-                                            'name': 'crewname',
+                                            'name': 'WestMoscǁØǁw',
                                             'boss': 'WestMoscow'
+                                        },
+                                        {
+                                            'name': 'crewname',
+                                            'boss': 'EastMinsk'
                                         },
                                         {
                                             'name': 'FgoatUpd',
-                                            'boss': 'WestMoscow'
+                                            'boss': 'nik_stopka'
                                         },
                                         {
                                             'name': 'ЭнтрǁØǁпия',
-                                            'boss': 'WestMoscow'
+                                            'boss': 'Viktoriya_Sizko'
                                         },
                                         {
                                             'name': 'АртхǁȺǁус',
-                                            'boss': 'WestMoscow'
+                                            'boss': 'GonzikBenzyavsky'
                                         }
                                     ],
                             'chats_test': 
