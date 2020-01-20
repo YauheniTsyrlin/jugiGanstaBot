@@ -1122,11 +1122,19 @@ def main_message(message):
                         if len(pingusers) > 0:
                             send_messages_big(message.chat.id, text=first_string + report)
                     elif 'setping' == response.split(':')[1]:
-                        # jugi:setping:True
-                        user = getUserByLogin(message.from_user.username)
+                        # jugi:setping:True:login
+                        login = response.split(":")[3].replace('@')
+                        if login == '*':
+                            login = message.from_user.username
+                        else:
+                            if not isGoatBoss(message.from_user.username):
+                                if not isAdmin(message.from_user.username):
+                                    send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_goat_boss'))
+                                    return
+                                    
+                        user = getUserByLogin(login)
                         user.setPing(response.split(":")[2] == 'True')
                         updateUser(user)
-                        user = getUserByLogin(message.from_user.username)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                     elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
@@ -1482,8 +1490,8 @@ def main_message(message):
                                 if u == message.from_user.username:
                                     find = True
                             
-                            if not find:
-                                markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
+                            # if not find:
+                            markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
                                                     
                         msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=markupinline)
                     elif 'getchat' == response.split(':')[1]:
@@ -1804,8 +1812,8 @@ def callback_query(call):
             if u == call.from_user.username:
                 find = True
         
-        if not find:
-            markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
+        # if not find:
+        markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
                                 
     text = get_raid_plan(raid_date, goat)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
