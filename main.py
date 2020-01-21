@@ -915,7 +915,7 @@ def main_message(message):
 
     if privateChat and isGoatBoss(message.from_user.username) and message.reply_to_message:
         send_message_to_admin('1')
-        if 'рассылка в НИИ' == message.text.lower():
+        if 'рассылка в нии' == message.text.lower():
             send_message_to_admin('2')
             goat = getMyGoat(message.from_user.username)
             if goat:
