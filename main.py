@@ -1296,14 +1296,15 @@ def main_message(message):
                     
                     elif 'toreward' == response.split(':')[1]:
                         #jugi:toreward:$any:$accessory
-                        login = response.split(':')[2]
-                        login = login.replace('@','').strip()
+
 
                         if not isGoatBoss(message.from_user.username):
                             if not isAdmin(message.from_user.username):
                                 bot.reply_to(message, text=getResponseDialogFlow('shot_message_not_goat_boss'))
                                 return
-                                
+
+                        login = response.split(':')[2]
+                        login = login.replace('@','').strip()        
                         user = getUserByLogin(login)
                         if not user:
                             send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
@@ -1311,7 +1312,7 @@ def main_message(message):
                         acc = response.split(':')[3]
                         user.addAccessory(acc)
                         updateUser(user)
-                        send_messages_big(message.chat.id, text=getResponseDialogFlow('new_accessory_add') + f'\n\n▫️ {acc}') 
+                        send_messages_big(message.chat.id, text=user.getName() + '!\n' + getResponseDialogFlow('new_accessory_add') + f'\n\n▫️ {acc}') 
 
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
                         # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
