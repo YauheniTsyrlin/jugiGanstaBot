@@ -921,9 +921,9 @@ def main_message(message):
                     return
             goat = getMyGoat(message.from_user.username)
             if goat:
-                if 'рассылка в нии' in message.text.lower():
+                if 'нии' in message.text.lower():
                     send_messages_big(goat['chats']['secret'], message.reply_to_message.text)
-                elif 'рассылка в флуд' in message.text.lower():
+                elif 'флуд' in message.text.lower():
                     send_messages_big(goat['chats']['info'], message.reply_to_message.text)
                 else:
                     send_messages_big(message.chat.id, 'Не понял! Нет такого чата!')
