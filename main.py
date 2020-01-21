@@ -914,14 +914,11 @@ def main_message(message):
 
 
     if privateChat and isGoatBoss(message.from_user.username) and message.reply_to_message:
-        send_message_to_admin('1')
         if 'рассылка в нии' == message.text.lower():
-            send_message_to_admin('2')
             goat = getMyGoat(message.from_user.username)
             if goat:
-                send_message_to_admin('3')
                 send_messages_big(goat['chats']['secret'], message.reply_to_message.text)
-                send_message_to_admin('4')
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                 return
     
     if hasAccessToWariors(message.from_user.username):
