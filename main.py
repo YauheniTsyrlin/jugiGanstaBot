@@ -914,14 +914,20 @@ def main_message(message):
 
 
     if privateChat and isGoatBoss(message.from_user.username) and message.reply_to_message:
-        if 'рассылка в нии' == message.text.lower():
+        if message.text.lower().startswith('рассылка в'):
             if not isGoatBoss(message.from_user.username):
                 if not isAdmin(message.from_user.username):
                     send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_goat_boss'))
                     return
             goat = getMyGoat(message.from_user.username)
             if goat:
-                send_messages_big(goat['chats']['secret'], message.reply_to_message.text)
+                if 'рассылка в нии' in message.text.lower():
+                    send_messages_big(goat['chats']['secret'], message.reply_to_message.text)
+                elif 'рассылка в флуд' in message.text.lower():
+                    send_messages_big(goat['chats']['info'], message.reply_to_message.text)
+                else:
+                    send_messages_big(message.chat.id, 'Не понял! Нет такого чата!')
+
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                 return
     
