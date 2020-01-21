@@ -244,7 +244,7 @@ class User(object):
         if self.ping == True:
             string = string + f'├🔔Пингуйте меня семеро!\n'
         else:
-            string = string + f'├🔕Нихт! {self.ping}\n'
+            string = string + f'├🔕Нихт!\n'
         
         # if self.chat:
         #     string = string + f'├🗣{self.chat}\n'
