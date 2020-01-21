@@ -1297,7 +1297,7 @@ def main_message(message):
                     elif 'toreward' == response.split(':')[1]:
                         #jugi:toreward:$any:$accessory
                         login = response.split(':')[2]
-                        login = login.replace('@').strip()
+                        login = login.replace('@','').strip()
 
                         if not isGoatBoss(message.from_user.username):
                             if not isAdmin(message.from_user.username):
