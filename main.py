@@ -396,7 +396,7 @@ def send_welcome_and_dismiss(message):
         bot.send_message(message.chat.id, text=response)
         
         goat = getMyGoat(message.from_user.username)
-        if isGoatSecretChat(message.from_user.username, message.chat.id):
+        if not isGoatSecretChat(message.from_user.username, message.chat.id):
             bot.send_photo(message.chat.id, random.sample(getSetting('STICKERS','NEW_MEMBER_IMG'), 1)[0]['value'])
 
 # Handle inline_handler
@@ -915,8 +915,10 @@ def main_message(message):
 
     if privateChat and isGoatBoss(message.from_user.username) and message.reply_to_message:
         if 'рассылка в НИИ' == message.text.lower():
-            send_messages_big(message.chat.id, message.reply_to_message.text)
-            return
+            goat = getMyGoat(message.from_user.username)
+            if goat:
+                send_messages_big(goat['chats']['secret'], message.reply_to_message.text)
+                return
     
     if hasAccessToWariors(message.from_user.username):
         #write_json(message.json)
