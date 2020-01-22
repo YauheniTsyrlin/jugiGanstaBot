@@ -932,8 +932,11 @@ def main_message(message):
             return       
 
     if message.reply_to_message and 'хуифицируй' in message.text.lower():
-        text = getResponseHuificator(message.reply_to_message.text)
-        reply_to_big(message.reply_to_message.json, text)
+        if not isGoatSecretChat(message.from_user.username, message.chat.id):
+            text = getResponseHuificator(message.reply_to_message.text)
+            reply_to_big(message.reply_to_message.json, text)
+        else:
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_secretchat'))
         return
 
     if privateChat and isGoatBoss(message.from_user.username) and message.reply_to_message:
