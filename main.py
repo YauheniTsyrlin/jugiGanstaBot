@@ -928,7 +928,7 @@ def main_message(message):
                         send_messages_big(goat['chats']['secret'], message.reply_to_message.text)
                 elif 'флуд' in message.text.lower():
                     if message.reply_to_message.sticker:
-                        bot.send_sticker(goat['chats']['secret'], message.reply_to_message.sticker.file_id)
+                        bot.send_sticker(goat['chats']['info'], message.reply_to_message.sticker.file_id)
                     else:
                         send_messages_big(goat['chats']['info'], message.reply_to_message.text)   
                 else:
