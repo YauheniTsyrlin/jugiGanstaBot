@@ -922,9 +922,15 @@ def main_message(message):
             goat = getMyGoat(message.from_user.username)
             if goat:
                 if 'нии' in message.text.lower():
-                    send_messages_big(goat['chats']['secret'], message.reply_to_message.text)
+                    if message.reply_to_message.sticker:
+                        bot.send_sticker(goat['chats']['secret'], message.reply_to_message.sticker.file_id)
+                    else:
+                        send_messages_big(goat['chats']['secret'], message.reply_to_message.text)
                 elif 'флуд' in message.text.lower():
-                    send_messages_big(goat['chats']['info'], message.reply_to_message.text)
+                    if message.reply_to_message.sticker:
+                        bot.send_sticker(goat['chats']['secret'], message.reply_to_message.sticker.file_id)
+                    else:
+                        send_messages_big(goat['chats']['info'], message.reply_to_message.text)   
                 else:
                     send_messages_big(message.chat.id, 'Не понял! Нет такого чата!')
 
