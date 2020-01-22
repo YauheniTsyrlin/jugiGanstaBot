@@ -12,6 +12,7 @@ import ssl
 
 from aiohttp import web
 from yandex_geocoder import Client
+import pymorphy2
 
 import telebot
 from telebot import apihelper
@@ -49,6 +50,8 @@ settings        = mydb["settings"]
 pending_messages = mydb["pending_messages"]
 plan_raids      = mydb["rades"]
 report_raids    = mydb["report_raids"]
+
+morph = pymorphy2.MorphAnalyzer()
 
 logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
@@ -382,8 +385,15 @@ def getResponseHuificator(text):
     report = ''
     words = text.split(' ')
     for word in words:
-        if len(word) > 3:
-            word = tools.huificate(word)
+        #if len(word.strip()) > 3:
+        p = morph.parse(word.replace('-то','').replace('.','').replace(',','').replace('!','').replace('?','').replace('(','').replace(')','').replace(':',''))[0]
+        #print(f'{word} {p.word} {p.tag}')
+        if 'VERB' in p.tag:
+            pass
+        elif '-то' in word:
+            pass
+        elif 'NOUN' in p.tag or 'ADJF' in p.tag or 'ADVB' in p.tag:
+            word = p.word + '-' + tools.huificate(word)
         report = report + word + ' '
     return report
 
@@ -563,16 +573,6 @@ def main_message(message):
 
     if message.from_user.username == None:
         return
-
-    # if message.from_user.username == 'GonzikBenzyavsky':
-    #     bot.delete_message(message.chat.id, message.message_id)
-    #     user = getUserByLogin(message.from_user.username)
-    #     name = message.from_user.username
-    #     if user:
-    #         name = user.getName()
-    #     send_messages_big(message.chat.id, text=f'{name} 🗣:\n' + getResponseHuificator(message.text))
-    #     return
-
 
     black_list = getSetting('BLACK_LIST', message.from_user.username)
     if black_list:
@@ -933,7 +933,11 @@ def main_message(message):
 
     if message.reply_to_message and 'хуифицируй' in message.text.lower():
         if not isGoatSecretChat(message.from_user.username, message.chat.id):
-            text = getResponseHuificator(message.reply_to_message.text)
+            phrases = message.reply_to_message.text.split('\n')
+            text = ''
+            for words in phrases:
+                responce = getResponseHuificator(words)
+                text = text + responce + '\n'
             reply_to_big(message.reply_to_message.json, text)
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_not_secretchat'))
