@@ -378,6 +378,15 @@ def getResponseDialogFlow(text):
     # Если есть ответ от бота - присылаем юзеру, если нет - бот его не понял
     return response
 
+def getResponseHuificator(text):
+    report = ''
+    words = text.split(' ')
+    for word in words:
+        if len(word) > 3:
+            word = tools.huificate(word)
+        report = report + word + ' '
+    return report
+
 def censored(message):
     bot.delete_message(message.chat.id, message.message_id)
     id = random.sample(getSetting('STICKERS','CENSORSHIP'), 1)[0]['value']
@@ -554,6 +563,16 @@ def main_message(message):
 
     if message.from_user.username == None:
         return
+
+    # if message.from_user.username == 'GonzikBenzyavsky':
+    #     bot.delete_message(message.chat.id, message.message_id)
+    #     user = getUserByLogin(message.from_user.username)
+    #     name = message.from_user.username
+    #     if user:
+    #         name = user.getName()
+    #     send_messages_big(message.chat.id, text=f'{name} 🗣:\n' + getResponseHuificator(message.text))
+    #     return
+
 
     black_list = getSetting('BLACK_LIST', message.from_user.username)
     if black_list:
@@ -912,6 +931,10 @@ def main_message(message):
             bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_SALUTE'), 1)[0]['value'])
             return       
 
+    if message.reply_to_message and 'хуифицируй' in message.text.lower():
+        text = getResponseHuificator(message.reply_to_message.text)
+        reply_to_big(message.reply_to_message.json, text)
+        return
 
     if privateChat and isGoatBoss(message.from_user.username) and message.reply_to_message:
         if message.text.lower().startswith('рассылка в'):
