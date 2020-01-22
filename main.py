@@ -925,14 +925,14 @@ def main_message(message):
                     if message.reply_to_message.sticker:
                         bot.send_sticker(goat['chats']['secret'], message.reply_to_message.sticker.file_id)
                     elif message.reply_to_message.photo:
-                        bot.send_photo(goat['chats']['secret'], message.reply_to_message.photo.file_id)
+                        bot.send_photo(goat['chats']['secret'], message.reply_to_message.photo[len(message.reply_to_message.photo)-1].file_id)
                     else:
                         send_messages_big(goat['chats']['secret'], message.reply_to_message.text)
                 elif 'флуд' in message.text.lower():
                     if message.reply_to_message.sticker:
                         bot.send_sticker(goat['chats']['info'], message.reply_to_message.sticker.file_id)
                     elif message.reply_to_message.photo:
-                        bot.send_photo(goat['chats']['info'], message.reply_to_message.photo.file_id)
+                        bot.send_photo(goat['chats']['info'], message.reply_to_message.photo[len(message.reply_to_message.photo)-1].file_id)
                     else:
                         send_messages_big(goat['chats']['info'], message.reply_to_message.text)   
                 else:
