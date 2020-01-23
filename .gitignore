@@ -5983,3 +5983,5 @@ venv/Lib/site-packages/regex-2020.1.8.dist-info/METADATA
 venv/Lib/site-packages/regex-2020.1.8.dist-info/RECORD
 venv/Lib/site-packages/regex-2020.1.8.dist-info/top_level.txt
 venv/Lib/site-packages/regex-2020.1.8.dist-info/WHEEL
+df_env.json
+__pycache__/dialogflow.cpython-37.pyc
