@@ -6,7 +6,7 @@ import config
 
 def getResponseDialogFlow(userId: str, text_to_be_analyzed: str):
 
-    credentials = (service_account.Credentials.from_service_account_info(dialogflow_key))
+    credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON))
     session_client = dialogflow_v2.SessionsClient(credentials=credentials)
     session = session_client.session_path(config.DIALOG_FLOW_JSON['project_id'], userId)
 
