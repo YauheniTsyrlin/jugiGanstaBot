@@ -1229,7 +1229,8 @@ def main_message(message):
                             raid_date = raid_date.replace(minute=0, second=0, microsecond=0)
 
                             if plan_date.hour > 17 or plan_date.hour < 1:
-                                raid_date = raid_date + timedelta(days=1)
+                                if not plan_date.hour < 1:
+                                    raid_date = raid_date + timedelta(days=1)
                                 raid_date = raid_date.replace(hour=1)
                             elif plan_date.hour > 1 and plan_date.hour < 9:
                                 raid_date = raid_date.replace(hour=9)
