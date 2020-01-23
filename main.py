@@ -1813,7 +1813,7 @@ def main_message(message):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("capture_"))
 def callback_query(call):
-
+    logger.info(f'callback_query_handler: {call.data}')
     goat = call.data.split('_')[3]
 
     if not goat == getMyGoatName(call.from_user.username):
