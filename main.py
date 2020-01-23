@@ -380,7 +380,10 @@ def getResponseDialogFlow(message, text: str):
     # responseJson = json.loads(request.getresponse().read().decode('utf-8'))
     # response = responseJson['result']['fulfillment']['speech'] # Разбираем JSON и вытаскиваем ответ
     # # Если есть ответ от бота - присылаем юзеру, если нет - бот его не понял
-    return dialogflow.getResponseDialogFlow(message.from_user.username, text)
+    if message:
+        return dialogflow.getResponseDialogFlow(message.from_user.username, text)
+    else:
+        return dialogflow.getResponseDialogFlow('system_user', text)
 
 def getResponseHuificator(text):
     report = ''
@@ -1933,7 +1936,7 @@ def pending_message():
         ):
         text = pending_message.get('text')
         if pending_message.get('dialog_flow_text'):
-            text = getResponseDialogFlow(pending_message.get('user_id'), pending_message.get('dialog_flow_text'))
+            text = getResponseDialogFlow(None, pending_message.get('dialog_flow_text'))
         
         if pending_message.get('reply_message'):
             reply_to_big(pending_message.get('reply_message'), text)
