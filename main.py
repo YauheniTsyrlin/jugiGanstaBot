@@ -1821,8 +1821,9 @@ def callback_query(call):
         return
 
     raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
+    logger.info(f'raid_date: {raid_date}')
     raid_location = int(call.data.split('_')[1])
-
+    logger.info(f'raid_location: {raid_location}')
 
     myquery = { 
                 'rade_date': raid_date.timestamp(),
