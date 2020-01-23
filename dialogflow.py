@@ -2,18 +2,15 @@ import dialogflow_v2
 from google.api_core.exceptions import InvalidArgument
 from google.oauth2 import service_account
 import json
-
-DIALOGFLOW_LANGUAGE_CODE = 'ru-RU'
-GOOGLE_APPLICATION_CREDENTIALS = 'df_env.json'
-dialogflow_key = json.load(open('df_env.json'))
+import config
 
 def getResponseDialogFlow(userId: str, text_to_be_analyzed: str):
 
     credentials = (service_account.Credentials.from_service_account_info(dialogflow_key))
     session_client = dialogflow_v2.SessionsClient(credentials=credentials)
-    session = session_client.session_path(dialogflow_key['project_id'], userId)
+    session = session_client.session_path(config.DIALOG_FLOW_JSON['project_id'], userId)
 
-    text_input = dialogflow_v2.types.TextInput(text=text_to_be_analyzed, language_code=DIALOGFLOW_LANGUAGE_CODE)
+    text_input = dialogflow_v2.types.TextInput(text=text_to_be_analyzed, language_code='ru-RU')
     query_input = dialogflow_v2.types.QueryInput(text=text_input)
 
     try:
