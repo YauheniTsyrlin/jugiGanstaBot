@@ -3,8 +3,9 @@ from google.api_core.exceptions import InvalidArgument
 from google.oauth2 import service_account
 import json
 import config
+import users
 
-def getResponseDialogFlow(userId: str, text_to_be_analyzed: str):
+def getResponseDialogFlow(userId: str, text_to_be_analyzed: str, user: user.User):
 
     credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON))
     session_client = dialogflow_v2.SessionsClient(credentials=credentials)
@@ -18,6 +19,8 @@ def getResponseDialogFlow(userId: str, text_to_be_analyzed: str):
     except InvalidArgument:
         raise
     #print(response.query_result)
+    if user:
+        response.query_result.fulfillment_text = f'{user.getName()}!\n' + response.query_result.fulfillment_text
     return response.query_result
     
     # print("Query text:", response.query_result.query_text)
