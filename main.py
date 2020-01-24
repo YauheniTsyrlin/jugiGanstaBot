@@ -489,21 +489,22 @@ def get_message_photo(message):
 
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
-        wariorShow = None
+        # wariorShow = None
         for warior in ww:
-            s = f'⏰{tools.getTimeEmoji(warior.getTimeUpdate())} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(warior.getTimeUpdate()))
+            # s = f'⏰{tools.getTimeEmoji(warior.getTimeUpdate())} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(warior.getTimeUpdate()))
             update_warior(warior)
-            if not isRegisteredUserName(warior.getName()):
-                wariorShow = warior
+            # if not isRegisteredUserName(warior.getName()):
+            wariorShow = warior
         
         if privateChat:
-            if not wariorShow == None: 
-                if (wariorShow and wariorShow.photo):
-                    bot.send_photo(message.chat.id, wariorShow.photo, wariorShow.getProfile())
-                else:
-                    send_messages_big(message.chat.id, text=wariorShow.getProfile())
+            #if not wariorShow == None: 
+            wariorShow = getWariorByName(wariorShow.getName(), wariorShow.getFraction())
+            if (wariorShow.photo):
+                bot.send_photo(message.chat.id, wariorShow.photo, wariorShow.getProfile())
             else:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs'))
+                send_messages_big(message.chat.id, text=wariorShow.getProfile())
+            #else:
+                #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs'))
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs'))
     else:
