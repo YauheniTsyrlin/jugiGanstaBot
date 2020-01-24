@@ -10,6 +10,7 @@ import dialogflow
 
 import logging
 import ssl
+import ast
 
 from aiohttp import web
 from yandex_geocoder import Client
@@ -1426,15 +1427,22 @@ def main_message(message):
                         try:
                             report = ''
                             send_messages_big(message.chat.id, text=f'{response}')
-                            filter_str = response.split(response.split(":")[3])[1][1:]
+                            filter_str = response.split(':'+response.split(":")[3]+':')[1]
                             send_messages_big(message.chat.id, text=f'{filter_str}')
                             jsonfind = json.loads(filter_str)
-                            
-
+                            send_messages_big(message.chat.id, text=f'Do request...')
+                            feilds = response.split(":")[3].replace(' и ', ',').split(',')
+                            i = 1
                             for req in mydb[response.split(':')[2]].find(jsonfind):
-                                value = req[f'response.split(":")[3]']
-                                report = report + f'{value}\n'
-                            
+                                report = report + f'{i}. '
+                                for feild_name in feilds:
+                                    try:
+                                        value = req[f'{feild_name}']
+                                        report = report + f'{value} '
+                                    except: pass
+                                report = report + '\n'
+                                i = i + 1
+
                             if report == '':
                                 send_messages_big(message.chat.id, text=f'Ничего не найдено!')
                             else:
