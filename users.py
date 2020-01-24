@@ -275,7 +275,7 @@ class User(object):
 
         string = string + f'⏰{tools.getTimeEmoji(self.timeUpdate)} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeUpdate))) +'\n'
         if self.timeBan:
-            if self.timeBan > datetime.datetime.now().timestamp():
+            if self.timeBan > datetime.now().timestamp():
                 string = string + '☠️Забанен до ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeBan))) +'\n'  
         return string
 
