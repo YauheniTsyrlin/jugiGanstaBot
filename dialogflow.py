@@ -17,8 +17,8 @@ def getResponseDialogFlow(userId: str, text_to_be_analyzed: str):
         response = session_client.detect_intent(session=session, query_input=query_input)
     except InvalidArgument:
         raise
-    
-    return response.query_result.fulfillment_text
+    #print(response.query_result)
+    return response.query_result
     
     # print("Query text:", response.query_result.query_text)
     # print("Detected intent:", response.query_result.intent.display_name)
