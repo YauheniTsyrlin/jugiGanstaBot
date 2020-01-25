@@ -1357,29 +1357,44 @@ def main_message(message):
                                 markupinline.add(InlineKeyboardButton(f"{acc}", callback_data=f"pickupaccessory_{login}_{i}"))
                                 i = i + 1
                         if not accessory == '':
+                            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickupaccessory_exit"))
                             msg = send_messages_big(message.chat.id, text=getResponseDialogFlow(message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{accessory}\nЧто изьять?', reply_markup=markupinline)
                         else:
                             msg = send_messages_big(message.chat.id, text='У него ничего нет, он голодранец!' , reply_markup=markupinline)
-                            
                     elif 'toreward' == response.split(':')[1]:
                         #jugi:toreward:$any:$accessory
-
 
                         if not isGoatBoss(message.from_user.username):
                             if not isAdmin(message.from_user.username):
                                 bot.reply_to(message, text=getResponseDialogFlow(message, 'shot_message_not_goat_boss').fulfillment_text)
                                 return
 
-                        login = response.split(':')[2]
-                        login = login.replace('@','').strip()        
+                        login = response.split(':')[2].replace('@','').strip()
                         user = getUserByLogin(login)
                         if not user:
                             send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
                             return
-                        acc = response.split(':')[3]
-                        user.addAccessory(acc)
-                        updateUser(user)
-                        send_messages_big(message.chat.id, text=user.getName() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
+                        
+
+                        if response.split(':')[3] == '*':  
+                            markupinline = InlineKeyboardMarkup()
+                            counter = 10
+                            i = 1
+                            for acc in getSetting('ACCESSORY','REWARDS'):
+                                if user.getAccessory() and acc['value'] in user.getAccessory():
+                                    continue    
+
+                                markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward_{login}_{acc['name']}"))
+                                if i == counter :
+                                    markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next_{login}_{counter}"))
+                                    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+                                    break
+                                i = i + 1
+                            msg = send_messages_big(message.chat.id, text=f'Аксессуары {user.getName()}:\n{user.getAccessoryReport()}' , reply_markup=markupinline)
+                        else:
+                            user.addAccessory(acc)
+                            updateUser(user)
+                            send_messages_big(message.chat.id, text=user.getName() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
                         # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
                         ban = ('ban' == response.split(':')[1])
@@ -1839,9 +1854,126 @@ def main_message(message):
             if (random.random() <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'you_dont_our_band_gangster').fulfillment_text)
 
+
+
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith("toreward_"))
+def callback_query(call):
+
+    if not isGoatBoss(call.from_user.username):
+        if not isAdmin(call.from_user.username):
+            bot.answer_callback_query(call.id, "Тебе не положено!")
+            return
+
+    if 'toreward_exit' in call.data:
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='Раздача подарков завершена!', parse_mode='HTML')
+        return
+
+    if call.data.startswith("toreward_next"):
+        # toreward_next_{login}_10"
+        counter  = int(call.data.split('_')[3])
+        login = call.data.split('_')[2]
+        user = getUserByLogin(login)
+        markupinline = InlineKeyboardMarkup()
+        i = 1
+        addExit = False
+        for acc in getSetting('ACCESSORY','REWARDS'):
+            if user.getAccessory() and acc['value'] in user.getAccessory():
+                continue    
+
+            if i <= counter:
+                pass
+            else:
+                markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward_{login}_{acc['name']}"))
+                if i == counter + 10:
+                    markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back_{login}_{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next_{login}_{counter + 10}"))
+                    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+                    addExit = True
+                    break
+            i = i + 1
+        if not addExit:
+            markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back_{login}_{counter - 10}"))
+            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+
+        text=f'Аксессуары {user.getName()}:\n{user.getAccessoryReport()}'
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+        return
+
+    if call.data.startswith("toreward_back"):
+        # toreward_back_{login}_10"
+        counter  = int(call.data.split('_')[3])
+        login = call.data.split('_')[2]
+        user = getUserByLogin(login)
+        markupinline = InlineKeyboardMarkup()
+        i = 1
+        addExit = False
+        for acc in getSetting('ACCESSORY','REWARDS'):
+            if user.getAccessory() and acc['value'] in user.getAccessory():
+                continue    
+
+            if i <= counter:
+                pass
+            else:
+                markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward_{login}_{acc['name']}"))
+                if i == counter + 10:
+                    if counter == 0:
+                        markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next_{login}_{counter + 10}"))
+                    else:
+                        markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back_{login}_{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next_{login}_{counter + 10}"))
+                    
+                    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+                    addExit = True
+                    break
+            i = i + 1
+        if not addExit:
+            markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_next_{login}_{i+10}"))
+            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+
+        text=f'Аксессуары {user.getName()}:\n{user.getAccessoryReport()}'
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+        return
+
+    bot.answer_callback_query(call.id, "Ты сделал свой выбор")
+    login = call.data.split('_')[1]
+    user = getUserByLogin(login)
+
+    for acc in getSetting('ACCESSORY','REWARDS'):
+        if acc['name'] == call.data.split('_')[2]:
+            user.addAccessory(acc['value'])
+            updateUser(user)
+            send_messages_big(call.message.chat.id, text=user.getName() + '!\n' + getResponseDialogFlow(call.message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc["value"]}') 
+            break
+
+    markupinline = InlineKeyboardMarkup()
+    counter = 10
+    i = 1
+    for acc in getSetting('ACCESSORY','REWARDS'):
+        if user.getAccessory() and acc['value'] in user.getAccessory():
+            continue    
+
+        markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward_{login}_{acc['name']}"))
+        if i == counter :
+            markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next_{login}_{counter}"))
+            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+            break
+        i = i + 1
+
+    text=f'Аксессуары {user.getName()}:\n{user.getAccessoryReport()}'
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+
+
 @bot.callback_query_handler(func=lambda call: call.data.startswith("pickupaccessory_"))
 def callback_query(call):
     # pickupaccessory_{login}_{acc}
+    if not isGoatBoss(call.from_user.username):
+        if not isAdmin(call.from_user.username):
+            bot.answer_callback_query(call.id, "Тебе не положено!")
+            return
+
+    if 'pickupaccessory_exit' in call.data:
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='Отъём завершен!', parse_mode='HTML')
+        return
+
     bot.answer_callback_query(call.id, "Ты забрал это с полки...")
     login = call.data.split('_')[1]
     user = getUserByLogin(login)
@@ -1860,6 +1992,8 @@ def callback_query(call):
     text = 'У него больше ничего нет!'
     if not accessory == '':
         text = getResponseDialogFlow(call.message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{accessory}\nЧто изьять?'
+        
+    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickupaccessory_exit"))
 
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 

@@ -394,6 +394,16 @@ class User(object):
     def getAccessory(self):
         return self.accessory
 
+    def getAccessoryReport(self):
+        accessory = ''
+        if self.accessory and len(self.accessory)>0:
+            for acc in self.accessory:
+                accessory = accessory + f'▫️ {acc}\n'
+        if not accessory == '':
+            return accessory
+        else:
+            return 'Ничего нет'
+
     def addAccessory(self, accessoryItem: str):
         if self.accessory == None:
             self.accessory = []

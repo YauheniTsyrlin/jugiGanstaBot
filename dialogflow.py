@@ -10,6 +10,8 @@ from telebot.types import Message
 def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str, user: users.User, message: Message):
     clear_message_context = False
 
+    # list_entities(config.DIALOG_FLOW_JSON['project_id'])
+
     contexts = get_contexts(config.DIALOG_FLOW_JSON['project_id'], session_id, "user")
     if not contexts:
         print(f'Create context user for {session_id}')
@@ -88,3 +90,36 @@ def get_contexts(project_id, session_id, name):
             return None
     except:
         return None
+
+def get_entity(project_id, session_id, name):
+    import dialogflow_v2 as dialogflow
+    entity_client = dialogflow.EntityTypesClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
+    name_entity = entity_client.entity_type_path(project_id, session_id, name)
+    try:
+        entity = entity_client.get_entity_type(name_entity)
+        if entity:
+            # for field, value in context.parameters.fields.items():
+            #     if value.string_value:
+            #         #print('\t{}: {}'.format(field, value))
+            print(f'entity {entity.name} найден')
+            return entity
+        else:
+            print(f'entity {entity.name} не найден')
+            return None
+    except:
+        return None
+
+def list_entities(project_id, entity_type_id='4bf591fa-680d-4477-a91e-079ead57246b'):
+    import dialogflow_v2 as dialogflow
+    entity_types_client = dialogflow.EntityTypesClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
+
+    parent = entity_types_client.entity_type_path(
+        project_id, entity_type_id)
+
+    entities = entity_types_client.get_entity_type(parent).entities
+
+    for entity in entities:
+        print('Entity value: {}'.format(entity.value))
+        print('Entity synonyms: {}\n'.format(entity.synonyms))
+# [END dialogflow_list_entities]
+
