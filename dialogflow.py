@@ -6,15 +6,27 @@ import config
 import users
 from google.protobuf import struct_pb2
 
-def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, user: users.User):
+def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, user: users.User, message: Message):
+    clear_message_context = False
 
     contexts = get_contexts(config.DIALOG_FLOW_JSON['project_id'], session_id, "user")
     if not contexts:
         print(f'Create context user for {session_id}')
         parameters = struct_pb2.Struct()
-        parameters['login'] = user.getLogin()
-        parameters['name'] = user.getName()
+        if user:
+            parameters['login'] = user.getLogin()
+            parameters['name'] = user.getName()
+        else:
+            parameters['login'] = session_id
         create_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "user", 60, parameters)
+
+    if message and message.reply_to_message:
+        parameters = struct_pb2.Struct()
+        parameters['reply_to_message_id'] = message.reply_to_message.message_id
+        parameters['reply_to_message_username'] = message.reply_to_message.from_user.username
+        create_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message", 0.5, parameters)
+        clear_message_context = True
+
 
     credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON))
     session_client = dialogflow_v2.SessionsClient(credentials=credentials)
@@ -27,8 +39,17 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, user: users
         # print(response.query_result)
     except InvalidArgument:
         raise
-    
+
+    if clear_message_context:
+        delete_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message")
+
     return response.query_result
+
+def delete_context(project_id, session_id, context_id):
+    import dialogflow_v2 as dialogflow
+    contexts_client = dialogflow.ContextsClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
+    context_name = contexts_client.context_path(project_id, session_id, context_id)
+    contexts_client.delete_context(context_name)
 
 def create_context(project_id, session_id, context_id, lifespan_count, parameters):
     import dialogflow_v2 as dialogflow
