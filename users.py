@@ -393,6 +393,7 @@ class User(object):
         self.accessory = accessory  
     def getAccessory(self):
         return self.accessory
+
     def addAccessory(self, accessoryItem: str):
         if self.accessory == None:
             self.accessory = []
@@ -402,6 +403,11 @@ class User(object):
                 find = True
         if not find:
             self.accessory.append(accessoryItem)
+
+    def removeAccessory(self, accessoryItem: str):
+        if self.accessory == None:
+            self.accessory = []
+        self.accessory.remove(accessoryItem)
 
 # ------------------------------------------
     def setTimeBan(self, timeBan):

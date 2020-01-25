@@ -7,7 +7,7 @@ import users
 from google.protobuf import struct_pb2
 from telebot.types import Message
 
-def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, user: users.User, message: Message):
+def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str, user: users.User, message: Message):
     clear_message_context = False
 
     contexts = get_contexts(config.DIALOG_FLOW_JSON['project_id'], session_id, "user")
@@ -33,8 +33,15 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, user: users
     session_client = dialogflow_v2.SessionsClient(credentials=credentials)
     session = session_client.session_path(config.DIALOG_FLOW_JSON['project_id'], session_id)
 
-    text_input = dialogflow_v2.types.TextInput(text=text_to_be_analyzed, language_code='ru-RU')
-    query_input = dialogflow_v2.types.QueryInput(text=text_input)
+    query_input = None
+    if event:
+        event_input = dialogflow_v2.types.EventInput(name=event, language_code='ru-RU')
+        query_input = dialogflow_v2.types.QueryInput(event=event_input)
+    else:
+        text_input = dialogflow_v2.types.TextInput(text=text_to_be_analyzed, language_code='ru-RU')
+        query_input = dialogflow_v2.types.QueryInput(text=text_input)
+
+    
     try:
         response = session_client.detect_intent(session=session, query_input=query_input)
         # print(response.query_result)

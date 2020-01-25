@@ -369,15 +369,15 @@ def write_json(data, filename = "./pips.json"):
     with open(filename, 'a', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
-def getResponseDialogFlow(message, text: str):
-    if '' == text.strip():
+def getResponseDialogFlow(message, text: str, event=None):
+    if not text or '' == text.strip():
         text = 'голос!'
 
     if message:
         user = getUserByLogin(message.from_user.username)
-        return dialogflow.getResponseDialogFlow(message.from_user.username, text, user, message)
+        return dialogflow.getResponseDialogFlow(message.from_user.username, text, event, user, message)
     else:
-        return dialogflow.getResponseDialogFlow('system_user', text, None, message)
+        return dialogflow.getResponseDialogFlow('system_user', text, event, None, message)
 
 def getResponseHuificator(text):
     report = ''
@@ -1332,7 +1332,35 @@ def main_message(message):
 
                         updateUser(None)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)        
-                    
+                    elif 'pickupaccessory' == response.split(':')[1]:
+                        #jugi:pickupaccessory:$any
+
+                        if not isGoatBoss(message.from_user.username):
+                            if not isAdmin(message.from_user.username):
+                                bot.reply_to(message, text=getResponseDialogFlow(message, 'shot_message_not_goat_boss').fulfillment_text)
+                                return
+
+                        login = response.split(':')[2].replace('@','').strip()         
+                        user = getUserByLogin(login)
+
+                        if not user:
+                            send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
+                            return
+
+                        markupinline = InlineKeyboardMarkup()
+
+                        accessory = ''
+                        if user.getAccessory() and len(user.getAccessory())>0:
+                            i = 0
+                            for acc in user.getAccessory():
+                                accessory = accessory + f'▫️ {acc}\n'
+                                markupinline.add(InlineKeyboardButton(f"{acc}", callback_data=f"pickupaccessory_{login}_{i}"))
+                                i = i + 1
+                        if not accessory == '':
+                            msg = send_messages_big(message.chat.id, text=getResponseDialogFlow(message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{accessory}\nЧто изьять?', reply_markup=markupinline)
+                        else:
+                            msg = send_messages_big(message.chat.id, text='У него ничего нет, он голодранец!' , reply_markup=markupinline)
+                            
                     elif 'toreward' == response.split(':')[1]:
                         #jugi:toreward:$any:$accessory
 
@@ -1352,7 +1380,6 @@ def main_message(message):
                         user.addAccessory(acc)
                         updateUser(user)
                         send_messages_big(message.chat.id, text=user.getName() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
-
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
                         # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
                         ban = ('ban' == response.split(':')[1])
@@ -1407,7 +1434,6 @@ def main_message(message):
 
                         user = getUserByLogin(user.getLogin())
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text + f'\n{report}')
-                    
                     elif 'requests' == response.split(':')[1]:
                         if not isAdmin(message.from_user.username):
                             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_admin').fulfillment_text)
@@ -1442,8 +1468,6 @@ def main_message(message):
                         except Exception as e:
                             send_messages_big(message.chat.id, text=f'Ошибка!')
                             send_messages_big(message.chat.id, text=f'{e}')
-
-
                     elif 'rade' == response.split(':')[1]:
                         # jugi:rade:Госпиталь 🚷 📍24км:Старая фабрика 📍5км:*:True:2020-01-13T21:00:00
                         if isGoatBoss(message.from_user.username) or isAdmin(message.from_user.username):
@@ -1815,12 +1839,36 @@ def main_message(message):
             if (random.random() <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'you_dont_our_band_gangster').fulfillment_text)
 
+@bot.callback_query_handler(func=lambda call: call.data.startswith("pickupaccessory_"))
+def callback_query(call):
+    # pickupaccessory_{login}_{acc}
+    bot.answer_callback_query(call.id, "Ты забрал это с полки...")
+    login = call.data.split('_')[1]
+    user = getUserByLogin(login)
+    acc = user.getAccessory()[int(call.data.split('_')[2])]
+    user.removeAccessory(acc)
+    updateUser(user)
+
+    markupinline = InlineKeyboardMarkup()
+    accessory = ''
+    if user.getAccessory() and len(user.getAccessory())>0:
+        i = 0
+        for acc in user.getAccessory():
+            accessory = accessory + f'▫️ {acc}\n'
+            markupinline.add(InlineKeyboardButton(f"{acc}", callback_data=f"pickupaccessory_{login}_{i}"))
+            i = i + 1
+    text = 'У него больше ничего нет!'
+    if not accessory == '':
+        text = getResponseDialogFlow(call.message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{accessory}\nЧто изьять?'
+
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("capture_"))
 def callback_query(call):
     logger.info(f'callback_query_handler: {call.data}')
+    
     goat = call.data.split('_')[3]
-
     if not goat == getMyGoatName(call.from_user.username):
         bot.answer_callback_query(call.id, "Это план не твоего козла!")
         return
@@ -1882,7 +1930,6 @@ def callback_query(call):
                                 
     text = get_raid_plan(raid_date, goat)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
-
 
 def send_messages_big(chat_id: str, text: str, reply_markup=None):
     strings = text.split('\n')
