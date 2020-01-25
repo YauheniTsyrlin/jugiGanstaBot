@@ -5,6 +5,7 @@ import json
 import config
 import users
 from google.protobuf import struct_pb2
+from telebot.types import Message
 
 def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, user: users.User, message: Message):
     clear_message_context = False

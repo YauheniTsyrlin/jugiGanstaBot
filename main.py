@@ -375,9 +375,9 @@ def getResponseDialogFlow(message, text: str):
 
     if message:
         user = getUserByLogin(message.from_user.username)
-        return dialogflow.getResponseDialogFlow(message.from_user.username, text, user)
+        return dialogflow.getResponseDialogFlow(message.from_user.username, text, user, message)
     else:
-        return dialogflow.getResponseDialogFlow('system_user', text, None)
+        return dialogflow.getResponseDialogFlow('system_user', text, None, message)
 
 def getResponseHuificator(text):
     report = ''
