@@ -1391,9 +1391,9 @@ def main_message(message):
                                 if user.getAccessory() and acc['value'] in user.getAccessory():
                                     continue    
 
-                                markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward_{login}_{acc['name']}"))
+                                markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward|{login}|{acc['name']}"))
                                 if i == counter :
-                                    markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next_{login}_{counter}"))
+                                    markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter}"))
                                     markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
                                     break
                                 i = i + 1
