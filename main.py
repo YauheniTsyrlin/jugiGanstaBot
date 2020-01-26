@@ -1361,7 +1361,7 @@ def main_message(message):
                             i = 0
                             for acc in user.getAccessory():
                                 accessory = accessory + f'▫️ {acc}\n'
-                                markupinline.add(InlineKeyboardButton(f"{acc}", callback_data=f"pickupaccessory_{login}_{i}"))
+                                markupinline.add(InlineKeyboardButton(f"{acc}", callback_data=f"pickupaccessory|{login}|{i}"))
                                 i = i + 1
                         if not accessory == '':
                             markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickupaccessory_exit"))
@@ -1652,8 +1652,8 @@ def main_message(message):
                             # делаем голосовалку
                             markupinline = InlineKeyboardMarkup()
                             markupinline.add(
-                                InlineKeyboardButton(f"Ну нахер! ⛔", callback_data=f"dungeon_no_{dt.timestamp()}_{band}_{dungeon_km}"),
-                                InlineKeyboardButton(f"Я в деле! ✅", callback_data=f"dungeon_yes_{dt.timestamp()}_{band}_{dungeon_km}")
+                                InlineKeyboardButton(f"Ну нахер! ⛔", callback_data=f"dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}"),
+                                InlineKeyboardButton(f"Я в деле! ✅", callback_data=f"dungeon_yes|{dt.timestamp()}|{band}|{dungeon_km}")
                                 )
 
 
@@ -1906,19 +1906,20 @@ def main_message(message):
 
 
 
-@bot.callback_query_handler(func=lambda call: call.data.startswith("dungeon_"))
+@bot.callback_query_handler(func=lambda call: call.data.startswith("dungeon"))
 def callback_query(call):
-    # dungeon_no_{dt.timestamp()}_{band}_{dungeon_km}\    if not isGoatBoss(call.from_user.username):
-    band = call.data.split('_')[3]
+    #     0              1           2        3
+    # dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}
+    band = call.data.split('|')[2]
     if not isUsersBand(call.from_user.username, band):
         bot.answer_callback_query(call.id, "Это не для твоей банды!")
         return
     
     user = getUserByLogin(call.from_user.username)
 
-    dt = datetime.fromtimestamp(float(call.data.split('_')[2])) 
+    dt = datetime.fromtimestamp(float(call.data.split('|')[1])) 
     time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
-    dungeon_km = call.data.split('_')[4]
+    dungeon_km = call.data.split('|')[3]
     dungeon = getSetting(code='DUNGEONS', value=dungeon_km) 
 
     markupinline = InlineKeyboardMarkup()
@@ -1938,7 +1939,7 @@ def callback_query(call):
         signedup = False
 
     row = {}
-    row.update({'date': float(call.data.split('_')[2])})
+    row.update({'date': float(call.data.split('|')[1])})
     row.update({'login': call.from_user.username})
     row.update({'band': user.getBand()})
     row.update({'goat': getMyGoatName(call.from_user.username)})
@@ -1949,7 +1950,7 @@ def callback_query(call):
     newvalues = { "$set": row }
     result = dungeons.update_one({
         'login': call.from_user.username, 
-        'date': float(call.data.split('_')[2]),
+        'date': float(call.data.split('|')[1]),
         'band': user.getBand(),
         'dungeon_km': dungeon_km
         }, newvalues)
@@ -1959,7 +1960,7 @@ def callback_query(call):
     report_yes = '<b>Записались на захват:</b>\n'
     i = 0
     for dun in dungeons.find({
-        'date': float(call.data.split('_')[2]),
+        'date': float(call.data.split('|')[1]),
         'band': user.getBand(),
         'dungeon_km': dungeon_km,
         'signedup': True
@@ -1974,7 +1975,7 @@ def callback_query(call):
     report_no = '<b>Отказались от захвата:</b>\n'
     i = 0
     for dun in dungeons.find({
-        'date': float(call.data.split('_')[2]),
+        'date': float(call.data.split('|')[1]),
         'band': user.getBand(),
         'dungeon_km': dungeon_km,
         'signedup': False
@@ -1989,9 +1990,7 @@ def callback_query(call):
     text = text + report_yes + '\n' + report_no
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
-
-
-@bot.callback_query_handler(func=lambda call: call.data.startswith("toreward_"))
+@bot.callback_query_handler(func=lambda call: call.data.startswith("toreward"))
 def callback_query(call):
 
     if not isGoatBoss(call.from_user.username):
@@ -2004,9 +2003,10 @@ def callback_query(call):
         return
 
     if call.data.startswith("toreward_next"):
-        # toreward_next_{login}_10"
-        counter  = int(call.data.split('_')[3])
-        login = call.data.split('_')[2]
+        #        0         1     2
+        # toreward_next|{login}|10
+        counter  = int(call.data.split('|')[2])
+        login = call.data.split('|')[1]
         user = getUserByLogin(login)
         markupinline = InlineKeyboardMarkup()
         i = 1
@@ -2018,15 +2018,15 @@ def callback_query(call):
             if i <= counter:
                 pass
             else:
-                markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward_{login}_{acc['name']}"))
+                markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward|{login}|{acc['name']}"))
                 if i == counter + 10:
-                    markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back_{login}_{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next_{login}_{counter + 10}"))
+                    markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back|{login}|{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter + 10}"))
                     markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
                     addExit = True
                     break
             i = i + 1
         if not addExit:
-            markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back_{login}_{counter - 10}"))
+            markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back|{login}|{counter - 10}"))
             markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
 
         text=f'Аксессуары {user.getName()}:\n{user.getAccessoryReport()}'
@@ -2034,9 +2034,9 @@ def callback_query(call):
         return
 
     if call.data.startswith("toreward_back"):
-        # toreward_back_{login}_10"
-        counter  = int(call.data.split('_')[3])
-        login = call.data.split('_')[2]
+        # toreward_back|{login}|10"
+        counter  = int(call.data.split('|')[2])
+        login = call.data.split('|')[1]
         user = getUserByLogin(login)
         markupinline = InlineKeyboardMarkup()
         i = 1
@@ -2048,19 +2048,19 @@ def callback_query(call):
             if i <= counter:
                 pass
             else:
-                markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward_{login}_{acc['name']}"))
+                markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward|{login}|{acc['name']}"))
                 if i == counter + 10:
                     if counter == 0:
-                        markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next_{login}_{counter + 10}"))
+                        markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter + 10}"))
                     else:
-                        markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back_{login}_{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next_{login}_{counter + 10}"))
+                        markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back|{login}|{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter + 10}"))
                     
                     markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
                     addExit = True
                     break
             i = i + 1
         if not addExit:
-            markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_next_{login}_{i+10}"))
+            markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_next|{login}|{i+10}"))
             markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
 
         text=f'Аксессуары {user.getName()}:\n{user.getAccessoryReport()}'
@@ -2072,7 +2072,7 @@ def callback_query(call):
     user = getUserByLogin(login)
 
     for acc in getSetting(code='ACCESSORY', name='REWARDS'):
-        if acc['name'] == call.data.split('_')[2]:
+        if acc['name'] == call.data.split('|')[2]:
             user.addAccessory(acc['value'])
             updateUser(user)
             send_messages_big(call.message.chat.id, text=user.getName() + '!\n' + getResponseDialogFlow(call.message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc["value"]}') 
@@ -2085,9 +2085,9 @@ def callback_query(call):
         if user.getAccessory() and acc['value'] in user.getAccessory():
             continue    
 
-        markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward_{login}_{acc['name']}"))
+        markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward|{login}|{acc['name']}"))
         if i == counter :
-            markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next_{login}_{counter}"))
+            markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter}"))
             markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
             break
         i = i + 1
@@ -2095,9 +2095,9 @@ def callback_query(call):
     text=f'Аксессуары {user.getName()}:\n{user.getAccessoryReport()}'
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
-@bot.callback_query_handler(func=lambda call: call.data.startswith("pickupaccessory_"))
+@bot.callback_query_handler(func=lambda call: call.data.startswith("pickupaccessory"))
 def callback_query(call):
-    # pickupaccessory_{login}_{acc}
+    # pickupaccessory|{login}|{acc}
     if not isGoatBoss(call.from_user.username):
         if not isAdmin(call.from_user.username):
             bot.answer_callback_query(call.id, "Тебе не положено!")
@@ -2108,9 +2108,9 @@ def callback_query(call):
         return
 
     bot.answer_callback_query(call.id, "Ты забрал это с полки...")
-    login = call.data.split('_')[1]
+    login = call.data.split('|')[1]
     user = getUserByLogin(login)
-    acc = user.getAccessory()[int(call.data.split('_')[2])]
+    acc = user.getAccessory()[int(call.data.split('|')[2])]
     user.removeAccessory(acc)
     updateUser(user)
 
@@ -2120,7 +2120,7 @@ def callback_query(call):
         i = 0
         for acc in user.getAccessory():
             accessory = accessory + f'▫️ {acc}\n'
-            markupinline.add(InlineKeyboardButton(f"{acc}", callback_data=f"pickupaccessory_{login}_{i}"))
+            markupinline.add(InlineKeyboardButton(f"{acc}", callback_data=f"pickupaccessory|{login}|{i}"))
             i = i + 1
     text = 'У него больше ничего нет!'
     if not accessory == '':
