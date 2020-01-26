@@ -1399,6 +1399,7 @@ def main_message(message):
                                 i = i + 1
                             msg = send_messages_big(message.chat.id, text=f'Аксессуары {user.getName()}:\n{user.getAccessoryReport()}' , reply_markup=markupinline)
                         else:
+                            acc = response.split(':')[3]
                             user.addAccessory(acc)
                             updateUser(user)
                             send_messages_big(message.chat.id, text=user.getName() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
