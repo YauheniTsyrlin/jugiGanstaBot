@@ -2069,7 +2069,7 @@ def callback_query(call):
         return
 
     bot.answer_callback_query(call.id, "Ты сделал свой выбор")
-    login = call.data.split('_')[1]
+    login = call.data.split('|')[1]
     user = getUserByLogin(login)
 
     for acc in getSetting(code='ACCESSORY', name='REWARDS'):
