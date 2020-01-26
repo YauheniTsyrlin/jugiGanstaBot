@@ -1992,6 +1992,7 @@ def callback_query(call):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("toreward"))
 def callback_query(call):
+    logger.info(f'{call.data}')
 
     if not isGoatBoss(call.from_user.username):
         if not isAdmin(call.from_user.username):
