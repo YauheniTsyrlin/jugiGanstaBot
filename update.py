@@ -936,14 +936,14 @@ newvalues = { "$set": { "value":
                         {
                             'name': 'KILLERS',
                             'value': {
-                                'from_date': datetime.datetime(2019, 12, 15, 12, 0, 0).timestamp(), 
+                                'from_date': datetime.datetime(2020, 1, 23, 0, 0, 0).timestamp(), 
                                 'to_date': None
                             }
                         },
                         {
                             'name': 'RAIDS',
                             'value': {
-                                'from_date': datetime.datetime(2019, 12, 19, 23, 0, 0).timestamp(), 
+                                'from_date': datetime.datetime(2020, 1, 23, 0, 0, 0).timestamp(), 
                                 'to_date': None
                             }
                         }
