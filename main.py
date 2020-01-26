@@ -49,6 +49,7 @@ competition     = mydb["competition"]
 settings        = mydb["settings"]
 pending_messages = mydb["pending_messages"]
 plan_raids      = mydb["rades"]
+dungeons        = mydb["dungeons"]
 report_raids    = mydb["report_raids"]
 
 morph = pymorphy2.MorphAnalyzer()
@@ -69,7 +70,7 @@ SETTINGS_ARR = [] # Зарегистрированные настройки
 for setting in settings.find():
     SETTINGS_ARR.append(setting)
 
-def getSetting(code: str, name=None):
+def getSetting(code: str, name=None, value=None):
     """ Получение настройки """
     result = settings.find_one({'code': code})
     if (result):
@@ -77,11 +78,16 @@ def getSetting(code: str, name=None):
             for arr in result.get('value'):
                 if arr['name'] == name:
                     return arr['value'] 
+        elif value:
+            for arr in result.get('value'):
+                if arr['value'] == value:
+                    return arr['name'] 
+
         else:
             return result.get('value')
 
 ADMIN_ARR = []
-for adm in list(getSetting('ADMINISTRATOR')):
+for adm in list(getSetting(code='ADMINISTRATOR')):
     ADMIN_ARR.append(adm)
 
 def isAdmin(login: str):
@@ -111,14 +117,14 @@ def isRegisteredUserLogin(login: str):
     return False
 
 def isGoatBoss(login: str):
-    for goat in getSetting('GOATS_BANDS'):
+    for goat in getSetting(code='GOATS_BANDS'):
         for boss in goat['boss']:
             if boss == login:
                 return True
     return False
 
 def isBandBoss(login: str):
-    for goat in getSetting('GOATS_BANDS'):
+    for goat in getSetting(code='GOATS_BANDS'):
         for band in goat['bands']:
             if band['boss'] == login:
                 return True
@@ -129,7 +135,7 @@ def getMyBands(login: str):
     if not user:
         return None
 
-    for goat in getSetting('GOATS_BANDS'):
+    for goat in getSetting(code='GOATS_BANDS'):
         for band in goat['bands']:
             if user.getBand() and user.getBand().lower() == band.get('name').lower():
                 return goat['bands']
@@ -140,7 +146,7 @@ def getMyBandsName(login: str):
     if not user:
         return None
     
-    for goat in getSetting('GOATS_BANDS'):
+    for goat in getSetting(code='GOATS_BANDS'):
         find = False
         bands = []
         for band in goat['bands']:
@@ -167,7 +173,7 @@ def getMyGoat(login: str):
     if not user:
         return None
 
-    for goat in getSetting('GOATS_BANDS'):
+    for goat in getSetting(code='GOATS_BANDS'):
         for band in goat['bands']:
             if user.getBand() and user.getBand().lower() == band.get('name').lower():
                 return goat
@@ -178,7 +184,7 @@ def getMyGoatName(login: str):
     if not user:
         return None
 
-    for goat in getSetting('GOATS_BANDS'):
+    for goat in getSetting(code='GOATS_BANDS'):
         for band in goat['bands']:
             if user.getBand() and user.getBand().lower() == band.get('name').lower():
                 return goat['name']
@@ -186,7 +192,7 @@ def getMyGoatName(login: str):
     return None 
 
 def getGoatBands(goatName: str):
-    for goat in getSetting('GOATS_BANDS'):
+    for goat in getSetting(code='GOATS_BANDS'):
         if goat.get('name') == goatName:
             bands = []
             for band in goat['bands']:
@@ -208,7 +214,7 @@ def hasAccessToWariors(login: str):
     if not user:
         return False
 
-    for band in getSetting('BANDS_ACCESS_WARIORS'):
+    for band in getSetting(code='BANDS_ACCESS_WARIORS'):
         if user.getBand() and band.get('band').lower() == user.getBand().lower():
             return True
 
@@ -395,7 +401,7 @@ def getResponseHuificator(text):
 
 def censored(message):
     bot.delete_message(message.chat.id, message.message_id)
-    id = random.sample(getSetting('STICKERS','CENSORSHIP'), 1)[0]['value']
+    id = random.sample(getSetting(code='STICKERS',name='CENSORSHIP'), 1)[0]['value']
     if len(id) > 40:
         bot.send_photo(message.chat.id, id)
     else:
@@ -407,12 +413,12 @@ def censored(message):
 def send_welcome_and_dismiss(message):
     response = getResponseDialogFlow(message, message.content_type).fulfillment_text
     if response:
-        bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_NEW_MEMBER'), 1)[0]['value'])
+        bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS',name='BOT_NEW_MEMBER'), 1)[0]['value'])
         bot.send_message(message.chat.id, text=response)
         
         goat = getMyGoat(message.from_user.username)
         if not isGoatSecretChat(message.from_user.username, message.chat.id):
-            bot.send_photo(message.chat.id, random.sample(getSetting('STICKERS','NEW_MEMBER_IMG'), 1)[0]['value'])
+            bot.send_photo(message.chat.id, random.sample(getSetting(code='STICKERS',name='NEW_MEMBER_IMG'), 1)[0]['value'])
 
 # Handle inline_handler
 @bot.inline_handler(lambda query: query.query)
@@ -555,8 +561,8 @@ def get_message_stiker(message):
             message.text = text
             main_message(message)
 
-            if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
-                bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_VOICE'), 1)[0]['value'])
+            if (random.random() <= float(getSetting(code='PROBABILITY',name='EMOTIONS'))):
+                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS',name='BOT_VOICE'), 1)[0]['value'])
         else:
             send_messages_big(message.chat.id, text=f'🗣<b>{message.from_user.username}</b> что-то сказал, но я ничего не понял!')
 
@@ -571,7 +577,8 @@ def main_message(message):
     if message.from_user.username == None:
         return
 
-    black_list = getSetting('BLACK_LIST', message.from_user.username)
+    black_list = getSetting(code='BLACK_LIST', name=message.from_user.username)
+    print(black_list)
     if black_list:
         send_messages_big(message.chat.id, text=f'{message.from_user.username} заслужил пожизненный бан {black_list}', reply_markup=None)
         send_message_to_admin(f'⚠️Внимание! \n {message.from_user.username} написал Джу:\n\n {message.text}')
@@ -597,7 +604,7 @@ def main_message(message):
                     updateUser(userIAm)
                     return
             else:
-                acc = random.sample(getSetting('ACCESSORY','PIP_BOY'), 1)[0]["value"]
+                acc = random.sample(getSetting(code='ACCESSORY', name='PIP_BOY'), 1)[0]["value"]
                 send_messages_big(message.chat.id, text=f'Поздравляю! \nТебе выдали "{acc}" и вытолкнули за дверь!')
                 userIAm.setChat(message.chat.id)
                 userIAm.addAccessory(acc)
@@ -607,7 +614,7 @@ def main_message(message):
             if userIAm.getChat():
                 pass
             else:
-                if (random.random() <= float(getSetting('PROBABILITY','YOU_PRIVATE_CHAT'))):
+                if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_PRIVATE_CHAT'))):
                     bot.reply_to(message, text=getResponseDialogFlow(message, 'accessory_old_pipboy').fulfillment_text, parse_mode='HTML')
 
     callJugi = (privateChat 
@@ -895,34 +902,34 @@ def main_message(message):
         return
 
     if 'грац' in message.text.lower() or 'лол' in message.text.lower() or 'lol' in message.text.lower():
-        if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
-            bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_LOVE'), 1)[0]['value'])
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
+            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_LOVE'), 1)[0]['value'])
             return
     if 'збс' in message.text.lower() or 'ура' in message.text.lower() or '))' in message.text.lower() or 'ахах' in message.text.lower() or 'ебать' in message.text.lower() or 'ебаать' in message.text.lower() or 'ебааать' in message.text.lower():
-        if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
-            bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_LIKE'), 1)[0]['value'])
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
+            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_LIKE'), 1)[0]['value'])
             return
     if 'пиздец' in message.text.lower():
-        if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
-            bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_DEAD'), 1)[0]['value'])
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
+            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_DEAD'), 1)[0]['value'])
             return
     if 'тык' == message.text.lower() or 'тык!' == message.text.lower() or 'тык!)' == message.text.lower() or 'тык)' == message.text.lower() or ' тык' in message.text.lower() or ' тык' in message.text.lower():
-        if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
-            bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_FINGER_TYK'), 1)[0]['value'])
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
+            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_FINGER_TYK'), 1)[0]['value'])
             return
     if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да?' == message.text.lower() or 'да!)' == message.text.lower():
-        if (random.random() <= float(getSetting('PROBABILITY','YES_STICKER'))):
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
-                bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_DA_PINDA'), 1)[0]['value'])
+                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_DA_PINDA'), 1)[0]['value'])
                 return
     if 'нет' == message.text.lower() or 'нет!' == message.text.lower() or 'нет?' == message.text.lower() or 'нет!)' == message.text.lower():
-        if (random.random() <= float(getSetting('PROBABILITY','NO_STICKER'))):
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='NO_STICKER'))):
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
-                bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_NO_PINDA'), 1)[0]['value'])
+                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_NO_PINDA'), 1)[0]['value'])
                 return
     if 'тебя буквально размазали' in message.text.lower():
-        if (random.random() <= float(getSetting('PROBABILITY','EMOTIONS'))):
-            bot.send_sticker(message.chat.id, random.sample(getSetting('STICKERS','BOT_SALUTE'), 1)[0]['value'])
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
+            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
             return       
 
     if message.reply_to_message and 'хуифицируй' in message.text.lower():
@@ -1011,7 +1018,7 @@ def main_message(message):
                     send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
                     return
             
-            sec = int(randrange(int(getSetting('PROBABILITY','FUNY_BAN'))))
+            sec = int(randrange(int(getSetting(code='PROBABILITY',name='FUNY_BAN'))))
             tz = config.SERVER_MSK_DIFF
             ban_date = datetime.now() + timedelta(seconds=sec, hours=tz.hour)
             
@@ -1192,12 +1199,12 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
                     elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
-                        photo = random.sample(getSetting('STICKERS', 'BOT_LOVE'), 1)[0]['value']
+                        photo = random.sample(getSetting(code='STICKERS', name='BOT_LOVE'), 1)[0]['value']
                         bot.send_sticker(message.chat.id, photo)
                         send_messages_big(message.chat.id, text=f'{response.split(":")[2]}')
                     elif 'youbadbot' == response.split(':')[1]:
                         # jugi:youbadbot
-                        sec = int(randrange(int(getSetting('PROBABILITY','JUGI_BAD_BOT_BAN'))))
+                        sec = int(randrange(int(getSetting(code='PROBABILITY', name='JUGI_BAD_BOT_BAN'))))
                         tz = config.SERVER_MSK_DIFF
                         ban_date = datetime.now() + timedelta(seconds=sec, hours=tz.hour)
                         userIAm.setTimeBan(ban_date.timestamp())
@@ -1205,7 +1212,7 @@ def main_message(message):
                         report = f'<b>{response.split(":")[2]}</b>\n<b>{userIAm.getName()}</b> выписан бан! ⏰{sec} секунд(ы) в тишине научат тебя хорошему поведению!'
                         updateUser(userIAm)
 
-                        photo = random.sample(getSetting('STICKERS', 'BOT_FUCKOFF'), 1)[0]['value']
+                        photo = random.sample(getSetting(code='STICKERS', name='BOT_FUCKOFF'), 1)[0]['value']
                         bot.send_sticker(message.chat.id, photo)
                         send_messages_big(message.chat.id, text=f'\n{report}')
                     elif 'planrade' == response.split(':')[1]:
@@ -1277,7 +1284,7 @@ def main_message(message):
                             send_messages_big(message.chat.id, text='Не твой козёл!\n' + getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
                             return
 
-                        for goat in getSetting('GOATS_BANDS'):
+                        for goat in getSetting(code='GOATS_BANDS'):
                             if goatName == goat.get('name'):
                                 report = radeReport(goat)
                                 send_messages_big(message.chat.id, text=report)
@@ -1380,7 +1387,7 @@ def main_message(message):
                             markupinline = InlineKeyboardMarkup()
                             counter = 10
                             i = 1
-                            for acc in getSetting('ACCESSORY','REWARDS'):
+                            for acc in getSetting(code='ACCESSORY', name='REWARDS'):
                                 if user.getAccessory() and acc['value'] in user.getAccessory():
                                     continue    
 
@@ -1617,8 +1624,10 @@ def main_message(message):
                             time_str = response.split(response.split(":")[3])[1][1:]
                             dt = parse(time_str)
                             time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
-
-                            first_string = f'<b>Захват!</b> 🤟{band} {time_str} <b>{response.split(":")[3]}</b>\n'
+                            dungeon = response.split(":")[3]
+                            dungeon_km = getSetting(code='DUNGEONS', name=dungeon)
+                            text = f'<b>Захват!</b> 🤟{band} <b>{dungeon} в {time_str}</b>\n\n'
+                            #first_string = f'<b>Захват!</b> 🤟{band} {time_str} <b>{dungeon}</b>\n'
                             
                             usersarr = []
                             for registered_user in registered_users.find({"band": f"{band}"}):
@@ -1640,11 +1649,52 @@ def main_message(message):
                                     pingusers = []
                                     report = f''
 
-                            if len(pingusers) > 0:
-                                send_messages_big(message.chat.id, text=first_string + report)
+                            # делаем голосовалку
+                            markupinline = InlineKeyboardMarkup()
+                            markupinline.add(
+                                InlineKeyboardButton(f"Ну нахер! ⛔", callback_data=f"dungeon_no_{dt.timestamp()}_{band}_{dungeon_km}"),
+                                InlineKeyboardButton(f"Я в деле! ✅", callback_data=f"dungeon_yes_{dt.timestamp()}_{band}_{dungeon_km}")
+                                )
 
-                            if not privateChat:
-                                bot.pin_chat_message(message.chat.id, msg.message_id)
+
+                            report_yes = '<b>Записались на захват:</b>\n'
+                            i = 0
+                            for dun in dungeons.find({
+                                'date': dt.timestamp(),
+                                'band': band,
+                                'dungeon_km': dungeon_km,
+                                'signedup': True
+                                }):
+                                i = i + 1
+                                user = getUserByLogin(dun['login'])
+                                report_yes = report_yes + f'  {i}. {user.getName()}\n'
+
+                            if i == 0:
+                                report_yes = report_yes + '  Никто не записался\n'
+
+                            report_no = '<b>Отказались от захвата:</b>\n'
+                            i = 0
+                            for dun in dungeons.find({
+                                'date': dt.timestamp(),
+                                'band': band,
+                                'dungeon_km': dungeon_km,
+                                'signedup': False
+                                }):
+                                i = i + 1
+                                user = getUserByLogin(dun['login'])
+                                report_no = report_no + f'  {i}. {user.getName()}\n'
+
+                            if i == 0:
+                                report_no = report_no + '  Никто не отказался\n'
+
+                            text = text + report_yes + '\n' + report_no
+                                
+                            send_messages_big(message.chat.id, text=text, reply_markup=markupinline)
+
+                            # if not privateChat:
+                            #     if len(pingusers) > 0:
+                            #         msg = send_messages_big(message.chat.id, text=first_string + report)
+                            #         bot.pin_chat_message(message.chat.id, msg.message_id)
                     elif 'remind' == response.split(':')[1]:
                         # jugi:remind:2019-11-04T17:12:00+02:00
                         if not userIAm.getLocation():
@@ -1683,7 +1733,7 @@ def main_message(message):
                         
                         photo = response.split(':')[2]
                         if len(response.split(':')) > 4:
-                            photo = random.sample(getSetting('STICKERS', response.split(':')[4]), 1)[0]['value']
+                            photo = random.sample(getSetting(code='STICKERS', name=response.split(':')[4]), 1)[0]['value']
                         text = response.split(':')[3]
                         if text:
                             bot.send_message(message.chat.id, text=text)   
@@ -1726,7 +1776,7 @@ def main_message(message):
                         report = ''
                         report = report + f'🏆ТОП 5 УБИЙЦ 🐐<b>{getMyGoatName(userIAm.getLogin())}</b>\n'
                         report = report + '\n'
-                        setting = getSetting('REPORTS','KILLERS')
+                        setting = getSetting(code='REPORTS',name='KILLERS')
                         from_date = setting.get('from_date')
                         to_date = setting.get('to_date')
 
@@ -1851,9 +1901,93 @@ def main_message(message):
         return
     else:
         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
-            if (random.random() <= float(getSetting('PROBABILITY','I_DONT_KNOW_YOU'))):
+            if (random.random() <= float(getSetting(code='PROBABILITY', name='I_DONT_KNOW_YOU'))):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'you_dont_our_band_gangster').fulfillment_text)
 
+
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith("dungeon_"))
+def callback_query(call):
+    # dungeon_no_{dt.timestamp()}_{band}_{dungeon_km}\    if not isGoatBoss(call.from_user.username):
+    band = call.data.split('_')[3]
+    if not isUsersBand(call.from_user.username, band):
+        bot.answer_callback_query(call.id, "Это не для твоей банды!")
+        return
+    
+    user = getUserByLogin(call.from_user.username)
+
+    dt = datetime.fromtimestamp(float(call.data.split('_')[2])) 
+    time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
+    dungeon_km = call.data.split('_')[4]
+    dungeon = getSetting(code='DUNGEONS', value=dungeon_km) 
+
+    markupinline = InlineKeyboardMarkup()
+    markupinline.add(
+        InlineKeyboardButton(f"Ну нахер! ⛔", callback_data=f"dungeon_no_{dt.timestamp()}_{band}_{dungeon_km}"),
+        InlineKeyboardButton(f"Я в деле! ✅", callback_data=f"dungeon_yes_{dt.timestamp()}_{band}_{dungeon_km}")
+        )
+
+    text=f'<b>Захват!</b> 🤟{band} <b>{dungeon} в {time_str}</b>\n\n'
+    
+    signedup = False
+    if call.data.startswith("dungeon_yes"):
+        signedup = True
+        bot.answer_callback_query(call.id, "Красавчик!")
+    elif call.data.startswith("dungeon_no"):
+        bot.answer_callback_query(call.id, "Трусишка!")
+        signedup = False
+
+    row = {}
+    row.update({'date': float(call.data.split('_')[2])})
+    row.update({'login': call.from_user.username})
+    row.update({'band': user.getBand()})
+    row.update({'goat': getMyGoatName(call.from_user.username)})
+    row.update({'dungeon_km': dungeon_km})
+    row.update({'dungeon': dungeon})
+    row.update({'signedup': signedup})
+
+    newvalues = { "$set": row }
+    result = dungeons.update_one({
+        'login': call.from_user.username, 
+        'date': float(call.data.split('_')[2]),
+        'band': user.getBand(),
+        'dungeon_km': dungeon_km
+        }, newvalues)
+    if result.matched_count < 1:
+        dungeons.insert_one(row)
+
+    report_yes = '<b>Записались на захват:</b>\n'
+    i = 0
+    for dun in dungeons.find({
+        'date': float(call.data.split('_')[2]),
+        'band': user.getBand(),
+        'dungeon_km': dungeon_km,
+        'signedup': True
+        }):
+        i = i + 1
+        user = getUserByLogin(dun['login'])
+        report_yes = report_yes + f'  {i}. {user.getName()}\n'
+
+    if i == 0:
+        report_yes = report_yes + '  Никто не записался\n'
+
+    report_no = '<b>Отказались от захвата:</b>\n'
+    i = 0
+    for dun in dungeons.find({
+        'date': float(call.data.split('_')[2]),
+        'band': user.getBand(),
+        'dungeon_km': dungeon_km,
+        'signedup': False
+        }):
+        i = i + 1
+        user = getUserByLogin(dun['login'])
+        report_no = report_no + f'  {i}. {user.getName()}\n'
+
+    if i == 0:
+        report_no = report_no + '  Никто не отказался\n'
+
+    text = text + report_yes + '\n' + report_no
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
 
 
@@ -1877,7 +2011,7 @@ def callback_query(call):
         markupinline = InlineKeyboardMarkup()
         i = 1
         addExit = False
-        for acc in getSetting('ACCESSORY','REWARDS'):
+        for acc in getSetting(code='ACCESSORY',name='REWARDS'):
             if user.getAccessory() and acc['value'] in user.getAccessory():
                 continue    
 
@@ -1907,7 +2041,7 @@ def callback_query(call):
         markupinline = InlineKeyboardMarkup()
         i = 1
         addExit = False
-        for acc in getSetting('ACCESSORY','REWARDS'):
+        for acc in getSetting(code='ACCESSORY',name='REWARDS'):
             if user.getAccessory() and acc['value'] in user.getAccessory():
                 continue    
 
@@ -1937,7 +2071,7 @@ def callback_query(call):
     login = call.data.split('_')[1]
     user = getUserByLogin(login)
 
-    for acc in getSetting('ACCESSORY','REWARDS'):
+    for acc in getSetting(code='ACCESSORY', name='REWARDS'):
         if acc['name'] == call.data.split('_')[2]:
             user.addAccessory(acc['value'])
             updateUser(user)
@@ -1947,7 +2081,7 @@ def callback_query(call):
     markupinline = InlineKeyboardMarkup()
     counter = 10
     i = 1
-    for acc in getSetting('ACCESSORY','REWARDS'):
+    for acc in getSetting(code='ACCESSORY', name='REWARDS'):
         if user.getAccessory() and acc['value'] in user.getAccessory():
             continue    
 
@@ -1960,7 +2094,6 @@ def callback_query(call):
 
     text=f'Аксессуары {user.getName()}:\n{user.getAccessoryReport()}'
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
-
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("pickupaccessory_"))
 def callback_query(call):
@@ -1994,9 +2127,7 @@ def callback_query(call):
         text = getResponseDialogFlow(call.message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{accessory}\nЧто изьять?'
         
     markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickupaccessory_exit"))
-
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
-
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("capture_"))
 def callback_query(call):
@@ -2163,7 +2294,7 @@ def rade():
     
     # Новый год!
     if now_date.day == 1 and now_date.month == 1 and now_date.hour == 0 and now_date.minute in (0,10,15,20,25,35,35,50) and now_date.second < 15:
-        for goat in getSetting('GOATS_BANDS'):
+        for goat in getSetting(code='GOATS_BANDS'):
             report = ''
             try:
                 r = requests.get(f'{config.ANECDOT_URL}={16}', verify=False, timeout=7)
@@ -2171,11 +2302,11 @@ def rade():
             except:
                 report = 'Чёт я приуныл... Ничего в голову не идет... С новым годом!'
             send_messages_big(goat['chats']['info'], report)
-            bot.send_sticker(goat['chats']['info'], random.sample(getSetting('STICKERS','NEW_YEAR'), 1)[0]['value']) 
+            bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='NEW_YEAR'), 1)[0]['value']) 
 
     # 14 февраля!
     if now_date.day == 14 and now_date.month == 2 and now_date.hour == 10 and now_date.minute in (0,10,15,20,25,35,35,50) and now_date.second < 15:
-        for goat in getSetting('GOATS_BANDS'):
+        for goat in getSetting(code='GOATS_BANDS'):
             report = ''
             try:
                 r = requests.get(f'{config.ANECDOT_URL}={16}', verify=False, timeout=7)
@@ -2183,12 +2314,12 @@ def rade():
             except:
                 report = 'Чёт я приуныл... Ничего в голову не идет... С новым годом!'
             send_messages_big(goat['chats']['info'], report)
-            bot.send_sticker(goat['chats']['info'], random.sample(getSetting('STICKERS','LOVE_DAY'), 1)[0]['value']) 
+            bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='LOVE_DAY'), 1)[0]['value']) 
 
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
         updateUser(None)
-        for goat in getSetting('GOATS_BANDS'):
+        for goat in getSetting(code='GOATS_BANDS'):
             if getPlanedRaidLocation(goat['name'], planRaid = True)['rade_location']:
                 report = radeReport(goat, True)
                 send_messages_big(goat['chats']['secret'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
@@ -2196,7 +2327,7 @@ def rade():
     if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second < 15:
         logger.info('Rade time now!')
         updateUser(None)
-        for goat in getSetting('GOATS_BANDS'):
+        for goat in getSetting(code='GOATS_BANDS'):
             if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
                 report = radeReport(goat)
                 send_messages_big(goat['chats']['secret'], text='<b>Результаты рейда</b>\n' + report)
@@ -2205,7 +2336,7 @@ def rade():
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
         logger.info('Clear raid info!')
-        for goat in getSetting('GOATS_BANDS'):
+        for goat in getSetting(code='GOATS_BANDS'):
             registered_users.update_many(
                 {'band':{'$in':getGoatBands(goat.get('name'))}},
                 { '$set': { 'raidlocation': None} }
@@ -2354,7 +2485,7 @@ def statistic(goatName: str):
     report = f'🐐<b>{goatName}</b>\n\n'
     report = report + f'🧘‍♂️ <b>Рейдеры</b>:\n'
 
-    setting = getSetting('REPORTS','RAIDS')
+    setting = getSetting(code='REPORTS', name='RAIDS')
     from_date = setting.get('from_date')
     to_date = setting.get('to_date')
 

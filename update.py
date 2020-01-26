@@ -108,6 +108,16 @@ if (not result):
         'value': ''   
              })  
 
+
+result = settings.find_one({'code': 'DUNGEONS'})
+if (not result):
+    print('Not Find setting. Insert DUNGEONS')
+    settings.insert_one({
+        'code': 'DUNGEONS', 
+        'description': ' Подземелья', 
+        'value': ''   
+             })   
+
 result = settings.find_one({'code': 'BLACK_LIST'})
 if (not result):
     print('Not Find setting. Insert BLACK_LIST')
@@ -797,6 +807,45 @@ newvalues = { "$set": { "value":
                             ] 
                         }
 
+                    ]
+                } 
+            } 
+u = settings.update_one(myquery, newvalues)
+
+myquery = { "code": 'DUNGEONS' }
+newvalues = { "$set": { "value": 
+                    [
+                        {
+                            'name': '⛏️Старая шахта',
+                            'value': '11'
+                        },{
+                            'name': '🚷🚽Сточная труба',
+                            'value': '23'
+                        },{
+                            'name': '⚙️Открытое Убежище',
+                            'value': '29'
+                        },{
+                            'name': '🚷🦇Бэт-пешера',
+                            'value': '34'
+                        },{
+                            'name': '🦆Перевал Уткина',
+                            'value': '39'
+                        },{
+                            'name': '⛰️Высокий Хротгар',
+                            'value': '45'
+                        },{
+                            'name': '🛑Руины Гексагона',
+                            'value': '50'
+                        },{
+                            'name': '🚷🔬Научный комплекс',
+                            'value': '55'
+                        },{
+                            'name': '🚷⛩️Храм испытаний',
+                            'value': '69'
+                        },{
+                            'name': '🗨️Черная меза',
+                            'value': '74'
+                        }
                     ]
                 } 
             } 
