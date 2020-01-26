@@ -952,7 +952,6 @@ myquery = { "code": 'BANDS_ACCESS_WARIORS' }
 newvalues = { "$set": { "value": 
             [
                 {'band': 'АртхǁȺǁус'},
-                {'band': 'WestMoscǁØǁw'},
                 {'band': 'без банды'},
                 {'band': 'Crewname'},
                 {'band': 'FgoatUpd'},
@@ -980,10 +979,6 @@ newvalues = { "$set":
                                     [
                                         {
                                             'name': 'без банды',
-                                            'boss': 'WestMoscow'
-                                        },
-                                        {
-                                            'name': 'WestMoscǁØǁw',
                                             'boss': 'WestMoscow'
                                         },
                                         {
