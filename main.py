@@ -927,6 +927,13 @@ def main_message(message):
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
                 bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_NO_PINDA'), 1)[0]['value'])
                 return
+
+    if 'а' == message.text.lower() or 'а!' == message.text.lower() or 'а?' == message.text.lower() or 'а!)' == message.text.lower():
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='A_STICKER'))):
+            if not isGoatSecretChat(message.from_user.username, message.chat.id):
+                bot.send_photo(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_A_PINDA'), 1)[0]['value'])
+                return
+
     if 'тебя буквально размазали' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
@@ -1047,7 +1054,6 @@ def main_message(message):
                 send_messages_big(message.chat.id, text='✅ Готово')
             
             updateUser(None)
-
         elif (callJugi and 'профиль @' in message.text.lower()):
             
             name = tools.deEmojify(message.text.split('@')[1].strip())
@@ -1381,7 +1387,6 @@ def main_message(message):
                         if not user:
                             send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
                             return
-                        
 
                         if response.split(':')[3] == '*':  
                             markupinline = InlineKeyboardMarkup()

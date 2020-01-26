@@ -605,7 +605,6 @@ newvalues = { "$set": { "value":
             } 
 u = settings.update_one(myquery, newvalues)
 
-
 myquery = { "code": 'STICKERS' }
 newvalues = { "$set": { "value": 
                     [
@@ -935,6 +934,16 @@ newvalues = { "$set": { "value":
                             ] 
                         },
                         {
+                            'name': 'BOT_A_PINDA',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAACAgIAAxkBAAJ7g14t6foXyqRJtOR-XMK5h6yNKGqkAAJQAAPyBCAWeiu5xwoM98oYBA'
+                                }
+                            ] 
+                        },
+                        {
                             'name': 'CENSORSHIP',
                             'value':
                             [
@@ -1099,6 +1108,11 @@ newvalues = { "$set": { "value":
                         {
                             # Вероятность
                             'name': 'NO_STICKER',
+                            'value': 1.00
+                        },
+                        {
+                            # Вероятность
+                            'name': 'A_STICKER',
                             'value': 1.00
                         },
                         {
