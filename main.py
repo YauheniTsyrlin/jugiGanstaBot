@@ -1638,7 +1638,7 @@ def main_message(message):
                                 pingusers.append(pu)
                                 report = report + f'{counter}. @{pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
                                 if counter % 5 == 0:
-                                    send_messages_big(message.chat.id, text=first_string + report)
+                                    send_messages_big(message.chat.id, text=text + report)
                                     pingusers = []
                                     report = f''
 
