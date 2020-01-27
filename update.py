@@ -1241,7 +1241,7 @@ print("#         RAIDS            #")
 print("#==========================#")
 
 
-x = report_raids.delete_many({'date':1580162400.0});
+x = report_raids.delete_many({'date':1580238000.0});
 
 print("#==========================#")              
 print("#         USERS            #")    
