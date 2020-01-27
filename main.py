@@ -1568,6 +1568,7 @@ def main_message(message):
                             radeloc_arr.append(row)
                         
                         if eval(response.split(":")[5]):
+                            logger.info('true')
                             for radeloc in radeloc_arr:                                
                                 myquery = { 
                                             'rade_date': raid_date.timestamp(),
