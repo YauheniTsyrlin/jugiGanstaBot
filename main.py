@@ -1498,6 +1498,9 @@ def main_message(message):
                     elif 'rade' == response.split(':')[1]:
                         #   0    1           2            3          4          
                         # jugi:rade:Госпиталь 🚷 📍24км:True:2020-01-13T21:00:00
+                        print(f'isGoatBoss = {isGoatBoss(message.from_user.username)}')
+                        print(f'isAdmin = {isAdmin(message.from_user.username)}')
+                        print(response.split(f':{response.split(":")[3]:}')[1])
                         if isGoatBoss(message.from_user.username) or isAdmin(message.from_user.username):
                             pass
                         else:
@@ -1513,7 +1516,8 @@ def main_message(message):
                         goat = getMyGoatName(message.from_user.username)
                         #   0    1        2              3               4         5       6
                         # jugi:rade:$radelocation1:$radelocation2:$radelocation3:$bool:$date-time
-                        raid_date = parse(response.split(response.split(":")[3])[1][1:])
+                        
+                        raid_date = parse(response.split(f':{response.split(":")[3]:}')[1])
 
                         if raid_date.hour not in (1, 9, 17):
                             send_messages_big(message.chat.id, text='Рейды проходят только в 1:00, 9:00, 17:00!\nУкажи правильное время!')
