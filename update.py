@@ -1241,9 +1241,12 @@ print("#==========================#")
 print("#         RAIDS            #")    
 print("#==========================#")
 
+for x in plan_raids.find({'date':{'$gte':1580238000.0}}):
+    print(x)
 
 x = plan_raids.delete_many({'date':1580238000.0});
-
+    print(deleted_count)
+    
 print("#==========================#")              
 print("#         USERS            #")    
 print("#==========================#")
