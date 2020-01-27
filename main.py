@@ -1516,7 +1516,7 @@ def main_message(message):
                         goat = getMyGoatName(message.from_user.username)
                         #   0    1        2              3               4         5       6
                         # jugi:rade:$radelocation1:$radelocation2:$radelocation3:$bool:$date-time
-                        # raid_date = parse(response.split(response.split(":")[5])[1][1:])
+                        raid_date = parse(response.split(response.split(":")[5])[1][1:])
                         # if raid_date.hour not in (1, 9, 17):
                         #     send_messages_big(message.chat.id, text='Рейды проходят только в 1:00, 9:00, 17:00!\nУкажи правильное время!')
                         #     return 
