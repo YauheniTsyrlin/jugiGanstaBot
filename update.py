@@ -1241,7 +1241,7 @@ print("#==========================#")
 print("#         RAIDS            #")    
 print("#==========================#")
 
-for x in plan_raids.find({'date':1580162400.0}):
+for x in plan_raids.find():
     print(x)
 
 x = plan_raids.delete_many({'date':1580162400.0})
