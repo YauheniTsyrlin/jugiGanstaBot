@@ -11,6 +11,7 @@ registered_wariors = mydb["wariors"]
 battle = mydb["battle"]
 settings = mydb["settings"]
 report_raids    = mydb["report_raids"]
+plan_raids      = mydb["rades"]
 
 def getSetting(code: str):
     """ Получение настройки """
@@ -1241,7 +1242,7 @@ print("#         RAIDS            #")
 print("#==========================#")
 
 
-x = report_raids.delete_many({'date':1580238000.0});
+x = plan_raids.delete_many({'date':1580238000.0});
 
 print("#==========================#")              
 print("#         USERS            #")    
