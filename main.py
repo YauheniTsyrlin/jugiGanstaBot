@@ -1903,6 +1903,7 @@ def main_message(message):
 def callback_query(call):
     #     0              1           2        3
     # dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}
+
     band = call.data.split('|')[2]
     if not isUsersBand(call.from_user.username, band):
         bot.answer_callback_query(call.id, "Это не для твоей банды!")
@@ -1917,8 +1918,8 @@ def callback_query(call):
 
     markupinline = InlineKeyboardMarkup()
     markupinline.add(
-        InlineKeyboardButton(f"Ну нахер! ⛔", callback_data=f"dungeon_no_{dt.timestamp()}_{band}_{dungeon_km}"),
-        InlineKeyboardButton(f"Я в деле! ✅", callback_data=f"dungeon_yes_{dt.timestamp()}_{band}_{dungeon_km}")
+        InlineKeyboardButton(f"Ну нахер! ⛔", callback_data=f"dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}"),
+        InlineKeyboardButton(f"Я в деле! ✅", callback_data=f"dungeon_yes|{dt.timestamp()}|{band}|{dungeon_km}")
         )
 
     text=f'<b>Захват!</b> 🤟{band} <b>{dungeon} в {time_str}</b>\n\n'
