@@ -1517,6 +1517,7 @@ def main_message(message):
                         #   0    1        2              3               4         5       6
                         # jugi:rade:$radelocation1:$radelocation2:$radelocation3:$bool:$date-time
                         raid_date = parse(response.split(response.split(":")[5])[1][1:])
+                        print(raid_date)
                         # if raid_date.hour not in (1, 9, 17):
                         #     send_messages_big(message.chat.id, text='Рейды проходят только в 1:00, 9:00, 17:00!\nУкажи правильное время!')
                         #     return 
@@ -1531,6 +1532,7 @@ def main_message(message):
                         markupinline = InlineKeyboardMarkup()
 
                         if eval(response.split(":")[5]):
+                            logger.info('True')
                             radeloc_arr = []
 
                             row = {}
@@ -1590,6 +1592,9 @@ def main_message(message):
                                         'goat': goat,
                                         'users': users_onraid})
                         else:
+                            logger.info('false')
+                            logger.info(raid_date)
+                            logger.info(goat)
                             plan_raids.delete_many({
                                             'rade_date': raid_date.timestamp(),
                                             'goat': goat
