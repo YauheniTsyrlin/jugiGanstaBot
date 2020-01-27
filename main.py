@@ -1500,7 +1500,8 @@ def main_message(message):
                             send_messages_big(message.chat.id, text=f'Ошибка!')
                             send_messages_big(message.chat.id, text=f'{e}')
                     elif 'rade' == response.split(':')[1]:
-                        # jugi:rade:Госпиталь 🚷 📍24км:Старая фабрика 📍5км:*:True:2020-01-13T21:00:00
+                        #   0    1           2            3          4          
+                        # jugi:rade:Госпиталь 🚷 📍24км:True:2020-01-13T21:00:00
                         if isGoatBoss(message.from_user.username) or isAdmin(message.from_user.username):
                             pass
                         else:
@@ -1516,11 +1517,11 @@ def main_message(message):
                         goat = getMyGoatName(message.from_user.username)
                         #   0    1        2              3               4         5       6
                         # jugi:rade:$radelocation1:$radelocation2:$radelocation3:$bool:$date-time
-                        raid_date = parse(response.split(response.split(":")[5])[1][1:])
-                        print(raid_date)
-                        # if raid_date.hour not in (1, 9, 17):
-                        #     send_messages_big(message.chat.id, text='Рейды проходят только в 1:00, 9:00, 17:00!\nУкажи правильное время!')
-                        #     return 
+                        raid_date = parse(response.split(response.split(":")[3])[1][1:])
+
+                        if raid_date.hour not in (1, 9, 17):
+                            send_messages_big(message.chat.id, text='Рейды проходят только в 1:00, 9:00, 17:00!\nУкажи правильное время!')
+                            return 
 
                         # Проверка на будущую дату
                         tz = config.SERVER_MSK_DIFF
@@ -1531,33 +1532,14 @@ def main_message(message):
 
                         markupinline = InlineKeyboardMarkup()
 
-                        if eval(response.split(":")[5]):
-                            logger.info('True')
+                        if eval(response.split(":")[3]):
+                            
                             radeloc_arr = []
-
-                            row = {}
-                            rade_text = response.split(":")[2]
-                            rade_location = int(response.split(":")[2].split('📍')[1].split('км')[0].strip())
-                            row.update({'rade_text': rade_text})
-                            row.update({'rade_location': rade_location})
-                            radeloc_arr.append(row)
-
-                            if response.split(":")[3] == '*':
-                                pass
-                            else:
+                            rlocs = response.split(":")[2].replace(' и ', ',').split(',')
+                            for rloc in rlocs:
                                 row = {}
-                                rade_text = response.split(":")[3]
-                                rade_location = int(response.split(":")[3].split('📍')[1].split('км')[0].strip())
-                                row.update({'rade_text': rade_text})
-                                row.update({'rade_location': rade_location})
-                                radeloc_arr.append(row)
-
-                            if response.split(":")[4] == '*':
-                                pass
-                            else:
-                                row = {}
-                                rade_text = response.split(":")[4]
-                                rade_location = int(response.split(":")[4].split('📍')[1].split('км')[0].strip())
+                                rade_text = rloc
+                                rade_location = int(rloc.split('📍')[1].split('км')[0].strip())
                                 row.update({'rade_text': rade_text})
                                 row.update({'rade_location': rade_location})
                                 radeloc_arr.append(row)
@@ -1567,8 +1549,7 @@ def main_message(message):
                             row.update({'rade_location': 0})
                             radeloc_arr.append(row)
                         
-                        if eval(response.split(":")[5]):
-                            logger.info('true')
+                        if eval(response.split(":")[3]):
                             for radeloc in radeloc_arr:                                
                                 myquery = { 
                                             'rade_date': raid_date.timestamp(),
@@ -1593,9 +1574,6 @@ def main_message(message):
                                         'goat': goat,
                                         'users': users_onraid})
                         else:
-                            logger.info('false')
-                            logger.info(raid_date)
-                            logger.info(goat)
                             plan_raids.delete_many({
                                             'rade_date': raid_date.timestamp(),
                                             'goat': goat

@@ -1241,8 +1241,8 @@ print("#==========================#")
 print("#         RAIDS            #")    
 print("#==========================#")
 
-x = plan_raids.delete_many({'rade_date':1580162400.0})
-print(x.deleted_count)
+# x = plan_raids.delete_many({'rade_date':1580162400.0})
+# print(x.deleted_count)
 
 print("#==========================#")              
 print("#         USERS            #")    
