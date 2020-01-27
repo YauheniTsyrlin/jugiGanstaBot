@@ -58,9 +58,7 @@ if (not result):
     settings.insert_one({
         'code': 'ADMINISTRATOR', 
         'description': 'Администраторы, имеющие право изменять настройки', 
-        'value': 
-            [{'login': 'GonzikBenzyavsky'},
-             {'login': 'Innok27'}]   
+        'value': ''
              })
 
 result = settings.find_one({'code': 'PROBABILITY'})

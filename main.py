@@ -86,17 +86,13 @@ def getSetting(code: str, name=None, value=None):
         else:
             return result.get('value')
 
-ADMIN_ARR = []
-for adm in list(getSetting(code='ADMINISTRATOR')):
-    ADMIN_ARR.append(adm)
-
 def isAdmin(login: str):
-    for adm in list(ADMIN_ARR):
+    for adm in getSetting(code='ADMINISTRATOR'):
         if login.lower() == adm.get('login').lower(): return True
     return False
 
 def getAdminChat(login: str):
-    for adm in list(ADMIN_ARR):
+    for adm in getSetting(code='ADMINISTRATOR'):
         if login.lower() == adm.get('login').lower(): return adm.get('chat')
     return None
 
@@ -2205,7 +2201,7 @@ def send_messages_big(chat_id: str, text: str, reply_markup=None):
     return msg
 
 def send_message_to_admin(text: str):
-    for adm in ADMIN_ARR:
+    for adm in getSetting(code='ADMINISTRATOR'):
         if adm.get('chat'):
             send_messages_big(adm.get('chat'), text)
 
