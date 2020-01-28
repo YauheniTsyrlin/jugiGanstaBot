@@ -2249,7 +2249,7 @@ def pending_message():
         ):
         text = pending_message.get('text')
         if pending_message.get('dialog_flow_text'):
-            text = getResponseDialogFlow(None, pending_message.get('dialog_flow_text').fulfillment_text)
+            text = getResponseDialogFlow(None, pending_message.get('dialog_flow_text')).fulfillment_text
         
         if pending_message.get('reply_message'):
             reply_to_big(pending_message.get('reply_message'), text)
