@@ -840,6 +840,8 @@ def main_message(message):
                     name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
                     name = name.split('@')[1].split('👂')[0].strip()
                     u = getUserByName(name)
+                    print(f'{name} {u.getBand()}')
+                    
                     if u and (not u.getBand() == band):
                         u.setBand(band)
 
@@ -896,7 +898,7 @@ def main_message(message):
                     ping = ''
                     if not offu.isPing():
                         ping = '🔕' 
-                    report = report +  f'{i}.🏋️‍♂️{offu.getRaidWeight()} {ping} {offu.getName()} 📍{offu.getWastelandLocation()}км\n'
+                    report = report +  f'{i}.{u.getFraction()[0:1]}{offu.getRaidWeight()} {ping} {offu.getName()} 📍{offu.getWastelandLocation()}км\n'
                     i = i + 1
             report = report + '\n'
             if alianusersReport == '':
