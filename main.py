@@ -1639,9 +1639,9 @@ def main_message(message):
                             for user in getBandUsers(band):
                                 counter = counter + 1
                                 if user.isPing():
-                                    report = report + f'{counter}. @{user.getLogin()}\n'
+                                    report = report + f'{counter}. @{user.getLogin()} ({user.getName()})\n'
                                 else:
-                                    report = report + f'{counter}. 🔕{user.getLogin()}\n'
+                                    report = report + f'{counter}. 🔕{user.getLogin()} ({user.getName()})\n'
 
                                 if counter % 5 == 0:
                                     send_messages_big(message.chat.id, text=text + report)
