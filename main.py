@@ -861,7 +861,7 @@ def main_message(message):
                             updateUser(u)
                             onraidcounter = onraidcounter + 1
                             onraidReport = onraidReport + f'{onraidcounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n'
-                            onraidusers.append(registered_user)
+                            onraidusers.append(u)
                         else:
                             fuckupraidrw = fuckupraidrw + u.getRaidWeight()
                             fuckupraidcounter = fuckupraidcounter + 1
@@ -876,7 +876,11 @@ def main_message(message):
             report = report + f'🤘 <b>{band}</b>\n\n' 
             if onraidcounter > 0:
                 report = report + f'🧘‍♂️ <b>на рейде</b>: <b>{onraidcounter}/{allcounter}</b>\n'
-                report = report + onraidReport
+                # report = report + onraidReport
+                i = 1
+                for onu in sorted(onraidusers, key = lambda i: i.getRaidWeight(), reverse=True):
+                    report = report +  f'{i}.🏋️‍♂️{onu.getRaidWeight()} {onu.getName()} 👊{onu.getRaidLocation()}км\n'
+                    i = i + 1
                 report = report + f'\n<b>Общий вес</b>: 🏋️‍♂️{onraidrw}/{allrw} <b>{str(int(onraidrw/allrw*100))}%</b>\n'
             report = report + '\n'
             if fuckupraidrw > 0:
