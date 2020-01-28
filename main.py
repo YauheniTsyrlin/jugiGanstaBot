@@ -1922,7 +1922,7 @@ def callback_query(call):
     print(f'bandcall.from_user.username = {call.from_user.username}')
     print(f'isUsersBand = {isUsersBand(call.from_user.username, band)}')
     
-    if not :
+    if not isUsersBand(call.from_user.username, band):
         bot.answer_callback_query(call.id, "Это не для твоей банды!")
         return
     
