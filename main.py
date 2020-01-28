@@ -1646,7 +1646,8 @@ def main_message(message):
                                 if counter % 5 == 0:
                                     send_messages_big(message.chat.id, text=text + report)
                                     report = f''
-                            send_messages_big(message.chat.id, text=text)
+                            if not report == '':
+                                send_messages_big(message.chat.id, text=report)
 
                             # делаем голосовалку
                             markupinline = InlineKeyboardMarkup()
