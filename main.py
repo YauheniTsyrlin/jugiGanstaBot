@@ -1919,14 +1919,16 @@ def callback_query(call):
     logger.info(call.data)
     band = call.data.split('|')[2]
     logger.info(f'band = {band}')
-    logger.info(f'bandcall.from_user.username = {call.from_user.username}')
+    logger.info(f'call.from_user.username = {call.from_user.username}')
     logger.info(f'isUsersBand = {isUsersBand(call.from_user.username, band)}')
     
-    if not isUsersBand(call.from_user.username, band):
+    user = getUserByLogin(call.from_user.username)
+    logger.info(f'user.getBand() = {user.getBand()}')
+    if not user.getBand() == band:
         bot.answer_callback_query(call.id, "Это не для твоей банды!")
         return
     
-    user = getUserByLogin(call.from_user.username)
+   
 
     dt = datetime.fromtimestamp(float(call.data.split('|')[1])) 
     time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
