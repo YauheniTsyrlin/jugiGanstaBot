@@ -861,7 +861,6 @@ def main_message(message):
                             updateUser(u)
                             onraidcounter = onraidcounter + 1
                             onraidReport = onraidReport + f'{onraidcounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n'
-                            u.update({'weight': u.getRaidWeight()})
                             onraidusers.append(registered_user)
                         else:
                             fuckupraidrw = fuckupraidrw + u.getRaidWeight()
