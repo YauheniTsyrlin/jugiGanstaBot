@@ -840,7 +840,7 @@ def main_message(message):
                     name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
                     name = name.split('@')[1].split('👂')[0].strip()
                     u = getUserByName(name)
-                    if not u.getBand() == band:
+                    if u and (not u.getBand() == band):
                         u.setBand(band)
 
                     spliter = ''
@@ -885,7 +885,7 @@ def main_message(message):
                 # report = report + onraidReport
                 i = 1
                 for onu in sorted(onraidusers, key = lambda i: i.getRaidWeight(), reverse=True):
-                    report = report +  f'{i}.🏋️‍♂️{onu.getRaidWeight()} {onu.getName()} 👊{onu.getRaidLocation()}км\n'
+                    report = report +  f'{i}.{u.getFraction()[0:1]}{onu.getRaidWeight()} {onu.getName()} 👊{onu.getRaidLocation()}км\n'
                     i = i + 1
                 report = report + f'\n<b>Общий вес</b>: 🏋️‍♂️{onraidrw}/{allrw} <b>{str(int(onraidrw/allrw*100))}%</b>\n'
             report = report + '\n'
