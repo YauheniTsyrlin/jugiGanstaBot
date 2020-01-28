@@ -840,7 +840,6 @@ def main_message(message):
                     name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
                     name = name.split('@')[1].split('👂')[0].strip()
                     u = getUserByName(name)
-                    print(f'{name} {u.getBand()} {u.getRaidWeight()}')
                     
                     if u and (not u.getBand() == band):
                         u.setBand(band)
@@ -866,15 +865,10 @@ def main_message(message):
                         if '👊' in strings[i]:
                             onraidrw = onraidrw + u.getRaidWeight()
                             u.setRaidLocation(km)
-                            
-                            #onraidcounter = onraidcounter + 1
-                            #onraidReport = onraidReport + f'{onraidcounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n'
-                            #onraidusers.append(u)
+                             onraidusers.append(u)
                         else:
                             fuckupraidrw = fuckupraidrw + u.getRaidWeight()
-                            #fuckupraidcounter = fuckupraidcounter + 1
                             fuckupusers.append(u)
-                            #fuckupusersReport = fuckupusersReport + f'{fuckupraidcounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n' 
                     else:
                         aliancounter  = aliancounter + 1
                         alianusersReport = alianusersReport + f'{aliancounter}. {name} {spliter}{km}км\n'
@@ -884,7 +878,6 @@ def main_message(message):
             report = report + f'🤘 <b>{band}</b>\n\n' 
             if onraidcounter > 0:
                 report = report + f'🧘‍♂️ <b>на рейде</b>: <b>{onraidcounter}/{allcounter}</b>\n'
-                # report = report + onraidReport
                 i = 1
                 for onu in sorted(onraidusers, key = lambda i: i.getRaidWeight(), reverse=True):
                     report = report +  f'{i}.{onu.getFraction()[0:1]}{onu.getRaidWeight()} {onu.getName()} 👊{onu.getRaidLocation()}км\n'
