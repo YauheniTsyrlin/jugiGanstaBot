@@ -1064,12 +1064,18 @@ def main_message(message):
         elif (callJugi and 'профиль @' in message.text.lower()):
             
             name = tools.deEmojify(message.text.split('@')[1].strip())
+            print(f'name={name}')
             if isGoatBoss(message.from_user.username):
                 login = message.text.split('@')[1].strip()
-                if (isRegisteredUserName(name) or isRegisteredUserLogin(login)):
+                print(f'login={login}')
+                if isRegisteredUserName(name) or isRegisteredUserLogin(login):
+                    print(f'Ok')
                     user = getUserByLogin(login)
+                    print(f'user={user}')
                     if not user:
+                        print(f'not user')
                         user = getUserByName(name)
+
                     if user:
                         send_messages_big(message.chat.id, text=user.getProfile())
                 else:
