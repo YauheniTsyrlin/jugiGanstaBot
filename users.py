@@ -119,7 +119,8 @@ def importUser(registered_user):
         if (registered_user.get('accessory')):    
             u.accessory     = registered_user['accessory']
         u.setRaidLocation(registered_user['raidlocation'])
-        u.setWastelandLocation(registered_user['wastelandLocation'])
+        if (registered_user.get('wastelandLocation')):
+            u.setWastelandLocation(registered_user['wastelandLocation'])
         return u
 
 class User(object):
