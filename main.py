@@ -865,14 +865,14 @@ def main_message(message):
                             onraidrw = onraidrw + u.getRaidWeight()
                             u.setRaidLocation(km)
                             updateUser(u)
-                            onraidcounter = onraidcounter + 1
-                            onraidReport = onraidReport + f'{onraidcounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n'
-                            onraidusers.append(u)
+                            #onraidcounter = onraidcounter + 1
+                            #onraidReport = onraidReport + f'{onraidcounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n'
+                            #onraidusers.append(u)
                         else:
                             fuckupraidrw = fuckupraidrw + u.getRaidWeight()
-                            fuckupraidcounter = fuckupraidcounter + 1
+                            #fuckupraidcounter = fuckupraidcounter + 1
                             fuckupusers.append(u)
-                            fuckupusersReport = fuckupusersReport + f'{fuckupraidcounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n' 
+                            #fuckupusersReport = fuckupusersReport + f'{fuckupraidcounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n' 
                     else:
                         aliancounter  = aliancounter + 1
                         alianusersReport = alianusersReport + f'{aliancounter}. {name} {spliter}{km}км\n'
@@ -891,7 +891,13 @@ def main_message(message):
             report = report + '\n'
             if fuckupraidrw > 0:
                 report = report + '🐢 <b>Бандиты в проёбе</b>:\n'
-                report = report + fuckupusersReport
+                i = 1
+                for offu in sorted(fuckupusers, key = lambda i: i.getRaidWeight(), reverse=True):
+                    ping = ''
+                    if not offu.isPing():
+                        ping = '🔕' 
+                    report = report +  f'{i}.🏋️‍♂️{offu.getRaidWeight()} {ping} {offu.getName()} 👊{offu.getRaidLocation()}км\n'
+                    i = i + 1
             report = report + '\n'
             if alianusersReport == '':
                 pass
