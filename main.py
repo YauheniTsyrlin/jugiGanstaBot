@@ -840,7 +840,7 @@ def main_message(message):
                     name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
                     name = name.split('@')[1].split('👂')[0].strip()
                     u = getUserByName(name)
-                    print(f'{name} {u.getBand()}')
+                    print(f'{name} {u.getBand()} {u.getRaidWeight()}')
                     
                     if u and (not u.getBand() == band):
                         u.setBand(band)
