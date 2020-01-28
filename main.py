@@ -899,14 +899,14 @@ def main_message(message):
                 report = report + '🐀 <b>Крысы в банде</b> (нет регистрации):\n'
                 report = report + alianusersReport
             
-            if onraidcounter > 0 or aliancounter > 0:
-                if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                    bot.delete_message(message.chat.id, message.message_id)
-                    send_messages_big(message.chat.id, text=report)
-                else:
-                    censored(message)
+            #if onraidcounter > 0 or aliancounter > 0:
+            if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                bot.delete_message(message.chat.id, message.message_id)
+                send_messages_big(message.chat.id, text=report)
             else:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_one_on_rade').fulfillment_text)
+                censored(message)
+            #else:
+            #    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_one_on_rade').fulfillment_text)
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
@@ -1064,16 +1064,11 @@ def main_message(message):
         elif (callJugi and 'профиль @' in message.text.lower()):
             
             name = tools.deEmojify(message.text.split('@')[1].strip())
-            print(f'name={name}')
             if isGoatBoss(message.from_user.username):
                 login = message.text.split('@')[1].strip()
-                print(f'login={login}')
                 if isRegisteredUserName(name) or isRegisteredUserLogin(login):
-                    print(f'Ok')
                     user = getUserByLogin(login)
-                    print(f'user={user}')
                     if not user:
-                        print(f'not user')
                         user = getUserByName(name)
 
                     if user:
