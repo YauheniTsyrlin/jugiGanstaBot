@@ -1916,11 +1916,11 @@ def main_message(message):
 def callback_query(call):
     #     0              1           2        3
     # dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}
-
+    logger.info(call.data)
     band = call.data.split('|')[2]
-    print(f'band = {band}')
-    print(f'bandcall.from_user.username = {call.from_user.username}')
-    print(f'isUsersBand = {isUsersBand(call.from_user.username, band)}')
+    logger.info(f'band = {band}')
+    logger.info(f'bandcall.from_user.username = {call.from_user.username}')
+    logger.info(f'isUsersBand = {isUsersBand(call.from_user.username, band)}')
     
     if not isUsersBand(call.from_user.username, band):
         bot.answer_callback_query(call.id, "Это не для твоей банды!")
