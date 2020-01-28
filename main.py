@@ -840,6 +840,8 @@ def main_message(message):
                     name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
                     name = name.split('@')[1].split('👂')[0].strip()
                     u = getUserByName(name)
+                    if not u.getBand() == band:
+                        u.setBand(band)
 
                     spliter = ''
                     km = ''
