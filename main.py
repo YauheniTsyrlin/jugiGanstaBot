@@ -574,7 +574,6 @@ def main_message(message):
         return
 
     black_list = getSetting(code='BLACK_LIST', name=message.from_user.username)
-    print(black_list)
     if black_list:
         send_messages_big(message.chat.id, text=f'{message.from_user.username} заслужил пожизненный бан {black_list}', reply_markup=None)
         send_message_to_admin(f'⚠️Внимание! \n {message.from_user.username} написал Джу:\n\n {message.text}')
@@ -1908,7 +1907,7 @@ def main_message(message):
 def callback_query(call):
     #     0              1           2        3
     # dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}
-    
+
     band = call.data.split('|')[2]
     
     if not isUsersBand(call.from_user.username, band):

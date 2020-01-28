@@ -1160,7 +1160,6 @@ newvalues = { "$set": { "value":
                             'value': 600
                         }
 
-                        
                     ]
                 } 
             } 
@@ -1190,13 +1189,14 @@ u = settings.update_one(myquery, newvalues)
 
 myquery = { "code": 'ADMINISTRATOR' }
 newvalues = { "$set": { "value": 
-            [
-                {
-                    'login': 'GonzikBenzyavsky',
-                    'chat' : 497065022
+                    [
+                        {
+                            'login': 'GonzikBenzyavsky',
+                            'chat' : 497065022
+                        }
+                    ]
                 }
-            ]
-        } } 
+            } 
              
 u = settings.update_one(myquery, newvalues)
 
