@@ -1918,8 +1918,11 @@ def callback_query(call):
     # dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}
 
     band = call.data.split('|')[2]
+    print(f'band = {band}')
+    print(f'bandcall.from_user.username = {call.from_user.username}')
+    print(f'isUsersBand = {isUsersBand(call.from_user.username, band)}')
     
-    if not isUsersBand(call.from_user.username, band):
+    if not :
         bot.answer_callback_query(call.id, "Это не для твоей банды!")
         return
     
