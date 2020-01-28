@@ -866,6 +866,7 @@ def main_message(message):
                             onraidrw = onraidrw + u.getRaidWeight()
                             u.setRaidLocation(km)
                             onraidusers.append(u)
+                            print(u.getName())
                         else:
                             fuckupraidrw = fuckupraidrw + u.getRaidWeight()
                             fuckupusers.append(u)
