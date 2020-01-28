@@ -1106,11 +1106,11 @@ def main_message(message):
             else:                 
                 send_messages_big(message.chat.id, text=f'{login} уволен нафиг! Удалено {doc.deleted_count} записей в дневнике бандитов и {war.deleted_count} в дневнике боев!')
         elif (callJugi and 'профиль' in message.text.lower() ):
-            # if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
-            #     pass
-            # else:
-            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
-            #     return
+            if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                pass
+            else:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
+                return
             user = users.getUser(message.from_user.username, registered_users)
             if user:
                 warior = getWariorByName(user.getName(), user.getFraction())
@@ -1612,11 +1612,11 @@ def main_message(message):
                                 send_messages_big(message.chat.id, text=f'Ты пытался созвать на захват банду 🤟<b>{band}</b>\n' + getResponseDialogFlow(message, 'not_right_band').fulfillment_text)
                                 return  
 
-                            if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
-                                pass
-                            else:
-                                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
-                                return
+                            # if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                            #     pass
+                            # else:
+                            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
+                            #     return
 
                             time_str = response.split(response.split(":")[3])[1][1:]
                             dt = parse(time_str)
