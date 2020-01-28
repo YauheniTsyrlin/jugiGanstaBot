@@ -865,7 +865,7 @@ def main_message(message):
                         if '👊' in strings[i]:
                             onraidrw = onraidrw + u.getRaidWeight()
                             u.setRaidLocation(km)
-                             onraidusers.append(u)
+                            onraidusers.append(u)
                         else:
                             fuckupraidrw = fuckupraidrw + u.getRaidWeight()
                             fuckupusers.append(u)
