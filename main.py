@@ -187,6 +187,13 @@ def getMyGoatName(login: str):
 
     return None 
 
+def getBandUsers(band: str):
+    users = []
+    for user in list(USERS_ARR):
+        if user.getBand() and band.lower() == user.getBand().lower(): 
+            users.append(user)
+    return users
+
 def getGoatBands(goatName: str):
     for goat in getSetting(code='GOATS_BANDS'):
         if goat.get('name') == goatName:
@@ -1625,25 +1632,19 @@ def main_message(message):
                             dungeon_km = getSetting(code='DUNGEONS', name=dungeon)
                             text = f'<b>Захват!</b> 🤟{band} <b>{dungeon} в {time_str}</b>\n\n'
                             #first_string = f'<b>Захват!</b> 🤟{band} {time_str} <b>{dungeon}</b>\n'
-                            
-                            usersarr = []
-                            for registered_user in registered_users.find({"band": f"{band}"}):
-                                user = users.importUser(registered_user)
-                                if user.isPing():
-                                    registered_user.update({'weight': user.getRaidWeight()})
-                                    usersarr.append(registered_user)
 
                             # Пингуем
                             counter = 0
-                            pingusers = []
                             report = f''
-                            for pu in sorted(usersarr, key = lambda i: i['weight'], reverse=True):
+                            for user in getBandUsers(band):
                                 counter = counter + 1
-                                pingusers.append(pu)
-                                report = report + f'{counter}. @{pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
+                                if user.isPing():
+                                    report = report + f'{counter}. @{user.getLogin()}\n'
+                                else:
+                                    report = report + f'{counter}. 🔕{user.getLogin()}\n'
+
                                 if counter % 5 == 0:
                                     send_messages_big(message.chat.id, text=text + report)
-                                    pingusers = []
                                     report = f''
 
                             # делаем голосовалку
