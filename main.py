@@ -1635,7 +1635,7 @@ def main_message(message):
 
                             # Пингуем
                             counter = 0
-                            report = f'{len(getBandUsers(band))}'
+                            report = f''
                             for user in getBandUsers(band):
                                 counter = counter + 1
                                 if user.isPing():
