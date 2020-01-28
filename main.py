@@ -918,9 +918,10 @@ def main_message(message):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_DEAD'), 1)[0]['value'])
             return
     if 'тык' == message.text.lower() or 'тык!' == message.text.lower() or 'тык!)' == message.text.lower() or 'тык)' == message.text.lower() or ' тык' in message.text.lower() or ' тык' in message.text.lower():
-        if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
-            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_FINGER_TYK'), 1)[0]['value'])
-            return
+        if not isGoatSecretChat(message.from_user.username, message.chat.id):
+            if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
+                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_FINGER_TYK'), 1)[0]['value'])
+                return
     if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да?' == message.text.lower() or 'да!)' == message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
