@@ -863,10 +863,10 @@ def main_message(message):
                         allcounter = allcounter + 1
                         u.setWastelandLocation(km)
                         if '👊' in strings[i]:
+                            onraidcounter = onraidcounter + 1
                             onraidrw = onraidrw + u.getRaidWeight()
                             u.setRaidLocation(km)
                             onraidusers.append(u)
-                            print(u.getName())
                         else:
                             fuckupraidrw = fuckupraidrw + u.getRaidWeight()
                             fuckupusers.append(u)
