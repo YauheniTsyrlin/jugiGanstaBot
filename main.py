@@ -894,7 +894,7 @@ def main_message(message):
                     ping = ''
                     if not offu.isPing():
                         ping = '🔕' 
-                    report = report +  f'{i}.🏋️‍♂️{offu.getRaidWeight()} {ping} {offu.getName()} 👊{offu.getRaidLocation()}км\n'
+                    report = report +  f'{i}.🏋️‍♂️{offu.getRaidWeight()} {ping} {offu.getName()} 👊{offu.getWastelandLocation()}км\n'
                     i = i + 1
             report = report + '\n'
             if alianusersReport == '':
