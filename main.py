@@ -1908,8 +1908,9 @@ def main_message(message):
 def callback_query(call):
     #     0              1           2        3
     # dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}
-
+    
     band = call.data.split('|')[2]
+    
     if not isUsersBand(call.from_user.username, band):
         bot.answer_callback_query(call.id, "Это не для твоей банды!")
         return
@@ -1991,7 +1992,6 @@ def callback_query(call):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("toreward"))
 def callback_query(call):
-    logger.info(f'{call.data}')
 
     if not isGoatBoss(call.from_user.username):
         if not isAdmin(call.from_user.username):
