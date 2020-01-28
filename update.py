@@ -880,6 +880,10 @@ newvalues = { "$set": { "value":
                                 {
                                     'name': '1',
                                     'value': 'CAADAgADKQAD29t-AAFgFIcFdTXiDhYE'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': 'CAACAgIAAxkBAAJ-uF4wjlwuQ6ort2ZkdYlSovXbkNNZAAIhAAPyBCAW9ZOxMuI8IPMYBA'
                                 }
                             ] 
                         },

@@ -58,6 +58,8 @@ def updateUser(newUser, oldUser):
         oldUser.raid = newUser.raid
     if hasattr(newUser, 'raidlocation'):
         oldUser.raidlocation = newUser.raidlocation
+    if hasattr(newUser, 'wastelandLocation'):
+        oldUser.wastelandLocation = newUser.wastelandLocation
     if newUser.dzen:
         oldUser.dzen = newUser.dzen
     if newUser.timeUpdate:
@@ -117,6 +119,7 @@ def importUser(registered_user):
         if (registered_user.get('accessory')):    
             u.accessory     = registered_user['accessory']
         u.setRaidLocation(registered_user['raidlocation'])
+        u.setWastelandLocation(registered_user['wastelandLocation'])
         return u
 
 class User(object):
@@ -133,6 +136,7 @@ class User(object):
         self.timeBan  = None
         self.raid = None
         self.raidlocation = None
+        self.wastelandLocation = None
         self.ping = None
         self.chat = None
         self.accessory = None
@@ -192,6 +196,9 @@ class User(object):
             if ('📍' in strings[i] and '👊' in strings[i]):
                 self.raidlocation = int(strings[i].split('👣')[1].split('км.')[0])
                 self.raid = strings[i].split('📍')[1].split('👊')[0].strip()
+            elif ('📍' in strings[i]):
+                self.wastelandLocation = int(strings[i].split('👣')[1].split('км.')[0])
+
             if ('🏵' in strings[i]):
                 if '/me' in text:
                     self.setDzen(int(strings[i].count('🏵')))
@@ -262,6 +269,8 @@ class User(object):
         string = string + f'├🗣{self.charisma}|🤸🏽‍{self.agility}|🔋{self.stamina}|\n'
         if self.raid:
             string = string + f'├👊{self.raid}\n'
+        elif self.wastelandLocation:
+            string = string + f'├👣Замечен на {self.wastelandLocation}км\n'
         string = string + f'└🏋️‍♂️Вес на рейде: {self.getRaidWeight()}\n'
         string = string + f'\n'
 
@@ -373,6 +382,11 @@ class User(object):
         self.raidlocation = raidlocation  
     def getRaidLocation(self):
         return self.raidlocation
+
+    def setWastelandLocation(self, wastelandLocation):
+        self.wastelandLocation = wastelandLocation  
+    def getWastelandLocation(self):
+        return self.wastelandLocation
 
     def setStatus(self, status):
         self.status = status  

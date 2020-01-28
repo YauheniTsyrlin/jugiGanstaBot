@@ -835,8 +835,6 @@ def main_message(message):
                     )
                     updateUser(None)
 
-
-
                 if '👂' in strings[i]:
                     name = strings[i]
                     name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
@@ -860,11 +858,11 @@ def main_message(message):
                     if u:
                         allrw = allrw + u.getRaidWeight()
                         allcounter = allcounter + 1
-                        
+                        u.setWastelandLocation(km)
                         if '👊' in strings[i]:
                             onraidrw = onraidrw + u.getRaidWeight()
                             u.setRaidLocation(km)
-                            updateUser(u)
+                            
                             #onraidcounter = onraidcounter + 1
                             #onraidReport = onraidReport + f'{onraidcounter}.🏋️‍♂️{u.getRaidWeight()} {u.getName()} {spliter}{km}км\n'
                             #onraidusers.append(u)
@@ -876,7 +874,7 @@ def main_message(message):
                     else:
                         aliancounter  = aliancounter + 1
                         alianusersReport = alianusersReport + f'{aliancounter}. {name} {spliter}{km}км\n'
-                        
+                    updateUser(u)
                 i = i + 1
             
             report = report + f'🤘 <b>{band}</b>\n\n' 
@@ -925,7 +923,7 @@ def main_message(message):
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_LIKE'), 1)[0]['value'])
             return
-    if 'пиздец' in message.text.lower():
+    if 'пидорасы' == message.text.lower() or 'пидоры' == message.text.lower() or 'пиздец' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_DEAD'), 1)[0]['value'])
             return
@@ -949,10 +947,13 @@ def main_message(message):
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
                 bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_A_PINDA'), 1)[0]['value'])
                 return
+
     if 'тебя буквально размазали' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
             return       
+    
+    
     if message.reply_to_message and 'хуифицируй' in message.text.lower():
         if not isGoatSecretChat(message.from_user.username, message.chat.id):
             phrases = message.reply_to_message.text.split('\n')
