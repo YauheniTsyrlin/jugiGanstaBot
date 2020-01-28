@@ -949,7 +949,7 @@ def main_message(message):
                 text = text + responce + '\n'
             reply_to_big(message.reply_to_message.json, text)
         else:
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_secretchat').fulfillment_text)
+            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
         return
     if privateChat and isGoatBoss(message.from_user.username) and message.reply_to_message:
         if message.text.lower().startswith('рассылка в'):
@@ -1109,7 +1109,7 @@ def main_message(message):
             if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                 pass
             else:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_secretchat').fulfillment_text)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
                 return
             user = users.getUser(message.from_user.username, registered_users)
             if user:
@@ -1139,7 +1139,7 @@ def main_message(message):
                         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                             pass
                         else:
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_secretchat').fulfillment_text)
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
                             return
 
                         # Собираем всех пользоватлей с бандой Х
@@ -1227,7 +1227,7 @@ def main_message(message):
                         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                             pass
                         else:
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_secretchat').fulfillment_text)
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
                             return
 
                         goat = getMyGoatName(message.from_user.username)
@@ -1279,7 +1279,7 @@ def main_message(message):
                         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                             pass
                         else:
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_secretchat').fulfillment_text)
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
                             return
 
                         goatName = response.split(':')[2].strip()
@@ -1304,7 +1304,7 @@ def main_message(message):
                         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                             pass
                         else:
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_secretchat').fulfillment_text)
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
                             return
 
                         goatName = response.split(':')[2].strip()
@@ -1327,7 +1327,7 @@ def main_message(message):
                         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                             pass
                         else:
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_secretchat').fulfillment_text)
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
                             return
 
                         goatName = response.split(':')[2].strip()
@@ -1514,7 +1514,7 @@ def main_message(message):
                         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                             pass
                         else:
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_secretchat').fulfillment_text)
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
                             return
                         
                         goat = getMyGoatName(message.from_user.username)
@@ -1615,7 +1615,7 @@ def main_message(message):
                             if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                                 pass
                             else:
-                                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_secretchat').fulfillment_text)
+                                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
                                 return
 
                             time_str = response.split(response.split(":")[3])[1][1:]
@@ -1767,7 +1767,7 @@ def main_message(message):
                         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                             pass
                         else:
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_secretchat').fulfillment_text)
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
                             return
 
                         report = ''
