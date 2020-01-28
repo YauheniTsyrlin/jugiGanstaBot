@@ -939,7 +939,12 @@ newvalues = { "$set": { "value":
                                 {
                                     'name': '1',
                                     'value': 'CAADAgADHwAD8gQgFh9xxAnDN9D6FgQ'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': 'CAACAgIAAxkBAAJ-jF4wa3_QsJkHiyfbdYwB-LjkKcNOAAIgAAPyBCAWr8697eDb43AYBA'
                                 }
+                                
                             ] 
                         },
                         {
