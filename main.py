@@ -887,7 +887,7 @@ def main_message(message):
                 # report = report + onraidReport
                 i = 1
                 for onu in sorted(onraidusers, key = lambda i: i.getRaidWeight(), reverse=True):
-                    report = report +  f'{i}.{u.getFraction()[0:1]}{onu.getRaidWeight()} {onu.getName()} 👊{onu.getRaidLocation()}км\n'
+                    report = report +  f'{i}.{onu.getFraction()[0:1]}{onu.getRaidWeight()} {onu.getName()} 👊{onu.getRaidLocation()}км\n'
                     i = i + 1
                 report = report + f'\n<b>Общий вес</b>: 🏋️‍♂️{onraidrw}/{allrw} <b>{str(int(onraidrw/allrw*100))}%</b>\n'
             report = report + '\n'
@@ -898,7 +898,7 @@ def main_message(message):
                     ping = ''
                     if not offu.isPing():
                         ping = '🔕' 
-                    report = report +  f'{i}.{u.getFraction()[0:1]}{offu.getRaidWeight()} {ping} {offu.getName()} 📍{offu.getWastelandLocation()}км\n'
+                    report = report +  f'{i}.{offu.getFraction()[0:1]}{offu.getRaidWeight()} {ping} {offu.getName()} 📍{offu.getWastelandLocation()}км\n'
                     i = i + 1
             report = report + '\n'
             if alianusersReport == '':
