@@ -811,7 +811,8 @@ def main_message(message):
                         print('YES')
                         dungeon = d['name']
                         break
-                report = f'✊️Захват <b>{dungeon}</b>' + '\n'
+                #report = f'✊️Захват <b>{dungeon}</b>' + '\n'
+                report = s
 
             if s.startswith('🤘'):
                 band = s.replace('🤘','')
