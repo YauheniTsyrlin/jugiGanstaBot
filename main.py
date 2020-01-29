@@ -807,6 +807,7 @@ def main_message(message):
                 for d in getSetting(code='DUNGEONS'):
                     if tools.deEmojify(d['name']) in s:
                         dungeon = d['name']
+                        break
             report = f'✊️Захват <b>{dungeon}</b>' + '\n'
 
             if s.startswith('🤘'):
