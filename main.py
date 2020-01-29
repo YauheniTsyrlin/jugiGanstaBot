@@ -795,6 +795,36 @@ def main_message(message):
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
+    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('✊️Захват') and 'Вы автоматически отправитесь на совместную зачистку локации' in message.text):
+        strings = message.text.split('\n')
+        dungeon = ''
+        band = ''
+        report = ''
+        ondungeon = ''
+        i = 1
+        for s in strings:
+            if s.startswith('✊️Захват'):
+                for d in getSetting(code='DUNGEONS'):
+                    if tools.deEmojify(d['name']) in s:
+                        dungeon = d['name']
+                report = s + '\n'
+
+            if s.startswith('🤘'):
+                band = s.replace('🤘','')
+                report = report + s + '\n\n' 
+
+            if s.startswith('в сборе.'):
+                report = report + s
+
+            if s.startswith('👊'):
+                name = s.replace('👊','')
+                user = getUserByName(name)
+                report = report + s
+                i = i + 1
+        bot.edit_message_text(chat_id=message.chat.id, message_id=message.message_id, text=report, parse_mode='HTML', reply_markup=markupinline)
+
+            
+    
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Панель банды.' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
@@ -937,7 +967,7 @@ def main_message(message):
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
                 bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_DA_PINDA'), 1)[0]['value'])
                 return
-    if 'неа' == message.text.lower() or 'нет' == message.text.lower() or 'нет!' == message.text.lower() or 'нет?' == message.text.lower() or 'нет!)' == message.text.lower():
+    if 'нэт' == message.text.lower() or 'неа' == message.text.lower() or 'нет' == message.text.lower() or 'нет!' == message.text.lower() or 'нет?' == message.text.lower() or 'нет!)' == message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='NO_STICKER'))):
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
                 bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_NO_PINDA'), 1)[0]['value'])
@@ -1638,7 +1668,7 @@ def main_message(message):
                             time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
                             dungeon = response.split(":")[3]
                             dungeon_km = getSetting(code='DUNGEONS', name=dungeon)
-                            text = f'<b>Захват!</b> 🤟{band} <b>{dungeon} в {time_str}</b>\n\n'
+                            text = f'✊️Захват <b>{dungeon}\n🤟{band}\nв {time_str}</b>\n\n'
                             #first_string = f'<b>Захват!</b> 🤟{band} {time_str} <b>{dungeon}</b>\n'
 
                             # Пингуем
@@ -1935,8 +1965,8 @@ def callback_query(call):
         InlineKeyboardButton(f"Я в деле! ✅", callback_data=f"dungeon_yes|{dt.timestamp()}|{band}|{dungeon_km}")
         )
 
-    text=f'<b>Захват!</b> 🤟{band} <b>{dungeon} в {time_str}</b>\n\n'
-    
+    text = f'✊️Захват <b>{dungeon}\n🤟{band}\nв {time_str}</b>\n\n'
+
     signedup = False
     if call.data.startswith("dungeon_yes"):
         signedup = True
