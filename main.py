@@ -821,7 +821,7 @@ def main_message(message):
                 user = getUserByName(name)
                 report = report + s
                 i = i + 1
-        bot.edit_message_text(chat_id=message.chat.id, message_id=message.message_id, text=report, parse_mode='HTML', reply_markup=markupinline)
+        bot.edit_message_text(chat_id=message.chat.id, message_id=message.message_id, text=report, parse_mode='HTML')
 
             
     
