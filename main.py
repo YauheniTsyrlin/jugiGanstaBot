@@ -829,7 +829,7 @@ def main_message(message):
                 i = i + 1
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=report)
-            
+        return  
     
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Панель банды.' in message.text):
         #write_json(message.json)
