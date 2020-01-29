@@ -821,8 +821,8 @@ def main_message(message):
                 user = getUserByName(name)
                 report = report + s
                 i = i + 1
-        bot.edit_message_text(chat_id=message.chat.id, message_id=message.message_id, text=report, parse_mode='HTML')
-
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=report)
             
     
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Панель банды.' in message.text):
