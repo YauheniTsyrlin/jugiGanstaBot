@@ -804,7 +804,7 @@ def main_message(message):
         i = 1
         for s in strings:
             if s.startswith('✊️Захват'):
-                print(s)
+                print(f'{s}==============================================)
                 for d in getSetting(code='DUNGEONS'):
                     print(tools.deEmojify(d['name']))
                     if tools.deEmojify(d['name']) in s:
