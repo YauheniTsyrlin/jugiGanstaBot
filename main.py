@@ -813,13 +813,13 @@ def main_message(message):
                 band = s.replace('🤘','')
                 report = report + s + '\n\n' 
 
-            if s.startswith('в сборе.'):
-                report = report + s
+            if 'в сборе.' in s:
+                report = report + f'<b>{s}</b>' + '\n'
 
             if s.startswith('👊'):
                 name = s.replace('👊','')
                 user = getUserByName(name)
-                report = report + s
+                report = report + s + '\n'
                 i = i + 1
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=report)
