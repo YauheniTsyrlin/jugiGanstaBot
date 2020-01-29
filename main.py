@@ -1195,7 +1195,7 @@ def main_message(message):
                             if pu["ping"] == True:
                                 report = report + f'{counter}. @{pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
                             else:
-                                report = report + f'{counter}. {pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
+                                report = report + f'{counter}. 🔕{pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
                             if counter % 5 == 0:
                                 send_messages_big(message.chat.id, text=first_string + report)
                                 pingusers = []
@@ -2283,7 +2283,7 @@ def ping_on_reade(fuckupusers, chat_id):
         if fu.isPing():
             fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()}\n'
         else:
-            fuckupusersReport = fuckupusersReport + f'{counter}. {fu.getLogin()}\n'
+            fuckupusersReport = fuckupusersReport + f'{counter}. 🔕{fu.getLogin()}\n'
 
         if counter % 5 == 0:
             send_messages_big(chat_id, text=fuckupusersReport)
