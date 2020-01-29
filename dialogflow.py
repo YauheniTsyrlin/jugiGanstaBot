@@ -56,27 +56,24 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
     return response.query_result
 
 def delete_context(project_id, session_id, context_id):
-    import dialogflow_v2 as dialogflow
-    contexts_client = dialogflow.ContextsClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
+    contexts_client = dialogflow_v2.ContextsClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
     context_name = contexts_client.context_path(project_id, session_id, context_id)
     contexts_client.delete_context(context_name)
 
 def create_context(project_id, session_id, context_id, lifespan_count, parameters):
-    import dialogflow_v2 as dialogflow
-    contexts_client = dialogflow.ContextsClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
+    contexts_client = dialogflow_v2.ContextsClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
 
     session_path = contexts_client.session_path(project_id, session_id)
     context_name = contexts_client.context_path(
         project_id, session_id, context_id)
 
-    context = dialogflow.types.Context(
+    context = dialogflow_v2.types.Context(
         name=context_name, lifespan_count=lifespan_count, parameters=parameters)
 
     response = contexts_client.create_context(session_path, context)
 
 def get_contexts(project_id, session_id, name):
-    import dialogflow_v2 as dialogflow
-    contexts_client = dialogflow.ContextsClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
+    contexts_client = dialogflow_v2.ContextsClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
     name_context = contexts_client.context_path(project_id, session_id, name)
     try:
         context = contexts_client.get_context(name_context)
@@ -92,8 +89,7 @@ def get_contexts(project_id, session_id, name):
         return None
 
 def get_entity(project_id, session_id, name):
-    import dialogflow_v2 as dialogflow
-    entity_client = dialogflow.EntityTypesClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
+    entity_client = dialogflow_v2.EntityTypesClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
     name_entity = entity_client.entity_type_path(project_id, session_id, name)
     try:
         entity = entity_client.get_entity_type(name_entity)
@@ -110,8 +106,7 @@ def get_entity(project_id, session_id, name):
         return None
 
 def list_entities(project_id, entity_type_id='4bf591fa-680d-4477-a91e-079ead57246b'):
-    import dialogflow_v2 as dialogflow
-    entity_types_client = dialogflow.EntityTypesClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
+    entity_types_client = dialogflow_v2.EntityTypesClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
 
     parent = entity_types_client.entity_type_path(
         project_id, entity_type_id)

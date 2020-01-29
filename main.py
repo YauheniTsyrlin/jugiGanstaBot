@@ -10,6 +10,7 @@ import dialogflow
 
 import logging
 import ssl
+from mem_top import mem_top
 
 from aiohttp import web
 from yandex_geocoder import Client
@@ -52,7 +53,7 @@ plan_raids      = mydb["rades"]
 dungeons        = mydb["dungeons"]
 report_raids    = mydb["report_raids"]
 
-morph = pymorphy2.MorphAnalyzer()
+
 
 logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
@@ -389,6 +390,7 @@ def getResponseDialogFlow(message, text: str, event=None):
         return dialogflow.getResponseDialogFlow('system_user', text, event, None, message)
 
 def getResponseHuificator(text):
+    morph = pymorphy2.MorphAnalyzer()
     report = ''
     words = text.split(' ')
     for word in words:
