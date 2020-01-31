@@ -795,25 +795,23 @@ def main_message(message):
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
-    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('✊️Захват') and 'Вы автоматически отправитесь на совместную зачистку локации' in message.text):
+    elif (message.forward_from and 'Вы автоматически отправитесь на совместную зачистку локации' in message.text and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('✊️Захват') ):
         strings = message.text.split('\n')
         dungeon = ''
         band = ''
         report = ''
         ondungeon = ''
+        users_ondungeon = []
         i = 1
         for s in strings:
             if s.startswith('✊️Захват'):
                 print(f'{s}')
                 for d in getSetting(code='DUNGEONS'):
-                    print(tools.deEmojify(d['name']))
-                    if tools.deEmojify(d['name']) in s:
-                        print('YES')
+                    if tools.deEmojify(s.replace('✊️Захват ','')) in d['name'] :
                         dungeon = d['name']
-                        print(dungeon)
                         break
-                #report = f'✊️Захват <b>{dungeon}</b>' + '\n'
-                report = s
+
+                report = f'✊️Захват <b>{dungeon}</b>' + '\n'
 
             if s.startswith('🤘'):
                 band = s.replace('🤘','')
@@ -825,13 +823,14 @@ def main_message(message):
             if s.startswith('👊'):
                 name = s.replace('👊','')
                 user = getUserByName(name)
+                users_ondungeon.append(user)
                 report = report + s + '\n'
                 i = i + 1
+
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=report)
         return  
-    
-    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Панель банды.' in message.text):
+    elif (message.forward_from and 'Панель банды.' in message.text and message.forward_from.username == 'WastelandWarsBot'):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
 
@@ -951,7 +950,27 @@ def main_message(message):
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
 
-    if 'грац' in message.text.lower() or 'грац!' in message.text.lower() or  'лол' in message.text.lower() or 'lol' in message.text.lower():
+    if message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text:
+        if not privateChat:
+            if not isGoatSecretChat(message.from_user.username, message.chat.id):
+                replacements =  {
+                                    "0": str(random.randint(1,9)), 
+                                    "1": str(random.randint(1,9)), 
+                                    "2": str(random.randint(1,9)), 
+                                    "3": str(random.randint(1,9)), 
+                                    "4": str(random.randint(1,9)), 
+                                    "5": str(random.randint(1,9)), 
+                                    "6": str(random.randint(1,9)), 
+                                    "7": str(random.randint(1,9)), 
+                                    "8": str(random.randint(1,9)), 
+                                    "9": str(random.randint(1,9)) 
+                                }
+                text = "".join([replacements.get(c, c) for c in message.text])
+                bot.delete_message(message.chat.id, message.message_id)
+                send_messages_big(message.chat.id, text=f'🗣 {userIAm.getName()} ({userIAm.getLogin()}):\n\n'+text)
+                return
+
+    if 'gratz' in message.text.lower() or 'грац' in message.text.lower() or 'грац!' in message.text.lower() or  'лол' in message.text.lower() or 'lol' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_LOVE'), 1)[0]['value'])
             return
@@ -967,6 +986,7 @@ def main_message(message):
         if not isGoatSecretChat(message.from_user.username, message.chat.id):
             if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
                 bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_FINGER_TYK'), 1)[0]['value'])
+                logger.info(mem_top())
                 return
     if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да?' == message.text.lower() or 'да!)' == message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
@@ -983,9 +1003,8 @@ def main_message(message):
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
                 bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_A_PINDA'), 1)[0]['value'])
                 return
-
     if 'тебя буквально размазали' in message.text.lower():
-        if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='SALUTE_STICKER'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
             return       
     

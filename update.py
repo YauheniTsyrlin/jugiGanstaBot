@@ -660,10 +660,19 @@ newvalues = { "$set": { "value":
                                 {
                                     'name': '120',
                                     'value': '🧸 Мишка-обнимашка'
+                                },
+                                {
+                                    'name': '121',
+                                    'value': '💪 За храбрость и мужество'
+                                },
+                                {
+                                    'name': '122',
+                                    'value': '🍌 Банан преданности'
+                                },
+                                {
+                                    'name': '123',
+                                    'value': '🍑 Персик преданности'
                                 }
-                                
-                                
-                                
                             ] 
                         }
                     ]
@@ -1187,6 +1196,11 @@ newvalues = { "$set": { "value":
                         },
                         {
                             # Вероятность
+                            'name': 'SALUTE_STICKER',
+                            'value': 0.50
+                        },
+                        {
+                            # Вероятность
                             'name': 'A_STICKER',
                             'value': 1.00
                         },
@@ -1212,14 +1226,14 @@ newvalues = { "$set": { "value":
                         {
                             'name': 'KILLERS',
                             'value': {
-                                'from_date': datetime.datetime(2020, 1, 23, 0, 0, 0).timestamp(), 
+                                'from_date': datetime.datetime(2020, 1, 31, 6, 0, 0).timestamp(), 
                                 'to_date': None
                             }
                         },
                         {
                             'name': 'RAIDS',
                             'value': {
-                                'from_date': datetime.datetime(2020, 1, 23, 0, 0, 0).timestamp(), 
+                                'from_date': datetime.datetime(2020, 1, 31, 6, 0, 0).timestamp(), 
                                 'to_date': None
                             }
                         }
