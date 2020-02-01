@@ -1444,7 +1444,7 @@ def main_message(message):
                                 markupinline.add(InlineKeyboardButton(f"{acc}", callback_data=f"pickupaccessory|{login}|{i}"))
                                 i = i + 1
                         if not accessory == '':
-                            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickupaccessory_exit"))
+                            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickupaccessory_exit|{login}"))
                             msg = send_messages_big(message.chat.id, text=getResponseDialogFlow(message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{accessory}\nЧто изьять?', reply_markup=markupinline)
                         else:
                             msg = send_messages_big(message.chat.id, text='У него ничего нет, он голодранец!' , reply_markup=markupinline)
@@ -2165,6 +2165,11 @@ def callback_query(call):
         if not isAdmin(call.from_user.username):
             bot.answer_callback_query(call.id, "Тебе не положено!")
             return
+
+    login = call.data.split('|')[1]
+    user = getUserByLogin(login)
+    markupinline = InlineKeyboardMarkup()
+
     accessory = ''
     if user.getAccessory() and len(user.getAccessory())>0:
         i = 0
@@ -2179,19 +2184,25 @@ def callback_query(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'Отъём завершен!\n{accessory}', parse_mode='HTML')
         return
 
-    bot.answer_callback_query(call.id, "Ты забрал это с полки...")
-    login = call.data.split('|')[1]
-    user = getUserByLogin(login)
     acc = user.getAccessory()[int(call.data.split('|')[2])]
+    bot.answer_callback_query(call.id, "Ты забрал это с полки...")
+    
     user.removeAccessory(acc)
     updateUser(user)
 
-    markupinline = InlineKeyboardMarkup()
-    
+    accessory = ''
+    if user.getAccessory() and len(user.getAccessory())>0:
+        i = 0
+        for acc in user.getAccessory():
+            accessory = accessory + f'▫️ {acc}\n'
+            markupinline.add(InlineKeyboardButton(f"{acc}", callback_data=f"pickupaccessory|{login}|{i}"))
+            i = i + 1
+    text = 'У него больше ничего нет!'
+
     if not accessory == '':
         text = getResponseDialogFlow(call.message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{accessory}\nЧто изьять?'
         
-    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickupaccessory_exit"))
+    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickupaccessory_exit|{login}"))
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("capture_"))
