@@ -950,6 +950,7 @@ def main_message(message):
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
 
+    # Заменяем в сообщениях от ВВ все цифры 
     if message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text:
         if not privateChat:
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
@@ -2164,9 +2165,18 @@ def callback_query(call):
         if not isAdmin(call.from_user.username):
             bot.answer_callback_query(call.id, "Тебе не положено!")
             return
+    accessory = ''
+    if user.getAccessory() and len(user.getAccessory())>0:
+        i = 0
+        for acc in user.getAccessory():
+            accessory = accessory + f'▫️ {acc}\n'
+            markupinline.add(InlineKeyboardButton(f"{acc}", callback_data=f"pickupaccessory|{login}|{i}"))
+            i = i + 1
+    text = 'У него больше ничего нет!'
 
     if 'pickupaccessory_exit' in call.data:
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='Отъём завершен!', parse_mode='HTML')
+
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'Отъём завершен!\n{accessory}', parse_mode='HTML')
         return
 
     bot.answer_callback_query(call.id, "Ты забрал это с полки...")
@@ -2177,14 +2187,7 @@ def callback_query(call):
     updateUser(user)
 
     markupinline = InlineKeyboardMarkup()
-    accessory = ''
-    if user.getAccessory() and len(user.getAccessory())>0:
-        i = 0
-        for acc in user.getAccessory():
-            accessory = accessory + f'▫️ {acc}\n'
-            markupinline.add(InlineKeyboardButton(f"{acc}", callback_data=f"pickupaccessory|{login}|{i}"))
-            i = i + 1
-    text = 'У него больше ничего нет!'
+    
     if not accessory == '':
         text = getResponseDialogFlow(call.message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{accessory}\nЧто изьять?'
         
