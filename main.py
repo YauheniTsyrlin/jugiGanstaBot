@@ -951,6 +951,52 @@ def main_message(message):
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
+    
+    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('Теперь') and 'под контролем' in message.text):
+        if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+            return        
+        
+        band = ''
+        dungeon_km = 0
+        dungeon_name = ''
+        usesrOnDungeon = []
+        for s in message.text.split('\n'):
+            if s.startswith('Теперь'): 
+                band = s.split('🤘')[1].split('!')[0]
+                dungeon_tmp = s.split('Теперь')[1].split('под контролем')[0].strip().lower()
+                for d in getSetting(code='DUNGEONS'):
+                    if dungeon_tmp in d.lower():
+                        dungeon_km = int(d['value'])
+                        dungeon_name = d['name']        
+                        break
+            elif s.startswith('👊'):
+                name = s.split('👊')[1].split('❤️')[0].strip()
+                user = getUserByName(name)
+                usesrOnDungeon.append(user)
+
+        for user in usesrOnDungeon:
+            row = {}
+            row.update({'date': float(call.data.split('|')[1])})
+            row.update({'login': message.from_user.username})
+            row.update({'band': band})
+            row.update({'goat': getMyGoatName(message.from_user.username)})
+            row.update({'dungeon_km': dungeon_km})
+            row.update({'dungeon': dungeon})
+            row.update({'signedup': signedup})
+            row.update({'invader': True})
+
+            newvalues = { "$set": row }
+            result = dungeons.update_one({
+                'login': call.from_user.username, 
+                'date': float(call.data.split('|')[1]),
+                'band': user.getBand(),
+                'dungeon_km': dungeon_km
+                }, newvalues)
+            if result.matched_count < 1:
+                dungeons.insert_one(row)
+
+
     # Заменяем в сообщениях от ВВ все цифры 
     if message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
         # сохраняем км, если он больше максимального
@@ -2026,7 +2072,7 @@ def callback_query(call):
         signedup = True
         bot.answer_callback_query(call.id, "Красавчик!")
     elif call.data.startswith("dungeon_no"):
-        bot.answer_callback_query(call.id, "Трусишка!")
+        bot.answer_callback_query(call.id, "Сыкло!")
         signedup = False
 
     row = {}
@@ -2037,6 +2083,7 @@ def callback_query(call):
     row.update({'dungeon_km': dungeon_km})
     row.update({'dungeon': dungeon})
     row.update({'signedup': signedup})
+    row.update({'invader': False})
 
     newvalues = { "$set": row }
     result = dungeons.update_one({

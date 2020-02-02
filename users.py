@@ -78,7 +78,9 @@ def updateUser(newUser, oldUser):
 
     if hasattr(newUser, 'maxkm'):
         if newUser.maxkm:
-            if oldUser.maxkm < newUser.maxkm: 
+            if oldUser.maxkm == None:
+                oldUser.maxkm = newUser.maxkm
+            elif oldUser.maxkm < newUser.maxkm: 
                 oldUser.maxkm = newUser.maxkm
 
     return oldUser
