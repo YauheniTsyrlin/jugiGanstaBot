@@ -1106,6 +1106,34 @@ newvalues = { "$set": { "value":
                                     'value': 'CAADBQADlAMAAukKyAPXbNncxSnLkRYE'
                                 }
                             ] 
+                        },
+                        {
+                            'name': 'BOT_MORNING',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAACAgIAAxkBAAKEy142fCMG7X0MjErMnCW_L9kYIla8AALCPwAC4KOCB6u6lHvLpulbGAQ'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': 'CAACAgQAAxkBAAKE0V42gLJ0vnjsbZsQNv_YuY24P09pAAI8AQACa65eCWU2xUL2sOUQGAQ'
+                                }
+                            ] 
+                        },
+                        {
+                            'name': 'BOT_NIGHT',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAACAgIAAxkBAAKEzV42f8A_r2sQsKzfjgVDXpzzZ0yLAAJPAgACWuOKF5k-9glf2ST7GAQ'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': 'CAACAgIAAxkBAAKEz142gCsRn2f3r-e-fB-AlGW21dS2AALDPwAC4KOCB5UoxIzuehFgGAQ'
+                                }
+                            ] 
                         }
 
                     ]
@@ -1202,6 +1230,16 @@ newvalues = { "$set": { "value":
                             # Вероятность
                             'name': 'SALUTE_STICKER',
                             'value': 0.50
+                        },
+                        {
+                            # Вероятность
+                            'name': 'MORNING_STICKER',
+                            'value': 0.30
+                        },
+                        {
+                            # Вероятность
+                            'name': 'NIGHT_STICKER',
+                            'value': 0.30
                         },
                         {
                             # Вероятность

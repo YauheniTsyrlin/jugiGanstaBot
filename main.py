@@ -987,7 +987,7 @@ def main_message(message):
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_LIKE'), 1)[0]['value'])
             return
-    if 'пидорасы' == message.text.lower() or 'пидоры' == message.text.lower() or 'пиздец' in message.text.lower():
+    if 'пидорасы' == message.text.lower() or 'пидоры' == message.text.lower() or 'писец' == message.text.lower() or 'пиздец' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_DEAD'), 1)[0]['value'])
             return
@@ -1016,7 +1016,15 @@ def main_message(message):
         if (random.random() <= float(getSetting(code='PROBABILITY', name='SALUTE_STICKER'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
             return       
-    
+    if 'утречка' in message.text.lower() or 'добрым утром' in message.text.lower() or 'доброго утра' in message.text.lower() or 'доброго утречка' in message.text.lower() or 'доброе утро' in message.text.lower():
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='MORNING_STICKER'))):
+            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_MORNING'), 1)[0]['value'])
+            return 
+    if 'пойду спать' in message.text.lower() or 'я спать' in message.text.lower() or 'доброй ночи' in message.text.lower() or 'спокойной ночи' in message.text.lower() or 'спатки' in message.text.lower() or 'сладких снов' in message.text.lower() or 'добрых снов' in message.text.lower():
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='NIGHT_STICKER'))):
+            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_NIGHT'), 1)[0]['value'])
+            return 
+
     # Хуификация
     if message.reply_to_message and 'хуифицируй' in message.text.lower():
         if not isGoatSecretChat(message.from_user.username, message.chat.id):
@@ -1989,8 +1997,6 @@ def main_message(message):
         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
             if (random.random() <= float(getSetting(code='PROBABILITY', name='I_DONT_KNOW_YOU'))):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'you_dont_our_band_gangster').fulfillment_text)
-
-
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("dungeon"))
 def callback_query(call):
