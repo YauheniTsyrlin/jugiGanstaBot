@@ -953,9 +953,10 @@ def main_message(message):
         return
     
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('Теперь') and 'под контролем' in message.text):
-        if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-            return        
+        # if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+        #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+        #     return        
+
         
         band = ''
         dungeon_km = 0
@@ -966,35 +967,91 @@ def main_message(message):
                 band = s.split('🤘')[1].split('!')[0]
                 dungeon_tmp = s.split('Теперь')[1].split('под контролем')[0].strip().lower()
                 for d in getSetting(code='DUNGEONS'):
-                    if dungeon_tmp in d.lower():
+                    if dungeon_tmp in d['name'].lower():
                         dungeon_km = int(d['value'])
                         dungeon_name = d['name']        
                         break
             elif s.startswith('👊'):
                 name = s.split('👊')[1].split('❤️')[0].strip()
                 user = getUserByName(name)
-                usesrOnDungeon.append(user)
+                if user:
+                    usesrOnDungeon.append(user)
+        
+        goatName = getMyGoatName(usesrOnDungeon[0].getLogin()) 
+        
+        dresult = dungeons.aggregate([ 
+            {   "$match": {
+                        "band": band,
+                        "dungeon_km": dungeon_km,
+                        "state": "NEW"
+                    } 
+            },
+            {   "$group": {
+                "_id": "$date", 
+                "count": {
+                    "$sum": 1}}},
+                
+            {   "$sort" : { "count" : -1 } }
+            ])
+        
+        date_arr = []
+        for d in dresult:
+            date_arr.append(d.get("_id"))
 
-        for user in usesrOnDungeon:
-            row = {}
-            row.update({'date': float(call.data.split('|')[1])})
-            row.update({'login': message.from_user.username})
-            row.update({'band': band})
-            row.update({'goat': getMyGoatName(message.from_user.username)})
-            row.update({'dungeon_km': dungeon_km})
-            row.update({'dungeon': dungeon})
-            row.update({'signedup': signedup})
-            row.update({'invader': True})
-
-            newvalues = { "$set": row }
-            result = dungeons.update_one({
-                'login': call.from_user.username, 
-                'date': float(call.data.split('|')[1]),
-                'band': user.getBand(),
-                'dungeon_km': dungeon_km
-                }, newvalues)
-            if result.matched_count < 1:
+        if len(date_arr) == 0:
+            tz = config.SERVER_MSK_DIFF
+            dungeon_date = (datetime.now() + timedelta(hours=tz.hour)).timestamp()
+            for user in usesrOnDungeon:
+                row = {}
+                row.update({'date': dungeon_date})
+                row.update({'login': user.getLogin()})
+                row.update({'band': band})
+                row.update({'goat': goatName})
+                row.update({'dungeon_km': dungeon_km})
+                row.update({'dungeon': dungeon_name})
+                row.update({'signedup': True})
+                row.update({'invader': True})
+                row.update({'state': 'CLOSED'})
                 dungeons.insert_one(row)
+            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+            return
+        elif len(date_arr) == 1:
+            dungeon_date = date_arr[0]
+            for user in usesrOnDungeon:
+                row = {}
+                row.update({'date': dungeon_date})
+                row.update({'login': user.getLogin()})
+                row.update({'band': band})
+                row.update({'goat': goatName})
+                row.update({'dungeon_km': dungeon_km})
+                row.update({'dungeon': dungeon_name})
+                row.update({'signedup': True})
+                row.update({'invader': True})
+                row.update({'state': 'CLOSED'})
+
+                newvalues = { "$set": row }
+                result = dungeons.update_one({
+                    'login': user.getLogin(), 
+                    'date': dungeon_date,
+                    'band': band,
+                    'goat': goatName,
+                    'dungeon_km': dungeon_km
+                    }, newvalues)
+                if result.matched_count < 1:
+                    dungeons.insert_one(row)
+            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+        else:
+            markupinline = InlineKeyboardMarkup()
+            
+            for date in date_arr:
+                dt = datetime.fromtimestamp(date)
+                markupinline.add(
+                    InlineKeyboardButton(f"{dt.hour}:{d.minute}", callback_data=f"commit_dungeon_time|{dt.timestamp()}|{band}|{dungeon_km}"),
+                    InlineKeyboardButton(f"Готово ✅", callback_data=f"commit_dungeon_yes|{dt.timestamp()}|{band}|{dungeon_km}"),
+                    InlineKeyboardButton(f"Закрыть ⛔", callback_data=f"commit_dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}")
+                )
+            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
+
 
 
     # Заменяем в сообщениях от ВВ все цифры 
@@ -2088,6 +2145,7 @@ def callback_query(call):
     row.update({'dungeon': dungeon})
     row.update({'signedup': signedup})
     row.update({'invader': False})
+    row.update({'state': "NEW"})
 
     newvalues = { "$set": row }
     result = dungeons.update_one({

@@ -26,6 +26,8 @@ settings    = mydb["settings"]
 pending_messages = mydb["pending_messages"]
 plan_raids      = mydb["rades"]
 report_raids    = mydb["report_raids"]
+plan_raids      = mydb["rades"]
+dungeons        = mydb["dungeons"]
 
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
@@ -349,41 +351,39 @@ def statistic(goatName: str):
 
 print('\n======== radeReport ==========\n')
 
-# dresult = registered_wariors.aggregate([ 
-#     # {   "$match": {
-#     #             "$and" : [
-                    
-#     #                     {'name':{'$regex':'rushk', '$options':'i'}}   
-#     #                 ]
-#     #         } 
-#     # },
-#     {   "$group": {
-#         "_id": "$name", 
-#         "count": {
-#             "$sum": 1}}},
+dresult = dungeons.aggregate([ 
+    {   "$match": {
+                "band": "АртхǁȺǁус"
+            } 
+    },
+    {   "$group": {
+        "_id": "$date", 
+        "count": {
+            "$sum": 1}}},
         
-#     {   "$sort" : { "count" : -1 } }
-#     ])
+    {   "$sort" : { "count" : -1 } }
+    ])
     
-# for d in dresult:
-#     user_name = d.get("_id") 
-#     print(f'{d.get("count")} - {user_name}')  
+for d in dresult:
+    print(d)
+    date = d.get("_id") 
+    print(f'{d.get("count")} - {datetime.fromtimestamp(date)}')  
 
-# 
 
+sys.exit(0)
 
 # for ts in (1579191477, 1579191477):
-#     print(f"{datetime.fromtimestamp(ts)}")
+# #     print(f"{datetime.fromtimestamp(ts)}")
 
-report = ''
-jsonfind = json.loads('{"chat":{"$not":{"$exists": "true"}}}')
-for req in mydb["users"].find(jsonfind
-                            ):
-                                value = req[f'login']
-                                report = report + f'{value}\n'
+# report = ''
+# jsonfind = json.loads('{"chat":{"$not":{"$exists": "true"}}}')
+# for req in mydb["users"].find(jsonfind
+#                             ):
+#                                 value = req[f'login']
+#                                 report = report + f'{value}\n'
 
-print(report)
-sys.exit(0)
+# print(report)
+
 
 # #report_raids.remove()
 for goat in getSetting('GOATS_BANDS'):
