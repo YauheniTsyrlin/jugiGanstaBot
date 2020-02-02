@@ -899,6 +899,7 @@ def main_message(message):
                         allrw = allrw + u.getRaidWeight()
                         allcounter = allcounter + 1
                         u.setWastelandLocation(km)
+                        u.setMaxkm(km)
                         if '👊' in strings[i]:
                             onraidcounter = onraidcounter + 1
                             onraidrw = onraidrw + u.getRaidWeight()
@@ -907,10 +908,11 @@ def main_message(message):
                         else:
                             fuckupraidrw = fuckupraidrw + u.getRaidWeight()
                             fuckupusers.append(u)
+                        updateUser(u)
                     else:
                         aliancounter  = aliancounter + 1
                         alianusersReport = alianusersReport + f'{aliancounter}. {name} {spliter}{km}км\n'
-                    updateUser(u)
+                    
                 i = i + 1
             
             report = report + f'🤘 <b>{band}</b>\n\n' 
@@ -949,9 +951,14 @@ def main_message(message):
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
-
     # Заменяем в сообщениях от ВВ все цифры 
-    if message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text:
+    if message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
+        # сохраняем км, если он больше максимального
+        km = int(message.text.split('👣')[1].split('км')[0])
+        if userIAm.getMaxkm() < km:
+             userIAm.setMaxkm(km)
+             updateUser(userIAm)
+
         if not privateChat:
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
                 replacements =  {
@@ -970,6 +977,7 @@ def main_message(message):
                 bot.delete_message(message.chat.id, message.message_id)
                 send_messages_big(message.chat.id, text=f'🗣 {userIAm.getName()} ({userIAm.getLogin()}):\n\n'+text)
                 return
+        return
 
     if 'gratz' in message.text.lower() or 'грац' in message.text.lower() or 'грац!' in message.text.lower() or  'лол' in message.text.lower() or 'lol' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
@@ -1009,7 +1017,7 @@ def main_message(message):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
             return       
     
-    
+    # Хуификация
     if message.reply_to_message and 'хуифицируй' in message.text.lower():
         if not isGoatSecretChat(message.from_user.username, message.chat.id):
             phrases = message.reply_to_message.text.split('\n')
@@ -1021,6 +1029,7 @@ def main_message(message):
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
         return
+    # Рассылка в чаты
     if privateChat and isGoatBoss(message.from_user.username) and message.reply_to_message:
         if message.text.lower().startswith('рассылка в'):
             if not isGoatBoss(message.from_user.username):
@@ -1495,7 +1504,6 @@ def main_message(message):
                                     user.addAccessory(acc)
                                     updateUser(user)
                                 send_messages_big(message.chat.id, text='Бандиты!\n' + getResponseDialogFlow(message, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {acc}') 
-    
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
                         # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
                         ban = ('ban' == response.split(':')[1])
@@ -2738,8 +2746,6 @@ def statistic(goatName: str):
     report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
 
     return report                                 
-
-# 20 secund
 
 # 5 secund
 def pending_job():

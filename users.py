@@ -76,6 +76,10 @@ def updateUser(newUser, oldUser):
         if newUser.accessory:
             oldUser.accessory = newUser.accessory
 
+    if hasattr(newUser, 'maxkm'):
+        if newUser.maxkm:
+            oldUser.maxkm = newUser.maxkm
+
     return oldUser
 
 def importUser(registered_user):
@@ -121,6 +125,10 @@ def importUser(registered_user):
         u.setRaidLocation(registered_user['raidlocation'])
         if (registered_user.get('wastelandLocation')):
             u.setWastelandLocation(registered_user['wastelandLocation'])
+        if (registered_user.get('maxkm')):
+            u.setMaxkm(registered_user['maxkm'])
+
+            
         return u
 
 class User(object):
@@ -141,6 +149,7 @@ class User(object):
         self.ping = None
         self.chat = None
         self.accessory = None
+        self.maxkm = None
 
         strings = text.split('\n')
         isEquipequipment = False
@@ -199,7 +208,8 @@ class User(object):
                 self.raid = strings[i].split('📍')[1].split('👊')[0].strip()
             elif ('📍' in strings[i]):
                 self.wastelandLocation = int(strings[i].split('👣')[1].split('км.')[0])
-
+                self.setMaxkm(self.wastelandLocation)
+                
             if ('🏵' in strings[i]):
                 if '/me' in text:
                     self.setDzen(int(strings[i].count('🏵')))
@@ -270,8 +280,8 @@ class User(object):
         string = string + f'├🗣{self.charisma}|🤸🏽‍{self.agility}|🔋{self.stamina}|\n'
         if self.raid:
             string = string + f'├👊{self.raid}\n'
-        elif self.wastelandLocation:
-            string = string + f'├👣Замечен на {self.wastelandLocation}км\n'
+        elif self.getMaxkm():
+            string = string + f'├👣Был замечен на {self.getMaxkm()}км\n'
         string = string + f'└🏋️‍♂️Вес на рейде: {self.getRaidWeight()}\n'
         string = string + f'\n'
 
@@ -388,6 +398,16 @@ class User(object):
         self.wastelandLocation = wastelandLocation  
     def getWastelandLocation(self):
         return self.wastelandLocation
+
+    def setMaxkm(self, maxkm):
+        if self.maxkm == None:
+            self.maxkm = maxkm
+        elif maxkm > self.maxkm:
+            self.maxkm = maxkm   
+    def getMaxkm(self):
+        if self.maxkm == None: 
+            return 0
+        return self.maxkm
 
     def setStatus(self, status):
         self.status = status  
