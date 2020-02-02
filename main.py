@@ -1334,6 +1334,10 @@ def main_message(message):
                                     return
                                     
                         user = getUserByLogin(login)
+                        if not user:
+                            send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
+                            return 
+                        
                         user.setPing(response.split(":")[2] == 'True')
                         updateUser(user)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
