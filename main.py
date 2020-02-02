@@ -953,9 +953,9 @@ def main_message(message):
         return
     
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('Теперь') and 'под контролем' in message.text):
-        # if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-        #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-        #     return        
+        if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+            return        
 
         
         band = ''
