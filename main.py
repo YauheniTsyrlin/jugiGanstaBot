@@ -1274,15 +1274,16 @@ def main_message(message):
                     return
 
             login = message.text.split('@')[1].strip()
-            user = getUserByLogin(login)
-            if not user:
-                send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
-                return
 
-            if not isAdmin(message.from_user.username):
-                if not isUsersBand(message.from_user.username, user.getBand()):
-                    send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
-                    return
+            # user = getUserByLogin(login)
+            # if not user:
+            #     send_messages_big(message.chat.id, text=f'Нет зарегистрированного бандита с логином {login}!')
+            #     return
+
+            # if not isAdmin(message.from_user.username):
+            #     if not isUsersBand(message.from_user.username, user.getBand()):
+            #         send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
+            #         return
 
             myquery = { "login": f"{login}" }
             doc = registered_users.delete_one(myquery)
@@ -1290,6 +1291,7 @@ def main_message(message):
             
             myquery = { "name": f"{login}" }
             war = registered_wariors.delete_one(myquery)
+            update_warior(None)
 
             if doc.deleted_count == 0:
                 send_messages_big(message.chat.id, text=f'{login} не найден в бандитах! Удалено {war.deleted_count} в дневнике боев!')
