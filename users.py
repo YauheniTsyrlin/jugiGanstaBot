@@ -72,6 +72,11 @@ def updateUser(newUser, oldUser):
     if hasattr(newUser, 'chat'):
         if newUser.chat:
             oldUser.chat = newUser.chat
+
+    if hasattr(newUser, 'birthday'):
+        if newUser.birthday:
+            oldUser.birthday = newUser.birthday
+
     if hasattr(newUser, 'accessory'):
         if newUser.accessory:
             oldUser.accessory = newUser.accessory
@@ -130,8 +135,9 @@ def importUser(registered_user):
             u.setWastelandLocation(registered_user['wastelandLocation'])
         if (registered_user.get('maxkm')):
             u.setMaxkm(registered_user['maxkm'])
+        if (registered_user.get('birthday')):
+            u.setBirthday(registered_user['birthday'])
 
-            
         return u
 
 class User(object):
@@ -153,13 +159,13 @@ class User(object):
         self.chat = None
         self.accessory = None
         self.maxkm = None
+        self.birthday = None
 
         strings = text.split('\n')
         isEquipequipment = False
         for s in strings:
             if ('Экипировка' in strings[i]):
                 isEquipequipment = True
-
             if ('Банда' in strings[i]):
                 self.setBand(strings[i].split(':')[1].strip())
             if ('Здоровье' in strings[i]):
@@ -266,10 +272,8 @@ class User(object):
             string = string + f'├🔔Пингуйте меня семеро!\n'
         else:
             string = string + f'├🔕Нихт!\n'
-        
-        # if self.chat:
-        #     string = string + f'├🗣{self.chat}\n'
-
+        if self.birthday:
+            string = string + f'├🥳День рождения: {time.strftime("%d %b", time.gmtime(self.birthday))}\n'
         if self.status:
             string = string + f'└😏Статус: {self.status}\n'
         else:
@@ -426,6 +430,12 @@ class User(object):
         self.chat = chat  
     def getChat(self):
         return self.chat
+
+
+    def setBirthday(self, birthday):
+        self.birthday = birthday  
+    def getBirthday(self):
+        return self.birthday
 
     def setAccessory(self, accessory):
         self.accessory = accessory  

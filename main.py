@@ -1399,6 +1399,11 @@ def main_message(message):
                         user.setPing(response.split(":")[2] == 'True')
                         updateUser(user)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+                    elif 'birthday' == response.split(':')[1]:
+                        # jugi:birthday:2020-02-02
+                        userIAm.setBirthday(parse(response.split(':birthday:')[1]).timestamp())
+                        updateUser(userIAm)
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)        
                     elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
                         photo = random.sample(getSetting(code='STICKERS', name='BOT_LOVE'), 1)[0]['value']
