@@ -53,7 +53,7 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
     if clear_message_context:
         delete_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message")
 
-    return response.query_result
+    return response.query_result.fulfillment_text
 
 def delete_context(project_id, session_id, context_id):
     contexts_client = dialogflow_v2.ContextsClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
