@@ -598,28 +598,8 @@ def main_message(message):
         return
 
     userIAm = getUserByLogin(message.from_user.username)
-    if userIAm:
-        if privateChat:
-            if userIAm.getChat():
-                if userIAm.getChat() == message.chat.id:
-                    pass
-                else:
-                    userIAm.setChat(message.chat.id)
-                    updateUser(userIAm)
-                    return
-            else:
-                acc = random.sample(getSetting(code='ACCESSORY', name='PIP_BOY'), 1)[0]["value"]
-                send_messages_big(message.chat.id, text=f'Поздравляю! \nТебе выдали "{acc}" и вытолкнули за дверь!')
-                userIAm.setChat(message.chat.id)
-                userIAm.addAccessory(acc)
-                updateUser(userIAm)
-                return
-        else:
-            if userIAm.getChat():
-                pass
-            else:
-                if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_PRIVATE_CHAT'))):
-                    bot.reply_to(message, text=getResponseDialogFlow(message, 'accessory_old_pipboy').fulfillment_text, parse_mode='HTML')
+    # if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_PRIVATE_CHAT'))):
+    #     bot.reply_to(message, text=getResponseDialogFlow(message, 'accessory_old_pipboy').fulfillment_text, parse_mode='HTML')
 
     callJugi = (privateChat 
                             or message.text.lower().startswith('джу') 
@@ -635,33 +615,40 @@ def main_message(message):
             'СОДЕРЖИМОЕ РЮКЗАКА' not in message.text and 
             'ПРИПАСЫ В РЮКЗАКЕ' not in message.text and 
             'РЕСУРСЫ и ХЛАМ' not in message.text ):
+            
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
+ 
+            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+                return
+
             if 'ТОП ИГРОКОВ:' in message.text:
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
                 for warior in ww:
                     update_warior(warior)
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
                 return
-            
-            if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+
+            if privateChat or (not isRegisteredUserLogin(message.from_user.username)) or isGoatSecretChat(message.from_user.username, message.chat.id):
                 pass
             else:
                 censored(message)
-
-            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-                return
             
             user = users.User(message.from_user.username, message.forward_date, message.text)
             
             if findUser==False:  
-                if 'Подробности /me' in message.text: 
+                if 'Подробности /me' in message.text or (not privateChat): 
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'pip_me').fulfillment_text)
                     return
                 else:
+                    acc = random.sample(getSetting(code='ACCESSORY', name='PIP_BOY'), 1)[0]["value"]
+                    user.setChat(message.chat.id)
+                    user.addAccessory(acc)
                     user.setPing(True)
                     x = registered_users.insert_one(json.loads(user.toJSON()))
                     updateUser(None)
+
+                    send_messages_big(message.chat.id, text=f'Поздравляю! \nТебе выдали "{acc}" и вытолкнули за дверь!')
                     send_message_to_admin(f'⚠️Внимание! Зарегистрировался новый пользователь.\n {user.getProfile()}')
             else:
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
