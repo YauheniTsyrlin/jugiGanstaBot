@@ -594,7 +594,8 @@ def main_message(message):
         name = message.from_user.username
         if user:
             name = user.getName()
-        send_messages_big(message.chat.id, text=f'{name} хотел что-то сказать, но у него получилось лишь:\n' + getResponseDialogFlow(message, 'user_banned').fulfillment_text)
+        send_messages_big(message.chat.id, text=f'{name} хотел что-то сказать, но у него получилось лишь:\n🐷 Хрю-Хрю' )
+        # + getResponseDialogFlow(message, 'user_banned').fulfillment_text
         return
 
     userIAm = getUserByLogin(message.from_user.username)
@@ -615,7 +616,7 @@ def main_message(message):
             'СОДЕРЖИМОЕ РЮКЗАКА' not in message.text and 
             'ПРИПАСЫ В РЮКЗАКЕ' not in message.text and 
             'РЕСУРСЫ и ХЛАМ' not in message.text ):
-            
+
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
  
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
