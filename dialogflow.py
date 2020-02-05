@@ -13,6 +13,7 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
     # list_entities(config.DIALOG_FLOW_JSON['project_id'])
 
     contexts = get_contexts(config.DIALOG_FLOW_JSON['project_id'], session_id, "user")
+    logger.info(contexts)
     if not contexts:
         print(f'Create context user for {session_id}')
         parameters = struct_pb2.Struct()
