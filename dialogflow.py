@@ -47,7 +47,7 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
 
     
     try:
-        response = await session_client.detect_intent(session=session, query_input=query_input)
+        response = session_client.detect_intent(session=session, query_input=query_input)
         # print(response.query_result)
     except InvalidArgument:
         raise
