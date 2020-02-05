@@ -17,7 +17,6 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
     # list_entities(config.DIALOG_FLOW_JSON['project_id'])
 
     contexts = get_contexts(config.DIALOG_FLOW_JSON['project_id'], session_id, "user")
-    print(contexts)
     if not contexts:
         print(f'Create context user for {session_id}')
         parameters = struct_pb2.Struct()
@@ -26,7 +25,8 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
             parameters['name'] = user.getName()
         else:
             parameters['login'] = session_id
-        create_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "user", 60, parameters)
+        await create_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "user", 60, parameters)
+        
 
     if message and message.reply_to_message:
         parameters = struct_pb2.Struct()
@@ -47,12 +47,12 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
 
     
     try:
-        response = session_client.detect_intent(session=session, query_input=query_input)
+        response = await session_client.detect_intent(session=session, query_input=query_input)
         # print(response.query_result)
     except InvalidArgument:
         raise
     finally:
-        pass
+        response.
 
     if clear_message_context:
         delete_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message")
