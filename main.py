@@ -1874,7 +1874,7 @@ def main_message(message):
                                     if user in users_on_cupture:
                                         pref = '👍'
                                     elif user in users_off_cupture:
-                                        pref = '👎'
+                                        pref = '🚬'
                                     
                                     report = report + f'{counter}. {pref}{user.getLogin()} ({user.getName()})\n'
                                 else:
@@ -1892,7 +1892,7 @@ def main_message(message):
                                 InlineKeyboardButton(f"Ну нахер! ⛔", callback_data=f"dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}"),
                                 InlineKeyboardButton(f"Я в деле! ✅", callback_data=f"dungeon_yes|{dt.timestamp()}|{band}|{dungeon_km}")
                                 )
-                                
+
                             text = text + report_yes + '\n' + report_no
                             send_messages_big(message.chat.id, text=text, reply_markup=markupinline)
 
