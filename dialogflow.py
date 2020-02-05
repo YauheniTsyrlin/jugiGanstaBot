@@ -48,11 +48,11 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
     
     try:
         response = session_client.detect_intent(session=session, query_input=query_input)
-        # print(response.query_result)
+        print(response)
     except InvalidArgument:
         raise
     finally:
-        response.
+        pass
 
     if clear_message_context:
         delete_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message")
