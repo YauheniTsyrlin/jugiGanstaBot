@@ -7,6 +7,10 @@ import users
 from google.protobuf import struct_pb2
 from telebot.types import Message
 
+credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON))
+session_client = dialogflow_v2.SessionsClient(credentials=credentials)
+contexts_client = dialogflow_v2.ContextsClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
+
 def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str, user: users.User, message: Message):
     clear_message_context = False
 
@@ -31,9 +35,6 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
         create_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message", 1, parameters)
         clear_message_context = True
 
-
-    credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON))
-    session_client = dialogflow_v2.SessionsClient(credentials=credentials)
     session = session_client.session_path(config.DIALOG_FLOW_JSON['project_id'], session_id)
 
     query_input = None
@@ -50,6 +51,8 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
         # print(response.query_result)
     except InvalidArgument:
         raise
+    finally:
+        pass
 
     if clear_message_context:
         delete_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message")
@@ -57,7 +60,6 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
     return response.query_result.fulfillment_text
 
 def delete_context(project_id, session_id, context_id):
-    contexts_client = dialogflow_v2.ContextsClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
     context_name = contexts_client.context_path(project_id, session_id, context_id)
     contexts_client.delete_context(context_name)
 
@@ -74,7 +76,6 @@ def create_context(project_id, session_id, context_id, lifespan_count, parameter
     response = contexts_client.create_context(session_path, context)
 
 def get_contexts(project_id, session_id, name):
-    contexts_client = dialogflow_v2.ContextsClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
     name_context = contexts_client.context_path(project_id, session_id, name)
     try:
         context = contexts_client.get_context(name_context)
