@@ -1814,11 +1814,11 @@ def main_message(message):
                                 send_messages_big(message.chat.id, text=f'Ты пытался созвать на захват банду 🤟<b>{band}</b>\n' + getResponseDialogFlow(message, 'not_right_band'))
                                 return  
 
-                            # if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
-                            #     pass
-                            # else:
-                            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship'))
-                            #     return
+                            if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                                pass
+                            else:
+                                censored(message)
+                                return
 
                             time_str = response.split(response.split(":")[3])[1][1:]
                             dt = parse(time_str)
@@ -1826,32 +1826,10 @@ def main_message(message):
                             dungeon = response.split(":")[3]
                             dungeon_km = getSetting(code='DUNGEONS', name=dungeon)
                             text = f'✊️Захват <b>{dungeon}\n🤟{band}\nв {time_str}</b>\n\n'
-                            #first_string = f'<b>Захват!</b> 🤟{band} {time_str} <b>{dungeon}</b>\n'
 
-                            # Пингуем
-                            counter = 0
-                            report = f''
-                            for user in getBandUsers(band):
-                                counter = counter + 1
-                                if user.isPing():
-                                    report = report + f'{counter}. @{user.getLogin()} ({user.getName()})\n'
-                                else:
-                                    report = report + f'{counter}. 🔕{user.getLogin()} ({user.getName()})\n'
-
-                                if counter % 5 == 0:
-                                    send_messages_big(message.chat.id, text=text + report)
-                                    report = f''
-                            if not report == '':
-                                send_messages_big(message.chat.id, text=report)
-
-                            # делаем голосовалку
-                            markupinline = InlineKeyboardMarkup()
-                            markupinline.add(
-                                InlineKeyboardButton(f"Ну нахер! ⛔", callback_data=f"dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}"),
-                                InlineKeyboardButton(f"Я в деле! ✅", callback_data=f"dungeon_yes|{dt.timestamp()}|{band}|{dungeon_km}")
-                                )
-
-
+                            users_on_cupture = []
+                            users_off_cupture = []
+                            
                             report_yes = '<b>Записались на захват:</b>\n'
                             i = 0
                             for dun in dungeons.find({
@@ -1862,6 +1840,7 @@ def main_message(message):
                                 }):
                                 i = i + 1
                                 user = getUserByLogin(dun['login'])
+                                users_on_cupture.append(user)
                                 report_yes = report_yes + f'  {i}. {user.getName()}\n'
 
                             if i == 0:
@@ -1877,13 +1856,44 @@ def main_message(message):
                                 }):
                                 i = i + 1
                                 user = getUserByLogin(dun['login'])
+                                users_off_cupture.append(user)
                                 report_no = report_no + f'  {i}. {user.getName()}\n'
 
                             if i == 0:
                                 report_no = report_no + '  Никто не отказался\n'
 
                             text = text + report_yes + '\n' + report_no
-                                
+                            
+
+                            # Пингуем
+                            counter = 0
+                            report = f''
+                            for user in getBandUsers(band):
+                                counter = counter + 1
+                                if user.isPing():
+                                    pref = '@'
+                                    if user in users_on_cupture:
+                                        pref = '👍'
+                                    elif user in users_off_cupture:
+                                        pref = '👎'
+                                    
+                                    report = report + f'{counter}. {pref}{user.getLogin()} ({user.getName()})\n'
+                                else:
+                                    report = report + f'{counter}. 🔕{user.getLogin()} ({user.getName()})\n'
+
+                                if counter % 5 == 0:
+                                    send_messages_big(message.chat.id, text=text + report)
+                                    report = f''
+                            if not report == '':
+                                send_messages_big(message.chat.id, text=report)
+
+                            # делаем голосовалку
+                            markupinline = InlineKeyboardMarkup()
+                            markupinline.add(
+                                InlineKeyboardButton(f"Ну нахер! ⛔", callback_data=f"dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}"),
+                                InlineKeyboardButton(f"Я в деле! ✅", callback_data=f"dungeon_yes|{dt.timestamp()}|{band}|{dungeon_km}")
+                                )
+    
                             send_messages_big(message.chat.id, text=text, reply_markup=markupinline)
 
                             # if not privateChat:
