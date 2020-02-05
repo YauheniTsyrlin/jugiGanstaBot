@@ -25,7 +25,7 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
             parameters['name'] = user.getName()
         else:
             parameters['login'] = session_id
-        await create_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "user", 60, parameters)
+        create_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "user", 60, parameters)
         
 
     if message and message.reply_to_message:
