@@ -1861,7 +1861,7 @@ def main_message(message):
                             if i == 0:
                                 report_no = report_no + '  Никто не отказался\n'
 
-                            text = text + report_yes + '\n' + report_no
+                            
                             
 
                             # Пингуем
@@ -1892,7 +1892,8 @@ def main_message(message):
                                 InlineKeyboardButton(f"Ну нахер! ⛔", callback_data=f"dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}"),
                                 InlineKeyboardButton(f"Я в деле! ✅", callback_data=f"dungeon_yes|{dt.timestamp()}|{band}|{dungeon_km}")
                                 )
-    
+                                
+                            text = text + report_yes + '\n' + report_no
                             send_messages_big(message.chat.id, text=text, reply_markup=markupinline)
 
                             # if not privateChat:
