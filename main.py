@@ -1406,7 +1406,7 @@ def main_message(message):
                             return
 
 
-                  elif 'youbeautiful' == response.split(':')[1]:
+                    elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
                         photo = random.sample(getSetting(code='STICKERS', name='BOT_LOVE'), 1)[0]['value']
                         bot.send_sticker(message.chat.id, photo)
