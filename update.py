@@ -1221,6 +1221,16 @@ newvalues = { "$set": { "value":
                                     'value': 'CAACAgIAAxkBAAKVDV48VezE11O-GkbhFbU0t0K8O5o3AAJjAAOFQTIQveRUbGOqm4UYBA'
                                 }
                             ] 
+                        },
+                        {
+                            'name': 'BOT_CRY',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAACAgIAAxkBAAKVMV48dN0Ymx-YHrGwIi4GuJnRRVbWAAI6AANlbZgfExN7LTUarJAYBA'
+                                }
+                            ] 
                         }
 
                     ]

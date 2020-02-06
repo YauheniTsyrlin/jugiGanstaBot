@@ -1410,6 +1410,7 @@ def main_message(message):
                                     time.sleep(random.randint(500,2000) / 1000)
                                 else:
                                     send_messages_big(message.chat.id, text='Пипец ты кайфолом!')
+                                    bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
                                     flexFlag = False
                                     break
                             if flexFlag:
