@@ -1308,7 +1308,7 @@ def main_message(message):
             if text.lower().startswith('джу'):
                 text = message.text[3:]
             
-            result = getResponseDialogFlow(message, text).fulfillment_text
+            result = getResponseDialogFlow(message, text)
             response = result
             parameters = result.parameters
             if response:
