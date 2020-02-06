@@ -1402,7 +1402,8 @@ def main_message(message):
 
                             send_messages_big(message.chat.id, f'Ща заебашу {counter} стикеров!')
                             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_GO_FLEX'), 1)[0]['value'])
-                            global flexFlag = True
+                            global flexFlag
+                            flexFlag = True
                             for i in range(0, counter):
                                 if flexFlag:
                                     bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_FLEX'), 1)[0]['value'])
