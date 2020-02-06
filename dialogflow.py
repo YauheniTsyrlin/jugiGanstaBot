@@ -48,7 +48,7 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
     
     try:
         response = session_client.detect_intent(session=session, query_input=query_input)
-        print(response)
+        #print(response)
     except InvalidArgument:
         raise
     finally:
@@ -57,7 +57,7 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
     if clear_message_context:
         delete_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message")
 
-    return response.query_result.fulfillment_text
+    return response.query_result
 
 def delete_context(project_id, session_id, context_id):
     context_name = contexts_client.context_path(project_id, session_id, context_id)
@@ -90,33 +90,33 @@ def get_contexts(project_id, session_id, name):
     except:
         return None
 
-def get_entity(project_id, session_id, name):
-    entity_client = dialogflow_v2.EntityTypesClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
-    name_entity = entity_client.entity_type_path(project_id, session_id, name)
-    try:
-        entity = entity_client.get_entity_type(name_entity)
-        if entity:
-            # for field, value in context.parameters.fields.items():
-            #     if value.string_value:
-            #         #print('\t{}: {}'.format(field, value))
-            print(f'entity {entity.name} найден')
-            return entity
-        else:
-            print(f'entity {entity.name} не найден')
-            return None
-    except:
-        return None
+# def get_entity(project_id, session_id, name):
+#     entity_client = dialogflow_v2.EntityTypesClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
+#     name_entity = entity_client.entity_type_path(project_id, session_id, name)
+#     try:
+#         entity = entity_client.get_entity_type(name_entity)
+#         if entity:
+#             # for field, value in context.parameters.fields.items():
+#             #     if value.string_value:
+#             #         #print('\t{}: {}'.format(field, value))
+#             print(f'entity {entity.name} найден')
+#             return entity
+#         else:
+#             print(f'entity {entity.name} не найден')
+#             return None
+#     except:
+#         return None
 
-def list_entities(project_id, entity_type_id='4bf591fa-680d-4477-a91e-079ead57246b'):
-    entity_types_client = dialogflow_v2.EntityTypesClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
+# def list_entities(project_id, entity_type_id='4bf591fa-680d-4477-a91e-079ead57246b'):
+#     entity_types_client = dialogflow_v2.EntityTypesClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
 
-    parent = entity_types_client.entity_type_path(
-        project_id, entity_type_id)
+#     parent = entity_types_client.entity_type_path(
+#         project_id, entity_type_id)
 
-    entities = entity_types_client.get_entity_type(parent).entities
+#     entities = entity_types_client.get_entity_type(parent).entities
 
-    for entity in entities:
-        print('Entity value: {}'.format(entity.value))
-        print('Entity synonyms: {}\n'.format(entity.synonyms))
-# [END dialogflow_list_entities]
+#     for entity in entities:
+#         print('Entity value: {}'.format(entity.value))
+#         print('Entity synonyms: {}\n'.format(entity.synonyms))
+# # [END dialogflow_list_entities]
 
