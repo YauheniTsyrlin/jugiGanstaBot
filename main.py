@@ -1824,7 +1824,7 @@ def main_message(message):
                             time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
                             dungeon = response.split(":")[3]
                             dungeon_km = getSetting(code='DUNGEONS', name=dungeon)
-                            text = f'✊️Захват <b>{dungeon}\n🤟{band}\nв {time_str}</b>\n\n'
+                            text = f'✊️Захват <b>{dungeon_km}км {dungeon}\n🤟{band}\nв {time_str}</b>\n\n'
 
                             users_on_cupture = []
                             users_off_cupture = []
@@ -2130,7 +2130,7 @@ def callback_query(call):
         InlineKeyboardButton(f"Я в деле! ✅", callback_data=f"dungeon_yes|{dt.timestamp()}|{band}|{dungeon_km}")
         )
 
-    text = f'✊️Захват <b>{dungeon}\n🤟{band}\nв {time_str}</b>\n\n'
+    text = f'✊️Захват <b>{dungeon_km}км {dungeon}\n🤟{band}\nв {time_str}</b>\n\n'
 
     signedup = False
     if call.data.startswith("dungeon_yes"):
