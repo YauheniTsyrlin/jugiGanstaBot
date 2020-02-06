@@ -1400,7 +1400,7 @@ def main_message(message):
                         if eval(response.split(':')[2]):
                             counter = int(randrange(int(getSetting(code='PROBABILITY', name='JUGI_FLEX'))))
 
-                            send_messages_big(chatid, f'Ща заебашу {counter} стикеров!')
+                            send_messages_big(message.chat.id, f'Ща заебашу {counter} стикеров!')
                             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_GO_FLEX'), 1)[0]['value'])
                             flexFlag = True
                             for i in range(0, counter):
