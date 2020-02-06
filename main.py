@@ -1411,6 +1411,7 @@ def main_message(message):
                                 else:
                                     send_messages_big(message.chat.id, text='Пипец ты кайфолом!')
                                     flexFlag = False
+                                    break
                             if flexFlag:
                                 bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_END_FLEX'), 1)[0]['value'])
                                 send_messages_big(message.chat.id, f'Хорошо, заебашил {counter} стикеров!')
