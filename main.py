@@ -1403,10 +1403,11 @@ def main_message(message):
                             proccessFlex.start() # Start new thread
                             flexProccess.append(proccessFlex)
                         else:
-                            for p in proccessFlex:
+                            for p in flexProccess:
                                 send_messages_big(message.chat.id, text='Пипец ты кайфолом!')
                                 p.terminate()
                                 p.join()
+                            flexProccess.clear()
                             return
                     elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
