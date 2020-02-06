@@ -2893,11 +2893,13 @@ def rade_job():
 
 
 def flex_job(counter: int, chatid: str):
+    send_messages_big(chatid, f'Ща заебашу {counter} стикеров!')
     bot.send_sticker(chatid, random.sample(getSetting(code='STICKERS', name='BOT_GO_FLEX'), 1)[0]['value'])
     for i in range(0, counter):
         bot.send_sticker(chatid, random.sample(getSetting(code='STICKERS', name='BOT_FLEX'), 1)[0]['value'])
-        time.sleep(50 / 1000)
+        time.sleep(random.randint(500,2000) / 1000)
     bot.send_sticker(chatid, random.sample(getSetting(code='STICKERS', name='BOT_END_FLEX'), 1)[0]['value'])
+    send_messages_big(chatid, f'Хорошо, заебашил {counter} стикеров!')
 
 
 def main_loop():
