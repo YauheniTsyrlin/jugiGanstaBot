@@ -1346,7 +1346,7 @@ newvalues = { "$set": { "value":
                         {
                             # Range
                             'name': 'JUGI_FLEX',
-                            'value': 500
+                            'value': 20
                         }
 
                     ]
