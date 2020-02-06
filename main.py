@@ -54,7 +54,7 @@ dungeons        = mydb["dungeons"]
 report_raids    = mydb["report_raids"]
 
 
-flexProccess = []
+flexFlag = False
 logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
 bot = telebot.TeleBot(config.TOKEN)
@@ -1399,16 +1399,24 @@ def main_message(message):
 
                         if eval(response.split(':')[2]):
                             counter = int(randrange(int(getSetting(code='PROBABILITY', name='JUGI_FLEX'))))
-                            proccessFlex = Process(target=flex_job, args=(counter, message.chat.id))
-                            proccessFlex.start() # Start new thread
-                            flexProccess.append(proccessFlex)
+
+                            send_messages_big(chatid, f'Ща заебашу {counter} стикеров!')
+                            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_GO_FLEX'), 1)[0]['value'])
+                            flexFlag = True
+                            for i in range(0, counter):
+                                if flexFlag:
+                                    bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_FLEX'), 1)[0]['value'])
+                                    time.sleep(random.randint(500,2000) / 1000)
+                                else:
+                                    send_messages_big(message.chat.id, text='Пипец ты кайфолом!')
+                                    flexFlag = False
+                            if flexFlag:
+                                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_END_FLEX'), 1)[0]['value'])
+                                send_messages_big(message.chat.id, f'Хорошо, заебашил {counter} стикеров!')
+                                flexFlag = False
                         else:
-                            send_messages_big(message.chat.id, text='Пипец ты кайфолом!')
-                            for p in flexProccess:
-                                p.terminate()
-                                p.join()
-                                send_messages_big(message.chat.id, text='Остановил флекс нахОй!')
-                            flexProccess.clear()
+                            flexFlag = False
+                            send_messages_big(message.chat.id, text='Остановиливаю флекс нахОй!')
                             return
                     elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
