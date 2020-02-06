@@ -54,7 +54,7 @@ dungeons        = mydb["dungeons"]
 report_raids    = mydb["report_raids"]
 
 
-
+flexProccess = []
 logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
 bot = telebot.TeleBot(config.TOKEN)
@@ -1400,9 +1400,12 @@ def main_message(message):
                         if eval(response.split(':')[2]):
                             counter = int(randrange(int(getSetting(code='PROBABILITY', name='JUGI_FLEX'))))
                             proccessFlex = Process(target=flex_job, args=(counter, message.chat.id))
-                            proccessFlex.start() # Start new thread 
+                            proccessFlex.start() # Start new thread
+                            flexProccess.append(proccessFlex)
                         else:
-                            send_messages_big(message.chat.id, text='Это выше моих сил... Флексим дальше!')
+                            send_messages_big(message.chat.id, text='Пипец ты кайфолом!')
+                            for p in proccessFlex:
+                                p.terminate()
                             return
                     elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
