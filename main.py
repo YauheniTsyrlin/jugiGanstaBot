@@ -1310,7 +1310,7 @@ def main_message(message):
             
             result = getResponseDialogFlow(message, text).fulfillment_text
             response = result
-            #parameters = result.parameters
+            parameters = result.parameters
             if response:
                 if (response.startswith('jugi:')):
                     #jugi:ping:Артхаус
@@ -1391,7 +1391,22 @@ def main_message(message):
                         userIAm.setBirthday(parse(response.split(':birthday:')[1]).timestamp())
                         updateUser(userIAm)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)        
-                    elif 'youbeautiful' == response.split(':')[1]:
+                     elif 'flex' == response.split(':')[1]:
+                        # jugi:flex:$bool
+                        if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
+                            return
+
+                        if eval(response.split(':')[2]):
+                            counter = int(randrange(int(getSetting(code='PROBABILITY', name='JUGI_FLEX'))))
+                            proccessFlex = Process(target=flex_job, args=(counter, message.chat.id))
+                            proccessFlex.start() # Start new thread 
+                        else:
+                            send_messages_big(message.chat.id, text='Это выше моих сил... Флексим дальше!')
+                            return
+
+
+                  elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
                         photo = random.sample(getSetting(code='STICKERS', name='BOT_LOVE'), 1)[0]['value']
                         bot.send_sticker(message.chat.id, photo)
@@ -1672,40 +1687,40 @@ def main_message(message):
                             return
                         #   0     1        2       3
                         # jugi:requests:$tables:$fields:$filters
-                        # try:
-                        #     report = ''
-                        #     send_messages_big(message.chat.id, text=f'{response}')
-                        #     #filter_str = response.split(':'+response.split(":")[3]+':')[1]
-                        #     filter_str = parameters.fields['filters'].string_value
-                        #     send_messages_big(message.chat.id, text=f'{filter_str}')
-                        #     jsonfind = json.loads(filter_str)
-                        #     send_messages_big(message.chat.id, text=f'Do request...')
-                        #     # fields = response.split(":")[3].replace(' и ', ',').split(',')
+                        try:
+                            report = ''
+                            send_messages_big(message.chat.id, text=f'{response}')
+                            #filter_str = response.split(':'+response.split(":")[3]+':')[1]
+                            filter_str = parameters.fields['filters'].string_value
+                            send_messages_big(message.chat.id, text=f'{filter_str}')
+                            jsonfind = json.loads(filter_str)
+                            send_messages_big(message.chat.id, text=f'Do request...')
+                            # fields = response.split(":")[3].replace(' и ', ',').split(',')
 
-                        #     i = 1
-                        #     for req in mydb[parameters.fields['tables'].string_value].find(jsonfind):
-                        #         report = report + f'{i}. '
-                        #         for field_name in parameters.fields['fields'].list_value:
-                        #             try:
-                        #                 value = req[f'{field_name}']
-                        #                 report = report + f'{value} '
-                        #             except: pass
-                        #         report = report + '\n'
-                        #         i = i + 1
+                            i = 1
+                            for req in mydb[parameters.fields['tables'].string_value].find(jsonfind):
+                                report = report + f'{i}. '
+                                for field_name in parameters.fields['fields'].list_value:
+                                    try:
+                                        value = req[f'{field_name}']
+                                        report = report + f'{value} '
+                                    except: pass
+                                report = report + '\n'
+                                i = i + 1
 
-                        #     if report == '':
-                        #         send_messages_big(message.chat.id, text=f'Ничего не найдено!')
-                        #     else:
-                        #         send_messages_big(message.chat.id, text=f'{report}')
-                        # except Exception as e:
-                        #     send_messages_big(message.chat.id, text=f'Ошибка!')
-                        #     send_messages_big(message.chat.id, text=f'{e}')
+                            if report == '':
+                                send_messages_big(message.chat.id, text=f'Ничего не найдено!')
+                            else:
+                                send_messages_big(message.chat.id, text=f'{report}')
+                        except Exception as e:
+                            send_messages_big(message.chat.id, text=f'Ошибка!')
+                            send_messages_big(message.chat.id, text=f'{e}')
                     elif 'rade' == response.split(':')[1]:
                         #   0    1           2            3          4          
                         # jugi:rade:Госпиталь 🚷 📍24км:True:2020-01-13T21:00:00
-                        print(f'isGoatBoss = {isGoatBoss(message.from_user.username)}')
-                        print(f'isAdmin = {isAdmin(message.from_user.username)}')
-                        print(response.split(f':{response.split(":")[3]:}')[1])
+                        # print(f'isGoatBoss = {isGoatBoss(message.from_user.username)}')
+                        # print(f'isAdmin = {isAdmin(message.from_user.username)}')
+                        # print(response.split(f':{response.split(":")[3]:}')[1])
                         if isGoatBoss(message.from_user.username) or isAdmin(message.from_user.username):
                             pass
                         else:
@@ -2877,6 +2892,15 @@ def rade_job():
     while True:
         rade()
         time.sleep(15)
+
+
+def flex_job(counter: int, chatid: str):
+    bot.send_sticker(chatid, random.sample(getSetting(code='STICKERS', name='BOT_GO_FLEX'), 1)[0]['value'])
+    for i in range(0, counter):
+        bot.send_sticker(chatid, random.sample(getSetting(code='STICKERS', name='BOT_FLEX'), 1)[0]['value'])
+        time.sleep(50 / 1000)
+    bot.send_sticker(chatid, random.sample(getSetting(code='STICKERS', name='BOT_END_FLEX'), 1)[0]['value'])
+
 
 def main_loop():
     if (config.POLLING):

@@ -1155,6 +1155,72 @@ newvalues = { "$set": { "value":
                                     'value': 'CAACAgIAAxkBAAKEz142gCsRn2f3r-e-fB-AlGW21dS2AALDPwAC4KOCB5UoxIzuehFgGAQ'
                                 }
                             ] 
+                        },
+                        {
+                            'name': 'BOT_GO_FLEX',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAACAgIAAxkBAAKVC148VaR7rrZrEPG4lozAc4bKcKChAAJkAAOFQTIQGugJwpZxbJ0YBA'
+                                }
+                            ] 
+                        },
+                        {
+                            'name': 'BOT_FLEX',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAACAgIAAxkBAAKVD148VhBELpdpWH-hL47yQwyrQi0ZAAJUAAOFQTIQ2ZWEJZvDUmoYBA'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': 'CAACAgIAAxkBAAKVEV48VhFWneZt-_ikDC0FbIN-N5v6AAJVAAOFQTIQS8S4HV367O8YBA'
+                                },
+                                {
+                                    'name': '3',
+                                    'value': 'CAACAgIAAxkBAAKVE148Vk0kqnscDqURTEmK8jK-GA6TAAIPAAN1UIETwg1RZjDIXX8YBA'
+                                },
+                                {
+                                    'name': '4',
+                                    'value': 'CAACAgIAAxkBAAKVFV48VlYtoKDAi0gUr8i4U047O9S4AAIOAAN1UIET_sdrEVjKnl0YBA'
+                                },
+                                {
+                                    'name': '5',
+                                    'value': 'CAACAgIAAxkBAAKVF148VnpTtwyJlIHyGk0H3JPiM9t_AAIQAAN1UIETE8FnCIyfw_sYBA'
+                                },
+                                {
+                                    'name': '6',
+                                    'value': 'CAACAgIAAxkBAAKVGV48VoW6wk9967s0AAGEsdZR8eo9zAACCAADdVCBEz9--bhiHsOGGAQ'
+                                },
+                                {
+                                    'name': '7',
+                                    'value': 'CAACAgIAAxkBAAKVG148VzCiNRRB5yyt4AwrrvsSVIgqAAIHAAN1UIET-UUCe-oKIroYBA'
+                                },
+                                {
+                                    'name': '8',
+                                    'value': 'CAACAgIAAxkBAAKVHV48VzhEbnSmzb5YAlYf4YbGN4L-AAILAAN1UIET3l2gshmuaO0YBA'
+                                },
+                                {
+                                    'name': '9',
+                                    'value': 'CAACAgIAAxkBAAKVH148V1nqnEaeRUXwQrL9UljQCZZBAAI4dgEAAWOLRgwsE7xUfVt_5hgE'
+                                },
+                                {
+                                    'name': '10',
+                                    'value': 'CAACAgIAAxkBAAKVIV48V2awGJxVPZHIB_UWdNiKka7dAAI7dgEAAWOLRgxZxmSeLOoRXBgE'
+                                }
+                            ] 
+                        },
+                        {
+                            'name': 'BOT_END_FLEX',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAACAgIAAxkBAAKVDV48VezE11O-GkbhFbU0t0K8O5o3AAJjAAOFQTIQveRUbGOqm4UYBA'
+                                }
+                            ] 
                         }
 
                     ]
