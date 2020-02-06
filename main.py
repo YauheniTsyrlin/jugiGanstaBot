@@ -1391,7 +1391,7 @@ def main_message(message):
                         userIAm.setBirthday(parse(response.split(':birthday:')[1]).timestamp())
                         updateUser(userIAm)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)        
-                     elif 'flex' == response.split(':')[1]:
+                    elif 'flex' == response.split(':')[1]:
                         # jugi:flex:$bool
                         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
