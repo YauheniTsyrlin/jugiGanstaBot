@@ -250,15 +250,21 @@ def updateUser(newuser: users.User):
 
 def isUserBan(login: str):
     userIAm = getUserByLogin(login)
+    logger.info('1')
     if userIAm:
+        logger.info('2')
         if userIAm.getTimeBan():
+            logger.info('3')
             tz = config.SERVER_MSK_DIFF
             date_for = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
             if date_for.timestamp() < userIAm.getTimeBan():
+                logger.info('4')
                 return True
             else:
+                logger.info('5')
                 userIAm.setTimeBan(None)
                 updateUser(userIAm)
+    logger.info('6')
     return False
 
 def getWariorFraction(string: str):
