@@ -1182,7 +1182,6 @@ def main_message(message):
                     and message.reply_to_message
                     and message.text):
             login = message.reply_to_message.from_user.username
-            send_messages_big(message.chat.id, text=f'login {login}')
 
             if isGoatBoss(login) or isAdmin(login):
                 login = message.from_user.username
@@ -1211,18 +1210,12 @@ def main_message(message):
             sec = int(randrange(15, int(getSetting(code='PROBABILITY',name='FUNY_BAN'))))
             tz = config.SERVER_MSK_DIFF
             ban_date = datetime.now() + timedelta(hours=tz.hour)
-            
-            send_messages_big(message.chat.id, text=f'sec {sec}')
-            send_messages_big(message.chat.id, text=f'user.getTimeBan() {user.getTimeBan()}')
 
-            # if user.getTimeBan():
-
-            #     send_messages_big(message.chat.id, text=f'timeBan is not null {user.getTimeBan()}')
-            #     ban_date = datetime.fromtimestamp(user.getTimeBan()) + timedelta(second=sec, hours=tz.hour) 
-            #     send_messages_big(message.chat.id, text=f'timeBan ban {ban_date}')
+            if user.getTimeBan():
+                ban_date = datetime.fromtimestamp(user.getTimeBan()) + timedelta(second=sec, hours=tz.hour) 
 
             user.setTimeBan(ban_date.timestamp())
-            report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно!'
+            report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно! Помолчит до {ban_date}'
             updateUser(user)
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text + f'\n{report}')
         elif (callJugi and 'статус ' in message.text.lower() and ' @' in message.text):
