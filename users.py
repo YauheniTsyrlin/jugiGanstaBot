@@ -145,7 +145,6 @@ class User(object):
         i = 0
         self.login = login
         self.timeUpdate = date
-        self.timeBan = None
         self.status = None
         self.dzen = 0
         self.band = None

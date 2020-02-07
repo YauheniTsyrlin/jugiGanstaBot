@@ -1206,6 +1206,8 @@ def main_message(message):
             tz = config.SERVER_MSK_DIFF
             ban_date = datetime.now() + timedelta(hours=tz.hour)
             
+            send_messages_big(message.chat.id, text=f'user.getTimeBan() {user.getTimeBan()}')
+
             if user.getTimeBan():
 
                 send_messages_big(message.chat.id, text=f'timeBan is not null {user.getTimeBan()}')
@@ -2512,7 +2514,7 @@ def pending_message():
         
         text = pending_message.get('text')
         if pending_message.get('dialog_flow_text'):
-            text = getResponseDialogFlow(None, pending_message.get('dialog_flow_text').fulfillment_text)
+            text = getResponseDialogFlow(None, pending_message.get('dialog_flow_text')).fulfillment_text
         
         if pending_message.get('reply_message'):
             reply_to_big(pending_message.get('reply_message'), text)
