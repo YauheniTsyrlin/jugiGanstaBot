@@ -1216,7 +1216,7 @@ def main_message(message):
             #     ban_date = datetime.fromtimestamp(user.getTimeBan()) + timedelta(second=sec, hours=tz.hour) 
 
             user.setTimeBan(ban_date.timestamp())
-            report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно! Помолчит до {ban_date}'
+            report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно! Помолчит до {ban_date} tz+{tz.hour}'
             updateUser(user)
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text + f'\n{report}')
         elif (callJugi and 'статус ' in message.text.lower() and ' @' in message.text):
