@@ -1176,6 +1176,7 @@ def main_message(message):
                     and message.reply_to_message
                     and message.text):
             login = message.reply_to_message.from_user.username
+            send_messages_big(message.chat.id, text=f'login {login}')
 
             if isGoatBoss(login) or isAdmin(login):
                 login = message.from_user.username
