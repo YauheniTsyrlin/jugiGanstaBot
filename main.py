@@ -1209,7 +1209,8 @@ def main_message(message):
             
             sec = int(randrange(15, int(getSetting(code='PROBABILITY',name='FUNY_BAN'))))
             tz = config.SERVER_MSK_DIFF
-            ban_date = datetime.now() + timedelta(hours=tz.hour)
+            
+            ban_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
 
             if user.getTimeBan():
                 ban_date = datetime.fromtimestamp(user.getTimeBan()) + timedelta(second=sec, hours=tz.hour) 
@@ -1461,7 +1462,7 @@ def main_message(message):
                         goat = getMyGoatName(message.from_user.username)
 
                         tz = config.SERVER_MSK_DIFF
-                        plan_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+                        plan_date = datetime.now() + c
                         raid_date = plan_date
 
                         if response.split(response.split(":")[1])[1][1:].strip() == '*':
