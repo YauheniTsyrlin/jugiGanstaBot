@@ -1210,7 +1210,7 @@ def main_message(message):
             sec = int(randrange(15, int(getSetting(code='PROBABILITY',name='FUNY_BAN'))))
             tz = config.SERVER_MSK_DIFF
 
-            ban_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+            ban_date = datetime.now() + timedelta(seconds=sec, minutes=tz.minute, hours=tz.hour)
 
             # if user.getTimeBan():
             #     ban_date = datetime.fromtimestamp(user.getTimeBan()) + timedelta(second=sec, hours=tz.hour) 
