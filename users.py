@@ -64,6 +64,10 @@ def updateUser(newUser, oldUser):
         oldUser.dzen = newUser.dzen
     if newUser.timeUpdate:
         oldUser.timeUpdate = newUser.timeUpdate
+
+    if hasattr(newUser, 'timeBan'):
+        oldUser.timeBan = newUser.timeBan
+
     if hasattr(newUser, 'ping'):
         if newUser.ping == None:
             pass
