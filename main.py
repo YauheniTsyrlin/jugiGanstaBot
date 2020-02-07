@@ -250,21 +250,15 @@ def updateUser(newuser: users.User):
 
 def isUserBan(login: str):
     userIAm = getUserByLogin(login)
-    logger.info('1')
     if userIAm:
-        logger.info('2')
         if userIAm.getTimeBan():
-            logger.info('3')
             tz = config.SERVER_MSK_DIFF
             date_for = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
             if date_for.timestamp() < userIAm.getTimeBan():
-                logger.info('4')
                 return True
             else:
-                logger.info('5')
                 userIAm.setTimeBan(None)
                 updateUser(userIAm)
-    logger.info('6')
     return False
 
 def getWariorFraction(string: str):
@@ -1212,11 +1206,11 @@ def main_message(message):
 
             ban_date = datetime.now() + timedelta(seconds=sec, minutes=tz.minute, hours=tz.hour)
 
-            # if user.getTimeBan():
-            #     ban_date = datetime.fromtimestamp(user.getTimeBan()) + timedelta(second=sec, hours=tz.hour) 
+            if user.getTimeBan():
+                ban_date = datetime.fromtimestamp(user.getTimeBan()) + timedelta(second=sec) 
 
             user.setTimeBan(ban_date.timestamp())
-            report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно! Помолчит до {ban_date} tz+{tz.hour}'
+            report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно!'
             updateUser(user)
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text + f'\n{report}')
         elif (callJugi and 'статус ' in message.text.lower() and ' @' in message.text):
