@@ -1207,7 +1207,7 @@ def main_message(message):
             ban_date = datetime.now() + timedelta(seconds=sec, minutes=tz.minute, hours=tz.hour)
 
             if user.getTimeBan():
-                ban_date = datetime.fromtimestamp(user.getTimeBan()) + timedelta(second=sec) 
+                ban_date = datetime.fromtimestamp(user.getTimeBan()) + timedelta(seconds=sec) 
 
             user.setTimeBan(ban_date.timestamp())
             report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно!'
