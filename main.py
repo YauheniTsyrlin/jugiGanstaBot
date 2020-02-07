@@ -1215,11 +1215,11 @@ def main_message(message):
             send_messages_big(message.chat.id, text=f'sec {sec}')
             send_messages_big(message.chat.id, text=f'user.getTimeBan() {user.getTimeBan()}')
 
-            if user.getTimeBan():
+            # if user.getTimeBan():
 
-                send_messages_big(message.chat.id, text=f'timeBan is not null {user.getTimeBan()}')
-                ban_date = datetime.fromtimestamp(user.getTimeBan()) + timedelta(second=sec, hours=tz.hour) 
-                send_messages_big(message.chat.id, text=f'timeBan ban {ban_date}')
+            #     send_messages_big(message.chat.id, text=f'timeBan is not null {user.getTimeBan()}')
+            #     ban_date = datetime.fromtimestamp(user.getTimeBan()) + timedelta(second=sec, hours=tz.hour) 
+            #     send_messages_big(message.chat.id, text=f'timeBan ban {ban_date}')
 
             user.setTimeBan(ban_date.timestamp())
             report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно!'
@@ -1408,37 +1408,36 @@ def main_message(message):
                         updateUser(userIAm)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)        
                     elif 'flex' == response.split(':')[1]:
-                        pass
-                        # # jugi:flex:$bool
-                        # if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
-                        #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
-                        #     return
+                        # jugi:flex:$bool
+                        if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
+                            return
 
-                        # if eval(response.split(':')[2]):
-                        #     counter = int(randrange(int(getSetting(code='PROBABILITY', name='JUGI_FLEX'))))
+                        if eval(response.split(':')[2]):
+                            counter = int(randrange(int(getSetting(code='PROBABILITY', name='JUGI_FLEX'))))
 
-                        #     send_messages_big(message.chat.id, f'Ща заебашу {counter} стикеров!')
-                        #     bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_GO_FLEX'), 1)[0]['value'])
+                            send_messages_big(message.chat.id, f'Ща заебашу {counter} стикеров!')
+                            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_GO_FLEX'), 1)[0]['value'])
                             
-                        #     global flexFlag
-                        #     flexFlag = True
-                        #     for i in range(0, counter):
-                        #         if flexFlag:
-                        #             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_FLEX'), 1)[0]['value'])
-                        #             time.sleep(random.randint(500,2000) / 1000)
-                        #         else:
-                        #             send_messages_big(message.chat.id, text='Пипец ты кайфолом!')
-                        #             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
-                        #             flexFlag = False
-                        #             break
-                        #     if flexFlag:
-                        #         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_END_FLEX'), 1)[0]['value'])
-                        #         send_messages_big(message.chat.id, f'Хорошо, заебашил {counter} стикеров!')
-                        #         flexFlag = False
-                        # else:
-                        #     flexFlag = False
-                        #     send_messages_big(message.chat.id, text='Остановиливаю флекс нахОй!')
-                        #     return
+                            global flexFlag
+                            flexFlag = True
+                            for i in range(0, counter):
+                                if flexFlag:
+                                    bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_FLEX'), 1)[0]['value'])
+                                    time.sleep(random.randint(500,2000) / 1000)
+                                else:
+                                    send_messages_big(message.chat.id, text='Пипец ты кайфолом!')
+                                    bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
+                                    flexFlag = False
+                                    break
+                            if flexFlag:
+                                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_END_FLEX'), 1)[0]['value'])
+                                send_messages_big(message.chat.id, f'Хорошо, заебашил {counter} стикеров!')
+                                flexFlag = False
+                        else:
+                            flexFlag = False
+                            send_messages_big(message.chat.id, text='Остановиливаю флекс нахОй!')
+                            return
                     elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
                         photo = random.sample(getSetting(code='STICKERS', name='BOT_LOVE'), 1)[0]['value']
