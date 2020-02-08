@@ -351,24 +351,27 @@ def statistic(goatName: str):
 
 print('\n======== radeReport ==========\n')
 
-dresult = dungeons.aggregate([ 
-    {   "$match": {
-                "band": "АртхǁȺǁус"
-            } 
-    },
-    {   "$group": {
-        "_id": "$date", 
-        "count": {
-            "$sum": 1}}},
+# dresult = dungeons.aggregate([ 
+#     {   "$match": {
+#                 "band": "АртхǁȺǁус"
+#             } 
+#     },
+#     {   "$group": {
+#         "_id": "$date", 
+#         "count": {
+#             "$sum": 1}}},
         
-    {   "$sort" : { "count" : -1 } }
-    ])
+#     {   "$sort" : { "count" : -1 } }
+#     ])
     
-for d in dresult:
-    print(d)
-    date = d.get("_id") 
-    print(f'{d.get("count")} - {datetime.fromtimestamp(date)}')  
+# for d in dresult:
+#     print(d)
+#     date = d.get("_id") 
+#     print(f'{d.get("count")} - {datetime.fromtimestamp(date)}')  
 
+b = 'True'
+if b == True:
+    print(f'{1}')
 
 sys.exit(0)
 
