@@ -361,7 +361,7 @@ def setSetting(code: str, value: str):
     return True
 
 def getButtonsMenu(list_buttons):
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+    markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     groups_names = []
     for group in list_buttons:
         groups_names.append(types.KeyboardButton(f'{group}'))
@@ -493,7 +493,7 @@ def send_back_from_usset(message):
     user.addSettings(setting)
     updateUser(user)
 
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+    markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда')
     bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
 
@@ -505,7 +505,7 @@ def send_settings(message):
         return
 
     if message.text == '👨‍❤️‍👨Участник "Пидор дня"':
-        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+        markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
         markup.add('Участвую 👨‍❤️‍👨!', 'Сам ты пидор 👨‍❤️‍👨!')
         bot.send_message(message.chat.id, text='Розыгрыш в общем чате ровно в 21:00\nТвой выбор...', reply_markup=markup)
 
@@ -515,7 +515,7 @@ def send_back_from_usset(message):
     if not privateChat:
         bot.send_message(message.chat.id, text='Иди в личный чат!')
         return
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+    markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда')
     bot.send_message(message.chat.id, text='Вернулся...', reply_markup=markup)
 
@@ -529,7 +529,7 @@ def send_usset(message):
 
     buttons = getUserSettingsName()
     buttons.append('Назад 📋🔚')
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+    markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     markup.add(*buttons)
     user = getUserByLogin(message.from_user.username)
     bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
@@ -539,7 +539,7 @@ def send_usset(message):
 def send_welcome(message):
     response = getResponseDialogFlow(message, 'start').fulfillment_text
     privateChat = ('private' in message.chat.type)
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+    markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     if not privateChat:
         markup.add('Джу, 📋 Отчет', 'Джу, 📜 Профиль', f'Джу, ⏰ план рейда')
     else:
@@ -2654,7 +2654,7 @@ def rade():
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='LOVE_DAY'), 1)[0]['value']) 
 
     # Пидор дня
-    if now_date.hour == 19 and now_date.minute == 36 and now_date.second < 15:
+    if now_date.hour == 19 and now_date.minute == 48 and now_date.second < 15:
         updateUser(None)
         user_in_game = []
         for user in USERS_ARR:
@@ -2665,12 +2665,20 @@ def rade():
         winners = random.sample(user_in_game, 1)
         if len(winners)>0:
             userWin = winners[0]
-            text = f'Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getName()} (@{userWin.getLogin()})!!!\n👬 Два самых красивых бандита под вздохи толпы надевают на твою голову 👑 золотую корону и, ласково шлепая тебя по попе, сгоняют с помоста!\n🎆 Самое время поздравить сегодняшнего победителя!'
+            text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getName()} (@{userWin.getLogin()})!!!\n\n👬 Два самых красивых бандита под вздохи толпы надевают на твою голову 👑 золотую корону и, ласково шлепая тебя по попе, сгоняют с помоста!\n🎁 Самое время поздравить сегодняшнего победителя!'
             # getMyGoat(userWin.getLogin())['chats']['info']
             send_messages_big(497065022, text=text)
+
+            acc = '👑 "Пидор дня"'
             for user in USERS_ARR:
-                user.removeAccessory('👑 "Пидор дня"')
-            userWin.addAccessory('👑 "Пидор дня"')
+                if acc in user.getAccessory() 
+                    user.removeAccessory(acc)
+                    updateUser(user)
+                    break
+            
+            userWin.addAccessory(acc)
+            updateUser(userWin)
+            send_messages_big(497065022, text=user.getName() + '!\n' + getResponseDialogFlow(call.message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
 
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
