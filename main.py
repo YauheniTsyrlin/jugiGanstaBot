@@ -2654,7 +2654,7 @@ def rade():
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='LOVE_DAY'), 1)[0]['value']) 
 
     # Пидор дня
-    if now_date.hour == 19 and now_date.minute == 51 and now_date.second < 15:
+    if now_date.hour == 19 and now_date.minute == 53 and now_date.second < 15:
         updateUser(None)
         user_in_game = []
         for user in USERS_ARR:
@@ -2678,7 +2678,7 @@ def rade():
             
             userWin.addAccessory(acc)
             updateUser(userWin)
-            send_messages_big(497065022, text=user.getName() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
+            send_messages_big(497065022, text=user.getName() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
 
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
