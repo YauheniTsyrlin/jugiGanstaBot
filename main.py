@@ -1356,14 +1356,14 @@ def main_message(message):
             doc = registered_users.delete_one(myquery)
             updateUser(None)
             
-            myquery = { "name": f"{login}" }
-            war = registered_wariors.delete_one(myquery)
-            update_warior(None)
+            # myquery = { "name": f"{login}" }
+            # war = registered_wariors.delete_one(myquery)
+            # update_warior(None)
 
             if doc.deleted_count == 0:
-                send_messages_big(message.chat.id, text=f'{login} не найден в бандитах! Удалено {war.deleted_count} в дневнике боев!')
+                send_messages_big(message.chat.id, text=f'{login} не найден в бандитах!')
             else:                 
-                send_messages_big(message.chat.id, text=f'{login} уволен нафиг! Удалено {doc.deleted_count} записей в дневнике бандитов и {war.deleted_count} в дневнике боев!')
+                send_messages_big(message.chat.id, text=f'{login} уволен нафиг!')
         elif (callJugi and 'профиль' in message.text.lower() ):
             if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                 pass
