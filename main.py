@@ -1311,7 +1311,7 @@ def main_message(message):
             
             updateUser(None)
         elif (callJugi and 'профиль @' in message.text.lower()):
-            
+            updateUser(None)
             name = tools.deEmojify(message.text.split('@')[1].strip())
             if isGoatBoss(message.from_user.username):
                 login = message.text.split('@')[1].strip()
@@ -1370,6 +1370,8 @@ def main_message(message):
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
                 return
+
+            updateUser(None)
             user = users.getUser(message.from_user.username, registered_users)
             if user:
                 warior = getWariorByName(user.getName(), user.getFraction())
