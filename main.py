@@ -2678,7 +2678,7 @@ def rade():
             
             userWin.addAccessory(acc)
             updateUser(userWin)
-            send_messages_big(chat, text=user.getName() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
+            send_messages_big(chat, text=userWin.getName() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
             row = {}
             row.update({'date':now_date.timestamp()})
             row.update({'login':userWin.getLogin()})
