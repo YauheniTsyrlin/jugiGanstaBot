@@ -507,7 +507,7 @@ def send_settings(message):
     if message.text == '👨‍❤️‍👨Участник "Пидор дня"':
         markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
         markup.add('Участвую 👨‍❤️‍👨!', 'Сам ты пидор 👨‍❤️‍👨!')
-        bot.send_message(message.chat.id, text='Розыгрыш в общем чате ровно в 21:00\nТвой выбор...', reply_markup=markup)
+        bot.send_message(message.chat.id, text='Розыгрыш в общем чате ровно в 9:00\nТвой выбор...', reply_markup=markup)
 
 @bot.message_handler(func=lambda message: message.text and 'Назад 📋🔚' in message.text)
 def send_back_from_usset(message):
@@ -2654,7 +2654,7 @@ def rade():
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='LOVE_DAY'), 1)[0]['value']) 
 
     # Пидор дня
-    if now_date.hour == 21 and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour == 9 and now_date.minute == 0 and now_date.second < 15:
         updateUser(None)
         user_in_game = []
         for user in USERS_ARR:
