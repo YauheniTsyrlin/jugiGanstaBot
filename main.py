@@ -1336,25 +1336,23 @@ def main_message(message):
                     send_messages_big(message.chat.id, text=warior.getProfile())
         elif callJugi and ('уволить @' in message.text.lower() or 'удалить @' in message.text.lower()):
             if not isGoatBoss(message.from_user.username):
-                if not isAdmin(message.from_user.username):
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_goat_boss').fulfillment_text)
-                    return
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_goat_boss').fulfillment_text)
+                return
 
             login = message.text.split('@')[1].strip()
+            user = getUserByLogin(login)
+            if not user:
+                send_messages_big(message.chat.id, text=f'Нет зарегистрированного бандита с логином {login}!')
+                return
 
-            # user = getUserByLogin(login)
-            # if not user:
-            #     send_messages_big(message.chat.id, text=f'Нет зарегистрированного бандита с логином {login}!')
-            #     return
+            if not isUsersBand(message.from_user.username, user.getBand()):
+                send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
+                return
 
-            # if not isAdmin(message.from_user.username):
-            #     if not isUsersBand(message.from_user.username, user.getBand()):
-            #         send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
-            #         return
-
-            myquery = { "login": f"{login}" }
+            myquery = { "login": f"{user.getLogin()}" }
             doc = registered_users.delete_one(myquery)
             updateUser(None)
+            
             
             # myquery = { "name": f"{login}" }
             # war = registered_wariors.delete_one(myquery)
