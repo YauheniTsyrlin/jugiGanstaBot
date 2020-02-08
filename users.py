@@ -493,11 +493,11 @@ class User(object):
         if self.settings and len(self.settings)>0:
             for setting in self.settings:
                 value = setting["value"]
-                if value == True
+                if value == True:
                     value = 'Да'
-                elif value == False
+                elif value == False:
                     value = 'Нет'
-                    
+
                 result = result + f'▫️ {setting["name"]}: {value}\n'
         if not result == '':
             return f'📋Личные настройки (/usset):\n'+result
