@@ -2678,7 +2678,7 @@ def rade():
             
             userWin.addAccessory(acc)
             updateUser(userWin)
-            send_messages_big(497065022, text=user.getName() + '!\n' + getResponseDialogFlow(call.message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
+            send_messages_big(497065022, text=user.getName() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
 
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
