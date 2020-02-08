@@ -413,6 +413,19 @@ def censored(message):
         bot.send_sticker(message.chat.id, id)
     send_messages_big(message.chat.id, text=getResponseDialogFlow(message ,'shot_censorship').fulfillment_text)
 
+def getUserSettingsName():
+    result = []
+    for sett in getSetting(code='USER_SETTINGS'):
+        result.append(sett["name"])
+    return result
+
+def getUserSetting(login: str, name: str):
+    user = getUserByLogin(login)
+    for sett in user.getSettings():
+        if sett["name"] == name:
+            return sett
+    return None
+
 # Handle new_chat_members
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
 def send_welcome_and_dismiss(message):
@@ -457,6 +470,68 @@ def default_query(inline_query):
             bot.answer_inline_query(inline_query.id, result, cache_time=30)
     except Exception as e:
         print(e)
+
+@bot.message_handler(func=lambda message: message.text and ('Участвую 👨‍❤️‍👨!' in message.text or 'Сам ты пидор 👨‍❤️‍👨!' in message.text))
+def send_back_from_usset(message):
+    privateChat = ('private' in message.chat.type)
+    if not privateChat:
+        bot.send_message(message.chat.id, text='Иди в личный чат!')
+        return
+
+    user = getUserByLogin(message.from_user.username)
+    setting = None
+    for s in getSetting(code='USER_SETTINGS'):
+        if s["name"] == '👨‍❤️‍👨Участник "Пидор дня"':
+            setting = s
+
+    if 'Участвую 👨‍❤️‍👨!' in message.text:
+        setting.update({'value': True})
+    elif 'Сам ты пидор 👨‍❤️‍👨!' in message.text:
+        setting.update({'value': False})
+
+    user.addSettings(setting)
+    updateUser(user)
+
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+    markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда')
+    bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
+
+@bot.message_handler(func=lambda message: message.content_type == 'text' and message.text in getUserSettingsName())
+def send_settings(message):
+    privateChat = ('private' in message.chat.type)
+    if not privateChat:
+        bot.send_message(message.chat.id, text='Иди в личный чат!')
+        return
+
+    if message.text == '👨‍❤️‍👨Участник "Пидор дня"':
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+        markup.add('Участвую 👨‍❤️‍👨!', 'Сам ты пидор 👨‍❤️‍👨!')
+        bot.send_message(message.chat.id, text='Розыгрыш в общем чате ровно в 21:00\nТвой выбор...', reply_markup=markup)
+
+@bot.message_handler(func=lambda message: message.text and 'Назад 📋🔚' in message.text)
+def send_back_from_usset(message):
+    privateChat = ('private' in message.chat.type)
+    if not privateChat:
+        bot.send_message(message.chat.id, text='Иди в личный чат!')
+        return
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+    markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда')
+    bot.send_message(message.chat.id, text='Вернулся...', reply_markup=markup)
+
+# Handle /usset
+@bot.message_handler(commands=['usset'])
+def send_usset(message):
+    privateChat = ('private' in message.chat.type)
+    if not privateChat:
+        bot.send_message(message.chat.id, text='Иди в личный чат!')
+        return
+
+    buttons = getUserSettingsName()
+    buttons.append('Назад 📋🔚')
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, row_width=2, resize_keyboard=True)
+    markup.add(*buttons)
+    user = getUserByLogin(message.from_user.username)
+    bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
 
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['start'])
@@ -2577,6 +2652,22 @@ def rade():
             send_messages_big(goat['chats']['info'], report)
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='LOVE_DAY'), 1)[0]['value']) 
 
+    # Пидор дня
+    if now_date.hour == 21 and now_date.minute == 0 and now_date.second < 15:
+        updateUser(None)
+        user_in_game = []
+        for user in USERS_ARR:
+            usersettings = getUserSetting(user.getLogin(), '👨‍❤️‍👨Участник "Пидор дня"')
+            if usersettings:
+                user_in_game.append(user)
+
+        winners = random.sample(user_in_game, 1)
+        if len(winners)>0:
+            userWin = winners[0]
+            text = f'👨‍❤️‍💋‍👨 Поздравляю!\nВ конкурсе "Пидор дня" сегодня побеждает...\n{userWin.getName()}!!!\nСамое время поздравить сегодняшнего победителя!'
+            send_messages_big(getMyGoat(userWin.getLogin())['chats']['info'], text=text)
+        
+
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
         updateUser(None)
@@ -2922,7 +3013,6 @@ def flex_job(counter: int, chatid: str):
         time.sleep(random.randint(500,2000) / 1000)
     bot.send_sticker(chatid, random.sample(getSetting(code='STICKERS', name='BOT_END_FLEX'), 1)[0]['value'])
     send_messages_big(chatid, f'Хорошо, заебашил {counter} стикеров!')
-
 
 def main_loop():
     if (config.POLLING):

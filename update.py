@@ -70,6 +70,15 @@ if (not result):
         'value': ''   
              })  
 
+result = settings.find_one({'code': 'USER_SETTINGS'})
+if (not result):
+    print('Not Find setting. Insert USER_SETTINGS')
+    settings.insert_one({
+        'code': 'USER_SETTINGS', 
+        'description': 'Возможные настройки пользователя', 
+        'value': ''   
+             })  
+
 result = settings.find_one({'code': 'BANDS_ACCESS_WARIORS'})
 if (not result):
     print('Not Find setting. Insert BANDS_ACCESS_WARIORS')
@@ -1395,6 +1404,37 @@ newvalues = { "$set": { "value":
                 } 
             } 
 u = settings.update_one(myquery, newvalues)
+
+myquery = { "code": 'USER_SETTINGS' }
+newvalues = { "$set": { "value": 
+                    [
+                        {
+                            'name': '👨‍❤️‍👨Участник "Пидор дня"',
+                            'value': False
+                        }
+                        # ,
+                        # {
+                        #     'name': '📍Место обитания',
+                        #     'value': ""
+                        # },
+                        # {
+                        #     'name': '⌚Часовой пояс',
+                        #     'value': ""
+                        # },
+                        # {
+                        #     'name': '🗓️День рождения',
+                        #     'value': ""
+                        # },
+                        # {
+                        #     'name': '🔔Пинги',
+                        #     'value': ""
+                        # }
+                    ]
+                } 
+            } 
+u = settings.update_one(myquery, newvalues)
+
+
 
 myquery = { "code": 'REPORTS' }
 newvalues = { "$set": { "value": 

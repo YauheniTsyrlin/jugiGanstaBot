@@ -84,6 +84,10 @@ def updateUser(newUser, oldUser):
     if hasattr(newUser, 'accessory'):
         if newUser.accessory:
             oldUser.accessory = newUser.accessory
+    
+    if hasattr(newUser, 'settings'):
+        if newUser.settings:
+            oldUser.settings = newUser.settings
 
     if hasattr(newUser, 'maxkm'):
         if newUser.maxkm:
@@ -134,6 +138,8 @@ def importUser(registered_user):
             u.chat     = registered_user['chat']
         if (registered_user.get('accessory')):    
             u.accessory     = registered_user['accessory']
+        if (registered_user.get('settings')):    
+            u.settings     = registered_user['settings']
         u.setRaidLocation(registered_user['raidlocation'])
         if (registered_user.get('wastelandLocation')):
             u.setWastelandLocation(registered_user['wastelandLocation'])
@@ -161,6 +167,7 @@ class User(object):
         self.ping = None
         self.chat = None
         self.accessory = None
+        self.settings = None
         self.maxkm = None
         self.birthday = None
 
@@ -294,8 +301,11 @@ class User(object):
             string = string + f'├👣Был замечен на {self.getMaxkm()}км\n'
         string = string + f'└🏋️‍♂️Вес на рейде: {self.getRaidWeight()}\n'
         string = string + f'\n'
+        
+        string = string + self.getSettingsReport() + '\n'
 
-        string = string + f'Аксессуары:\n'
+
+        string = string + f'🛒Аксессуары:\n'
         if self.accessory and len(self.accessory) > 0:
             for acc in self.accessory:
                 string = string + f'▫️ {acc}\n'
@@ -469,6 +479,42 @@ class User(object):
         if self.accessory == None:
             self.accessory = []
         self.accessory.remove(accessoryItem)
+
+
+    def setSettings(self, settings):
+        self.settings = settings  
+    def getSettings(self):
+        if self.settings == None:
+            self.settings = []
+        return self.settings
+
+    def getSettingsReport(self):
+        result = ''
+        if self.settings and len(self.settings)>0:
+            for setting in self.settings:
+                result = result + f'▫️ {setting["name"]}: {setting["value"]}\n'
+        if not result == '':
+            return f'📋Личные настройки (/usset):\n'+result
+        else:
+            
+            return f'📋Личные настройки (/usset):\n▫️ Ничего нет' + '\n'
+
+    def addSettings(self, settingItem: str):
+        if self.settings == None:
+            self.settings = []
+        find = False
+        for setting in self.settings:
+            if setting["name"] == settingItem["name"]:
+                setting.update({'value': settingItem["value"]})
+                find = True
+        if not find:
+            self.settings.append(settingItem)
+
+    def removeSettings(self, settingItem: str):
+        if self.settings == None:
+            self.settings = []
+        self.settings.remove(settingItem)
+
 
 # ------------------------------------------
     def setTimeBan(self, timeBan):
