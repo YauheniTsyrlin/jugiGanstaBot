@@ -52,6 +52,7 @@ pending_messages = mydb["pending_messages"]
 plan_raids      = mydb["rades"]
 dungeons        = mydb["dungeons"]
 report_raids    = mydb["report_raids"]
+man_of_day      = mydb["man_of_day"]
 
 
 flexFlag = False
@@ -2653,7 +2654,7 @@ def rade():
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='LOVE_DAY'), 1)[0]['value']) 
 
     # Пидор дня
-    if now_date.hour == 21 and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour == 19 and now_date.minute == 36 and now_date.second < 15:
         updateUser(None)
         user_in_game = []
         for user in USERS_ARR:
@@ -2664,9 +2665,12 @@ def rade():
         winners = random.sample(user_in_game, 1)
         if len(winners)>0:
             userWin = winners[0]
-            text = f'👨‍❤️‍💋‍👨 Поздравляю!\nВ конкурсе "Пидор дня" сегодня побеждает...\n{userWin.getName()}!!!\nСамое время поздравить сегодняшнего победителя!'
-            send_messages_big(getMyGoat(userWin.getLogin())['chats']['info'], text=text)
-        
+            text = f'Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getName()} (@{userWin.getLogin()})!!!\n👬 Два самых красивых бандита под вздохи толпы надевают на твою голову 👑 золотую корону и, ласково шлепая тебя по попе, сгоняют с помоста!\n🎆 Самое время поздравить сегодняшнего победителя!'
+            # getMyGoat(userWin.getLogin())['chats']['info']
+            send_messages_big(497065022, text=text)
+            for user in USERS_ARR:
+                user.removeAccessory('👑 "Пидор дня"')
+            userWin.addAccessory('👑 "Пидор дня"')
 
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
