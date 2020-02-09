@@ -2249,7 +2249,7 @@ def main_message(message):
                                 user_name = f'<b>{user_name}</b>'
                                 findInLoser = i
 
-                            if i <= 5: report = report + f'{i}. {emoji}{user_name}: {d.get("count")}\n' 
+                            if i <= 5: report = report + f'{i}. {emoji}{user_name} ({user_login}): {d.get("count")}\n' 
                              
 
                         if (i == 0): 
