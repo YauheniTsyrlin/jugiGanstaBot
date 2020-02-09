@@ -53,6 +53,7 @@ plan_raids      = mydb["rades"]
 dungeons        = mydb["dungeons"]
 report_raids    = mydb["report_raids"]
 man_of_day      = mydb["man_of_day"]
+pip_history     = mydb["pip_history"]
 
 
 flexFlag = False
@@ -427,6 +428,25 @@ def getUserSetting(login: str, name: str):
             return sett
     return None
 
+def addToUserHistory(user: users.User):
+    row = {}
+    row.update({'date'    :user.getTimeUpdate()})
+    row.update({'login'   :user.getLogin()})
+    row.update({'damage'  :user.getDamage()})   #⚔ 
+    row.update({'armor'   :user.getArmor()})    #🛡
+    row.update({'dzen'    :user.getDzen()})     #🏵
+    row.update({'force'   :user.getForce()})    #💪
+    row.update({'accuracy':user.getAccuracy()}) #🔫
+    row.update({'health'  :user.getHealth()})   #❤
+    row.update({'charisma':user.getCharisma()}) #🗣
+    row.update({'agility' :user.getAgility()})  #🤸🏽‍
+    row.update({'stamina' :user.getStamina()})  #🔋
+
+    newvalues = { "$set": row }
+    result = pip_history.update_one({'login': user.getLogin(), 'date': user.getTimeUpdate()}, newvalues)
+    if result.matched_count < 1:
+        pip_history.insert_one(row)
+
 # Handle new_chat_members
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
 def send_welcome_and_dismiss(message):
@@ -730,6 +750,7 @@ def main_message(message):
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
                 updateUser(updatedUser)
 
+            addToUserHistory(user)
                 
             if privateChat:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'setpip').fulfillment_text)
@@ -2751,6 +2772,8 @@ def rade():
             row.update({'login':userWin.getLogin()})
             row.update({'description':acc})
             man_of_day.insert_one(row)
+            send_messages_big(chat, text=report_man_of_day('')) 
+
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
         updateUser(None)
