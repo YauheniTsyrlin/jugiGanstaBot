@@ -2207,7 +2207,7 @@ def main_message(message):
                         report = report + f'\n' 
                         report = report + f'👨‍❤️‍👨ТОП 5 "Бандитов дня"\n' 
                         report = report + '\n'
-                        dresult = battle.aggregate([
+                        dresult = man_of_day.aggregate([
                             {   "$match": {
                                     "$and" : [
                                         { 
