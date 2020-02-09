@@ -2206,7 +2206,7 @@ def main_message(message):
 
                         report = report + f'\n' 
 
-                        report = report + report_man_of_day()
+                        report = report + report_man_of_day(message.from_user.username)
 
                         report = report + f'\n' 
                         report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
@@ -2225,7 +2225,7 @@ def main_message(message):
             if (random.random() <= float(getSetting(code='PROBABILITY', name='I_DONT_KNOW_YOU'))):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'you_dont_our_band_gangster').fulfillment_text)
 
-def report_man_of_day():
+def report_man_of_day(message_user_name: str):
     setting = getSetting(code='REPORTS',name='KILLERS')
     from_date = setting.get('from_date')
     to_date = setting.get('to_date')
@@ -2235,7 +2235,7 @@ def report_man_of_day():
 
     if (not to_date):
         to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
-        
+
     report = f'👨‍❤️‍👨ТОП 5 "Бандитов дня"\n' 
     report = report + '\n'
     dresult = man_of_day.aggregate([
@@ -2276,7 +2276,7 @@ def report_man_of_day():
         user_name = user_login
         if user:
             user_name = f'{user.getName()}'
-        if message.from_user.username  == user_login:
+        if message_user_name  == user_login:
             user_name = f'<b>{user_name}</b>'
             findInLoser = i
 
