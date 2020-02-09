@@ -2205,58 +2205,8 @@ def main_message(message):
                             if (findInLoser > 5): report = report + f'\n🧸 Твое место - {findInLoser}!\n'
 
                         report = report + f'\n' 
-                        report = report + f'👨‍❤️‍👨ТОП 5 "Бандитов дня"\n' 
-                        report = report + '\n'
-                        dresult = man_of_day.aggregate([
-                            {   "$match": {
-                                    "$and" : [
-                                        { 
-                                            "date": {
-                                                '$gte': from_date,
-                                                '$lt': to_date
-                                                    }       
-                                        }
-                                        ]
-                                } 
-                            }, 
-                            {   "$group": {
-                                "_id": "$login", 
-                                "count": {
-                                    "$sum": 1}}},
-                                
-                            {   "$sort" : { "count" : -1 } }
-                            ])
-                            
-                        findInLoser = 0
-                        i = 0
-                        for d in dresult:
-                            user_login = d.get("_id")  
-                            user = getUserByLogin(user_login)
-                            i = i + 1
-                            if i == 1:
-                                emoji = '💝 '
-                            elif i == 2:
-                                emoji = '💖 '    
-                            elif i == 3:
-                                emoji = '❤️ '
-                            else:
-                                emoji = ''
-                            
-                            user_name = user_login
-                            if user:
-                                user_name = f'{user.getName()}'
-                            if message.from_user.username  == user_login:
-                                user_name = f'<b>{user_name}</b>'
-                                findInLoser = i
 
-                            if i <= 5: report = report + f'{i}. {emoji}{user_name} ({user_login}): {d.get("count")}\n' 
-                             
-
-                        if (i == 0): 
-                            report = report + f'В нашем козле нет пидоров!\n'
-                        else:
-                            if (findInLoser > 5): report = report + f'\n🧸 Твое место - {findInLoser}!\n'
-
+                        report = report + report_man_of_day()
 
                         report = report + f'\n' 
                         report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
@@ -2274,6 +2224,58 @@ def main_message(message):
         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
             if (random.random() <= float(getSetting(code='PROBABILITY', name='I_DONT_KNOW_YOU'))):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'you_dont_our_band_gangster').fulfillment_text)
+
+def report_man_of_day():
+    report = f'👨‍❤️‍👨ТОП 5 "Бандитов дня"\n' 
+    report = report + '\n'
+    dresult = man_of_day.aggregate([
+        {   "$match": {
+                "$and" : [
+                    { 
+                        "date": {
+                            '$gte': from_date,
+                            '$lt': to_date
+                                }       
+                    }
+                    ]
+            } 
+        }, 
+        {   "$group": {
+            "_id": "$login", 
+            "count": {
+                "$sum": 1}}},
+            
+        {   "$sort" : { "count" : -1 } }
+        ])
+        
+    findInLoser = 0
+    i = 0
+    for d in dresult:
+        user_login = d.get("_id")  
+        user = getUserByLogin(user_login)
+        i = i + 1
+        if i == 1:
+            emoji = '💝 '
+        elif i == 2:
+            emoji = '💖 '    
+        elif i == 3:
+            emoji = '❤️ '
+        else:
+            emoji = ''
+        
+        user_name = user_login
+        if user:
+            user_name = f'{user.getName()}'
+        if message.from_user.username  == user_login:
+            user_name = f'<b>{user_name}</b>'
+            findInLoser = i
+
+        if i <= 5: report = report + f'{i}. {emoji}{user_name} ({user_login}): {d.get("count")}\n' 
+    if (i == 0): 
+        report = report + f'В нашем козле нет пидоров!\n'
+    else:
+        if (findInLoser > 5): report = report + f'\n🧸 Твое место - {findInLoser}!\n'
+    return report
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("dungeon"))
 def callback_query(call):
