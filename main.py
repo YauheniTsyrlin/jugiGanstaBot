@@ -2226,6 +2226,16 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'you_dont_our_band_gangster').fulfillment_text)
 
 def report_man_of_day():
+    setting = getSetting(code='REPORTS',name='KILLERS')
+    from_date = setting.get('from_date')
+    to_date = setting.get('to_date')
+
+    if (not from_date):
+        from_date = (datetime(2019, 1, 1)).timestamp() 
+
+    if (not to_date):
+        to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
+        
     report = f'👨‍❤️‍👨ТОП 5 "Бандитов дня"\n' 
     report = report + '\n'
     dresult = man_of_day.aggregate([
