@@ -2310,7 +2310,7 @@ def report_man_of_day(message_user_name: str):
     acc = '👑 "Пидор дня"'
     for u in list(USERS_ARR):
         if acc in u.getAccessory():
-            report = report + f'\nПидор дня <b>{u.getName()} ({u.getLogin()})</b>\n'
+            report = report + f'\nПидор дня <b>{u.getName()}</b> ({u.getLogin()})\n'
             break
     return report
 
