@@ -453,6 +453,8 @@ class User(object):
     def setAccessory(self, accessory):
         self.accessory = accessory  
     def getAccessory(self):
+        if self.accessory == None:
+            self.accessory = []
         return self.accessory
 
     def getAccessoryReport(self):

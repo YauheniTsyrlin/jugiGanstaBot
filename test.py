@@ -394,19 +394,31 @@ if True:
 
 # Define the upper limit, lower limit, interval of Y axis and colors
 y_LL = 100
+print(df.iloc[:, 1:])
 y_UL = int(df.iloc[:, 1:].max().max()*1.1)
+print(y_UL)
 y_interval = 400
-mycolors = ['tab:red', 'tab:blue', 'tab:green', 'tab:orange']    
+mycolors = ['tab:red', 'tab:blue', 'tab:green', 'tab:orange', 'tab:red', 'tab:blue', 'tab:green', 'tab:orange', 'tab:red']    
 
 # Draw Plot and Annotate
 fig, ax = plt.subplots(1,1,figsize=(16, 9), dpi= 80)    
 
 columns = df.columns[1:]  
-for i, column in enumerate(columns):    
-    plt.plot(df.date.values, df
-.values, lw=1.5, color=mycolors[i])    
-    plt.text(df.shape[0]+1, df
-.values[-1], column, fontsize=14, color=mycolors[i])
+print(columns)
+for i, column in enumerate(columns): 
+    print(f'{i}----------------------')
+    print(df.date.values) 
+    print('======================') 
+    print(df.date.values)   
+    print('**********************')
+    plt.plot(df.date.values, df.values, lw=1.5, color=mycolors[i])    
+    plt.text(df.shape[0]+1, df.values[-1], column, fontsize=14, color=mycolors[i])
+    print(df.shape[0]+1)
+    print('^^^^^^^^^^^^^^^^^^^^^^')
+    print(df.values[-1]) 
+    print('~~~~~~~~~~~~~~~~~~~~~~')
+    print(column) 
+    print('++++++++++++++++++++++')
 
 # Draw Tick lines  
 for y in range(y_LL, y_UL, y_interval):    
@@ -421,12 +433,16 @@ plt.gca().spines["top"].set_alpha(.3)
 plt.gca().spines["bottom"].set_alpha(.3)
 plt.gca().spines["right"].set_alpha(.3)
 plt.gca().spines["left"].set_alpha(.3)
-
+print("0")
 plt.title('Number of Deaths from Lung Diseases in the UK (1974-1979)', fontsize=22)
 plt.yticks(range(y_LL, y_UL, y_interval), [str(y) for y in range(y_LL, y_UL, y_interval)], fontsize=12)    
-plt.xticks(range(0, df.shape[0], 12), df.date.values[::12], horizontalalignment='left', fontsize=12)    
+plt.xticks(range(0, df.shape[0], 12), df.date.values[::12], horizontalalignment='left', fontsize=12) 
+
+print("1")
 plt.ylim(y_LL, y_UL)    
-plt.xlim(-2, 80)    
+print("2")
+plt.xlim(-2, 80)
+print("3")    
 plt.show()
 
 sys.exit(0)
