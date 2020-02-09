@@ -371,12 +371,28 @@ print('\n======== radeReport ==========\n')
 #     date = d.get("_id") 
 #     print(f'{d.get("count")} - {datetime.fromtimestamp(date)}')  
 
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
 import matplotlib.pyplot as plt
-# import numpy as np
-# np.random.seed(444)
+import seaborn as sns
+import warnings; warnings.filterwarnings(action='once')
 
-fig, _ = plt.subplots()
-print(type(fig)) # <class 'matplotlib.figure.Figure'>
+# Import Data
+df = pd.read_csv("https://github.com/selva86/datasets/raw/master/mpg_ggplot2.csv")
+cursor = db[collection].find(query)
+
+# Draw Plot
+plt.figure(figsize=(16,10), dpi= 80)
+sns.kdeplot(df.loc[df['cyl'] == 4, "cty"], shade=True, color="g", label="❤", alpha=.7)
+sns.kdeplot(df.loc[df['cyl'] == 5, "cty"], shade=True, color="deeppink", label="⚔", alpha=.7)
+sns.kdeplot(df.loc[df['cyl'] == 6, "cty"], shade=True, color="dodgerblue", label="🔋", alpha=.7)
+sns.kdeplot(df.loc[df['cyl'] == 8, "cty"], shade=True, color="orange", label="Cyl=8", alpha=.7)
+
+# Decoration
+plt.title('Прогресс', fontsize=22)
+plt.legend()
+plt.show()
 
 sys.exit(0)
 

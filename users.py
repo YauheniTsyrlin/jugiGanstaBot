@@ -339,7 +339,7 @@ class User(object):
         return self.band
 
     def setHealth(self, health):
-        self.health = health
+        self.health = int(health)
     def getHealth(self):
         return self.health
 
