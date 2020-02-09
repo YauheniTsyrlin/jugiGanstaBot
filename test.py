@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+ 
 from datetime import datetime
 from datetime import timedelta
 import time
@@ -369,9 +371,12 @@ print('\n======== radeReport ==========\n')
 #     date = d.get("_id") 
 #     print(f'{d.get("count")} - {datetime.fromtimestamp(date)}')  
 
-b = 'True'
-if b == True:
-    print(f'{1}')
+import matplotlib.pyplot as plt
+# import numpy as np
+# np.random.seed(444)
+
+fig, _ = plt.subplots()
+print(type(fig)) # <class 'matplotlib.figure.Figure'>
 
 sys.exit(0)
 
