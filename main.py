@@ -1759,24 +1759,24 @@ def main_message(message):
 
                         if ban:
                             if not isGoatBoss(message.from_user.username):
-                                if not isAdmin(message.from_user.username):
-                                    bot.reply_to(message, text=getResponseDialogFlow(message, 'shot_message_not_goat_boss').fulfillment_text)
-                                    return
+                                bot.reply_to(message, text=getResponseDialogFlow(message, 'shot_message_not_goat_boss').fulfillment_text)
+                                return
 
                         
                         user = getUserByLogin(login)
-                        if not user and not allUser:
-                            send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
-                            return
-
-                        if not user.getBand() and not allUser:
-                            send_messages_big(message.chat.id, text=f'У бандита {login} нет банды!')
-                            return
-
-                        if not isUsersBand(message.from_user.username, user.getBand()) and not allUser:
-                            if not isAdmin(message.from_user.username):
-                                send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
+                        if not allUser:
+                            if not user:
+                                send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
                                 return
+
+                            if not user.getBand():
+                                send_messages_big(message.chat.id, text=f'У бандита {login} нет банды!')
+                                return
+
+                            if not isUsersBand(message.from_user.username, user.getBand()):
+                                if not isAdmin(message.from_user.username):
+                                    send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
+                                    return
                     
                         time_str = response.split(response.split(':')[2])[1][1:]
                         date_for = None
