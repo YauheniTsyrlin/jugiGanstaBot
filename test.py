@@ -377,72 +377,76 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import seaborn as sns
 import warnings; warnings.filterwarnings(action='once')
+
+from statsmodels.tsa.seasonal import seasonal_decompose
+
 pip_history     = mydb["pip_history"]
 
-for x in pip_history.find({'login': 'GonzikBenzyavsky'}):
-    print(x)
-# Make a query to the specific DB and Collection
+#Make a query to the specific DB and Collection
 cursor = pip_history.find({'login': 'GonzikBenzyavsky'})
 
 # Expand the cursor and construct the DataFrame
 df =  pd.DataFrame(list(cursor))
+df['date'] = [str(datetime.fromtimestamp(x)) for x in df.date]
+df['agility'] = [int(x) for x in df.agility]
+df['charisma'] = [int(x) for x in df.charisma]
 
-# Delete the _id
+# # Delete the _id
 if True:
     del df['_id']
+    # del df['date']
     del df['login']
+    del df['damage']
+    del df['armor']
+    del df['dzen']
+    del df['force']
+    del df['accuracy']
+    del df['health']
+    del df['stamina']
+
 
 # Define the upper limit, lower limit, interval of Y axis and colors
-y_LL = 100
-print(df.iloc[:, 1:])
-y_UL = int(df.iloc[:, 1:].max().max()*1.1)
+
+y_UL = int(df.agility.max().max()*1.1)
+y_LL = int(df.charisma.max().max()*1.1)
+print(y_LL)
 print(y_UL)
-y_interval = 400
-mycolors = ['tab:red', 'tab:blue', 'tab:green', 'tab:orange', 'tab:red', 'tab:blue', 'tab:green', 'tab:orange', 'tab:red']    
+y_interval = 100
+mycolors = ['dodgerblue', 'deeppink', 'orange', 'g']    
 
 # Draw Plot and Annotate
-fig, ax = plt.subplots(1,1,figsize=(16, 9), dpi= 80)    
+fig, ax = plt.subplots(1,1,figsize=(9, 9), dpi= 80)  
 
 columns = df.columns[1:]  
-print(columns)
-for i, column in enumerate(columns): 
-    print(f'{i}----------------------')
-    print(df.date.values) 
-    print('======================') 
-    print(df.date.values)   
-    print('**********************')
-    plt.plot(df.date.values, df.values, lw=1.5, color=mycolors[i])    
-    plt.text(df.shape[0]+1, df.values[-1], column, fontsize=14, color=mycolors[i])
-    print(df.shape[0]+1)
-    print('^^^^^^^^^^^^^^^^^^^^^^')
-    print(df.values[-1]) 
-    print('~~~~~~~~~~~~~~~~~~~~~~')
-    print(column) 
-    print('++++++++++++++++++++++')
+#for i, column in enumerate(columns):    
+
+plt.plot(df.date.values, df.agility.values, lw=1.5, color='dodgerblue') 
+plt.text(df.shape[0]+1, df.agility.values[-1], 'agility')
+
+plt.plot(df.date.values, df.charisma.values, lw=1.5, color='deeppink') 
+plt.text(df.shape[0]+1, df.charisma.values[-1], 'charisma')
 
 # Draw Tick lines  
 for y in range(y_LL, y_UL, y_interval):    
-    plt.hlines(y, xmin=0, xmax=71, colors='black', alpha=0.3, linestyles="--", lw=0.5)
+    plt.hlines(y, xmin=0, xmax=10, colors='black', alpha=0.3, linestyles="--", lw=0.5)
 
 # Decorations    
-plt.tick_params(axis="both", which="both", bottom=False, top=False,    
-                labelbottom=True, left=False, right=False, labelleft=True)        
+plt.tick_params(axis="both", which="both", bottom=False, top=False, labelbottom=True, left=False, right=False, labelleft=True)        
 
 # Lighten borders
 plt.gca().spines["top"].set_alpha(.3)
 plt.gca().spines["bottom"].set_alpha(.3)
 plt.gca().spines["right"].set_alpha(.3)
 plt.gca().spines["left"].set_alpha(.3)
-print("0")
-plt.title('Number of Deaths from Lung Diseases in the UK (1974-1979)', fontsize=22)
-plt.yticks(range(y_LL, y_UL, y_interval), [str(y) for y in range(y_LL, y_UL, y_interval)], fontsize=12)    
-plt.xticks(range(0, df.shape[0], 12), df.date.values[::12], horizontalalignment='left', fontsize=12) 
 
-print("1")
-plt.ylim(y_LL, y_UL)    
-print("2")
-plt.xlim(-2, 80)
-print("3")    
+plt.title('Прогресс Пип-боев', fontsize=22)
+
+print(range(y_LL, y_UL, y_interval))
+print([str(y) for y in range(y_LL, y_UL, y_interval)])
+plt.yticks(range(y_LL, y_UL, y_interval), [str(y) for y in range(y_LL, y_UL, y_interval)], fontsize=12)    
+plt.xticks(range(0, df.shape[0], 12), df.date.values[::12], horizontalalignment='left', fontsize=12)    
+# plt.ylim(y_LL, y_UL)    
+# plt.xlim(-2, 80)    
 plt.show()
 
 sys.exit(0)

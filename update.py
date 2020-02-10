@@ -1581,5 +1581,5 @@ print("#==========================#")
 print("#==========================#")              
 print("#         BATTLE           #")              
 print("#==========================#")
-# pip_history     = mydb["pip_history"]
-# pip_history.remove()
+pip_history     = mydb["pip_history"]
+pip_history.remove()

@@ -430,7 +430,8 @@ def getUserSetting(login: str, name: str):
 
 def addToUserHistory(user: users.User):
     row = {}
-    row.update({'date'    :user.getTimeUpdate()})
+    date = datetime.fromtimestamp(user.getTimeUpdate()).replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
+    row.update({'date'    :date})
     row.update({'login'   :user.getLogin()})
     row.update({'damage'  :user.getDamage()})   #⚔ 
     row.update({'armor'   :user.getArmor()})    #🛡
@@ -443,7 +444,7 @@ def addToUserHistory(user: users.User):
     row.update({'stamina' :user.getStamina()})  #🔋
 
     newvalues = { "$set": row }
-    result = pip_history.update_one({'login': user.getLogin(), 'date': user.getTimeUpdate()}, newvalues)
+    result = pip_history.update_one({'login': user.getLogin(), 'date': date}, newvalues)
     if result.matched_count < 1:
         pip_history.insert_one(row)
 
