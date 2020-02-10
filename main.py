@@ -1747,6 +1747,7 @@ def main_message(message):
                                 send_messages_big(message.chat.id, text='Бандиты!\n' + getResponseDialogFlow(message, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {acc}') 
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
                         # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
+                        logger.info(response)
                         ban = ('ban' == response.split(':')[1])
                         login = response.split(':')[2]
                         allUser = False
