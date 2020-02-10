@@ -1749,7 +1749,12 @@ def main_message(message):
                         # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
                         ban = ('ban' == response.split(':')[1])
                         login = response.split(':')[2]
-                        login = login.split('@')[1].split(' ')[0].strip()
+                        allUser = False
+
+                        if login.lower() == 'всех':
+                            allUser = True
+                        else:
+                            login = login.split('@')[1].split(' ')[0].strip()
 
                         if ban:
                             if not isGoatBoss(message.from_user.username):
@@ -1759,15 +1764,15 @@ def main_message(message):
 
                         
                         user = getUserByLogin(login)
-                        if not user:
+                        if not user and not allUser:
                             send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
                             return
 
-                        if not user.getBand():
+                        if not user.getBand() and not allUser:
                             send_messages_big(message.chat.id, text=f'У бандита {login} нет банды!')
                             return
 
-                        if not isUsersBand(message.from_user.username, user.getBand()):
+                        if not isUsersBand(message.from_user.username, user.getBand()) and not allUser:
                             if not isAdmin(message.from_user.username):
                                 send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
                                 return
@@ -1790,14 +1795,30 @@ def main_message(message):
 
                         report = ''
                         if ban:
-                            user.setTimeBan(date_for.timestamp())
-                            report = f'{user.getName()} забанен нахрен до\n'+'⏰' + time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime(date_for.timestamp()))
+                            if not allUser:
+                                user.setTimeBan(date_for.timestamp())
+                                report = f'{user.getName()} забанен нахрен до\n'+'⏰' + time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime(date_for.timestamp()))
+                                updateUser(user)
+                            else:
+                                for u in list(USERS_ARR):
+                                    if u.getLogin() == message.from_user.username:
+                                        pass
+                                    else:
+                                        u.setTimeBan(date_for.timestamp())
+                                        updateUser(u)
+                                report = f'Все забанены нахрен до\n'+'⏰' + time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime(date_for.timestamp()))
+                                
                         else:
-                            user.setTimeBan(None)
-                            report = f'{user.getName()} разбанен. Говори, дорогой!'
-                        updateUser(user)
+                            if not allUser:
+                                user.setTimeBan(None)
+                                report = f'{user.getName()} разбанен. Говори, дорогой!'
+                                updateUser(user)
+                            else:
+                                for u in list(USERS_ARR):
+                                    u.setTimeBan(None)
+                                    updateUser(u)
+                                report = f'Все разбанены. Говори, дорогие мои!'
 
-                        user = getUserByLogin(user.getLogin())
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text + f'\n{report}')
                     elif 'requests' == response.split(':')[1]:
                         if not isAdmin(message.from_user.username):

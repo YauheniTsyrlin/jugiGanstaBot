@@ -387,14 +387,13 @@ cursor = pip_history.find({'login': 'GonzikBenzyavsky'})
 
 # Expand the cursor and construct the DataFrame
 df =  pd.DataFrame(list(cursor))
-df['date'] = [str(datetime.fromtimestamp(x)) for x in df.date]
+df['date'] = [datetime.fromtimestamp(x).strftime("%d/%m") for x in df.date]
 df['agility'] = [int(x) for x in df.agility]
 df['charisma'] = [int(x) for x in df.charisma]
 
 # # Delete the _id
 if True:
     del df['_id']
-    # del df['date']
     del df['login']
     del df['damage']
     del df['armor']
@@ -412,18 +411,18 @@ y_LL = int(df.charisma.max().max()*1.1)
 print(y_LL)
 print(y_UL)
 y_interval = 100
-mycolors = ['dodgerblue', 'deeppink', 'orange', 'g']    
+mycolors = ['tab:red', 'tab:blue', 'orange', 'g']    
 
 # Draw Plot and Annotate
-fig, ax = plt.subplots(1,1,figsize=(9, 9), dpi= 80)  
+fig, ax = plt.subplots(1,1,figsize=(12, 7), dpi= 80)  
 
 columns = df.columns[1:]  
 #for i, column in enumerate(columns):    
 
-plt.plot(df.date.values, df.agility.values, lw=1.5, color='dodgerblue') 
+plt.plot(df.date.values, df.agility.values, lw=1.5, color='tab:red') 
 plt.text(df.shape[0]+1, df.agility.values[-1], 'agility')
 
-plt.plot(df.date.values, df.charisma.values, lw=1.5, color='deeppink') 
+plt.plot(df.date.values, df.charisma.values, lw=1.5, color='tab:blue') 
 plt.text(df.shape[0]+1, df.charisma.values[-1], 'charisma')
 
 # Draw Tick lines  
@@ -440,11 +439,11 @@ plt.gca().spines["right"].set_alpha(.3)
 plt.gca().spines["left"].set_alpha(.3)
 
 plt.title('Прогресс Пип-боев', fontsize=22)
-
+print(df.date.values)
 print(range(y_LL, y_UL, y_interval))
 print([str(y) for y in range(y_LL, y_UL, y_interval)])
 plt.yticks(range(y_LL, y_UL, y_interval), [str(y) for y in range(y_LL, y_UL, y_interval)], fontsize=12)    
-plt.xticks(range(0, df.shape[0], 12), df.date.values[::12], horizontalalignment='left', fontsize=12)    
+plt.xticks(range(0, df.shape[0]), df.date.values, horizontalalignment='left', fontsize=12)    
 # plt.ylim(y_LL, y_UL)    
 # plt.xlim(-2, 80)    
 plt.show()
