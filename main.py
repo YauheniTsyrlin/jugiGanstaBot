@@ -1818,7 +1818,7 @@ def main_message(message):
                                 for u in list(USERS_ARR):
                                     u.setTimeBan(None)
                                     updateUser(u)
-                                report = f'Все разбанены. Говори, дорогие мои!'
+                                report = f'Все разбанены. Говорите, дорогие мои!'
 
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text + f'\n{report}')
                     elif 'requests' == response.split(':')[1]:
