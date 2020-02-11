@@ -7,6 +7,7 @@ import wariors
 import tools
 import speech
 import dialogflow
+import matplot
 
 import logging
 import ssl
@@ -493,6 +494,14 @@ def default_query(inline_query):
     except Exception as e:
         print(e)
 
+@bot.message_handler(func=lambda message: message.text and ('📈 Статистика' in message.text))
+def send_back_from_usset(message):
+    cursor = pip_history.find({'login': message.from_user.username})
+    matplot.getPlot(cursor, message.from_user.username)
+    img = open(config.PATH_IMAGE + f'plot_{message.from_user.username}.png', 'rb')
+    bot.send_photo(message.chat.id, img)
+
+
 @bot.message_handler(func=lambda message: message.text and ('Участвую 👨‍❤️‍👨!' in message.text or 'Сам ты пидор 👨‍❤️‍👨!' in message.text))
 def send_back_from_usset(message):
     privateChat = ('private' in message.chat.type)
@@ -515,7 +524,7 @@ def send_back_from_usset(message):
     updateUser(user)
 
     markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда')
+    markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
     bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
 
 @bot.message_handler(func=lambda message: message.content_type == 'text' and message.text in getUserSettingsName())
@@ -537,7 +546,7 @@ def send_back_from_usset(message):
         bot.send_message(message.chat.id, text='Иди в личный чат!')
         return
     markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда')
+    markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
     bot.send_message(message.chat.id, text='Вернулся...', reply_markup=markup)
 
 # Handle /usset
@@ -562,9 +571,9 @@ def send_welcome(message):
     privateChat = ('private' in message.chat.type)
     markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     if not privateChat:
-        markup.add('Джу, 📋 Отчет', 'Джу, 📜 Профиль', f'Джу, ⏰ план рейда')
+        markup.add('Джу, 📋 Отчет', f'Джу, ⏰ план рейда')
     else:
-        markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда')
+        markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
 
     if response:
         bot.send_message(message.chat.id, text=response, reply_markup=markup)
@@ -606,7 +615,6 @@ def get_message_photo(message):
             if result.matched_count < 1:
                     registered_wariors.insert_one(row)
             update_warior(None)
-
             wariorShow = warior
         
         if privateChat:
