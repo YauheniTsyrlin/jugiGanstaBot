@@ -1138,33 +1138,33 @@ def main_message(message):
 
 
 
-    # Заменяем в сообщениях от ВВ все цифры 
-    if message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
-        # сохраняем км, если он больше максимального
-        km = int(message.text.split('👣')[1].split('км')[0])
-        if userIAm.getMaxkm() < km:
-             userIAm.setMaxkm(km)
-             updateUser(userIAm)
+    # # Заменяем в сообщениях от ВВ все цифры 
+    # if message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
+    #     # сохраняем км, если он больше максимального
+    #     km = int(message.text.split('👣')[1].split('км')[0])
+    #     if userIAm.getMaxkm() < km:
+    #          userIAm.setMaxkm(km)
+    #          updateUser(userIAm)
 
-        if not privateChat:
-            if not isGoatSecretChat(message.from_user.username, message.chat.id):
-                replacements =  {
-                                    "0": str(random.randint(1,9)), 
-                                    "1": str(random.randint(1,9)), 
-                                    "2": str(random.randint(1,9)), 
-                                    "3": str(random.randint(1,9)), 
-                                    "4": str(random.randint(1,9)), 
-                                    "5": str(random.randint(1,9)), 
-                                    "6": str(random.randint(1,9)), 
-                                    "7": str(random.randint(1,9)), 
-                                    "8": str(random.randint(1,9)), 
-                                    "9": str(random.randint(1,9)) 
-                                }
-                text = "".join([replacements.get(c, c) for c in message.text])
-                bot.delete_message(message.chat.id, message.message_id)
-                send_messages_big(message.chat.id, text=f'🗣 {userIAm.getName()} ({userIAm.getLogin()}):\n\n'+text)
-                return
-        return
+    #     if not privateChat:
+    #         if not isGoatSecretChat(message.from_user.username, message.chat.id):
+    #             replacements =  {
+    #                                 "0": str(random.randint(1,9)), 
+    #                                 "1": str(random.randint(1,9)), 
+    #                                 "2": str(random.randint(1,9)), 
+    #                                 "3": str(random.randint(1,9)), 
+    #                                 "4": str(random.randint(1,9)), 
+    #                                 "5": str(random.randint(1,9)), 
+    #                                 "6": str(random.randint(1,9)), 
+    #                                 "7": str(random.randint(1,9)), 
+    #                                 "8": str(random.randint(1,9)), 
+    #                                 "9": str(random.randint(1,9)) 
+    #                             }
+    #             text = "".join([replacements.get(c, c) for c in message.text])
+    #             bot.delete_message(message.chat.id, message.message_id)
+    #             send_messages_big(message.chat.id, text=f'🗣 {userIAm.getName()} ({userIAm.getLogin()}):\n\n'+text)
+    #             return
+    #     return
 
     if 'gratz' in message.text.lower() or 'грац' in message.text.lower() or 'грац!' in message.text.lower() or  'лол' in message.text.lower() or 'lol' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
@@ -1185,22 +1185,25 @@ def main_message(message):
                 logger.info(mem_top())
                 return
     if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да?' == message.text.lower() or 'да!)' == message.text.lower():
-        if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
-            if not isGoatSecretChat(message.from_user.username, message.chat.id):
-                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_DA_PINDA'), 1)[0]['value'])
-                return
+        pass
+        # if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
+        #     if not isGoatSecretChat(message.from_user.username, message.chat.id):
+        #         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_DA_PINDA'), 1)[0]['value'])
+        #         return
     if 'нэт' == message.text.lower() or 'неа' == message.text.lower() or 'нет' == message.text.lower() or 'нет!' == message.text.lower() or 'нет?' == message.text.lower() or 'нет!)' == message.text.lower():
-        if (random.random() <= float(getSetting(code='PROBABILITY', name='NO_STICKER'))):
-            if not isGoatSecretChat(message.from_user.username, message.chat.id):
-                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_NO_PINDA'), 1)[0]['value'])
-                return
+        pass
+        # if (random.random() <= float(getSetting(code='PROBABILITY', name='NO_STICKER'))):
+        #     if not isGoatSecretChat(message.from_user.username, message.chat.id):
+        #         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_NO_PINDA'), 1)[0]['value'])
+        #         return
     if 'а' == message.text.lower() or 'а!' == message.text.lower() or 'а?' == message.text.lower() or 'а!)' == message.text.lower():
-        if (random.random() <= float(getSetting(code='PROBABILITY', name='A_STICKER'))):
-            if not isGoatSecretChat(message.from_user.username, message.chat.id):
-                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_A_PINDA'), 1)[0]['value'])
-                return
+        pass
+        # if (random.random() <= float(getSetting(code='PROBABILITY', name='A_STICKER'))):
+        #     if not isGoatSecretChat(message.from_user.username, message.chat.id):
+        #         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_A_PINDA'), 1)[0]['value'])
+        #         return   SALUTE_STICKER
     if 'тебя буквально размазали' in message.text.lower():
-        if (random.random() <= float(getSetting(code='PROBABILITY', name='SALUTE_STICKER'))):
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
             return       
     if 'утречка' in message.text.lower() or 'добрым утром' in message.text.lower() or 'доброго утра' in message.text.lower() or 'доброго утречка' in message.text.lower() or 'доброе утро' in message.text.lower():
@@ -1374,11 +1377,6 @@ def main_message(message):
             myquery = { "login": f"{user.getLogin()}" }
             doc = registered_users.delete_one(myquery)
             updateUser(None)
-            
-            
-            # myquery = { "name": f"{login}" }
-            # war = registered_wariors.delete_one(myquery)
-            # update_warior(None)
 
             if doc.deleted_count == 0:
                 send_messages_big(message.chat.id, text=f'{login} не найден в бандитах!')
@@ -1494,36 +1492,37 @@ def main_message(message):
                         updateUser(userIAm)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)        
                     elif 'flex' == response.split(':')[1]:
+                        pass
                         # jugi:flex:$bool
-                        if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
-                            return
+                        # if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                        #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
+                        #     return
 
-                        if eval(response.split(':')[2]):
-                            counter = int(randrange(int(getSetting(code='PROBABILITY', name='JUGI_FLEX'))))
+                        # if eval(response.split(':')[2]):
+                        #     counter = int(randrange(int(getSetting(code='PROBABILITY', name='JUGI_FLEX'))))
 
-                            send_messages_big(message.chat.id, f'Ща заебашу {counter} стикеров!')
-                            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_GO_FLEX'), 1)[0]['value'])
+                        #     send_messages_big(message.chat.id, f'Ща заебашу {counter} стикеров!')
+                        #     bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_GO_FLEX'), 1)[0]['value'])
                             
-                            global flexFlag
-                            flexFlag = True
-                            for i in range(0, counter):
-                                if flexFlag:
-                                    bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_FLEX'), 1)[0]['value'])
-                                    time.sleep(random.randint(1000,3000) / 1000)
-                                else:
-                                    send_messages_big(message.chat.id, text='Пипец ты кайфолом!')
-                                    bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
-                                    flexFlag = False
-                                    break
-                            if flexFlag:
-                                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_END_FLEX'), 1)[0]['value'])
-                                send_messages_big(message.chat.id, f'Хорошо, заебашил {counter} стикеров!')
-                                flexFlag = False
-                        else:
-                            flexFlag = False
-                            send_messages_big(message.chat.id, text='Остановиливаю флекс нахОй!')
-                            return
+                        #     global flexFlag
+                        #     flexFlag = True
+                        #     for i in range(0, counter):
+                        #         if flexFlag:
+                        #             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_FLEX'), 1)[0]['value'])
+                        #             time.sleep(random.randint(1000,3000) / 1000)
+                        #         else:
+                        #             send_messages_big(message.chat.id, text='Пипец ты кайфолом!')
+                        #             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
+                        #             flexFlag = False
+                        #             break
+                        #     if flexFlag:
+                        #         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_END_FLEX'), 1)[0]['value'])
+                        #         send_messages_big(message.chat.id, f'Хорошо, заебашил {counter} стикеров!')
+                        #         flexFlag = False
+                        # else:
+                        #     flexFlag = False
+                        #     send_messages_big(message.chat.id, text='Остановиливаю флекс нахОй!')
+                        #     return
                     elif 'youbeautiful' == response.split(':')[1]:
                         # jugi:youbeautiful:text
                         photo = random.sample(getSetting(code='STICKERS', name='BOT_LOVE'), 1)[0]['value']
