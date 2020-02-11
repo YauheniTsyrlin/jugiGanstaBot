@@ -591,22 +591,30 @@ def get_message_photo(message):
 
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
-        # wariorShow = None
         for warior in ww:
-            # s = f'⏰{tools.getTimeEmoji(warior.getTimeUpdate())} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(warior.getTimeUpdate()))
-            update_warior(warior)
-            # if not isRegisteredUserName(warior.getName()):
+            row = {
+                    "name": f"{warior.getName()}", 
+                    "fraction": f"{warior.getFraction()}",
+                    'band': warior.getBand(), 
+                    'goat': warior.getGoat()
+                }
+            newvalues = { "$set":  row}
+            result = registered_wariors.update_one({
+                "name": f"{warior.getName()}", 
+                "fraction": f"{warior.getFraction()}"
+                }, newvalues)
+            if result.matched_count < 1:
+                    registered_wariors.insert_one(row)
+            update_warior(None)
+
             wariorShow = warior
         
         if privateChat:
-            #if not wariorShow == None: 
             wariorShow = getWariorByName(wariorShow.getName(), wariorShow.getFraction())
             if (wariorShow.photo):
                 bot.send_photo(message.chat.id, wariorShow.photo, wariorShow.getProfile())
             else:
                 send_messages_big(message.chat.id, text=wariorShow.getProfile())
-            #else:
-                #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
     else:
@@ -695,9 +703,6 @@ def main_message(message):
         return
 
     userIAm = getUserByLogin(message.from_user.username)
-    # if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_PRIVATE_CHAT'))):
-    #     bot.reply_to(message, text=getResponseDialogFlow(message, 'accessory_old_pipboy').fulfillment_text, parse_mode='HTML')
-
     callJugi = (privateChat 
                             or message.text.lower().startswith('джу') 
                             or (message.reply_to_message 
@@ -726,10 +731,10 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
                 return
 
-            if privateChat or (not isRegisteredUserLogin(message.from_user.username)) or isGoatSecretChat(message.from_user.username, message.chat.id):
-                pass
-            else:
-                censored(message)
+            # if privateChat or (not isRegisteredUserLogin(message.from_user.username)) or isGoatSecretChat(message.from_user.username, message.chat.id):
+            #     pass
+            # else:
+            #     censored(message)
             
             user = users.User(message.from_user.username, message.forward_date, message.text)
             
@@ -761,10 +766,10 @@ def main_message(message):
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text) 
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'FIGHT!' in message.text):
-        if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-            pass
-        else:
-            censored(message)
+        # if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+        #     pass
+        # else:
+        #     censored(message)
 
         ww = wariors.fromFightToWarioirs(message.forward_date, message, USERS_ARR, battle)
         if ww == None:
@@ -837,12 +842,6 @@ def main_message(message):
                 for goat in goats:
                     report_goat_info = report_goat_info + f'🐐 {goat["name"]}: <b>{goat["counter"]}</b>\n'
                 report_goat_info = report_goat_info + '\n'
-
-            # if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-            #     pass
-            # else:
-            #     censored(message)
-            #     return
 
             if not find:
                 send_messages_big(message.chat.id, text='Не нашел никого!')
@@ -1025,14 +1024,11 @@ def main_message(message):
                 report = report + '🐀 <b>Крысы в банде</b> (нет регистрации):\n'
                 report = report + alianusersReport
             
-            #if onraidcounter > 0 or aliancounter > 0:
             if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
                 bot.delete_message(message.chat.id, message.message_id)
                 send_messages_big(message.chat.id, text=report)
             else:
                 censored(message)
-            #else:
-            #    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_one_on_rade').fulfillment_text)
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
@@ -1136,16 +1132,18 @@ def main_message(message):
                 )
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
 
+    if message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
+        if hasAccessToWariors(message.from_user.username):
+            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+                pass
+            else:
+                # сохраняем км, если он больше максимального
+                km = int(message.text.split('👣')[1].split('км')[0])
+                if userIAm.getMaxkm() < km:
+                    userIAm.setMaxkm(km)
+                    updateUser(userIAm)
 
-
-    # # Заменяем в сообщениях от ВВ все цифры 
-    # if message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
-    #     # сохраняем км, если он больше максимального
-    #     km = int(message.text.split('👣')[1].split('км')[0])
-    #     if userIAm.getMaxkm() < km:
-    #          userIAm.setMaxkm(km)
-    #          updateUser(userIAm)
-
+    # Заменяем в сообщениях от ВВ все цифры 
     #     if not privateChat:
     #         if not isGoatSecretChat(message.from_user.username, message.chat.id):
     #             replacements =  {
@@ -1967,11 +1965,11 @@ def main_message(message):
                                 send_messages_big(message.chat.id, text=f'Ты пытался созвать на захват банду 🤟<b>{band}</b>\n' + getResponseDialogFlow(message, 'not_right_band').fulfillment_text)
                                 return  
 
-                            if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
-                                pass
-                            else:
-                                censored(message)
-                                return
+                            # if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                            #     pass
+                            # else:
+                            #     censored(message)
+                            #     return
 
                             time_str = response.split(response.split(":")[3])[1][1:]
                             dt = parse(time_str)
