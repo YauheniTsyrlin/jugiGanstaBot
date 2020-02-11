@@ -382,6 +382,8 @@ pip_history     = mydb["pip_history"]
 #Make a query to the specific DB and Collection
 cursor = pip_history.find({'login': 'GonzikBenzyavsky'})
 
+
+
 # Expand the cursor and construct the DataFrame
 df =  pd.DataFrame(list(cursor))
 df['date'] = [datetime.fromtimestamp(x).strftime("%d/%m") for x in df.date]
