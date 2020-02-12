@@ -494,7 +494,7 @@ def default_query(inline_query):
     except Exception as e:
         print(e)
 
-@bot.message_handler(func=lambda message: message.text and ('📈 Статистика' in message.text))
+@bot.message_handler(func=lambda message: message.text and ('📈 Статистика' == message.text))
 def send_back_from_usset(message):
     cursor = pip_history.find({'login': message.from_user.username})
     matplot.getPlot(cursor, message.from_user.username)
@@ -571,7 +571,7 @@ def send_welcome(message):
     privateChat = ('private' in message.chat.type)
     markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     if not privateChat:
-        markup.add('Джу, 📋 Отчет', f'Джу, ⏰ план рейда')
+        markup.add('Джу, 📋 Отчет', f'Джу, ⏰ план рейда', '📈 Статистика')
     else:
         markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
 
