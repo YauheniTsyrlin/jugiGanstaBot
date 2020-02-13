@@ -734,7 +734,7 @@ def main_message(message):
         if user:
             if user.isAccessoryItem(acc):
                 pass
-            else
+            else:
                 user.addAccessory(acc)
                 updateUser(user)
                 send_messages_big(message.chat.id, text=user.getName() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
