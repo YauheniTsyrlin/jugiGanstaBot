@@ -609,14 +609,12 @@ def get_message_photo(message):
                     'goat': warior.getGoat(),
                     'photo': message.photo[0].file_id
                 }
-            print(row)
             newvalues = { "$set":  row}
             result = registered_wariors.update_one({
                 "name": f"{warior.getName()}", 
                 "fraction": f"{warior.getFraction()}"
                 }, newvalues)
             if result.matched_count < 1:
-                print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
                 registered_wariors.insert_one(row)
             update_warior(None)
             wariorShow = warior
@@ -691,7 +689,7 @@ def get_message_stiker(message):
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
-    #write_json(message.json)
+    write_json(message.json)
 
     privateChat = ('private' in message.chat.type)
     logger.info(f'chat:{message.chat.id}:{privateChat}:{message.from_user.username} : {message.text}')
@@ -722,6 +720,26 @@ def main_message(message):
                                 and message.reply_to_message.from_user.username in ('FriendsBrotherBot', 'JugiGanstaBot') )
                 )
     findUser = not (userIAm == None)
+
+    if message.forward_from_chat and message.forward_from_chat.username == 'wwkeeperhorn' and ' постиг ' in message.text:
+        # ⚙️Машенька постиг 8-й 🏵Дзен !
+        name = message.text.split(' постиг ')[0]
+        name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
+        name = name.split('@')[1].split(' ')[0].strip()
+        num_dzen = message.text.split(' постиг ')[1].split('-й')[0]
+        fraction = getWariorFraction(message.text)
+        acc = f'🏵️ Грамота за {num_dzen}-й Дзен' 
+        
+        user = getUserByName(name)
+        if user:
+            if user.isAccessoryItem(acc):
+                pass
+            else
+                user.addAccessory(acc)
+                updateUser(user)
+                send_messages_big(message.chat.id, text=user.getName() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
+        return
+
 
     if (message.text.startswith('📟Пип-бой 3000') and 
             '/killdrone' not in message.text and 
@@ -1175,6 +1193,9 @@ def main_message(message):
     #             send_messages_big(message.chat.id, text=f'🗣 {userIAm.getName()} ({userIAm.getLogin()}):\n\n'+text)
     #             return
     #     return
+
+
+
 
     if 'gratz' in message.text.lower() or 'грац' in message.text.lower() or 'грац!' in message.text.lower() or  'лол' in message.text.lower() or 'lol' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):

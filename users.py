@@ -467,6 +467,17 @@ class User(object):
         else:
             return 'Ничего нет'
 
+    def isAccessoryItem(self, accessoryItem: str):
+        if self.accessory == None:
+            self.accessory = []
+
+        find = False
+        for acc in self.accessory:
+            if acc == accessoryItem:
+                find = True
+                break
+        return find
+
     def addAccessory(self, accessoryItem: str):
         if self.accessory == None:
             self.accessory = []
@@ -474,8 +485,10 @@ class User(object):
         for acc in self.accessory:
             if acc == accessoryItem:
                 find = True
+                break
         if not find:
             self.accessory.append(accessoryItem)
+    
 
     def removeAccessory(self, accessoryItem: str):
         if self.accessory == None:
