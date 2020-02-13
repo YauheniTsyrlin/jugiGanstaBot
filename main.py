@@ -602,18 +602,22 @@ def get_message_photo(message):
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
         for warior in ww:
             row = {
+                    "timeUpdate": message.forward_date, 
                     "name": f"{warior.getName()}", 
                     "fraction": f"{warior.getFraction()}",
                     'band': warior.getBand(), 
-                    'goat': warior.getGoat()
+                    'goat': warior.getGoat(),
+                    'photo': message.photo[0].file_id
                 }
+            print(row)
             newvalues = { "$set":  row}
             result = registered_wariors.update_one({
                 "name": f"{warior.getName()}", 
                 "fraction": f"{warior.getFraction()}"
                 }, newvalues)
             if result.matched_count < 1:
-                    registered_wariors.insert_one(row)
+                print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+                registered_wariors.insert_one(row)
             update_warior(None)
             wariorShow = warior
         
@@ -897,7 +901,6 @@ def main_message(message):
         i = 1
         for s in strings:
             if s.startswith('✊️Захват'):
-                print(f'{s}')
                 for d in getSetting(code='DUNGEONS'):
                     if tools.deEmojify(s.replace('✊️Захват ','')) in d['name'] :
                         dungeon = d['name']
@@ -1036,7 +1039,8 @@ def main_message(message):
                 bot.delete_message(message.chat.id, message.message_id)
                 send_messages_big(message.chat.id, text=report)
             else:
-                censored(message)
+                pass
+                #censored(message)
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
@@ -1421,11 +1425,11 @@ def main_message(message):
                 if (response.startswith('jugi:')):
                     #jugi:ping:Артхаус
                     if 'ping' == response.split(':')[1]:
-                        if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
-                            pass
-                        else:
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
-                            return
+                        # if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                        #     pass
+                        # else:
+                        #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
+                        #     return
 
                         # Собираем всех пользоватлей с бандой Х
                         band = response.split(':')[2]
@@ -1463,9 +1467,9 @@ def main_message(message):
                             counter = counter + 1
                             pingusers.append(pu)
                             if pu["ping"] == True:
-                                report = report + f'{counter}. @{pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
+                                report = report + f'{counter}. @{pu["login"]} \n'
                             else:
-                                report = report + f'{counter}. 🔕{pu["login"]} 🏋️‍♂️{pu["weight"]} \n'
+                                report = report + f'{counter}. 🔕{pu["login"]} \n'
                             if counter % 5 == 0:
                                 send_messages_big(message.chat.id, text=first_string + report)
                                 pingusers = []
@@ -2132,11 +2136,11 @@ def main_message(message):
                         else:
                             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'understand').fulfillment_text)
                     elif 'rating' == response.split(':')[1]:
-                        if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
-                            pass
-                        else:
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
-                            return
+                        # if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                        #     pass
+                        # else:
+                        #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_censorship').fulfillment_text)
+                        #     return
 
                         report = ''
                         report = report + f'🏆ТОП 5 УБИЙЦ 🐐<b>{getMyGoatName(userIAm.getLogin())}</b>\n'
