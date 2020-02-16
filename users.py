@@ -444,7 +444,6 @@ class User(object):
     def getChat(self):
         return self.chat
 
-
     def setBirthday(self, birthday):
         self.birthday = birthday  
     def getBirthday(self):
@@ -456,7 +455,6 @@ class User(object):
         if self.accessory == None:
             self.accessory = []
         return self.accessory
-
     def getAccessoryReport(self):
         accessory = ''
         if self.accessory and len(self.accessory)>0:
@@ -466,7 +464,6 @@ class User(object):
             return accessory
         else:
             return 'Ничего нет'
-
     def isAccessoryItem(self, accessoryItem: str):
         if self.accessory == None:
             self.accessory = []
@@ -477,7 +474,6 @@ class User(object):
                 find = True
                 break
         return find
-
     def addAccessory(self, accessoryItem: str):
         if self.accessory == None:
             self.accessory = []
@@ -488,13 +484,10 @@ class User(object):
                 break
         if not find:
             self.accessory.append(accessoryItem)
-    
-
     def removeAccessory(self, accessoryItem: str):
         if self.accessory == None:
             self.accessory = []
         self.accessory.remove(accessoryItem)
-
 
     def setSettings(self, settings):
         self.settings = settings  
@@ -502,7 +495,6 @@ class User(object):
         if self.settings == None:
             self.settings = []
         return self.settings
-
     def getSettingsReport(self):
         result = ''
         if self.settings and len(self.settings)>0:
@@ -519,7 +511,6 @@ class User(object):
         else:
             
             return f'📋Личные настройки (/usset):\n▫️ Ничего нет' + '\n'
-
     def addSettings(self, settingItem: str):
         if self.settings == None:
             self.settings = []
@@ -530,6 +521,13 @@ class User(object):
                 find = True
         if not find:
             self.settings.append(settingItem)
+    def getSettingValue(self, settingItem: str):
+        if self.settings == None:
+            self.settings = []
+        for setting in self.settings:
+            if setting["name"] == settingItem:
+                return setting["value"]
+        return None
 
     def removeSettings(self, settingItem: str):
         if self.settings == None:

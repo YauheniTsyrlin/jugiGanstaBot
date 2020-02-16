@@ -2,6 +2,9 @@ import emoji
 from datetime import timedelta
 from datetime import datetime
 
+def isOneEmojify(inputString):
+    return emoji.emoji_count(inputString) == 1
+
 def deEmojify(inputString):
     ''' Delete emoji'''
     return emoji.get_emoji_regexp().sub(r'', inputString)

@@ -539,6 +539,29 @@ def send_settings(message):
         markup.add('Участвую 👨‍❤️‍👨!', 'Сам ты пидор 👨‍❤️‍👨!')
         bot.send_message(message.chat.id, text='Розыгрыш в общем чате ровно в 9:00\nТвой выбор...', reply_markup=markup)
 
+    if message.text == '🃏Мой герб':
+        bot.send_message(message.chat.id, text='Отправь мне любой эмодзи. Только эмодзи может быть твоим гербом...')
+        bot.register_next_step_handler(message, process_gerb_step)    
+
+def process_gerb_step(message):
+    if tools.isOneEmojify(message.text):
+        user = getUserByLogin(message.from_user.username)
+        setting = None
+        for s in getSetting(code='USER_SETTINGS'):
+            if s["name"] == '🃏Мой герб':
+                setting = s
+                setting.update({'value': message.text})
+                user.addSettings(setting)
+                updateUser(user)
+
+                markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+                markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
+                bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
+                break
+    else:
+        bot.send_message(message.chat.id, text='Похоже, что ты меня не понял...')
+
+
 @bot.message_handler(func=lambda message: message.text and 'Назад 📋🔚' in message.text)
 def send_back_from_usset(message):
     privateChat = ('private' in message.chat.type)
@@ -909,7 +932,7 @@ def main_message(message):
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
-    elif (message.forward_from and 'Вы автоматически отправитесь на совместную зачистку локации' in message.text and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('✊️Захват') ):
+    elif (message.forward_from and ('Захват начался!' in message.text or 'Вы автоматически отправитесь на совместную зачистку локации' in message.text) and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('✊️Захват') ):
         strings = message.text.split('\n')
         dungeon = ''
         band = ''
@@ -934,10 +957,15 @@ def main_message(message):
                 report = report + f'<b>{s}</b>' + '\n'
 
             if s.startswith('👊'):
-                name = s.replace('👊','')
+                name = s.replace('👊','').strip()
                 user = getUserByName(name)
                 users_ondungeon.append(user)
-                report = report + s + '\n'
+                string = s
+                if user:
+                    gerb = user.getSettingValue("🃏Мой герб")
+                    if gerb == None: gerb = ''
+                    string = '👊' + f' {gerb}{user.getName()}'
+                report = report + string + '\n'
                 i = i + 1
 
         bot.delete_message(message.chat.id, message.message_id)
@@ -2024,8 +2052,13 @@ def main_message(message):
                                 }):
                                 i = i + 1
                                 user = getUserByLogin(dun['login'])
-                                users_on_cupture.append(user)
-                                report_yes = report_yes + f'  {i}. {user.getName()}\n'
+                                gerb = ''
+                                if user:
+                                    gerb = user.getSettingValue("🃏Мой герб")
+                                    users_on_cupture.append(user)
+                                    report_yes = report_yes + f'  {i}. {gerb}{user.getName()}\n'
+                                else:
+                                    report_yes = report_yes + f'  {i}. {dun["login"]}\n'
 
                             if i == 0:
                                 report_yes = report_yes + '  Никто не записался\n'
@@ -2040,20 +2073,23 @@ def main_message(message):
                                 }):
                                 i = i + 1
                                 user = getUserByLogin(dun['login'])
-                                users_off_cupture.append(user)
-                                report_no = report_no + f'  {i}. {user.getName()}\n'
+                                gerb = ''
+                                if user:
+                                    gerb = user.getSettingValue("🃏Мой герб")
+                                    users_off_cupture.append(user)
+                                    report_no = report_no + f'  {i}. {gerb}{user.getName()}\n'
+                                else:
+                                    report_no = report_no + f'  {i}. {dun["login"]}\n'
 
                             if i == 0:
                                 report_no = report_no + '  Никто не отказался\n'
-
-                            
-                            
 
                             # Пингуем
                             counter = 0
                             report = f''
                             for user in getBandUsers(band):
                                 counter = counter + 1
+                                
                                 if user.isPing():
                                     pref = '@'
                                     if user in users_on_cupture:
@@ -2429,7 +2465,13 @@ def callback_query(call):
         }):
         i = i + 1
         user = getUserByLogin(dun['login'])
-        report_yes = report_yes + f'  {i}. {user.getName()}\n'
+        gerb = ''
+        if user:
+            gerb = user.getSettingValue("🃏Мой герб")
+            users_off_cupture.append(user)
+            report_yes = report_yes + f'  {i}. {gerb}{user.getName()}\n'
+        else:
+            report_yes = report_yes + f'  {i}. {dun["login"]}\n'
 
     if i == 0:
         report_yes = report_yes + '  Никто не записался\n'
@@ -2444,7 +2486,13 @@ def callback_query(call):
         }):
         i = i + 1
         user = getUserByLogin(dun['login'])
-        report_no = report_no + f'  {i}. {user.getName()}\n'
+        gerb = ''
+        if user:
+            gerb = user.getSettingValue("🃏Мой герб")
+            users_off_cupture.append(user)
+            report_no = report_no + f'  {i}. {gerb}{user.getName()}\n'
+        else:
+            report_no = report_no + f'  {i}. {dun["login"]}\n'
 
     if i == 0:
         report_no = report_no + '  Никто не отказался\n'
