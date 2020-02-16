@@ -547,7 +547,7 @@ def process_gerb_step(message):
     if tools.isOneEmojify(message.text):
         for user in list(USERS_ARR):
             if user.getSettingValue('🃏Мой герб') and user.getSettingValue('🃏Мой герб') == message.text:
-                bot.send_message(message.chat.id, text='Поздняк, этот герб уже забил за собой {user.getLogin()}', reply_markup=markup)
+                bot.send_message(message.chat.id, text='Поздняк, этот герб уже забил за собой {user.getLogin()}')
                 return
 
         user = getUserByLogin(message.from_user.username)
