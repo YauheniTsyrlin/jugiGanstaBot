@@ -1616,7 +1616,7 @@ def main_message(message):
                         goat = getMyGoatName(message.from_user.username)
 
                         tz = config.SERVER_MSK_DIFF
-                        plan_date = datetime.now() + c
+                        plan_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
                         raid_date = plan_date
 
                         if response.split(response.split(":")[1])[1][1:].strip() == '*':
