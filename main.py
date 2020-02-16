@@ -545,6 +545,11 @@ def send_settings(message):
 
 def process_gerb_step(message):
     if tools.isOneEmojify(message.text):
+        for user in list(USERS_ARR):
+            if user.getSettingValue('🃏Мой герб') and user.getSettingValue('🃏Мой герб') == message.text:
+                bot.send_message(message.chat.id, text='Поздняк, этот герб уже забил за собой {user.getLogin()}', reply_markup=markup)
+                return
+
         user = getUserByLogin(message.from_user.username)
         setting = None
         for s in getSetting(code='USER_SETTINGS'):
@@ -560,7 +565,6 @@ def process_gerb_step(message):
                 break
     else:
         bot.send_message(message.chat.id, text='Похоже, что ты меня не понял...')
-
 
 @bot.message_handler(func=lambda message: message.text and 'Назад 📋🔚' in message.text)
 def send_back_from_usset(message):
@@ -2238,17 +2242,22 @@ def main_message(message):
                         i = 0
                         for d in dresult:
                             user_name = d.get("_id")   
-                            if not isRegisteredUserName(user_name): continue
+
+                            user = getUserByName(user_name)
+                            if user == None: continue
+
+                            gerb = user.getSettingValue("🃏Мой герб")
+                            if gerb == None: gerb = ''
 
                             i = i + 1
                             if i == 1:
-                                emoji = '🥇 '
+                                emoji = f'🥇 {gerb}'
                             elif i == 2:
-                                emoji = '🥈 '    
+                                emoji = f'🥈 {gerb}'    
                             elif i == 3:
-                                emoji = '🥉 '
+                                emoji = f'🥉 {gerb}'
                             else:
-                                emoji = ''
+                                emoji = f'{gerb}'
                             
                             if user_name == tools.deEmojify(message.from_user.first_name):
                                 user_name = f'<b>{user_name}</b>'
@@ -2290,17 +2299,21 @@ def main_message(message):
                         i = 0
                         for d in dresult:
                             user_name = d.get("_id")  
-                            if not isRegisteredUserName(user_name): continue
-                            
+                            user = getUserByName(user_name)
+                            if user == None: continue
+
+                            gerb = user.getSettingValue("🃏Мой герб")
+                            if gerb == None: gerb = ''
+                                
                             i = i + 1
                             if i == 1:
-                                emoji = '👻 '
+                                emoji = f'👻 {gerb}'
                             elif i == 2:
-                                emoji = '💀️ '    
+                                emoji = f'💀️ {gerb}'    
                             elif i == 3:
-                                emoji = '☠️ '
+                                emoji = f'☠️ {gerb}'
                             else:
-                                emoji = ''
+                                emoji = f'{gerb}'
 
                             if user_name == tools.deEmojify(message.from_user.first_name):
                                 user_name = f'<b>{user_name}</b>'
@@ -2394,7 +2407,7 @@ def report_man_of_day(message_user_name: str):
     if (i == 0): 
         report = report + f'В нашем козле нет пидоров!\n'
     else:
-        if (findInLoser > 5): report = report + f'\n🧸 Твое место - {findInLoser}!\n'
+        if (findInLoser > 5): report = report + f'\n💔 Твое пидорье место - {findInLoser}!\n'
     
     acc = '👑 "Пидор дня"'
     for u in list(USERS_ARR):
