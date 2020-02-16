@@ -2052,9 +2052,9 @@ def main_message(message):
                                 }):
                                 i = i + 1
                                 user = getUserByLogin(dun['login'])
-                                gerb = ''
                                 if user:
                                     gerb = user.getSettingValue("🃏Мой герб")
+                                    if gerb == None: gerb = ''
                                     users_on_cupture.append(user)
                                     report_yes = report_yes + f'  {i}. {gerb}{user.getName()}\n'
                                 else:
@@ -2073,9 +2073,9 @@ def main_message(message):
                                 }):
                                 i = i + 1
                                 user = getUserByLogin(dun['login'])
-                                gerb = ''
                                 if user:
                                     gerb = user.getSettingValue("🃏Мой герб")
+                                    if gerb == None: gerb = ''
                                     users_off_cupture.append(user)
                                     report_no = report_no + f'  {i}. {gerb}{user.getName()}\n'
                                 else:
@@ -2465,10 +2465,9 @@ def callback_query(call):
         }):
         i = i + 1
         user = getUserByLogin(dun['login'])
-        gerb = ''
         if user:
             gerb = user.getSettingValue("🃏Мой герб")
-            users_off_cupture.append(user)
+            if gerb == None: gerb = ''
             report_yes = report_yes + f'  {i}. {gerb}{user.getName()}\n'
         else:
             report_yes = report_yes + f'  {i}. {dun["login"]}\n'
@@ -2486,10 +2485,9 @@ def callback_query(call):
         }):
         i = i + 1
         user = getUserByLogin(dun['login'])
-        gerb = ''
         if user:
             gerb = user.getSettingValue("🃏Мой герб")
-            users_off_cupture.append(user)
+            if gerb == None: gerb = ''
             report_no = report_no + f'  {i}. {gerb}{user.getName()}\n'
         else:
             report_no = report_no + f'  {i}. {dun["login"]}\n'
