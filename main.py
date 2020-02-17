@@ -936,45 +936,45 @@ def main_message(message):
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
-    elif (message.forward_from and ('Захват начался!' in message.text or 'Вы автоматически отправитесь на совместную зачистку локации' in message.text) and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('✊️Захват') ):
-        strings = message.text.split('\n')
-        dungeon = ''
-        band = ''
-        report = ''
-        ondungeon = ''
-        users_ondungeon = []
-        i = 1
-        for s in strings:
-            if s.startswith('✊️Захват'):
-                for d in getSetting(code='DUNGEONS'):
-                    if tools.deEmojify(s.replace('✊️Захват ','')) in d['name'] :
-                        dungeon = d['name']
-                        break
+    # elif (message.forward_from and ('Захват начался!' in message.text or 'Вы автоматически отправитесь на совместную зачистку локации' in message.text) and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('✊️Захват') ):
+    #     strings = message.text.split('\n')
+    #     dungeon = ''
+    #     band = ''
+    #     report = ''
+    #     ondungeon = ''
+    #     users_ondungeon = []
+    #     i = 1
+    #     for s in strings:
+    #         if s.startswith('✊️Захват'):
+    #             for d in getSetting(code='DUNGEONS'):
+    #                 if tools.deEmojify(s.replace('✊️Захват ','')) in d['name'] :
+    #                     dungeon = d['name']
+    #                     break
 
-                report = f'✊️Захват <b>{dungeon}</b>' + '\n'
+    #             report = f'✊️Захват <b>{dungeon}</b>' + '\n'
 
-            if s.startswith('🤘'):
-                band = s.replace('🤘','')
-                report = report + s + '\n\n' 
+    #         if s.startswith('🤘'):
+    #             band = s.replace('🤘','')
+    #             report = report + s + '\n\n' 
 
-            if 'в сборе.' in s:
-                report = report + f'<b>{s}</b>' + '\n'
+    #         if 'в сборе.' in s:
+    #             report = report + f'<b>{s}</b>' + '\n'
 
-            if s.startswith('👊'):
-                name = s.replace('👊','').strip()
-                user = getUserByName(name)
-                users_ondungeon.append(user)
-                string = s
-                if user:
-                    gerb = user.getSettingValue("🃏Мой герб")
-                    if gerb == None: gerb = ''
-                    string = '👊' + f' {gerb}{user.getName()}'
-                report = report + string + '\n'
-                i = i + 1
+    #         if s.startswith('👊'):
+    #             name = s.replace('👊','').strip()
+    #             user = getUserByName(name)
+    #             users_ondungeon.append(user)
+    #             string = s
+    #             if user:
+    #                 gerb = user.getSettingValue("🃏Мой герб")
+    #                 if gerb == None: gerb = ''
+    #                 string = '👊' + f' {gerb}{user.getName()}'
+    #             report = report + string + '\n'
+    #             i = i + 1
 
-        bot.delete_message(message.chat.id, message.message_id)
-        send_messages_big(message.chat.id, text=report)
-        return  
+    #     bot.delete_message(message.chat.id, message.message_id)
+    #     send_messages_big(message.chat.id, text=report)
+    #     return  
     elif (message.forward_from and 'Панель банды.' in message.text and message.forward_from.username == 'WastelandWarsBot'):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
@@ -1094,31 +1094,66 @@ def main_message(message):
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
-    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('Теперь') and 'под контролем' in message.text):
-        if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-            return        
+    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' 
+                and 
+                    (
+                        (message.text.startswith('Теперь') and 'под контролем' in message.text)
+                        or
+                        (message.text.startswith('✊️Захват') and ('Захват начался!' in message.text or 'Вы автоматически отправитесь на совместную зачистку локации' in message.text)) 
+                    )
+                ):
+        # if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+        #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+        #     return        
 
         
         band = ''
         dungeon_km = 0
         dungeon_name = ''
         usesrOnDungeon = []
+        text = ''
         for s in message.text.split('\n'):
+            #Теперь Гексагон под контролем 🤘АртхǁȺǁус
             if s.startswith('Теперь'): 
                 band = s.split('🤘')[1].split('!')[0]
                 dungeon_tmp = s.split('Теперь')[1].split('под контролем')[0].strip().lower()
                 for d in getSetting(code='DUNGEONS'):
                     if dungeon_tmp in d['name'].lower():
                         dungeon_km = int(d['value'])
-                        dungeon_name = d['name']        
+                        dungeon_name = d['name']     
                         break
+                text = f'✊️Теперь <b>{dungeon_km}км {dungeon_name}</b>\nпод контролем 🤟<b>{band}</b>\n\nУдарный отряд\n'
+       
+            elif s.startswith('✊️Захват'):
+                for d in getSetting(code='DUNGEONS'):
+                    if tools.deEmojify(s.replace('✊️Захват ','')) in d['name'] :
+                        dungeon_name = d['name']
+                        dungeon_km = int(d['value'])
+                        break
+            elif s.startswith('🤘'):
+                band = s.replace('🤘','')
+                text = f'✊️Захват <b>{dungeon_name}</b>\n🤘{band}\n\n'
+            elif 'в сборе.' in s:
+                text = text + f'<b>{s}</b>' + '\n'
             elif s.startswith('👊'):
                 name = s.split('👊')[1].split('❤️')[0].strip()
                 user = getUserByName(name)
                 if user:
                     usesrOnDungeon.append(user)
+                else:
+                    print(f'Не найден бандит {name}')
         
+        i = 1
+        for user in usesrOnDungeon:
+            gerb = user.getSettingValue("🃏Мой герб")
+            if gerb == None: gerb = ''
+
+            text = text + f'  {i}. {gerb}<b>{user.getName()}</b>\n'
+            i = i + 1
+
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=text)
+
         goatName = getMyGoatName(usesrOnDungeon[0].getLogin()) 
         
         dresult = dungeons.aggregate([ 
@@ -2043,6 +2078,7 @@ def main_message(message):
                             dungeon_km = getSetting(code='DUNGEONS', name=dungeon)
                             text = f'✊️Захват <b>{dungeon_km}км {dungeon}\n🤟{band}\nв {time_str}</b>\n\n'
 
+                            users_in_cupture = []
                             users_on_cupture = []
                             users_off_cupture = []
                             
@@ -2056,6 +2092,9 @@ def main_message(message):
                                 }):
                                 i = i + 1
                                 user = getUserByLogin(dun['login'])
+                                if eval(dun['invader']):
+                                    users_in_cupture.append(user)
+
                                 if user:
                                     gerb = user.getSettingValue("🃏Мой герб")
                                     if gerb == None: gerb = ''
@@ -2095,12 +2134,16 @@ def main_message(message):
                                 counter = counter + 1
                                 
                                 if user.isPing():
+                                    second_pref = ''
                                     pref = '@'
+
                                     if user in users_on_cupture:
-                                        pref = '👍'
+                                        pref = '🏎'
                                     elif user in users_off_cupture:
                                         pref = '🚬'
-                                    
+                                    if user in users_in_cupture:
+                                        second_pref = '🔥'
+
                                     report = report + f'{counter}. {pref}{user.getLogin()} ({user.getName()})\n'
                                 else:
                                     report = report + f'{counter}. 🔕{user.getLogin()} ({user.getName()})\n'
