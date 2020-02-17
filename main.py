@@ -2092,7 +2092,7 @@ def main_message(message):
                                 }):
                                 i = i + 1
                                 user = getUserByLogin(dun['login'])
-                                if eval(dun['invader']):
+                                if dun['invader']:
                                     users_in_cupture.append(user)
 
                                 if user:
