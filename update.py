@@ -1590,56 +1590,38 @@ print("#==========================#")
 # pip_history     = mydb["pip_history"]
 # pip_history.remove()
 
-x = registered_wariors.delete_many({'name':'🛡_MrFoxy_🛡'})
-x = registered_wariors.delete_many({'name':'Сунь Хуй Вчай ☕️'})
-x = registered_wariors.delete_many({'name':'Alexandra Lady Keda R12👠'})
-x = registered_wariors.delete_many({'name':'🏎 big_zmei'})
-x = registered_wariors.delete_many({'name':'🌚 PoT3akpou ŇṼ'})
-x = registered_wariors.delete_many({'name':'🤬EBASOS DESTROYER'})
-x = registered_wariors.delete_many({'name':'Ghost👻'})
-x = registered_wariors.delete_many({'name':'🧔🏻Дядя Фёдор ŇṼ 🌇'})
 
-x = registered_wariors.delete_many({'name':'🕓Время пить чай'})
-x = registered_wariors.delete_many({'name':'❇️Дианон пакату'})
-x = registered_wariors.delete_many({'name':'💛 @Alex_Fenya 💛'})
-x = registered_wariors.delete_many({'name':'✴️ Murloc'})
-x = registered_wariors.delete_many({'name':'Ibra🐍'})
-x = registered_wariors.delete_many({'name':'Твоя мамка 🍝42'})
-x = registered_wariors.delete_many({'name':'Мёд '})
-
-x = registered_wariors.delete_many({'name':{'$regex' : '^ ', '$options' : 'i'}})
-
-dresult = registered_wariors.aggregate([ 
-    {   "$group": {
-        "_id": "$name", 
-        "count": {
-            "$sum": 1}}},
+# dresult = registered_wariors.aggregate([ 
+#     {   "$group": {
+#         "_id": "$name", 
+#         "count": {
+#             "$sum": 1}}},
         
-    {   "$sort" : { "count" : -1 } }
-    ])
+#     {   "$sort" : { "count" : -1 } }
+#     ])
 
-i = 1
-for d in dresult:
-    if d.get("count") > 1:
-        print(f'{i}. {d.get("_id")} {d.get("count")}')
+# i = 1
+# for d in dresult:
+#     if d.get("count") > 1:
+#         print(f'{i}. {d.get("_id")} {d.get("count")}')
         
-        dresult2 = registered_wariors.aggregate([ 
-            {   "$match": {
-                        "name": d.get("_id")
-                    } 
-            },   
-            {   "$sort" : { "timeUpdate" : 1 } }
-            ])
+#         dresult2 = registered_wariors.aggregate([ 
+#             {   "$match": {
+#                         "name": d.get("_id")
+#                     } 
+#             },   
+#             {   "$sort" : { "timeUpdate" : 1 } }
+#             ])
         
-        z = 1
-        for m in dresult2:
-            if z == d.get("count"): break
+#         z = 1
+#         for m in dresult2:
+#             if z == d.get("count"): break
 
-            string =  f'    ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(m.get("timeUpdate")))
-            print(m.get('_id'))
-            registered_wariors.delete_many({'_id': m.get('_id')})
-            z = z + 1
-    i = i + 1
+#             string =  f'    ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(m.get("timeUpdate")))
+#             print(m.get('_id'))
+#             registered_wariors.delete_many({'_id': m.get('_id')})
+#             z = z + 1
+#     i = i + 1
 
 
 

@@ -155,8 +155,10 @@ def fromTopToWariorsBM(forward_date, message, wariors):
         if ('Счет: ' in strings[i] ):
             name = strings[i-1].split('. ')[1].split(' [')[0].strip()
             fraction = getFractionFromString(strings[i-1].split(' [')[1].split(']')[0])
-            bm = strings[i].split('Счет: ')[1].strip()
-
+            bm = 0
+            try:
+                bm = int(strings[i].split('Счет: ')[1].strip())
+            except: pass
          
             warior = Warior(name, message.forward_date, "", None)
             warior.setBm(bm)
