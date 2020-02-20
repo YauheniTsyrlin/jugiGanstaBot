@@ -277,15 +277,15 @@ def getWariorFraction(string: str):
         return '👙Клуб бикини'
 
 def getWariorByName(name: str, fraction: str):
-    name = tools.deEmojify(name)
+    name = tools.deEmojify(name).strip()
     for warior in list(WARIORS_ARR):
-        if name == warior.getName() and fraction == warior.getFraction(): 
+        if name == warior.getName().strip() and fraction == warior.getFraction(): 
             return warior
     return None
 
 def isKnownWarior(name: str, fraction: str):
     for warior in list(WARIORS_ARR):
-        if warior.getName() and name.lower() == warior.getName().lower() and warior.getFraction() == fraction: 
+        if warior.getName() and name.lower().strip() == warior.getName().lower().strip() and warior.getFraction() == fraction: 
             return True
     return False
 
