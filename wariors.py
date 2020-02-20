@@ -236,7 +236,7 @@ class Warior(object):
     def __init__(self, name, date, text, photo):
         strings = text.split('\n')
  
-        self.name = tools.deEmojify(name)
+        self.name = tools.deEmojify(name).strip()
         self.band = None
         self.goat = None
         self.fraction = None
@@ -457,7 +457,7 @@ class Warior(object):
         return string
 
     def setName(self, name):
-        self.name = tools.deEmojify(name)
+        self.name = tools.deEmojify(name).strip()
     def getName(self):
         return self.name
 

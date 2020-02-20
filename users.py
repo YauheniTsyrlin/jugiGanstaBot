@@ -327,6 +327,11 @@ class User(object):
     def getName(self):
         return self.name
 
+    def getNameAndGerb(self):
+        gerb = getSettingValue("🃏Мой герб")
+        if gerb == None: gerb = ''
+        return gerb+self.name
+
     def setFraction(self, fraction):
         self.fraction = fraction
     def getFraction(self):

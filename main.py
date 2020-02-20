@@ -1102,10 +1102,9 @@ def main_message(message):
                         (message.text.startswith('✊️Захват') and ('Захват начался!' in message.text or 'Вы автоматически отправитесь на совместную зачистку локации' in message.text)) 
                     )
                 ):
-        # if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-        #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-        #     return        
-
+        if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+            return        
         
         band = ''
         dungeon_km = 0
@@ -2914,7 +2913,8 @@ def rade():
         winners = random.sample(user_in_game, 1)
         if len(winners)>0:
             userWin = winners[0]
-            text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getName()} (@{userWin.getLogin()})!!!\n\n👬 Два самых красивых бандита под вздохи толпы надевают на твою голову 👑 золотую корону и, ласково шлепая тебя по попе, сгоняют с помоста!\n🎁 Самое время поздравить сегодняшнего победителя!'
+            
+            text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getName()} (@{userWin.getLogin()})!!!\n\n👬 Два самых красивых бандита, {random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()} и {random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()}, под вздохи толпы надевают на твою голову 👑 золотую корону и, ласково шлепая тебя по попе, сгоняют с помоста!\n🎁 Самое время поздравить сегодняшнего победителя!'
             chat = getMyGoat(userWin.getLogin())['chats']['info']
             send_messages_big(chat, text=text)
 
