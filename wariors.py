@@ -19,7 +19,7 @@ def mergeWariors(warior, wariorToUpdate):
 
     if (warior.bm):
         if wariorToUpdate.bm:
-            if (wariorToUpdate.bm < warior.bm):
+            if (int(wariorToUpdate.bm) < warior.bm):
                 wariorToUpdate.bm = warior.bm
         else: 
             wariorToUpdate.bm = warior.bm  

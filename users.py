@@ -328,7 +328,7 @@ class User(object):
         return self.name
 
     def getNameAndGerb(self):
-        gerb = getSettingValue("🃏Мой герб")
+        gerb = self.getSettingValue("🃏Мой герб")
         if gerb == None: gerb = ''
         return gerb+self.name
 
