@@ -428,7 +428,7 @@ class Warior(object):
         if self.bm:
             if not self.bm == 0:
                 bm_str = self.bm
-        string = string + f'┌📯 Боевая мощь: '+ bm_str +'\n'  
+        string = string + f'┌📯 Боевая мощь: {bm_str}\n'  
         
         if self.enemy_armor:
             if self.damage:
