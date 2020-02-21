@@ -1448,6 +1448,7 @@ def main_message(message):
                     send_messages_big(message.chat.id, text=f'В базе зарегистрированнных бандитов {login} не найден')
 
             for x in registered_wariors.find({'name':f'{name}'}):
+                print(f'find {name}')
                 warior = wariors.importWarior(x)
                 if (warior and warior.photo):
                     try:
