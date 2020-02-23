@@ -1505,8 +1505,7 @@ def main_message(message):
             text = message.text 
             if text.lower().startswith('джу'):
                 text = message.text[3:]
-            print(f'{len(text)}')
-            print(text)
+
             result = getResponseDialogFlow(message, text)
             response = result.fulfillment_text
             parameters = result.parameters
@@ -2424,9 +2423,13 @@ def report_man_of_day(message_user_name: str):
             
         {   "$sort" : { "count" : -1 } }
         ])
-        
+    
+    acc = '👑 "Пидор дня"'
     findInLoser = 0
     i = 0
+    pidor_counter = 0
+    pidor_user_now = None
+
     for d in dresult:
         user_login = d.get("_id")  
         user = getUserByLogin(user_login)
@@ -2442,23 +2445,27 @@ def report_man_of_day(message_user_name: str):
         
         user_name = user_login
         if user:
-            user_name = f'{user.getName()}'
+            user_name = f'{user.getNameAndGerb()}'
+            pd = user.getSettingValue(acc)
+            if pd:
+                pidor_counter = i
+                pidor_user_now = user
+        else:
+            user_name = user_login
+
         if message_user_name  == user_login:
             user_name = f'<b>{user_name}</b>'
             findInLoser = i
 
-        if i <= 5: report = report + f'{i}. {emoji}{user_name} ({user_login}): {d.get("count")}\n' 
+        if i <= 5: report = report + f'{i}. {emoji}{user_name}: <b>{d.get("count")}</b>\n' 
     if (i == 0): 
         report = report + f'В нашем козле нет пидоров!\n'
     else:
         if (findInLoser > 5): report = report + f'\n💔 Твое пидорье место - {findInLoser}!\n'
     
-    acc = '👑 "Пидор дня"'
-    for u in list(USERS_ARR):
-        if acc in u.getAccessory():
-            report = report + f'\nПидор дня <b>{u.getName()}</b> ({u.getLogin()})\n'
-            break
-    return report
+    if pidor_user_now:
+        report = report + f'\nПидор дня <b>{pidor_user_now.getNameAndGerb()}</b> на {pidor_counter} месте\n'
+
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("dungeon"))
 def callback_query(call):
