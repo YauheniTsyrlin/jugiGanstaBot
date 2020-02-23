@@ -2435,11 +2435,11 @@ def report_man_of_day(message_user_name: str):
         user = getUserByLogin(user_login)
         i = i + 1
         if i == 1:
-            emoji = '💝 '
+            emoji = '💝 - '
         elif i == 2:
-            emoji = '💖 '    
+            emoji = '💖 - '    
         elif i == 3:
-            emoji = '❤️ '
+            emoji = '❤️ - '
         else:
             emoji = ''
         
