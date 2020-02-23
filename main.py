@@ -2467,7 +2467,8 @@ def report_man_of_day(message_user_name: str):
     
     if pidor_user_now:
         report = report + f'\nПидор дня <b>{pidor_user_now.getNameAndGerb()}</b> на {pidor_counter} месте\n'
-
+    
+    return report
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("dungeon"))
 def callback_query(call):
