@@ -2372,7 +2372,7 @@ def main_message(message):
 
                         report = report + f'\n' 
 
-                        report = report + report_man_of_day(message.from_user.username)
+                        report = report + f'{report_man_of_day(message.from_user.username)}'
 
                         report = report + f'\n' 
                         report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
