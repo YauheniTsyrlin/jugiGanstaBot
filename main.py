@@ -2294,11 +2294,11 @@ def main_message(message):
 
                             i = i + 1
                             if i == 1:
-                                emoji = f'🥇 {gerb}'
+                                emoji = f'🥇 - {gerb}'
                             elif i == 2:
-                                emoji = f'🥈 {gerb}'    
+                                emoji = f'🥈 - {gerb}'    
                             elif i == 3:
-                                emoji = f'🥉 {gerb}'
+                                emoji = f'🥉 - {gerb}'
                             else:
                                 emoji = f'{gerb}'
                             
@@ -2350,11 +2350,11 @@ def main_message(message):
                                 
                             i = i + 1
                             if i == 1:
-                                emoji = f'👻 {gerb}'
+                                emoji = f'👻 - {gerb}'
                             elif i == 2:
-                                emoji = f'💀️ {gerb}'    
+                                emoji = f'💀️ - {gerb}'    
                             elif i == 3:
-                                emoji = f'☠️ {gerb}'
+                                emoji = f'☠️ - {gerb}'
                             else:
                                 emoji = f'{gerb}'
 
