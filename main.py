@@ -2452,12 +2452,14 @@ def report_man_of_day(message_user_name: str):
                 pidor_user_now = user
         else:
             user_name = user_login
+        print(user_name)
 
         if message_user_name  == user_login:
             user_name = f'<b>{user_name}</b>'
             findInLoser = i
 
         if i <= 5: report = report + f'{i}. {emoji}{user_name}: <b>{d.get("count")}</b>\n' 
+        print(report)
     if (i == 0): 
         report = report + f'В нашем козле нет пидоров!\n'
     else:
