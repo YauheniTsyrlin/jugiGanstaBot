@@ -498,6 +498,9 @@ def default_query(inline_query):
 def send_back_from_usset(message):
 
     counter = pip_history.find({'login': message.from_user.username}).count()
+    if counter == 0:
+        bot.send_message(message.chat.id, text='Сбрось мне хоть один pip!')
+        return
     N = 0
     if counter > 10:
         N = 10
