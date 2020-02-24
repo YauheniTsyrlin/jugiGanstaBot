@@ -1454,7 +1454,7 @@ def main_message(message):
                     bot.send_message(message.chat.id, text='Сбрось мне хоть один pip!')
                     return
                 logger.info(f'{counter}')
-                for u in pip_history.find({'login': user.getLogin()}):
+                for u in pip_history.find({'login': user.getLogin()}).skip(4):
                     logger.info(f'{u}')
                 
                 N = 0
