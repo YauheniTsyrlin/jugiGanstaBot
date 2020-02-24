@@ -2516,8 +2516,7 @@ def callback_query(call):
         bot.answer_callback_query(call.id, "Это не для твоей банды!")
         return
 
-    tz = config.SERVER_MSK_DIFF
-    dt = datetime.fromtimestamp(float(call.data.split('|')[1])) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+    dt = datetime.fromtimestamp(float(call.data.split('|')[1]))
     time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
     dungeon_km = call.data.split('|')[3]
     dungeon = getSetting(code='DUNGEONS', value=dungeon_km) 
