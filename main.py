@@ -1453,7 +1453,7 @@ def main_message(message):
                 if counter == 0:
                     bot.send_message(message.chat.id, text='Сбрось мне хоть один pip!')
                     return
-                logger.info(f'counter')
+                logger.info(f'{counter}')
                 N = 0
                 if counter > 10:
                     N = 10
