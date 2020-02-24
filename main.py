@@ -2953,7 +2953,7 @@ def rade():
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='LOVE_DAY'), 1)[0]['value']) 
 
     # Пидор дня
-    if now_date.hour == 23 and now_date.minute == 47 and now_date.second < 15:
+    if now_date.hour == 9 and now_date.minute == 0 and now_date.second < 15:
         updateUser(None)
         user_in_game = []
         for user in USERS_ARR:
@@ -3015,24 +3015,24 @@ def rade():
 
             text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getName()} (@{userWin.getLogin()})!!!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, под вздохи толпы надевают на твою голову 👑 золотую корону и, ласково шлепая тебя по попе, сгоняют с помоста!\n🎁 Самое время поздравить сегодняшнего победителя!'
             chat = getMyGoat(userWin.getLogin())['chats']['info']
-            send_messages_big(497065022, text=text)
+            send_messages_big(chat, text=text)
 
-            # acc = '👑 "Пидор дня"'
-            # for user in USERS_ARR:
-            #     if acc in user.getAccessory():
-            #         user.removeAccessory(acc)
-            #         updateUser(user)
-            #         break
+            acc = '👑 "Пидор дня"'
+            for user in USERS_ARR:
+                if acc in user.getAccessory():
+                    user.removeAccessory(acc)
+                    updateUser(user)
+                    break
             
-            # userWin.addAccessory(acc)
-            # updateUser(userWin)
-            # send_messages_big(chat, text=userWin.getName() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
-            # row = {}
-            # row.update({'date':now_date.timestamp()})
-            # row.update({'login':userWin.getLogin()})
-            # row.update({'description':acc})
-            # man_of_day.insert_one(row)
-            # send_messages_big(chat, text=report_man_of_day('')) 
+            userWin.addAccessory(acc)
+            updateUser(userWin)
+            send_messages_big(chat, text=userWin.getName() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
+            row = {}
+            row.update({'date':now_date.timestamp()})
+            row.update({'login':userWin.getLogin()})
+            row.update({'description':acc})
+            man_of_day.insert_one(row)
+            send_messages_big(chat, text=report_man_of_day('')) 
 
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
