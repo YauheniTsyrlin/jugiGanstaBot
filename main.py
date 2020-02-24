@@ -1445,7 +1445,7 @@ def main_message(message):
             if not isGoatBoss(message.from_user.username):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_goat_boss').fulfillment_text)
                 return
-                          
+
             login = tools.deEmojify(message.text.split('@')[1].strip())
             user = getUserByLogin(login)
             if user:
@@ -1453,6 +1453,7 @@ def main_message(message):
                 if counter == 0:
                     bot.send_message(message.chat.id, text='Сбрось мне хоть один pip!')
                     return
+                logger.info(f'counter')
                 N = 0
                 if counter > 10:
                     N = 10
