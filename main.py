@@ -2482,20 +2482,18 @@ def report_man_of_day(message_user_name: str):
         user_name = user_login
         if user:
             user_name = f'{user.getNameAndGerb()}'
-            pd = user.getSettingValue(acc)
-            if pd:
+            if user.isAccessoryItem(acc):
                 pidor_counter = i
                 pidor_user_now = user
         else:
             user_name = user_login
-        print(user_name)
 
         if message_user_name  == user_login:
             user_name = f'<b>{user_name}</b>'
             findInLoser = i
 
         if i <= 5: report = report + f'{i}. {emoji}{user_name}: <b>{d.get("count")}</b>\n' 
-        print(report)
+
     if (i == 0): 
         report = report + f'В нашем козле нет пидоров!\n'
     else:
@@ -2508,7 +2506,7 @@ def report_man_of_day(message_user_name: str):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("dungeon"))
 def callback_query(call):
-    # logger.info(f'{call.from_user.username} {call.data}')
+    #  logger.info(f'{call.from_user.username} {call.data}')
     #     0              1           2        3
     # dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}
     band = call.data.split('|')[2]
