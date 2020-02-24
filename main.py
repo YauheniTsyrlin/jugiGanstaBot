@@ -504,6 +504,8 @@ def send_back_from_usset(message):
     N = 0
     if counter > 10:
         N = 10
+    else:
+        counter = 0
     cursor = pip_history.find({'login': message.from_user.username}).skip(counter - N)
     matplot.getPlot(cursor, message.from_user.username)
     img = open(config.PATH_IMAGE + f'plot_{message.from_user.username}.png', 'rb')
@@ -1453,10 +1455,7 @@ def main_message(message):
                 if counter == 0:
                     bot.send_message(message.chat.id, text='Сбрось мне хоть один pip!')
                     return
-                logger.info(f'{counter}')
-                for u in pip_history.find({'login': user.getLogin()}).skip(4):
-                    logger.info(f'{u}')
-                
+               
                 N = 0
                 if counter > 10:
                     N = 10
