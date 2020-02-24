@@ -2178,11 +2178,14 @@ def main_message(message):
                                     elif user in users_off_cupture:
                                         pref = '🚬'
                                     if user in users_in_cupture:
-                                        second_pref = '🔥'
-
-                                    report = report + f'{counter}. {pref}{user.getLogin()} ({user.getName()})\n'
+                                        pref = '🔥'
+                                    
+                                    if pref == '@':
+                                        report = report + f'{counter}. {pref}{user.getLogin()}\n'
+                                    else:
+                                        report = report + f'{counter}. {pref} {user.getNameAndGerb()})\n'
                                 else:
-                                    report = report + f'{counter}. 🔕{user.getLogin()} ({user.getName()})\n'
+                                    report = report + f'{counter}. 🔕 {user.getNameAndGerb()}\n'
 
                                 if counter % 5 == 0:
                                     send_messages_big(message.chat.id, text=text + report)
