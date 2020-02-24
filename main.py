@@ -1440,6 +1440,29 @@ def main_message(message):
                 send_messages_big(message.chat.id, text='✅ Готово')
             
             updateUser(None)
+        
+        elif (callJugi and 'статистика @' in message.text.lower()):
+            if not isGoatBoss(message.from_user.username):
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_goat_boss').fulfillment_text)
+                return
+                          
+            login = tools.deEmojify(message.text.split('@')[1].strip())
+            user = getUserByLogin(login)
+            if user:
+                counter = pip_history.find({'login': user.getLogin()}).count()
+                if counter == 0:
+                    bot.send_message(message.chat.id, text='Сбрось мне хоть один pip!')
+                    return
+                N = 0
+                if counter > 10:
+                    N = 10
+                cursor = pip_history.find({'login': user.getLogin()}).skip(counter - N)
+                matplot.getPlot(cursor, user.getLogin())
+                img = open(config.PATH_IMAGE + f'plot_{user.getLogin()}.png', 'rb')
+                bot.send_photo(message.chat.id, img)
+            else:
+                send_messages_big(message.chat.id, text=f'Не найден бандит {login}')
+
         elif (callJugi and 'профиль @' in message.text.lower()):
             updateUser(None)
             name = tools.deEmojify(message.text.split('@')[1].strip())
