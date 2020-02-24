@@ -1460,6 +1460,8 @@ def main_message(message):
                 N = 0
                 if counter > 10:
                     N = 10
+                else:
+                    counter = 0
                 cursor = pip_history.find({'login': user.getLogin()}).skip(counter - N)
                 matplot.getPlot(cursor, user.getLogin())
                 img = open(config.PATH_IMAGE + f'plot_{user.getLogin()}.png', 'rb')
