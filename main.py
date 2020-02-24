@@ -496,7 +496,12 @@ def default_query(inline_query):
 
 @bot.message_handler(func=lambda message: message.text and ('📈 Статистика' == message.text))
 def send_back_from_usset(message):
-    cursor = pip_history.find({'login': message.from_user.username}).skip(pip_history.find({'login': message.from_user.username}).count() - 10)
+
+    counter = pip_history.find({'login': message.from_user.username}).count()
+    N = 0
+    if counter > 10:
+        N = 10
+    cursor = pip_history.find({'login': message.from_user.username}).skip(counter - N)
     matplot.getPlot(cursor, message.from_user.username)
     img = open(config.PATH_IMAGE + f'plot_{message.from_user.username}.png', 'rb')
     bot.send_photo(message.chat.id, img)
