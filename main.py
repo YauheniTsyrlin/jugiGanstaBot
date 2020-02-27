@@ -45,6 +45,7 @@ from bson.objectid import ObjectId
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["jugidb"]
 registered_users = mydb["users"]
+tg_users        = mydb["tg_users"]
 registered_wariors = mydb["wariors"]
 battle          = mydb["battle"]
 competition     = mydb["competition"]
@@ -65,6 +66,10 @@ bot = telebot.TeleBot(config.TOKEN)
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
     USERS_ARR.append(users.importUser(x))
+
+TG_USERS_ARR = [] # Зарегистрированные пользователи
+for x in tg_users.find():
+    TG_USERS_ARR.append(x)
 
 WARIORS_ARR = [] # Зарегистрированные жители пустоши
 for x in registered_wariors.find():
@@ -89,6 +94,29 @@ def getSetting(code: str, name=None, value=None):
 
         else:
             return result.get('value')
+
+def check_and_register_tg_user(tg_login: str):
+    user = getUserByLogin(tg_login)
+    if user: 
+        return
+    else:
+        if getTgUser(tg_login) == None:
+            row = {}
+            row.update({'createdate' :datetime.now().timestamp()})
+            row.update({'login' : tg_login})
+            row.update({'timeban' : None})
+            newvalues = { "$set": row }
+            tg_users.insert_one(row)
+
+            TG_USERS_ARR.clear()
+            for x in tg_users.find():
+                TG_USERS_ARR.append(x)
+
+def getTgUser(login: str):
+    for user in list(TG_USERS_ARR):
+        if login == user["login"]: 
+            return user
+    return None
 
 def isAdmin(login: str):
     for adm in getSetting(code='ADMINISTRATOR'):
@@ -252,16 +280,33 @@ def updateUser(newuser: users.User):
         USERS_ARR.append(users.importUser(x))
 
 def isUserBan(login: str):
+    tz = config.SERVER_MSK_DIFF
+    date_for = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+
     userIAm = getUserByLogin(login)
     if userIAm:
         if userIAm.getTimeBan():
-            tz = config.SERVER_MSK_DIFF
-            date_for = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
             if date_for.timestamp() < userIAm.getTimeBan():
                 return True
             else:
                 userIAm.setTimeBan(None)
                 updateUser(userIAm)
+    else:
+        tg_user = getTgUser(login)
+        if tg_user and tg_user['timeban']:
+            if date_for.timestamp() < tg_user['timeban']:
+                return True
+            else:
+                tg_user.update({'timeban' : None})
+                newvalues = { "$set": tg_user }
+                result = tg_users.update_one({
+                    'login': login
+                    }, newvalues)
+
+                TG_USERS_ARR.clear()
+                for x in tg_users.find():
+                    TG_USERS_ARR.append(x)
+
     return False
 
 def getWariorFraction(string: str):
@@ -739,6 +784,8 @@ def main_message(message):
         send_messages_big(message.chat.id, text=f'{message.from_user.username} заслужил пожизненный бан {black_list}', reply_markup=None)
         send_message_to_admin(f'⚠️Внимание! \n {message.from_user.username} написал Джу:\n\n {message.text}')
         return
+
+    check_and_register_tg_user(message.from_user.username)
 
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
