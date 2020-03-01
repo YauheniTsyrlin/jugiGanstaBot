@@ -541,7 +541,12 @@ def default_query(inline_query):
 
 @bot.message_handler(func=lambda message: message.text and ('📈 Статистика' == message.text))
 def send_back_from_usset(message):
-
+    #write_json(message.json)
+    if isUserBan(message.from_user.username):
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то наговорить, но у него получилось лишь:\n' + getResponseDialogFlow(message, 'user_banned').fulfillment_text)
+        return
+        
     counter = pip_history.find({'login': message.from_user.username}).count()
     if counter == 0:
         bot.send_message(message.chat.id, text='Сбрось мне хоть один pip!')
@@ -725,6 +730,15 @@ def get_message_stiker(message):
     privateChat = ('private' in message.chat.type)
     if privateChat:
         send_messages_big(message.chat.id, text=message.sticker.file_id)
+
+# Handle voice
+@bot.message_handler(content_types=["video", "video_note"])
+def get_message_stiker(message):
+    #write_json(message.json)
+    if isUserBan(message.from_user.username):
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то настримить, но у него получилось лишь:\n' + getResponseDialogFlow(message, 'user_banned').fulfillment_text)
+        return
 
 # Handle voice
 @bot.message_handler(content_types=["voice"])
