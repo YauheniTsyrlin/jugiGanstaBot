@@ -309,6 +309,16 @@ def isUserBan(login: str):
 
     return False
 
+def updateTgUser(tg_user):
+    newvalues = { "$set": tg_user }
+    result = tg_users.update_one({
+        'login': tg_user["login"]
+        }, newvalues)
+
+    TG_USERS_ARR.clear()
+    for x in tg_users.find():
+        TG_USERS_ARR.append(x)
+
 def getWariorFraction(string: str):
     if (string.startswith('⚙️')):
         return '⚙️Убежище 4'
@@ -2010,9 +2020,14 @@ def main_message(message):
                         report = ''
                         if ban:
                             if not allUser:
-                                user.setTimeBan(date_for.timestamp())
-                                report = f'{user.getName()} забанен нахрен до\n'+'⏰' + time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime(date_for.timestamp()))
-                                updateUser(user)
+                                if user == None:
+                                    tguser = getTgUser(login)
+                                    tguser["timeban"] = date_for.timestamp()
+                                    updateTgUser(tguser)
+                                else:
+                                    user.setTimeBan(date_for.timestamp())
+                                    report = f'{user.getName()} забанен нахрен до\n'+'⏰' + time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime(date_for.timestamp()))
+                                    updateUser(user)
                             else:
                                 for u in list(USERS_ARR):
                                     if u.getLogin() == message.from_user.username:
@@ -2020,6 +2035,13 @@ def main_message(message):
                                     else:
                                         u.setTimeBan(date_for.timestamp())
                                         updateUser(u)
+                                for tguser in list(TG_USERS_ARR):
+                                    if tguser["login"] == message.from_user.username:
+                                        pass
+                                    else:
+                                        tguser["timeban"] = date_for.timestamp()
+                                        updateTgUser(tguser)
+
                                 report = f'Все забанены нахрен до\n'+'⏰' + time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime(date_for.timestamp()))
                                 
                         else:
@@ -2031,6 +2053,11 @@ def main_message(message):
                                 for u in list(USERS_ARR):
                                     u.setTimeBan(None)
                                     updateUser(u)
+                                
+                                for tguser in list(TG_USERS_ARR):
+                                    tguser['timeBan'] = None
+                                    updateTgUser(tguser)
+                                    
                                 report = f'Все разбанены. Говорите, дорогие мои!'
 
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text + f'\n{report}')
