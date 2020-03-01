@@ -1964,7 +1964,11 @@ def main_message(message):
                             if not isGoatBoss(message.from_user.username):
                                 bot.reply_to(message, text=getResponseDialogFlow(message, 'shot_message_not_goat_boss').fulfillment_text)
                                 return
-
+                        else:
+                            if allUser:
+                                if not isGoatBoss(message.from_user.username):
+                                    bot.reply_to(message, text=getResponseDialogFlow(message, 'shot_message_not_goat_boss').fulfillment_text)
+                                    return
                         
                         user = getUserByLogin(login)
                         if not allUser:
