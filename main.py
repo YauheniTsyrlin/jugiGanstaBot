@@ -546,7 +546,7 @@ def send_back_from_usset(message):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то наговорить, но у него получилось лишь:\n' + getResponseDialogFlow(message, 'user_banned').fulfillment_text)
         return
-        
+
     counter = pip_history.find({'login': message.from_user.username}).count()
     if counter == 0:
         bot.send_message(message.chat.id, text='Сбрось мне хоть один pip!')
@@ -738,6 +738,15 @@ def get_message_stiker(message):
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то настримить, но у него получилось лишь:\n' + getResponseDialogFlow(message, 'user_banned').fulfillment_text)
+        return
+
+# Handle voice
+@bot.message_handler(content_types=["location"])
+def get_message_stiker(message):
+    #write_json(message.json)
+    if isUserBan(message.from_user.username):
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то рассказать про свою локацию, но у него получилось лишь:\n' + getResponseDialogFlow(message, 'user_banned').fulfillment_text)
         return
 
 # Handle voice
