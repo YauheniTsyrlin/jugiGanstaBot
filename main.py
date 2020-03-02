@@ -1750,7 +1750,7 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=f'{response.split(":")[2]}')
                     elif 'youbadbot' == response.split(':')[1]:
                         # jugi:youbadbot
-                        sec = int(randrange(int(getSetting(code='PROBABILITY', name='JUGI_BAD_BOT_BAN'))))
+                        sec = int(randrange(288, int(getSetting(code='PROBABILITY', name='JUGI_BAD_BOT_BAN'))))
                         tz = config.SERVER_MSK_DIFF
                         ban_date = datetime.now() + timedelta(seconds=sec, hours=tz.hour)
                         userIAm.setTimeBan(ban_date.timestamp())
@@ -2057,7 +2057,7 @@ def main_message(message):
                                 for tguser in list(TG_USERS_ARR):
                                     tguser['timeBan'] = None
                                     updateTgUser(tguser)
-                                    
+
                                 report = f'Все разбанены. Говорите, дорогие мои!'
 
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text + f'\n{report}')

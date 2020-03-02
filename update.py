@@ -1409,7 +1409,7 @@ newvalues = { "$set": { "value":
                         {
                             # Range
                             'name': 'JUGI_BAD_BOT_BAN',
-                            'value': 600
+                            'value': 1488
                         },
                         {
                             # Range
