@@ -1495,7 +1495,7 @@ def main_message(message):
                     send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
                     return
             
-            sec = int(randrange(15, int(getSetting(code='PROBABILITY',name='FUNY_BAN'))))
+            sec = int(randrange(228, int(getSetting(code='PROBABILITY',name='FUNY_BAN'))))
             tz = config.SERVER_MSK_DIFF
 
             ban_date = datetime.now() + timedelta(seconds=sec, minutes=tz.minute, hours=tz.hour)
