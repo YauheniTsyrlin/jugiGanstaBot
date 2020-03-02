@@ -2619,6 +2619,12 @@ def callback_query(call):
     #  logger.info(f'{call.from_user.username} {call.data}')
     #     0              1           2        3
     # dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}
+
+    if isUserBan(call.from_user.username):
+       bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
+       return
+
+
     band = call.data.split('|')[2]
     user = getUserByLogin(call.from_user.username)
     if not user.getBand() == band:
@@ -2713,6 +2719,9 @@ def callback_query(call):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("toreward"))
 def callback_query(call):
+    if isUserBan(call.from_user.username):
+        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
+        return
 
     if not isGoatBoss(call.from_user.username):
         if not isAdmin(call.from_user.username):
@@ -2829,6 +2838,11 @@ def callback_query(call):
 @bot.callback_query_handler(func=lambda call: call.data.startswith("pickupaccessory"))
 def callback_query(call):
     # pickupaccessory|{login}|{acc}
+
+    if isUserBan(call.from_user.username):
+        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
+        return
+
     if not isGoatBoss(call.from_user.username):
         if not isAdmin(call.from_user.username):
             bot.answer_callback_query(call.id, "Тебе не положено!")
@@ -2873,7 +2887,9 @@ def callback_query(call):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("capture_"))
 def callback_query(call):
-    logger.info(f'callback_query_handler: {call.data}')
+    if isUserBan(call.from_user.username):
+        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
+        return
     
     goat = call.data.split('_')[3]
     if not goat == getMyGoatName(call.from_user.username):
@@ -3058,6 +3074,14 @@ def rade():
                 report = 'Чёт я приуныл... Ничего в голову не идет... С новым годом!'
             send_messages_big(goat['chats']['info'], report)
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='LOVE_DAY'), 1)[0]['value']) 
+    # День рождения
+    if now_date.hour == 8 and now_date.minute == 0 and now_date.second < 15:
+        updateUser(None)
+        for user in USERS_ARR:
+            if user.getBirthday():
+                bday = time.gmtime(user.getBirthday())
+                if now_date.day == bday.day and now_date.month == bday.month: 
+                    send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Пидор дня
     if now_date.hour == 9 and now_date.minute == 0 and now_date.second < 15:
@@ -3140,7 +3164,6 @@ def rade():
             row.update({'description':acc})
             man_of_day.insert_one(row)
             send_messages_big(chat, text=report_man_of_day('')) 
-
 
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
         updateUser(None)
@@ -3299,7 +3322,7 @@ def radeReport(goat, ping=False):
                 if planed_raid_location:
                     if planed_raid_location == u.getRaidLocation():
                         location = '✔️' + location
-                report = report + f'{counter}. {u.getName()} 📍{location}км\n'
+                report = report + f'{counter}. {u.getNameAndGerb()} 📍{location}км\n'
             report = report + f'\n'
         if ping:
             if planed_raid_location:
