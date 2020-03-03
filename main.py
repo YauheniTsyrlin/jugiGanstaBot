@@ -878,16 +878,16 @@ def main_message(message):
         koronavirus(may_be_infected, message.chat.id)
 
     userIAm = getUserByLogin(message.from_user.username)
-    if userIAm:
+    if not privateChat and userIAm:
         if userIAm.isAccessoryItem(acc_koronavirus):
             global INFECT_PROBABILITY
             INFECT_PROBABILITY = float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))
         else:
-            if INFECT_PROBABILITY > 0.1:
+            if INFECT_PROBABILITY > 0.05:
                 may_be_infected = []
                 may_be_infected.append(message.from_user.username)
                 koronavirus(may_be_infected, message.chat.id)
-                INFECT_PROBABILITY = INFECT_PROBABILITY / 2
+                INFECT_PROBABILITY = INFECT_PROBABILITY * 0.3
             else:
                 INFECT_PROBABILITY = 0
 
