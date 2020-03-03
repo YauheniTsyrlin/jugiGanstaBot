@@ -1555,6 +1555,16 @@ newvalues = { "$set": { "value":
                         },
                         {
                             # Range
+                            'name': 'PANDING_WAIT_START_1',
+                            'value': 600
+                        },
+                        {
+                            # Range
+                            'name': 'PANDING_WAIT_END_1',
+                            'value': 12000
+                        },
+                        {
+                            # Range
                             'name': 'JUGI_FLEX',
                             'value': 500
                         },

@@ -807,26 +807,44 @@ def get_message_stiker(message):
         else:
             send_messages_big(message.chat.id, text=f'🗣<b>{message.from_user.username}</b> что-то сказал, но я ничего не понял!')
 
-def koronavirus(message):
+def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))):
+    if len(logins) < 1:
+        return
+
     acc = '🦇 Коронавирус'
-    add_to_user = False
-    add_to_user_reply = False
-    if message.reply_to_message and (not message.reply_to_message.from_user.is_bot):
-        user = getUserByLogin(message.from_user.username)
-        user_reply = getUserByLogin(message.reply_to_message.from_user.username)
-        if user and user_reply:
+
+    isKoronavirus = False
+    users_in_danger = []
+    for user_login in logins:
+        user = getUserByLogin(user_login)
+        if user:
+            users_in_danger.append(user)
             if user.isAccessoryItem(acc):
-                if (random.random() <= float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))):
-                    add_to_user_reply = True
-            if user_reply.isAccessoryItem(acc):
-                if (random.random() <= float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))):
-                    add_to_user = True
-    if add_to_user_reply:
-        user_reply.addAccessory(acc)
+                isKoronavirus = True
+    
+    counter_infected = 0
+    if isKoronavirus:
+        for user in users_in_danger:
+            if not user.isAccessoryItem(acc):
+                if (random.random() <= probability):
+                    user.addAccessory(acc)
+                    updateUser(user)
+                    counter_infected = counter_infected + 1
 
-    if add_to_user:
-        user.addAccessory(acc)
+    if counter_infected > 0:
+        sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
+        tz = config.SERVER_MSK_DIFF
+        pending_date = datetime.now() + timedelta(seconds=sec, hours=tz.hour)
 
+        pending_messages.insert_one({ 
+            'chat_id': chat,
+            'reply_message': None,
+            'create_date': datetime.now().timestamp(),
+            'user_id': logins[0],  
+            'state': 'WAIT',
+            'pending_date': pending_date.timestamp(),
+            'dialog_flow_text': 'koronavirus_new_member',
+            'text': None})
 
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
@@ -847,7 +865,11 @@ def main_message(message):
 
     check_and_register_tg_user(message.from_user.username)
 
-    koronavirus(message)
+    if message.reply_to_message and not message.reply_to_message.from_user.is_bot:
+        may_be_infected = []
+        may_be_infected.append(message.reply_to_message.from_user.username)
+        may_be_infected.append(message.from_user.username)
+        koronavirus(may_be_infected, message.chat.id)
 
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
