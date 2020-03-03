@@ -807,6 +807,27 @@ def get_message_stiker(message):
         else:
             send_messages_big(message.chat.id, text=f'🗣<b>{message.from_user.username}</b> что-то сказал, но я ничего не понял!')
 
+def koronavirus(message):
+    acc = '🦇 Коронавирус'
+    add_to_user = False
+    add_to_user_reply = False
+    if message.reply_to_message and (not message.reply_to_message.from_user.is_bot):
+        user = getUserByLogin(message.from_user.username)
+        user_reply = getUserByLogin(message.reply_to_message.from_user.username)
+        if user and user_reply:
+            if user.isAccessoryItem(acc):
+                if (random.random() <= float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))):
+                    add_to_user_reply = True
+            if user_reply.isAccessoryItem(acc):
+                if (random.random() <= float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))):
+                    add_to_user = True
+    if add_to_user_reply:
+        user_reply.addAccessory(acc)
+
+    if add_to_user:
+        user.addAccessory(acc)
+
+
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
@@ -825,6 +846,8 @@ def main_message(message):
         return
 
     check_and_register_tg_user(message.from_user.username)
+
+    koronavirus(message)
 
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
