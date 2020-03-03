@@ -492,7 +492,8 @@ class User(object):
     def removeAccessory(self, accessoryItem: str):
         if self.accessory == None:
             self.accessory = []
-        self.accessory.remove(accessoryItem)
+        if self.isAccessoryItem(accessoryItem):
+            self.accessory.remove(accessoryItem)
 
     def setSettings(self, settings):
         self.settings = settings  
