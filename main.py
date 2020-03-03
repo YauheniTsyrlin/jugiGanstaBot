@@ -2547,7 +2547,7 @@ def report_koronavirus():
         if user.isAccessoryItem(acc_koronavirus):
             counter = counter + 1
 
-    report = f'🦇 Статистика зараженных: <b>{counter}</b>"\n' 
+    report = f'🦇 Статистика зараженных: <b>{counter}</b>\n' 
     return report
 
 def report_man_of_day(message_user_name: str):
