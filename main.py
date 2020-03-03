@@ -829,6 +829,7 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
                 isKoronavirus = True
     
     counter_infected = 0
+    names = ''
     if isKoronavirus:
         for user in users_in_danger:
             if not user.isAccessoryItem(acc_koronavirus):
@@ -836,6 +837,7 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
                     user.addAccessory(acc_koronavirus)
                     updateUser(user)
                     counter_infected = counter_infected + 1
+                    names = names + f'{counter_infected}. {user.getNameAndGerb()}\n'
                     send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен коронавирусом!')
 
     if counter_infected > 0:
@@ -850,7 +852,7 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
             'state': 'WAIT',
             'pending_date': pending_date.timestamp(),
             'dialog_flow_text': 'koronavirus_new_member',
-            'text': f'Количество заразившихся {counter_infected}'})
+            'text': f'Количество заразившихся {counter_infected}:\n{names}'})
 
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
