@@ -1755,7 +1755,7 @@ print("#         BATTLE           #")
 print("#==========================#")
 # pip_history     = mydb["pip_history"]
 # 
-pending_messages.remove()
+# pending_messages.remove()
 
 
 # dresult = registered_wariors.aggregate([ 
