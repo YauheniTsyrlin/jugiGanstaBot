@@ -2519,8 +2519,10 @@ def main_message(message):
                             if (findInLoser > 5): report = report + f'\n🧸 Твое место - {findInLoser}!\n'
 
                         report = report + f'\n' 
-
                         report = report + f'{report_man_of_day(message.from_user.username)}'
+                        
+                        report = report + f'\n' 
+                        report = report + f'{report_koronavirus()}'
 
                         report = report + f'\n' 
                         report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
@@ -2538,6 +2540,15 @@ def main_message(message):
         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
             if (random.random() <= float(getSetting(code='PROBABILITY', name='I_DONT_KNOW_YOU'))):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'you_dont_our_band_gangster').fulfillment_text)
+
+def report_koronavirus():
+    counter = 0
+    for user in USERS_ARR:
+        if user.isAccessoryItem(acc_koronavirus):
+            counter = counter + 1
+
+    report = f'🦇 Статистика зараженных: <b>{counter}</b>"\n' 
+    report = report + '\n'
 
 def report_man_of_day(message_user_name: str):
     setting = getSetting(code='REPORTS',name='KILLERS')
