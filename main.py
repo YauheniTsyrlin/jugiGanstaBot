@@ -840,8 +840,7 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
 
     if counter_infected > 0:
         sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
-        tz = config.SERVER_MSK_DIFF
-        pending_date = datetime.now() + timedelta(seconds=sec, hours=tz.hour)
+        pending_date = datetime.now() + timedelta(seconds=sec)
 
         pending_messages.insert_one({ 
             'chat_id': chat,
