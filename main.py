@@ -79,6 +79,9 @@ SETTINGS_ARR = [] # Зарегистрированные настройки
 for setting in settings.find():
     SETTINGS_ARR.append(setting)
 
+INFECT_PROBABILITY = 0
+acc_koronavirus = '🦇 Коронавирус'
+
 def getSetting(code: str, name=None, value=None):
     """ Получение настройки """
     result = settings.find_one({'code': code})
@@ -811,23 +814,21 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
     if len(logins) < 1:
         return
 
-    acc = '🦇 Коронавирус'
-
     isKoronavirus = False
     users_in_danger = []
     for user_login in logins:
         user = getUserByLogin(user_login)
         if user:
             users_in_danger.append(user)
-            if user.isAccessoryItem(acc):
+            if user.isAccessoryItem(acc_koronavirus):
                 isKoronavirus = True
     
     counter_infected = 0
     if isKoronavirus:
         for user in users_in_danger:
-            if not user.isAccessoryItem(acc):
+            if not user.isAccessoryItem(acc_koronavirus):
                 if (random.random() <= probability):
-                    user.addAccessory(acc)
+                    user.addAccessory(acc_koronavirus)
                     updateUser(user)
                     counter_infected = counter_infected + 1
 
@@ -844,7 +845,7 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
             'state': 'WAIT',
             'pending_date': pending_date.timestamp(),
             'dialog_flow_text': 'koronavirus_new_member',
-            'text': None})
+            'text': f'Количество заразившихся {counter_infected}'})
 
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
@@ -1077,45 +1078,6 @@ def main_message(message):
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
-    # elif (message.forward_from and ('Захват начался!' in message.text or 'Вы автоматически отправитесь на совместную зачистку локации' in message.text) and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('✊️Захват') ):
-    #     strings = message.text.split('\n')
-    #     dungeon = ''
-    #     band = ''
-    #     report = ''
-    #     ondungeon = ''
-    #     users_ondungeon = []
-    #     i = 1
-    #     for s in strings:
-    #         if s.startswith('✊️Захват'):
-    #             for d in getSetting(code='DUNGEONS'):
-    #                 if tools.deEmojify(s.replace('✊️Захват ','')) in d['name'] :
-    #                     dungeon = d['name']
-    #                     break
-
-    #             report = f'✊️Захват <b>{dungeon}</b>' + '\n'
-
-    #         if s.startswith('🤘'):
-    #             band = s.replace('🤘','')
-    #             report = report + s + '\n\n' 
-
-    #         if 'в сборе.' in s:
-    #             report = report + f'<b>{s}</b>' + '\n'
-
-    #         if s.startswith('👊'):
-    #             name = s.replace('👊','').strip()
-    #             user = getUserByName(name)
-    #             users_ondungeon.append(user)
-    #             string = s
-    #             if user:
-    #                 gerb = user.getSettingValue("🃏Мой герб")
-    #                 if gerb == None: gerb = ''
-    #                 string = '👊' + f' {gerb}{user.getName()}'
-    #             report = report + string + '\n'
-    #             i = i + 1
-
-    #     bot.delete_message(message.chat.id, message.message_id)
-    #     send_messages_big(message.chat.id, text=report)
-    #     return  
     elif (message.forward_from and 'Панель банды.' in message.text and message.forward_from.username == 'WastelandWarsBot'):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
@@ -1423,23 +1385,20 @@ def main_message(message):
                 logger.info(mem_top())
                 return
     if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да?' == message.text.lower() or 'да!)' == message.text.lower():
-        pass
-        # if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
-        #     if not isGoatSecretChat(message.from_user.username, message.chat.id):
-        #         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_DA_PINDA'), 1)[0]['value'])
-        #         return
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
+            if not isGoatSecretChat(message.from_user.username, message.chat.id):
+                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_DA_PINDA'), 1)[0]['value'])
+                return
     if 'нэт' == message.text.lower() or 'неа' == message.text.lower() or 'нет' == message.text.lower() or 'нет!' == message.text.lower() or 'нет?' == message.text.lower() or 'нет!)' == message.text.lower():
-        pass
-        # if (random.random() <= float(getSetting(code='PROBABILITY', name='NO_STICKER'))):
-        #     if not isGoatSecretChat(message.from_user.username, message.chat.id):
-        #         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_NO_PINDA'), 1)[0]['value'])
-        #         return
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='NO_STICKER'))):
+            if not isGoatSecretChat(message.from_user.username, message.chat.id):
+                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_NO_PINDA'), 1)[0]['value'])
+                return
     if 'а' == message.text.lower() or 'а!' == message.text.lower() or 'а?' == message.text.lower() or 'а!)' == message.text.lower():
-        pass
-        # if (random.random() <= float(getSetting(code='PROBABILITY', name='A_STICKER'))):
-        #     if not isGoatSecretChat(message.from_user.username, message.chat.id):
-        #         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_A_PINDA'), 1)[0]['value'])
-        #         return   SALUTE_STICKER
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='A_STICKER'))):
+            if not isGoatSecretChat(message.from_user.username, message.chat.id):
+                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_A_PINDA'), 1)[0]['value'])
+                return
     if 'тебя буквально размазали' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
@@ -1572,8 +1531,7 @@ def main_message(message):
                 registered_users.update_one({"login": f"{login}"}, newvalues)
                 send_messages_big(message.chat.id, text='✅ Готово')
             
-            updateUser(None)
-        
+            updateUser(None)  
         elif (callJugi and 'статистика @' in message.text.lower()):
             if not isGoatBoss(message.from_user.username):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_goat_boss').fulfillment_text)
@@ -1598,7 +1556,6 @@ def main_message(message):
                 bot.send_photo(message.chat.id, img)
             else:
                 send_messages_big(message.chat.id, text=f'Не найден бандит {login}')
-
         elif (callJugi and 'профиль @' in message.text.lower()):
             updateUser(None)
             name = tools.deEmojify(message.text.split('@')[1].strip())
@@ -3052,8 +3009,10 @@ def pending_message():
         ):
         
         text = pending_message.get('text')
+        if text == None:
+            text = ''
         if pending_message.get('dialog_flow_text'):
-            text = getResponseDialogFlow(None, pending_message.get('dialog_flow_text')).fulfillment_text
+            text = getResponseDialogFlow(None, pending_message.get('dialog_flow_text')).fulfillment_text + '\n' + text
         
         if pending_message.get('reply_message'):
             reply_to_big(pending_message.get('reply_message'), text)

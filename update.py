@@ -1516,12 +1516,12 @@ newvalues = { "$set": { "value":
                         {
                             # Вероятность
                             'name': 'YES_STICKER',
-                            'value': 1.00
+                            'value': 0.00
                         },
                         {
                             # Вероятность
                             'name': 'NO_STICKER',
-                            'value': 1.00
+                            'value': 0.00
                         },
                         {
                             # Вероятность
@@ -1541,7 +1541,7 @@ newvalues = { "$set": { "value":
                         {
                             # Вероятность
                             'name': 'A_STICKER',
-                            'value': 1.00
+                            'value': 0.00
                         },
                         {
                             # Вероятность
