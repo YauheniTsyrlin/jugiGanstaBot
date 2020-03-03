@@ -80,6 +80,7 @@ for setting in settings.find():
     SETTINGS_ARR.append(setting)
 
 INFECT_PROBABILITY = 0
+INFECT_USER = ''
 acc_koronavirus = '🦇 Коронавирус'
 
 def getSetting(code: str, name=None, value=None):
@@ -816,9 +817,10 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
 
     users_in_danger = []
     isKoronavirus = False
-    
+    infected_user_login = ''
     if INFECT_PROBABILITY > 0:
         probability = INFECT_PROBABILITY
+        infected_user_login = INFECT_USER
         isKoronavirus = True
     
     for user_login in logins:
@@ -827,6 +829,8 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
             users_in_danger.append(user)
             if user.isAccessoryItem(acc_koronavirus):
                 isKoronavirus = True
+                infected_user_login = user.getLogin()
+                break
     
     counter_infected = 0
     names = ''
@@ -837,7 +841,8 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
                     user.addAccessory(acc_koronavirus)
                     updateUser(user)
                     counter_infected = counter_infected + 1
-                    names = names + f'{counter_infected}. {user.getNameAndGerb()}\n'
+                    infected_user = getUserByLogin(infected_user_login)
+                    names = names + f'{counter_infected}. {user.getNameAndGerb()} заразился от {infected_user.getNameAndGerb()}\n'
                     send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен коронавирусом!')
 
     if counter_infected > 0:
