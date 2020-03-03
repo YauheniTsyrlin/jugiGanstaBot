@@ -85,6 +85,16 @@ def getGoatBands(goatName: str):
             return bands
     return None
 
+def updateUser(newuser: users.User):
+    if newuser == None:
+        pass
+    else:
+        newvalues = { "$set": json.loads(newuser.toJSON()) }
+        z = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
+    USERS_ARR.clear()
+    for x in registered_users.find():
+        USERS_ARR.append(users.importUser(x))
+
 def radeReport(goat):
     goat_report = {}
     goat_report.update({'name': goat.get('name')})
@@ -499,10 +509,12 @@ print('\n======== radeReport ==========\n')
 #             z = z + 1
 #     i = i + 1
 
+acc_koronavirus = '🦇 Коронавирус'
+for user in USERS_ARR:
+    user.removeAccessory(acc_koronavirus)
+    user.removeAccessory('🤍 Аскорбинка')
+    updateUser(user)
 
-for z in pending_messages.find():
-    print(z)
-    
 sys.exit(0)
 
 # for ts in (1579191477, 1579191477):

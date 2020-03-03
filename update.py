@@ -1567,7 +1567,7 @@ newvalues = { "$set": { "value":
                         {
                             # Range
                             'name': 'PANDING_WAIT_END_1',
-                            'value': 300
+                            'value': 90
                         },
                         {
                             # Range
@@ -1577,7 +1577,7 @@ newvalues = { "$set": { "value":
                         {
                             # Вероятность
                             'name': 'KORONOVIRUS',
-                            'value': 0.5
+                            'value': 0.1
                         }
 
                     ]

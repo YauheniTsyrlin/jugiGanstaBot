@@ -890,11 +890,11 @@ def main_message(message):
             global INFECT_PROBABILITY
             INFECT_PROBABILITY = float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))
         else:
-            if INFECT_PROBABILITY > 0.05:
+            if INFECT_PROBABILITY > 0.01:
                 may_be_infected = []
                 may_be_infected.append(message.from_user.username)
                 koronavirus(may_be_infected, message.chat.id)
-                INFECT_PROBABILITY = INFECT_PROBABILITY * 0.3
+                INFECT_PROBABILITY = INFECT_PROBABILITY - INFECT_PROBABILITY * 0.2
             else:
                 INFECT_PROBABILITY = 0
 
