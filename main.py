@@ -831,6 +831,7 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
                     user.addAccessory(acc_koronavirus)
                     updateUser(user)
                     counter_infected = counter_infected + 1
+                    send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен коронавирусом!')
 
     if counter_infected > 0:
         sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
@@ -871,6 +872,23 @@ def main_message(message):
         may_be_infected.append(message.reply_to_message.from_user.username)
         may_be_infected.append(message.from_user.username)
         koronavirus(may_be_infected, message.chat.id)
+    
+    if '@' in message.text:
+        may_be_infected = []
+        may_be_infected.append(message.from_user.username)
+        koronavirus(may_be_infected, message.chat.id)
+
+    userIAm = getUserByLogin(message.from_user.username)
+    if userIAm:
+        if userIAm.isAccessoryItem(acc_koronavirus):
+            INFECT_PROBABILITY = float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))
+        else:
+            
+            if INFECT_PROBABILITY > 0.1:
+                INFECT_PROBABILITY = INFECT_PROBABILITY / 2
+            else:
+                INFECT_PROBABILITY = 0
+
 
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
@@ -880,8 +898,7 @@ def main_message(message):
             name = user.getName()
         send_messages_big(message.chat.id, text=f'{name} хотел что-то сказать, но у него получилось лишь:\n{getResponseDialogFlow(message, "user_banned").fulfillment_text}' )
         return
-
-    userIAm = getUserByLogin(message.from_user.username)
+    
     callJugi = (privateChat 
                             or message.text.lower().startswith('джу') 
                             or (message.reply_to_message 
