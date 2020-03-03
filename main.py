@@ -2549,6 +2549,7 @@ def report_koronavirus():
 
     report = f'🦇 Статистика зараженных: <b>{counter}</b>"\n' 
     report = report + '\n'
+    return report
 
 def report_man_of_day(message_user_name: str):
     setting = getSetting(code='REPORTS',name='KILLERS')
