@@ -843,7 +843,7 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
                     counter_infected = counter_infected + 1
                     infected_user = getUserByLogin(infected_user_login)
                     names = names + f'{counter_infected}. {user.getNameAndGerb()} заразился от {infected_user.getNameAndGerb()}\n'
-                    send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен коронавирусом !')
+                    send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен коронавирусом от {infected_user.getNameAndGerb()}!')
 
     if counter_infected > 0:
         sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
