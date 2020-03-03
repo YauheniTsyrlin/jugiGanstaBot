@@ -842,7 +842,7 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
                     updateUser(user)
                     counter_infected = counter_infected + 1
                     infected_user = getUserByLogin(infected_user_login)
-                    names = names + f'{counter_infected}. {user.getNameAndGerb()} заразился от {infected_user.getNameAndGerb()}\n'
+                    names = names + f'{counter_infected}. {user.getNameAndGerb()}\n'
                     send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен коронавирусом от {infected_user.getNameAndGerb()}!')
 
     if counter_infected > 0:
