@@ -814,8 +814,13 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
     if len(logins) < 1:
         return
 
-    isKoronavirus = False
     users_in_danger = []
+    isKoronavirus = False
+    
+    if INFECT_PROBABILITY > 0:
+        probability = INFECT_PROBABILITY
+        isKoronavirus = True
+    
     for user_login in logins:
         user = getUserByLogin(user_login)
         if user:
@@ -872,19 +877,16 @@ def main_message(message):
         may_be_infected.append(message.reply_to_message.from_user.username)
         may_be_infected.append(message.from_user.username)
         koronavirus(may_be_infected, message.chat.id)
-    
-    if '@' in message.text:
-        may_be_infected = []
-        may_be_infected.append(message.from_user.username)
-        koronavirus(may_be_infected, message.chat.id)
 
     userIAm = getUserByLogin(message.from_user.username)
     if userIAm:
         if userIAm.isAccessoryItem(acc_koronavirus):
             INFECT_PROBABILITY = float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))
         else:
-            
             if INFECT_PROBABILITY > 0.1:
+                may_be_infected = []
+                may_be_infected.append(message.from_user.username)
+                koronavirus(may_be_infected, message.chat.id)
                 INFECT_PROBABILITY = INFECT_PROBABILITY / 2
             else:
                 INFECT_PROBABILITY = 0
