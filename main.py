@@ -881,7 +881,8 @@ def main_message(message):
     userIAm = getUserByLogin(message.from_user.username)
     if userIAm:
         if userIAm.isAccessoryItem(acc_koronavirus):
-            global INFECT_PROBABILITY = float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))
+            global INFECT_PROBABILITY
+            INFECT_PROBABILITY = float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))
         else:
             if INFECT_PROBABILITY > 0.1:
                 may_be_infected = []
