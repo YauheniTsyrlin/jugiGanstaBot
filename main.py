@@ -83,65 +83,6 @@ INFECT_OR_CURE_PROBABILITY = {}
 acc_koronavirus = '🦇 Коронавирус'
 doctors = ['💉 Удостоверение "Медбрат"', '💉 Удостоверение "Медсестричка"']
 
-def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))):
-    if len(logins) < 1:
-        return
-
-    users_in_danger = []
-    isKoronavirus = False
-
-    try:
-        probability = INFECT_OR_CURE_PROBABILITY[f'chat_{chat}']
-        isKoronavirus = True
-    except: pass
-    
-    for user_login in logins:
-        user = getUserByLogin(user_login)
-        if user:
-            users_in_danger.append(user)
-            if user.isAccessoryItem(acc_koronavirus):
-                isKoronavirus = True
-                break
-    
-    counter_infected = 0
-    names = ''
-    if isKoronavirus:
-        for user in users_in_danger:
-            if not user.isAccessoryItem(acc_koronavirus):
-                if (random.random() <= probability):
-                    if isIamDoctor(user.getLogin()):
-                        # Доктор заражается только в 10% случаев 
-                        if (random.random() > int(getSetting(code='PROBABILITY', name='DOCTOR_INFECTED'))):
-                            return
-                    user.addAccessory(acc_koronavirus)
-                    updateUser(user)
-                    counter_infected = counter_infected + 1
-                    names = names + f'{user.getNameAndGerb()}\n'
-                    send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен коронавирусом!')
-
-    if counter_infected > 0:
-        sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
-        pending_date = datetime.now() + timedelta(seconds=sec)
-
-        pending_messages.insert_one({ 
-            'chat_id': chat,
-            'reply_message': None,
-            'create_date': datetime.now().timestamp(),
-            'user_id': logins[0],  
-            'state': 'WAIT',
-            'pending_date': pending_date.timestamp(),
-            'dialog_flow_text': 'koronavirus_new_member',
-            'text': f'{names}'})
-
-
-def isIamDoctor(login: str):
-    user = getUserByLogin(login)
-    if user:
-        for doc in doctors:
-            if user.isAccessoryItem(doc):
-                return True
-    return False
-
 def getSetting(code: str, name=None, value=None):
     """ Получение настройки """
     result = settings.find_one({'code': code})
@@ -566,6 +507,64 @@ def addToUserHistory(user: users.User):
     result = pip_history.update_one({'login': user.getLogin(), 'date': date}, newvalues)
     if result.matched_count < 1:
         pip_history.insert_one(row)
+
+def isIamDoctor(login: str):
+    user = getUserByLogin(login)
+    if user:
+        for doc in doctors:
+            if user.isAccessoryItem(doc):
+                return True
+    return False
+
+def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))):
+    if len(logins) < 1:
+        return
+
+    users_in_danger = []
+    isKoronavirus = False
+
+    try:
+        probability = INFECT_OR_CURE_PROBABILITY[f'chat_{chat}']
+        isKoronavirus = True
+    except: pass
+    
+    for user_login in logins:
+        user = getUserByLogin(user_login)
+        if user:
+            users_in_danger.append(user)
+            if user.isAccessoryItem(acc_koronavirus):
+                isKoronavirus = True
+                break
+    
+    counter_infected = 0
+    names = ''
+    if isKoronavirus:
+        for user in users_in_danger:
+            if not user.isAccessoryItem(acc_koronavirus):
+                if (random.random() <= probability):
+                    if isIamDoctor(user.getLogin()):
+                        # Доктор заражается только в 10% случаев 
+                        if (random.random() > int(getSetting(code='PROBABILITY', name='DOCTOR_INFECTED'))):
+                            return
+                    user.addAccessory(acc_koronavirus)
+                    updateUser(user)
+                    counter_infected = counter_infected + 1
+                    names = names + f'{user.getNameAndGerb()}\n'
+                    send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен коронавирусом!')
+
+    if counter_infected > 0:
+        sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
+        pending_date = datetime.now() + timedelta(seconds=sec)
+
+        pending_messages.insert_one({ 
+            'chat_id': chat,
+            'reply_message': None,
+            'create_date': datetime.now().timestamp(),
+            'user_id': logins[0],  
+            'state': 'WAIT',
+            'pending_date': pending_date.timestamp(),
+            'dialog_flow_text': 'koronavirus_new_member',
+            'text': f'{names}'})
 
 # Handle new_chat_members
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
