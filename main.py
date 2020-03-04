@@ -906,7 +906,9 @@ def main_message(message):
                 new_probability = new_probability - new_probability * 0.2
                 INFECT_OR_CURE_PROBABILITY.update({f'infected_{chat}': new_probability})
             else:
-                INFECT_OR_CURE_PROBABILITY.pop(f'infected_{chat}')
+                try:
+                    INFECT_OR_CURE_PROBABILITY.pop(f'infected_{chat}')
+                except: pass
 
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
