@@ -2022,11 +2022,11 @@ def main_message(message):
                             msg = send_messages_big(message.chat.id, text='У него ничего нет, он голодранец!' , reply_markup=markupinline)
                     elif 'toreward' == response.split(':')[1]:
                         #jugi:toreward:$any:$accessory
-                        logger.info(response)
-                        if not isGoatBoss(message.from_user.username):
-                            if not isAdmin(message.from_user.username):
-                                bot.reply_to(message, text=getResponseDialogFlow(message, 'shot_message_not_goat_boss').fulfillment_text)
-                                return
+                        
+                        # if not isGoatBoss(message.from_user.username):
+                        if not isAdmin(message.from_user.username):
+                            bot.reply_to(message, text=getResponseDialogFlow(message, 'shot_message_not_admin').fulfillment_text)
+                            return
 
                         login = response.split(':')[2].replace('@','').strip()
                         user = getUserByLogin(login)

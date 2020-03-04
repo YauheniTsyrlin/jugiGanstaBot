@@ -1665,6 +1665,10 @@ newvalues = { "$set": { "value":
                         {
                             'login': 'GonzikBenzyavsky',
                             'chat' : 497065022
+                        },
+                        {
+                            'login': 'WestMoscow',
+                            'chat' : 0
                         }
                     ]
                 }
