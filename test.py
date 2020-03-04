@@ -16,7 +16,6 @@ import users
 import wariors
 import tools
 
-from main import isAdmin
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["jugidb"]
@@ -509,11 +508,22 @@ print('\n======== radeReport ==========\n')
 #             z = z + 1
 #     i = i + 1
 
-acc_koronavirus = '🦇 Коронавирус'
-for user in USERS_ARR:
-    user.removeAccessory(acc_koronavirus)
-    user.removeAccessory('🤍 Аскорбинка')
-    updateUser(user)
+INFECT_PROBABILITY = {}
+
+INFECT_PROBABILITY.update({'1':'1'})
+INFECT_PROBABILITY.update({'1':'2'})
+INFECT_PROBABILITY.update({'2':'222'})
+INFECT_PROBABILITY.update({'2':'333'})
+INFECT_PROBABILITY.update({'1':'3'})
+print(INFECT_PROBABILITY)
+
+
+print(INFECT_PROBABILITY['1'])
+try:
+    print(INFECT_PROBABILITY['13'])
+except:
+    INFECT_PROBABILITY.update({'14':'355'})
+    print(INFECT_PROBABILITY['14'])
 
 sys.exit(0)
 

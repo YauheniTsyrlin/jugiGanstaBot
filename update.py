@@ -1578,6 +1578,16 @@ newvalues = { "$set": { "value":
                             # Вероятность
                             'name': 'KORONOVIRUS',
                             'value': 0.1
+                        },
+                        {
+                            # Вероятность
+                            'name': 'DOCTOR_INFECTED',
+                            'value': 0.1
+                        },
+                        {
+                            # Вероятность
+                            'name': 'DOCTOR_CURED',
+                            'value': 0.3
                         }
 
                     ]
