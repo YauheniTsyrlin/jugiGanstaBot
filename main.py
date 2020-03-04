@@ -3204,7 +3204,7 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Пидор дня
-    if now_date.hour == 9 and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour == 0 and now_date.minute == 37 and now_date.second < 15:
         updateUser(None)
         user_in_game = []
         for user in USERS_ARR:
