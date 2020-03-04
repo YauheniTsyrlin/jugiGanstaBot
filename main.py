@@ -892,7 +892,13 @@ def main_message(message):
         if userIAm.isAccessoryItem(acc_koronavirus):
             INFECT_OR_CURE_PROBABILITY.update({f'infected_{chat}': float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))})
         else:
-            if INFECT_OR_CURE_PROBABILITY[f'infected_{chat}'] and INFECT_OR_CURE_PROBABILITY[f'infected_{chat}'] > 0.01:
+            isYes = False
+            try:
+                pr = INFECT_OR_CURE_PROBABILITY[f'infected_{chat}']
+                isYes = True
+            except: pass
+
+            if isYes and INFECT_OR_CURE_PROBABILITY[f'infected_{chat}'] > 0.01:
                 may_be_infected = []
                 may_be_infected.append(message.from_user.username)
                 koronavirus(may_be_infected, message.chat.id)
