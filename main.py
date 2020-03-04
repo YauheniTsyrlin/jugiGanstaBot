@@ -508,13 +508,6 @@ def addToUserHistory(user: users.User):
     if result.matched_count < 1:
         pip_history.insert_one(row)
 
-def isIamDoctor(login: str):
-    user = getUserByLogin(login)
-    if user:
-        for doc in doctors:
-            if user.isAccessoryItem(doc):
-                return True
-    return False
 
 def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))):
     if len(logins) < 1:
@@ -2914,8 +2907,12 @@ def callback_query(call):
         return
 
     acc = user.getAccessory()[int(call.data.split('|')[2])]
-    bot.answer_callback_query(call.id, "Ты забрал это с полки...")
     
+    if acc == acc_koronavirus:
+        bot.answer_callback_query(call.id, "Это болезнь, ее нельзя забрать, только вылечить!")
+        return    
+    
+    bot.answer_callback_query(call.id, "Ты забрал это с полки...")
     user.removeAccessory(acc)
     updateUser(user)
 
