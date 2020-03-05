@@ -1567,7 +1567,7 @@ newvalues = { "$set": { "value":
                         {
                             # Range
                             'name': 'PANDING_WAIT_END_1',
-                            'value': 5
+                            'value': 10
                         },
                         {
                             # Range
@@ -1577,7 +1577,7 @@ newvalues = { "$set": { "value":
                         {
                             # Range
                             'name': 'PANDING_WAIT_END_2',
-                            'value': 5
+                            'value': 10
                         },
                         {
                             # Range
