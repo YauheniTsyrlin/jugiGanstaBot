@@ -2624,6 +2624,7 @@ def main_message(message):
                         
                         report = report + f'\n' 
                         report = report + f'{report_koronavirus()}'
+                        report = report + f'{report_medics()}'
 
                         report = report + f'\n' 
                         report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
@@ -2649,6 +2650,15 @@ def report_koronavirus():
             counter = counter + 1
 
     report = f'🦇 Статистика зараженных: <b>{counter}</b>\n' 
+    return report
+
+def report_medics():
+    counter = 0
+    for user in USERS_ARR:
+        if isIamDoctor(user.getLogin()):
+            counter = counter + 1
+
+    report = f'💉 Сертифицированных докторов: <b>{counter}</b>\n' 
     return report
 
 def report_man_of_day(message_user_name: str):
