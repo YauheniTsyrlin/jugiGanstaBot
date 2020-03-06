@@ -531,6 +531,9 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
     for user_login in logins:
         user = getUserByLogin(user_login)
         if user:
+            goat = getMyGoat(user.getLogin())
+            if goat:
+                chat = goat['chats']['info']
             users_in_danger.append(user)
             if user.isAccessoryItem(acc_koronavirus):
                 isKoronavirus = True
@@ -588,6 +591,9 @@ def cure(logins, chat: str, probability = float(getSetting(code='PROBABILITY', n
     names = ''
     if isDoctor:
         for user in users_in_danger:
+            goat = getMyGoat(user.getLogin())
+            if goat:
+                chat = goat['chats']['info']
             if user.isAccessoryItem(acc_koronavirus):
                 if (random.random() <= probability):
                     user.removeAccessory(acc_koronavirus)
@@ -597,7 +603,7 @@ def cure(logins, chat: str, probability = float(getSetting(code='PROBABILITY', n
                     send_message_to_admin(f'⚠️❤️ Внимание! \n {user.getLogin()} выздоровел от 🦇 коронавируса!')
 
     if counter_cured > 0:
-        sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_2')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_2'))))
+        sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
         pending_date = datetime.now() + timedelta(seconds=sec)
 
         pending_messages.insert_one({ 

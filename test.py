@@ -509,7 +509,7 @@ print('\n======== radeReport ==========\n')
 #     i = i + 1
 
 
-for x in pending_messages.fing():
+for x in pending_messages.find():
     print(x)
 
 sys.exit(0)
