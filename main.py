@@ -1605,9 +1605,15 @@ def main_message(message):
                         average_kr = int(average_kr / counter_kr)
                     if counter_mat > 0:
                         average_mat = int(average_mat / counter_mat)
+                    
+                    habitat_str = ''
+                    for h in habitat.keys():
+                        if habitat_str == '':
+                            habitat_str = habitat_str + h
+                        else:
+                            habitat_str = ', '+habitat_str
 
-                        habitat
-                    report = report + f'👣 Встречается: <b>{habitat.keys()} км</b>\n'
+                    report = report + f'👣 Встречается: <b>{habitat_str} км</b>\n'
                     report = report + f'✊ Побед: <b>{win_counter}/{counter}</b>\n'
                     report = report + f'💔 Урон бандитам:\n'
                     report = report + f'      Min <b>{min_beaten}</b> при 🛡<b>{min_beaten_user_armor}</b>\n'
