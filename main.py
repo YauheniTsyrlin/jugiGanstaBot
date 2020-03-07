@@ -1623,9 +1623,9 @@ def main_message(message):
                     report = report + f'      Min <b>{min_damage}</b> при ⚔<b>{min_damage_user_damage}</b>\n'
                     report = report + f'      В среднем <b>{average_damage}</b>\n'
                     report = report + f'      Max <b>{max_damage}</b> при ⚔<b>{max_damage_user_damage}</b>\n' 
-                    report = report + f'В среднем добыто:\n'
-                    report = report + f'      🕳 {average_kr}\n'
-                    report = report + f'      📦 {average_mat}\n'
+                    report = report + f'💰 <b>В среднем добыто</b>:\n'
+                    report = report + f'      🕳 <b>{average_kr}</b>\n'
+                    report = report + f'      📦 <b>{average_mat}</b>\n'
                     send_messages_big(message.chat.id, text=report)
                 else:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
