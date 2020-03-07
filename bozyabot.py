@@ -85,7 +85,8 @@ def getMobReport(mob_name: str, mob_class: str):
 
     habitat = {}
     for one_mob in mob.find({'mob_name':mob_name, 'mob_class': mob_class}):
-        
+        #send_messages_big(497065022, text=f'{one_mob}')
+
         counter = counter + 1
         if one_mob['win']:
             win_counter = win_counter + 1
@@ -121,9 +122,9 @@ def getMobReport(mob_name: str, mob_class: str):
                 min_damage_user_damage = one_mob['user_damage']
             one_average_damage = one_average_damage + b
 
-        if one_counter_beaten > 0:
-            average_beaten = average_beaten + one_average_beaten / one_counter_beaten
-            average_beaten_counter = average_beaten_counter + 1
+        if one_counter_damage > 0:
+            average_damage = average_damage + one_average_damage / one_counter_damage
+            average_damage_counter = average_damage_counter + 1
 
         if one_mob['kr'] > 0:
             counter_kr = counter_kr + 1
@@ -140,6 +141,8 @@ def getMobReport(mob_name: str, mob_class: str):
 
     if average_beaten_counter > 0:
         average_beaten = int(average_beaten / average_beaten_counter)
+    if average_damage_counter > 0:
+        average_damage = int(average_damage / average_damage_counter)
     if counter_kr > 0:
         average_kr = int(average_kr / counter_kr)
     if counter_mat > 0:
