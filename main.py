@@ -667,7 +667,7 @@ def getMobReport(mob_name: str, mob_class: str):
 
     habitat = {}
     for one_mob in mob.find({'mob_name':mob_name, 'mob_class': mob_class}):
-        send_messages_big(497065022, text=one_mob)
+        send_messages_big(497065022, text=f'{one_mob}')
 
         counter = counter + 1
         if one_mob['win']:
