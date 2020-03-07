@@ -1520,8 +1520,8 @@ def main_message(message):
                     mob.insert_one(row)
 
                 if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                    report = 'Статистика сражений\n'
-                    report = report + f'<b>{mob_name}</b> {mob_class} на <b>{km}</b>км.\n\n'
+                    report = '<b>Статистика сражений</b>\n'
+                    report = report + f'<b>{mob_name}</b> {mob_class}\n\n'
                     counter = 0
                     win_counter = 0
 
@@ -1544,10 +1544,14 @@ def main_message(message):
                     counter_mat = 0
                     average_mat = 0
 
-                    for one_mob in mob.find({'km':km, 'mob_name':mob_name, 'mob_class':mob_class}):
+                    habitat = {}
+                    for one_mob in mob.find({'mob_name':mob_name, 'mob_class':mob_class}):
+                        
                         counter = counter + 1
                         if one_mob['win']:
                             win_counter = win_counter + 1
+                        
+                        habitat.update({f'{one_mob["km"]}':True})
 
                         one_average_beaten = 0
                         one_counter_beaten = 0
@@ -1601,6 +1605,9 @@ def main_message(message):
                         average_kr = int(average_kr / counter_kr)
                     if counter_mat > 0:
                         average_mat = int(average_mat / counter_mat)
+
+                        habitat
+                    report = report + f'👣 Встречается: <b>{habitat.keys()} км</b>\n'
                     report = report + f'✊ Побед: <b>{win_counter}/{counter}</b>\n'
                     report = report + f'💔 Урон бандитам:\n'
                     report = report + f'      Min <b>{min_beaten}</b> при 🛡<b>{min_beaten_user_armor}</b>\n'
