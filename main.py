@@ -56,7 +56,7 @@ dungeons        = mydb["dungeons"]
 report_raids    = mydb["report_raids"]
 man_of_day      = mydb["man_of_day"]
 pip_history     = mydb["pip_history"]
-
+mob             = mydb["mob"]
 
 flexFlag = False
 logger = telebot.logger
@@ -574,7 +574,8 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
     names = ''
     for user in users_in_danger:
         if not user.isAccessoryItem(acc_koronavirus):
-            if (random.random() <= probability):
+            r = random.random()
+            if (r <= probability):
                 if hasDoctorMask(user.getLogin()):
                     # Маска снижает заражение на %%%  
                     if (random.random() < int(getSetting(code='PROBABILITY', name='MASK_DEFENCE'))):
@@ -1028,7 +1029,6 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=user.getName() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
         return
 
-
     if (message.text.startswith('📟Пип-бой 3000') and 
             '/killdrone' not in message.text and 
             'ТОП ФРАКЦИЙ' not in message.text and 
@@ -1449,8 +1449,7 @@ def main_message(message):
                     InlineKeyboardButton(f"Закрыть ⛔", callback_data=f"commit_dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}")
                 )
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
-
-    if message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
+    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
         if hasAccessToWariors(message.from_user.username):
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
                 pass
@@ -1461,6 +1460,67 @@ def main_message(message):
                     userIAm.setMaxkm(km)
                     updateUser(userIAm)
 
+        if 'Сражение с' in message.text:
+            user = getUserByLogin(message.from_user.username)
+            if user == None:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
+                return
+
+            if tools.getTimeEmoji(user.getTimeUpdate()) not in ('👶','👦'):
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
+                return
+
+            strings = message.text.split('\n')
+            mob_name = ''
+            mob_class = ''
+            km = int(message.text.split('👣')[1].split('км')[0])
+            kr = 0
+            mat = 0
+            damage = []
+            beaten = []
+            you_win = False
+            for s in strings:
+                if s.startswith('Сражение с'):
+                    mob_name = s.split('Сражение с')[1].split('(')[0].strip()
+                    mob_class = s.split('(')[1].split(')')[0].strip()
+                if s.startswith('Получено:') and '🕳' in s and '📦' in s:
+                    kr = int(s.split('🕳')[1].split(' ').strip())
+                    mat = int(s.split('📦')[1].strip())
+                if s.startswith('👤Ты') and '💥' in s:
+                    damage.append(int(s.split('💥')[1].strip()))
+                if 'нанес тебе удар' in s and '💔' in s:
+                    beaten.append(int(s.split('💔')[1].strip()))
+                if s.startswith('Ты одержал победу!') in s:
+                    you_win = True
+
+            if mob_name == '':
+                pass
+            else:
+                row = {}
+                row.update({'date': message.forward_date})
+                row.update({'login': message.from_user.username})
+                row.update({'mob_name': mob_name})
+                row.update({'mob_class': mob_class})
+                
+                row.update({'km': km})
+                row.update({'kr': kr})
+                row.update({'mat': mat})
+                row.update({'bm': user.getBm()})
+                row.update({'damage': damage})
+                row.update({'beaten': beaten})
+
+                newvalues = { "$set": row }
+                result = mob.update_one({
+                    'login': message.forward_date, 
+                    'date': message.forward_date,
+                    'km': km
+                    }, newvalues)
+                if result.matched_count < 1:
+                    mob.insert_one(row)
+
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+        return
+        
     # Заменяем в сообщениях от ВВ все цифры 
     #     if not privateChat:
     #         if not isGoatSecretChat(message.from_user.username, message.chat.id):
