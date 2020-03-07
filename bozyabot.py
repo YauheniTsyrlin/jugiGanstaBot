@@ -18,6 +18,7 @@ from datetime import timedelta
 from datetime import datetime
 
 import users
+import tools
 import pymongo
 from bson.objectid import ObjectId
 
@@ -55,18 +56,6 @@ def updateUser(newuser: users.User):
     USERS_ARR.clear()
     for x in registered_users.find():
         USERS_ARR.append(users.importUser(x))
-
-def getTimeEmoji(time):
-    if time > (datetime.now() - timedelta(days=7)).timestamp():
-        return '👶'
-    elif time > (datetime.now() - timedelta(days=14)).timestamp():
-        return '👦'
-    elif time > (datetime.now() - timedelta(days=28)).timestamp():
-        return '👨'
-    elif time > (datetime.now() - timedelta(days=56)).timestamp():
-        return '👨‍🦳'
-    else:
-        return '👴'
 
 def getResponseDialogFlow(text):
     if '' == text.strip():
