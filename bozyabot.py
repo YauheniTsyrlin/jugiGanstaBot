@@ -34,6 +34,9 @@ USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
     USERS_ARR.append(users.importUser(x))
 
+def isGoatSecretChat(login: str, secretchat: str):
+    return True
+
 def getUserByLogin(login: str):
     for user in list(USERS_ARR):
         try:
@@ -88,7 +91,7 @@ def main_message(message):
                                 and message.reply_to_message.from_user.is_bot 
                                 and message.reply_to_message.from_user.username in ('BozyaBot') )
                 )
-    iAmUser = getUserByLogin(message.from_user.username)
+    userIAm = getUserByLogin(message.from_user.username)
     if (message.text.startswith('📟Пип-бой 3000') and 
             '/killdrone' not in message.text and 
             'ТОП ФРАКЦИЙ' not in message.text and 
@@ -104,7 +107,7 @@ def main_message(message):
             
             user = users.User(message.from_user.username, message.forward_date, message.text)
             
-            if iAmUser == None:  
+            if userIAm == None:  
                 if 'Подробности /me' in message.text or (not privateChat): 
                     send_messages_big(message.chat.id, text=getResponseDialogFlow('pip_me'))
                     return
@@ -125,11 +128,11 @@ def main_message(message):
 
     if message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
         if 'Сражение с' in message.text:
-            if iAmUser == None:
+            if userIAm == None:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('no_user')) 
                 return
 
-            if getTimeEmoji(iAmUser.getTimeUpdate()) not in ('👶','👦'):
+            if tools.getTimeEmoji(userIAm.getTimeUpdate()) not in ('👶','👦'):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('update_pip')) 
                 return
 
@@ -168,9 +171,9 @@ def main_message(message):
                 row.update({'km': km})
                 row.update({'kr': kr})
                 row.update({'mat': mat})
-                row.update({'bm': iAmUser.getBm()})
-                row.update({'user_damage': iAmUser.getDamage()})
-                row.update({'user_armor': iAmUser.getArmor()})
+                row.update({'bm': userIAm.getBm()})
+                row.update({'user_damage': userIAm.getDamage()})
+                row.update({'user_armor': userIAm.getArmor()})
                 row.update({'damage': damage})
                 row.update({'beaten': beaten})
                 row.update({'win': you_win})
@@ -184,11 +187,9 @@ def main_message(message):
                 if result.matched_count < 1:
                     mob.insert_one(row)
 
-                if not privateChat:
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
-                else:
-                    report = 'Статистика сражений\n'
-                    report = report + f'<b>{mob_name}</b> {mob_class} на <b>{km}</b>км.\n\n'
+                if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                    report = '<b>Статистика сражений</b>\n'
+                    report = report + f'<b>{mob_name}</b> {mob_class}\n\n'
                     counter = 0
                     win_counter = 0
 
@@ -211,10 +212,14 @@ def main_message(message):
                     counter_mat = 0
                     average_mat = 0
 
-                    for one_mob in mob.find({'km':km, 'mob_name':mob_name, 'mob_class':mob_class}):
+                    habitat = {}
+                    for one_mob in mob.find({'mob_name':mob_name, 'mob_class':mob_class}):
+                        
                         counter = counter + 1
                         if one_mob['win']:
                             win_counter = win_counter + 1
+                        
+                        habitat.update({f'{one_mob["km"]}':True})
 
                         one_average_beaten = 0
                         one_counter_beaten = 0
@@ -268,19 +273,31 @@ def main_message(message):
                         average_kr = int(average_kr / counter_kr)
                     if counter_mat > 0:
                         average_mat = int(average_mat / counter_mat)
+                    
+                    habitat_str = ''
+                    for h in habitat.keys():
+                        if habitat_str == '':
+                            habitat_str = habitat_str + h
+                        else:
+                            habitat_str = habitat_str + ', '+ h
+
+                    report = report + f'👣 Встречается: <b>{habitat_str}</b> км\n'
                     report = report + f'✊ Побед: <b>{win_counter}/{counter}</b>\n'
-                    report = report + f'💔 Урон бандитам:\n'
+                    report = report + f'💔 <b>Урон бандитам</b>:\n'
                     report = report + f'      Min <b>{min_beaten}</b> при 🛡<b>{min_beaten_user_armor}</b>\n'
                     report = report + f'      В среднем <b>{average_beaten}</b>\n'
                     report = report + f'      Max <b>{max_beaten}</b> при 🛡<b>{max_beaten_user_armor}</b>\n'
-                    report = report + f'💥Получил от бандитов:\n'
+                    report = report + f'💥 <b>Получил от бандитов</b>:\n'
                     report = report + f'      Min <b>{min_damage}</b> при ⚔<b>{min_damage_user_damage}</b>\n'
                     report = report + f'      В среднем <b>{average_damage}</b>\n'
                     report = report + f'      Max <b>{max_damage}</b> при ⚔<b>{max_damage_user_damage}</b>\n' 
-                    report = report + f'В среднем добыто:\n'
-                    report = report + f'      🕳 {average_kr}\n'
-                    report = report + f'      📦 {average_mat}\n'
+                    report = report + f'💰 <b>В среднем добыто</b>:\n'
+                    report = report + f'      🕳 <b>{average_kr}</b>\n'
+                    report = report + f'      📦 <b>{average_mat}</b>\n'
                     send_messages_big(message.chat.id, text=report)
+                else:
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
+
         return
 
     if callBozy:
