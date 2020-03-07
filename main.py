@@ -1459,14 +1459,12 @@ def main_message(message):
                 if userIAm.getMaxkm() < km:
                     userIAm.setMaxkm(km)
                     updateUser(userIAm)
-
         if 'Сражение с' in message.text:
-            user = getUserByLogin(message.from_user.username)
-            if user == None:
+            if userIAm == None:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
                 return
 
-            if tools.getTimeEmoji(user.getTimeUpdate()) not in ('👶','👦'):
+            if tools.getTimeEmoji(userIAm.getTimeUpdate()) not in ('👶','👦'):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
                 return
 
@@ -1505,9 +1503,9 @@ def main_message(message):
                 row.update({'km': km})
                 row.update({'kr': kr})
                 row.update({'mat': mat})
-                row.update({'bm': user.getBm()})
-                row.update({'user_damage': user.getDamage()})
-                row.update({'user_armor': user.getArmor()})
+                row.update({'bm': userIAm.getBm()})
+                row.update({'user_damage': userIAm.getDamage()})
+                row.update({'user_armor': userIAm.getArmor()})
                 row.update({'damage': damage})
                 row.update({'beaten': beaten})
                 row.update({'win': you_win})
@@ -1521,9 +1519,7 @@ def main_message(message):
                 if result.matched_count < 1:
                     mob.insert_one(row)
 
-                if not privateChat:
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
-                else:
+                if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
                     report = 'Статистика сражений\n'
                     report = report + f'<b>{mob_name}</b> {mob_class} на <b>{km}</b>км.\n\n'
                     counter = 0
@@ -1618,6 +1614,9 @@ def main_message(message):
                     report = report + f'      🕳 {average_kr}\n'
                     report = report + f'      📦 {average_mat}\n'
                     send_messages_big(message.chat.id, text=report)
+                else:
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+
         return
 
     # Заменяем в сообщениях от ВВ все цифры 
