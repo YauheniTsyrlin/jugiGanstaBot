@@ -1514,8 +1514,8 @@ def main_message(message):
 
                 newvalues = { "$set": row }
                 result = mob.update_one({
-                    'login': message.forward_date, 
                     'date': message.forward_date,
+                    'login': message.from_user.username, 
                     'km': km
                     }, newvalues)
                 if result.matched_count < 1:
