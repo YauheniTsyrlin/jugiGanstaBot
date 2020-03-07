@@ -226,6 +226,26 @@ def main_message(message):
         return
 
     if message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
+        if 'Во время вылазки на тебя напал' in message.text:
+            if userIAm == None:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
+                return
+
+            strings = message.text.split('\n')
+            mob_name = ''
+            mob_class = ''
+            for s in strings:
+                if s.startswith('Во время вылазки на тебя напал'):
+                    mob_name = s.split('Во время вылазки на тебя напал')[1].split('(')[0].strip()
+                    mob_class = s.split('(')[1].split(')')[0].strip()
+                    break
+            if mob_name == '':
+                pass
+            else:
+                report = getMobReport(mob_name, mob_class)
+                send_messages_big(message.chat.id, text=report)
+            return  
+        
         if 'Сражение с' in message.text:
             if userIAm == None:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('no_user')) 

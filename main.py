@@ -667,7 +667,8 @@ def getMobReport(mob_name: str, mob_class: str):
 
     habitat = {}
     for one_mob in mob.find({'mob_name':mob_name, 'mob_class': mob_class}):
-        
+        send_messages_big(497065022, text=one_mob)
+
         counter = counter + 1
         if one_mob['win']:
             win_counter = win_counter + 1
@@ -1587,6 +1588,7 @@ def main_message(message):
             else:
                 report = getMobReport(mob_name, mob_class)
                 send_messages_big(message.chat.id, text=report)
+            return
 
         if 'Сражение с' in message.text:
             if userIAm == None:
