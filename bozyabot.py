@@ -168,7 +168,7 @@ def main_message(message):
                 row.update({'km': km})
                 row.update({'kr': kr})
                 row.update({'mat': mat})
-                row.update({'bm': user.getBm()})
+                row.update({'bm': iAmUser.getBm()})
                 row.update({'user_damage': iAmUser.getDamage()})
                 row.update({'user_armor': iAmUser.getArmor()})
                 row.update({'damage': damage})
