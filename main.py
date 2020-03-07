@@ -1611,7 +1611,7 @@ def main_message(message):
                         if habitat_str == '':
                             habitat_str = habitat_str + h
                         else:
-                            habitat_str = ', '+habitat_str
+                            habitat_str = habitat_str + ', '+ h
 
                     report = report + f'👣 Встречается: <b>{habitat_str} км</b>\n'
                     report = report + f'✊ Побед: <b>{win_counter}/{counter}</b>\n'
