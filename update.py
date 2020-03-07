@@ -878,6 +878,11 @@ newvalues = { "$set": { "value":
                                     'name': '135',
                                     'value': '💉 Удостоверение "Главврач"',
                                     'cost': 1
+                                },
+                                {
+                                    'name': '136',
+                                    'value': '💃 Статуэтка "Умница"',
+                                    'cost': 1
                                 }
                             ] 
                         }
@@ -1734,8 +1739,6 @@ newvalues = { "$set": { "value":
                 } 
             } 
 u = settings.update_one(myquery, newvalues)
-
-
 
 myquery = { "code": 'REPORTS' }
 newvalues = { "$set": { "value": 
