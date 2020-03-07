@@ -1506,6 +1506,8 @@ def main_message(message):
                 row.update({'kr': kr})
                 row.update({'mat': mat})
                 row.update({'bm': user.getBm()})
+                row.update({'user_damage': user.getDamage()})
+                row.update({'user_armor': user.getArmor()})
                 row.update({'damage': damage})
                 row.update({'beaten': beaten})
                 row.update({'win': you_win})
@@ -1520,6 +1522,11 @@ def main_message(message):
                     mob.insert_one(row)
 
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+
+
+                for one_mob in mob.find({'km':km, 'mob_name':mob_name, 'mob_class':mob_class}):
+                    pass
+
         return
 
     # Заменяем в сообщениях от ВВ все цифры 

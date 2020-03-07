@@ -14,6 +14,7 @@ settings = mydb["settings"]
 report_raids    = mydb["report_raids"]
 plan_raids      = mydb["rades"]
 pending_messages = mydb["pending_messages"]
+mob             = mydb["mob"]
 
 def getSetting(code: str):
     """ Получение настройки """
@@ -1803,7 +1804,7 @@ print("#         BATTLE           #")
 print("#==========================#")
 # pip_history     = mydb["pip_history"]
 # 
-# pending_messages.remove()
+mob.remove()
 
 
 # dresult = registered_wariors.aggregate([ 
