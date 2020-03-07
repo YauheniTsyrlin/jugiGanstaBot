@@ -185,7 +185,7 @@ def main_message(message):
                     mob.insert_one(row)
 
                 if not privateChat:
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
                 else:
                     report = 'Статистика сражений\n'
                     report = report + f'<b>{mob_name}</b> {mob_class} на <b>{km}</b>км.\n\n'
