@@ -152,7 +152,7 @@ def main_message(message):
                 if s.startswith('👤Ты') and '💥' in s:
                     damage.append(int(s.split('💥')[1].strip()))
                 if 'нанес тебе удар' in s and '💔' in s:
-                    beaten.append(int(s.split('💔')[1].strip()))
+                    beaten.append(-1*int(s.split('💔')[1].strip()))
                 if s.startswith('Ты одержал победу!'):
                     you_win = True
 
