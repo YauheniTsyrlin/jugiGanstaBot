@@ -3390,9 +3390,17 @@ def rade():
                 r = requests.get(f'{config.ANECDOT_URL}={16}', verify=False, timeout=7)
                 report = r.text[12:-2]
             except:
-                report = 'Чёт я приуныл... Ничего в голову не идет... С новым годом!'
+                report = 'Чёт я приуныл... Ничего в голову не идет... С днем всех влюблённых!'
             send_messages_big(goat['chats']['info'], report)
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='LOVE_DAY'), 1)[0]['value']) 
+    
+    # 8 марта!
+    if now_date.day == 8 and now_date.month == 3 and now_date.hour == 9 and now_date.minute in (0,10,15,20,25,35,35,50) and now_date.second < 15:
+        for goat in getSetting(code='GOATS_BANDS'):
+            report = 'Девашки! Я ваз лублу!'
+            send_messages_big(goat['chats']['info'], report)
+            bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='8_MARCH'), 1)[0]['value']) 
+    
     # День рождения
     if now_date.hour == 8 and now_date.minute == 0 and now_date.second < 15:
         updateUser(None)
