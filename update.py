@@ -1804,7 +1804,7 @@ print("#         BATTLE           #")
 print("#==========================#")
 # pip_history     = mydb["pip_history"]
 # 
-mob.remove()
+#  mob.remove()
 
 
 # dresult = registered_wariors.aggregate([ 

@@ -97,39 +97,39 @@ def main_message(message):
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
  
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive'))
                 return
             
             user = users.User(message.from_user.username, message.forward_date, message.text)
             
             if user == None:  
                 if 'Подробности /me' in message.text or (not privateChat): 
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'pip_me').fulfillment_text)
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow('pip_me'))
                     return
                 else:
                     user.setChat(message.chat.id)
                     user.setPing(True)
                     x = registered_users.insert_one(json.loads(user.toJSON()))
                     updateUser(None)
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'registered').fulfillment_text)
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow('registered'))
             else:
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
                 updateUser(updatedUser)
 
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
         else:
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text) 
+            send_messages_big(message.chat.id, text=getResponseDialogFlow('deceive')) 
         return
 
     if message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
         if 'Сражение с' in message.text:
             user = getUserByLogin(message.from_user.username)
             if user == None:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('no_user')) 
                 return
 
             if getTimeEmoji(user.getTimeUpdate()) not in ('👶','👦'):
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('update_pip')) 
                 return
 
             strings = message.text.split('\n')
@@ -253,7 +253,7 @@ def main_message(message):
                 report = report + f'      📦 {average_mat}\n'
                 send_messages_big(message.chat.id, text=report)
         return
-                
+
     if callBozy:
         text = message.text 
         if text.lower().startswith('бозя'):
