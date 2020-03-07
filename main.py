@@ -1490,7 +1490,7 @@ def main_message(message):
                     damage.append(int(s.split('💥')[1].strip()))
                 if 'нанес тебе удар' in s and '💔' in s:
                     beaten.append(int(s.split('💔')[1].strip()))
-                if s.startswith('Ты одержал победу!') in s:
+                if s.startswith('Ты одержал победу!'):
                     you_win = True
 
             if mob_name == '':
@@ -1508,6 +1508,7 @@ def main_message(message):
                 row.update({'bm': user.getBm()})
                 row.update({'damage': damage})
                 row.update({'beaten': beaten})
+                row.update({'win': you_win})
 
                 newvalues = { "$set": row }
                 result = mob.update_one({
@@ -1520,7 +1521,7 @@ def main_message(message):
 
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
         return
-        
+
     # Заменяем в сообщениях от ВВ все цифры 
     #     if not privateChat:
     #         if not isGoatSecretChat(message.from_user.username, message.chat.id):
