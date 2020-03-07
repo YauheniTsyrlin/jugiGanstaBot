@@ -1599,9 +1599,12 @@ def main_message(message):
                     if min_damage == 1000000: 
                         min_damage = 0
 
-                    average_beaten = average_beaten / average_beaten_counter
-                    average_kr = average_kr / counter_kr
-                    average_mat = average_mat / counter_mat
+                    if average_beaten_counter > 0:
+                        average_beaten = average_beaten / average_beaten_counter
+                    if counter_kr > 0:
+                        average_kr = average_kr / counter_kr
+                    if counter_mat > 0:
+                        average_mat = average_mat / counter_mat
                     report = report + f'🤝Встретился {counter}, победили {win_counter}\n'
                     report = report + f'💔Нанёс урона бандитам:\n'
                     report = report + f'    Минимум {min_beaten} при броне {min_beaten_user_armor}\n'
