@@ -57,6 +57,116 @@ def updateUser(newuser: users.User):
     for x in registered_users.find():
         USERS_ARR.append(users.importUser(x))
 
+def getMobReport(mob_name: str, mob_class: str):
+    
+    report = '<b>Статистика сражений</b>\n'
+    report = report + f'<b>{mob_name}</b> {mob_class}\n\n'
+    counter = 0
+    win_counter = 0
+
+    min_beaten = 1000000
+    average_beaten = 0
+    average_beaten_counter = 0
+    max_beaten = 0
+    max_beaten_user_armor = 0
+    min_beaten_user_armor = 0
+
+    min_damage = 1000000
+    average_damage = 0
+    average_damage_counter = 0
+    max_damage = 0
+    max_damage_user_damage = 0
+    min_damage_user_damage = 0
+
+    counter_kr = 0
+    average_kr = 0
+    counter_mat = 0
+    average_mat = 0
+
+    habitat = {}
+    for one_mob in mob.find({'mob_name':mob_name, 'mob_class': mob_class}):
+        
+        counter = counter + 1
+        if one_mob['win']:
+            win_counter = win_counter + 1
+        
+        habitat.update({f'{one_mob["km"]}':True})
+
+        one_average_beaten = 0
+        one_counter_beaten = 0
+        for b in one_mob['beaten']:
+            one_counter_beaten = one_counter_beaten + 1
+            if b > max_beaten: 
+                max_beaten = b
+                max_beaten_user_armor = one_mob['user_armor']
+            if b < min_beaten: 
+                min_beaten = b
+                min_beaten_user_armor = one_mob['user_armor']
+            one_average_beaten = one_average_beaten + b
+
+        if one_counter_beaten > 0:
+            average_beaten = average_beaten + one_average_beaten / one_counter_beaten
+            average_beaten_counter = average_beaten_counter + 1
+
+
+        one_average_damage = 0
+        one_counter_damage = 0
+        for b in one_mob['damage']:
+            one_counter_damage = one_counter_damage + 1
+            if b > max_damage: 
+                max_damage = b
+                max_damage_user_damage = one_mob['user_damage']
+            if b < min_damage: 
+                min_damage = b
+                min_damage_user_damage = one_mob['user_damage']
+            one_average_damage = one_average_damage + b
+
+        if one_counter_beaten > 0:
+            average_beaten = average_beaten + one_average_beaten / one_counter_beaten
+            average_beaten_counter = average_beaten_counter + 1
+
+        if one_mob['kr'] > 0:
+            counter_kr = counter_kr + 1
+            average_kr = average_kr + one_mob['kr']
+        
+        if one_mob['mat'] > 0:
+            counter_mat = counter_mat + 1
+            average_mat = average_mat + one_mob['mat']
+
+    if min_beaten == 1000000: 
+        min_beaten = 0
+    if min_damage == 1000000: 
+        min_damage = 0
+
+    if average_beaten_counter > 0:
+        average_beaten = int(average_beaten / average_beaten_counter)
+    if counter_kr > 0:
+        average_kr = int(average_kr / counter_kr)
+    if counter_mat > 0:
+        average_mat = int(average_mat / counter_mat)
+    
+    habitat_str = ''
+    for h in habitat.keys():
+        if habitat_str == '':
+            habitat_str = habitat_str + h
+        else:
+            habitat_str = habitat_str + ', '+ h
+
+    report = report + f'👣 Встречается: <b>{habitat_str}</b> км\n'
+    report = report + f'✊ Побед: <b>{win_counter}/{counter}</b>\n'
+    report = report + f'💔 <b>Урон бандитам</b>:\n'
+    report = report + f'      Min <b>{min_beaten}</b> при 🛡<b>{min_beaten_user_armor}</b>\n'
+    report = report + f'      В среднем <b>{average_beaten}</b>\n'
+    report = report + f'      Max <b>{max_beaten}</b> при 🛡<b>{max_beaten_user_armor}</b>\n'
+    report = report + f'💥 <b>Получил от бандитов</b>:\n'
+    report = report + f'      Min <b>{min_damage}</b> при ⚔<b>{min_damage_user_damage}</b>\n'
+    report = report + f'      В среднем <b>{average_damage}</b>\n'
+    report = report + f'      Max <b>{max_damage}</b> при ⚔<b>{max_damage_user_damage}</b>\n' 
+    report = report + f'💰 <b>В среднем добыто</b>:\n'
+    report = report + f'      🕳 <b>{average_kr}</b>\n'
+    report = report + f'      📦 <b>{average_mat}</b>\n'
+    return report
+
 def getResponseDialogFlow(text):
     if '' == text.strip():
         text = 'голос!'
@@ -177,112 +287,7 @@ def main_message(message):
                     mob.insert_one(row)
 
                 if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                    report = '<b>Статистика сражений</b>\n'
-                    report = report + f'<b>{mob_name}</b> {mob_class}\n\n'
-                    counter = 0
-                    win_counter = 0
-
-                    min_beaten = 1000000
-                    average_beaten = 0
-                    average_beaten_counter = 0
-                    max_beaten = 0
-                    max_beaten_user_armor = 0
-                    min_beaten_user_armor = 0
-
-                    min_damage = 1000000
-                    average_damage = 0
-                    average_damage_counter = 0
-                    max_damage = 0
-                    max_damage_user_damage = 0
-                    min_damage_user_damage = 0
-
-                    counter_kr = 0
-                    average_kr = 0
-                    counter_mat = 0
-                    average_mat = 0
-
-                    habitat = {}
-                    for one_mob in mob.find({'mob_name':mob_name, 'mob_class':mob_class}):
-                        
-                        counter = counter + 1
-                        if one_mob['win']:
-                            win_counter = win_counter + 1
-                        
-                        habitat.update({f'{one_mob["km"]}':True})
-
-                        one_average_beaten = 0
-                        one_counter_beaten = 0
-                        for b in one_mob['beaten']:
-                            one_counter_beaten = one_counter_beaten + 1
-                            if b > max_beaten: 
-                                max_beaten = b
-                                max_beaten_user_armor = one_mob['user_armor']
-                            if b < min_beaten: 
-                                min_beaten = b
-                                min_beaten_user_armor = one_mob['user_armor']
-                            one_average_beaten = one_average_beaten + b
-
-                        if one_counter_beaten > 0:
-                            average_beaten = average_beaten + one_average_beaten / one_counter_beaten
-                            average_beaten_counter = average_beaten_counter + 1
-
-
-                        one_average_damage = 0
-                        one_counter_damage = 0
-                        for b in one_mob['damage']:
-                            one_counter_damage = one_counter_damage + 1
-                            if b > max_damage: 
-                                max_damage = b
-                                max_damage_user_damage = one_mob['user_damage']
-                            if b < min_damage: 
-                                min_damage = b
-                                min_damage_user_damage = one_mob['user_damage']
-                            one_average_damage = one_average_damage + b
-
-                        if one_counter_beaten > 0:
-                            average_beaten = average_beaten + one_average_beaten / one_counter_beaten
-                            average_beaten_counter = average_beaten_counter + 1
-
-                        if one_mob['kr'] > 0:
-                            counter_kr = counter_kr + 1
-                            average_kr = average_kr + one_mob['kr']
-                        
-                        if one_mob['mat'] > 0:
-                            counter_mat = counter_mat + 1
-                            average_mat = average_mat + one_mob['mat']
-
-                    if min_beaten == 1000000: 
-                        min_beaten = 0
-                    if min_damage == 1000000: 
-                        min_damage = 0
-
-                    if average_beaten_counter > 0:
-                        average_beaten = int(average_beaten / average_beaten_counter)
-                    if counter_kr > 0:
-                        average_kr = int(average_kr / counter_kr)
-                    if counter_mat > 0:
-                        average_mat = int(average_mat / counter_mat)
-                    
-                    habitat_str = ''
-                    for h in habitat.keys():
-                        if habitat_str == '':
-                            habitat_str = habitat_str + h
-                        else:
-                            habitat_str = habitat_str + ', '+ h
-
-                    report = report + f'👣 Встречается: <b>{habitat_str}</b> км\n'
-                    report = report + f'✊ Побед: <b>{win_counter}/{counter}</b>\n'
-                    report = report + f'💔 <b>Урон бандитам</b>:\n'
-                    report = report + f'      Min <b>{min_beaten}</b> при 🛡<b>{min_beaten_user_armor}</b>\n'
-                    report = report + f'      В среднем <b>{average_beaten}</b>\n'
-                    report = report + f'      Max <b>{max_beaten}</b> при 🛡<b>{max_beaten_user_armor}</b>\n'
-                    report = report + f'💥 <b>Получил от бандитов</b>:\n'
-                    report = report + f'      Min <b>{min_damage}</b> при ⚔<b>{min_damage_user_damage}</b>\n'
-                    report = report + f'      В среднем <b>{average_damage}</b>\n'
-                    report = report + f'      Max <b>{max_damage}</b> при ⚔<b>{max_damage_user_damage}</b>\n' 
-                    report = report + f'💰 <b>В среднем добыто</b>:\n'
-                    report = report + f'      🕳 <b>{average_kr}</b>\n'
-                    report = report + f'      📦 <b>{average_mat}</b>\n'
+                    report = getMobReport(mob_name, mob_class)
                     send_messages_big(message.chat.id, text=report)
                 else:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow('shot_message_zbs'))
