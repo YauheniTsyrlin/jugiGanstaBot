@@ -1525,7 +1525,7 @@ def main_message(message):
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
                 else:
                     report = 'Статистика сражений\n'
-                    report = report + f'<b>{mob_name}</b> {mob_class} на <b>{km}</b>\n\n'
+                    report = report + f'<b>{mob_name}</b> {mob_class} на <b>{km}</b>км.\n\n'
                     counter = 0
                     win_counter = 0
 
@@ -1600,22 +1600,23 @@ def main_message(message):
                         min_damage = 0
 
                     if average_beaten_counter > 0:
-                        average_beaten = average_beaten / average_beaten_counter
+                        average_beaten = int(average_beaten / average_beaten_counter)
                     if counter_kr > 0:
-                        average_kr = average_kr / counter_kr
+                        average_kr = int(average_kr / counter_kr)
                     if counter_mat > 0:
-                        average_mat = average_mat / counter_mat
-                    report = report + f'🤝Встретился {counter}, победили {win_counter}\n'
-                    report = report + f'💔Нанёс урона бандитам:\n'
-                    report = report + f'    Минимум {min_beaten} при броне {min_beaten_user_armor}\n'
-                    report = report + f'    В среднем {average_beaten}\n'
-                    report = report + f'    Максимум {max_beaten} при броне {max_beaten_user_armor}\n'
-                    report = report + f'💥Получил урона от бандитов:\n'
-                    report = report + f'    Минимум {min_damage} при броне {min_damage_user_damage}\n'
-                    report = report + f'    В среднем {average_damage}\n'
-                    report = report + f'    Максимум {max_damage} при броне {max_damage_user_damage}\n' 
-                    report = report + f'🕳В среднем добыто крышек: {average_kr}\n'
-                    report = report + f'📦В среднем добыто матов: {average_mat}\n'
+                        average_mat = int(average_mat / counter_mat)
+                    report = report + f'✊ Побед: <b>{win_counter}/{counter}</b>\n'
+                    report = report + f'💔 Урон бандитам:\n'
+                    report = report + f'      Min <b>{min_beaten}</b> при 🛡<b>{min_beaten_user_armor}</b>\n'
+                    report = report + f'      В среднем <b>{average_beaten}</b>\n'
+                    report = report + f'      Max <b>{max_beaten}</b> при 🛡<b>{max_beaten_user_armor}</b>\n'
+                    report = report + f'💥Получил от бандитов:\n'
+                    report = report + f'      Min <b>{min_damage}</b> при ⚔<b>{min_damage_user_damage}</b>\n'
+                    report = report + f'      В среднем <b>{average_damage}</b>\n'
+                    report = report + f'      Max <b>{max_damage}</b> при ⚔<b>{max_damage_user_damage}</b>\n' 
+                    report = report + f'В среднем добыто:\n'
+                    report = report + f'      🕳 {average_kr}\n'
+                    report = report + f'      📦 {average_mat}\n'
                     send_messages_big(message.chat.id, text=report)
         return
 
