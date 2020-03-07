@@ -3395,7 +3395,7 @@ def rade():
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='LOVE_DAY'), 1)[0]['value']) 
     
     # 8 марта!
-    if now_date.day == 8 and now_date.month == 3 and now_date.hour == 9 and now_date.minute in (0,10,15,20,25,35,35,50) and now_date.second < 15:
+    if now_date.day == 8 and now_date.month == 3 and now_date.hour == 9 and now_date.minute in (0,10,15,20,25,35,40,45,50,55) and now_date.second < 15:
         for goat in getSetting(code='GOATS_BANDS'):
             report = 'Девашки! Я ваз лублу!'
             send_messages_big(goat['chats']['info'], report)
