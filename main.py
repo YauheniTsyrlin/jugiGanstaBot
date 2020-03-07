@@ -1489,7 +1489,7 @@ def main_message(message):
                 if s.startswith('👤Ты') and '💥' in s:
                     damage.append(int(s.split('💥')[1].strip()))
                 if 'нанес тебе удар' in s and '💔' in s:
-                    beaten.append(int(s.split('💔')[1].strip()))
+                    beaten.append(-1*int(s.split('💔')[1].strip()))
                 if s.startswith('Ты одержал победу!'):
                     you_win = True
 
@@ -1521,12 +1521,99 @@ def main_message(message):
                 if result.matched_count < 1:
                     mob.insert_one(row)
 
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+                if not privateChat:
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+                else:
+                    report = 'Статистика сражений\n'
+                    report = report + f'<b>{mob_name}</b> {mob_class} на <b>{km}</b>\n\n'
+                    counter = 0
+                    win_counter = 0
+
+                    min_beaten = 1000000
+                    average_beaten = 0
+                    average_beaten_counter = 0
+                    max_beaten = 0
+                    max_beaten_user_armor = 0
+                    min_beaten_user_armor = 0
+
+                    min_damage = 1000000
+                    average_damage = 0
+                    average_damage_counter = 0
+                    max_damage = 0
+                    max_damage_user_damage = 0
+                    min_damage_user_damage = 0
+
+                    counter_kr = 0
+                    average_kr = 0
+                    counter_mat = 0
+                    average_mat = 0
+
+                    for one_mob in mob.find({'km':km, 'mob_name':mob_name, 'mob_class':mob_class}):
+                        counter = counter + 1
+                        if one_mob['win']:
+                            win_counter = win_counter + 1
+
+                        one_average_beaten = 0
+                        one_counter_beaten = 0
+                        for b in one_mob['beaten']:
+                            one_counter_beaten = one_counter_beaten + 1
+                            if b > max_beaten: 
+                                max_beaten = b
+                                max_beaten_user_armor = one_mob['user_armor']
+                            if b < min_beaten: 
+                                min_beaten = b
+                                min_beaten_user_armor = one_mob['user_armor']
+                            one_average_beaten = one_average_beaten + b
+
+                        if one_counter_beaten > 0:
+                            average_beaten = average_beaten + one_average_beaten / one_counter_beaten
+                            average_beaten_counter = average_beaten_counter + 1
 
 
-                for one_mob in mob.find({'km':km, 'mob_name':mob_name, 'mob_class':mob_class}):
-                    pass
+                        one_average_damage = 0
+                        one_counter_damage = 0
+                        for b in one_mob['damage']:
+                            one_counter_damage = one_counter_damage + 1
+                            if b > max_damage: 
+                                max_damage = b
+                                max_damage_user_damage = one_mob['user_damage']
+                            if b < min_damage: 
+                                min_damage = b
+                                min_damage_user_damage = one_mob['user_damage']
+                            one_average_damage = one_average_damage + b
 
+                        if one_counter_beaten > 0:
+                            average_beaten = average_beaten + one_average_beaten / one_counter_beaten
+                            average_beaten_counter = average_beaten_counter + 1
+
+                        if one_mob['kr'] > 0:
+                            counter_kr = counter_kr + 1
+                            average_kr = average_kr + one_mob['kr']
+                        
+                        if one_mob['mat'] > 0:
+                            counter_mat = counter_mat + 1
+                            average_mat = average_mat + one_mob['mat']
+
+                    if min_beaten == 1000000: 
+                        min_beaten = 0
+                    if min_damage == 1000000: 
+                        min_damage = 0
+
+                    average_beaten = average_beaten / average_beaten_counter
+                    average_kr = average_kr / counter_kr
+                    average_mat = average_mat / counter_mat
+                    report = report + f'🤝Встретился {counter}, победили {win_counter}\n'
+                    report = report + f'💔Нанёс урона бандитам:\n'
+                    report = report + f'    Минимум {min_beaten} при броне {min_beaten_user_armor}\n'
+                    report = report + f'    В среднем {average_beaten}\n'
+                    report = report + f'    Максимум {max_beaten} при броне {max_beaten_user_armor}\n'
+                    report = report + f'💥Получил урона от бандитов:\n'
+                    report = report + f'    Минимум {min_damage} при броне {min_damage_user_damage}\n'
+                    report = report + f'    В среднем {average_damage}\n'
+                    report = report + f'    Максимум {max_damage} при броне {max_damage_user_damage}\n' 
+                    report = report + f'🕳В среднем добыто крышек: {average_kr}\n'
+                    report = report + f'📦В среднем добыто матов: {average_mat}\n'
+                    send_messages_big(message.chat.id, text=report)
         return
 
     # Заменяем в сообщениях от ВВ все цифры 
