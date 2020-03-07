@@ -146,7 +146,7 @@ def main_message(message):
                     mob_name = s.split('Сражение с')[1].split('(')[0].strip()
                     mob_class = s.split('(')[1].split(')')[0].strip()
                 if s.startswith('Получено:') and '🕳' in s and '📦' in s:
-                    kr = int(s.split('🕳')[1].split(' ').strip())
+                    kr = int(s.split('🕳')[1].split(' ')[0].strip())
                     mat = int(s.split('📦')[1].strip())
                 if s.startswith('👤Ты') and '💥' in s:
                     damage.append(int(s.split('💥')[1].strip()))
