@@ -1613,13 +1613,13 @@ def main_message(message):
                         else:
                             habitat_str = habitat_str + ', '+ h
 
-                    report = report + f'👣 Встречается: <b>{habitat_str} км</b>\n'
+                    report = report + f'👣 Встречается: <b>{habitat_str}</b> км\n'
                     report = report + f'✊ Побед: <b>{win_counter}/{counter}</b>\n'
-                    report = report + f'💔 Урон бандитам:\n'
+                    report = report + f'💔 <b>Урон бандитам</b>:\n'
                     report = report + f'      Min <b>{min_beaten}</b> при 🛡<b>{min_beaten_user_armor}</b>\n'
                     report = report + f'      В среднем <b>{average_beaten}</b>\n'
                     report = report + f'      Max <b>{max_beaten}</b> при 🛡<b>{max_beaten_user_armor}</b>\n'
-                    report = report + f'💥Получил от бандитов:\n'
+                    report = report + f'💥 <b>Получил от бандитов</b>:\n'
                     report = report + f'      Min <b>{min_damage}</b> при ⚔<b>{min_damage_user_damage}</b>\n'
                     report = report + f'      В среднем <b>{average_damage}</b>\n'
                     report = report + f'      Max <b>{max_damage}</b> при ⚔<b>{max_damage_user_damage}</b>\n' 
