@@ -81,7 +81,9 @@ for setting in settings.find():
 
 INFECT_OR_CURE_PROBABILITY = {}
 acc_koronavirus = '🦇 Коронавирус'
-doctors = ['💉 Удостоверение "Медбрат"', '💉 Удостоверение "Медсестричка"']
+acc_doctor_mask = '🥽 Медицинская маска'
+acc_doctor_main = '💉 Удостоверение "Главврач"'
+doctors = ['💉 Удостоверение "Медбрат"', '💉 Удостоверение "Медсестричка"', '💉 Удостоверение "Главврач"']
 
 def getSetting(code: str, name=None, value=None):
     """ Получение настройки """
@@ -193,6 +195,17 @@ def isGoatSecretChat(login: str, secretchat: str):
     goat = getMyGoat(login)
     if goat:
         if goat['chats']['secret'] == secretchat:
+            return True
+        else:
+            return False    
+    else:
+        return False
+    return True
+
+def isGoatInfoChat(login: str, secretchat: str):
+    goat = getMyGoat(login)
+    if goat:
+        if goat['chats']['info'] == secretchat:
             return True
         else:
             return False    
@@ -508,51 +521,69 @@ def addToUserHistory(user: users.User):
     if result.matched_count < 1:
         pip_history.insert_one(row)
 
-def isIamDoctor(login: str):
-    user = getUserByLogin(login)
+def isDoctor(user_login: str):
+    user = getUserByLogin(user_login)
     if user:
         for doc in doctors:
             if user.isAccessoryItem(doc):
                 return True
     return False
 
-def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))):
-    if len(logins) < 1:
-        return
-
-    users_in_danger = []
-    isKoronavirus = False
-
-    try:
-        probability = INFECT_OR_CURE_PROBABILITY[f'infected_{chat}']
-        isKoronavirus = True
-    except: pass
-    
+def isInfected(logins):
     for user_login in logins:
         user = getUserByLogin(user_login)
         if user:
-            goat = getMyGoat(user.getLogin())
-            if goat:
-                chat = goat['chats']['info']
-            users_in_danger.append(user)
             if user.isAccessoryItem(acc_koronavirus):
-                isKoronavirus = True
+                return True
+    return False
+
+def hasDoctorMask(user_login):
+    user = getUserByLogin(user_login)
+    if user:
+        if user.isAccessoryItem(acc_doctor_mask):
+            return True
+    return False
+
+def isDoctorIn(logins):
+    for user_login in logins:
+        if isDoctor(user_login):
+            return True
+    return False
+
+def isDoctorMainIn(logins):
+    for user_login in logins:
+        user = getUserByLogin(user_login)
+        if user and user.isAccessoryItem(acc_doctor_main):
+            return True
+    return False
+    
+def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))):
+    if len(logins) < 1:
+        return
+    if probability == 0:
+        return
+
+    users_in_danger = []
+   
+    for user_login in logins:
+        user = getUserByLogin(user_login)
+        if user:
+            users_in_danger.append(user)
     
     counter_infected = 0
     names = ''
-    if isKoronavirus:
-        for user in users_in_danger:
-            if not user.isAccessoryItem(acc_koronavirus):
-                if (random.random() <= probability):
-                    if isIamDoctor(user.getLogin()):
-                        # Доктор заражается только в 10% случаев 
-                        if (random.random() > int(getSetting(code='PROBABILITY', name='DOCTOR_INFECTED'))):
-                            return
-                    user.addAccessory(acc_koronavirus)
-                    updateUser(user)
-                    counter_infected = counter_infected + 1
-                    names = names + f'{user.getNameAndGerb()}\n'
-                    send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен коронавирусом!')
+    for user in users_in_danger:
+        if not user.isAccessoryItem(acc_koronavirus):
+            if (random.random() <= probability):
+                if hasDoctorMask(user.getLogin()):
+                    # Маска снижает заражение на %%%  
+                    if (random.random() < int(getSetting(code='PROBABILITY', name='MASK_DEFENCE'))):
+                        return
+                user.addAccessory(acc_koronavirus)
+                updateUser(user)
+                counter_infected = counter_infected + 1
+                names = names + f'{user.getNameAndGerb()}\n'
+                send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен коронавирусом!')
 
     if counter_infected > 0:
         sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
@@ -571,36 +602,27 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
 def cure(logins, chat: str, probability = float(getSetting(code='PROBABILITY', name='DOCTOR_CURED'))):
     if len(logins) < 1:
         return
+    if probability == 0:
+        return
 
     users_in_danger = []
-    isDoctor = False
 
-    try:
-        probability = INFECT_OR_CURE_PROBABILITY[f'cure_{chat}']
-        isDoctor = True
-    except: pass
-    
     for user_login in logins:
         user = getUserByLogin(user_login)
         if user:
             users_in_danger.append(user)
-            if isIamDoctor(user.getLogin()):
-                isDoctor = True
     
     counter_cured = 0
     names = ''
-    if isDoctor:
-        for user in users_in_danger:
-            goat = getMyGoat(user.getLogin())
-            if goat:
-                chat = goat['chats']['info']
-            if user.isAccessoryItem(acc_koronavirus):
-                if (random.random() <= probability):
-                    user.removeAccessory(acc_koronavirus)
-                    updateUser(user)
-                    counter_cured = counter_cured + 1
-                    names = names + f'{user.getNameAndGerb()}\n'
-                    send_message_to_admin(f'⚠️❤️ Внимание! \n {user.getLogin()} выздоровел от 🦇 коронавируса!')
+
+    for user in users_in_danger:
+        if user.isAccessoryItem(acc_koronavirus):
+            if (random.random() <= probability):
+                user.removeAccessory(acc_koronavirus)
+                updateUser(user)
+                counter_cured = counter_cured + 1
+                names = names + f'{user.getNameAndGerb()}\n'
+                send_message_to_admin(f'⚠️❤️ Внимание! \n {user.getLogin()} выздоровел от 🦇 коронавируса!')
 
     if counter_cured > 0:
         sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
@@ -937,48 +959,38 @@ def main_message(message):
         return
 
     check_and_register_tg_user(message.from_user.username)
-
-    if message.reply_to_message and not message.reply_to_message.from_user.is_bot:
-        may_be_infected = []
-        may_be_infected.append(message.reply_to_message.from_user.username)
-        may_be_infected.append(message.from_user.username)
-        koronavirus(may_be_infected, message.chat.id)
-        cure(may_be_infected, message.chat.id)
-
     userIAm = getUserByLogin(message.from_user.username)
-    if not privateChat and userIAm:
-        may_be_cured = []
-        may_be_cured.append(message.from_user.username)
-        cure(may_be_cured, message.chat.id)
+    
+    if not privateChat and userIAm and isGoatInfoChat(message.from_user.username, message.chat.id):
+        may_be_cured_or_infected = []
+        may_be_cured_or_infected.append(message.from_user.username)
+        if message.reply_to_message and not message.reply_to_message.from_user.is_bot:
+            may_be_cured_or_infected.append(message.reply_to_message.from_user.username)
 
-        if userIAm.isAccessoryItem(acc_koronavirus):
+        # Если есть зараженные
+        if isInfected(may_be_cured_or_infected):
             INFECT_OR_CURE_PROBABILITY.update({f'infected_{chat}': float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))})
         else:
-            isYes = False
             try:
-                pr = INFECT_OR_CURE_PROBABILITY[f'infected_{chat}']
-                isYes = True
-            except: pass
-
-            if isYes and INFECT_OR_CURE_PROBABILITY[f'infected_{chat}'] > 0.01:
-                may_be_infected = []
-                may_be_infected.append(message.from_user.username)
-                koronavirus(may_be_infected, message.chat.id)
                 new_probability = INFECT_OR_CURE_PROBABILITY[f'infected_{chat}']
-                new_probability = new_probability - new_probability * 0.2
+                new_probability = new_probability * float(getSetting(code='PROBABILITY', name='KORONOVIRUS_HALFLIFE'))
+                if new_probability < 0.01:
+                    new_probability = 0
                 INFECT_OR_CURE_PROBABILITY.update({f'infected_{chat}': new_probability})
-            else:
-                try:
-                    INFECT_OR_CURE_PROBABILITY.pop(f'infected_{chat}')
-                except: pass
+            except: 
+                INFECT_OR_CURE_PROBABILITY.update({f'infected_{chat}': 0}) 
 
-        if isIamDoctor(userIAm.getLogin()):
-            INFECT_OR_CURE_PROBABILITY.update({f'cure_{chat}': float(getSetting(code='PROBABILITY', name='DOCTOR_CURED'))})
+        # Если есть доктор
+        if isDoctorIn(may_be_cured_or_infected):
+            if isDoctorMainIn(may_be_cured_or_infected):
+                INFECT_OR_CURE_PROBABILITY.update({f'cure_{chat}': float(getSetting(code='PROBABILITY', name='DOCTOR_MAIN_CURED'))})
+            else:                
+                INFECT_OR_CURE_PROBABILITY.update({f'cure_{chat}': float(getSetting(code='PROBABILITY', name='DOCTOR_CURED'))})
         else:
-            try:
-                INFECT_OR_CURE_PROBABILITY.pop(f'cure_{chat}')
-            except: pass
+            INFECT_OR_CURE_PROBABILITY.update({f'cure_{chat}': 0})
 
+        koronavirus(may_be_cured_or_infected, message.chat.id, probability=float(INFECT_OR_CURE_PROBABILITY[f'infected_{chat}']))
+        cure(may_be_cured_or_infected, message.chat.id, probability=float(INFECT_OR_CURE_PROBABILITY[f'cure_{chat}']))
 
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
@@ -2661,7 +2673,7 @@ def report_koronavirus():
 def report_medics():
     counter = 0
     for user in USERS_ARR:
-        if isIamDoctor(user.getLogin()):
+        if isDoctor(user.getLogin()):
             counter = counter + 1
 
     report = f'💉 Сертифицированных докторов: <b>{counter}</b>\n' 
@@ -2999,7 +3011,7 @@ def callback_query(call):
     if acc == acc_koronavirus:
         bot.answer_callback_query(call.id, "Это болезнь, ее нельзя забрать, только вылечить!")
         return    
-    
+
     bot.answer_callback_query(call.id, "Ты забрал это с полки...")
     user.removeAccessory(acc)
     updateUser(user)
