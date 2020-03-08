@@ -3127,13 +3127,13 @@ def callback_query(call):
                 markupinline.add(InlineKeyboardButton(f"{rank['value']}", callback_data=f"setrank|{login}|{rank['name']}"))
                 if i == counter + 10:
                     markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"setrank_back|{login}|{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"setrank_next|{login}|{counter + 10}"))
-                    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
                     addExit = True
                     break
             i = i + 1
         if not addExit:
             markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"setrank_back|{login}|{counter - 10}"))
-            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
+        
+        markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
         
         if user:
             text=f'Звание {user.getNameAndGerb()}: {user.getRank()}'
@@ -3163,13 +3163,13 @@ def callback_query(call):
                     else:
                         markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"setrank_back|{login}|{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"setrank_next|{login}|{counter + 10}"))
                     
-                    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
+                    #markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
                     addExit = True
                     break
             i = i + 1
         if not addExit:
             markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"setrank_next|{login}|{i+10}"))
-            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
+        markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
 
         text=f'Звание {user.getNameAndGerb()}: {user.getRank()}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
@@ -3196,9 +3196,12 @@ def callback_query(call):
         markupinline.add(InlineKeyboardButton(f"{rank['value']}", callback_data=f"setrank|{login}|{rank['name']}"))
         if i == counter :
             markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"setrank_next|{login}|{counter}"))
-            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
+            #markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
             break
         i = i + 1
+
+    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
+    
     if user:
         text=f'Звание {user.getNameAndGerb()}: {user.getRank()}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
