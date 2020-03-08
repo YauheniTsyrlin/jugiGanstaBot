@@ -3595,12 +3595,13 @@ def rade():
                     if rank['bm'] < user.getBm():
                        newRank = rank  
                 
-                if newRank['name'] == user.getRank()['name']:
-                    pass
-                else:
-                    user.setRank(newRank)
-                    updateUser(user)
-                    send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n{newRank["value"]}')
+                # if newRank['name'] == user.getRank()['name']:
+                #     pass
+                # else:
+                user.setRank(newRank)
+                updateUser(user)
+                goat = getMyGoat(user.getLogin())
+                send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n{newRank["value"]}')
 
     # Пидор дня
     if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
