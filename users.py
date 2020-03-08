@@ -467,6 +467,8 @@ class User(object):
         self.rank = rank  
     def getRank(self):
         return self.rank
+    def getRankName(self):
+        return self.rank['value']
 
     def setAccessory(self, accessory):
         self.accessory = accessory  

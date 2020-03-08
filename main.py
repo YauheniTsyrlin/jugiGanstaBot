@@ -1591,7 +1591,6 @@ def main_message(message):
                 report = getMobReport(mob_name, mob_class)
                 send_messages_big(message.chat.id, text=report)
             return
-
         if 'Сражение с' in message.text:
             if userIAm == None:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
@@ -2255,12 +2254,11 @@ def main_message(message):
                                 send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
                                 return
 
-
                         markupinline = InlineKeyboardMarkup()
                         counter = 10
                         i = 1
                         for rank in getSetting(code='RANK', name='MILITARY'):
-                            if user and user.getRank() == rank['value']:
+                            if user and user.getRankName() == rank['value']:
                                 continue    
 
                             markupinline.add(InlineKeyboardButton(f"{rank['value']}", callback_data=f"setrank|{login}|{rank['name']}"))
@@ -2270,7 +2268,7 @@ def main_message(message):
                             i = i + 1
                         markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
                         if user:
-                            text = f'Звание {user.getNameAndGerb()}: {user.getRank()}'
+                            text = f'Звание {user.getNameAndGerb()}: {user.getRankName()}'
                             msg = send_messages_big(message.chat.id, text=text, reply_markup=markupinline)
                     elif 'toreward' == response.split(':')[1]:
                         #jugi:toreward:$any:$accessory
@@ -3118,7 +3116,7 @@ def callback_query(call):
         i = 1
         addExit = False
         for rank in getSetting(code='RANK',name='MILITARY'):
-            if user and user.getRank() == rank['value']:
+            if user and user.getRankName() == rank['value']:
                 continue    
 
             if i <= counter:
@@ -3136,7 +3134,7 @@ def callback_query(call):
         markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
         
         if user:
-            text=f'Звание {user.getNameAndGerb()}: {user.getRank()}'
+            text=f'Звание {user.getNameAndGerb()}: {user.getRankName()}'
         
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
         return
@@ -3150,7 +3148,7 @@ def callback_query(call):
         i = 1
         addExit = False
         for rank in getSetting(code='RANK',name='MILITARY'):
-            if user.getRank() == rank['value']:
+            if user.getRankName() == rank['value']:
                 continue    
 
             if i <= counter:
@@ -3171,7 +3169,7 @@ def callback_query(call):
             markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"setrank_next|{login}|{i+10}"))
         markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
 
-        text=f'Звание {user.getNameAndGerb()}: {user.getRank()}'
+        text=f'Звание {user.getNameAndGerb()}: {user.getRankName()}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
         return
 
@@ -3181,7 +3179,7 @@ def callback_query(call):
     
     for rank in getSetting(code='RANK', name='MILITARY'):
         if rank['name'] == call.data.split('|')[2]:
-            user.setRank(rank['value'])
+            user.setRank(rank)
             updateUser(user)
             send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message, 'set_new_rank').fulfillment_text + f'\n\n▫️ {rank["value"]}') 
             break
@@ -3190,7 +3188,7 @@ def callback_query(call):
     counter = 10
     i = 1
     for rank in getSetting(code='RANK', name='MILITARY'):
-        if user and user.getRank() == rank['value']:
+        if user and user.getRankName() == rank['value']:
             continue    
 
         markupinline.add(InlineKeyboardButton(f"{rank['value']}", callback_data=f"setrank|{login}|{rank['name']}"))
@@ -3203,9 +3201,8 @@ def callback_query(call):
     markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
     
     if user:
-        text=f'Звание {user.getNameAndGerb()}: {user.getRank()}'
+        text=f'Звание {user.getNameAndGerb()}: {user.getRankName()}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
-
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("toreward"))
 def callback_query(call):
@@ -4004,7 +4001,6 @@ def rade_job():
     while True:
         rade()
         time.sleep(15)
-
 
 def flex_job(counter: int, chatid: str):
     send_messages_big(chatid, f'Ща заебашу {counter} стикеров!')

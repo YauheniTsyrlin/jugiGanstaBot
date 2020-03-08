@@ -509,10 +509,10 @@ print('\n======== radeReport ==========\n')
 #     i = i + 1
 
 
-for x in pending_messages.find():
-    print(x)
+# for x in pending_messages.find():
+#     print(x)
 
-sys.exit(0)
+# sys.exit(0)
 
 # for ts in (1579191477, 1579191477):
 # #     print(f"{datetime.fromtimestamp(ts)}")
