@@ -67,7 +67,7 @@ def getPlot(cursor, username: str):
     plt.gca().spines["bottom"].set_alpha(.3)
     plt.gca().spines["right"].set_alpha(.3)
     plt.gca().spines["left"].set_alpha(.3)
-    plt.title('Прогресс Пип-боев', fontsize=22)
+    plt.title(f'Прогресс Пип-боев {username}', fontsize=22)
 
     plt.yticks(range( 0, max(y_MAX) + y_interval, y_interval), [str(y) for y in range( 0, max(y_MAX) + y_interval  , y_interval)], fontsize=12)    
     plt.xticks(range(0, 10), df.date.values, horizontalalignment='left', fontsize=12)    
