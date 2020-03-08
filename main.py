@@ -3179,6 +3179,7 @@ def callback_query(call):
     
     for rank in getSetting(code='RANK', name='MILITARY'):
         if rank['name'] == call.data.split('|')[2]:
+            rank.update({'update':'hand'})
             user.setRank(rank)
             updateUser(user)
             send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message, 'set_new_rank').fulfillment_text + f'\n\n▫️ {rank["value"]}') 
@@ -3583,6 +3584,23 @@ def rade():
                 bday = time.gmtime(user.getBirthday())
                 if now_date.day == bday.day and now_date.month == bday.month: 
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
+
+    # Присвоение званий
+    if now_date.hour == 19 and now_date.minute == 18 and now_date.second < 15:
+        updateUser(None)
+        for user in USERS_ARR:
+            if user.getRank()['update'] == 'auto':
+                newRank = None
+                for rank in getSetting(code='RANK', name='MILITARY'):
+                    if rank['bm'] < user.getBm():
+                       newRank = rank  
+                
+                if newRank['name'] == user.getRank()['name']:
+                    pass
+                else:
+                    user.setRank(newRank)
+                    updateUser(user)
+                    send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n{newRank["value"]}')
 
     # Пидор дня
     if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
