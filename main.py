@@ -2259,7 +2259,7 @@ def main_message(message):
                         markupinline = InlineKeyboardMarkup()
                         counter = 10
                         i = 1
-                        for rank in getSetting(code='RANKS', name='MILITARY'):
+                        for rank in getSetting(code='RANK', name='MILITARY'):
                             if user and user.getRank() == rank['value']:
                                 continue    
 
