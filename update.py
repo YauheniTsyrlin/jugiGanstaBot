@@ -119,6 +119,14 @@ if (not result):
         'value': ''   
              })  
 
+result = settings.find_one({'code': 'RANK'})
+if (not result):
+    print('Not Find setting. Insert RANK')
+    settings.insert_one({
+        'code': 'RANK', 
+        'description': ' Ранги и должности', 
+        'value': ''   
+             })  
 
 result = settings.find_one({'code': 'DUNGEONS'})
 if (not result):
@@ -142,6 +150,59 @@ if (not result):
 print("#==========================#")              
 print("#     UPDATE SETTINGS      #")              
 print("#==========================#")              
+
+myquery = { "code": 'RANK' }
+newvalues = { "$set": { "value": 
+                    [
+                        {
+                            'name': 'MILITARY',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': '👤 Новобранец',
+                                    'cost': 1
+                                },
+                                {
+                                    'name': '2',
+                                    'value': '🩲 Новобранец в трусах',
+                                    'cost': 1
+                                },
+                                {
+                                    'name': '3',
+                                    'value': '🐹 Бывалый Новобранец',
+                                    'cost': 1
+                                }
+                            ] 
+                        },
+                        {
+                            'name': 'MEDICS',
+                            'value':
+                            [
+                                
+                                {
+                                    'name': '1',
+                                    'value': '💉 Медсестра',
+                                    'cost': 1
+                                    
+                                },
+                                {
+                                    'name': '2',
+                                    'value': '💉 Медбрат',
+                                    'cost': 1
+                                },
+                                {
+                                    'name': '3',
+                                    'value': '💊 Главврач',
+                                    'cost': 1
+                                }
+                            ] 
+                        }
+                    ]
+                } 
+            } 
+u = settings.update_one(myquery, newvalues)
+
 
 myquery = { "code": 'ACCESSORY' }
 newvalues = { "$set": { "value": 
@@ -1865,11 +1926,11 @@ print("#==========================#")
 print("#         USERS            #")    
 print("#==========================#")
 
-for x in registered_users.find():
-    registered_users.update(
-        { 'login': x.get('login')},
-        { '$set': { 'rank': '👤 Новобранец'} }
-    )
+# for x in registered_users.find():
+#     registered_users.update(
+#         { 'login': x.get('login')},
+#         { '$set': { 'rank': '👤 Новобранец'} }
+#     )
 
 # for x in registered_users.find():
 #     registered_users.update(

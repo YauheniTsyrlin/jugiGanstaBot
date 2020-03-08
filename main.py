@@ -2237,6 +2237,42 @@ def main_message(message):
                             msg = send_messages_big(message.chat.id, text=getResponseDialogFlow(message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{accessory}\nЧто изьять?', reply_markup=markupinline)
                         else:
                             msg = send_messages_big(message.chat.id, text='У него ничего нет, он голодранец!' , reply_markup=markupinline)
+                    elif 'setrank' == response.split(':')[1]:
+                        #jugi:setrank:$any
+                        
+                        # if not isGoatBoss(message.from_user.username):
+                        if not isAdmin(message.from_user.username):
+                            bot.reply_to(message, text=getResponseDialogFlow(message, 'shot_message_not_admin').fulfillment_text)
+                            return
+
+                        login = response.split(':')[2].replace('@','').strip()
+                        user = getUserByLogin(login)
+                        if login.lower() == 'всем':
+                            send_messages_big(message.chat.id, text=f'Укажи логин бандита "@..."!')
+                            return
+                        else:
+                            if not user:
+                                send_messages_big(message.chat.id, text=f'Нет бандита с логином {login}!')
+                                return
+
+
+                        markupinline = InlineKeyboardMarkup()
+                        counter = 10
+                        i = 1
+                        for rank in getSetting(code='RANKS', name='MILITARY'):
+                            if user and user.getRank() == rank['value']:
+                                continue    
+
+                            markupinline.add(InlineKeyboardButton(f"{rank['value']}", callback_data=f"setrank|{login}|{rank['name']}"))
+                            if i == counter :
+                                markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"setrank_next|{login}|{counter}"))
+                                markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
+                                break
+                            i = i + 1
+                        if user:
+                            text = f'Звание {user.getNameAndGerb()}: {user.getRank()}'
+                            msg = send_messages_big(message.chat.id, text=text, reply_markup=markupinline)
+                    
                     elif 'toreward' == response.split(':')[1]:
                         #jugi:toreward:$any:$accessory
                         
@@ -2269,7 +2305,7 @@ def main_message(message):
                                     break
                                 i = i + 1
                             if user:
-                                msg = send_messages_big(message.chat.id, text=f'Аксессуары {user.getName()}:\n{user.getAccessoryReport()}' , reply_markup=markupinline)
+                                msg = send_messages_big(message.chat.id, text=f'Аксессуары {user.getNameAndGerb()}:\n{user.getAccessoryReport()}' , reply_markup=markupinline)
                             else:
                                 msg = send_messages_big(message.chat.id, text=f'Всем бандитам будет выдан...' , reply_markup=markupinline)
 
@@ -2278,7 +2314,7 @@ def main_message(message):
                             if user:
                                 user.addAccessory(acc)
                                 updateUser(user)
-                                send_messages_big(message.chat.id, text=user.getName() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
+                                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
                             else:
                                 for user in list(USERS_ARR):
                                     user.addAccessory(acc)
@@ -3057,6 +3093,117 @@ def callback_query(call):
     text = text + report_yes + '\n' + report_no
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
     # logger.info(f'{call.from_user.username} {text}')
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith("setrank"))
+def callback_query(call):
+    if isUserBan(call.from_user.username):
+        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
+        return
+
+    if not isGoatBoss(call.from_user.username):
+        if not isAdmin(call.from_user.username):
+            bot.answer_callback_query(call.id, "Тебе не положено!")
+            return
+
+    if 'setrank_exit' in call.data:
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='Присвоение звания завершено!', parse_mode='HTML')
+        return
+
+    if call.data.startswith("setrank_next"):
+        #        0         1     2
+        # toreward_next|{login}|10
+        counter  = int(call.data.split('|')[2])
+        login = call.data.split('|')[1]
+        user = getUserByLogin(login)
+        markupinline = InlineKeyboardMarkup()
+        i = 1
+        addExit = False
+        for rank in getSetting(code='RANK',name='MILITARY'):
+            if user and user.getRank() == rank['value']:
+                continue    
+
+            if i <= counter:
+                pass
+            else:
+                markupinline.add(InlineKeyboardButton(f"{rank['value']}", callback_data=f"setrank|{login}|{rank['name']}"))
+                if i == counter + 10:
+                    markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"setrank_back|{login}|{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"setrank_next|{login}|{counter + 10}"))
+                    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
+                    addExit = True
+                    break
+            i = i + 1
+        if not addExit:
+            markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"setrank_back|{login}|{counter - 10}"))
+            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
+        
+        if user:
+            text=f'Звание {user.getNameAndGerb()}: {user.getRank()}'
+        
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+        return
+
+    if call.data.startswith("setrank_back"):
+        # toreward_back|{login}|10"
+        counter  = int(call.data.split('|')[2])
+        login = call.data.split('|')[1]
+        user = getUserByLogin(login)
+        markupinline = InlineKeyboardMarkup()
+        i = 1
+        addExit = False
+        for rank in getSetting(code='RANK',name='MILITARY'):
+            if user.getRank() == rank['value']:
+                continue    
+
+            if i <= counter:
+                pass
+            else:
+                markupinline.add(InlineKeyboardButton(f"{rank['value']}", callback_data=f"setrank|{login}|{rank['name']}"))
+                if i == counter + 10:
+                    if counter == 0:
+                        markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"setrank_next|{login}|{counter + 10}"))
+                    else:
+                        markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"setrank_back|{login}|{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"setrank_next|{login}|{counter + 10}"))
+                    
+                    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
+                    addExit = True
+                    break
+            i = i + 1
+        if not addExit:
+            markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"setrank_next|{login}|{i+10}"))
+            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
+
+        text=f'Звание {user.getNameAndGerb()}: {user.getRank()}'
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+        return
+
+    bot.answer_callback_query(call.id, "Ты сделал свой выбор")
+    login = call.data.split('|')[1]
+    user = getUserByLogin(login)
+    
+    for rank in getSetting(code='RANK', name='MILITARY'):
+        if rank['name'] == call.data.split('|')[2]:
+            user.setRank(rank['value'])
+            updateUser(user)
+            send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message, 'set_new_rank').fulfillment_text + f'\n\n▫️ {rank["value"]}') 
+            break
+
+    markupinline = InlineKeyboardMarkup()
+    counter = 10
+    i = 1
+    for rank in getSetting(code='RANK', name='MILITARY'):
+        if user and user.getRank() == rank['value']:
+            continue    
+
+        markupinline.add(InlineKeyboardButton(f"{rank['value']}", callback_data=f"setrank|{login}|{rank['name']}"))
+        if i == counter :
+            markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"setrank_next|{login}|{counter}"))
+            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
+            break
+        i = i + 1
+    if user:
+        text=f'Звание {user.getNameAndGerb()}: {user.getRank()}'
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("toreward"))
 def callback_query(call):
