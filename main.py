@@ -2266,13 +2266,12 @@ def main_message(message):
                             markupinline.add(InlineKeyboardButton(f"{rank['value']}", callback_data=f"setrank|{login}|{rank['name']}"))
                             if i == counter :
                                 markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"setrank_next|{login}|{counter}"))
-                                markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
                                 break
                             i = i + 1
+                        markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
                         if user:
                             text = f'Звание {user.getNameAndGerb()}: {user.getRank()}'
                             msg = send_messages_big(message.chat.id, text=text, reply_markup=markupinline)
-                    
                     elif 'toreward' == response.split(':')[1]:
                         #jugi:toreward:$any:$accessory
                         
