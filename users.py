@@ -96,59 +96,65 @@ def updateUser(newUser, oldUser):
             elif oldUser.maxkm < newUser.maxkm: 
                 oldUser.maxkm = newUser.maxkm
 
+    if hasattr(newUser, 'rank'):
+        if newUser.rank:
+            oldUser.rank = newUser.rank
+
     return oldUser
 
 def importUser(registered_user):
-        u = User(registered_user['login'], registered_user['timeUpdate'],'')
-        u.login          = registered_user['login']
-        u.name           = registered_user['name']
-        u.fraction       = registered_user['fraction']
-        if (registered_user.get('band')):
-            u.band       = registered_user['band']
-        if (registered_user.get('status')):
-            u.status     = registered_user['status']
-        u.health         = registered_user['health']
-        u.hunger         = registered_user['hunger']
-        u.damage         = registered_user['damage']
-        u.armor          = registered_user['armor']
-        u.force          = registered_user['force']
-        u.accuracy       = registered_user['accuracy']
-        u.charisma       = registered_user['charisma']
-        u.agility        = registered_user['agility']
-        u.stamina        = registered_user['stamina']
-        try:
-            u.setPing(registered_user['ping'])
-        except:
-            u.setPing(True)
-        if (registered_user.get('location')):    
-            u.location     = registered_user['location']
-        if (registered_user.get('timeZone')):    
-            u.timeZone     = registered_user['timeZone']
-        if (registered_user.get('dzen')):
-            u.dzen        = registered_user['dzen']
-        if (registered_user.get('timeBan')):
-            u.timeBan        = registered_user['timeBan']
-        if (registered_user.get('timeUpdate')):    
-            u.timeUpdate     = registered_user['timeUpdate']
-        if (registered_user.get('status')):    
-            u.status     = registered_user['status']
-        if (registered_user.get('raid')):    
-            u.raid     = registered_user['raid']
-        if (registered_user.get('chat')):    
-            u.chat     = registered_user['chat']
-        if (registered_user.get('accessory')):    
-            u.accessory     = registered_user['accessory']
-        if (registered_user.get('settings')):    
-            u.settings     = registered_user['settings']
-        u.setRaidLocation(registered_user['raidlocation'])
-        if (registered_user.get('wastelandLocation')):
-            u.setWastelandLocation(registered_user['wastelandLocation'])
-        if (registered_user.get('maxkm')):
-            u.setMaxkm(registered_user['maxkm'])
-        if (registered_user.get('birthday')):
-            u.setBirthday(registered_user['birthday'])
+    u = User(registered_user['login'], registered_user['timeUpdate'],'')
+    u.login          = registered_user['login']
+    u.name           = registered_user['name']
+    u.fraction       = registered_user['fraction']
+    if (registered_user.get('band')):
+        u.band       = registered_user['band']
+    if (registered_user.get('status')):
+        u.status     = registered_user['status']
+    u.health         = registered_user['health']
+    u.hunger         = registered_user['hunger']
+    u.damage         = registered_user['damage']
+    u.armor          = registered_user['armor']
+    u.force          = registered_user['force']
+    u.accuracy       = registered_user['accuracy']
+    u.charisma       = registered_user['charisma']
+    u.agility        = registered_user['agility']
+    u.stamina        = registered_user['stamina']
+    try:
+        u.setPing(registered_user['ping'])
+    except:
+        u.setPing(True)
+    if (registered_user.get('location')):    
+        u.location     = registered_user['location']
+    if (registered_user.get('timeZone')):    
+        u.timeZone     = registered_user['timeZone']
+    if (registered_user.get('dzen')):
+        u.dzen        = registered_user['dzen']
+    if (registered_user.get('timeBan')):
+        u.timeBan        = registered_user['timeBan']
+    if (registered_user.get('timeUpdate')):    
+        u.timeUpdate     = registered_user['timeUpdate']
+    if (registered_user.get('status')):    
+        u.status     = registered_user['status']
+    if (registered_user.get('raid')):    
+        u.raid     = registered_user['raid']
+    if (registered_user.get('chat')):    
+        u.chat     = registered_user['chat']
+    if (registered_user.get('accessory')):    
+        u.accessory     = registered_user['accessory']
+    if (registered_user.get('settings')):    
+        u.settings     = registered_user['settings']
+    u.setRaidLocation(registered_user['raidlocation'])
+    if (registered_user.get('wastelandLocation')):
+        u.setWastelandLocation(registered_user['wastelandLocation'])
+    if (registered_user.get('maxkm')):
+        u.setMaxkm(registered_user['maxkm'])
+    if (registered_user.get('birthday')):
+        u.setBirthday(registered_user['birthday'])
+    if (registered_user.get('rank')):
+        u.setRank(registered_user['rank'])
 
-        return u
+    return u
 
 class User(object):
     def __init__(self, login, date, text):
@@ -170,6 +176,7 @@ class User(object):
         self.settings = None
         self.maxkm = None
         self.birthday = None
+        self.rank = None
 
         strings = text.split('\n')
         isEquipequipment = False
@@ -268,7 +275,9 @@ class User(object):
         
         if self.band:
             string = string + f'├🤟Банда: {self.band}\n'
-        
+        if self.rank:
+            string = string + f'├🥋Звание: {rank}\n'
+     
         if self.location:
             timeZone = '+00:00'
             if self.timeZone:
@@ -454,6 +463,11 @@ class User(object):
     def getBirthday(self):
         return self.birthday
 
+    def setRank(self, rank):
+        self.rank = rank  
+    def getRank(self):
+        return self.rank
+
     def setAccessory(self, accessory):
         self.accessory = accessory  
     def getAccessory(self):
@@ -494,7 +508,6 @@ class User(object):
             self.accessory = []
         if self.isAccessoryItem(accessoryItem):
             self.accessory.remove(accessoryItem)
-
     def setSettings(self, settings):
         self.settings = settings  
     def getSettings(self):
