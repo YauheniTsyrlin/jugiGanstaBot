@@ -3586,7 +3586,7 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 19 and now_date.minute == 18 and now_date.second < 15:
+    if now_date.hour == 19 and now_date.minute == 23 and now_date.second < 15:
         updateUser(None)
         for user in USERS_ARR:
             if user.getRank()['update'] == 'auto':
