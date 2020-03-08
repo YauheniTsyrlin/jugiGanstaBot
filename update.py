@@ -1083,9 +1083,6 @@ newvalues = { "$set": { "value":
                                     'value': '🗣 Соблазнитель ванаМинго',
                                     'cost': 1
                                 }
-
-
-                                
                             ] 
                         }
                     ]
@@ -2062,7 +2059,7 @@ print("#==========================#")
 print("#         USERS            #")    
 print("#==========================#")
 
-# for x in registered_users.find({'rank':'🧪Воин из пбробирки'}):
+# for x in registered_users.find({'rank': None}):
 #     registered_users.update(
 #         { 'login': x.get('login')},
 #         { '$set': { 'rank': 

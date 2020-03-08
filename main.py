@@ -1178,6 +1178,13 @@ def main_message(message):
                     user.setChat(message.chat.id)
                     user.addAccessory(acc)
                     user.setPing(True)
+
+                    newRank = None
+                    for rank in getSetting(code='RANK', name='MILITARY'):
+                        if rank['bm'] < user.getBm():
+                            newRank = rank  
+                    user.setRank(newRank)
+
                     x = registered_users.insert_one(json.loads(user.toJSON()))
                     updateUser(None)
 
