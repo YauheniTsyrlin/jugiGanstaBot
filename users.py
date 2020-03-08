@@ -276,7 +276,7 @@ class User(object):
         if self.band:
             string = string + f'├🤟Банда: {self.band}\n'
         if self.rank:
-            string = string + f'├🥋Звание: {self.rank}\n'
+            string = string + f'├🥋Звание: {self.getRankName()}\n'
      
         if self.location:
             timeZone = '+00:00'
