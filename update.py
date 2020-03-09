@@ -1087,13 +1087,13 @@ newvalues = { "$set": { "value":
                                     'name': '140',
                                     'value': '🤍 Сердце Кирилла навсегда',
                                     'cost': 1,
-                                    'mode': 'personal'
+                                    'mode': 'arhive'
                                 },
                                 {
                                     'name': '141',
                                     'value': '🤍 тату "ЛеДонна"',
                                     'cost': 1,
-                                    'mode': 'personal'
+                                    'mode': 'arhive'
                                 }
                                 
                                 

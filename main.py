@@ -3358,6 +3358,15 @@ def callback_query(call):
     
     for acc in getSetting(code='ACCESSORY', name='REWARDS'):
         if acc['name'] == call.data.split('|')[2]:
+
+            try:
+                if acc['mode'] == 'arhive':
+                    bot.answer_callback_query(call.id, "Это нельзя нельзя никому больше выдавать!")
+                    return
+            except:
+                pass
+
+
             if login.lower() == 'всем':
                 for user in list(USERS_ARR):
                     user.addAccessory(acc['value'])
