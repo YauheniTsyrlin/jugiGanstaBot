@@ -370,6 +370,10 @@ hashstr = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8
 
 
 dresult = mob.aggregate([ 
+    {   "$match": {
+                "kr": {"$gte": 0}
+            } 
+    },
     {   "$group": {
         "_id": { "mobname":"mob_name$", "mobclass":"$mob_class"}, 
         "count": {
