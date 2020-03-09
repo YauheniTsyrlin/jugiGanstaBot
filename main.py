@@ -649,7 +649,7 @@ def getMobHash(mob_name: str, mob_class: str):
 def getMobDetailReport(mob_name: str, mob_class: str):
     hashstr = getMobHash(mob_name, mob_class)
     return 'В разработке...'
-    
+
 def getMobReport(mob_name: str, mob_class: str):
     hashstr = getMobHash(mob_name, mob_class)
 
@@ -929,7 +929,7 @@ def send_usset(message):
     bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
 
 # Handle '/mob'
-@bot.message_handler(func=lambda message: message.text.startswith('/mob'))
+@bot.message_handler(func=lambda message: message.text and message.text.startswith('/mob'))
 def send_mob_report(message):
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)

@@ -203,7 +203,7 @@ def getResponseDialogFlow(text):
     return response
 
 # Handle '/mob'
-@bot.message_handler(func=lambda message: message.text.startswith('/mob'))
+@bot.message_handler(func=lambda message: message.text and message.text.startswith('/mob'))
 def send_mob_report(message):
     hashstr = message.text
     dresult = mob.aggregate([ 
