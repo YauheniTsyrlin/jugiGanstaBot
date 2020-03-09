@@ -640,7 +640,7 @@ def cure(logins, chat: str, probability = float(getSetting(code='PROBABILITY', n
             'text': f'{names}'})
 
 def getMobReport(mob_name: str, mob_class: str):
-    hashstr = f'/mob{int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8}'  
+    hashstr = f'/mob{int(hashlib.sha256(s.encode("utf-8")).hexdigest(), 16) % 10**8}'  
 
     report = '<b>Статистика сражений</b>\n'
     report = report + f'<b>{mob_name}</b> {mob_class}\n'
