@@ -920,9 +920,8 @@ def send_usset(message):
     user = getUserByLogin(message.from_user.username)
     bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
 
-
 # Handle '/mob'
-@bot.message_handler(commands=['mob'])
+@bot.message_handler(func=lambda message: '/mob' in message.text, content_types=['text'])
 def send_welcome(message):
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
@@ -930,7 +929,6 @@ def send_welcome(message):
         return
     send_messages_big(message.chat.id, text=f'Пока не реализовано!')
         
-
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
