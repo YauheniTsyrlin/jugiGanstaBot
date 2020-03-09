@@ -920,6 +920,17 @@ def send_usset(message):
     user = getUserByLogin(message.from_user.username)
     bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
 
+
+# Handle '/mob'
+@bot.message_handler(commands=['mob'])
+def send_welcome(message):
+    if isUserBan(message.from_user.username):
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то стартовать, но у него получилось лишь:\n' + getResponseDialogFlow(message, 'user_banned').fulfillment_text)
+        return
+    send_messages_big(message.chat.id, text=f'Пока не реализовано!')
+        
+
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
