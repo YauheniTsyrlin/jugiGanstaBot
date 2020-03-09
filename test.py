@@ -30,6 +30,7 @@ plan_raids      = mydb["rades"]
 report_raids    = mydb["report_raids"]
 plan_raids      = mydb["rades"]
 dungeons        = mydb["dungeons"]
+mob             = mydb["mob"]
 
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
@@ -363,24 +364,30 @@ def statistic(goatName: str):
 
 print('\n======== radeReport ==========\n')
 
-# dresult = dungeons.aggregate([ 
-#     {   "$match": {
-#                 "band": "АртхǁȺǁус"
-#             } 
-#     },
-#     {   "$group": {
-#         "_id": "$date", 
-#         "count": {
-#             "$sum": 1}}},
-        
-#     {   "$sort" : { "count" : -1 } }
-#     ])
-    
-# for d in dresult:
-#     print(d)
-#     date = d.get("_id") 
-#     print(f'{d.get("count")} - {datetime.fromtimestamp(date)}')  
+s = 'Статистика сражений 🚨Анклав Генри Эдем 1111'
+hashstr = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8
 
+
+
+dresult = mob.aggregate([ 
+    {   "$group": {
+        "_id": { "mobname":"mob_name$", "mobclass":"$mob_class"}, 
+        "count": {
+            "$sum": 1}}},
+        
+    {   "$sort" : { "count" : -1 } }
+    ])
+    
+for d in dresult:
+    print(d)
+    # mob_name = d.get("_id") 
+    # mob_class = d.get("_id2") 
+    # s = mob_name + mob_class
+    # hashstr = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8
+
+    # print(f'{d.get("count")} - {mob_name} {mob_class} /mob{hashstr}')  
+
+sys.exit(0)
 
 # import pandas as pd
 # import matplotlib as mpl
@@ -509,10 +516,6 @@ print('\n======== radeReport ==========\n')
 #             z = z + 1
 #     i = i + 1
 
-s = 'Статистика сражений 🚨Анклав Генри Эдем 1111'
-hashstr = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8
-print(f'{hashstr}')
-sys.exit(0)
 
 # for ts in (1579191477, 1579191477):
 # #     print(f"{datetime.fromtimestamp(ts)}")
