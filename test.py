@@ -383,13 +383,12 @@ dresult = mob.aggregate([
     ])
     
 for d in dresult:
-    print(d)
-    # mob_name = d.get("_id") 
-    # mob_class = d.get("_id2") 
-    # s = mob_name + mob_class
-    # hashstr = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8
+    mob_name = d["_id"]["mob_name"] 
+    mob_class = d["_id"]["mob_class"] 
+    s = mob_name + mob_class
+    hashstr = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8
 
-    # print(f'{d.get("count")} - {mob_name} {mob_class} /mob{hashstr}')  
+    print(f'{d.get("count")} - {mob_name} {mob_class} /mob{hashstr}')  
 
 sys.exit(0)
 
