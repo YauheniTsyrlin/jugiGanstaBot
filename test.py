@@ -375,7 +375,7 @@ dresult = mob.aggregate([
             } 
     },
     {   "$group": {
-        "_id": { "mobname":"$mob_name", "mobclass":"$mob_class"}, 
+        "_id": { "mob_name":"$mob_name", "mob_class":"$mob_class"}, 
         "count": {
             "$sum": 1}}},
         
