@@ -1609,7 +1609,11 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
                 return
 
-            if tools.getTimeEmoji(userIAm.getTimeUpdate()) not in ('👶','👦'):
+            # if tools.getTimeEmoji(userIAm.getTimeUpdate()) not in ('👶','👦'):
+            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
+            #     return
+
+            if userIAm.getTimeUpdate() > (datetime.now() - timedelta(days=1)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
                 return
 
@@ -3556,8 +3560,6 @@ def rade():
     tz = config.SERVER_MSK_DIFF
     now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
 
-    logger.info('check rade time: now ' + str(now_date))
-    
     # Новый год!
     if now_date.day == 1 and now_date.month == 1 and now_date.hour == 0 and now_date.minute in (0,10,15,20,25,35,35,50) and now_date.second < 15:
         for goat in getSetting(code='GOATS_BANDS'):
@@ -3599,7 +3601,7 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 13 and now_date.minute == 52 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
         report = ''
         updateUser(None)
         for user in USERS_ARR:

@@ -15,7 +15,8 @@ import random
 import users 
 import wariors
 import tools
-
+	
+import hashlib
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["jugidb"]
@@ -508,10 +509,10 @@ print('\n======== radeReport ==========\n')
 #             z = z + 1
 #     i = i + 1
 
-
-# for x in registered_users.find({'rank': None}):
-#     print(x)
-# sys.exit(0)
+s = 'Статистика сражений 🚨Анклав Генри Эдем 1111'
+hashstr = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8
+print(f'{hashstr}')
+sys.exit(0)
 
 # for ts in (1579191477, 1579191477):
 # #     print(f"{datetime.fromtimestamp(ts)}")
