@@ -3352,7 +3352,7 @@ def callback_query(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
         return
 
-    bot.answer_callback_query(call.id, "Ты сделал свой выбор")
+
     login = call.data.split('|')[1]
     user = getUserByLogin(login)
     
@@ -3366,7 +3366,7 @@ def callback_query(call):
             except:
                 pass
 
-
+            bot.answer_callback_query(call.id, "Ты сделал свой выбор")
             if login.lower() == 'всем':
                 for user in list(USERS_ARR):
                     user.addAccessory(acc['value'])
