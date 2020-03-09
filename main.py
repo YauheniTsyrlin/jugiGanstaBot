@@ -751,6 +751,11 @@ def getMobReport(mob_name: str, mob_class: str):
     report = report + f'💰 <b>В среднем добыто</b>:\n'
     report = report + f'      🕳 <b>{average_kr}</b>\n'
     report = report + f'      📦 <b>{average_mat}</b>\n'
+
+    all_counter = mob.find().count()
+    report = report + f'\n'
+    report = report + f'Всего записей в базе <b>{all_counter}</b>\n'
+
     return report
 
 # Handle new_chat_members
