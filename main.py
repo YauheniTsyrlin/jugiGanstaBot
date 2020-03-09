@@ -950,7 +950,7 @@ def send_welcome(message):
         mob_name = d["_id"]["mob_name"] 
         mob_class = d["_id"]["mob_class"] 
         s = mob_name + mob_class
-        hashstr_in_bd = f'mob{int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8}'
+        hashstr_in_bd = getMobHash(mob_name, mob_class)
         if hashstr == hashstr_in_bd:
             send_messages_big(message.chat.id, text=getMobReport(mob_name, mob_class))
             return
