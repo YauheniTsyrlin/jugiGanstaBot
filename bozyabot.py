@@ -59,10 +59,18 @@ def updateUser(newuser: users.User):
     for x in registered_users.find():
         USERS_ARR.append(users.importUser(x))
 
+def getMobHash(mob_name: str, mob_class: str):
+    stringforhash = mob_name + mob_class
+    hashstr = f'/mob{int(hashlib.sha256(stringforhash.encode("utf-8")).hexdigest(), 16) % 10**8}'  
+    return hashstr
+
 def getMobReport(mob_name: str, mob_class: str):
+    hashstr = getMobHash(mob_name, mob_class)
     
     report = '<b>Статистика сражений</b>\n'
-    report = report + f'<b>{mob_name}</b> {mob_class}\n\n'
+    report = report + f'<b>{mob_name}</b> {mob_class}\n'
+    report = report + f'Подробнее {hashstr}\n\n'
+    
     counter = 0
     win_counter = 0
 

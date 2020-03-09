@@ -641,9 +641,13 @@ def cure(logins, chat: str, probability = float(getSetting(code='PROBABILITY', n
             'dialog_flow_text': 'koronavirus_minus_member',
             'text': f'{names}'})
 
-def getMobReport(mob_name: str, mob_class: str):
+def getMobHash(mob_name: str, mob_class: str):
     stringforhash = mob_name + mob_class
     hashstr = f'/mob{int(hashlib.sha256(stringforhash.encode("utf-8")).hexdigest(), 16) % 10**8}'  
+    return hashstr
+
+def getMobReport(mob_name: str, mob_class: str):
+    hashstr = getMobHash(mob_name, mob_class)
 
     report = '<b>Статистика сражений</b>\n'
     report = report + f'<b>{mob_name}</b> {mob_class}\n'
@@ -927,6 +931,34 @@ def send_welcome(message):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то стартовать, но у него получилось лишь:\n' + getResponseDialogFlow(message, 'user_banned').fulfillment_text)
         return
+    
+    hashstr = message.text
+    dresult = mob.aggregate([ 
+    {   "$match": {
+                "kr": {"$gte": 0}
+            } 
+    },
+    {   "$group": {
+        "_id": { "mob_name":"$mob_name", "mob_class":"$mob_class"}, 
+        "count": {
+            "$sum": 1}}},
+        
+    {   "$sort" : { "count" : -1 } }
+    ])
+    
+    for d in dresult:
+        mob_name = d["_id"]["mob_name"] 
+        mob_class = d["_id"]["mob_class"] 
+        s = mob_name + mob_class
+        hashstr_in_bd = f'mob{int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8}'
+        if hashstr == hashstr_in_bd:
+            send_messages_big(message.chat.id, text=getMobReport(mob_name, mob_class))
+            return
+
+    report = '<b>Статистика сражений</b>\n'
+    report = report + f'<b>{mob_name}</b> {mob_class}\n'
+    report = report + f'Подробнее {hashstr}\n\n'
+
     send_messages_big(message.chat.id, text=f'Пока не реализовано!')
         
 # Handle '/start' and '/help'
