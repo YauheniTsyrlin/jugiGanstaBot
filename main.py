@@ -952,7 +952,7 @@ def send_mob_report(message):
         s = mob_name + mob_class
         hashstr_in_bd = getMobHash(mob_name, mob_class)
         if hashstr == hashstr_in_bd:
-            send_messages_big(message.chat.id, text=getMobReport(mob_name, mob_class))
+            #send_messages_big(message.chat.id, text=getMobReport(mob_name, mob_class))
             return
 
     report = '<b>Статистика сражений</b>\n'
