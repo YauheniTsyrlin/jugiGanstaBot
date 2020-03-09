@@ -640,9 +640,12 @@ def cure(logins, chat: str, probability = float(getSetting(code='PROBABILITY', n
             'text': f'{names}'})
 
 def getMobReport(mob_name: str, mob_class: str):
+    hashstr = f'/mob{int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8}'  
 
     report = '<b>Статистика сражений</b>\n'
-    report = report + f'<b>{mob_name}</b> {mob_class}\n\n'
+    report = report + f'<b>{mob_name}</b> {mob_class}\n'
+    report = report + f'Подробнее {hashstr}\n\n'
+
     counter = 0
     win_counter = 0
 
@@ -755,7 +758,7 @@ def getMobReport(mob_name: str, mob_class: str):
     all_counter = mob.find().count()
     report = report + f'\n'
     report = report + f'Всего записей в базе <b>{all_counter}</b>\n'
-
+    
     return report
 
 # Handle new_chat_members
