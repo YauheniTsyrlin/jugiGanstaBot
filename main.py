@@ -3585,16 +3585,16 @@ def rade():
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='8_MARCH'), 1)[0]['value']) 
     
     # День рождения
-    if now_date.hour == 8 and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 15 and now_date.second < 15:
         updateUser(None)
         for user in USERS_ARR:
             if user.getBirthday():
-                bday = time.gmtime(user.getBirthday())
+                bday = datetime.fromtimestamp(user.getBirthday())
                 if now_date.day == bday.day and now_date.month == bday.month: 
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 20 and now_date.minute == 5 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 20 and now_date.second < 15:
         updateUser(None)
         for user in USERS_ARR:
             if user.getRank()['update'] == 'auto':

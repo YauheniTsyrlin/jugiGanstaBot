@@ -149,7 +149,7 @@ def getMobReport(mob_name: str, mob_class: str):
         average_mat = int(average_mat / counter_mat)
     
     habitat_str = ''
-    for h in habitat.keys():
+    for h in sorted(habitat):
         if habitat_str == '':
             habitat_str = habitat_str + h
         else:
