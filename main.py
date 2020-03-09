@@ -925,7 +925,7 @@ def send_usset(message):
     bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
 
 # Handle '/mob'
-@bot.message_handler(func=lambda message: '/mob' in message.text, content_types=['text'])
+@bot.message_handler(func=lambda message: '/mob' in message.text)
 def send_welcome(message):
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
