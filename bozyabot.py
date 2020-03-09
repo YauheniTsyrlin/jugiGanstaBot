@@ -255,6 +255,7 @@ def main_message(message):
             return  
         
         if 'Сражение с' in message.text:
+            mob.remove()
             if userIAm == None:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('no_user')) 
                 return
