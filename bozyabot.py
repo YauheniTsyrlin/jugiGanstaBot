@@ -263,6 +263,11 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow('update_pip')) 
                 return
 
+            if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
+                send_messages_big(message.chat.id, text=getResponseDialogFlow('old_forward')) 
+                return
+                
+
             strings = message.text.split('\n')
             mob_name = ''
             mob_class = ''
