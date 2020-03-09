@@ -925,7 +925,7 @@ def send_usset(message):
     bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
 
 # Handle '/mob'
-@bot.message_handler(func=lambda message: message.text and '/mob' in message.text)
+@bot.message_handler(func=lambda message: message.text.startswith('/mob'))
 def send_mob_report(message):
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
@@ -952,7 +952,7 @@ def send_mob_report(message):
         s = mob_name + mob_class
         hashstr_in_bd = getMobHash(mob_name, mob_class)
         if hashstr == hashstr_in_bd:
-            #send_messages_big(message.chat.id, text=getMobReport(mob_name, mob_class))
+            send_messages_big(message.chat.id, text=getMobReport(mob_name, mob_class))
             return
 
     report = '<b>Статистика сражений</b>\n'
