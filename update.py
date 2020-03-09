@@ -2059,19 +2059,19 @@ print("#==========================#")
 print("#         USERS            #")    
 print("#==========================#")
 
-for x in registered_users.find({'rank': None}):
-    registered_users.update(
-        { 'login': x.get('login')},
-        { '$set': { 'rank': 
-                            {
-                                'name': '1',
-                                'value': '🧪Воин из пробирки',
-                                'bm': 50,
-                                'update': 'auto'
-                            }
-                    } 
-        }
-    )
+# for x in registered_users.find({'rank': None}):
+#     registered_users.update(
+#         { 'login': x.get('login')},
+#         { '$set': { 'rank': 
+#                             {
+#                                 'name': '1',
+#                                 'value': '🧪Воин из пробирки',
+#                                 'bm': 50,
+#                                 'update': 'auto'
+#                             }
+#                     } 
+#         }
+#     )
 
 # for x in registered_users.find():
 #     registered_users.update(
