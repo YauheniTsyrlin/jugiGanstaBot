@@ -1613,7 +1613,7 @@ def main_message(message):
             #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
             #     return
 
-            if userIAm.getTimeUpdate() > (datetime.now() - timedelta(days=1)).timestamp():
+            if userIAm.getTimeUpdate() > (datetime.now() - timedelta(hours=1)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
                 return
 
