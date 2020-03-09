@@ -926,7 +926,7 @@ def send_usset(message):
 
 # Handle '/mob'
 @bot.message_handler(func=lambda message: '/mob' in message.text)
-def send_welcome(message):
+def send_mob_report(message):
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то стартовать, но у него получилось лишь:\n' + getResponseDialogFlow(message, 'user_banned').fulfillment_text)
