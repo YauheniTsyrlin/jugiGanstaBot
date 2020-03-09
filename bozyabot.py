@@ -16,6 +16,8 @@ from aiohttp import web
 import requests
 from datetime import timedelta
 from datetime import datetime
+import hashlib
+
 
 import users
 import tools

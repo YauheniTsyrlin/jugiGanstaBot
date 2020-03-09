@@ -8,6 +8,8 @@ import tools
 import speech
 import dialogflow
 import matplot
+import hashlib
+
 
 import logging
 import ssl
