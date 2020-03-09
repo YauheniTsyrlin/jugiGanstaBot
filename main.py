@@ -646,6 +646,10 @@ def getMobHash(mob_name: str, mob_class: str):
     hashstr = f'/mob{int(hashlib.sha256(stringforhash.encode("utf-8")).hexdigest(), 16) % 10**8}'  
     return hashstr
 
+def getMobDetailReport(mob_name: str, mob_class: str):
+    hashstr = getMobHash(mob_name, mob_class)
+    return 'В разработке...'
+    
 def getMobReport(mob_name: str, mob_class: str):
     hashstr = getMobHash(mob_name, mob_class)
 
@@ -952,14 +956,10 @@ def send_mob_report(message):
         s = mob_name + mob_class
         hashstr_in_bd = getMobHash(mob_name, mob_class)
         if hashstr == hashstr_in_bd:
-            send_messages_big(message.chat.id, text=getMobReport(mob_name, mob_class))
+            send_messages_big(message.chat.id, text=getMobDetailReport(mob_name, mob_class))
             return
 
-    report = '<b>Статистика сражений</b>\n'
-    report = report + f'<b>{mob_name}</b> {mob_class}\n'
-    report = report + f'Подробнее {hashstr}\n\n'
-
-    send_messages_big(message.chat.id, text=f'Пока не реализовано!')
+    send_messages_big(message.chat.id, text=f'Не нашел ничего!')
         
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['start'])

@@ -64,13 +64,17 @@ def getMobHash(mob_name: str, mob_class: str):
     hashstr = f'/mob{int(hashlib.sha256(stringforhash.encode("utf-8")).hexdigest(), 16) % 10**8}'  
     return hashstr
 
+def getMobDetailReport(mob_name: str, mob_class: str):
+    hashstr = getMobHash(mob_name, mob_class)
+    return 'В разработке...'
+
 def getMobReport(mob_name: str, mob_class: str):
     hashstr = getMobHash(mob_name, mob_class)
     
     report = '<b>Статистика сражений</b>\n'
     report = report + f'<b>{mob_name}</b> {mob_class}\n'
     report = report + f'Подробнее {hashstr}\n\n'
-    
+
     counter = 0
     win_counter = 0
 
@@ -197,6 +201,34 @@ def getResponseDialogFlow(text):
     response = responseJson['result']['fulfillment']['speech'] # Разбираем JSON и вытаскиваем ответ
     # Если есть ответ от бота - присылаем юзеру, если нет - бот его не понял
     return response
+
+# Handle '/mob'
+@bot.message_handler(func=lambda message: message.text.startswith('/mob'))
+def send_mob_report(message):
+    hashstr = message.text
+    dresult = mob.aggregate([ 
+    {   "$match": {
+                "kr": {"$gte": 0}
+            } 
+    },
+    {   "$group": {
+        "_id": { "mob_name":"$mob_name", "mob_class":"$mob_class"}, 
+        "count": {
+            "$sum": 1}}},
+        
+    {   "$sort" : { "count" : -1 } }
+    ])
+    
+    for d in dresult:
+        mob_name = d["_id"]["mob_name"] 
+        mob_class = d["_id"]["mob_class"] 
+        s = mob_name + mob_class
+        hashstr_in_bd = getMobHash(mob_name, mob_class)
+        if hashstr == hashstr_in_bd:
+            send_messages_big(message.chat.id, text=getMobDetailReport(mob_name, mob_class))
+            return
+
+    send_messages_big(message.chat.id, text=f'Не нашел ничего!')
 
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
