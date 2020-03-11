@@ -101,8 +101,8 @@ def getSetting(code: str, name=None, value=None, id=None):
                     return arr['name'] 
         elif id:
             for arr in result.get('value'):
-                if arr['id'] == value:
-                    return arr['name'] 
+                if arr['id'] == id:
+                    return arr 
         else:
             return result.get('value')
 
