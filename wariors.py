@@ -303,6 +303,8 @@ class Warior(object):
                         self.setFraction('⚛️Республика')
                     elif (strings[i].startswith('👙')):
                         self.setFraction('👙Клуб бикини')
+                    elif (strings[i].startswith('🔰')):
+                        self.setFraction('🔰Конкорд')
                 i=i+1
 
     def toJSON(self):
