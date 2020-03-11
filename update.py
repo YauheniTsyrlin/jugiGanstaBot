@@ -1939,13 +1939,19 @@ myquery = { "code": 'USER_SETTINGS' }
 newvalues = { "$set": { "value": 
                     [
                         {
+                            'id': 'pidor_of_the_day',
                             'name': '👨‍❤️‍👨Участник "Пидор дня"',
                             'value': False
-                        }
-                        ,
+                        },
                         {
+                            'id': 'my_gerb',
                             'name': '🃏Мой герб',
                             'value': ""
+                        },
+                        {
+                            'id': 'partizan',
+                            'name': '🧠Играю в "П"артизана',
+                            'value': False
                         }
                         # ,
                         # {

@@ -880,7 +880,31 @@ def send_settings(message):
 
     if message.text == '🃏Мой герб':
         bot.send_message(message.chat.id, text='Отправь мне любой эмодзи. Только эмодзи может быть твоим гербом...')
-        bot.register_next_step_handler(message, process_gerb_step)    
+        bot.register_next_step_handler(message, process_gerb_step)
+    
+    if message.text == '🧠Играю в "П"артизана':
+        markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+        markup.add('Да ✅', 'Нет ❌')
+        bot.send_message(message.chat.id, text='Твой выбор...', reply_markup=markup)
+        bot.register_next_step_handler(message, process_partizan_step)   
+
+def process_partizan_step(message):
+    if message.text == 'Да ✅' or message.text == 'Нет ❌':
+        user = getUserByLogin(message.from_user.username)
+        setting = getSetting(code='USER_SETTINGS', id='partizan')
+        if message.text == 'Да ✅':
+            setting.update({'value': True})
+        else:
+            setting.update({'value': False})
+        user.addSettings(setting)
+        updateUser(user)
+
+        markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+        markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
+        bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
+        break
+    else:
+        bot.send_message(message.chat.id, text='Похоже, что ты меня не понял...')
 
 def process_gerb_step(message):
     if tools.isOneEmojify(message.text):
