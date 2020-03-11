@@ -382,31 +382,43 @@ newvalues = { "$set": { "value":
                             ] 
                         },
                         {
-                            'name': 'REWARDS',
+                            'name': 'CLOTHES',
                             'value':
                             [
                                 
                                 {
-                                    'name': '1',
-                                    'value': '🔬 Халат учёного',
-                                    'cost': 1
-                                    
+                                    'code': '1',
+                                    'name': '🔬 Халат учёного',
+                                    'cost': 5,
+                                    'weight': 0.3,
+                                    'state': [
+                                                {'new': 0.8},
+                                                {'a little broken': 0.6}, 
+                                                {'broken',: 0.4}, 
+                                                {'tatters': 0.2}
+                                            ],
+                                    'decay': 0.01,
+                                    'position': ['dressed','in inventory', 'in the closet', 'on the ground'],
+
                                 },
                                 {
-                                    'name': '2',
-                                    'value': '🎩 Шляпа Линкольна',
-                                    'cost': 1
-                                },
-                                {
-                                    'name': '3',
+                                    'code': '3',
                                     'value': '👒 Соломенная шляпка',
                                     'cost': 1
                                 },
                                 {
-                                    'name': '4',
+                                    'code': '4',
                                     'value': '🩲 Трусы охотника на Трогов',
                                     'cost': 1
-                                },
+                                }
+                            ]
+                        },
+                        {
+                            'name': 'REWARDS',
+                            'value':
+                            [
+                                
+                                
                                 {
                                     'name': '5',
                                     'value': '🐚 Труп улитки',

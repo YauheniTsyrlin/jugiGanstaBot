@@ -349,6 +349,8 @@ def getWariorFraction(string: str):
         return '⚛️Республика'
     elif (string.startswith('👙')):
         return '👙Клуб бикини'
+    elif (string.startswith('🔰')):
+        return '🔰Конкорд'
 
 def getWariorByName(name: str, fraction: str):
     name = tools.deEmojify(name).strip()
@@ -3657,25 +3659,27 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour == 22 and now_date.minute == 17 and now_date.second < 15:
         report = ''
         updateUser(None)
         for user in USERS_ARR:
-            report = report + f'{user.getLogin()} {user.getBm()} {user.getRank()["update"]} {user.getRank()["name"]}\n'
             if user.getRank()['update'] == 'auto':
                 for rank in getSetting(code='RANK', name='MILITARY'):
                     if rank['bm'] > user.getBm():
                         break
 
-                report = report + f'{rank["bm"]} {rank["name"]} {rank["value"]}\n'
                 if rank['name'] == user.getRank()['name']:
                     pass
                 else:
+                    report = report + f'За достижение {rank["bm"]} бандит {rank["name"]} повышен в звании. Теперь он {rank["value"]}\n'
                     user.setRank(rank)
                     updateUser(user)
                     goat = getMyGoat(user.getLogin())
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️ {rank["value"]}')
-        #send_message_to_admin(report)
+        if report == '':
+            pass:
+        else:
+            send_message_to_admin(report)
     
     # Пидор дня
     if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
