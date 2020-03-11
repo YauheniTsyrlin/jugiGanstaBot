@@ -3659,7 +3659,7 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 22 and now_date.minute == 23 and now_date.second < 15:
+    if now_date.hour == 22 and now_date.minute == 24 and now_date.second < 15:
         report = ''
         updateUser(None)
         for user in USERS_ARR:
@@ -3677,7 +3677,7 @@ def rade():
                     goat = getMyGoat(user.getLogin())
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️ {rank["value"]}')
         if report == '':
-            pass:
+            pass
         else:
             send_message_to_admin(report)
     
