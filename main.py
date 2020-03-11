@@ -911,7 +911,7 @@ def process_partizan_step(message):
 def process_gerb_step(message):
     if tools.isOneEmojify(message.text):
         for user in list(USERS_ARR):
-            if user.getSettingValue('🃏Мой герб') and user.getSettingValue('🃏Мой герб') == message.text:
+            if user.getSettingValue(name='🃏Мой герб') and user.getSettingValue(name='🃏Мой герб') == message.text:
                 bot.send_message(message.chat.id, text=f'Поздняк, этот герб уже забил за собой {user.getLogin()}')
                 return
 
@@ -1567,7 +1567,7 @@ def main_message(message):
         
         i = 1
         for user in usesrOnDungeon:
-            gerb = user.getSettingValue("🃏Мой герб")
+            gerb = user.getSettingValue(name="🃏Мой герб")
             if gerb == None: gerb = ''
 
             text = text + f'  {i}. {gerb}<b>{user.getName()}</b>\n'
@@ -2098,6 +2098,27 @@ def main_message(message):
 
                         if len(pingusers) > 0:
                             send_messages_big(message.chat.id, text=first_string + report)
+                    elif 'letsgame' == response.split(':')[1]:
+                        #jugi:letsgame:partizan
+                        if response.split(":")[2] == 'partizan':
+                            # if not (message.from_user.username == 'Lena_Lenochka_32'):
+                            #     send_messages_big(message.chat.id, text='Тебе это не положено! \nПозови ЛеДонну и убери свои шаловливые руки от клавиатуры!')
+                            #     return
+                            report = '! Бандиты с 🧠!\nСобираемся на игру!\n\n'
+                            counter = 0
+                            for user in list(USERS_ARR):
+                                if user.isPing():
+                                    if user.getSettingValue(id='partizan'):
+                                        counter = counter + 1
+                                        report = report + f'{counter}. @{user.getNameAndGerb()}\n'    
+                            if counter > 0
+                                send_messages_big(message.chat.id, text=report)
+                            else:
+                                send_messages_big(message.chat.id, text=f'Никто не записался...')
+
+                        else: 
+                            send_messages_big(message.chat.id, text='Я не знаю игру с названием {response.split(":")[2]}')
+
                     elif 'setping' == response.split(':')[1]:
                         # jugi:setping:True:login
                         login = response.split(":")[3].replace('@','')
@@ -2684,7 +2705,7 @@ def main_message(message):
                                     users_in_cupture.append(user)
 
                                 if user:
-                                    gerb = user.getSettingValue("🃏Мой герб")
+                                    gerb = user.getSettingValue(name="🃏Мой герб")
                                     if gerb == None: gerb = ''
                                     users_on_cupture.append(user)
                                     report_yes = report_yes + f'  {i}. {gerb}{user.getName()}\n'
@@ -2705,7 +2726,7 @@ def main_message(message):
                                 i = i + 1
                                 user = getUserByLogin(dun['login'])
                                 if user:
-                                    gerb = user.getSettingValue("🃏Мой герб")
+                                    gerb = user.getSettingValue(name="🃏Мой герб")
                                     if gerb == None: gerb = ''
                                     users_off_cupture.append(user)
                                     report_no = report_no + f'  {i}. {gerb}{user.getName()}\n'
@@ -2880,7 +2901,7 @@ def main_message(message):
                             user = getUserByName(user_name)
                             if user == None: continue
 
-                            gerb = user.getSettingValue("🃏Мой герб")
+                            gerb = user.getSettingValue(name="🃏Мой герб")
                             if gerb == None: gerb = ''
 
                             i = i + 1
@@ -2936,7 +2957,7 @@ def main_message(message):
                             user = getUserByName(user_name)
                             if user == None: continue
 
-                            gerb = user.getSettingValue("🃏Мой герб")
+                            gerb = user.getSettingValue(name="🃏Мой герб")
                             if gerb == None: gerb = ''
                                 
                             i = i + 1
@@ -3150,7 +3171,7 @@ def callback_query(call):
         i = i + 1
         user = getUserByLogin(dun['login'])
         if user:
-            gerb = user.getSettingValue("🃏Мой герб")
+            gerb = user.getSettingValue(name="🃏Мой герб")
             if gerb == None: gerb = ''
             report_yes = report_yes + f'  {i}. {gerb}{user.getName()}\n'
         else:
@@ -3170,7 +3191,7 @@ def callback_query(call):
         i = i + 1
         user = getUserByLogin(dun['login'])
         if user:
-            gerb = user.getSettingValue("🃏Мой герб")
+            gerb = user.getSettingValue(name="🃏Мой герб")
             if gerb == None: gerb = ''
             report_no = report_no + f'  {i}. {gerb}{user.getName()}\n'
         else:

@@ -337,7 +337,7 @@ class User(object):
         return self.name
 
     def getNameAndGerb(self):
-        gerb = self.getSettingValue("🃏Мой герб")
+        gerb = self.getSettingValue(name="🃏Мой герб")
         if gerb == None: gerb = ''
         return gerb+self.name
 
@@ -542,12 +542,18 @@ class User(object):
                 find = True
         if not find:
             self.settings.append(settingItem)
-    def getSettingValue(self, settingItem: str):
+    def getSettingValue(self, name=None, id=None):
         if self.settings == None:
             self.settings = []
         for setting in self.settings:
-            if setting["name"] == settingItem:
-                return setting["value"]
+            try:
+                if id:
+                    if setting["id"] == id:
+                        return setting["value"]
+                elif name:
+                    if setting["name"] == name:
+                        return setting["value"]
+            except: pass
         return None
 
     def removeSettings(self, settingItem: str):

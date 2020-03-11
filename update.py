@@ -16,11 +16,24 @@ plan_raids      = mydb["rades"]
 pending_messages = mydb["pending_messages"]
 mob             = mydb["mob"]
 
-def getSetting(code: str):
+def getSetting(code: str, name=None, value=None, id=None):
     """ Получение настройки """
     result = settings.find_one({'code': code})
     if (result):
-        return result.get('value') 
+        if name:
+            for arr in result.get('value'):
+                if arr['name'] == name:
+                    return arr['value'] 
+        elif value:
+            for arr in result.get('value'):
+                if arr['value'] == value:
+                    return arr['name'] 
+        elif id:
+            for arr in result.get('value'):
+                if arr['id'] == id:
+                    return arr 
+        else:
+            return result.get('value')
 
 def setSetting(login: str, code: str, value: str):
     """ Сохранение настройки """
