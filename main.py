@@ -3659,7 +3659,7 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 22 and now_date.minute == 24 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
         report = ''
         updateUser(None)
         for user in USERS_ARR:
@@ -3682,7 +3682,7 @@ def rade():
             send_message_to_admin(report)
     
     # Пидор дня
-    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour == 22 and now_date.minute == 33 and now_date.second < 15:
         logger.info('Pidor of the day!')
         updateUser(None)
         user_in_game = []
