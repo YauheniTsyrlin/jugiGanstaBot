@@ -2111,7 +2111,7 @@ def main_message(message):
                                     if user.getSettingValue(id='partizan'):
                                         counter = counter + 1
                                         report = report + f'{counter}. @{user.getNameAndGerb()}\n'    
-                            if counter > 0
+                            if counter > 0:
                                 send_messages_big(message.chat.id, text=report)
                             else:
                                 send_messages_big(message.chat.id, text=f'Никто не записался...')
