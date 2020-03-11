@@ -2104,7 +2104,7 @@ def main_message(message):
                             # if not (message.from_user.username == 'Lena_Lenochka_32'):
                             #     send_messages_big(message.chat.id, text='Тебе это не положено! \nПозови ЛеДонну и убери свои шаловливые руки от клавиатуры!')
                             #     return
-                            report = '! Бандиты с 🧠!\nСобираемся на игру!\n\n'
+                            report = 'Бандиты с 🧠!\nСобираемся на игру!\n\n'
                             counter = 0
                             for user in list(USERS_ARR):
                                 if user.isPing():
