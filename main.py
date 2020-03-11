@@ -87,7 +87,7 @@ acc_doctor_mask = '🥽 Медицинская маска'
 acc_doctor_main = '💉 Удостоверение "Главврач"'
 doctors = ['💉 Удостоверение "Медбрат"', '💉 Удостоверение "Медсестричка"', '💉 Удостоверение "Главврач"']
 
-def getSetting(code: str, name=None, value=None):
+def getSetting(code: str, name=None, value=None, id=None):
     """ Получение настройки """
     result = settings.find_one({'code': code})
     if (result):
@@ -99,7 +99,10 @@ def getSetting(code: str, name=None, value=None):
             for arr in result.get('value'):
                 if arr['value'] == value:
                     return arr['name'] 
-
+        elif id:
+            for arr in result.get('value'):
+                if arr['id'] == value:
+                    return arr['name'] 
         else:
             return result.get('value')
 
@@ -902,7 +905,6 @@ def process_partizan_step(message):
         markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
         markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
         bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
-        break
     else:
         bot.send_message(message.chat.id, text='Похоже, что ты меня не понял...')
 
