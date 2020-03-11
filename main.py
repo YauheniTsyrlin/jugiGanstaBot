@@ -2110,7 +2110,7 @@ def main_message(message):
                                 if user.isPing():
                                     if user.getSettingValue(id='partizan'):
                                         counter = counter + 1
-                                        report = report + f'{counter}. @{user.getNameAndGerb()}\n'    
+                                        report = report + f'{counter}. @{user.getLogin()} {user.getNameAndGerb()}\n'    
                             if counter > 0:
                                 send_messages_big(message.chat.id, text=report)
                             else:
