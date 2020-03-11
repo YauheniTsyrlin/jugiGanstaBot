@@ -143,7 +143,9 @@ def getFractionFromString(string: str):
     elif ('⚛️' in string):
         fraction = '⚛️Республика'
     elif ('👙' in string):
-        fraction = '👙Клуб бикини'  
+        fraction = '👙Клуб бикини' 
+    elif ('🔰' in string):
+        fraction = '🔰Конкорд' 
     return fraction
 
 def fromTopToWariorsBM(forward_date, message, wariors):
