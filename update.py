@@ -394,7 +394,7 @@ newvalues = { "$set": { "value":
                                     'state': [
                                                 {'new': 0.8},
                                                 {'a little broken': 0.6}, 
-                                                {'broken',: 0.4}, 
+                                                {'broken': 0.4}, 
                                                 {'tatters': 0.2}
                                             ],
                                     'decay': 0.01,
