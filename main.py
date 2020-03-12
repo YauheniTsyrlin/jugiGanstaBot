@@ -3817,7 +3817,7 @@ def rade():
                 statistic(goat['name'])
 
 
-    if now_date.hour in (0, 9, 17) and now_date.minute == 54 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 7 and now_date.second < 15:
         logger.info('Clear raid info!')
         for goat in getSetting(code='GOATS_BANDS'):
             setGiftsForRaid(goat["name"])
@@ -3826,7 +3826,7 @@ def rade():
     if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
         logger.info('Clear raid info!')
         for goat in getSetting(code='GOATS_BANDS'):
-            #setGiftsForRaid()
+            setGiftsForRaid(goat["name"])
             registered_users.update_many(
                 {'band':{'$in':getGoatBands(goat.get('name'))}},
                 { '$set': { 'raidlocation': None} }
@@ -3989,28 +3989,23 @@ def setGiftsForRaid(name: str):
         name = raid["login"]
         if user:
             name = user.getNameAndGerb().strip()
-            if user.isAccessoryItem('🔩 Болт М69, возложенный на рейд'):
-                if user.isAccessoryItem('🔩🔩 Болт М228, возложенный на рейд'):
-                    if user.isAccessoryItem('🔩🔩🔩 Болт М404, возложенный на рейд'):
-                        if user.isAccessoryItem('🔩🔩🔩🔩 Болт М1488, возложенный на рейд'):
+            acc = '🔩 Болт М69, возложенный на рейд'
+            if user.isAccessoryItem(acc):
+                acc = '🔩🔩 Болт М228, возложенный на рейд'
+                if user.isAccessoryItem(acc):
+                    acc = '🔩🔩🔩 Болт М404, возложенный на рейд'
+                    if user.isAccessoryItem(acc):
+                        acc = '🔩🔩🔩🔩 Болт М1488, возложенный на рейд'
+                        if user.isAccessoryItem(acc):
+                            acc = '🎫🍼 Билет на гигантскую бутылку'
                             if user.isAccessoryItem('🎫🍼 Билет на гигантскую бутылку'):
-                                send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\nНа выход!')
-                            else:
-                                send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n🎫🍼 Билет на гигантскую бутылку!')
-                                #user.addAccessory('🎫🍼 Билет на гигантскую бутылку')
-                        else:
-                            send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n🔩🔩🔩🔩 Болт М1488, возложенный на рейд!')
-                            #user.addAccessory('🔩🔩🔩🔩 Болт М1488, возложенный на рейд')
-                    else:
-                        send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n🔩🔩🔩 Болт М404, возложенный на рейд!')
-                        #user.addAccessory('🔩🔩🔩 Болт М404, возложенный на рейд')
-                else:
-                    send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n🔩🔩 Болт М228, возложенный на рейд!')
-                    #user.addAccessory('🔩🔩 Болт М228, возложенный на рейд')    
-            else:
-                send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n🔩 Болт М69, возложенный на рейд!')
-                #user.addAccessory('🔩 Болт М69, возложенный на рейд')
+                                send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\nНа выход за проёбы рейдов!')
+                                return
 
+            send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n{acc}!')
+            # user.addAccessory(acc)
+            # send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}')    
+            # updateUser(user)
 
 def statistic(goatName: str):
     report = f'🐐<b>{goatName}</b>\n\n'
