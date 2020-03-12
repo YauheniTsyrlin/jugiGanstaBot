@@ -3817,10 +3817,10 @@ def rade():
                 statistic(goat['name'])
 
 
-    if now_date.hour in (1, 9, 17) and now_date.minute == 13 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 20 and now_date.second < 15:
         logger.info('Clear raid info!')
         for goat in getSetting(code='GOATS_BANDS'):
-            setGiftsForRaid(goat["name"])
+            setGiftsForRaid(goat)
 
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
@@ -3974,22 +3974,19 @@ def radeReport(goat, ping=False):
                 ping_on_reade(bands.get("usersoffrade"), goat['chats']['secret'] )
     return report
 
-def setGiftsForRaid(name: str):
-    send_message_to_admin(f'⚠️⚠️⚠️ {name}!')
-    raid = getPlanedRaidLocation(goatName=name, planRaid=False)
+def setGiftsForRaid(goat):
+    raid = getPlanedRaidLocation(goatName=goat['name'], planRaid=False)
     raid.update({"rade_date":  (datetime(2020, 3, 12, 17, 0)).timestamp()    })
     send_message_to_admin(f'⚠️⚠️ {datetime.fromtimestamp(raid["rade_date"])}!')
  
     for raid in report_raids.find(
         {   "date": raid['rade_date'],
-            "band": {'$in': getGoatBands(name)},
+            "band": {'$in': getGoatBands(goat['name'])},
             "on_raid": False,
             "planed_location": {'$ne':None}   
         }):
         user = getUserByLogin(raid["login"])
-        name = raid["login"]
         if user:
-            name = user.getNameAndGerb().strip()
             acc = '🔩 Болт М69, возложенный на рейд'
             if user.isAccessoryItem(acc):
                 acc = '🔩🔩 Болт М228, возложенный на рейд'
@@ -4005,7 +4002,7 @@ def setGiftsForRaid(name: str):
 
             send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n{acc}!')
             user.addAccessory(acc)
-            send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}')    
+            send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}')    
             updateUser(user)
 
 def statistic(goatName: str):
