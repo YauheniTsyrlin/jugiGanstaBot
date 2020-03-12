@@ -3817,7 +3817,7 @@ def rade():
                 statistic(goat['name'])
 
 
-    if now_date.hour in (0, 9, 17) and now_date.minute == 25 and now_date.second < 15:
+    if now_date.hour in (0, 9, 17) and now_date.minute == 28 and now_date.second < 15:
         logger.info('Clear raid info!')
         for goat in getSetting(code='GOATS_BANDS'):
             setGiftsForRaid()
@@ -3826,11 +3826,11 @@ def rade():
     if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
         logger.info('Clear raid info!')
         for goat in getSetting(code='GOATS_BANDS'):
-            # setGiftsForRaid()
-            # registered_users.update_many(
-            #     {'band':{'$in':getGoatBands(goat.get('name'))}},
-            #     { '$set': { 'raidlocation': None} }
-            # )
+            #setGiftsForRaid()
+            registered_users.update_many(
+                {'band':{'$in':getGoatBands(goat.get('name'))}},
+                { '$set': { 'raidlocation': None} }
+            )
         updateUser(None)
 
 def getPlanedRaidLocation(goatName: str, planRaid = True):
