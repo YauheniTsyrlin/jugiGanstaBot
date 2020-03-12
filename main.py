@@ -420,7 +420,7 @@ def get_raid_plan(raid_date, goat):
             for u in users_onraid:
                 i = i + 1
                 reg_usr = getUserByLogin(u)
-                plan_for_date = plan_for_date + f'    {i}. {reg_usr.getName()}\n'
+                plan_for_date = plan_for_date + f'    {i}. {reg_usr.getNameAndGerb()}\n'
         
         find = True
 
@@ -1220,7 +1220,7 @@ def main_message(message):
             else:
                 user.addAccessory(acc)
                 updateUser(user)
-                send_messages_big(message.chat.id, text=user.getName() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
+                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
         return
 
     if (message.text.startswith('📟Пип-бой 3000') and 
@@ -1442,7 +1442,7 @@ def main_message(message):
 
                 if '👂' in strings[i]:
                     name = strings[i]
-                    name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
+                    name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
                     name = name.split('@')[1].split('👂')[0].strip()
                     u = getUserByName(name)
                     
@@ -1488,7 +1488,7 @@ def main_message(message):
                 report = report + f'🧘‍♂️ <b>на рейде</b>: <b>{onraidcounter}/{allcounter}</b>\n'
                 i = 1
                 for onu in sorted(onraidusers, key = lambda i: i.getRaidWeight(), reverse=True):
-                    report = report +  f'{i}.{onu.getFraction()[0:1]}{onu.getRaidWeight()} {onu.getName()} 👊{onu.getRaidLocation()}км\n'
+                    report = report +  f'{i}.{onu.getFraction()[0:1]}{onu.getRaidWeight()} {onu.getNameAndGerb()} 👊{onu.getRaidLocation()}км\n'
                     i = i + 1
                 report = report + f'\n<b>Общий вес</b>: 🏋️‍♂️{onraidrw}/{allrw} <b>{str(int(onraidrw/allrw*100))}%</b>\n'
             report = report + '\n'
@@ -1567,10 +1567,7 @@ def main_message(message):
         
         i = 1
         for user in usesrOnDungeon:
-            gerb = user.getSettingValue(name="🃏Мой герб")
-            if gerb == None: gerb = ''
-
-            text = text + f'  {i}. {gerb}<b>{user.getName()}</b>\n'
+            text = text + f'  {i}. <b>{user.getNameAndGerb()}</b>\n'
             i = i + 1
 
         bot.delete_message(message.chat.id, message.message_id)
@@ -1917,7 +1914,7 @@ def main_message(message):
                 ban_date = datetime.fromtimestamp(user.getTimeBan()) + timedelta(seconds=sec) 
 
             user.setTimeBan(ban_date.timestamp())
-            report = f'{user.getName()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно!'
+            report = f'{user.getNameAndGerb()} будет выписан бан! Злой Джу определил, что ⏰{sec} секунд(ы) будет достаточно!'
             updateUser(user)
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text + f'\n{report}')
         elif (callJugi and 'статус ' in message.text.lower() and ' @' in message.text):
@@ -2118,7 +2115,6 @@ def main_message(message):
 
                         else: 
                             send_messages_big(message.chat.id, text='Я не знаю игру с названием {response.split(":")[2]}')
-
                     elif 'setping' == response.split(':')[1]:
                         # jugi:setping:True:login
                         login = response.split(":")[3].replace('@','')
@@ -2187,7 +2183,7 @@ def main_message(message):
                         ban_date = datetime.now() + timedelta(seconds=sec, hours=tz.hour)
                         userIAm.setTimeBan(ban_date.timestamp())
 
-                        report = f'<b>{response.split(":")[2]}</b>\n<b>{userIAm.getName()}</b> выписан бан! ⏰{sec} секунд(ы) в тишине научат тебя хорошему поведению!'
+                        report = f'<b>{response.split(":")[2]}</b>\n<b>{userIAm.getNameAndGerb()}</b> выписан бан! ⏰{sec} секунд(ы) в тишине научат тебя хорошему поведению!'
                         updateUser(userIAm)
 
                         photo = random.sample(getSetting(code='STICKERS', name='BOT_FUCKOFF'), 1)[0]['value']
@@ -2492,7 +2488,7 @@ def main_message(message):
                                     updateTgUser(tguser)
                                 else:
                                     user.setTimeBan(date_for.timestamp())
-                                    report = f'{user.getName()} забанен нахрен до\n'+'⏰' + time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime(date_for.timestamp()))
+                                    report = f'{user.getNameAndGerb()} забанен нахрен до\n'+'⏰' + time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime(date_for.timestamp()))
                                     updateUser(user)
                             else:
                                 for u in list(USERS_ARR):
@@ -2513,7 +2509,7 @@ def main_message(message):
                         else:
                             if not allUser:
                                 user.setTimeBan(None)
-                                report = f'{user.getName()} разбанен. Говори, дорогой!'
+                                report = f'{user.getNameAndGerb()} разбанен. Говори, дорогой!'
                                 updateUser(user)
                             else:
                                 for u in list(USERS_ARR):
@@ -2705,10 +2701,8 @@ def main_message(message):
                                     users_in_cupture.append(user)
 
                                 if user:
-                                    gerb = user.getSettingValue(name="🃏Мой герб")
-                                    if gerb == None: gerb = ''
                                     users_on_cupture.append(user)
-                                    report_yes = report_yes + f'  {i}. {gerb}{user.getName()}\n'
+                                    report_yes = report_yes + f'  {i}. {user.getNameAndGerb()}\n'
                                 else:
                                     report_yes = report_yes + f'  {i}. {dun["login"]}\n'
 
@@ -2726,10 +2720,8 @@ def main_message(message):
                                 i = i + 1
                                 user = getUserByLogin(dun['login'])
                                 if user:
-                                    gerb = user.getSettingValue(name="🃏Мой герб")
-                                    if gerb == None: gerb = ''
                                     users_off_cupture.append(user)
-                                    report_no = report_no + f'  {i}. {gerb}{user.getName()}\n'
+                                    report_no = report_no + f'  {i}. {user.getNameAndGerb()}\n'
                                 else:
                                     report_no = report_no + f'  {i}. {dun["login"]}\n'
 
@@ -3171,9 +3163,7 @@ def callback_query(call):
         i = i + 1
         user = getUserByLogin(dun['login'])
         if user:
-            gerb = user.getSettingValue(name="🃏Мой герб")
-            if gerb == None: gerb = ''
-            report_yes = report_yes + f'  {i}. {gerb}{user.getName()}\n'
+            report_yes = report_yes + f'  {i}. {user.getNameAndGerb()}\n'
         else:
             report_yes = report_yes + f'  {i}. {dun["login"]}\n'
 
@@ -3191,9 +3181,7 @@ def callback_query(call):
         i = i + 1
         user = getUserByLogin(dun['login'])
         if user:
-            gerb = user.getSettingValue(name="🃏Мой герб")
-            if gerb == None: gerb = ''
-            report_no = report_no + f'  {i}. {gerb}{user.getName()}\n'
+            report_no = report_no + f'  {i}. {user.getNameAndGerb()}\n'
         else:
             report_no = report_no + f'  {i}. {dun["login"]}\n'
 
@@ -3362,7 +3350,7 @@ def callback_query(call):
         
         text=f'Всем бандитам будет что-то выдано! Просмотрено {counter} аксессуаров'
         if user:
-            text=f'Аксессуары {user.getName()}:\n{user.getAccessoryReport()}'
+            text=f'Аксессуары {user.getNameAndGerb()}:\n{user.getAccessoryReport()}'
         
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
         return
@@ -3397,7 +3385,7 @@ def callback_query(call):
             markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_next|{login}|{i+10}"))
             markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
 
-        text=f'Аксессуары {user.getName()}:\n{user.getAccessoryReport()}'
+        text=f'Аксессуары {user.getNameAndGerb()}:\n{user.getAccessoryReport()}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
         return
 
@@ -3425,7 +3413,7 @@ def callback_query(call):
             else:
                 user.addAccessory(acc['value'])
                 updateUser(user)
-                send_messages_big(call.message.chat.id, text=user.getName() + '!\n' + getResponseDialogFlow(call.message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc["value"]}') 
+                send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc["value"]}') 
                 break
 
     markupinline = InlineKeyboardMarkup()
@@ -3442,7 +3430,7 @@ def callback_query(call):
             break
         i = i + 1
     if user:
-        text=f'Аксессуары {user.getName()}:\n{user.getAccessoryReport()}'
+        text=f'Аксессуары {user.getNameAndGerb()}:\n{user.getAccessoryReport()}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("pickupaccessory"))
@@ -3790,7 +3778,7 @@ def rade():
                 pidor1 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
                 pidor2 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
 
-            text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getName()} (@{userWin.getLogin()})!!!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, под вздохи толпы надевают на твою голову 👑 золотую корону и, ласково шлепая тебя по попе, сгоняют с помоста!\n🎁 Самое время поздравить сегодняшнего победителя!'
+            text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!!!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, под вздохи толпы надевают на твою голову 👑 золотую корону и, ласково шлепая тебя по попе, сгоняют с помоста!\n🎁 Самое время поздравить сегодняшнего победителя!'
             chat = getMyGoat(userWin.getLogin())['chats']['info']
             send_messages_big(chat, text=text)
 
@@ -3803,7 +3791,7 @@ def rade():
             
             userWin.addAccessory(acc)
             updateUser(userWin)
-            send_messages_big(chat, text=userWin.getName() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
+            send_messages_big(chat, text=userWin.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
             row = {}
             row.update({'date':now_date.timestamp()})
             row.update({'login':userWin.getLogin()})
@@ -4050,11 +4038,11 @@ def statistic(goatName: str):
         count = d.get("count")
 
         if isGoatBoss(name):
-            report_boss = f'😎 наш босс <b>{user.getName()}</b> посетил рейды {count} раз. Скажите за это ему "Спасибо!" при встрече.\n'
+            report_boss = f'😎 наш босс <b>{user.getNameAndGerb()}</b> посетил рейды {count} раз. Скажите за это ему "Спасибо!" при встрече.\n'
             continue
         
         if user:
-            name = user.getName().strip()
+            name = user.getNameAndGerb().strip()
         report = report + f'{count} {name}\n'
 
 
@@ -4112,7 +4100,7 @@ def statistic(goatName: str):
         user = getUserByLogin(name)
         login = name
         if user:
-            name = user.getName().strip()
+            name = user.getNameAndGerb().strip()
 
         if bad_raid_counter == count:
             hrenraid.append(f'@{login} {name}\n')
