@@ -3817,7 +3817,7 @@ def rade():
                 statistic(goat['name'])
 
 
-    if now_date.hour in (1, 9, 17) and now_date.minute == 20 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 22 and now_date.second < 15:
         logger.info('Clear raid info!')
         for goat in getSetting(code='GOATS_BANDS'):
             setGiftsForRaid(goat)
@@ -4002,7 +4002,7 @@ def setGiftsForRaid(goat):
 
             send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n{acc}!')
             user.addAccessory(acc)
-            send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}')    
+            send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}')    
             updateUser(user)
 
 def statistic(goatName: str):
