@@ -3817,7 +3817,7 @@ def rade():
                 statistic(goat['name'])
 
 
-    if now_date.hour in (0, 9, 17) and now_date.minute == 43 and now_date.second < 15:
+    if now_date.hour in (0, 9, 17) and now_date.minute == 47 and now_date.second < 15:
         logger.info('Clear raid info!')
         for goat in getSetting(code='GOATS_BANDS'):
             setGiftsForRaid(goat["name"])
@@ -3837,6 +3837,9 @@ def getPlanedRaidLocation(goatName: str, planRaid = True):
     tz = config.SERVER_MSK_DIFF
     raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
     hour = raid_date.hour
+
+    if not planRaid and raid_date.hour <= 1:
+        raid_date = raid_date - timedelta(days=1)
 
     if planRaid and raid_date.hour >= 17:
         raid_date = raid_date + timedelta(days=1)
