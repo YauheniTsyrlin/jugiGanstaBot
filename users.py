@@ -555,7 +555,6 @@ class User(object):
                         return setting["value"]
             except: pass
         return None
-
     def removeSettings(self, settingItem: str):
         if self.settings == None:
             self.settings = []

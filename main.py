@@ -3816,13 +3816,21 @@ def rade():
                 saveRaidResult(goat)
                 statistic(goat['name'])
 
+
+    if now_date.hour in (0, 9, 17) and now_date.minute == 25 and now_date.second < 15:
+        logger.info('Clear raid info!')
+        for goat in getSetting(code='GOATS_BANDS'):
+            setGiftsForRaid()
+
+
     if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
         logger.info('Clear raid info!')
         for goat in getSetting(code='GOATS_BANDS'):
-            registered_users.update_many(
-                {'band':{'$in':getGoatBands(goat.get('name'))}},
-                { '$set': { 'raidlocation': None} }
-            )
+            # setGiftsForRaid()
+            # registered_users.update_many(
+            #     {'band':{'$in':getGoatBands(goat.get('name'))}},
+            #     { '$set': { 'raidlocation': None} }
+            # )
         updateUser(None)
 
 def getPlanedRaidLocation(goatName: str, planRaid = True):
@@ -3963,6 +3971,57 @@ def radeReport(goat, ping=False):
                 ping_on_reade(bands.get("usersoffrade"), goat['chats']['secret'] )
     return report
 
+def setGiftsForRaid(goatname, raid_date):
+    raid = getPlanedRaidLocation(goatname, false)
+    rade_date = raid['rade_date']
+    send_message_to_admin(f'⚠️⚠️ {datetime.fromtimestamp(raid.["rade_date"])}!')
+ 
+    for raid in report_raids.find([
+        {   "$match": {
+                "$and" : [
+                    { 
+                        "date": raid_date       
+                    },
+                    {
+                        "band": {'$in': getGoatBands(goatname)}   
+                    },
+                    {
+                        "on_raid": False
+                    },
+                    {
+                        "planed_location": {'$ne':None}   
+                    }
+                ]
+            }
+        }
+    ]):
+        user = getUserByLogin(raid["login"])
+        name = raid["login"]
+        if user:
+            name = user.getNameAndGerb().strip()
+            if user.isAccessoryItem('🔩 Болт М69, возложенный на рейд'):
+                if user.isAccessoryItem('🔩🔩 Болт М228, возложенный на рейд'):
+                    if user.isAccessoryItem('🔩🔩🔩 Болт М404, возложенный на рейд'):
+                        if user.isAccessoryItem('🔩🔩🔩🔩 Болт М1488, возложенный на рейд'):
+                            if user.isAccessoryItem('🎫🍼 Билет на гигантскую бутылку'):
+                                send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\nНа выход!')
+                            else:
+                                send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n🎫🍼 Билет на гигантскую бутылку!')
+                                #user.addAccessory('🎫🍼 Билет на гигантскую бутылку')
+                        else:
+                            send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n🔩🔩🔩🔩 Болт М1488, возложенный на рейд!')
+                            #user.addAccessory('🔩🔩🔩🔩 Болт М1488, возложенный на рейд')
+                    else:
+                        send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n🔩🔩🔩 Болт М404, возложенный на рейд!')
+                        #user.addAccessory('🔩🔩🔩 Болт М404, возложенный на рейд')
+                else:
+                    send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n🔩🔩 Болт М228, возложенный на рейд!')
+                    #user.addAccessory('🔩🔩 Болт М228, возложенный на рейд')    
+            else:
+                send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n🔩 Болт М69, возложенный на рейд!')
+                #user.addAccessory('🔩 Болт М69, возложенный на рейд')
+
+
 def statistic(goatName: str):
     report = f'🐐<b>{goatName}</b>\n\n'
     report = report + f'🧘‍♂️ <b>Рейдеры</b>:\n'
@@ -4037,9 +4096,9 @@ def statistic(goatName: str):
         user = getUserByLogin(name)
         count = d.get("count")
 
-        if isGoatBoss(name):
-            report_boss = f'😎 наш босс <b>{user.getNameAndGerb()}</b> посетил рейды {count} раз. Скажите за это ему "Спасибо!" при встрече.\n'
-            continue
+        # if isGoatBoss(name):
+        #     report_boss = f'😎 наш босс <b>{user.getNameAndGerb()}</b> посетил рейды {count} раз. Скажите за это ему "Спасибо!" при встрече.\n'
+        #     continue
         
         if user:
             name = user.getNameAndGerb().strip()
@@ -4093,10 +4152,10 @@ def statistic(goatName: str):
         if j == 0:
             bad_raid_counter = count
 
-        if isGoatBoss(name):
-            report_boss = report_boss + f'Еще наш босс не был на некоторых рейдах, потому что был зянят переписью хренейдеров, забивших на общие цели! Это, надеюсь, всем понятно?!\n'
-            report_boss = '\n'+report_boss
-            continue
+        # if isGoatBoss(name):
+        #     report_boss = report_boss + f'Еще наш босс не был на некоторых рейдах, потому что был зянят переписью хренейдеров, забивших на общие цели! Это, надеюсь, всем понятно?!\n'
+        #     report_boss = '\n'+report_boss
+        #     continue
         user = getUserByLogin(name)
         login = name
         if user:
