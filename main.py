@@ -1698,7 +1698,10 @@ def main_message(message):
             damage = []
             beaten = []
             you_win = False
+            dark_zone = False
             for s in strings:
+                if s.startswith('🚷'):
+                    dark_zone = True
                 if s.startswith('Сражение с'):
                     mob_name = s.split('Сражение с')[1].split('(')[0].strip()
                     mob_class = s.split('(')[1].split(')')[0].strip()
@@ -1722,6 +1725,7 @@ def main_message(message):
                 row.update({'mob_class': mob_class})
                 
                 row.update({'km': km})
+                row.update({'dark_zone': dark_zone})
                 row.update({'kr': kr})
                 row.update({'mat': mat})
                 row.update({'bm': userIAm.getBm()})
@@ -1735,7 +1739,8 @@ def main_message(message):
                 result = mob.update_one({
                     'date': message.forward_date,
                     'login': message.from_user.username, 
-                    'km': km
+                    'km': km,
+                    'dark_zone': dark_zone
                     }, newvalues)
                 if result.matched_count < 1:
                     mob.insert_one(row)
