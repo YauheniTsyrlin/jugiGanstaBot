@@ -2318,9 +2318,9 @@ print("#==========================#")
 print("#         USERS            #")    
 print("#==========================#")
 
-mob.update_many(
-    { '$set': { 'dark_zone': False} }
-)
+# mob.update_many(
+#     { '$set': { 'dark_zone': False} }
+# )
     
 # for x in registered_users.find({'rank': None}):
 #     registered_users.update(
