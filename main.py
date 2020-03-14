@@ -3826,7 +3826,7 @@ def rade():
                 statistic(goat['name'])
 
 
-    if now_date.hour in (1, 9, 20) and now_date.minute == 19 and now_date.second < 15:
+    if now_date.hour in (1, 9, 20) and now_date.minute == 21 and now_date.second < 15:
         logger.info('Clear raid info!')
         for goat in getSetting(code='GOATS_BANDS'):
             setGiftsForRaid(goat)
@@ -3979,7 +3979,7 @@ def radeReport(goat, ping=False):
 
 def setGiftsForRaid(goat):
     raidPlan = getPlanedRaidLocation(goatName=goat['name'], planRaid=False)
-    send_message_to_admin(f'⚠️⚠️ {datetime.fromtimestamp(raid["rade_date"])}!')
+    send_message_to_admin(f'⚠️⚠️ {datetime.fromtimestamp(raidPlan["rade_date"])}!')
  
     for raid in report_raids.find(
         {   "date": raidPlan['rade_date'],
