@@ -3826,7 +3826,7 @@ def rade():
                 statistic(goat['name'])
 
 
-    if now_date.hour in (1, 9, 20) and now_date.minute == 21 and now_date.second < 15:
+    if now_date.hour in (1, 9, 20) and now_date.minute == 24 and now_date.second < 15:
         logger.info('Clear raid info!')
         for goat in getSetting(code='GOATS_BANDS'):
             setGiftsForRaid(goat)
@@ -3999,10 +3999,10 @@ def setGiftsForRaid(goat):
                         if user.isAccessoryItem(acc):
                             acc = '🎫🍼 Билет на гигантскую бутылку'
                             if user.isAccessoryItem(acc):
-                                send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\nНа выход за проёбы рейдов!')
+                                send_message_to_admin(f'⚠️ {user.getNameAndGerb()} {user.getLogin()}\nНа выход за проёбы рейдов!')
                                 continue
 
-            send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n▫️ {acc}!')
+            send_message_to_admin(f'⚠️ {user.getNameAndGerb()} @{user.getLogin()}\n▫️ {acc}!')
             # user.addAccessory(acc)
             # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}')    
             # updateUser(user)
@@ -4033,7 +4033,7 @@ def setGiftsForRaid(goat):
                             else:
                                 continue
 
-                send_message_to_admin(f'❎ {user.getNameAndGerb()}\nЗабрали:\n▫️ {acc}!')
+                send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {acc}!')
                 # user.removeSettings(acc)
                 # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + 'У тебя забрали:' + f'\n\n▫️ {acc}')    
                 # updateUser(user)
