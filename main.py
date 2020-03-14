@@ -1228,6 +1228,7 @@ def main_message(message):
             'ТОП ФРАКЦИЙ' not in message.text and 
             'СОДЕРЖИМОЕ РЮКЗАКА' not in message.text and 
             'ПРИПАСЫ В РЮКЗАКЕ' not in message.text and 
+            '🏆ТОП КОЗЛОВ:' not in message.text and
             'РЕСУРСЫ и ХЛАМ' not in message.text ):
 
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
@@ -3825,14 +3826,14 @@ def rade():
                 statistic(goat['name'])
 
 
-    if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
+    if now_date.hour in (1, 9, 20) and now_date.minute == 13 and now_date.second < 15:
         logger.info('Clear raid info!')
         for goat in getSetting(code='GOATS_BANDS'):
             setGiftsForRaid(goat)
-            registered_users.update_many(
-                {'band':{'$in':getGoatBands(goat.get('name'))}},
-                { '$set': { 'raidlocation': None} }
-            )
+            # registered_users.update_many(
+            #     {'band':{'$in':getGoatBands(goat.get('name'))}},
+            #     { '$set': { 'raidlocation': None} }
+            # )
         updateUser(None)
 
 def getPlanedRaidLocation(goatName: str, planRaid = True):
@@ -3977,11 +3978,11 @@ def radeReport(goat, ping=False):
     return report
 
 def setGiftsForRaid(goat):
-    raid = getPlanedRaidLocation(goatName=goat['name'], planRaid=False)
+    raidPlan = getPlanedRaidLocation(goatName=goat['name'], planRaid=False)
     send_message_to_admin(f'⚠️⚠️ {datetime.fromtimestamp(raid["rade_date"])}!')
  
     for raid in report_raids.find(
-        {   "date": raid['rade_date'],
+        {   "date": raidPlan['rade_date'],
             "band": {'$in': getGoatBands(goat['name'])},
             "on_raid": False,
             "planed_location": {'$ne':None}   
@@ -4002,12 +4003,12 @@ def setGiftsForRaid(goat):
                                 continue
 
             send_message_to_admin(f'⚠️ {user.getNameAndGerb()}\n▫️ {acc}!')
-            user.addAccessory(acc)
-            send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}')    
-            updateUser(user)
+            # user.addAccessory(acc)
+            # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}')    
+            # updateUser(user)
 
     for raid in report_raids.find(
-            {   "date": raid['rade_date'],
+            {   "date": raidPlan['rade_date'],
                 "band": {'$in': getGoatBands(goat['name'])},
                 "on_raid": True,
                 "planed_location": {'$ne':None}   
@@ -4033,9 +4034,9 @@ def setGiftsForRaid(goat):
                                 continue
 
                 send_message_to_admin(f'❎ {user.getNameAndGerb()}\nЗабрали:\n▫️ {acc}!')
-                user.removeSettings(acc)
-                send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + 'У тебя забрали:' + f'\n\n▫️ {acc}')    
-                updateUser(user)
+                # user.removeSettings(acc)
+                # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + 'У тебя забрали:' + f'\n\n▫️ {acc}')    
+                # updateUser(user)
 
 def statistic(goatName: str):
     report = f'🐐<b>{goatName}</b>\n\n'
