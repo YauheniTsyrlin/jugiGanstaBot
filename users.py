@@ -555,12 +555,19 @@ class User(object):
                         return setting["value"]
             except: pass
         return None
+
     def removeSettings(self, settingItem: str):
         if self.settings == None:
             self.settings = []
-        try:
-            self.settings.remove(settingItem)
-        except: pass
+        
+        sett = None
+        for setting in self.settings:
+            if setting["name"] == settingItem:
+                sett = setting
+                break
+            
+        if not (sett == None):
+            self.settings.remove(sett)
 # ------------------------------------------
     def setTimeBan(self, timeBan):
         self.timeBan = timeBan  
