@@ -4040,7 +4040,7 @@ def setGiftsForRaid(goat):
 
                 send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {acc}!')
                 user.removeSettings(acc)
-                send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + 'У тебя забрали:' + f'\n\n▫️ {acc}')    
+                send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {acc}')    
                 updateUser(user)
 
 def statistic(goatName: str):
