@@ -562,11 +562,14 @@ class User(object):
         
         sett = None
         for setting in self.settings:
+            print(f'{setting["name"]}|{settingItem}')
             if setting["name"] == settingItem:
                 sett = setting
+                print(f'НАШЛИ!')
                 break
-            
+
         if not (sett == None):
+            print(f'УДАЛИЛИ!')
             self.settings.remove(sett)
 # ------------------------------------------
     def setTimeBan(self, timeBan):
