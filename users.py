@@ -485,6 +485,7 @@ class User(object):
             return accessory
         else:
             return 'Ничего нет'
+
     def isAccessoryItem(self, accessoryItem: str):
         if self.accessory == None:
             self.accessory = []
@@ -510,6 +511,7 @@ class User(object):
             self.accessory = []
         if self.isAccessoryItem(accessoryItem):
             self.accessory.remove(accessoryItem)
+            
     def setSettings(self, settings):
         self.settings = settings  
     def getSettings(self):
@@ -555,21 +557,17 @@ class User(object):
                         return setting["value"]
             except: pass
         return None
-
     def removeSettings(self, settingItem: str):
         if self.settings == None:
             self.settings = []
         
         sett = None
         for setting in self.settings:
-            print(f'{setting["name"]}|{settingItem}')
             if setting["name"] == settingItem:
                 sett = setting
-                print(f'НАШЛИ!')
                 break
 
         if not (sett == None):
-            print(f'УДАЛИЛИ!')
             self.settings.remove(sett)
 # ------------------------------------------
     def setTimeBan(self, timeBan):
