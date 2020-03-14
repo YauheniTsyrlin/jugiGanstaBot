@@ -1700,6 +1700,9 @@ def main_message(message):
             you_win = False
             dark_zone = False
             for s in strings:
+                if s.startswith('👊'):
+                    send_messages_big(message.chat.id, text='Это моб из митспина, не записываю...')
+                    return
                 if s.startswith('🚷'):
                     dark_zone = True
                 if s.startswith('Сражение с'):

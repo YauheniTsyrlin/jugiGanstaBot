@@ -355,7 +355,6 @@ newvalues = { "$set": { "value":
             } 
 u = settings.update_one(myquery, newvalues)
 
-
 # myquery = { "code": 'ACCESSORY' }
 # newvalues = { "$set": { "value": 
 #                     [
@@ -371,37 +370,37 @@ u = settings.update_one(myquery, newvalues)
 #                                     'quantity': 1
 #                                 },
 #                                 {
-#                                     'name': '2',
+#                                     'name': 'pip_antenna',
 #                                     'value': '📟 антена от Пип-боя',
 #                                     'cost': 1
 #                                 },
 #                                 {
-#                                     'name': '3',
+#                                     'name': 'pip_battery',
 #                                     'value': '📟 аккумулятор от Пип-боя',
 #                                     'cost': 1
 #                                 },
 #                                 {
-#                                     'name': '5',
+#                                     'name': 'pip_packaging',
 #                                     'value': '📟 упаковка от Пип-боя',
 #                                     'cost': 1
 #                                 },
 #                                 {
-#                                     'name': '6',
+#                                     'name': 'pip_spare_part',
 #                                     'value': '📟 запчасть от Пип-боя',
 #                                     'cost': 1
 #                                 },
 #                                 {
-#                                     'name': '8',
+#                                     'name': 'pip_broken_part',
 #                                     'value': '📟 сломанный Пип-бой',
 #                                     'cost': 1
 #                                 },
 #                                 {
-#                                     'name': '9',
+#                                     'name': 'pip_bolt',
 #                                     'value': '📟 болт от Пип-боя',
 #                                     'cost': 1
 #                                 },
 #                                 {
-#                                     'id': '45',
+#                                     'id': 'pip_repair_kit',
 #                                     'name': '🛠️ Ремкомплект для Пип-боя',
 #                                     'cost': 1
 #                                 }
