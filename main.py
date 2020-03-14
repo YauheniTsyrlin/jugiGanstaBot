@@ -1387,10 +1387,10 @@ def main_message(message):
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
-            # if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-            #     send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
-            #     return
+            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+                send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
+                return
 
             u = getUserByLogin(message.from_user.username)
             u.setRaidLocation(1)
@@ -3826,7 +3826,7 @@ def rade():
                 statistic(goat['name'])
 
 
-    if now_date.hour in (1, 9, 20) and now_date.minute == 25 and now_date.second < 15:
+    if now_date.hour in (1, 9, 21) and now_date.minute == 20 and now_date.second < 15:
         logger.info('Clear raid info!')
         for goat in getSetting(code='GOATS_BANDS'):
             setGiftsForRaid(goat)
@@ -3988,6 +3988,7 @@ def setGiftsForRaid(goat):
             "planed_location": {'$ne':None}   
         }):
         user = getUserByLogin(raid["login"])
+        send_message_to_admin(f'⚠️⚠️⚠️ {raid["login"]}!')
         if user:
             acc = '🔩 Болт М69, возложенный на рейд'
             if user.isAccessoryItem(acc):

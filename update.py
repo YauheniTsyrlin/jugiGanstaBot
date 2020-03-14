@@ -483,7 +483,7 @@ u = settings.update_one(myquery, newvalues)
 #                             'value':
 #                             [
 #                                 {
-#                                     'id': '2019-nCoV',
+#                                     'id': 'COVID-19',
 #                                     'name': '🦇 Коронавирус',
 #                                     'cost': 0,
 #                                     'type': 'disease',
