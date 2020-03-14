@@ -558,9 +558,9 @@ class User(object):
     def removeSettings(self, settingItem: str):
         if self.settings == None:
             self.settings = []
-        self.settings.remove(settingItem)
-
-
+        try:
+            self.settings.remove(settingItem)
+        except: pass
 # ------------------------------------------
     def setTimeBan(self, timeBan):
         self.timeBan = timeBan  
