@@ -1435,11 +1435,11 @@ def main_message(message):
                             send_messages_big(message.chat.id, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow(message, 'not_right_band').fulfillment_text)
                             return
                     
-                    registered_users.update_many(
-                        {'band': band},
-                        { '$set': { 'raidlocation': None} }
-                    )
-                    updateUser(None)
+                    # registered_users.update_many(
+                    #     {'band': band},
+                    #     { '$set': { 'raidlocation': None} }
+                    # )
+                    # updateUser(None)
 
                 if '👂' in strings[i]:
                     name = strings[i]
@@ -1477,6 +1477,7 @@ def main_message(message):
                         else:
                             fuckupraidrw = fuckupraidrw + u.getRaidWeight()
                             fuckupusers.append(u)
+                            u.setRaidLocation(None)
                         updateUser(u)
                     else:
                         aliancounter  = aliancounter + 1
@@ -3815,7 +3816,7 @@ def rade():
                 report = radeReport(goat, True)
                 send_messages_big(goat['chats']['secret'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
 
-    if now_date.hour in (1, 9, 17) and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
         logger.info('Rade time now!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
@@ -3826,15 +3827,17 @@ def rade():
                 statistic(goat['name'])
 
 
-    if now_date.hour in (1, 9, 21) and now_date.minute == 20 and now_date.second < 15:
+    if now_date.hour in (1, 9, 22) and now_date.minute == 15 and now_date.second < 15:
         logger.info('Clear raid info!')
+        updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
             setGiftsForRaid(goat)
-            # registered_users.update_many(
-            #     {'band':{'$in':getGoatBands(goat.get('name'))}},
-            #     { '$set': { 'raidlocation': None} }
-            # )
-        updateUser(None)
+
+            registered_users.update_many(
+                {'band':{'$in':getGoatBands(goat.get('name'))}},
+                { '$set': { 'raidlocation': None} }
+            )
+
 
 def getPlanedRaidLocation(goatName: str, planRaid = True):
     tz = config.SERVER_MSK_DIFF
@@ -3979,6 +3982,7 @@ def radeReport(goat, ping=False):
 
 def setGiftsForRaid(goat):
     raidPlan = getPlanedRaidLocation(goatName=goat['name'], planRaid=False)
+    raidPlan.update({'rade_date':(datetime(2020, 3, 14, 17, 0)).timestamp() })
     send_message_to_admin(f'⚠️⚠️ {datetime.fromtimestamp(raidPlan["rade_date"])}!')
  
     for raid in report_raids.find(
@@ -4035,9 +4039,9 @@ def setGiftsForRaid(goat):
                                 continue
 
                 send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {acc}!')
-                # user.removeSettings(acc)
-                # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + 'У тебя забрали:' + f'\n\n▫️ {acc}')    
-                # updateUser(user)
+                user.removeSettings(acc)
+                send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + 'У тебя забрали:' + f'\n\n▫️ {acc}')    
+                updateUser(user)
 
 def statistic(goatName: str):
     report = f'🐐<b>{goatName}</b>\n\n'
