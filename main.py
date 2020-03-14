@@ -1207,7 +1207,7 @@ def main_message(message):
     if message.forward_from_chat and message.forward_from_chat.username == 'wwkeeperhorn' and ' постиг ' in message.text:
         # ⚙️Машенька постиг 8-й 🏵Дзен !
         name = message.text.split(' постиг ')[0]
-        name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
+        name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
         name = name.split('@')[1].split(' ')[0].strip()
         num_dzen = message.text.split(' постиг ')[1].split('-й')[0]
         fraction = getWariorFraction(message.text)
@@ -1329,7 +1329,7 @@ def main_message(message):
                 if '|' in strings[i]:
                     name = strings[i]
                     fraction = getWariorFraction(strings[i])
-                    name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@')
+                    name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
                     name = name.split('@')[1].split('|')[0].strip()
                     warior = getWariorByName(name, fraction)
                     if warior:
