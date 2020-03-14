@@ -359,59 +359,11 @@ u = settings.update_one(myquery, newvalues)
 # newvalues = { "$set": { "value": 
 #                     [
 #                         {
-#                             'name': 'PIP_BOY',
-#                             'value':
-#                             [
-#                                 {
-#                                     'name': '1',
-#                                     'value': '📟 Пип-бой 2000',
-#                                     'cost': 1,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'name': 'pip_antenna',
-#                                     'value': '📟 антена от Пип-боя',
-#                                     'cost': 1
-#                                 },
-#                                 {
-#                                     'name': 'pip_battery',
-#                                     'value': '📟 аккумулятор от Пип-боя',
-#                                     'cost': 1
-#                                 },
-#                                 {
-#                                     'name': 'pip_packaging',
-#                                     'value': '📟 упаковка от Пип-боя',
-#                                     'cost': 1
-#                                 },
-#                                 {
-#                                     'name': 'pip_spare_part',
-#                                     'value': '📟 запчасть от Пип-боя',
-#                                     'cost': 1
-#                                 },
-#                                 {
-#                                     'name': 'pip_broken_part',
-#                                     'value': '📟 сломанный Пип-бой',
-#                                     'cost': 1
-#                                 },
-#                                 {
-#                                     'name': 'pip_bolt',
-#                                     'value': '📟 болт от Пип-боя',
-#                                     'cost': 1
-#                                 },
-#                                 {
-#                                     'id': 'pip_repair_kit',
-#                                     'name': '🛠️ Ремкомплект для Пип-боя',
-#                                     'cost': 1
-#                                 }
-#                             ] 
-#                         },
-#                         {
 #                             'name': 'CLOTHES',
 #                             'value':
 #                             [                               
 #                                 {
-#                                     'id': '1',
+#                                     'id': 'scientists_robe',
 #                                     'name': '🔬 Халат учёного',
 #                                     'cost': 5,
 #                                     'type': 'clothes',
@@ -428,50 +380,60 @@ u = settings.update_one(myquery, newvalues)
 
 #                                 },
 #                                 {
-#                                     'id': '3',
+#                                     'id': 'straw_hat',
 #                                     'name': '👒 Соломенная шляпка',
 #                                     'cost': 10,
 #                                     'type': 'clothes',
 #                                     'quantity': 10
 #                                 },
 #                                 {
-#                                     'id': '4',
+#                                     'id': 'hunter_panties',
 #                                     'name': '🩲 Трусы охотника на Трогов',
 #                                     'cost': 10,
 #                                     'type': 'clothes',
 #                                     'quantity': 10
 #                                 },
 #                                 {
-#                                     'id': '28',
+#                                     'id': 'dueling_glove',
 #                                     'name': '🧤 Дуэльная перчатка',
-#                                     'cost': 1,
+#                                     'cost': 15,
 #                                     'type': 'clothes',
 #                                     'quantity': 10
 #                                 },
 #                                 {
-#                                     'id': '84',
+#                                     'id': 'handkerchief',
 #                                     'name': '👻 Носовой платок',
-#                                     'cost': 1
+#                                     'cost': 6,
+#                                     'type': 'clothes',
+#                                     'quantity': 10
 #                                 },
 #                                 {
-#                                     'id': '111',
+#                                     'id': 'leather_bag',
 #                                     'name': '💰 Кожаный мешок',
-#                                     'cost': 1
+#                                     'cost': 4,
+#                                     'type': 'clothes',
+#                                     'quantity': 10
 #                                 },
 #                                 {
-#                                     'id': '134',
+#                                     'id': 'medical_mask',
 #                                     'name': '😷 Медицинская маска',
-#                                     'cost': 1
+#                                     'cost': 8,
+#                                     'type': 'clothes',
+#                                     'quantity': 10
 #                                 },
 #                                 {
-#                                     'id': '98',
+#                                     'id': 'dads_slippers',
 #                                     'name': '🥿 Батины тапки',
-#                                     'cost': 1
+#                                     'cost': 10,
+#                                     'type': 'clothes',
+#                                     'quantity': 10
 #                                 },
 #                                 {
-#                                     'id': '94',
+#                                     'id': 'latex_mask',
 #                                     'name': '👽 Латексная маска',
-#                                     'cost': 1
+#                                     'cost': 10,
+#                                     'type': 'clothes',
+#                                     'quantity': 10
 #                                 }
 #                             ]
 #                         },
@@ -1322,20 +1284,111 @@ u = settings.update_one(myquery, newvalues)
 #                                     'quantity': 20
 #                                 },
 #                                 {
-#                                     'id': '19',
+#                                     'id': 'sword_of_the_jedi',
 #                                     'name': '🗡️ Меч джедая',
 #                                     'cost': 130,
 #                                     'type': 'things',
 #                                     'quantity': 20
 #                                 },
 #                                 {
-#                                     'id': '87',
+#                                     'id': 'metal_detector',
 #                                     'name': '🧑‍🦯 Металлоискатель',
 #                                     'cost': 100,
 #                                     'type': 'things',
 #                                     'quantity': 20
+#                                 },
+#                                 {
+#                                     'name': 'pip_boy_2000',
+#                                     'value': '📟 Пип-бой 2000',
+#                                     'cost': 1000,
+#                                     'type': 'things',
+#                                     'quantity': 1000,
+#                                     'composition':
+#                                     {
+#                                         [
+#                                             {
+#                                                 'id': 'pip_broken_part',
+#                                                 'count': 1
+#                                             },
+#                                             {
+#                                                 'id': 'pip_antenna',
+#                                                 'count': 1
+#                                             },
+#                                             {
+#                                                 'id': 'pip_battery',
+#                                                 'count': 1
+#                                             },
+#                                             {
+#                                                 'id': 'pip_spare_part',
+#                                                 'count': 2
+#                                             },
+#                                             {
+#                                                 'id': 'pip_bolt',
+#                                                 'count': 3
+#                                             },
+#                                             {
+#                                                 'id': 'pip_repair_kit',
+#                                                 'count': 1
+#                                             }
+#                                         ]
+#                                     }
+#                                 },
+#                                 {
+#                                     'id': 'pip_repair_kit',
+#                                     'name': '🛠️ Ремкомплект для Пип-боя',
+#                                     'cost': 100,
+#                                     'type': 'things',
+#                                     'quantity': 2,
 #                                 }
 #                             ]
+#                         },
+#                         {
+#                             'name': 'PIP_BOY',
+#                             'value':
+#                             [
+#                                 {
+#                                     'id': 'pip_antenna',
+#                                     'name': '📟 антена от Пип-боя',
+#                                     'cost': 20,
+#                                     'type': 'things',
+#                                     'quantity': 5
+#                                 },
+#                                 {
+#                                     'id': 'pip_battery',
+#                                     'name': '📟 аккумулятор от Пип-боя',
+#                                     'cost': 20,
+#                                     'type': 'things',
+#                                     'quantity': 5
+#                                 },
+#                                 {
+#                                     'id': 'pip_packaging',
+#                                     'name': '📟 упаковка от Пип-боя',
+#                                     'cost': 1,
+#                                     'type': 'things',
+#                                     'quantity': 5
+#                                 },
+#                                 {
+#                                     'id': 'pip_spare_part',
+#                                     'name': '📟 запчасть от Пип-боя',
+#                                     'cost': 25,
+#                                     'type': 'things',
+#                                     'quantity': 5
+#                                 },
+#                                 {
+#                                     'id': 'pip_broken_part',
+#                                     'name': '📟 сломанный Пип-бой',
+#                                     'cost': 50,
+#                                     'type': 'things',
+#                                     'quantity': 5
+#                                 },
+#                                 {
+#                                     'id': 'pip_bolt',
+#                                     'name': '📟 болт от Пип-боя',
+#                                     'cost': 20,
+#                                     'type': 'things',
+#                                     'quantity': 30
+#                                 }
+#                             ] 
 #                         }
 #                     ]
 #                 } 
@@ -1346,7 +1399,7 @@ myquery = { "code": 'STICKERS' }
 newvalues = { "$set": { "value": 
                     [
                         {
-                            'id': 'NEW_YEAR',
+                            'name': 'NEW_YEAR',
                             'value': 
                             [
                                 {
@@ -1719,9 +1772,6 @@ newvalues = { "$set": { "value":
                                     'name': '5',
                                     'value': 'CAADAgADpwMAAs-71A6n4GtRdkxtohYE'
                                 }
-                                
-                                
-                                
                             ] 
                         },
                         {
@@ -1736,7 +1786,6 @@ newvalues = { "$set": { "value":
                                     'name': '2',
                                     'value': 'CAACAgIAAxkBAAJ-jF4wa3_QsJkHiyfbdYwB-LjkKcNOAAIgAAPyBCAWr8697eDb43AYBA'
                                 }
-                                
                             ] 
                         },
                         {

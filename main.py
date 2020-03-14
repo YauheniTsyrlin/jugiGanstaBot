@@ -782,12 +782,12 @@ def getMobReport(mob_name: str, mob_class: str):
 def send_welcome_and_dismiss(message):
     response = getResponseDialogFlow(message, message.content_type).fulfillment_text
     if response:
-        bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS',name='BOT_NEW_MEMBER'), 1)[0]['value'])
+        bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_NEW_MEMBER'), 1)[0]['value'])
         bot.send_message(message.chat.id, text=response)
         
         goat = getMyGoat(message.from_user.username)
         if not isGoatSecretChat(message.from_user.username, message.chat.id):
-            bot.send_photo(message.chat.id, random.sample(getSetting(code='STICKERS',name='NEW_MEMBER_IMG'), 1)[0]['value'])
+            bot.send_photo(message.chat.id, random.sample(getSetting(code='STICKERS', name='NEW_MEMBER_IMG'), 1)[0]['value'])
 
 # Handle inline_handler
 @bot.inline_handler(lambda query: query.query)
