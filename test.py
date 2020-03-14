@@ -372,31 +372,8 @@ def statistic(goatName: str):
 
 print('\n======== radeReport ==========\n')
 
-s = 'Статистика сражений 🚨Анклав Генри Эдем 1111'
-hashstr = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8
-
-
-
-dresult = mob.aggregate([ 
-    {   "$match": {
-                "kr": {"$gte": 0}
-            } 
-    },
-    {   "$group": {
-        "_id": { "mob_name":"$mob_name", "mob_class":"$mob_class"}, 
-        "count": {
-            "$sum": 1}}},
-        
-    {   "$sort" : { "count" : -1 } }
-    ])
-    
-for d in dresult:
-    mob_name = d["_id"]["mob_name"] 
-    mob_class = d["_id"]["mob_class"] 
-    s = mob_name + mob_class
-    hashstr = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8
-
-    print(f'{d.get("count")} - {mob_name} {mob_class} /mob{hashstr}')  
+for raid in report_raids.find():
+    print(raid)
 
 sys.exit(0)
 
