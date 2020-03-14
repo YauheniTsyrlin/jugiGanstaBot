@@ -411,7 +411,7 @@ def get_raid_plan(raid_date, goat):
             plan_for_date = plan_for_date + f'<b>Рейд в {str(t.hour).zfill(2)}:{str(t.minute).zfill(2)}</b>\n'
             time_str = t
 
-        plan_for_date = plan_for_date + f'{raid.get("rade_text")}\n'
+        plan_for_date = plan_for_date + f'<b>{raid.get("rade_text")}</b>\n'
         users_onraid = raid.get("users")
         if users_onraid == None or len(users_onraid) == 0:
             plan_for_date = plan_for_date + f'    Никто не записался\n'
@@ -3706,7 +3706,7 @@ def rade():
                 if rank['name'] == user.getRank()['name']:
                     pass
                 else:
-                    report = report + f'За достижение {rank["bm"]} бандит {rank["name"]} повышен в звании. Теперь он {rank["value"]}\n'
+                    report = report + f'За достижение {rank["bm"]} бандит {user.getNameAmdGerb()} повышен в звании. Теперь он {rank["value"]}\n'
                     user.setRank(rank)
                     updateUser(user)
                     goat = getMyGoat(user.getLogin())
