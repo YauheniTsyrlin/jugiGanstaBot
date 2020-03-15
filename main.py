@@ -1057,7 +1057,9 @@ def get_message_photo(message):
             else:
                 send_messages_big(message.chat.id, text=wariorShow.getProfile())
         else:
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+            wariorShow = getWariorByName(wariorShow.getName(), wariorShow.getFraction())
+            send_messages_big(message.chat.id, text=wariorShow.getProfile())
+            #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
     else:
         if privateChat:
             send_messages_big(message.chat.id, text=message.photo[len(message.photo)-1].file_id)
