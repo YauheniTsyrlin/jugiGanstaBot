@@ -2436,37 +2436,37 @@ for user in USERS_ARR:
 #  mob.remove()
 
 
-# dresult = registered_wariors.aggregate([ 
-#     {   "$group": {
-#         "_id": "$name", 
-#         "count": {
-#             "$sum": 1}}},
+dresult = registered_wariors.aggregate([ 
+    {   "$group": {
+        "_id": "$name", 
+        "count": {
+            "$sum": 1}}},
         
-#     {   "$sort" : { "count" : -1 } }
-#     ])
+    {   "$sort" : { "count" : -1 } }
+    ])
 
-# i = 1
-# for d in dresult:
-#     if d.get("count") > 1:
-#         print(f'{i}. {d.get("_id")} {d.get("count")}')
+i = 1
+for d in dresult:
+    if d.get("count") > 1:
+        print(f'{i}. {d.get("_id")} {d.get("count")}')
         
-#         dresult2 = registered_wariors.aggregate([ 
-#             {   "$match": {
-#                         "name": d.get("_id")
-#                     } 
-#             },   
-#             {   "$sort" : { "timeUpdate" : 1 } }
-#             ])
+        dresult2 = registered_wariors.aggregate([ 
+            {   "$match": {
+                        "name": d.get("_id")
+                    } 
+            },   
+            {   "$sort" : { "timeUpdate" : 1 } }
+            ])
         
-#         z = 1
-#         for m in dresult2:
-#             if z == d.get("count"): break
+        z = 1
+        for m in dresult2:
+            if z == d.get("count"): break
 
-#             string =  f'    ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(m.get("timeUpdate")))
-#             print(m.get('_id'))
-#             registered_wariors.delete_many({'_id': m.get('_id')})
-#             z = z + 1
-#     i = i + 1
+            string =  f'    ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(m.get("timeUpdate")))
+            print(m.get('_id'))
+            registered_wariors.delete_many({'_id': m.get('_id')})
+            z = z + 1
+    i = i + 1
 
 
 
