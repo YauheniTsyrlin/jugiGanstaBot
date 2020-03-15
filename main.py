@@ -1333,6 +1333,7 @@ def main_message(message):
                     name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
                     name = name.split('@')[1].split('|')[0].strip()
                     warior = getWariorByName(name, fraction)
+
                     if warior:
                         if warior.getGoat():
                             findGoat = False

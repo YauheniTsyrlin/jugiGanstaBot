@@ -322,6 +322,8 @@ class Warior(object):
             return '⚛️'
         elif (self.fraction.startswith('👙')):
             return '👙'
+        elif (self.fraction.startswith('🔰')):
+            return '🔰Конкорд'
 
     def getProfileInline(self):
         string = '┌'
