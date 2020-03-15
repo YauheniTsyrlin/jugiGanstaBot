@@ -16,6 +16,10 @@ plan_raids      = mydb["rades"]
 pending_messages = mydb["pending_messages"]
 mob             = mydb["mob"]
 
+USERS_ARR = [] # Зарегистрированные пользователи
+for x in registered_users.find():
+    USERS_ARR.append(users.importUser(x))
+
 def getSetting(code: str, name=None, value=None, id=None):
     """ Получение настройки """
     result = settings.find_one({'code': code})
@@ -40,6 +44,25 @@ def setSetting(login: str, code: str, value: str):
     myquery = { "code": code }
     newvalues = { "$set": { "value": value } }
     u = settings.update_one(myquery, newvalues)
+
+def getUserByLogin(login: str):
+    for user in list(USERS_ARR):
+        try:
+            if login.lower() == user.getLogin().lower(): 
+                return user
+        except:
+            pass
+    return None
+
+def updateUser(newuser: users.User):
+    if newuser == None:
+        pass
+    else:
+        newvalues = { "$set": json.loads(newuser.toJSON()) }
+        z = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
+    USERS_ARR.clear()
+    for x in registered_users.find():
+        USERS_ARR.append(users.importUser(x))
 
 # ==================================================
 myquery = {'code': 'OUR_BAND'}
@@ -2358,13 +2381,24 @@ for x in settings.find():
 print("#==========================#")              
 print("#         RAIDS            #")    
 print("#==========================#")
-
-# x = plan_raids.delete_many({'rade_date':1580162400.0})
-# print(x.deleted_count)
-
 print("#==========================#")              
 print("#         USERS            #")    
 print("#==========================#")
+print("#==========================#")              
+print("#         WARIORS          #")              
+print("#==========================#")
+print("#==========================#")              
+print("#         BATTLE           #")              
+print("#==========================#")
+
+updateUser(None)
+for user in USERS_ARR:
+    pass
+
+
+
+# x = plan_raids.delete_many({'rade_date':1580162400.0})
+# print(x.deleted_count)
 
 # mob.update_many(
 #     { '$set': { 'dark_zone': False} }
@@ -2396,13 +2430,7 @@ print("#==========================#")
 #         { '$set': { 'location': None} }
 #     )
 
-print("#==========================#")              
-print("#         WARIORS          #")              
-print("#==========================#")
 
-print("#==========================#")              
-print("#         BATTLE           #")              
-print("#==========================#")
 # pip_history     = mydb["pip_history"]
 # 
 #  mob.remove()
