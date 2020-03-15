@@ -476,6 +476,7 @@ class User(object):
         if self.accessory == None:
             self.accessory = []
         return self.accessory
+
     def getAccessoryReport(self):
         accessory = ''
         if self.accessory and len(self.accessory)>0:
@@ -485,7 +486,6 @@ class User(object):
             return accessory
         else:
             return 'Ничего нет'
-
     def isAccessoryItem(self, accessoryItem: str):
         if self.accessory == None:
             self.accessory = []

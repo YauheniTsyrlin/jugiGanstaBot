@@ -3,6 +3,7 @@ import json
 import datetime
 import time
 import users
+import tools
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 
@@ -147,11 +148,11 @@ if (not result):
         'value': ''   
              })  
 
-result = settings.find_one({'code': 'ACCESSORY'})
+result = settings.find_one({'code': 'ACCESSORY_ALL'})
 if (not result):
-    print('Not Find setting. Insert ACCESSORY')
+    print('Not Find setting. Insert ACCESSORY_ALL')
     settings.insert_one({
-        'code': 'ACCESSORY', 
+        'code': 'ACCESSORY_ALL', 
         'description': ' Аксессуары', 
         'value': ''   
              })  
@@ -363,14 +364,14 @@ newvalues = { "$set": { "value":
                             'value':
                             [
                                 {
-                                    'id': '1',
+                                    'id': 'pedal_director',
                                     'name': '🚵 Директор педального завода',
-                                    'cost': 1
+                                    'cost': 0
                                 },
                                 {
-                                    'id': '2',
+                                    'id': 'Chinese',
                                     'name': '😷 Китаец',
-                                    'cost': 1
+                                    'cost': 0
                                 }
                             ] 
                         }
@@ -379,1045 +380,1060 @@ newvalues = { "$set": { "value":
             } 
 u = settings.update_one(myquery, newvalues)
 
-# myquery = { "code": 'ACCESSORY' }
-# newvalues = { "$set": { "value": 
-#                     [
-#                         {
-#                             'name': 'CLOTHES',
-#                             'value':
-#                             [                               
-#                                 {
-#                                     'id': 'scientists_robe',
-#                                     'name': '🔬 Халат учёного',
-#                                     'cost': 5,
-#                                     'type': 'clothes',
-#                                     'quantity': 20,
-#                                     'weight': 0.3,
-#                                     'state': [
-#                                                 {'new': 0.8},
-#                                                 {'a little broken': 0.6}, 
-#                                                 {'broken': 0.4}, 
-#                                                 {'tatters': 0.2}
-#                                             ],
-#                                     'decay': 0.01,
-#                                     'position': ['dressed','in inventory', 'in the closet', 'on the ground'],
+myquery = { "code": 'ACCESSORY_ALL' }
+newvalues = { "$set": { "value": 
+                    [
+                        {
+                            'name': 'CLOTHES',
+                            'value':
+                            [                               
+                                {
+                                    'id': 'scientists_robe',
+                                    'name': '🔬 Халат учёного',
+                                    'cost': 5,
+                                    'type': 'clothes',
+                                    'quantity': 20,
+                                    'weight': 0.3,
+                                    'state': [
+                                                {'new': 0.8},
+                                                {'a little broken': 0.6}, 
+                                                {'broken': 0.4}, 
+                                                {'tatters': 0.2}
+                                            ],
+                                    'decay': 0.01,
+                                    'position': ['dressed','in inventory', 'in the closet', 'on the ground'],
 
-#                                 },
-#                                 {
-#                                     'id': 'straw_hat',
-#                                     'name': '👒 Соломенная шляпка',
-#                                     'cost': 10,
-#                                     'type': 'clothes',
-#                                     'quantity': 10
-#                                 },
-#                                 {
-#                                     'id': 'hunter_panties',
-#                                     'name': '🩲 Трусы охотника на Трогов',
-#                                     'cost': 10,
-#                                     'type': 'clothes',
-#                                     'quantity': 10
-#                                 },
-#                                 {
-#                                     'id': 'dueling_glove',
-#                                     'name': '🧤 Дуэльная перчатка',
-#                                     'cost': 15,
-#                                     'type': 'clothes',
-#                                     'quantity': 10
-#                                 },
-#                                 {
-#                                     'id': 'handkerchief',
-#                                     'name': '👻 Носовой платок',
-#                                     'cost': 6,
-#                                     'type': 'clothes',
-#                                     'quantity': 10
-#                                 },
-#                                 {
-#                                     'id': 'leather_bag',
-#                                     'name': '💰 Кожаный мешок',
-#                                     'cost': 4,
-#                                     'type': 'clothes',
-#                                     'quantity': 10
-#                                 },
-#                                 {
-#                                     'id': 'medical_mask',
-#                                     'name': '😷 Медицинская маска',
-#                                     'cost': 8,
-#                                     'type': 'clothes',
-#                                     'quantity': 10
-#                                 },
-#                                 {
-#                                     'id': 'dads_slippers',
-#                                     'name': '🥿 Батины тапки',
-#                                     'cost': 10,
-#                                     'type': 'clothes',
-#                                     'quantity': 10
-#                                 },
-#                                 {
-#                                     'id': 'latex_mask',
-#                                     'name': '👽 Латексная маска',
-#                                     'cost': 10,
-#                                     'type': 'clothes',
-#                                     'quantity': 10
-#                                 }
-#                             ]
-#                         },
-#                         {
-#                             'name': 'RAID_BOLTS',
-#                             'value':
-#                             [
-#                                 {
-#                                     'id': 'bolt_1',
-#                                     'name': '🔩 Болт М69, возложенный на рейд',
-#                                     'cost': 0,
-#                                     'type': 'bolt',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'bolt_2',
-#                                     'name': '🔩🔩 Болт М228, возложенный на рейд',
-#                                     'cost': 0,
-#                                     'type': 'bolt',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'bolt_3',
-#                                     'name': '🔩🔩🔩 Болт М404, возложенный на рейд',
-#                                     'cost': 0,
-#                                     'type': 'bolt',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'bolt_4',
-#                                     'name': '🔩🔩🔩🔩 Болт М1488, возложенный на рейд',
-#                                     'cost': 0,
-#                                     'type': 'bolt',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'bolt_5',
-#                                     'name': '🎫🍼 Билет на гигантскую бутылку',
-#                                     'cost': 0,
-#                                     'type': 'bolt',
-#                                     'quantity': 1000
-#                                 }
-#                             ]
-#                         },
-#                         {
-#                             'name': 'VIRUSES',
-#                             'value':
-#                             [
-#                                 {
-#                                     'id': 'COVID-19',
-#                                     'name': '🦇 Коронавирус',
-#                                     'cost': 0,
-#                                     'type': 'disease',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'mirror_disease',
-#                                     'name': '🔬 Зеркальная болезнь',
-#                                     'cost': 0,
-#                                     'type': 'disease',
-#                                     'quantity': 1000
-#                                 }
-#                             ]
-#                         },
-#                         {
-#                             'name': 'TATU',
-#                             'value':
-#                             [
-#                                 {
-#                                     'id': 'tatu_arthouse_1',
-#                                     'name': '♀️ Тату "Не забуду Кешу и АртхǁȺǁус!"',
-#                                     'cost': 100,
-#                                     'type': 'tatu',
-#                                     'quantity': 15
-#                                 },
-#                                 {
-#                                     'id': 'tatu_arthouse_2',
-#                                     'name': '♂️ Тату "Не забуду Кешу и АртхǁȺǁус!"',
-#                                     'cost': 100,
-#                                     'type': 'tatu',
-#                                     'quantity': 15
-#                                 },
-#                                 {
-#                                     'id': 'tatu_arthouse_3',
-#                                     'name': '♂️ Тату "Не забуду Кешу и АртхǁȺǁус!"',
-#                                     'cost': 100,
-#                                     'type': 'tatu',
-#                                     'quantity': 15
-#                                 },
-#                                 {
-#                                     'id': 'tatu_arthouse_4',
-#                                     'name': '♂️ Тату "Не забуду Кешу и АртхǁȺǁус!", с подписью Кеши.',
-#                                     'cost': 100,
-#                                     'type': 'tatu',
-#                                     'quantity': 15
-#                                 },
-#                                 {
-#                                     'id': 'tatu_ledonna_1',
-#                                     'name': '🤍 тату "ЛеДонна"',
-#                                     'cost': 200,
-#                                     'type': 'tatu',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'tatu_kirill_1',
-#                                     'name': '🤍 Сердце Кирилла навсегда',
-#                                     'cost': 200,
-#                                     'type': 'tatu',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'tatu_arthouse_5',
-#                                     'name': '♂️ Тату "АртхǁȺǁус тебя любит!", с подписью - мы все!',
-#                                     'cost': 120,
-#                                     'type': 'tatu',
-#                                     'quantity': 15
-#                                 },
-#                                 {
-#                                     'id': 'tatu_runing_man_1',
-#                                     'name': '🤺 Бегущий по лезвию',
-#                                     'cost': 100,
-#                                     'type': 'tatu',
-#                                     'quantity': 1000
-#                                 }
-#                             ]
-#                         },
-#                         {
-#                             'name': 'SKILLS',
-#                             'value':
-#                             [
-#                                 {
-#                                     'id': 'barman',
-#                                     'name': '🍾 Бармен',
-#                                     'cost': 0,
-#                                     'type': 'skill',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'moonshiner',
-#                                     'name': '📖 «Как перегонять спирт»',
-#                                     'cost': 0,
-#                                     'type': 'skill',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'fighter',
-#                                     'name': '🥋 Чёрный пояс по PvP',
-#                                     'cost': 0,
-#                                     'type': 'skill',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'boss',
-#                                     'name': '📿 Чётки босса банды',
-#                                     'cost': 0,
-#                                     'type': 'skill',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'programmer',
-#                                     'name': '🉐💮 Язык программирования',
-#                                     'cost': 0,
-#                                     'type': 'skill',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'perfectionist',
-#                                     'name': '🛑 Круг перфекциониста',
-#                                     'cost': 0,
-#                                     'type': 'skill',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'seducer',
-#                                     'name': '🗣 Соблазнитель ванаМинго',
-#                                     'cost': 0,
-#                                     'type': 'skill',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'the_running_man',
-#                                     'name': '🏃 Бегущий человек',
-#                                     'cost': 0,
-#                                     'type': 'skill',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'alien',
-#                                     'name': '🚼 Чужой',
-#                                     'cost': 0,
-#                                     'type': 'skill',
-#                                     'quantity': 1000
-#                                 }
-#                             ]
-#                         },
-#                         {
-#                             'name': 'EDIBLE',
-#                             'value':
-#                             [
-#                                 {
-#                                     'id': 'salt',
-#                                     'name': '🧂 Соль на рану',
-#                                     'cost': 1,
-#                                     'type': 'food',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'cookies',
-#                                     'name': '🍪 Довоенное печенье',
-#                                     'cost': 3,
-#                                     'type': 'food',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'head_crombopulus',
-#                                     'name': '👽 Голова кромбопулуса',
-#                                     'cost': 7,
-#                                     'type': 'food',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'tomato_juice',
-#                                     'name': '🌡 Томатный сок',
-#                                     'cost': 2,
-#                                     'type': 'food',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'soup_set',
-#                                     'name': '☠️ Суповой комплект',
-#                                     'cost': 4,
-#                                     'type': 'food',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'truffle',
-#                                     'name': '💩 Трюфель',
-#                                     'cost': 10,
-#                                     'type': 'food',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'ears',
-#                                     'name': '👂 Уши из Rivet City',
-#                                     'cost': 5,
-#                                     'type': 'food',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'chocolate_and_whiskey',
-#                                     'name': '🍫 и 🥃',
-#                                     'cost': 12,
-#                                     'type': 'food',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'banana',
-#                                     'name': '🍌 Банан преданности',
-#                                     'cost': 6,
-#                                     'type': 'food',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'peach',
-#                                     'name': '🍑 Персик преданности',
-#                                     'cost': 5,
-#                                     'type': 'food',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'ascorbin',
-#                                     'name': '🤍 Аскорбинка',
-#                                     'cost': 8,
-#                                     'type': 'food',
-#                                     'quantity': 1000
-#                                 },
-#                                 {
-#                                     'id': 'snail',
-#                                     'name': '🐚 Труп улитки',
-#                                     'cost': 1,
-#                                     'type': 'food',
-#                                     'quantity': 1000
-#                                 }
-#                             ]
-#                         },
-#                         {
-#                             'name': 'MARKS_OF_EXCELLENCE',
-#                             'value':
-#                             [
-#                                 {
-#                                     'id': 'fucking_i',
-#                                     'name': '🖕 Нихуя І степени',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'fucking_ii',
-#                                     'name': '🖕🖕 Нихуя ІІ степени',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'fucking_iii',
-#                                     'name': '🖕🖕🖕 Нихуя ІІІ степени',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'fucking_iv',
-#                                     'name': '🖕🖕🖕🖕 Нихуя IV степени',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'fucking_v',
-#                                     'name': '🖕🖕🖕🖕🖕 Нихуя V степени',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'fucking_full',
-#                                     'name': '🎖️ Полный кавалер ордена "Нихуя"',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'diploma_1',
-#                                     'name': '📄 Грамота за правильный вопрос!',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'diploma_2',
-#                                     'name': '📜 Грамота от вМ за групповой захват Научного комплекса',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'diploma_3',
-#                                     'name': '💪 За храбрость и мужество',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'certificate_gv',
-#                                     'name': '💉 Удостоверение "Главврач"',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
+                                },
+                                {
+                                    'id': 'straw_hat',
+                                    'name': '👒 Соломенная шляпка',
+                                    'cost': 10,
+                                    'type': 'clothes',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'hunter_panties',
+                                    'name': '🩲 Трусы охотника на Трогов',
+                                    'cost': 10,
+                                    'type': 'clothes',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'dueling_glove',
+                                    'name': '🧤 Дуэльная перчатка',
+                                    'cost': 15,
+                                    'type': 'clothes',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'handkerchief',
+                                    'name': '👻 Носовой платок',
+                                    'cost': 6,
+                                    'type': 'clothes',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'leather_bag',
+                                    'name': '💰 Кожаный мешок',
+                                    'cost': 4,
+                                    'type': 'clothes',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'medical_mask',
+                                    'name': '😷 Медицинская маска',
+                                    'cost': 8,
+                                    'type': 'clothes',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'dads_slippers',
+                                    'name': '🥿 Батины тапки',
+                                    'cost': 10,
+                                    'type': 'clothes',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'latex_mask',
+                                    'name': '👽 Латексная маска',
+                                    'cost': 10,
+                                    'type': 'clothes',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'linkoln_hat',
+                                    'name': '🎩 шляпа Линкольна',
+                                    'cost': 50,
+                                    'type': 'clothes',
+                                    'quantity': 1
+                                }
+                            ]
+                        },
+                        {
+                            'name': 'RAID_BOLTS',
+                            'value':
+                            [
+                                {
+                                    'id': 'bolt_1',
+                                    'name': '🔩 Болт М69, возложенный на рейд',
+                                    'cost': 0,
+                                    'type': 'bolt',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'bolt_2',
+                                    'name': '🔩🔩 Болт М228, возложенный на рейд',
+                                    'cost': 0,
+                                    'type': 'bolt',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'bolt_3',
+                                    'name': '🔩🔩🔩 Болт М404, возложенный на рейд',
+                                    'cost': 0,
+                                    'type': 'bolt',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'bolt_4',
+                                    'name': '🔩🔩🔩🔩 Болт М1488, возложенный на рейд',
+                                    'cost': 0,
+                                    'type': 'bolt',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'bolt_5',
+                                    'name': '🎫🍼 Билет на гигантскую бутылку',
+                                    'cost': 0,
+                                    'type': 'bolt',
+                                    'quantity': 1000
+                                }
+                            ]
+                        },
+                        {
+                            'name': 'VIRUSES',
+                            'value':
+                            [
+                                {
+                                    'id': 'COVID-19',
+                                    'name': '🦇 Коронавирус',
+                                    'cost': 0,
+                                    'type': 'disease',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'mirror_disease',
+                                    'name': '🔬 Зеркальная болезнь',
+                                    'cost': 0,
+                                    'type': 'disease',
+                                    'quantity': 1000
+                                }
+                            ]
+                        },
+                        {
+                            'name': 'TATU',
+                            'value':
+                            [
+                                {
+                                    'id': 'tatu_arthouse_1',
+                                    'name': '♀️ Тату "Не забуду Кешу и АртхǁȺǁус!"',
+                                    'cost': 100,
+                                    'type': 'tatu',
+                                    'quantity': 15
+                                },
+                                {
+                                    'id': 'tatu_arthouse_2',
+                                    'name': '♂️ Тату "Не забуду Кешу и АртхǁȺǁус!"',
+                                    'cost': 100,
+                                    'type': 'tatu',
+                                    'quantity': 15
+                                },
+                                {
+                                    'id': 'tatu_arthouse_3',
+                                    'name': '♂️ Тату "Не забуду Кешу и АртхǁȺǁус!"',
+                                    'cost': 100,
+                                    'type': 'tatu',
+                                    'quantity': 15
+                                },
+                                {
+                                    'id': 'tatu_arthouse_4',
+                                    'name': '♂️ Тату "Не забуду Кешу и АртхǁȺǁус!", с подписью Кеши.',
+                                    'cost': 100,
+                                    'type': 'tatu',
+                                    'quantity': 15
+                                },
+                                {
+                                    'id': 'tatu_ledonna_1',
+                                    'name': '🤍 тату "ЛеДонна"',
+                                    'cost': 200,
+                                    'type': 'tatu',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'tatu_kirill_1',
+                                    'name': '🤍 Сердце Кирилла навсегда',
+                                    'cost': 200,
+                                    'type': 'tatu',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'tatu_arthouse_5',
+                                    'name': '♂️ Тату "АртхǁȺǁус тебя любит!", с подписью - мы все!',
+                                    'cost': 120,
+                                    'type': 'tatu',
+                                    'quantity': 15
+                                },
+                                {
+                                    'id': 'tatu_runing_man_1',
+                                    'name': '🤺 Бегущий по лезвию',
+                                    'cost': 100,
+                                    'type': 'tatu',
+                                    'quantity': 1000
+                                }
+                            ]
+                        },
+                        {
+                            'name': 'SKILLS',
+                            'value':
+                            [
+                                {
+                                    'id': 'barman',
+                                    'name': '🍾 Бармен',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'moonshiner',
+                                    'name': '📖 «Как перегонять спирт»',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'fighter',
+                                    'name': '🥋 Чёрный пояс по PvP',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'boss',
+                                    'name': '📿 четки босса банды',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'programmer',
+                                    'name': '🉐💮 Язык программирования',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'perfectionist',
+                                    'name': '🛑 Круг перфекциониста',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'seducer',
+                                    'name': '🗣 Соблазнитель ванаМинго',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'the_running_man',
+                                    'name': '🏃 Бегущий человек',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'alien',
+                                    'name': '🚼 Чужой',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': 1000
+                                }
+                            ]
+                        },
+                        {
+                            'name': 'EDIBLE',
+                            'value':
+                            [
+                                {
+                                    'id': 'salt',
+                                    'name': '🧂 Соль на рану',
+                                    'cost': 1,
+                                    'type': 'food',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'cookies',
+                                    'name': '🍪 Довоенное печенье',
+                                    'cost': 3,
+                                    'type': 'food',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'head_crombopulus',
+                                    'name': '👽 Голова кромбопулуса',
+                                    'cost': 7,
+                                    'type': 'food',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'tomato_juice',
+                                    'name': '🌡 Томатный сок',
+                                    'cost': 2,
+                                    'type': 'food',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'soup_set',
+                                    'name': '☠️ Суповой комплект',
+                                    'cost': 4,
+                                    'type': 'food',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'truffle',
+                                    'name': '💩 Трюфель',
+                                    'cost': 10,
+                                    'type': 'food',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'ears',
+                                    'name': '👂 Уши из Rivet City',
+                                    'cost': 5,
+                                    'type': 'food',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'chocolate_and_whiskey',
+                                    'name': '🍫 и 🥃',
+                                    'cost': 12,
+                                    'type': 'food',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'banana',
+                                    'name': '🍌 Банан преданности',
+                                    'cost': 6,
+                                    'type': 'food',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'peach',
+                                    'name': '🍑 Персик преданности',
+                                    'cost': 5,
+                                    'type': 'food',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'ascorbin',
+                                    'name': '🤍 Аскорбинка',
+                                    'cost': 8,
+                                    'type': 'food',
+                                    'quantity': 1000
+                                },
+                                {
+                                    'id': 'snail',
+                                    'name': '🐚 Труп улитки',
+                                    'cost': 1,
+                                    'type': 'food',
+                                    'quantity': 1000
+                                }
+                            ]
+                        },
+                        {
+                            'name': 'MARKS_OF_EXCELLENCE',
+                            'value':
+                            [
+                                {
+                                    'id': 'fucking_i',
+                                    'name': '🖕 Нихуя І степени',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'fucking_ii',
+                                    'name': '🖕🖕 Нихуя ІІ степени',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'fucking_iii',
+                                    'name': '🖕🖕🖕 Нихуя ІІІ степени',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'fucking_iv',
+                                    'name': '🖕🖕🖕🖕 Нихуя IV степени',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'fucking_v',
+                                    'name': '🖕🖕🖕🖕🖕 Нихуя V степени',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'fucking_full',
+                                    'name': '🎖️ Полный кавалер ордена "Нихуя"',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'diploma_1',
+                                    'name': '📄 Грамота за правильный вопрос!',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'diploma_2',
+                                    'name': '📜 Грамота от вМ за групповой захват Научного комплекса',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'diploma_3',
+                                    'name': '💪 За храбрость и мужество!',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'certificate_gv',
+                                    'name': '💉 Удостоверение "Главврач"',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
                                     
-#                                 },
-#                                 {
-#                                     'id': 'certificate_mb',
-#                                     'name': '💉 Удостоверение "Медбрат"',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'certificate_mm',
-#                                     'name': '💉 Удостоверение "Медсестричка"',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'certificate_honorary_donor',
-#                                     'name': '🩸 Почётный донор',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'certificate_honorary_donor_i',
-#                                     'name': '🩸 Значёк "Почетный донор" I-степени',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'certificate_honorary_donor_ii',
-#                                     'name': '🩸 Значёк "Почетный донор" II-степени',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'certificate_honorary_donor_iii',
-#                                     'name': '🩸 Значёк "Почетный донор" III-степени',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'photo_8_bandits_in_scientific_complex',
-#                                     'name': '🎞️Фото 8-ми бандитов на фоне Научного комплекса',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'sign_from_the_door_of_the_scientific_complex',
-#                                     'name': '☢️Табличка с двери Научного комплекса с 8-ю подписями бойцов АртхǁȺǁус',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'test_tube_from_the_scientific_complex',
-#                                     'name': '🍼 Пробирка из Научного комплекса с надписью - здэс был Артоха̶уз',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'trolley_bus_ticket_scientific_complex',
-#                                     'name': '🎫 Билет на троллебус на групповую поездку до Научного комплекса',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'capture_medal_scientific_complex',
-#                                     'name': '🎖️ Медаль за захват 7-ми данже подряд 1-ой степени',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'newspaper_article_scientific_complex',
-#                                     'name': '📰 Статья в газете о легендарном походе за семью данжами',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'vacation_to_sanatorium',
-#                                     'name': '📃 Путёвка в санаторий "SPA Пустошь" за захват 7-ми данжей',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'burning_fart',
-#                                     'name': '🔥 Горящий пердак',
-#                                     'cost': 1,
-#                                     'type': 'marks_of_excellence',
-#                                     'quantity': 30
-#                                 }
-#                             ]
-#                         },
-#                         {
-#                             'name': 'REWARDS',
-#                             'value':
-#                             [
-#                                 {
-#                                     'id': 'statuette_shark',
-#                                     'name': '🦈 Статуэтка "Акула"',
-#                                     'cost': 5,
-#                                     'type': 'decoration',
-#                                     'quantity': 5
+                                },
+                                {
+                                    'id': 'certificate_mb',
+                                    'name': '💉 Удостоверение "Медбрат"',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'certificate_mm',
+                                    'name': '💉 Удостоверение "Медсестричка"',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'certificate_honorary_donor',
+                                    'name': '🩸 Почётный донор',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'certificate_honorary_donor_i',
+                                    'name': '🩸 Значёк "Почетный донор" I-степени',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'certificate_honorary_donor_ii',
+                                    'name': '🩸 Значёк "Почетный донор" II-степени',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'certificate_honorary_donor_iii',
+                                    'name': '🩸 Значёк "Почетный донор" III-степени',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'photo_8_bandits_in_scientific_complex',
+                                    'name': '🎞️Фото 8-ми бандитов на фоне Научного комплекса',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'sign_from_the_door_of_the_scientific_complex',
+                                    'name': '☢️Табличка с двери Научного комплекса с 8-ю подписями бойцов АртхǁȺǁус',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'test_tube_from_the_scientific_complex',
+                                    'name': '🍼 Пробирка из Научного комплекса с надписью - здэс был Артоха̶уз',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'trolley_bus_ticket_scientific_complex',
+                                    'name': '🎫 Билет на троллебус на групповую поездку до Научного комплекса',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'capture_medal_scientific_complex',
+                                    'name': '🎖️ Медаль за захват 7-ми данже подряд 1-ой степени',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'newspaper_article_scientific_complex',
+                                    'name': '📰 Статья в газете о легендарном походе за семью данжами',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'vacation_to_sanatorium',
+                                    'name': '📃 Путёвка в санаторий "SPA Пустошь" за захват 7-ми данжей',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'burning_fart',
+                                    'name': '🔥 Горящий пердак',
+                                    'cost': 1,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': 30
+                                }
+                            ]
+                        },
+                        {
+                            'name': 'REWARDS',
+                            'value':
+                            [
+                                {
+                                    'id': 'statuette_shark',
+                                    'name': '🦈 Статуэтка "Акула"',
+                                    'cost': 5,
+                                    'type': 'decoration',
+                                    'quantity': 5
 
-#                                 },
-#                                 {
-#                                     'id': 'statuette_complex',
-#                                     'name': '🤼 Статуэтка из говна и палок - "Групповой захват Научного комплекса"',
-#                                     'cost': 10,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'statuette_smart_girl',
-#                                     'name': '💃 Статуэтка "Умница"',
-#                                     'cost': 10,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'statuette_smart_boy',
-#                                     'name': '🕺 Статуэтка "Умник, бля"',
-#                                     'cost': 10,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'statuette_barman_2019',
-#                                     'name': '🍾 Бармен 2019 года',
-#                                     'cost': 10,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'statuette_the_eiffel_tower',
-#                                     'name': '♟ Эйфелева Башня',
-#                                     'cost': 10,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'sticker_pack',
-#                                     'name': '🎭 Набор стикеров Fallout 2',
-#                                     'cost': 30,
-#                                     'type': 'decoration',
-#                                     'quantity': 3
-#                                 },
-#                                 {
-#                                     'id': 'rebus_cube',
-#                                     'name': '🎲 Кубик ребусоведа',
-#                                     'cost': 10,
-#                                     'type': 'decoration',
-#                                     'quantity': 2
-#                                 },
-#                                 {
-#                                     'id': 'trident',
-#                                     'name': '🔱 Трезубец повелителя Пустоши',
-#                                     'cost': 30,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'dust_from_woolen',
-#                                     'name': '🌪 Пыль с Шерстяного',
-#                                     'cost': 50,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'saurons_point',
-#                                     'name': '🏵 Очко Саурона',
-#                                     'cost': 1,
-#                                     'type': 'decoration',
-#                                     'quantity': 10
-#                                 },
-#                                 {
-#                                     'id': 'urn_baphomet',
-#                                     'name': '⚱️Бафомет',
-#                                     'cost': 20,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'urn_faggoat',
-#                                     'name': '🎷Фаггот',
-#                                     'cost': 20,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'urn_anime',
-#                                     'name': '🏺 Анимэ',
-#                                     'cost': 20,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'two_girls_one_cup',
-#                                     'name': '🧁 Two girls, one cup',
-#                                     'cost': 120,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'mythical_friendship',
-#                                     'name': '✂️ Мифическая дружба',
-#                                     'cost': 10,
-#                                     'type': 'decoration',
-#                                     'quantity': 5
-#                                 },
-#                                 {
-#                                     'id': 'deanon',
-#                                     'name': '🆔 Деанон',
-#                                     'cost': 5,
-#                                     'type': 'decoration',
-#                                     'quantity': 10
-#                                 },
-#                                 {
-#                                     'id': 'paul',
-#                                     'name': '🌀 Пауль',
-#                                     'cost': 100,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'hamlet',
-#                                     'name': '💀 Гамлет',
-#                                     'cost': 50,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'yorick',
-#                                     'name': '💀 Йорик',
-#                                     'cost': 75,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'statuette_alien_1',
-#                                     'name': '👾 Ъуъеъкхх',
-#                                     'cost': 60,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'statuette_alien_2',
-#                                     'name': '👾 тпфптлтвфт ъуъ сука',
-#                                     'cost': 60,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'multipass_arthouse',
-#                                     'name': '💳 Мультипас бандита АртхǁȺǁус',
-#                                     'cost': 15,
-#                                     'type': 'decoration',
-#                                     'quantity': 15
-#                                 },
-#                                 {
-#                                     'id': '100_bucks',
-#                                     'name': '💵 Кровавые 100 баксов',
-#                                     'cost': 100,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': '200_bucks',
-#                                     'name': '💵 Кровные 200 баксов',
-#                                     'cost': 200,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'name_ring',
-#                                     'name': '🔅 Именной перстень "5-ый сезон"',
-#                                     'cost': 0,
-#                                     'type': 'decoration',
-#                                     'quantity': 75
-#                                 },
-#                                 {
-#                                     'id': 'something',
-#                                     'name': '🧫 Нечто',
-#                                     'cost': 50,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'pickman_painting',
-#                                     'name': '🎨 Картина Пикмана "F-395"',
-#                                     'cost': 100,
-#                                     'type': 'decoration',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'death_flag',
-#                                     'name': '🏴 Флаг смерти',
-#                                     'cost': 7,
-#                                     'type': 'decoration',
-#                                     'quantity': 10
-#                                 },
-#                                 {
-#                                     'id': 'armenian_rosary',
-#                                     'name': '📿 Армяне на стиле',
-#                                     'cost': 1,
-#                                     'type': 'decoration',
-#                                     'quantity': 4
-#                                 },
-#                                 {
-#                                     'id': 'sasai_kudasai',
-#                                     'name': '🔪 Сасайкудасай',
-#                                     'cost': 10,
-#                                     'type': 'decoration',
-#                                     'quantity': 5
-#                                 },
-#                                 {
-#                                     'name': '4',
-#                                     'value': '📟 игрушечный Пип-бой',
-#                                     'cost': 10,
-#                                     'type': 'decoration',
-#                                     'quantity': 5
-#                                 },
-#                                 {
-#                                     'name': '7',
-#                                     'value': '📟 моделька Пип-боя',
-#                                     'cost': 10,
-#                                     'type': 'decoration',
-#                                     'quantity': 5
-#                                 }                                
-#                             ] 
-#                         },
-#                         {
-#                             'name': 'THINGS',
-#                             'value':
-#                             [
-#                                 {
-#                                     'id': 'sticks',
-#                                     'name': '🥢 Близкая дружба',
-#                                     'cost': 1,
-#                                     'type': 'things',
-#                                     'quantity': 10
-#                                 },
-#                                 {
-#                                     'id': 'nipple_clamp',
-#                                     'name': '🗜 Зажим на соски',
-#                                     'cost': 10,
-#                                     'type': 'things',
-#                                     'quantity': 10
-#                                 },
-#                                 {
-#                                     'id': 'butt_plug',
-#                                     'name': '🕹️ Анальная пробка',
-#                                     'cost': 10,
-#                                     'type': 'things',
-#                                     'quantity': 10
-#                                 },
-#                                 {
-#                                     'id': 'magnifier',
-#                                     'name': '🔍 Лупа',
-#                                     'cost': 15,
-#                                     'type': 'things',
-#                                     'quantity': 2
-#                                 },
-#                                 {
-#                                     'id': 'disabled_carriage',
-#                                     'name': '♿️ Зато не пешком',
-#                                     'cost': 60,
-#                                     'type': 'things',
-#                                     'quantity': 2
-#                                 },
-#                                 {
-#                                     'id': 'speakers',
-#                                     'name': '🎶 Долбит нормально',
-#                                     'cost': 20,
-#                                     'type': 'things',
-#                                     'quantity': 30
-#                                 },
-#                                 {
-#                                     'id': 'flower_pervonach',
-#                                     'name': '🌷 Цветок "Первонах"',
-#                                     'cost': 3,
-#                                     'type': 'things',
-#                                     'quantity': 50
-#                                 },
-#                                 {
-#                                     'id': 'teddy_bear',
-#                                     'name': '🧸 Мишка-обнимашка',
-#                                     'cost': 10,
-#                                     'type': 'things',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'baby_tooth',
-#                                     'name': '🦷 Молочный зуб Рашки',
-#                                     'cost': 99,
-#                                     'type': 'things',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'key_to_the_apartment_in_halo',
-#                                     'name': '🔑 От квартиры в Ореоле',
-#                                     'cost': 1,
-#                                     'type': 'things',
-#                                     'quantity': 75
-#                                 },
-#                                 {
-#                                     'id': 'brick',
-#                                     'name': '🧱 Кирпич на голову',
-#                                     'cost': 1,
-#                                     'type': 'things',
-#                                     'quantity': 75
-#                                 },
-#                                 {
-#                                     'id': 'fork',
-#                                     'name': '🍴 Вилка в глаз',
-#                                     'cost': 2,
-#                                     'type': 'things',
-#                                     'quantity': 75
-#                                 },
-#                                 {
-#                                     'id': 'iron',
-#                                     'name': '🥌 Утюг',
-#                                     'cost': 7,
-#                                     'type': 'things',
-#                                     'quantity': 7
-#                                 },
-#                                 {
-#                                     'id': 'radar_detector',
-#                                     'name': '💿 Козырёк в авто',
-#                                     'cost': 15,
-#                                     'type': 'things',
-#                                     'quantity': 7
-#                                 },
-#                                 {
-#                                     'id': 'radar_detector_ii',
-#                                     'name': '📀 Блатной козырёк в авто',
-#                                     'cost': 20,
-#                                     'type': 'things',
-#                                     'quantity': 7
-#                                 },
-#                                 {
-#                                     'id': 'gps',
-#                                     'name': '🔊 GPS',
-#                                     'cost': 70,
-#                                     'type': 'things',
-#                                     'quantity': 5
-#                                 },
-#                                 {
-#                                     'id': 'horseshoe',
-#                                     'name': '🧲 Подкова',
-#                                     'cost': 25,
-#                                     'type': 'things',
-#                                     'quantity': 4
-#                                 },
-#                                 {
-#                                     'id': 'raid_plan',
-#                                     'name': '🧻 План рейда',
-#                                     'cost': 0,
-#                                     'type': 'things',
-#                                     'quantity': 1
-#                                 },
-#                                 {
-#                                     'id': 'comb',
-#                                     'name': '🚿 Расчёска от лох',
-#                                     'cost': 2,
-#                                     'type': 'things',
-#                                     'quantity': 15
-#                                 },
-#                                 {
-#                                     'id': 'pot',
-#                                     'name': '🏆 Горшок',
-#                                     'cost': 2,
-#                                     'type': 'things',
-#                                     'quantity': 20
-#                                 },
-#                                 {
-#                                     'id': '85',
-#                                     'name': '🚬 Арома стик',
-#                                     'cost': 3,
-#                                     'type': 'things',
-#                                     'quantity': 20
-#                                 },
-#                                 {
-#                                     'id': 'sword_of_the_jedi',
-#                                     'name': '🗡️ Меч джедая',
-#                                     'cost': 130,
-#                                     'type': 'things',
-#                                     'quantity': 20
-#                                 },
-#                                 {
-#                                     'id': 'metal_detector',
-#                                     'name': '🧑‍🦯 Металлоискатель',
-#                                     'cost': 100,
-#                                     'type': 'things',
-#                                     'quantity': 20
-#                                 },
-#                                 {
-#                                     'name': 'pip_boy_2000',
-#                                     'value': '📟 Пип-бой 2000',
-#                                     'cost': 1000,
-#                                     'type': 'things',
-#                                     'quantity': 1000,
-#                                     'composition':
-#                                     {
-#                                         [
-#                                             {
-#                                                 'id': 'pip_broken_part',
-#                                                 'count': 1
-#                                             },
-#                                             {
-#                                                 'id': 'pip_antenna',
-#                                                 'count': 1
-#                                             },
-#                                             {
-#                                                 'id': 'pip_battery',
-#                                                 'count': 1
-#                                             },
-#                                             {
-#                                                 'id': 'pip_spare_part',
-#                                                 'count': 2
-#                                             },
-#                                             {
-#                                                 'id': 'pip_bolt',
-#                                                 'count': 3
-#                                             },
-#                                             {
-#                                                 'id': 'pip_repair_kit',
-#                                                 'count': 1
-#                                             }
-#                                         ]
-#                                     }
-#                                 },
-#                                 {
-#                                     'id': 'pip_repair_kit',
-#                                     'name': '🛠️ Ремкомплект для Пип-боя',
-#                                     'cost': 100,
-#                                     'type': 'things',
-#                                     'quantity': 2,
-#                                 }
-#                             ]
-#                         },
-#                         {
-#                             'name': 'PIP_BOY',
-#                             'value':
-#                             [
-#                                 {
-#                                     'id': 'pip_antenna',
-#                                     'name': '📟 антена от Пип-боя',
-#                                     'cost': 20,
-#                                     'type': 'things',
-#                                     'quantity': 5
-#                                 },
-#                                 {
-#                                     'id': 'pip_battery',
-#                                     'name': '📟 аккумулятор от Пип-боя',
-#                                     'cost': 20,
-#                                     'type': 'things',
-#                                     'quantity': 5
-#                                 },
-#                                 {
-#                                     'id': 'pip_packaging',
-#                                     'name': '📟 упаковка от Пип-боя',
-#                                     'cost': 1,
-#                                     'type': 'things',
-#                                     'quantity': 5
-#                                 },
-#                                 {
-#                                     'id': 'pip_spare_part',
-#                                     'name': '📟 запчасть от Пип-боя',
-#                                     'cost': 25,
-#                                     'type': 'things',
-#                                     'quantity': 5
-#                                 },
-#                                 {
-#                                     'id': 'pip_broken_part',
-#                                     'name': '📟 сломанный Пип-бой',
-#                                     'cost': 50,
-#                                     'type': 'things',
-#                                     'quantity': 5
-#                                 },
-#                                 {
-#                                     'id': 'pip_bolt',
-#                                     'name': '📟 болт от Пип-боя',
-#                                     'cost': 20,
-#                                     'type': 'things',
-#                                     'quantity': 30
-#                                 }
-#                             ] 
-#                         }
-#                     ]
-#                 } 
-#             } 
-# u = settings.update_one(myquery, newvalues)
+                                },
+                                {
+                                    'id': 'statuette_complex',
+                                    'name': '🤼 Статуэтка из говна и палок - "Групповой захват Научного комплекса"',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'statuette_smart_girl',
+                                    'name': '💃 Статуэтка "Умница"',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'statuette_smart_boy',
+                                    'name': '🕺 Статуэтка "Умник, бля"',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'statuette_barman_2019',
+                                    'name': '🍾 Бармен 2019 года',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'statuette_the_eiffel_tower',
+                                    'name': '♟ Эйфелева Башня',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'sticker_pack',
+                                    'name': '🎭 Набор стикеров Fallout 2',
+                                    'cost': 30,
+                                    'type': 'decoration',
+                                    'quantity': 3
+                                },
+                                {
+                                    'id': 'rebus_cube',
+                                    'name': '🎲 Кубик ребусоведа',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': 2
+                                },
+                                {
+                                    'id': 'trident',
+                                    'name': '🔱 Трезубец повелителя Пустоши',
+                                    'cost': 30,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'dust_from_woolen',
+                                    'name': '🌪 Пыль с Шерстяного',
+                                    'cost': 50,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'saurons_point',
+                                    'name': '🏵 Очко Саурона',
+                                    'cost': 1,
+                                    'type': 'decoration',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'urn_baphomet',
+                                    'name': '⚱️Бафомет',
+                                    'cost': 20,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'urn_faggoat',
+                                    'name': '🎷Фаггот',
+                                    'cost': 20,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'urn_anime',
+                                    'name': '🏺 Анимэ',
+                                    'cost': 20,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'two_girls_one_cup',
+                                    'name': '🧁 Two girls, one cup',
+                                    'cost': 120,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'mythical_friendship',
+                                    'name': '✂️ Мифическая дружба',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': 5
+                                },
+                                {
+                                    'id': 'deanon',
+                                    'name': '🆔 Деанон',
+                                    'cost': 5,
+                                    'type': 'decoration',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'paul',
+                                    'name': '🌀 Пауль',
+                                    'cost': 100,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'hamlet',
+                                    'name': '💀 Гамлет',
+                                    'cost': 50,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'yorick',
+                                    'name': '💀 Йорик',
+                                    'cost': 75,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'statuette_alien_1',
+                                    'name': '👾 Ъуъеъкхх',
+                                    'cost': 60,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'statuette_alien_2',
+                                    'name': '👾 тпфптлтвфт ъуъ сука',
+                                    'cost': 60,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'multipass_arthouse',
+                                    'name': '💳 Мультипас бандита АртхǁȺǁус',
+                                    'cost': 15,
+                                    'type': 'decoration',
+                                    'quantity': 15
+                                },
+                                {
+                                    'id': '100_bucks',
+                                    'name': '💵 Кровавые 100 баксов',
+                                    'cost': 100,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': '200_bucks',
+                                    'name': '💵 Кровные 200 баксов',
+                                    'cost': 200,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'name_ring',
+                                    'name': '🔅 Именной перстень "5-ый сезон"',
+                                    'cost': 0,
+                                    'type': 'decoration',
+                                    'quantity': 75
+                                },
+                                {
+                                    'id': 'something',
+                                    'name': '🧫 Нечто',
+                                    'cost': 50,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'pickman_painting',
+                                    'name': '🎨 Картина Пикмана "F-395"',
+                                    'cost': 100,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'death_flag',
+                                    'name': '🏴 Флаг смерти',
+                                    'cost': 7,
+                                    'type': 'decoration',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'armenian_rosary',
+                                    'name': '📿 Армяне на стиле',
+                                    'cost': 1,
+                                    'type': 'decoration',
+                                    'quantity': 4
+                                },
+                                {
+                                    'id': 'sasai_kudasai',
+                                    'name': '🔪 Сасайкудасай',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': 5
+                                },
+                                {
+                                    'id': 'pip_boy_toy',
+                                    'name': '📟 игрушечный Пип-бой',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': 5
+                                },
+                                {
+                                    'id': 'pip_boy_model',
+                                    'name': '📟 моделька Пип-боя',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': 5
+                                },
+                                {
+                                    'id': 'crown_pidor_of_the_day',
+                                    'name': '👑 "Пидор дня"',
+                                    'cost': 100,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                }
+
+                                                                
+                            ] 
+                        },
+                        {
+                            'name': 'THINGS',
+                            'value':
+                            [
+                                {
+                                    'id': 'sticks',
+                                    'name': '🥢 Близкая дружба',
+                                    'cost': 1,
+                                    'type': 'things',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'nipple_clamp',
+                                    'name': '🗜 Зажим на соски',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'butt_plug',
+                                    'name': '🕹️ Анальная пробка',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': 10
+                                },
+                                {
+                                    'id': 'magnifier',
+                                    'name': '🔍 Лупа',
+                                    'cost': 15,
+                                    'type': 'things',
+                                    'quantity': 2
+                                },
+                                {
+                                    'id': 'disabled_carriage',
+                                    'name': '♿️ Зато не пешком',
+                                    'cost': 60,
+                                    'type': 'things',
+                                    'quantity': 2
+                                },
+                                {
+                                    'id': 'speakers',
+                                    'name': '🎶 Долбит нормально',
+                                    'cost': 20,
+                                    'type': 'things',
+                                    'quantity': 30
+                                },
+                                {
+                                    'id': 'flower_pervonach',
+                                    'name': '🌷 Цветок "Первонах"',
+                                    'cost': 3,
+                                    'type': 'things',
+                                    'quantity': 50
+                                },
+                                {
+                                    'id': 'teddy_bear',
+                                    'name': '🧸 Мишка-обнимашка',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'baby_tooth',
+                                    'name': '🦷 Молочный зуб Рашки',
+                                    'cost': 99,
+                                    'type': 'things',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'key_to_the_apartment_in_halo',
+                                    'name': '🔑 от квартиры в Ореоле',
+                                    'cost': 1,
+                                    'type': 'things',
+                                    'quantity': 75
+                                },
+                                {
+                                    'id': 'brick',
+                                    'name': '🧱 Кирпич на голову',
+                                    'cost': 1,
+                                    'type': 'things',
+                                    'quantity': 75
+                                },
+                                {
+                                    'id': 'fork',
+                                    'name': '🍴 Вилка в глаз',
+                                    'cost': 2,
+                                    'type': 'things',
+                                    'quantity': 75
+                                },
+                                {
+                                    'id': 'iron',
+                                    'name': '🥌 Утюг',
+                                    'cost': 7,
+                                    'type': 'things',
+                                    'quantity': 7
+                                },
+                                {
+                                    'id': 'radar_detector',
+                                    'name': '💿 Козырёк в авто',
+                                    'cost': 15,
+                                    'type': 'things',
+                                    'quantity': 7
+                                },
+                                {
+                                    'id': 'radar_detector_ii',
+                                    'name': '📀 Блатной козырёк в авто',
+                                    'cost': 20,
+                                    'type': 'things',
+                                    'quantity': 7
+                                },
+                                {
+                                    'id': 'gps',
+                                    'name': '🔊 GPS',
+                                    'cost': 70,
+                                    'type': 'things',
+                                    'quantity': 5
+                                },
+                                {
+                                    'id': 'horseshoe',
+                                    'name': '🧲 Подкова',
+                                    'cost': 25,
+                                    'type': 'things',
+                                    'quantity': 4
+                                },
+                                {
+                                    'id': 'raid_plan',
+                                    'name': '🧻 План рейда',
+                                    'cost': 0,
+                                    'type': 'things',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'comb',
+                                    'name': '🚿 Расчёска от лох',
+                                    'cost': 2,
+                                    'type': 'things',
+                                    'quantity': 15
+                                },
+                                {
+                                    'id': 'pot',
+                                    'name': '🏆 Горшок',
+                                    'cost': 2,
+                                    'type': 'things',
+                                    'quantity': 20
+                                },
+                                {
+                                    'id': '85',
+                                    'name': '🚬 Арома стик',
+                                    'cost': 3,
+                                    'type': 'things',
+                                    'quantity': 20
+                                },
+                                {
+                                    'id': 'sword_of_the_jedi',
+                                    'name': '🗡️ Меч джедая',
+                                    'cost': 130,
+                                    'type': 'things',
+                                    'quantity': 20
+                                },
+                                {
+                                    'id': 'metal_detector',
+                                    'name': '🧑‍🦯 Металлоискатель',
+                                    'cost': 100,
+                                    'type': 'things',
+                                    'quantity': 20
+                                },
+                                {
+                                    'id': 'pip_boy_2000',
+                                    'name': '📟 Пип-бой 2000',
+                                    'cost': 1000,
+                                    'type': 'things',
+                                    'quantity': 1000,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'pip_broken_part',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'pip_antenna',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'pip_battery',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'pip_spare_part',
+                                            'counter': 2
+                                        },
+                                        {
+                                            'id': 'pip_bolt',
+                                            'counter': 3
+                                        },
+                                        {
+                                            'id': 'pip_repair_kit',
+                                            'counter': 1
+                                        }
+                                    ]
+                                    
+                                },
+                                {
+                                    'id': 'pip_repair_kit',
+                                    'name': '🛠️ Ремкомплект для Пип-боя',
+                                    'cost': 100,
+                                    'type': 'things',
+                                    'quantity': 2,
+                                }
+                            ]
+                        },
+                        {
+                            'name': 'PIP_BOY',
+                            'value':
+                            [
+                                {
+                                    'id': 'pip_antenna',
+                                    'name': '📟 антена от Пип-боя',
+                                    'cost': 20,
+                                    'type': 'things',
+                                    'quantity': 5
+                                },
+                                {
+                                    'id': 'pip_battery',
+                                    'name': '📟 аккумулятор от Пип-боя',
+                                    'cost': 20,
+                                    'type': 'things',
+                                    'quantity': 5
+                                },
+                                {
+                                    'id': 'pip_packaging',
+                                    'name': '📟 упаковка от Пип-боя',
+                                    'cost': 1,
+                                    'type': 'things',
+                                    'quantity': 5
+                                },
+                                {
+                                    'id': 'pip_spare_part',
+                                    'name': '📟 запчасть от Пип-боя',
+                                    'cost': 25,
+                                    'type': 'things',
+                                    'quantity': 5
+                                },
+                                {
+                                    'id': 'pip_broken_part',
+                                    'name': '📟 сломанный Пип-бой',
+                                    'cost': 50,
+                                    'type': 'things',
+                                    'quantity': 5
+                                },
+                                {
+                                    'id': 'pip_bolt',
+                                    'name': '📟 болт от Пип-боя',
+                                    'cost': 20,
+                                    'type': 'things',
+                                    'quantity': 30
+                                }
+                            ] 
+                        }
+                    ]
+                } 
+            } 
+u = settings.update_one(myquery, newvalues)
 
 myquery = { "code": 'STICKERS' }
 newvalues = { "$set": { "value": 
@@ -2376,8 +2392,8 @@ newvalues = { "$set":
             } 
 u = settings.update_one(myquery, newvalues)
 
-for x in settings.find():
-    print(x)
+# for x in settings.find():
+#     print(x)
 
 print("#==========================#")              
 print("#         RAIDS            #")    
@@ -2394,7 +2410,70 @@ print("#==========================#")
 
 updateUser(None)
 for user in USERS_ARR:
-    pass
+    for acc in user.getAccessory():
+        acc = tools.deEmojify(acc).strip()
+        pref = ''
+        for x in getSetting(code='ACCESSORY_ALL', name='PIP_BOY', value=None, id=None):
+            if tools.deEmojify(x['name']).strip() == acc:
+                pref = '📟'
+                break
+        for x in getSetting(code='ACCESSORY_ALL', name='THINGS', value=None, id=None):
+            if tools.deEmojify(x['name']).strip() == acc:
+                pref = '🕹️'
+                break
+        for x in getSetting(code='ACCESSORY_ALL', name='REWARDS', value=None, id=None):
+            if tools.deEmojify(x['name']).strip() == acc:
+                pref = '🦈'
+                break
+        for x in getSetting(code='ACCESSORY_ALL', name='MARKS_OF_EXCELLENCE', value=None, id=None):
+            if tools.deEmojify(x['name']).strip() == acc:
+                pref = '📜'
+                break
+        for x in getSetting(code='ACCESSORY_ALL', name='EDIBLE', value=None, id=None):
+            if tools.deEmojify(x['name']).strip() == acc:
+                pref = '🍫'
+                break
+        for x in getSetting(code='ACCESSORY_ALL', name='SKILLS', value=None, id=None):
+            if tools.deEmojify(x['name']).strip() == acc:
+                pref = '🥋'
+                break            
+        for x in getSetting(code='ACCESSORY_ALL', name='TATU', value=None, id=None):
+            if tools.deEmojify(x['name']).strip() == acc:
+                pref = '♂️'
+                break  
+        for x in getSetting(code='ACCESSORY_ALL', name='VIRUSES', value=None, id=None):
+            if tools.deEmojify(x['name']).strip() == acc:
+                pref = '🦇'
+                break  
+        for x in getSetting(code='ACCESSORY_ALL', name='RAID_BOLTS', value=None, id=None):
+            if tools.deEmojify(x['name']).strip() == acc:
+                pref = '🔩'
+                break             
+        for x in getSetting(code='ACCESSORY_ALL', name='CLOTHES', value=None, id=None):
+            if tools.deEmojify(x['name']).strip() == acc:
+                pref = '👒'
+                break             
+        for x in getSetting(code='RANK', name='POSITIONS', value=None, id=None):
+            if tools.deEmojify(x['name']).strip() == acc:
+                pref = '👒'
+                break    
+        if 'Грамота за ' in acc and 'Дзен' in acc:
+            num = int(acc.split('Грамота за ')[1].split('-')[0].strip())
+            row =   {
+                        'id': f'marks_of_dzen_{num}',
+                        'name': f'🏵️ Грамота за {num}-й Дзен',
+                        'cost': 0,
+                        'type': 'marks_of_excellence',
+                        'quantity': 1000
+                    }
+            pref = '🏵️'
+
+
+
+        if pref == '':
+            pref = '_________________'
+            print(f'{pref} {user.getLogin()} {acc}')
+
 
 
 
