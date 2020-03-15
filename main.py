@@ -3707,7 +3707,7 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour == 11 and now_date.minute == 20 and now_date.second < 15:
         report = ''
         updateUser(None)
         for user in USERS_ARR:
@@ -3719,7 +3719,7 @@ def rade():
                 if rank['name'] == user.getRank()['name']:
                     pass
                 else:
-                    report = report + f'За достижение {rank["bm"]} бандит {user.getNameAmdGerb()} повышен в звании. Теперь он {rank["value"]}\n'
+                    report = report + f'За достижение {rank["bm"]} бандит {user.getNameAndGerb()} повышен в звании. Теперь он {rank["value"]}\n'
                     user.setRank(rank)
                     updateUser(user)
                     goat = getMyGoat(user.getLogin())
@@ -3730,7 +3730,7 @@ def rade():
             send_message_to_admin(report)
     
     # Пидор дня
-    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour == 11 and now_date.minute == 20 and now_date.second < 15:
         logger.info('Pidor of the day!')
         updateUser(None)
         user_in_game = []
