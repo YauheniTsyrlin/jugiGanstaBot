@@ -186,10 +186,15 @@ def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
     for s in strings:
         if (strings[i].startswith('VS.')):
             w1 = Warior(strings[i-1].split(' из ')[0].strip(), forward_date, message.text, None)
+
+
             w2 = Warior(strings[i+1].split(' из ')[0].strip(), forward_date, message.text, None)
+            
             result.append(w1)
             result.append(w2)
             fillResult = True
+
+        # if fillResult and '❤️' in s and '💥' in s
 
         if fillResult and (result[0].name in strings[i] and result[1].name in strings[i]):
             if (strings[i].startswith(result[0].name)):

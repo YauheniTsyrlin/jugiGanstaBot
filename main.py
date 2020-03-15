@@ -2097,10 +2097,11 @@ def main_message(message):
                         for pu in sorted(usersarr, key = lambda i: i['weight'], reverse=True):
                             counter = counter + 1
                             pingusers.append(pu)
+                            user = getUserByLogin(pu["login"])
                             if pu["ping"] == True:
-                                report = report + f'{counter}. @{pu["login"]} \n'
+                                report = report + f'{counter}. @{pu["login"]} {user.getNameAndGerb()}\n'
                             else:
-                                report = report + f'{counter}. 🔕{pu["login"]} \n'
+                                report = report + f'{counter}. 🔕{pu["login"]} {user.getNameAndGerb()}\n'
                             if counter % 5 == 0:
                                 send_messages_big(message.chat.id, text=first_string + report)
                                 pingusers = []
@@ -3707,7 +3708,7 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 11 and now_date.minute == 20 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
         report = ''
         updateUser(None)
         for user in USERS_ARR:
@@ -3723,14 +3724,14 @@ def rade():
                     user.setRank(rank)
                     updateUser(user)
                     goat = getMyGoat(user.getLogin())
-                    send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️ {rank["value"]}')
+                    send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️ {rank["bm"]} {rank["value"]}')
         if report == '':
             pass
         else:
             send_message_to_admin(report)
     
     # Пидор дня
-    if now_date.hour == 11 and now_date.minute == 20 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
         logger.info('Pidor of the day!')
         updateUser(None)
         user_in_game = []
