@@ -625,6 +625,13 @@ newvalues = { "$set": { "value":
                                     'quantity': 1000
                                 },
                                 {
+                                    'id': 'boss',
+                                    'name': '📿 Чётки босса банды',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': 1000
+                                },
+                                {
                                     'id': 'programmer',
                                     'name': '🉐💮 Язык программирования',
                                     'cost': 0,
@@ -1379,6 +1386,27 @@ newvalues = { "$set": { "value":
                                     'cost': 100,
                                     'type': 'things',
                                     'quantity': 2,
+                                },
+                                {
+                                    'id': 'bag_of_coins',
+                                    'name': '💰 Мешочек с монетами 100',
+                                    'cost': 100,
+                                    'type': 'things',
+                                    'quantity': 1000,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'coin',
+                                            'counter': 100
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'coin',
+                                    'name': '🕳️ Чеканная монета',
+                                    'cost': 1,
+                                    'type': 'things',
+                                    'quantity': 1000000,
                                 }
                             ]
                         },
@@ -2471,8 +2499,9 @@ for user in USERS_ARR:
 
 
         if pref == '':
-            pref = '_________________'
-            print(f'{pref} {user.getLogin()} {acc}')
+
+            pref = 'выдать bag_of_coins'
+            print(f'{pref} {user.getLogin()} за {acc}')
 
 
 
