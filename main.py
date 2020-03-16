@@ -1393,7 +1393,7 @@ def main_message(message):
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты уже записался.' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
-            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+            if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
                 return
 
@@ -1407,7 +1407,7 @@ def main_message(message):
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
-            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+            if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
                 send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
                 return
@@ -3660,7 +3660,7 @@ def pending_message():
         newvalues = { "$set": { "state": 'CANCEL'} }
         u = pending_messages.update_one(myquery, newvalues)
 
-def ping_on_reade(fuckupusers, chat_id):
+def ping_on_raid(fuckupusers, chat_id):
     # Пингуем
     if len(fuckupusers) == 0:
         return
@@ -3672,7 +3672,10 @@ def ping_on_reade(fuckupusers, chat_id):
         counter = counter + 1
         fusers.append(fu)
         if fu.isPing():
-            fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()}\n'
+            if fu.getRaidLocation() and fu.getRaidLocation() > 0: 
+                fuckupusersReport = fuckupusersReport + f'{counter}. {fu.getNameAndGerb()}\n'
+            else:
+                fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()}\n'
         else:
             fuckupusersReport = fuckupusersReport + f'{counter}. 🔕{fu.getLogin()}\n'
 
@@ -3745,7 +3748,7 @@ def rade():
                     user.setRank(rank)
                     updateUser(user)
                     goat = getMyGoat(user.getLogin())
-                    send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️ {rank["bm"]} {rank["value"]}')
+                    send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {rank["value"]}')
         if report == '':
             pass
         else:
@@ -3842,6 +3845,12 @@ def rade():
                 send_messages_big(goat['chats']['secret'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
+        for goat in getSetting(code='GOATS_BANDS'):
+            if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
+                report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть еще 25 минут!'
+                send_messages_big(goat['chats']['secret'], text= report)
+
+    if now_date.hour in (1, 9, 17) and now_date.minute == 30 and now_date.second < 15:
         logger.info('Rade time now!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
@@ -3851,7 +3860,7 @@ def rade():
                 saveRaidResult(goat)
                 statistic(goat['name'])
 
-    if now_date.hour in (1, 9, 17) and now_date.minute == 6 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 35 and now_date.second < 15:
         logger.info('Clear raid info!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
@@ -4000,7 +4009,7 @@ def radeReport(goat, ping=False):
             report = report + f'\n'
         if ping:
             if planed_raid_location:
-                ping_on_reade(bands.get("usersoffrade"), goat['chats']['secret'] )
+                ping_on_raid(bands.get("usersoffrade"), goat['chats']['secret'] )
     return report
 
 def setGiftsForRaid(goat):
