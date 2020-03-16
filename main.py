@@ -998,7 +998,7 @@ def send_welcome(message):
         return
 
     if (random.random() <= float(getSetting(code='PROBABILITY', name='DOOR_STICKER'))):
-        bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='DOOR'), 1)[0]['value'])
+        bot.send_photo(message.chat.id, random.sample(getSetting(code='STICKERS', name='DOOR'), 1)[0]['value'])
         return   
 
 # Handle '/start' and '/help'
