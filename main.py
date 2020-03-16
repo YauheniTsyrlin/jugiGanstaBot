@@ -1669,6 +1669,88 @@ def main_message(message):
                     InlineKeyboardButton(f"Закрыть ⛔", callback_data=f"commit_dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}")
                 )
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
+    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and message.text and message.text.startswith('ХОД БИТВЫ:'):
+        if hasAccessToWariors(message.from_user.username):
+            if 1 == 1: return
+            if 'Сражение с' in message.text:
+                if userIAm == None:
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
+                    return
+
+                if userIAm.getTimeUpdate() < (datetime.now() - timedelta(days=1)).timestamp():
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
+                    return
+
+                if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_forward').fulfillment_text) 
+                    return
+
+                strings = message.text.split('\n')
+                mob_name = ''
+                mob_class = ''
+                km = int(message.text.split('👣')[1].split('км')[0])
+                kr = 0
+                mat = 0
+                damage = []
+                beaten = []
+                you_win = False
+                dark_zone = False
+                for s in strings:
+                    if s.startswith('👊'):
+                        send_messages_big(message.chat.id, text='Это моб из митспина, не записываю...')
+                        return
+                    if s.startswith('🚷'):
+                        dark_zone = True
+                    if s.startswith('Сражение с'):
+                        mob_name = s.split('Сражение с')[1].split('(')[0].strip()
+                        mob_class = s.split('(')[1].split(')')[0].strip()
+                    if s.startswith('Получено:') and '🕳' in s and '📦' in s:
+                        kr = int(s.split('🕳')[1].split(' ')[0].strip())
+                        mat = int(s.split('📦')[1].strip())
+                    if s.startswith('👤Ты') and '💥' in s:
+                        damage.append(int(s.split('💥')[1].strip()))
+                    if 'нанес тебе удар' in s and '💔' in s:
+                        beaten.append(-1*int(s.split('💔')[1].strip()))
+                    if s.startswith('Ты одержал победу!'):
+                        you_win = True
+
+                if mob_name == '':
+                    pass
+                else:
+                    row = {}
+                    row.update({'date': message.forward_date})
+                    row.update({'login': message.from_user.username})
+                    row.update({'mob_name': mob_name})
+                    row.update({'mob_class': mob_class})
+                    
+                    row.update({'km': km})
+                    row.update({'dark_zone': dark_zone})
+                    row.update({'kr': kr})
+                    row.update({'mat': mat})
+                    row.update({'bm': userIAm.getBm()})
+                    row.update({'user_damage': userIAm.getDamage()})
+                    row.update({'user_armor': userIAm.getArmor()})
+                    row.update({'damage': damage})
+                    row.update({'beaten': beaten})
+                    row.update({'win': you_win})
+
+                    newvalues = { "$set": row }
+                    result = mob.update_one({
+                        'date': message.forward_date,
+                        'login': message.from_user.username, 
+                        'km': km,
+                        'dark_zone': dark_zone
+                        }, newvalues)
+                    if result.matched_count < 1:
+                        mob.insert_one(row)
+
+                    if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                        report = getMobReport(mob_name, mob_class)
+                        send_messages_big(message.chat.id, text=report)
+                    else:
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+
+            return
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
         if hasAccessToWariors(message.from_user.username):
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
@@ -1679,104 +1761,104 @@ def main_message(message):
                 if userIAm.getMaxkm() < km:
                     userIAm.setMaxkm(km)
                     updateUser(userIAm)
-        if 'Во время вылазки на тебя напал' in message.text:
-            if userIAm == None:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
-                return
-
-            strings = message.text.split('\n')
-            mob_name = ''
-            mob_class = ''
-            for s in strings:
-                if s.startswith('Во время вылазки на тебя напал'):
-                    mob_name = s.split('Во время вылазки на тебя напал')[1].split('(')[0].strip()
-                    mob_class = s.split('(')[1].split(')')[0].strip()
-                    break
-            if mob_name == '':
-                pass
-            else:
-                report = getMobReport(mob_name, mob_class)
-                send_messages_big(message.chat.id, text=report)
-            return
-        if 'Сражение с' in message.text:
-            if userIAm == None:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
-                return
-
-            if userIAm.getTimeUpdate() < (datetime.now() - timedelta(days=1)).timestamp():
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
-                return
-
-            if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_forward').fulfillment_text) 
-                return
-
-            strings = message.text.split('\n')
-            mob_name = ''
-            mob_class = ''
-            km = int(message.text.split('👣')[1].split('км')[0])
-            kr = 0
-            mat = 0
-            damage = []
-            beaten = []
-            you_win = False
-            dark_zone = False
-            for s in strings:
-                if s.startswith('👊'):
-                    send_messages_big(message.chat.id, text='Это моб из митспина, не записываю...')
+            if 'Во время вылазки на тебя напал' in message.text:
+                if userIAm == None:
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
                     return
-                if s.startswith('🚷'):
-                    dark_zone = True
-                if s.startswith('Сражение с'):
-                    mob_name = s.split('Сражение с')[1].split('(')[0].strip()
-                    mob_class = s.split('(')[1].split(')')[0].strip()
-                if s.startswith('Получено:') and '🕳' in s and '📦' in s:
-                    kr = int(s.split('🕳')[1].split(' ')[0].strip())
-                    mat = int(s.split('📦')[1].strip())
-                if s.startswith('👤Ты') and '💥' in s:
-                    damage.append(int(s.split('💥')[1].strip()))
-                if 'нанес тебе удар' in s and '💔' in s:
-                    beaten.append(-1*int(s.split('💔')[1].strip()))
-                if s.startswith('Ты одержал победу!'):
-                    you_win = True
 
-            if mob_name == '':
-                pass
-            else:
-                row = {}
-                row.update({'date': message.forward_date})
-                row.update({'login': message.from_user.username})
-                row.update({'mob_name': mob_name})
-                row.update({'mob_class': mob_class})
-                
-                row.update({'km': km})
-                row.update({'dark_zone': dark_zone})
-                row.update({'kr': kr})
-                row.update({'mat': mat})
-                row.update({'bm': userIAm.getBm()})
-                row.update({'user_damage': userIAm.getDamage()})
-                row.update({'user_armor': userIAm.getArmor()})
-                row.update({'damage': damage})
-                row.update({'beaten': beaten})
-                row.update({'win': you_win})
-
-                newvalues = { "$set": row }
-                result = mob.update_one({
-                    'date': message.forward_date,
-                    'login': message.from_user.username, 
-                    'km': km,
-                    'dark_zone': dark_zone
-                    }, newvalues)
-                if result.matched_count < 1:
-                    mob.insert_one(row)
-
-                if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                strings = message.text.split('\n')
+                mob_name = ''
+                mob_class = ''
+                for s in strings:
+                    if s.startswith('Во время вылазки на тебя напал'):
+                        mob_name = s.split('Во время вылазки на тебя напал')[1].split('(')[0].strip()
+                        mob_class = s.split('(')[1].split(')')[0].strip()
+                        break
+                if mob_name == '':
+                    pass
+                else:
                     report = getMobReport(mob_name, mob_class)
                     send_messages_big(message.chat.id, text=report)
-                else:
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+                return
+            if 'Сражение с' in message.text:
+                if userIAm == None:
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
+                    return
 
-        return
+                if userIAm.getTimeUpdate() < (datetime.now() - timedelta(days=1)).timestamp():
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
+                    return
+
+                if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_forward').fulfillment_text) 
+                    return
+
+                strings = message.text.split('\n')
+                mob_name = ''
+                mob_class = ''
+                km = int(message.text.split('👣')[1].split('км')[0])
+                kr = 0
+                mat = 0
+                damage = []
+                beaten = []
+                you_win = False
+                dark_zone = False
+                for s in strings:
+                    if s.startswith('👊'):
+                        send_messages_big(message.chat.id, text='Это моб из митспина, не записываю...')
+                        return
+                    if s.startswith('🚷'):
+                        dark_zone = True
+                    if s.startswith('Сражение с'):
+                        mob_name = s.split('Сражение с')[1].split('(')[0].strip()
+                        mob_class = s.split('(')[1].split(')')[0].strip()
+                    if s.startswith('Получено:') and '🕳' in s and '📦' in s:
+                        kr = int(s.split('🕳')[1].split(' ')[0].strip())
+                        mat = int(s.split('📦')[1].strip())
+                    if s.startswith('👤Ты') and '💥' in s:
+                        damage.append(int(s.split('💥')[1].strip()))
+                    if 'нанес тебе удар' in s and '💔' in s:
+                        beaten.append(-1*int(s.split('💔')[1].strip()))
+                    if s.startswith('Ты одержал победу!'):
+                        you_win = True
+
+                if mob_name == '':
+                    pass
+                else:
+                    row = {}
+                    row.update({'date': message.forward_date})
+                    row.update({'login': message.from_user.username})
+                    row.update({'mob_name': mob_name})
+                    row.update({'mob_class': mob_class})
+                    
+                    row.update({'km': km})
+                    row.update({'dark_zone': dark_zone})
+                    row.update({'kr': kr})
+                    row.update({'mat': mat})
+                    row.update({'bm': userIAm.getBm()})
+                    row.update({'user_damage': userIAm.getDamage()})
+                    row.update({'user_armor': userIAm.getArmor()})
+                    row.update({'damage': damage})
+                    row.update({'beaten': beaten})
+                    row.update({'win': you_win})
+
+                    newvalues = { "$set": row }
+                    result = mob.update_one({
+                        'date': message.forward_date,
+                        'login': message.from_user.username, 
+                        'km': km,
+                        'dark_zone': dark_zone
+                        }, newvalues)
+                    if result.matched_count < 1:
+                        mob.insert_one(row)
+
+                    if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                        report = getMobReport(mob_name, mob_class)
+                        send_messages_big(message.chat.id, text=report)
+                    else:
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+
+            return
 
     # Заменяем в сообщениях от ВВ все цифры 
     #     if not privateChat:
