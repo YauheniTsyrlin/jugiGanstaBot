@@ -388,6 +388,10 @@ newvalues = { "$set": { "value":
                             'name': 'REWARDS',
                             'value':
                             [
+                                {
+                                    'name':'wafelnitsa',
+                                    'value':'🖨 Wafelница'
+                                }
                                                                 
                             ] 
                         }
@@ -1144,6 +1148,13 @@ newvalues = { "$set": { "value":
                                     'quantity': 1
                                 },
                                 {
+                                    'id': 'punching_bag',
+                                    'name': '🦙 Груша для битья',
+                                    'cost': 50,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                },
+                                {
                                     'id': 'pickman_painting',
                                     'name': '🎨 Картина Пикмана "F-395"',
                                     'cost': 100,
@@ -1200,6 +1211,13 @@ newvalues = { "$set": { "value":
                             'name': 'THINGS',
                             'value':
                             [
+                                {
+                                    'id': 'wafelnitsa',
+                                    'name': '🖨 Wafelница',
+                                    'cost': 75,
+                                    'type': 'things',
+                                    'quantity': 10
+                                },
                                 {
                                     'id': 'sticks',
                                     'name': '🥢 Близкая дружба',

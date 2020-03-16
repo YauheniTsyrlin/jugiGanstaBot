@@ -1320,6 +1320,7 @@ def main_message(message):
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты оценил обстановку вокруг.' in message.text and 'Рядом кто-то есть.' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
+            # 👣52 км.
             strings = message.text.split('\n')
             i = 0
             find = False
@@ -1327,8 +1328,12 @@ def main_message(message):
             counter = 0
             report_goat_info = ''
             goats = []
+            km = 0
 
             for s in strings:
+                if '👣' in s and ' км' in s:
+                    # km = int(s.split('👣')[1].split('км')[0])
+                    report_goat_info = report_goat_info + f'<b>{s}</b>\n'
                 if '|' in strings[i]:
                     name = strings[i]
                     fraction = getWariorFraction(strings[i])
