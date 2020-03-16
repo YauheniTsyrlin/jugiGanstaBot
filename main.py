@@ -990,7 +990,7 @@ def send_mob_report(message):
     send_messages_big(message.chat.id, text=f'Не нашел ничего!')
 
 # Handle '/door' 
-@bot.message_handler(commands=['door'])
+@bot.message_handler(commands=['door','314door','pi_door', '3.14159265359_door'])
 def send_welcome(message):
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
