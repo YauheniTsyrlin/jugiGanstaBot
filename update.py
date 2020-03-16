@@ -388,7 +388,11 @@ newvalues = { "$set": { "value":
                             'name': 'REWARDS',
                             'value':
                             [
-                              
+                                {
+                                    'name':'wafelnitsa',
+                                    'value':'🖨 Wafelница'
+                                }
+                                                                
                             ] 
                         }
                     ]
