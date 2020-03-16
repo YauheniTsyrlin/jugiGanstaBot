@@ -2249,6 +2249,11 @@ newvalues = { "$set": { "value":
                         },
                         {
                             # Вероятность
+                            'name': 'DOOR_STICKER',
+                            'value': 1.00
+                        },
+                        {
+                            # Вероятность
                             'name': 'NIGHT_STICKER',
                             'value': 0.30
                         },
