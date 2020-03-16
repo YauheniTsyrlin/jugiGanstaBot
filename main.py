@@ -1831,6 +1831,10 @@ def main_message(message):
         if (random.random() <= float(getSetting(code='PROBABILITY', name='MORNING_STICKER'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_MORNING'), 1)[0]['value'])
             return 
+    if '/door' in message.text.lower():
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='MORNING_STICKER'))):
+            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='DOOR'), 1)[0]['value'])
+            return 
     if 'пойду спать' in message.text.lower() or 'я спать' in message.text.lower() or 'доброй ночи' in message.text.lower() or 'спокойной ночи' in message.text.lower() or 'спатки' in message.text.lower() or 'сладких снов' in message.text.lower() or 'добрых снов' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='NIGHT_STICKER'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_NIGHT'), 1)[0]['value'])

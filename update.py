@@ -2095,6 +2095,16 @@ newvalues = { "$set": { "value":
                             ] 
                         },
                         {
+                            'name': 'DOOR',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'AgACAgIAAxkBAALmrl5v0aD7Y9IU_YszBYvuj4M8VYLUAAKkqzEbgWg4S28P5Y5J_n1Oktq6DwAEAQADAgADeAADsjMGAAEYBA'
+                                }
+                            ] 
+                        },
+                        {
                             'name': 'BOT_CRY',
                             'value':
                             [
