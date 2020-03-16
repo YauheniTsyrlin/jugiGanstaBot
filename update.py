@@ -388,21 +388,6 @@ newvalues = { "$set": { "value":
                             'name': 'REWARDS',
                             'value':
                             [
-                                {
-                                    'name': 'something',
-                                    'value': '🧫 Нечто',
-                                    'cost': 10,
-                                    'type': 'decoration',
-                                    'quantity': 5
-                                },
-                                {
-                                    'name': 'punching_bag',
-                                    'value': '🦙 Груша для битья',
-                                    'cost': 28,
-                                    'type': 'decoration',
-                                    'quantity': 1
-                                }
-
                                                                 
                             ] 
                         }
