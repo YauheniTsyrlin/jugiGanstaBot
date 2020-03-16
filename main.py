@@ -3660,7 +3660,20 @@ def pending_message():
         newvalues = { "$set": { "state": 'CANCEL'} }
         u = pending_messages.update_one(myquery, newvalues)
 
-def ping_on_raid(fuckupusers, chat_id):
+def isUserVotedRaid(login, raidInfo, goatName):
+    find = False
+    for radeloc in plan_raids.find({
+                'rade_date': raidInfo['rade_date'],
+                'goat': goatName}): 
+        users_onraid = radeloc['users']
+        for u in users_onraid:
+            if u == login:
+                find = True
+                break
+    return find
+            
+
+def ping_on_raid(fuckupusers, chat_id, raidInfo, goatName):
     # Пингуем
     if len(fuckupusers) == 0:
         return
@@ -3672,12 +3685,12 @@ def ping_on_raid(fuckupusers, chat_id):
         counter = counter + 1
         fusers.append(fu)
         if fu.isPing():
-            if fu.getRaidLocation() and fu.getRaidLocation() > 0: 
+            if (fu.getRaidLocation() and fu.getRaidLocation() > 0) or isUserVotedRaid(fu.getLogin(), raidInfo, goatName): 
                 fuckupusersReport = fuckupusersReport + f'{counter}. {fu.getNameAndGerb()}\n'
             else:
                 fuckupusersReport = fuckupusersReport + f'{counter}. @{fu.getLogin()}\n'
         else:
-            fuckupusersReport = fuckupusersReport + f'{counter}. 🔕{fu.getLogin()}\n'
+            fuckupusersReport = fuckupusersReport + f'{counter}. 🔕{fu.getNameAndGerb()}\n'
 
         if counter % 5 == 0:
             send_messages_big(chat_id, text=fuckupusersReport)
@@ -4009,7 +4022,7 @@ def radeReport(goat, ping=False):
             report = report + f'\n'
         if ping:
             if planed_raid_location:
-                ping_on_raid(bands.get("usersoffrade"), goat['chats']['secret'] )
+                ping_on_raid(bands.get("usersoffrade"), goat['chats']['secret'], raidInfo, goat['name'])
     return report
 
 def setGiftsForRaid(goat):
