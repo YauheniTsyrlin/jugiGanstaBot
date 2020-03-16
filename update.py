@@ -389,15 +389,15 @@ newvalues = { "$set": { "value":
                             'value':
                             [
                                 {
-                                    'id': 'something',
-                                    'name': '🧫 Нечто',
+                                    'name': 'something',
+                                    'value': '🧫 Нечто',
                                     'cost': 10,
                                     'type': 'decoration',
                                     'quantity': 5
                                 },
                                 {
-                                    'id': 'punching_bag',
-                                    'name': '🦙 Груша для битья',
+                                    'name': 'punching_bag',
+                                    'value': '🦙 Груша для битья',
                                     'cost': 28,
                                     'type': 'decoration',
                                     'quantity': 1
