@@ -2485,72 +2485,72 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-updateUser(None)
-for user in USERS_ARR:
-    for acc in user.getAccessory():
-        acc = tools.deEmojify(acc).strip()
-        pref = ''
-        for x in getSetting(code='ACCESSORY_ALL', name='PIP_BOY', value=None, id=None):
-            if tools.deEmojify(x['name']).strip() == acc:
-                pref = '📟'
-                break
-        for x in getSetting(code='ACCESSORY_ALL', name='THINGS', value=None, id=None):
-            if tools.deEmojify(x['name']).strip() == acc:
-                pref = '🕹️'
-                break
-        for x in getSetting(code='ACCESSORY_ALL', name='REWARDS', value=None, id=None):
-            if tools.deEmojify(x['name']).strip() == acc:
-                pref = '🦈'
-                break
-        for x in getSetting(code='ACCESSORY_ALL', name='MARKS_OF_EXCELLENCE', value=None, id=None):
-            if tools.deEmojify(x['name']).strip() == acc:
-                pref = '📜'
-                break
-        for x in getSetting(code='ACCESSORY_ALL', name='EDIBLE', value=None, id=None):
-            if tools.deEmojify(x['name']).strip() == acc:
-                pref = '🍫'
-                break
-        for x in getSetting(code='ACCESSORY_ALL', name='SKILLS', value=None, id=None):
-            if tools.deEmojify(x['name']).strip() == acc:
-                pref = '🥋'
-                break            
-        for x in getSetting(code='ACCESSORY_ALL', name='TATU', value=None, id=None):
-            if tools.deEmojify(x['name']).strip() == acc:
-                pref = '♂️'
-                break  
-        for x in getSetting(code='ACCESSORY_ALL', name='VIRUSES', value=None, id=None):
-            if tools.deEmojify(x['name']).strip() == acc:
-                pref = '🦇'
-                break  
-        for x in getSetting(code='ACCESSORY_ALL', name='RAID_BOLTS', value=None, id=None):
-            if tools.deEmojify(x['name']).strip() == acc:
-                pref = '🔩'
-                break             
-        for x in getSetting(code='ACCESSORY_ALL', name='CLOTHES', value=None, id=None):
-            if tools.deEmojify(x['name']).strip() == acc:
-                pref = '👒'
-                break             
-        for x in getSetting(code='RANK', name='POSITIONS', value=None, id=None):
-            if tools.deEmojify(x['name']).strip() == acc:
-                pref = '👒'
-                break    
-        if 'Грамота за ' in acc and 'Дзен' in acc:
-            num = int(acc.split('Грамота за ')[1].split('-')[0].strip())
-            row =   {
-                        'id': f'marks_of_dzen_{num}',
-                        'name': f'🏵️ Грамота за {num}-й Дзен',
-                        'cost': 0,
-                        'type': 'marks_of_excellence',
-                        'quantity': 1000
-                    }
-            pref = '🏵️'
+# updateUser(None)
+# for user in USERS_ARR:
+#     for acc in user.getAccessory():
+#         acc = tools.deEmojify(acc).strip()
+#         pref = ''
+#         for x in getSetting(code='ACCESSORY_ALL', name='PIP_BOY', value=None, id=None):
+#             if tools.deEmojify(x['name']).strip() == acc:
+#                 pref = '📟'
+#                 break
+#         for x in getSetting(code='ACCESSORY_ALL', name='THINGS', value=None, id=None):
+#             if tools.deEmojify(x['name']).strip() == acc:
+#                 pref = '🕹️'
+#                 break
+#         for x in getSetting(code='ACCESSORY_ALL', name='REWARDS', value=None, id=None):
+#             if tools.deEmojify(x['name']).strip() == acc:
+#                 pref = '🦈'
+#                 break
+#         for x in getSetting(code='ACCESSORY_ALL', name='MARKS_OF_EXCELLENCE', value=None, id=None):
+#             if tools.deEmojify(x['name']).strip() == acc:
+#                 pref = '📜'
+#                 break
+#         for x in getSetting(code='ACCESSORY_ALL', name='EDIBLE', value=None, id=None):
+#             if tools.deEmojify(x['name']).strip() == acc:
+#                 pref = '🍫'
+#                 break
+#         for x in getSetting(code='ACCESSORY_ALL', name='SKILLS', value=None, id=None):
+#             if tools.deEmojify(x['name']).strip() == acc:
+#                 pref = '🥋'
+#                 break            
+#         for x in getSetting(code='ACCESSORY_ALL', name='TATU', value=None, id=None):
+#             if tools.deEmojify(x['name']).strip() == acc:
+#                 pref = '♂️'
+#                 break  
+#         for x in getSetting(code='ACCESSORY_ALL', name='VIRUSES', value=None, id=None):
+#             if tools.deEmojify(x['name']).strip() == acc:
+#                 pref = '🦇'
+#                 break  
+#         for x in getSetting(code='ACCESSORY_ALL', name='RAID_BOLTS', value=None, id=None):
+#             if tools.deEmojify(x['name']).strip() == acc:
+#                 pref = '🔩'
+#                 break             
+#         for x in getSetting(code='ACCESSORY_ALL', name='CLOTHES', value=None, id=None):
+#             if tools.deEmojify(x['name']).strip() == acc:
+#                 pref = '👒'
+#                 break             
+#         for x in getSetting(code='RANK', name='POSITIONS', value=None, id=None):
+#             if tools.deEmojify(x['name']).strip() == acc:
+#                 pref = '👒'
+#                 break    
+#         if 'Грамота за ' in acc and 'Дзен' in acc:
+#             num = int(acc.split('Грамота за ')[1].split('-')[0].strip())
+#             row =   {
+#                         'id': f'marks_of_dzen_{num}',
+#                         'name': f'🏵️ Грамота за {num}-й Дзен',
+#                         'cost': 0,
+#                         'type': 'marks_of_excellence',
+#                         'quantity': 1000
+#                     }
+#             pref = '🏵️'
 
 
 
-        if pref == '':
+#         if pref == '':
 
-            pref = 'выдать bag_of_coins'
-            print(f'{pref} {user.getLogin()} за {acc}')
+#             pref = 'выдать bag_of_coins'
+#             print(f'{pref} {user.getLogin()} за {acc}')
 
 
 
