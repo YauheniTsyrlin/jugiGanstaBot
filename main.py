@@ -1847,7 +1847,11 @@ def main_message(message):
         if (random.random() <= float(getSetting(code='PROBABILITY', name='NIGHT_STICKER'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_NIGHT'), 1)[0]['value'])
             return 
-
+    if '🚪' in message.text.lower():
+        if (random.random() <= float(getSetting(code='PROBABILITY', name='DOOR_STICKER'))):
+            bot.send_photo(message.chat.id, random.sample(getSetting(code='STICKERS', name='DOOR'), 1)[0]['value'])
+            return   
+            
     # Хуификация
     if message.reply_to_message and 'хуифицируй' in message.text.lower():
         if not isGoatSecretChat(message.from_user.username, message.chat.id):
