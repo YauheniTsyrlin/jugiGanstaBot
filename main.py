@@ -988,7 +988,19 @@ def send_mob_report(message):
             return
 
     send_messages_big(message.chat.id, text=f'Не нашел ничего!')
-        
+
+# Handle '/door' 
+@bot.message_handler(commands=['door'])
+def send_welcome(message):
+    if isUserBan(message.from_user.username):
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то стартовать, но у него получилось лишь:\n' + getResponseDialogFlow(message, 'user_banned').fulfillment_text)
+        return
+
+    if (random.random() <= float(getSetting(code='PROBABILITY', name='DOOR_STICKER'))):
+        bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='DOOR'), 1)[0]['value'])
+        return   
+
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -1830,10 +1842,6 @@ def main_message(message):
     if 'утречка' in message.text.lower() or 'добрым утром' in message.text.lower() or 'доброго утра' in message.text.lower() or 'доброго утречка' in message.text.lower() or 'доброе утро' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='MORNING_STICKER'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_MORNING'), 1)[0]['value'])
-            return 
-    if '/door' in message.text.lower():
-        if (random.random() <= float(getSetting(code='PROBABILITY', name='DOOR_STICKER'))):
-            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='DOOR'), 1)[0]['value'])
             return 
     if 'пойду спать' in message.text.lower() or 'я спать' in message.text.lower() or 'доброй ночи' in message.text.lower() or 'спокойной ночи' in message.text.lower() or 'спатки' in message.text.lower() or 'сладких снов' in message.text.lower() or 'добрых снов' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='NIGHT_STICKER'))):
