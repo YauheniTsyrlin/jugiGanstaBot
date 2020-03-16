@@ -380,6 +380,37 @@ newvalues = { "$set": { "value":
             } 
 u = settings.update_one(myquery, newvalues)
 
+
+myquery = { "code": 'ACCESSORY' }
+newvalues = { "$set": { "value": 
+                    [
+                        {
+                            'name': 'REWARDS',
+                            'value':
+                            [
+                                {
+                                    'id': 'something',
+                                    'name': '🧫 Нечто',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': 5
+                                },
+                                {
+                                    'id': 'punching_bag',
+                                    'name': '🦙 Груша для битья',
+                                    'cost': 28,
+                                    'type': 'decoration',
+                                    'quantity': 1
+                                }
+
+                                                                
+                            ] 
+                        }
+                    ]
+                } 
+            } 
+u = settings.update_one(myquery, newvalues)
+
 myquery = { "code": 'ACCESSORY_ALL' }
 newvalues = { "$set": { "value": 
                     [
@@ -1388,7 +1419,7 @@ newvalues = { "$set": { "value":
                                     'quantity': 2,
                                 },
                                 {
-                                    'id': 'bag_of_coins',
+                                    'id': 'bag_of_coins_100',
                                     'name': '💰 Мешочек с монетами 100',
                                     'cost': 100,
                                     'type': 'things',
