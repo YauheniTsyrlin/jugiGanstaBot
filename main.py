@@ -1898,7 +1898,7 @@ def main_message(message):
             elif (warior and warior.photo):
                 bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
             else:
-                send_messages_big(message.chat.id, text=warior.getProfile()
+                send_messages_big(message.chat.id, text=warior.getProfile())
 
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('Рейд в 17:00') or message.text.startswith('Рейд в 9:00') or message.text.startswith('Рейд в 01:00')):
         # Рейд в 9:00 17.3:
