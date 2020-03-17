@@ -7,6 +7,7 @@ def isOneEmojify(inputString):
 
 def deEmojify(inputString):
     ''' Delete emoji'''
+    inputString = inputString.replace('𐐒','')
     return emoji.get_emoji_regexp().sub(r'', inputString)
 
 def getTimeEmoji(time):
