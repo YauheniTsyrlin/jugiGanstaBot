@@ -372,9 +372,9 @@ def statistic(goatName: str):
 
 print('\n======== radeReport ==========\n')
 
-for raid in report_raids.find():
-    print(raid)
-
+s = 'Рейд в 9:00 17.3:'
+date = parse(s.split('Рейд в ')[1].strip())
+print(date)
 sys.exit(0)
 
 # import pandas as pd

@@ -1863,30 +1863,47 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
 
             return
+    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('Неподалеку ты заметил другого выжившего.'):
+        arr = [
+                'одержал победу над', 
+                'не оставил живого места от', 
+                'гордо наступил на полудохлого',
+                'оставил бездыханное тело',
+                'сделал сиротами детишек',
+                'добил с пинка',
+                'добил лежачего',
+                'выписал пропуск в Вальхаллу',
+                'добил фаталити',
+                'стоит над поверженным',
+                'одержал победу над']
+        counter = 0
+        name = ''
+        fraction = ''
+        for s in message.text.split('\n'):
+            counter = counter + 1
+            if counter > 1:
+                for a in arr:
+                    if a in s:
+                        name = s.split(a)[0].strip()
+                        name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
+                        name = name.split('@')[1].strip()
+                        fraction = getWariorFraction(s)
+                        break
+        if name == '':
+            pass
+        else:
+            warior = getWariorByName(name, fraction)
+            if warior == None:
+                send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
+            elif (warior and warior.photo):
+                bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+            else:
+                send_messages_big(message.chat.id, text=warior.getProfile()
 
-    # Заменяем в сообщениях от ВВ все цифры 
-    #     if not privateChat:
-    #         if not isGoatSecretChat(message.from_user.username, message.chat.id):
-    #             replacements =  {
-    #                                 "0": str(random.randint(1,9)), 
-    #                                 "1": str(random.randint(1,9)), 
-    #                                 "2": str(random.randint(1,9)), 
-    #                                 "3": str(random.randint(1,9)), 
-    #                                 "4": str(random.randint(1,9)), 
-    #                                 "5": str(random.randint(1,9)), 
-    #                                 "6": str(random.randint(1,9)), 
-    #                                 "7": str(random.randint(1,9)), 
-    #                                 "8": str(random.randint(1,9)), 
-    #                                 "9": str(random.randint(1,9)) 
-    #                             }
-    #             text = "".join([replacements.get(c, c) for c in message.text])
-    #             bot.delete_message(message.chat.id, message.message_id)
-    #             send_messages_big(message.chat.id, text=f'🗣 {userIAm.getName()} ({userIAm.getLogin()}):\n\n'+text)
-    #             return
-    #     return
 
-
-
+    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('Рейд в 17:00') or message.text.startswith('Рейд в 9:00') or message.text.startswith('Рейд в 01:00')):
+        # Рейд в 9:00 17.3:
+        date = message.text.split(':00')[1].split(':')[0].strip()
 
     if 'gratz' in message.text.lower() or 'грац' in message.text.lower() or 'грац!' in message.text.lower() or  'лол' in message.text.lower() or 'lol' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
