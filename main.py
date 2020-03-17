@@ -1884,6 +1884,12 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=warior.getProfile())
         return
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('Рейд в 17:00') or message.text.startswith('Рейд в 9:00') or message.text.startswith('Рейд в 01:00')):
+        
+        if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
+            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+            send_messages_big(message.chat.id, text='Поздняк! У тебя было 30 минут, чтобы прислать это. Статистика уже собрана и отправлена в библиотеку пустоши!')
+            return
+        
         tz = config.SERVER_MSK_DIFF
         date = (datetime.fromtimestamp(message.forward_date).replace(minute=0, second=0) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
         raid = getPlanedRaidLocation(getMyGoatName(message.from_user.username), planRaid = False)
