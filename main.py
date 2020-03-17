@@ -1863,7 +1863,7 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
 
             return
-    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('Неподалеку ты заметил другого выжившего.'):
+    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('Неподалеку ты заметил другого выжившего.') or message.text.startswith('Неподалеку ты заметил какую-то потасовку.')):
         arr = [
                 'одержал победу над', 
                 'не оставил живого места от', 
