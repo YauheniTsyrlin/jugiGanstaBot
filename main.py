@@ -2267,7 +2267,6 @@ def main_message(message):
                                 if len(pingusers) > 0:
                                     send_messages_big(message.chat.id, text=first_string + report)
 
-                                send_messages_big(message.chat.id, text=report)
                             else:
                                 send_messages_big(message.chat.id, text=f'Никто не записался...')
 
