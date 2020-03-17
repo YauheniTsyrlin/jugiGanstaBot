@@ -1351,6 +1351,7 @@ def main_message(message):
                     fraction = getWariorFraction(strings[i])
                     name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
                     name = name.split('@')[1].split('|')[0].strip()
+                    name = tools.deEmojify(name)
                     warior = getWariorByName(name, fraction)
 
                     if warior:
@@ -1870,6 +1871,7 @@ def main_message(message):
                         name = s.split(a)[0].strip()
                         name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
                         name = name.split('@')[1].strip()
+                        name = tools.deEmojify(name)
                         fraction = getWariorFraction(s)
                         break
         if name == '':
