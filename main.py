@@ -2236,14 +2236,37 @@ def main_message(message):
                             if not (message.from_user.username == 'Lena_Lenochka_32'):
                                 send_messages_big(message.chat.id, text='Тебе это не положено! \nПозови ЛеДонну и убери свои шаловливые руки от клавиатуры!')
                                 return
-                            report = 'Бандиты с 🧠!\nСобираемся на игру!\n\n'
                             counter = 0
+                            usersarr = []
                             for user in list(USERS_ARR):
                                 if user.isPing():
                                     if user.getSettingValue(id='partizan'):
                                         counter = counter + 1
-                                        report = report + f'{counter}. @{user.getLogin()} {user.getNameAndGerb()}\n'    
+                                        usersarr.append(user)
+
+                            first_string = 'Бандиты с 🧠!\nСобираемся на игру!\n\n'
+                            report = report + f'{counter}. @{user.getLogin()} {user.getNameAndGerb()}\n'    
+
                             if counter > 0:
+                                # Пингуем
+                                counter = 0
+                                pingusers = []
+                                report = f''
+                                for user in usersarr:
+                                    counter = counter + 1
+                                    pingusers.append(user)
+                                    if user.isPing():
+                                        report = report + f'{counter}. @{user.getLogin()} {user.getNameAndGerb()}\n' 
+                                    else:
+                                        report = report + f'{counter}. 🔕{user.getLogin()} {user.getNameAndGerb()}\n'
+                                    if counter % 5 == 0:
+                                        send_messages_big(message.chat.id, text=first_string + report)
+                                        pingusers = []
+                                        report = f''
+
+                                if len(pingusers) > 0:
+                                    send_messages_big(message.chat.id, text=first_string + report)
+
                                 send_messages_big(message.chat.id, text=report)
                             else:
                                 send_messages_big(message.chat.id, text=f'Никто не записался...')
