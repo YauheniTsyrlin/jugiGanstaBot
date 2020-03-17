@@ -1458,12 +1458,6 @@ def main_message(message):
                         if not isUsersBand(message.from_user.username, band):
                             send_messages_big(message.chat.id, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow(message, 'not_right_band').fulfillment_text)
                             return
-                    
-                    # registered_users.update_many(
-                    #     {'band': band},
-                    #     { '$set': { 'raidlocation': None} }
-                    # )
-                    # updateUser(None)
 
                 if '👂' in strings[i]:
                     name = strings[i]
@@ -1864,18 +1858,7 @@ def main_message(message):
 
             return
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('Неподалеку ты заметил другого выжившего.') or message.text.startswith('Неподалеку ты заметил какую-то потасовку.')):
-        arr = [
-                'одержал победу над', 
-                'не оставил живого места от', 
-                'гордо наступил на полудохлого',
-                'оставил бездыханное тело',
-                'сделал сиротами детишек',
-                'добил с пинка',
-                'добил лежачего',
-                'выписал пропуск в Вальхаллу',
-                'добил фаталити',
-                'стоит над поверженным',
-                'одержал победу над']
+        arr = ['одержал победу над', 'не оставил живого места от', 'гордо наступил на полудохлого', 'оставил бездыханное тело', 'сделал сиротами детишек', 'добил с пинка', 'добил лежачего', 'выписал пропуск в Вальхаллу', 'добил фаталити', 'стоит над поверженным', 'одержал победу над']
         counter = 0
         name = ''
         fraction = ''
@@ -1900,11 +1883,19 @@ def main_message(message):
             else:
                 send_messages_big(message.chat.id, text=warior.getProfile())
         return
-        
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('Рейд в 17:00') or message.text.startswith('Рейд в 9:00') or message.text.startswith('Рейд в 01:00')):
-        # Рейд в 9:00 17.3:
-        date = message.text.split(':00')[1].split(':')[0].strip()
-
+        tz = config.SERVER_MSK_DIFF
+        date = (datetime.fromtimestamp(message.forward_date).replace(minute=0, second=0) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
+        raid = getPlanedRaidLocation(getMyGoatName(message.from_user.username), planRaid = False)
+        if raid['rade_location']:
+            if raid['rade_date'] == date:
+                u = getUserByLogin(message.from_user.username)
+                u.setRaidLocation(1)
+                updateUser(u)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+                return
+        send_messages_big(message.chat.id, text='К чему ты это мне прислал?')
+        return
     if 'gratz' in message.text.lower() or 'грац' in message.text.lower() or 'грац!' in message.text.lower() or  'лол' in message.text.lower() or 'lol' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_LOVE'), 1)[0]['value'])

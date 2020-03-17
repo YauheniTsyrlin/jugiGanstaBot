@@ -372,8 +372,9 @@ def statistic(goatName: str):
 
 print('\n======== radeReport ==========\n')
 
-s = 'Рейд в 9:00 17.3:'
-date = parse(s.split('Рейд в ')[1].strip())
+s = 'Рейд в 9:00 10.3:'
+date_s = 1584223222
+date = datetime.fromtimestamp(date_s).replace(minute=0, second=0)
 print(date)
 sys.exit(0)
 
