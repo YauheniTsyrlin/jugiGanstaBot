@@ -2246,7 +2246,7 @@ def main_message(message):
                                         usersarr.append(user)
 
                             first_string = 'Бандиты с 🧠!\nСобираемся на игру!\n\n'
-                            report = report + f'{counter}. @{user.getLogin()} {user.getNameAndGerb()}\n'    
+                            report = ''
 
                             if counter > 0:
                                 # Пингуем
