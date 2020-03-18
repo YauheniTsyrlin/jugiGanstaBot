@@ -1243,7 +1243,8 @@ def main_message(message):
             'СОДЕРЖИМОЕ РЮКЗАКА' not in message.text and 
             'ПРИПАСЫ В РЮКЗАКЕ' not in message.text and 
             '🏆ТОП КОЗЛОВ:' not in message.text and
-            'РЕСУРСЫ и ХЛАМ' not in message.text ):
+            'РЕСУРСЫ и ХЛАМ' not in message.text and
+            '🔧РЕСУРСЫ И ХЛАМ' not in message.text ):
 
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
  
@@ -1394,9 +1395,9 @@ def main_message(message):
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты уже записался.' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
-            # if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-            #     return
+            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+                return
 
             u = getUserByLogin(message.from_user.username)
             u.setRaidLocation(1)
