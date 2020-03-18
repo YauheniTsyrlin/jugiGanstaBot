@@ -1409,7 +1409,7 @@ def main_message(message):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
             if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+                #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
                 send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
                 return
 
@@ -1888,7 +1888,7 @@ def main_message(message):
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('Рейд в 17:00') or message.text.startswith('Рейд в 9:00') or message.text.startswith('Рейд в 01:00')):
         
         if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+            #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
             send_messages_big(message.chat.id, text='Поздняк! У тебя было 30 минут, чтобы прислать это. Статистика уже собрана и отправлена в библиотеку пустоши!')
             return
         
