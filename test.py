@@ -31,6 +31,7 @@ report_raids    = mydb["report_raids"]
 plan_raids      = mydb["rades"]
 dungeons        = mydb["dungeons"]
 mob             = mydb["mob"]
+pip_history     = mydb["pip_history"]
 
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
