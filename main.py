@@ -1888,10 +1888,10 @@ def main_message(message):
         return
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('Рейд в 17:00') or message.text.startswith('Рейд в 9:00') or message.text.startswith('Рейд в 01:00')):
         
-        # if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
-        #     #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-        #     send_messages_big(message.chat.id, text='Поздняк! У тебя было 30 минут, чтобы прислать это. Статистика уже собрана и отправлена в библиотеку пустоши!')
-        #     return
+        if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
+            #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+            send_messages_big(message.chat.id, text='Поздняк! У тебя было 30 минут, чтобы прислать это. Статистика уже собрана и отправлена в библиотеку пустоши!')
+            return
         
         tz = config.SERVER_MSK_DIFF
         date = (datetime.fromtimestamp(message.forward_date).replace(minute=0, second=0) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
@@ -3977,6 +3977,7 @@ def rade():
             man_of_day.insert_one(row)
             send_messages_big(chat, text=report_man_of_day('')) 
 
+    # Предупреждение о рейде за час, полчаса, 10 минут
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
@@ -3984,9 +3985,12 @@ def rade():
                 report = radeReport(goat, True)
                 send_messages_big(goat['chats']['secret'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
 
+    # Рейд случился. Предупреждение
     if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
         for goat in getSetting(code='GOATS_BANDS'):
             if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
+                report = radeReport(goat, True)
+                send_messages_big(goat['chats']['secret'], text='<b>Предварительные</b> Результаты рейда\n' + report)
                 report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть 30 минут с момента прожимания /voevat_suda, либо ты можешь присылать свою награду за рейд аж до 30 минут после рейда!!'
                 send_messages_big(goat['chats']['secret'], text= report)
 
