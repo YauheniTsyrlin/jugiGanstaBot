@@ -1237,17 +1237,17 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
         return
 
-    if (message.text.startswith('📟Пип-бой 3000') and 
-            '/killdrone' not in message.text and 
-            'ТОП ФРАКЦИЙ' not in message.text and 
-            'СОДЕРЖИМОЕ РЮКЗАКА' not in message.text and 
-            'ПРИПАСЫ В РЮКЗАКЕ' not in message.text and 
-            '🏆ТОП КОЗЛОВ:' not in message.text and
-            'РЕСУРСЫ и ХЛАМ' not in message.text and
-            '🔧РЕСУРСЫ И ХЛАМ' not in message.text ):
-
+    if (message.text.startswith('📟Пип-бой 3000')):
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
- 
+            if ('/killdrone' in message.text or 
+                'ТОП ФРАКЦИЙ' in message.text or 
+                'СОДЕРЖИМОЕ РЮКЗАКА' in message.text or 
+                'ПРИПАСЫ В РЮКЗАКЕ' in message.text or 
+                '🏆ТОП КОЗЛОВ:' in message.text or
+                'РЕСУРСЫ и ХЛАМ' in message.text or
+                '🔧РЕСУРСЫ И ХЛАМ' in message.text):
+                return
+
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
                 return
