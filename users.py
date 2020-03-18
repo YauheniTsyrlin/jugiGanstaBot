@@ -312,7 +312,7 @@ class User(object):
             tmpkm = f'{self.raidlocation}'
             if self.raidlocation == 1:
                 tmpkm = f'?'
-            string = string + f'├👊На рейде на {self.raidlocation}км\n'
+            string = string + f'├👊На рейде на {tmpkm}км\n'
 
         string = string + f'└🏋️‍♂️Вес на рейде: {self.getRaidWeight()}\n'
         string = string + f'\n'
