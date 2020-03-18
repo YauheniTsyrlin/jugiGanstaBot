@@ -373,8 +373,8 @@ def statistic(goatName: str):
 
 print('\n======== radeReport ==========\n')
 
-for u in pip_history.find():
-    print(u)
+# for u in pip_history.find():
+#     print(u)
 sys.exit(0)
 
 # import pandas as pd

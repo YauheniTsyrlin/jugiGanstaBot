@@ -1333,7 +1333,7 @@ def main_message(message):
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты оценил обстановку вокруг.' in message.text and 'Рядом кто-то есть.' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
-            # 👣52 км.
+            # 🚷/👣52 км.
             strings = message.text.split('\n')
             i = 0
             find = False
@@ -1344,7 +1344,7 @@ def main_message(message):
             km = 0
 
             for s in strings:
-                if '👣' in s and ' км' in s:
+                if ('👣' in s or '🚷' in s) and ' км' in s:
                     # km = int(s.split('👣')[1].split('км')[0])
                     report_goat_info = report_goat_info + f'<b>{s}</b>\n'
                 if '|' in strings[i]:
@@ -1888,10 +1888,10 @@ def main_message(message):
         return
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('Рейд в 17:00') or message.text.startswith('Рейд в 9:00') or message.text.startswith('Рейд в 01:00')):
         
-        if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
-            #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-            send_messages_big(message.chat.id, text='Поздняк! У тебя было 30 минут, чтобы прислать это. Статистика уже собрана и отправлена в библиотеку пустоши!')
-            return
+        # if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
+        #     #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+        #     send_messages_big(message.chat.id, text='Поздняк! У тебя было 30 минут, чтобы прислать это. Статистика уже собрана и отправлена в библиотеку пустоши!')
+        #     return
         
         tz = config.SERVER_MSK_DIFF
         date = (datetime.fromtimestamp(message.forward_date).replace(minute=0, second=0) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
@@ -3987,7 +3987,7 @@ def rade():
     if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
         for goat in getSetting(code='GOATS_BANDS'):
             if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
-                report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть еще 25 минут!'
+                report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть 30 минут с момента прожимания /voevat_suda, либо ты можешь присылать свою награду за рейд аж до 30 минут после рейда!!'
                 send_messages_big(goat['chats']['secret'], text= report)
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 30 and now_date.second < 15:
