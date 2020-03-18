@@ -372,10 +372,8 @@ def statistic(goatName: str):
 
 print('\n======== radeReport ==========\n')
 
-s = 'Рейд в 9:00 10.3:'
-date_s = 1584223222
-date = datetime.fromtimestamp(date_s).replace(minute=0, second=0)
-print(date)
+for u in pip_history.find():
+    print(u)
 sys.exit(0)
 
 # import pandas as pd
