@@ -308,6 +308,9 @@ class User(object):
             string = string + f'├👊{self.raid}\n'
         elif self.getMaxkm():
             string = string + f'├👣Был замечен на {self.getMaxkm()}км\n'
+        if self.raidlocation:
+            string = string + f'├👊На рейде на {self.raidlocation}км\n'
+
         string = string + f'└🏋️‍♂️Вес на рейде: {self.getRaidWeight()}\n'
         string = string + f'\n'
         
