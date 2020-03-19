@@ -1429,7 +1429,7 @@ def main_message(message):
                 send_messages_big(message.chat.id, text='Никого не нашел!')
             else:
                 if counter_not_find > 0:
-                    report = report + '\n' + f'{counter_not_find} не нашел!'
+                    report = '⚡️Купола Грома.\n\n' + report + f'{counter_not_find} не нашел!'
                 send_messages_big(message.chat.id, text=report)
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты уже записался.' in message.text):
