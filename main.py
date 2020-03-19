@@ -730,10 +730,11 @@ def getMobReport(mob_name: str, mob_class: str):
         if one_mob['kr'] > 0:
             counter_kr = counter_kr + 1
             average_kr = average_kr + one_mob['kr']
-        
-        if one_mob['mat'] > 0:
-            counter_mat = counter_mat + 1
-            average_mat = average_mat + one_mob['mat']
+        try:
+            if one_mob['mat'] > 0:
+                counter_mat = counter_mat + 1
+                average_mat = average_mat + one_mob['mat']
+        except: pass
 
     if min_beaten == 1000000: 
         min_beaten = 0
