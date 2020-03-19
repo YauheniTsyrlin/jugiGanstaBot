@@ -1402,8 +1402,9 @@ def main_message(message):
             report = ''
             counter_not_find = 0
             for s in strings:
+                logger.info('!!!!!')
                 if strat: 
-                    fraction = s.split('(')[1].split(')')[0]
+                    fraction = s.split('(')[1].split(')')[0].strip()
                     pref = ''
                     if '(Без банды)' in s:
                         pref = '(Без банды)'
@@ -1420,7 +1421,8 @@ def main_message(message):
                         counter_not_find = counter_not_find + 1
                         
                 
-                if '📊ТОП Купола /tdtop' in s:
+                if 'ТОП Купола /tdtop' in s:
+                    logger.info('START!')
                     strart = True
             if report == '':
                 send_messages_big(message.chat.id, text='Никого не нашел!')
