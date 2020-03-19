@@ -1733,6 +1733,7 @@ def main_message(message):
             health = 0
             max_damage = 0
             max_beaten = 0
+            mob_class = ''
             name = ''
             for s in message.text.split('\n'):
                 counter = counter + 1
@@ -1759,7 +1760,7 @@ def main_message(message):
                 row.update({'date': message.forward_date})
                 row.update({'login': message.from_user.username})
                 row.update({'mob_name': name})
-                row.update({'mob_class': None})
+                row.update({'mob_class': mob_class})
                 
                 row.update({'km': None})
                 row.update({'dark_zone': None})
@@ -1785,7 +1786,7 @@ def main_message(message):
                     mob.insert_one(row)
 
                 if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                    report = getMobReport(name, None)
+                    report = getMobReport(name, mob_class)
                     send_messages_big(message.chat.id, text=report)
                 else:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
