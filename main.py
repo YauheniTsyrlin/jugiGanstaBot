@@ -1413,10 +1413,8 @@ def main_message(message):
                     elif '🤘' in s:
                         pref = '🤘'
                     name = s.split(')')[1].split(pref)[0].strip()
-                    fraction = getWariorFraction(fraction)
-                    warior = getWariorByName(name, fraction)
-                    logger.info(name)
-                    logger.info(fraction)
+                    fraction_full = getWariorFraction(fraction)
+                    warior = getWariorByName(name, fraction_full)
                     if warior:
                         report = report + f'{warior.getProfileSmall()}\n'
                     else:
