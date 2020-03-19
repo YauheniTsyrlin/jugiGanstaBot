@@ -1764,7 +1764,7 @@ def main_message(message):
                 
                 row.update({'km': 0})
                 row.update({'dark_zone': None})
-                row.update({'kr': None})
+                row.update({'kr': 0})
                 row.update({'mat': None})
                 row.update({'bm': userIAm.getBm()})
                 row.update({'user_damage': userIAm.getDamage()})
