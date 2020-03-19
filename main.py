@@ -1785,7 +1785,7 @@ def main_message(message):
                     mob.insert_one(row)
 
                 if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                    report = getMobReport(mob_name, mob_class)
+                    report = getMobReport(name, None)
                     send_messages_big(message.chat.id, text=report)
                 else:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
