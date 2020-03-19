@@ -1408,17 +1408,22 @@ def main_message(message):
 
                     fraction = s.split('(')[1].split(')')[0].strip()
                     pref = ''
+                    band = ''
                     if '(Без банды' in s:
                         pref = '(Без банды'
                     elif '🤘' in s:
                         pref = '🤘'
+                        band = s.split('🤘')[1].strip()
                     name = s.split(')')[1].split(pref)[0].strip()
                     fraction_full = getWariorFraction(fraction)
                     warior = getWariorByName(name, fraction_full)
                     if warior:
                         report = report + f'{warior.getProfileSmall()}\n'
                     else:
-                        report = report + f'┌{fraction} {name}\n└...\n'
+                        if band == '':
+                            report = report + f'┌{fraction} {name}\n└...\n'
+                        else:
+                            report = report + f'┌{fraction} {name}\n├🤘{band}\n└...\n'
                         
                 
                 if 'ТОП Купола /tdtop' in s:
