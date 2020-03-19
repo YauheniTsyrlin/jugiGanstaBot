@@ -1377,13 +1377,15 @@ def main_message(message):
                     live = int(strings[i].split('...И еще')[1].split('выживших')[0].strip())
                     counter = counter + live
                 i = i + 1
-            if counter > 0:
-                report = report + f'...И еще {str(counter)} выживших.'
+            
             
             if len(goats) > 0:
                 for goat in goats:
                     report_goat_info = report_goat_info + f'🐐 {goat["name"]}: <b>{goat["counter"]}</b>\n'
                 report_goat_info = report_goat_info + '\n'
+            
+            if counter > 0:
+                report_goat_info = report_goat_info + f'...И еще {str(counter)} выживших.'
 
             if not find:
                 send_messages_big(message.chat.id, text='Не нашел никого!')
