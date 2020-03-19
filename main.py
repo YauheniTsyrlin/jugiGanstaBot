@@ -1431,7 +1431,7 @@ def main_message(message):
             if report == '':
                 send_messages_big(message.chat.id, text='Никого не нашел!')
             else:
-                report = '<b>⚡️Купола Грома.</b>\n\n' + report + f'{counter_not_find} не нашел!'
+                report = '<b>⚡️Купола Грома.</b>\n\n' + report
                 send_messages_big(message.chat.id, text=report)
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты уже записался.' in message.text):
