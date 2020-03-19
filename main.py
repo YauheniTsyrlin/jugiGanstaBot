@@ -1388,7 +1388,7 @@ def main_message(message):
             if not find:
                 send_messages_big(message.chat.id, text='Не нашел никого!')
             else:
-                send_messages_big(message.chat.id, text=report_goat_info + report)
+                send_messages_big(message.chat.id, text=report + '\n'+ report_goat_info)
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
