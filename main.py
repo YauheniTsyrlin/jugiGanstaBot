@@ -1398,12 +1398,12 @@ def main_message(message):
         if hasAccessToWariors(message.from_user.username):
 
             strings = message.text.split('\n')
-            strat = False
+            start = False
             report = ''
             counter_not_find = 0
             for s in strings:
                 logger.info('!!!!!')
-                if strat: 
+                if start: 
                     fraction = s.split('(')[1].split(')')[0].strip()
                     pref = ''
                     if '(Без банды)' in s:
@@ -1423,7 +1423,7 @@ def main_message(message):
                 
                 if 'ТОП Купола /tdtop' in s:
                     logger.info('START!')
-                    strart = True
+                    start = True
             if report == '':
                 send_messages_big(message.chat.id, text='Никого не нашел!')
             else:
