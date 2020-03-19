@@ -4095,7 +4095,7 @@ def saveRaidResult(goat):
 
 def radeReport(goat, ping=False):
 
-    raidInfo = getPlanedRaidLocation(goat.get('name'))
+    raidInfo = getPlanedRaidLocation(goat.get('name'), False)
     logger.info(raidInfo)
 
     planed_raid_location = raidInfo['rade_location']
