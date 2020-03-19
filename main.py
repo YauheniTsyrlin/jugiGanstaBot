@@ -1408,8 +1408,8 @@ def main_message(message):
 
                     fraction = s.split('(')[1].split(')')[0].strip()
                     pref = ''
-                    if '(Без банды)' in s:
-                        pref = '(Без банды)'
+                    if '(Без банды' in s:
+                        pref = '(Без банды'
                     elif '🤘' in s:
                         pref = '🤘'
                     name = s.split(')')[1].split(pref)[0].strip()
