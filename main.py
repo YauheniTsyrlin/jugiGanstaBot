@@ -1499,7 +1499,7 @@ def main_message(message):
                         else:
                             fuckupraidrw = fuckupraidrw + u.getRaidWeight()
                             fuckupusers.append(u)
-                            u.setRaidLocation(None)
+                            u.setRaidLocation(0)
                         updateUser(u)
                     else:
                         aliancounter  = aliancounter + 1
@@ -2424,7 +2424,7 @@ def main_message(message):
 
                         for goat in getSetting(code='GOATS_BANDS'):
                             if goatName == goat.get('name'):
-                                report = radeReport(goat, True)
+                                report = radeReport(goat)
                                 send_messages_big(message.chat.id, text=report)
                     elif 'statistic' == response.split(':')[1]:
                         # jugi:statistic:*
@@ -2472,7 +2472,7 @@ def main_message(message):
                                 return
                         registered_users.update_many(
                             {'band':{'$in':getGoatBands(goatName)}},
-                            { '$set': { 'raidlocation': None} }
+                            { '$set': { 'raidlocation': 0} }
                         )
 
                         updateUser(None)
@@ -3991,7 +3991,7 @@ def rade():
     if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
         for goat in getSetting(code='GOATS_BANDS'):
             if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
-                report = radeReport(goat, True)
+                report = radeReport(goat, True, False)
                 send_messages_big(goat['chats']['secret'], text='<b>Предварительные</b> Результаты рейда\n' + report)
                 report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть 30 минут с момента прожимания /voevat_suda, либо ты можешь присылать свою награду за рейд аж до 30 минут после рейда!!'
                 send_messages_big(goat['chats']['secret'], text=report)
@@ -4001,7 +4001,7 @@ def rade():
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
             if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
-                report = radeReport(goat)
+                report = radeReport(goat, False, False)
                 send_messages_big(goat['chats']['secret'], text='<b>Результаты рейда</b>\n' + report)
                 saveRaidResult(goat)
                 statistic(goat['name'])
@@ -4011,10 +4011,9 @@ def rade():
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
             setGiftsForRaid(goat)
-
             registered_users.update_many(
                 {'band':{'$in':getGoatBands(goat.get('name'))}},
-                { '$set': { 'raidlocation': None} }
+                { '$set': { 'raidlocation': 0} }
             )
 
 def getPlanedRaidLocation(goatName: str, planRaid = True):
@@ -4083,7 +4082,7 @@ def saveRaidResult(goat):
                 row.update({'user_location': None})
                 row.update({'on_raid': False})
                 row.update({'on_planed_location': False})
-                if user.getRaidLocation():
+                if user.getRaidLocation() and user.getRaidLocation() > 0:
                     row.update({'on_raid': True}) 
                     row.update({'user_location': user.getRaidLocation()})    
                     if location and user.getRaidLocation() == location:
@@ -4093,9 +4092,9 @@ def saveRaidResult(goat):
                 if result.matched_count < 1:
                     report_raids.insert_one(row)
 
-def radeReport(goat, ping=False):
+def radeReport(goat, ping=False, planRaid=True):
 
-    raidInfo = getPlanedRaidLocation(goat.get('name'), planRaid=False)
+    raidInfo = getPlanedRaidLocation(goat.get('name'), planRaid)
     logger.info(raidInfo)
 
     planed_raid_location = raidInfo['rade_location']
@@ -4121,7 +4120,7 @@ def radeReport(goat, ping=False):
             if user.getBand() and user.getBand() == band.get('name'):
                 band_arr.update({'weight_all': band_arr.get('weight_all') + user.getRaidWeight()})
                 band_arr.update({'counter_all': band_arr.get('counter_all') + 1}) 
-                if user.getRaidLocation():
+                if user.getRaidLocation() and user.getRaidLocation()>0:
                     band_arr.update({'weight_on_rade': band_arr.get('weight_on_rade') + user.getRaidWeight()})
                     band_arr.update({'counter_on_rade': band_arr.get('counter_on_rade') + 1}) 
                     band_arr.get('usersonrade').append(user)
@@ -4157,7 +4156,6 @@ def radeReport(goat, ping=False):
             report = report + f'\n'
         if ping:
             if planed_raid_location:
-                send_message_to_admin('report')
                 ping_on_raid(bands.get("usersoffrade"), goat['chats']['secret'], raidInfo, goat['name'])
     return report
 

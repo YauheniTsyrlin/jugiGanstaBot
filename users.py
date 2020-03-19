@@ -229,9 +229,9 @@ class User(object):
             # 11 - |�🔋Выносливость: 8/16 /ref|
             if ('Выносливость' in strings[i]):
                 self.setStamina(int(strings[i].split(':')[1].split('/')[1].strip()))
-            if ('📍' in strings[i] and '👊' in strings[i]):
-                self.raidlocation = int(strings[i].split('👣')[1].split('км.')[0])
-                self.raid = strings[i].split('📍')[1].split('👊')[0].strip()
+            # if ('📍' in strings[i] and '👊' in strings[i]):
+            #     self.raidlocation = int(strings[i].split('👣')[1].split('км.')[0])
+            #     self.raid = strings[i].split('📍')[1].split('👊')[0].strip()
             elif ('📍' in strings[i]):
                 self.wastelandLocation = int(strings[i].split('👣')[1].split('км.')[0])
                 self.setMaxkm(self.wastelandLocation)
