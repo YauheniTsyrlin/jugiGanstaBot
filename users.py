@@ -57,7 +57,8 @@ def updateUser(newUser, oldUser):
     if hasattr(newUser, 'raid'):
         oldUser.raid = newUser.raid
     if hasattr(newUser, 'raidlocation'):
-        oldUser.raidlocation = newUser.raidlocation
+        if newUser.raidlocation:
+            oldUser.raidlocation = newUser.raidlocation
     if hasattr(newUser, 'wastelandLocation'):
         oldUser.wastelandLocation = newUser.wastelandLocation
     if newUser.dzen:
@@ -144,6 +145,7 @@ def importUser(registered_user):
         u.accessory     = registered_user['accessory']
     if (registered_user.get('settings')):    
         u.settings     = registered_user['settings']
+    
     u.setRaidLocation(registered_user['raidlocation'])
     if (registered_user.get('wastelandLocation')):
         u.setWastelandLocation(registered_user['wastelandLocation'])
