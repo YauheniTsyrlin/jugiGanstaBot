@@ -1762,7 +1762,7 @@ def main_message(message):
                 row.update({'mob_name': name})
                 row.update({'mob_class': mob_class})
                 
-                row.update({'km': None})
+                row.update({'km': 0})
                 row.update({'dark_zone': None})
                 row.update({'kr': None})
                 row.update({'mat': None})
