@@ -1404,7 +1404,7 @@ def main_message(message):
             for s in strings:
                 if 'Сейчас Купол Грома пуст, но ты можешь позвать сюда кого-нибудь из своих знакомых' in message.text:
                     break
-                
+
                 if start: 
                     if s.startswith('⚔️'):
                         continue
@@ -1715,8 +1715,15 @@ def main_message(message):
                 )
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and message.text and message.text.startswith('ХОД БИТВЫ:'):
+        conter = 0
+        for s in message.text.split('\n'):
+            conter = conter + 1
+            if conter == 2 and not (s == ''):
+                return
+        send_messages_big(message.chat.id, text='расчёт...')
+        if 1==1: return
+
         if hasAccessToWariors(message.from_user.username):
-            if 1 == 1: return
             if 'Сражение с' in message.text:
                 if userIAm == None:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
