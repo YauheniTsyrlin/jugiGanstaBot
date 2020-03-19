@@ -1420,7 +1420,7 @@ def main_message(message):
                     if warior:
                         report = report + f'{warior.getProfileSmall()}\n'
                     else:
-                        counter_not_find = counter_not_find + 1
+                        report = report + f'┌{fraction} {name}\n└...\n'
                         
                 
                 if 'ТОП Купола /tdtop' in s:
@@ -1428,8 +1428,7 @@ def main_message(message):
             if report == '':
                 send_messages_big(message.chat.id, text='Никого не нашел!')
             else:
-                if counter_not_find > 0:
-                    report = '⚡️Купола Грома.\n\n' + report + f'{counter_not_find} не нашел!'
+                report = '<b>⚡️Купола Грома.</b>\n\n' + report + f'{counter_not_find} не нашел!'
                 send_messages_big(message.chat.id, text=report)
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты уже записался.' in message.text):
