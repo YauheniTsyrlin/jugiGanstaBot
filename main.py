@@ -1740,7 +1740,7 @@ def main_message(message):
                     return
                 if counter >=3:
                     if '❤️' in s and health == 0:
-                        health = int(s.split('health')[1].strip())
+                        health = int(s.split('❤️')[1].strip())
                         name = s.split('❤️')[0].strip()
                     if '💔-' in s:
                         damage = int(s.split('💔-')[1].strip()) 
