@@ -1410,7 +1410,7 @@ def main_message(message):
                         pref = '(Без банды)'
                     elif '🤘' in s:
                         pref = '🤘'
-                    name = split(')')[1].split(pref)[0].strip()
+                    name = s.split(')')[1].split(pref)[0].strip()
                     fraction = getWariorFraction(fraction)
                     warior = getWariorByName(name, fraction)
                     logger.info(name)
