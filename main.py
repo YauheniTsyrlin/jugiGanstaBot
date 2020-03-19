@@ -2424,7 +2424,7 @@ def main_message(message):
 
                         for goat in getSetting(code='GOATS_BANDS'):
                             if goatName == goat.get('name'):
-                                report = radeReport(goat)
+                                report = radeReport(goat, True)
                                 send_messages_big(message.chat.id, text=report)
                     elif 'statistic' == response.split(':')[1]:
                         # jugi:statistic:*
@@ -3994,7 +3994,7 @@ def rade():
                 report = radeReport(goat, True)
                 send_messages_big(goat['chats']['secret'], text='<b>Предварительные</b> Результаты рейда\n' + report)
                 report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть 30 минут с момента прожимания /voevat_suda, либо ты можешь присылать свою награду за рейд аж до 30 минут после рейда!!'
-                send_messages_big(goat['chats']['secret'], text= report)
+                send_messages_big(goat['chats']['secret'], text=report)
 
     if now_date.hour in (1, 9, 17) and now_date.minute == 30 and now_date.second < 15:
         logger.info('Rade time now!')
@@ -4096,6 +4096,8 @@ def saveRaidResult(goat):
 def radeReport(goat, ping=False):
 
     raidInfo = getPlanedRaidLocation(goat.get('name'))
+    logger.info(raidInfo)
+
     planed_raid_location = raidInfo['rade_location']
     planed_raid_location_text = raidInfo['rade_text']
     goat_report = {}

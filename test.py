@@ -162,25 +162,34 @@ def radeReport(goat):
 
     return report
 
-def getPlanedRaidLocation(goatName: str):
+def getPlanedRaidLocation(goatName: str, planRaid = True):
     tz = config.SERVER_MSK_DIFF
-    raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+    raid_date = datetime.now() - timedelta(minutes=34, hours=2) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
     hour = raid_date.hour
 
-    if raid_date.hour >= 17:
-        raid_date = raid_date + timedelta(days=1)
+    if not planRaid and raid_date.hour <= 1:
+        raid_date = raid_date - timedelta(days=1)
 
+    if planRaid and raid_date.hour >= 17:
+        raid_date = raid_date + timedelta(days=1)
 
     if raid_date.hour >=1 and raid_date.hour <9:
         hour = 9
+        if not planRaid:
+            hour = 1
     elif raid_date.hour >=9 and raid_date.hour <17:
         hour = 17
+        if not planRaid:
+            hour = 9
     if raid_date.hour >=17 or raid_date.hour <1:
         hour = 1
+        if not planRaid:
+            hour = 17
 
     raidNone = {}
     raidNone.update({'rade_date': (raid_date.replace(hour=hour, minute=0, second=0, microsecond=0)).timestamp()})
     raidNone.update({'rade_location': None})
+    raidNone.update({'rade_text': None})
 
     for raid in plan_raids.find({
                                 '$and' : 
@@ -375,6 +384,9 @@ print('\n======== radeReport ==========\n')
 
 # for u in pip_history.find():
 #     print(u)
+raid = getPlanedRaidLocation('FǁȺǁggǁØǁAT', False)
+print(raid)
+print(datetime.fromtimestamp(raid["rade_date"]))
 sys.exit(0)
 
 # import pandas as pd
