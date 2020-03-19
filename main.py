@@ -4157,6 +4157,7 @@ def radeReport(goat, ping=False):
             report = report + f'\n'
         if ping:
             if planed_raid_location:
+                send_message_to_admin('report')
                 ping_on_raid(bands.get("usersoffrade"), goat['chats']['secret'], raidInfo, goat['name'])
     return report
 
