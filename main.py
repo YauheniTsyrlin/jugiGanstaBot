@@ -1400,8 +1400,11 @@ def main_message(message):
             strings = message.text.split('\n')
             start = False
             report = ''
-            counter_not_find = 0
+
             for s in strings:
+                if 'Сейчас Купол Грома пуст, но ты можешь позвать сюда кого-нибудь из своих знакомых' in message.text:
+                    break
+                
                 if start: 
                     if s.startswith('⚔️'):
                         continue
