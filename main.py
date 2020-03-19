@@ -1394,12 +1394,47 @@ def main_message(message):
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
+    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты либо очень смел, либо очень глуп, раз переступил порог ⚡️Купола Грома.' in message.text):
+        if hasAccessToWariors(message.from_user.username):
+            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+                return
+        strings = message.text.split('\n')
+        strat = False
+        report = ''
+        counter_not_find = 0
+        for s in strings:
+            if strat: 
+                fraction = s.split('(')[1].split(')')[0]
+                pref = ''
+                if '(Без банды)' in s:
+                    pref = '(Без банды)'
+                elif '🤘' in s:
+                    pref = '🤘'
+                name = split(')')[1].split(pref)[0].strip()
+                fraction = getWariorFraction(fraction)
+                warior = getWariorByName(name, fraction)
+                if warior:
+                    report = report + f'{warior.getProfileSmall()}\n'
+                else:
+                    counter_not_find = counter_not_find + 1
+                    
+            
+            if '📊ТОП Купола /tdtop' in s:
+                strart = True
+        if report == '':
+            send_messages_big(message.chat.id, text='Никого не нашел!')
+        else:
+            if counter_not_find > 0:
+                report = report + '\n' + f'{counter_not_find} не нашел!'
+            send_messages_big(message.chat.id, text=report)
+
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты уже записался.' in message.text):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
-            # if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-            #     return
+            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+                return
 
             u = getUserByLogin(message.from_user.username)
             u.setRaidLocation(1)
