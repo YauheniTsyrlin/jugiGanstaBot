@@ -1745,7 +1745,7 @@ def main_message(message):
                     if '💔-' in s:
                         damage = int(s.split('💔-')[1].strip()) 
                         if damage > max_damage:
-                            max_damage = damag
+                            max_damage = damage
                     if '💥' in s:
                         beaten = int(s.split('💥')[1].strip()) 
                         if beaten > max_beaten:
