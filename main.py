@@ -1412,6 +1412,8 @@ def main_message(message):
                     name = split(')')[1].split(pref)[0].strip()
                     fraction = getWariorFraction(fraction)
                     warior = getWariorByName(name, fraction)
+                    logger.info(name)
+                    logger.info(fraction)
                     if warior:
                         report = report + f'{warior.getProfileSmall()}\n'
                     else:
