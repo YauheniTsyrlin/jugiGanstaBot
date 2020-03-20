@@ -1316,7 +1316,7 @@ def main_message(message):
         
         for w in battle.find({
             'login': message.from_user.username, 
-            'date': forward_date,
+            'date': message.forward_date,
             'band': userIAm.getBand()}):
             if w['winnerWarior'] == userIAm.getName():
                 if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
