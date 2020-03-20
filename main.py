@@ -3195,11 +3195,11 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=report)
                 else:
                     try:
-                        reply_to_big(message.chat.id, text=response, reply_markup=None)
+                        reply_to_big(message, text=response)
                     except:
                         logger.info("Error!")
             else:
-                reply_to_big(message.chat.id, text=getResponseDialogFlow(message, 'understand').fulfillment_text)
+                reply_to_big(message, text=getResponseDialogFlow(message, 'understand').fulfillment_text)
         return
     else:
         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
