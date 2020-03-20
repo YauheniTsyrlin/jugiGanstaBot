@@ -4040,7 +4040,7 @@ def rade():
                 report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть 30 минут с момента прожимания /voevat_suda, либо ты можешь присылать свою награду за рейд аж до 30 минут после рейда!!'
                 send_messages_big(goat['chats']['secret'], text=report)
 
-    if now_date.hour in (1, 9, 17) and now_date.minute == 30 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 40 and now_date.second < 15:
         logger.info('Rade time now!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
@@ -4050,7 +4050,7 @@ def rade():
                 saveRaidResult(goat)
                 statistic(goat['name'])
 
-    if now_date.hour in (1, 9, 17) and now_date.minute == 35 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 40 and now_date.second < 15:
         logger.info('Clear raid info!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
