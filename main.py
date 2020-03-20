@@ -3195,7 +3195,10 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=report)
                 else:
                     try:
-                        reply_to_big(message.json, text=response)
+                        if privateChat:
+                            send_messages_big(message.chat.id, text=response)
+                        else:
+                            reply_to_big(message.json, text=response)
                     except:
                         logger.info("Error!")
             else:
