@@ -1475,9 +1475,9 @@ def main_message(message):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
 
-            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-                return
+            # if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+            #     return
 
             strings = message.text.split('\n')
             i = 0
@@ -3918,7 +3918,7 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour == 18 and now_date.minute == 8 and now_date.second < 15:
         report = ''
         updateUser(None)
         for user in USERS_ARR:
@@ -3941,7 +3941,7 @@ def rade():
             send_message_to_admin(report)
     
     # Пидор дня
-    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour == 18 and now_date.minute == 9 and now_date.second < 15:
         logger.info('Pidor of the day!')
         updateUser(None)
         user_in_game = []
@@ -4040,7 +4040,7 @@ def rade():
                 report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть 30 минут с момента прожимания /voevat_suda, либо ты можешь присылать свою награду за рейд аж до 30 минут после рейда!!'
                 send_messages_big(goat['chats']['secret'], text=report)
 
-    if now_date.hour in (1, 9, 17) and now_date.minute == 40 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 30 and now_date.second < 15:
         logger.info('Rade time now!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
@@ -4050,7 +4050,7 @@ def rade():
                 saveRaidResult(goat)
                 statistic(goat['name'])
 
-    if now_date.hour in (1, 9, 17) and now_date.minute == 40 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 30 and now_date.second < 15:
         logger.info('Clear raid info!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
