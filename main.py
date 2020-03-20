@@ -1475,9 +1475,9 @@ def main_message(message):
         #write_json(message.json)
         if hasAccessToWariors(message.from_user.username):
 
-            # if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-            #     return
+            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+                return
 
             strings = message.text.split('\n')
             i = 0
@@ -3195,11 +3195,11 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=report)
                 else:
                     try:
-                        send_messages_big(message.chat.id, text=response, reply_markup=None)
+                        reply_to_big(message.chat.id, text=response, reply_markup=None)
                     except:
                         logger.info("Error!")
             else:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'understand').fulfillment_text)
+                reply_to_big(message.chat.id, text=getResponseDialogFlow(message, 'understand').fulfillment_text)
         return
     else:
         if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
@@ -3843,8 +3843,7 @@ def isUserVotedRaid(login, raidInfo, goatName):
             if u == login:
                 find = True
                 break
-    return find
-            
+    return find        
 
 def ping_on_raid(fuckupusers, chat_id, raidInfo, goatName):
     # Пингуем
@@ -3918,7 +3917,7 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 18 and now_date.minute == 8 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 5 and now_date.second < 15:
         report = ''
         updateUser(None)
         for user in USERS_ARR:
@@ -3941,7 +3940,7 @@ def rade():
             send_message_to_admin(report)
     
     # Пидор дня
-    if now_date.hour == 18 and now_date.minute == 9 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 10 and now_date.second < 15:
         logger.info('Pidor of the day!')
         updateUser(None)
         user_in_game = []
