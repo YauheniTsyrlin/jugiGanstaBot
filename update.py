@@ -2238,34 +2238,39 @@ myquery = { "code": 'PROBABILITY' }
 newvalues = { "$set": { "value": 
                     [
                         {
-                            # Вероятность
+                            # Вероятность Я тебя не знаю
                             'name': 'I_DONT_KNOW_YOU',
                             'value': 0.5
                         },
                         {
-                            # Вероятность
+                            # Вероятность Быть или не быть
                             'name': 'TO_BE_OR_NOT',
                             'value': 0.5
                         },
                         {
-                            # Range
+                            # Range Бан тебе!
                             'name': 'FUNY_BAN',
                             'value': 600
                         },
                         {
-                            # Вероятность
+                            # Вероятность Эмоции
                             'name': 'EMOTIONS',
                             'value': 0.10
                         },
                         {
-                            # Вероятность
+                            # Вероятность Да, сэр!
                             'name': 'YES_STICKER',
-                            'value': 0.00
+                            'value': 0.10
                         },
                         {
-                            # Вероятность
-                            'name': 'NO_STICKER',
-                            'value': 0.00
+                            # Вероятность Ты победил!
+                            'name': 'YOU_WIN',
+                            'value': 0.50
+                        },
+                        {
+                            # Вероятность Ты проиграл
+                            'name': 'YOU_LOSER',
+                            'value': 0.50
                         },
                         {
                             # Вероятность

@@ -1313,7 +1313,17 @@ def main_message(message):
             return
         for warior in ww:
             update_warior(warior)
-
+        
+        for w in battle.find({
+            'login': message.from_user.username, 
+            'date': forward_date,
+            'band': userIAm.getBand()}):
+            if w['winnerWarior'] == userIAm.getName():
+                if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
+                    bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
+            else:
+                if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_LOSER'))):
+                    bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '/accept' in message.text and '/decline' in message.text):
@@ -1985,10 +1995,10 @@ def main_message(message):
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
                 bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_A_PINDA'), 1)[0]['value'])
                 return
-    if 'тебя буквально размазали' in message.text.lower():
-        if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
-            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
-            return       
+    # if 'тебя буквально размазали' in message.text.lower():
+    #     if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
+    #         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
+    #         return       
     if 'утречка' in message.text.lower() or 'добрым утром' in message.text.lower() or 'доброго утра' in message.text.lower() or 'доброго утречка' in message.text.lower() or 'доброе утро' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='MORNING_STICKER'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_MORNING'), 1)[0]['value'])
