@@ -1802,7 +1802,7 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
                 return
 
-            if message.forward_date < (datetime.now() - timedelta(days=1000)).timestamp():
+            if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_forward').fulfillment_text) 
                 return
                 
@@ -1831,7 +1831,6 @@ def main_message(message):
             if name == '':
                 pass
             else:
-                you_win = True
                 row = {}
                 row.update({'date': message.forward_date})
                 row.update({'boss_name': name})
@@ -1881,63 +1880,94 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
 
 
-            return
+        return
     
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('Победа!'):
-        name = ''
-        mob_class = ''
-        kr = 0
-        mat = 0
-        dark_zone = False
+        if hasAccessToWariors(message.from_user.username):
+    
+            if userIAm == None:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
+                return
 
-        for s in message.text.split('\n'):
-            if s.startswith('🔥'):
-                name = s.split('🔥')[1].split('(')[0].strip()
-                mob_class = ''
-            if s.startswith('Получено:') and '🕳' in s and '📦' in s:
-                kr = int(s.split('🕳')[1].split(' ')[0].strip())
-                mat = int(s.split('📦')[1].strip())
-            if s.startswith('☠️'):
-                killed.append(s.split('☠️')[1].strip())
-        if name == '':
-            pass
-        else:
-            you_win = True
-            row = {}
-            row.update({'date': message.forward_date})
-            row.update({'login': message.from_user.username})
-            row.update({'mob_name': name})
-            row.update({'mob_class': mob_class})
-            
-            row.update({'km': 0})
-            row.update({'dark_zone': dark_zone})
-            row.update({'kr': kr})
-            row.update({'mat': mat})
-            row.update({'bm': userIAm.getBm()})
-            row.update({'user_damage': userIAm.getDamage()})
-            row.update({'user_armor': userIAm.getArmor()})
-            row.update({'damage': []})
-            row.update({'beaten': []})
-            
-            if userIAm.getName() in s and '☠️' in s:
-                you_win = False
-            row.update({'win': you_win})
+            if userIAm.getTimeUpdate() < (datetime.now() - timedelta(days=1)).timestamp():
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
+                return
 
+            if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_forward').fulfillment_text) 
+                return
+                
+            counter = 0
+            health = 0
+            damage = []
+            beaten = []
+            killed = []
+            kr = []
+            mat = []
+            name = ''
 
-            newvalues = { "$set": row }
-            result = mob.update_one({
-                'name': name,
-                'mob_class': mob_class
-                }, newvalues)
-            if result.matched_count < 1:
-                mob.insert_one(row)
-            
-            if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                report = getMobReport(name, mob_class, dark_zone)
-                send_messages_big(message.chat.id, text=report)
+            for s in message.text.split('\n'):
+                if s.startswith('🔥'):
+                    name = s.split('🔥')[1].split('(')[0].strip()
+                if s.startswith('Получено:') and '🕳' in s and '📦' in s:
+                    kr = [int(s.split('🕳')[1].split(' ')[0].strip())]
+                    mat = [int(s.split('📦')[1].strip())]
+                if s.startswith('☠️'):
+                    killed.append(s.split('☠️')[1].strip())
+
+            if name == '':
+                pass
             else:
+                row = {}
+                row.update({'date': message.forward_date})
+                row.update({'boss_name': name})
+                row.update({'health': health})
+                row.update({'damage': damage})
+                row.update({'beaten': beaten})
+                row.update({'killed': killed})
+                row.update({'kr': kr})
+                row.update({'mat': mat})
+                row.update({'forward_date': [message.forward_date]})
+                
+
+                for bo in boss.find({'boss_name': name}):
+                    if bo['date'] > row['date']:
+                        row.update({'date': bo['date']})
+                    if bo['health'] > row['health']:
+                        row.update({'health': bo['health']})
+                    row.update({'damage': bo['damage'].append(row['damage'])})
+                    row.update({'beaten': bo['beaten'].append(row['beaten'])})
+                    row.update({'killed': bo['killed'].append(row['killed'])})
+                    row.update({'kr': bo['kr'].append(row['kr'])})
+                    row.update({'mat': bo['mat'].append(row['mat'])})
+                    if message.forward_date in bo['forward_date']:
+                        send_messages_big(message.chat.id, text='Дубликат!')
+                        if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                            report = getBossReport(name)
+                            send_messages_big(message.chat.id, text=report)
+                        return
+                    else:
+                        row.update({'forward_date': bo['forward_date'].append(row['forward_date'])})
+
+                newvalues = { "$set": row }
+                result = boss.update_one({
+                    'boss_name': name
+                    }, newvalues)
+                if result.matched_count < 1:
+                    boss.insert_one(row)
+
+                if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                    report = getBossReport(name)
+                    send_messages_big(message.chat.id, text=report)
+                else:
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+
+            if name == '':
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+
+
         return
+
 # ⚜️Боссы.
 # ❌Нацарапать крестик
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
