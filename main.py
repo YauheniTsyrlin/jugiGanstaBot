@@ -1868,7 +1868,7 @@ def main_message(message):
                     report = getMobReport(mob_name, mob_class, dark_zone)
                     hashstr = getMobHash(mob_name, mob_class)
                     mobindb = getMobByHash(hashstr)
-                    if mobindb
+                    if mobindb:
                         markupinline = InlineKeyboardMarkup()
                         markupinline.add(
                             InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
