@@ -2450,7 +2450,7 @@ def main_message(message):
 
                             
                             #if not find:
-                            markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
+                            markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date}_{goat}"))
               
                         text = get_raid_plan(raid_date, goat)
 
