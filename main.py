@@ -1885,8 +1885,8 @@ def main_message(message):
 
             newvalues = { "$set": row }
             result = mob.update_one({
-                'date': message.forward_date,
-                'login': message.from_user.username
+                'name': name,
+                'mob_class': mob_class
                 }, newvalues)
             if result.matched_count < 1:
                 mob.insert_one(row)
@@ -1897,7 +1897,8 @@ def main_message(message):
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
         return
-
+# ⚜️Боссы.
+# ❌Нацарапать крестик
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
         if hasAccessToWariors(message.from_user.username):
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
