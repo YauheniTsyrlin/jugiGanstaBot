@@ -648,7 +648,7 @@ def cure(logins, chat: str, probability = float(getSetting(code='PROBABILITY', n
 
 def getMobHash(mob_name: str, mob_class: str):
     stringforhash = mob_name + mob_class
-    hashstr = f'/mob{int(hashlib.sha256(stringforhash.encode("utf-8")).hexdigest(), 16) % 10**8}'  
+    hashstr = f'{int(hashlib.sha256(stringforhash.encode("utf-8")).hexdigest(), 16) % 10**8}'  
     return hashstr
 
 def getMobByHash(hashstr: str):
