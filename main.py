@@ -821,9 +821,6 @@ def getBossReport(boss_name: str):
     report = report + f'<b>{boss_name}</b>\n\n'
 
     for bo in boss.find({'boss_name': boss_name}):
-
-
-
         report = report + f'❤️ Здоровье: <b>{bo["health"]}</b>\n'
         report = report + f'💀 Убил: <b>{len(bo["killed"])}</b>\n'
         if len(bo["beaten"]) > 0:
@@ -1860,6 +1857,9 @@ def main_message(message):
                     row.update({'mat': bo['mat'].append(row['mat'])})
                     if message.forward_date in bo['forward_date']:
                         send_messages_big(message.chat.id, text='Дубликат!')
+                        if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                            report = getBossReport(name)
+                            send_messages_big(message.chat.id, text=report)
                         return
                     else:
                         row.update({'forward_date': bo['forward_date'].append(row['forward_date'])})
