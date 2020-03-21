@@ -1828,7 +1828,10 @@ def main_message(message):
                 strings = message.text.split('\n')
                 mob_name = ''
                 mob_class = ''
+                dark_zone = False
                 for s in strings:
+                    if s.startswith('🚷'):
+                        dark_zone = True
                     if s.startswith('Во время вылазки на тебя напал'):
                         mob_name = s.split('Во время вылазки на тебя напал')[1].split('(')[0].strip()
                         mob_class = s.split('(')[1].split(')')[0].strip()
@@ -1836,8 +1839,14 @@ def main_message(message):
                 if mob_name == '':
                     pass
                 else:
-                    report = getMobReport(mob_name, mob_class)
-                    send_messages_big(message.chat.id, text=report)
+                    report = getMobReport(mob_name, mob_class, dark_zone)
+
+                    markupinline = InlineKeyboardMarkup()
+                    markupinline.add(
+                        InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
+                        )
+            
+                    send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
                 return
             if 'Сражение с' in message.text:
                 if userIAm == None:
