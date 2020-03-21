@@ -384,9 +384,12 @@ print('\n======== radeReport ==========\n')
 
 # for u in pip_history.find():
 #     print(u)
-raid = getPlanedRaidLocation('FǁȺǁggǁØǁAT', False)
-print(raid)
-print(datetime.fromtimestamp(raid["rade_date"]))
+# raid = getPlanedRaidLocation('FǁȺǁggǁØǁAT', False)
+# print(raid)
+# print(datetime.fromtimestamp(raid["rade_date"]))
+a = '111'
+b = None
+print(a+b)
 sys.exit(0)
 
 # import pandas as pd
