@@ -1805,8 +1805,8 @@ def main_message(message):
                 row.update({'bm': userIAm.getBm()})
                 row.update({'user_damage': userIAm.getDamage()})
                 row.update({'user_armor': userIAm.getArmor()})
-                row.update({'damage': damage})
-                row.update({'beaten': beaten})
+                row.update({'damage': beaten})
+                row.update({'beaten': damage})
                 if userIAm.getName() in s and '☠️' in s:
                     you_win = False
                 row.update({'win': you_win})
