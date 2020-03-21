@@ -652,6 +652,7 @@ def getMobHash(mob_name: str, mob_class: str):
     return hashstr
 
 def getMobByHash(hashstr: str):
+    logger.info(f'get hash {hashstr}')
     dresult = mob.aggregate([ 
     {   "$match": {
                 "kr": {"$gte": 0}
@@ -1868,7 +1869,8 @@ def main_message(message):
                     hashstr = getMobHash(mob_name, mob_class)
                     mobindb = getMobByHash(hashstr)
                     logger.info(f'==============')
-                    logger.info(f'==={mobindb}==')
+                    logger.info(f'==={mob_name} {mob_class}==')
+                    logger.info(f'==={hashstr}==')
                     logger.info(f'==============')
                     markupinline = None
                     if mobindb:
@@ -3348,14 +3350,14 @@ def callback_query(call):
  
     hashstr = eval(call.data.split('|')[1])
     dark_zone = eval(call.data.split('|')[2])
-    mob = getMobByHash(hashstr)
-
+    mobinbd = getMobByHash(hashstr)
+    logger.info(f'{mobinbd}')
     markupinline = InlineKeyboardMarkup()
     markupinline.add(
         InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
         )
 
-    text = getMobReport(mob['mob_name'], mob['mob_class'], dark_zone)
+    text = getMobReport(mobinbd['mob_name'], mobinbd['mob_class'], dark_zone)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
     # logger.info(f'{call.from_user.username} {text}')
 
