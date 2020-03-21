@@ -1814,6 +1814,8 @@ def main_message(message):
             kr = []
             mat = []
             name = ''
+            forward_date = [message.forward_date]
+
             for s in message.text.split('\n'):
                 counter = counter + 1
                 if counter == 2 and not (s == ''):
@@ -1840,7 +1842,7 @@ def main_message(message):
                 row.update({'killed': killed})
                 row.update({'kr': kr})
                 row.update({'mat': mat})
-                row.update({'forward_date': [message.forward_date]})
+                row.update({'forward_date': forward_date})
                 
                 
 
@@ -1919,6 +1921,7 @@ def main_message(message):
             kr = []
             mat = []
             name = ''
+            forward_date = [message.forward_date]
 
             for s in message.text.split('\n'):
                 if s.startswith('🔥'):
@@ -1941,7 +1944,7 @@ def main_message(message):
                 row.update({'killed': killed})
                 row.update({'kr': kr})
                 row.update({'mat': mat})
-                row.update({'forward_date': [message.forward_date]})
+                row.update({'forward_date': forward_date})
                 
 
                 for bo in boss.find({'boss_name': name}):
