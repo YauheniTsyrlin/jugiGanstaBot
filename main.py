@@ -2415,38 +2415,37 @@ def main_message(message):
                         goat = getMyGoatName(message.from_user.username)
 
                         tz = config.SERVER_MSK_DIFF
-                        plan_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
-                        raid_date = plan_date
+                        raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour).timestamp()
 
                         if response.split(response.split(":")[1])[1][1:].strip() == '*':
-                            raid_date = raid_date.replace(minute=0, second=0, microsecond=0)
+                            raid_date = getPlanedRaidLocation(goat, planRaid = True)['rade_date']
+                            # raid_date = raid_date.replace(minute=0, second=0, microsecond=0)
 
-                            if plan_date.hour > 17 or plan_date.hour < 1:
-                                if not plan_date.hour < 1:
-                                    raid_date = raid_date + timedelta(days=1)
-                                raid_date = raid_date.replace(hour=1)
-                            elif plan_date.hour > 1 and plan_date.hour < 9:
-                                raid_date = raid_date.replace(hour=9)
-                            else:
-                                raid_date = raid_date.replace(hour=17)
+                            # if plan_date.hour > 17 or plan_date.hour < 1:
+                            #     if not plan_date.hour < 1:
+                            #         raid_date = raid_date + timedelta(days=1)
+                            #     raid_date = raid_date.replace(hour=1)
+                            # elif plan_date.hour > 1 and plan_date.hour < 9:
+                            #     raid_date = raid_date.replace(hour=9)
+                            # else:
+                            #     raid_date = raid_date.replace(hour=17)
+
                         else:
-                            raid_date = parse(response.split(response.split(":")[1])[1][1:])
+                            raid_date = parse(response.split(response.split(":")[1])[1][1:]).timestamp()
                         
                         markupinline = InlineKeyboardMarkup()
 
                         for radeloc in plan_raids.find({
-                                    'rade_date': { 
-                                        '$gte' : plan_date.timestamp()
-                                    }, 
+                                    'rade_date': raid_date, 
                                     'goat': goat}): 
-                            find = False
-                            try:
-                                users_onraid = radeloc['users']
-                                for u in users_onraid:
-                                    if u == message.from_user.username:
-                                        find = True
-                            except:
-                                pass
+                            # find = False
+                            # try:
+                            #     users_onraid = radeloc['users']
+                            #     for u in users_onraid:
+                            #         if u == message.from_user.username:
+                            #             find = True
+                            # except:
+                            #     pass
 
 
                             
