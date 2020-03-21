@@ -1828,7 +1828,8 @@ def main_message(message):
                         beaten.append(int(s.split('💔-')[1].strip()))
                     if '💥' in s:
                         damage.append(int(s.split('💥')[1].strip())) 
-
+                    if s.startswith('☠️'):
+                        killed.append(s.split('☠️')[1].strip())
                         
             if name == '':
                 pass
