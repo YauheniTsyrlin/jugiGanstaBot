@@ -671,7 +671,7 @@ def getMobByHash(hashstr: str):
         mob_class = d["_id"]["mob_class"] 
         hashstr_in_bd = getMobHash(mob_name, mob_class)
 
-        logger.info(f'{} {mob_class} {hashstr_in_bd}')
+        logger.info(f'{hashstr_in_bd} {mob_class} {hashstr_in_bd}')
 
         if hashstr == hashstr_in_bd:
             mobinbd = {'mob_name':mob_name, 'mob_class': mob_class}
