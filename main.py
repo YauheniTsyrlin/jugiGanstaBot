@@ -1929,8 +1929,8 @@ def main_message(message):
                 if s.startswith('Получено:') and '🕳' in s and '📦' in s:
                     kr = [int(s.split('🕳')[1].split(' ')[0].strip())]
                     mat = [int(s.split('📦')[1].strip())]
-                if s.startswith('☠️'):
-                    killed.append(s.split('☠️')[1].strip())
+                if s.startswith('💀'):
+                    killed.append(s.split('💀')[1].strip())
 
             if name == '':
                 pass
