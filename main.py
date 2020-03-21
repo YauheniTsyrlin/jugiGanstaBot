@@ -1821,6 +1821,8 @@ def main_message(message):
                     logger.info('!INSERT!!!!!!!!!!!!!!!!')
                     logger.info(row)
                     mob.insert_one(row)
+                else:
+                    logger.info('!UPDATE!!!!!!!!!!!!!!!!')
 
                 if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
                     report = getMobReport(name, mob_class)
