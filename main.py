@@ -1849,11 +1849,11 @@ def main_message(message):
                         row.update({'date': bo['date']})
                     if bo['health'] > row['health']:
                         row.update({'health': bo['health']})
-                    row.update({'damage': bo['damage'].append(row['damage'])})
-                    row.update({'beaten': bo['beaten'].append(row['beaten'])})
-                    row.update({'killed': bo['killed'].append(row['killed'])})
-                    row.update({'kr': bo['kr'].append(row['kr'])})
-                    row.update({'mat': bo['mat'].append(row['mat'])})
+                    row.update({'damage': bo['damage'].extend(row['damage'])})
+                    row.update({'beaten': bo['beaten'].extend(row['beaten'])})
+                    row.update({'killed': bo['killed'].extend(row['killed'])})
+                    row.update({'kr': bo['kr'].extend(row['kr'])})
+                    row.update({'mat': bo['mat'].extend(row['mat'])})
                     if message.forward_date in bo['forward_date']:
                         send_messages_big(message.chat.id, text='Дубликат!')
                         if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
@@ -1861,7 +1861,7 @@ def main_message(message):
                             send_messages_big(message.chat.id, text=report)
                         return
                     else:
-                        row.update({'forward_date': bo['forward_date'].append(row['forward_date'])})
+                        row.update({'forward_date': bo['forward_date'].extend(row['forward_date'])})
                 logger.info(row)
                 newvalues = { "$set": row }
                 result = boss.update_one({
@@ -1937,11 +1937,11 @@ def main_message(message):
                         row.update({'date': bo['date']})
                     if bo['health'] > row['health']:
                         row.update({'health': bo['health']})
-                    row.update({'damage': bo['damage'].append(row['damage'])})
-                    row.update({'beaten': bo['beaten'].append(row['beaten'])})
-                    row.update({'killed': bo['killed'].append(row['killed'])})
-                    row.update({'kr': bo['kr'].append(row['kr'])})
-                    row.update({'mat': bo['mat'].append(row['mat'])})
+                    row.update({'damage': bo['damage'].extend(row['damage'])})
+                    row.update({'beaten': bo['beaten'].extend(row['beaten'])})
+                    row.update({'killed': bo['killed'].extend(row['killed'])})
+                    row.update({'kr': bo['kr'].extend(row['kr'])})
+                    row.update({'mat': bo['mat'].extend(row['mat'])})
                     if message.forward_date in bo['forward_date']:
                         send_messages_big(message.chat.id, text='Дубликат!')
                         if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
@@ -1949,7 +1949,7 @@ def main_message(message):
                             send_messages_big(message.chat.id, text=report)
                         return
                     else:
-                        row.update({'forward_date': bo['forward_date'].append(row['forward_date'])})
+                        row.update({'forward_date': bo['forward_date'].extend(row['forward_date'])})
                 logger.info('row')
                 logger.info(row)
 
