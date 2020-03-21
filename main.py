@@ -1867,10 +1867,12 @@ def main_message(message):
                 else:
                     report = getMobReport(mob_name, mob_class, dark_zone)
                     hashstr = getMobHash(mob_name, mob_class)
-                    markupinline = InlineKeyboardMarkup()
-                    markupinline.add(
-                        InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
-                        )
+                    mobindb = getMobByHash(hashstr)
+                    if mobindb
+                        markupinline = InlineKeyboardMarkup()
+                        markupinline.add(
+                            InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
+                            )
             
                     send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
                 return
