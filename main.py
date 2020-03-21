@@ -716,7 +716,7 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
             if one_mob['health'] and one_mob['health'] > health:
                 health = one_mob['health']
         except: pass
-                
+
         counter = counter + 1
         if one_mob['win']:
             win_counter = win_counter + 1
@@ -790,7 +790,8 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
     if habitat_str == '':
         report = report + f"👣 Еще ни разу не встречали в {'🔆' if not dark_zone else '🚷'}\n"
     else:
-        report = report + f'👣 Встречается: <b>{habitat_str}</b> км\n'
+        if health > 0:
+            report = report + f'👣 Встречается: <b>{habitat_str}</b> км\n'
 
         if health > 0:
             report = report + f'❤️ Здоровье: <b>{health}</b>\n'
@@ -1795,7 +1796,7 @@ def main_message(message):
                         damage.append(int(s.split('💔-')[1].strip()))
                     if '💥' in s:
                         beaten.append(int(s.split('💥')[1].strip())) 
-            logger.info(f'{name} {health}')
+
             if name == '':
                 pass
             else:
@@ -1967,7 +1968,7 @@ def main_message(message):
                     if s.startswith('👊'):
                         send_messages_big(message.chat.id, text='Это моб из митспина, не записываю...')
                         return
-                    if s.startswith('🚷'):
+                    if s.startswith('🚷') or s.startswith('📯🚷'):
                         dark_zone = True
                     if s.startswith('Сражение с'):
                         mob_name = s.split('Сражение с')[1].split('(')[0].strip()
