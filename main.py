@@ -2415,7 +2415,7 @@ def main_message(message):
                         goat = getMyGoatName(message.from_user.username)
 
                         tz = config.SERVER_MSK_DIFF
-                        raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour).timestamp()
+                        raid_date = (datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
 
                         if response.split(response.split(":")[1])[1][1:].strip() == '*':
                             raid_date = getPlanedRaidLocation(goat, planRaid = True)['rade_date']
