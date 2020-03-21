@@ -1956,9 +1956,12 @@ def main_message(message):
 
                     logger.info('=====damage=====')
                     logger.info(bo['damage'])
-                    logger.info(damage)
-                    logger.info(bo['damage'].extend(damage))
+                    logger.info(row['damage'])
+
+                    logger.info(bo['damage'].extend(row['damage']))
+
                     logger.info('=====damage=====')
+
                     damage = bo['damage'].extend(damage)
                     row.update({'damage': damage})
 
