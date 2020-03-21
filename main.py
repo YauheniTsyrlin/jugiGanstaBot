@@ -712,9 +712,11 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
     habitat = {}
     for one_mob in mob.find({'mob_name':mob_name, 'mob_class': mob_class, 'dark_zone':dark_zone}):
         #send_messages_big(497065022, text=f'{one_mob}')
-        if one_mob['health'] and one_mob['health'] > health:
-            health = one_mob['health']
-        
+        try:
+            if one_mob['health'] and one_mob['health'] > health:
+                health = one_mob['health']
+        except: pass
+                
         counter = counter + 1
         if one_mob['win']:
             win_counter = win_counter + 1
