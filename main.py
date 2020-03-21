@@ -1896,7 +1896,7 @@ def main_message(message):
 
         return
     
-    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and ('Ты присоединился к группе, которая собирается атаковать' in message.text or message.text.startswith('Победа!') or (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.tex)):
+    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and ('Ты присоединился к группе, которая собирается атаковать' in message.text or message.text.startswith('Победа!') or (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.text)):
         if hasAccessToWariors(message.from_user.username):
     
             if userIAm == None:
