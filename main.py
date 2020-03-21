@@ -1958,7 +1958,7 @@ def main_message(message):
                     logger.info(bo['damage'])
                     logger.info(row['damage'])
 
-                    logger.info(bo['damage'].extend(row['damage']))
+                    logger.info( bo['damage'].extend([] if len(row['damage'])>0 else row['damage']) )
 
                     logger.info('=====damage=====')
 
