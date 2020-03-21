@@ -1840,9 +1840,9 @@ def main_message(message):
         kr = 0
         mat = 0
         dark_zone = False
-        
+
         for s in message.text.split('\n'):
-            if s.startswith('🔥):
+            if s.startswith('🔥'):
                 name = s.split('🔥')[1].split('(')[0].strip()
                 mob_class = s.split('(')[1].split(')')[0].strip()
             if s.startswith('Получено:') and '🕳' in s and '📦' in s:
