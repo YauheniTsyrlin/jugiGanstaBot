@@ -2433,25 +2433,25 @@ def main_message(message):
                             raid_date = parse(response.split(response.split(":")[1])[1][1:])
                         
                         markupinline = InlineKeyboardMarkup()
-
+                        
                         for radeloc in plan_raids.find({
                                     'rade_date': { 
                                         '$gte' : plan_date.timestamp()
                                     }, 
                                     'goat': goat}): 
-                            find = False
-                            try:
-                                users_onraid = radeloc['users']
-                                for u in users_onraid:
-                                    if u == message.from_user.username:
-                                        find = True
-                            except:
-                                pass
+                            # find = False
+                            # try:
+                            #     users_onraid = radeloc['users']
+                            #     for u in users_onraid:
+                            #         if u == message.from_user.username:
+                            #             find = True
+                            # except:
+                            #     pass
 
 
                             
-                            if not find:
-                                markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
+                            # if not find:
+                            markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
               
                         text = get_raid_plan(raid_date, goat)
 
