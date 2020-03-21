@@ -1836,13 +1836,13 @@ def main_message(message):
                         mob_name = s.split('Во время вылазки на тебя напал')[1].split('(')[0].strip()
                         mob_class = s.split('(')[1].split(')')[0].strip()
                         break
-                print(f"==============================================")
-                print(f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
+                logger.info(f"==============================================")
+                logger.info(f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
                 if mob_name == '':
                     pass
                 else:
                     report = getMobReport(mob_name, mob_class, dark_zone)
-                    print(f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
+                    logger.info(f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
                     markupinline = InlineKeyboardMarkup()
                     markupinline.add(
                         InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
