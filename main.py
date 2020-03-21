@@ -827,17 +827,17 @@ def getBossReport(boss_name: str):
         if len(bo["beaten"]) > 0:
             report = report + f'💔 <b>Урон бандитам</b>:\n'
             report = report + f'      Min <b>{min(bo["beaten"])}</b>\n'
-            report = report + f'      В среднем <b>{sum(bo["beaten"]) / len(bo["beaten"])}</b>\n'
+            report = report + f'      В среднем <b>{int(sum(bo["beaten"]) / len(bo["beaten"]))}</b>\n'
             report = report + f'      Max <b>{max(bo["beaten"])}</b>\n'
         if len(bo["damage"]) > 0:
             report = report + f'💥 <b>Получил от бандитов</b>:\n'
             report = report + f'      Min <b>{min(bo["damage"])}</b>\n'
-            report = report + f'      В среднем <b>{sum(bo["damage"]) / len(bo["damage"])}</b>\n'
+            report = report + f'      В среднем <b>{int(sum(bo["damage"]) / len(bo["damage"]))}</b>\n'
             report = report + f'      Max <b>{max(bo["damage"])}</b>\n'
         if len(bo["kr"]) > 0:
             report = report + f'💰 <b>В среднем добыто</b>:\n'
-            report = report + f'      🕳 <b>{sum(bo["kr"]) / len(bo["kr"])}</b>\n'
-            report = report + f'      📦 <b>{sum(bo["mat"]) / len(bo["mat"])}</b>\n'
+            report = report + f'      🕳 <b>{int(sum(bo["kr"]) / len(bo["kr"]))}</b>\n'
+            report = report + f'      📦 <b>{int(sum(bo["mat"]) / len(bo["mat"]))}</b>\n'
 
     return report 
 
@@ -1820,9 +1820,9 @@ def main_message(message):
                         health = int(s.split('❤️')[1].strip())
                         name = s.split('❤️')[0].strip()
                     if '💔-' in s:
-                        damage.append(int(s.split('💔-')[1].strip()))
+                        beaten.append(int(s.split('💔-')[1].strip()))
                     if '💥' in s:
-                        beaten.append(int(s.split('💥')[1].strip())) 
+                        damage.append(int(s.split('💥')[1].strip())) 
 
                         
             if name == '':
