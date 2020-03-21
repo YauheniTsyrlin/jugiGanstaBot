@@ -836,7 +836,7 @@ def getBossReport(boss_name: str):
             report = report + f'      Max <b>{max(bo["damage"])}</b>\n'
         if len(bo["kr"]) > 0:
             report = report + f'💰 <b>В среднем добыто</b>:\n'
-            report = report + f'      🕳 <b>{aversum(bo["kr"]) / len(bo["kr"])age_kr}</b>\n'
+            report = report + f'      🕳 <b>{sum(bo["kr"]) / len(bo["kr"])}</b>\n'
             report = report + f'      📦 <b>{sum(bo["mat"]) / len(bo["mat"])}</b>\n'
 
     return report 
