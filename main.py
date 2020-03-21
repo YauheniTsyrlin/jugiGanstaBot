@@ -671,8 +671,8 @@ def getMobByHash(hashstr: str):
         s = mob_name + mob_class
         hashstr_in_bd = getMobHash(mob_name, mob_class)
         if hashstr == hashstr_in_bd:
-            mob = {'mob_name':mob_name, 'mob_class': mob_class}
-            return mob
+            mobinbd = {'mob_name':mob_name, 'mob_class': mob_class}
+            return mobinbd
     return None
             
 
