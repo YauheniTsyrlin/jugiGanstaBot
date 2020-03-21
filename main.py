@@ -59,6 +59,7 @@ report_raids    = mydb["report_raids"]
 man_of_day      = mydb["man_of_day"]
 pip_history     = mydb["pip_history"]
 mob             = mydb["mob"]
+boss            = mydb["boss"]
 
 flexFlag = False
 logger = telebot.logger
@@ -814,6 +815,31 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
     report = report + f'Всего записей в базе <b>{all_counter}</b>\n'
     
     return report
+
+def getBossReport(boss_name: str):
+    report = f"⚜️<b>Статистика по боссам</b>\n"
+    report = report + f'<b>{boss_name}</b>\n\n'
+
+    for bo in boss.find({'boss_name': boss_name})
+
+        report = report + f'❤️ Здоровье: <b>{bo["health"]}</b>\n'
+        report = report + f'💀 Убил: <b>{len(bo["killed"])}</b>\n'
+        if len(bo["beaten"]) > 0:
+            report = report + f'💔 <b>Урон бандитам</b>:\n'
+            report = report + f'      Min <b>{min(bo["beaten"])}</b>\n'
+            report = report + f'      В среднем <b>{sum(bo["beaten"]) / len(bo["beaten"])}</b>\n'
+            report = report + f'      Max <b>{max(bo["beaten"])}</b>\n'
+        if len(bo["damage"]) > 0:
+            report = report + f'💥 <b>Получил от бандитов</b>:\n'
+            report = report + f'      Min <b>{min(bo["damage"])}</b>\n'
+            report = report + f'      В среднем <b>{sum(bo["damage"]) / len(bo["damage"])}</b>\n'
+            report = report + f'      Max <b>{max(bo["damage"])}</b>\n'
+        if len(bo["kr"]) > 0:
+            report = report + f'💰 <b>В среднем добыто</b>:\n'
+            report = report + f'      🕳 <b>{aversum(bo["kr"]) / len(bo["kr"])age_kr}</b>\n'
+            report = report + f'      📦 <b>{sum(bo["mat"]) / len(bo["mat"])}</b>\n'
+
+    return report 
 
 # Handle new_chat_members
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
@@ -1781,9 +1807,10 @@ def main_message(message):
             health = 0
             damage = []
             beaten = []
-            mob_class = ''
+            killed = []
+            kr = []
+            mat = []
             name = ''
-            dark_zone = False
             for s in message.text.split('\n'):
                 counter = counter + 1
                 if counter == 2 and not (s == ''):
@@ -1797,42 +1824,42 @@ def main_message(message):
                     if '💥' in s:
                         beaten.append(int(s.split('💥')[1].strip())) 
 
+                        
             if name == '':
                 pass
             else:
                 you_win = True
                 row = {}
                 row.update({'date': message.forward_date})
-                row.update({'login': message.from_user.username})
-                row.update({'mob_name': name})
-                row.update({'mob_class': mob_class})
-                
-                row.update({'km': 0})
-                row.update({'dark_zone': dark_zone})
-                row.update({'kr': 0})
-                row.update({'mat': 0})
-                row.update({'bm': userIAm.getBm()})
-                row.update({'user_damage': userIAm.getDamage()})
-                row.update({'user_armor': userIAm.getArmor()})
-                row.update({'damage': beaten})
-                row.update({'beaten': damage})
-                if userIAm.getName() in s and '☠️' in s:
-                    you_win = False
-                row.update({'win': you_win})
+                row.update({'boss_name': name})
                 row.update({'health': health})
+                row.update({'damage': damage})
+                row.update({'beaten': beaten})
+                row.update({'killed': killed})
+                row.update({'kr': kr})
+                row.update({'mat': mat})
+                
 
+                for bo in boss.find({'boss_name': name}):
+                    if bo['date'] > row['date']:
+                        row.update({'date': bo['date']})
+                    if bo['health'] > row['health']:
+                        row.update({'health': bo['health']})
+                    row.update({'damage': bo['damage'].append(row['damage']))
+                    row.update({'beaten': bo['beaten'].append(row['beaten']))
+                    row.update({'killed': bo['killed'].append(row['killed']))
+                    row.update({'kr': bo['kr'].append(row['kr']))
+                    row.update({'mat': bo['mat'].append(row['mat']))
+                
                 newvalues = { "$set": row }
-                result = mob.update_one({
-                    'date': message.forward_date,
-                    'login': message.from_user.username, 
-                    'km': 0,
-                    'dark_zone': dark_zone
+                result = boss.update_one({
+                    'boss_name': name
                     }, newvalues)
                 if result.matched_count < 1:
-                    mob.insert_one(row)
+                    boss.insert_one(row)
 
                 if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                    report = getMobReport(name, mob_class, dark_zone)
+                    report = getBossReport(name)
                     send_messages_big(message.chat.id, text=report)
                 else:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
@@ -1857,7 +1884,8 @@ def main_message(message):
             if s.startswith('Получено:') and '🕳' in s and '📦' in s:
                 kr = int(s.split('🕳')[1].split(' ')[0].strip())
                 mat = int(s.split('📦')[1].strip())
-        
+            if s.startswith('☠️'):
+                killed.append(s.split('☠️')[1].strip())
         if name == '':
             pass
         else:
