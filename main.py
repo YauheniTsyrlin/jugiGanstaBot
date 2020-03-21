@@ -1858,7 +1858,7 @@ def main_message(message):
                     if message.forward_date in bo['forward_date']:
                         send_messages_big(message.chat.id, text='Дубликат!')
                         return
-                    else
+                    else:
                         row.update({'forward_date': bo['forward_date'].append(row['forward_date'])})
 
                 newvalues = { "$set": row }
