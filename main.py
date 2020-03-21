@@ -822,6 +822,9 @@ def getBossReport(boss_name: str):
 
     for bo in boss.find({'boss_name': boss_name}):
 
+        last_date = 
+
+
         report = report + f'❤️ Здоровье: <b>{bo["health"]}</b>\n'
         report = report + f'💀 Убил: <b>{len(bo["killed"])}</b>\n'
         if len(bo["beaten"]) > 0:
@@ -1838,6 +1841,8 @@ def main_message(message):
                 row.update({'killed': killed})
                 row.update({'kr': kr})
                 row.update({'mat': mat})
+                row.update({'forward_date': [message.forward_date]})
+                
                 
 
                 for bo in boss.find({'boss_name': name}):
@@ -1850,7 +1855,12 @@ def main_message(message):
                     row.update({'killed': bo['killed'].append(row['killed'])})
                     row.update({'kr': bo['kr'].append(row['kr'])})
                     row.update({'mat': bo['mat'].append(row['mat'])})
-                
+                    if message.forward_date in bo['forward_date']:
+                        send_messages_big(message.chat.id, text='Дубликат!')
+                        return
+                    else
+                        row.update({'forward_date': bo['forward_date'].append(row['forward_date'])})
+
                 newvalues = { "$set": row }
                 result = boss.update_one({
                     'boss_name': name

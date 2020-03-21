@@ -17,6 +17,7 @@ report_raids    = mydb["report_raids"]
 plan_raids      = mydb["rades"]
 pending_messages = mydb["pending_messages"]
 mob             = mydb["mob"]
+boss            = mydb["boss"]
 
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
@@ -2628,7 +2629,7 @@ print("#==========================#")
 # 
 #  mob.remove()
 
-
+boss.remove()
 # mob_class = ''
 # for x in mob.find({'mob_class': mob_class}):
 #     print(x)
