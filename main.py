@@ -1818,6 +1818,8 @@ def main_message(message):
                     'dark_zone': None
                     }, newvalues)
                 if result.matched_count < 1:
+                    logger.info('!INSERT!!!!!!!!!!!!!!!!')
+                    logger.info(row)
                     mob.insert_one(row)
 
                 if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
