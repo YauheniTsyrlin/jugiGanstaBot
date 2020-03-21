@@ -1785,7 +1785,7 @@ def main_message(message):
                         damage.append(int(s.split('💔-')[1].strip()))
                     if '💥' in s:
                         beaten.append(int(s.split('💥')[1].strip())) 
-
+            logger.info(f'{name} {health}')
             if name == '':
                 pass
             else:
