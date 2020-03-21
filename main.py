@@ -1863,6 +1863,7 @@ def main_message(message):
                     else:
                         row.update({'forward_date': bo['forward_date'].extend(row['forward_date'])})
                 logger.info(row)
+                logger.info(row)
                 newvalues = { "$set": row }
                 result = boss.update_one({
                     'boss_name': name
