@@ -1932,7 +1932,7 @@ def main_message(message):
             elif (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.text):
                 name = message.text.split('\n')[3].strip()
             elif 'Ты присоединился к группе, которая собирается атаковать' in message.text:
-                name = message.text.split('Ты присоединился к группе, которая собирается атаковать')[1].split('.').strip()
+                name = message.text.split('Ты присоединился к группе, которая собирается атаковать')[1].split('.')[0].strip()
             
             if name == '':
                 pass
