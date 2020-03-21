@@ -1850,41 +1850,41 @@ def main_message(message):
                 mat = int(s.split('📦')[1].strip())
         
         if name == '':
-                pass
+            pass
+        else:
+            you_win = True
+            row = {}
+            row.update({'date': message.forward_date})
+            row.update({'login': message.from_user.username})
+            row.update({'mob_name': name})
+            row.update({'mob_class': mob_class})
+            
+            row.update({'km': 0})
+            row.update({'dark_zone': dark_zone})
+            row.update({'kr': kr})
+            row.update({'mat': mat})
+            row.update({'bm': userIAm.getBm()})
+            row.update({'user_damage': userIAm.getDamage()})
+            row.update({'user_armor': userIAm.getArmor()})
+
+            if userIAm.getName() in s and '☠️' in s:
+                you_win = False
+            row.update({'win': you_win})
+
+
+            newvalues = { "$set": row }
+            result = mob.update_one({
+                'date': message.forward_date,
+                'login': message.from_user.username
+                }, newvalues)
+            if result.matched_count < 1:
+                mob.insert_one(row)
+            
+            if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                report = getMobReport(name, mob_class, dark_zone)
+                send_messages_big(message.chat.id, text=report)
             else:
-                you_win = True
-                row = {}
-                row.update({'date': message.forward_date})
-                row.update({'login': message.from_user.username})
-                row.update({'mob_name': name})
-                row.update({'mob_class': mob_class})
-                
-                row.update({'km': 0})
-                row.update({'dark_zone': dark_zone})
-                row.update({'kr': kr})
-                row.update({'mat': mat})
-                row.update({'bm': userIAm.getBm()})
-                row.update({'user_damage': userIAm.getDamage()})
-                row.update({'user_armor': userIAm.getArmor()})
-
-                if userIAm.getName() in s and '☠️' in s:
-                    you_win = False
-                row.update({'win': you_win})
-
-
-                newvalues = { "$set": row }
-                result = mob.update_one({
-                    'date': message.forward_date,
-                    'login': message.from_user.username
-                    }, newvalues)
-                if result.matched_count < 1:
-                    mob.insert_one(row)
-                
-                if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                    report = getMobReport(name, mob_class, dark_zone)
-                    send_messages_big(message.chat.id, text=report)
-                else:
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
 
 
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
