@@ -1844,7 +1844,7 @@ def main_message(message):
         for s in message.text.split('\n'):
             if s.startswith('🔥'):
                 name = s.split('🔥')[1].split('(')[0].strip()
-                mob_class = s.split('(')[1].split(')')[0].strip()
+                mob_class = ''
             if s.startswith('Получено:') and '🕳' in s and '📦' in s:
                 kr = int(s.split('🕳')[1].split(' ')[0].strip())
                 mat = int(s.split('📦')[1].strip())
