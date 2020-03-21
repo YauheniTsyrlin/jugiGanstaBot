@@ -1852,19 +1852,19 @@ def main_message(message):
                     if bo['health'] > row['health']:
                         row.update({'health': bo['health']})
                     
-                    damage = bo['damage'].extend(damage)
+                    damage = bo['damage'] + damage
                     row.update({'damage': damage})
 
-                    beaten = bo['beaten'].extend(beaten)
+                    beaten = bo['beaten'] + beaten
                     row.update({'beaten': beaten})
                     
-                    killed = bo['killed'].extend(killed)
+                    killed = bo['killed'] + killed
                     row.update({'killed': killed})
                     
-                    kr = bo['kr'].extend(kr)
+                    kr = bo['kr'] + kr
                     row.update({'kr': kr})
                     
-                    mat = bo['mat'].extend(mat)
+                    mat = bo['mat']+ mat
                     row.update({'mat': mat})
 
                     if message.forward_date in bo['forward_date']:
@@ -1874,7 +1874,7 @@ def main_message(message):
                             send_messages_big(message.chat.id, text=report)
                         return
                     else:
-                        forward_date = bo['forward_date'].extend(forward_date)
+                        forward_date = bo['forward_date'] + forward_date
                         row.update({'forward_date': forward_date})
 
                 logger.info(row)
@@ -1954,27 +1954,19 @@ def main_message(message):
                     if bo['health'] > row['health']:
                         row.update({'health': bo['health']})
 
-                    logger.info('=====damage=====')
-                    logger.info(bo['damage'])
-                    logger.info(row['damage'])
-
-                    logger.info( bo['damage']+row['damage'] )
-
-                    logger.info('=====damage=====')
-
-                    damage = bo['damage'].extend(damage)
+                    damage = bo['damage'] + damage
                     row.update({'damage': damage})
 
-                    beaten = bo['beaten'].extend(beaten)
+                    beaten = bo['beaten'] + beaten
                     row.update({'beaten': beaten})
                     
-                    killed = bo['killed'].extend(killed)
+                    killed = bo['killed']+ killed
                     row.update({'killed': killed})
                     
-                    kr = bo['kr'].extend(kr)
+                    kr = bo['kr'] + kr
                     row.update({'kr': kr})
                     
-                    mat = bo['mat'].extend(mat)
+                    mat = bo['mat']+ mat
                     row.update({'mat': mat})
 
                     if message.forward_date in bo['forward_date']:
@@ -1984,13 +1976,8 @@ def main_message(message):
                             send_messages_big(message.chat.id, text=report)
                         return
                     else:
-                        forward_date = bo['forward_date'].extend(forward_date)
+                        forward_date = bo['forward_date'] + forward_date
                         row.update({'forward_date': forward_date})
-                
-                logger.info('row')
-                logger.info(row)
-
-                if 1==1: return
 
                 newvalues = { "$set": row }
                 result = boss.update_one({
