@@ -652,7 +652,6 @@ def getMobHash(mob_name: str, mob_class: str):
     return hashstr
 
 def getMobByHash(hashstr: str):
-    logger.info(f'get hash {hashstr}')
     dresult = mob.aggregate([ 
     {   "$match": {
                 "kr": {"$gte": 0}
@@ -670,17 +669,11 @@ def getMobByHash(hashstr: str):
         mob_name = d["_id"]["mob_name"] 
         mob_class = d["_id"]["mob_class"] 
         hashstr_in_bd = getMobHash(mob_name, mob_class)
-
-        logger.info(f'{hashstr_in_bd} {mob_name} {mob_class}')
-
         if hashstr == hashstr_in_bd:
             mobinbd = {'mob_name':mob_name, 'mob_class': mob_class}
-            logger.info(f'return {mobinbd}')
             return mobinbd
 
-    logger.info(f'return None')
     return None
-            
 
 def getMobDetailReport(mob_name: str, mob_class: str):
     hashstr = getMobHash(mob_name, mob_class)
@@ -1776,8 +1769,8 @@ def main_message(message):
                 
             counter = 0
             health = 0
-            max_damage = 0
-            max_beaten = 0
+            damage = []
+            beaten = []
             mob_class = ''
             name = ''
             for s in message.text.split('\n'):
@@ -1789,13 +1782,9 @@ def main_message(message):
                         health = int(s.split('❤️')[1].strip())
                         name = s.split('❤️')[0].strip()
                     if '💔-' in s:
-                        damage = int(s.split('💔-')[1].strip()) 
-                        if damage > max_damage:
-                            max_damage = damage
+                        damage.append(int(s.split('💔-')[1].strip()))
                     if '💥' in s:
-                        beaten = int(s.split('💥')[1].strip()) 
-                        if beaten > max_beaten:
-                            max_beaten = beaten
+                        beaten.append(int(s.split('💥')[1].strip())) 
 
             if name == '':
                 pass
@@ -1814,11 +1803,12 @@ def main_message(message):
                 row.update({'bm': userIAm.getBm()})
                 row.update({'user_damage': userIAm.getDamage()})
                 row.update({'user_armor': userIAm.getArmor()})
-                row.update({'damage': [max_damage]})
-                row.update({'beaten': [max_beaten]})
+                row.update({'damage': damage})
+                row.update({'beaten': beaten})
                 if userIAm.getName() in s and '☠️' in s:
                     you_win = False
                 row.update({'win': you_win})
+                row.update({'health': health})
 
                 newvalues = { "$set": row }
                 result = mob.update_one({
@@ -1874,10 +1864,6 @@ def main_message(message):
                     report = getMobReport(mob_name, mob_class, dark_zone)
                     hashstr = getMobHash(mob_name, mob_class)
                     mobindb = getMobByHash(hashstr)
-                    logger.info(f'==============')
-                    logger.info(f'==={mob_name} {mob_class}==')
-                    logger.info(f'==={hashstr}==')
-                    logger.info(f'==============')
                     markupinline = None
                     if mobindb:
                         markupinline = InlineKeyboardMarkup()
@@ -1906,6 +1892,7 @@ def main_message(message):
                 km = int(message.text.split('👣')[1].split('км')[0])
                 kr = 0
                 mat = 0
+                health = 0
                 damage = []
                 beaten = []
                 you_win = False
@@ -1948,6 +1935,8 @@ def main_message(message):
                     row.update({'damage': damage})
                     row.update({'beaten': beaten})
                     row.update({'win': you_win})
+                    row.update({'health': None})
+                    
 
                     newvalues = { "$set": row }
                     result = mob.update_one({
@@ -3346,9 +3335,9 @@ def report_man_of_day(message_user_name: str):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("mob_info"))
 def callback_query(call):
-    logger.info(f'{call.from_user.username} {call.data}')
-    #     0              1           2        3
-    # dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}
+    # logger.info(f'{call.from_user.username} {call.data}')
+    #     0              1           2        
+    # mob_info|{hashstr}|{not dark_zone}
 
     if isUserBan(call.from_user.username):
        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
@@ -3357,7 +3346,6 @@ def callback_query(call):
     hashstr = call.data.split('|')[1]
     dark_zone = eval(call.data.split('|')[2])
     mobinbd = getMobByHash(hashstr)
-    logger.info(f'{mobinbd}')
     markupinline = InlineKeyboardMarkup()
     markupinline.add(
         InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
@@ -3365,8 +3353,6 @@ def callback_query(call):
 
     text = getMobReport(mobinbd['mob_name'], mobinbd['mob_class'], dark_zone)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
-    # logger.info(f'{call.from_user.username} {text}')
-
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("dungeon"))
 def callback_query(call):
