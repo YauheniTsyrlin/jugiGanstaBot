@@ -1868,6 +1868,9 @@ def main_message(message):
                     report = getMobReport(mob_name, mob_class, dark_zone)
                     hashstr = getMobHash(mob_name, mob_class)
                     mobindb = getMobByHash(hashstr)
+                    logger.info(f'==============')
+                    logger.info(f'==={mobindb}==')
+                    logger.info(f'==============')
                     markupinline = None
                     if mobindb:
                         markupinline = InlineKeyboardMarkup()
