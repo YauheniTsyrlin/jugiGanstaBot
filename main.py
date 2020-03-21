@@ -1763,7 +1763,7 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
                 return
 
-            if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
+            if message.forward_date < (datetime.now() - timedelta(days=1000)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_forward').fulfillment_text) 
                 return
                 
