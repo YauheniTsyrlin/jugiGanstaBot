@@ -757,8 +757,11 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
             habitat_str = habitat_str + h
         else:
             habitat_str = habitat_str + ', '+ h
+    if habitat_str == '':
+        report = report + f'👣 Еще ни разу не встречали в {'🔆' if not dark_zone else '🚷'}\n'
+    else:
+        report = report + f'👣 Встречается: <b>{habitat_str}</b> км\n'
 
-    report = report + f'👣 Встречается: <b>{habitat_str}</b> км\n'
     report = report + f'✊ Побед: <b>{win_counter}/{counter}</b>\n'
     report = report + f'💔 <b>Урон бандитам</b>:\n'
     report = report + f'      Min <b>{min_beaten}</b> при 🛡<b>{min_beaten_user_armor}</b>\n'
