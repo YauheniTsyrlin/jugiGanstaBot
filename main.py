@@ -672,7 +672,10 @@ def getMobByHash(hashstr: str):
         hashstr_in_bd = getMobHash(mob_name, mob_class)
         if hashstr == hashstr_in_bd:
             mobinbd = {'mob_name':mob_name, 'mob_class': mob_class}
+            logger.info(f'return {mobinbd}')
             return mobinbd
+
+    logger.info(f'return None')
     return None
             
 
