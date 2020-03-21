@@ -1878,7 +1878,6 @@ def main_message(message):
                         row.update({'forward_date': forward_date})
 
                 logger.info(row)
-                logger.info(row)
                 newvalues = { "$set": row }
                 result = boss.update_one({
                     'boss_name': name
