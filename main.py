@@ -822,8 +822,7 @@ def getBossReport(boss_name: str):
 
     for bo in boss.find({'boss_name': boss_name}):
 
-        last_date = max(bo["forward_date"])
-        report = report + f'⏰ Замечен {time.strftime("%d.%m.%Y %H:%M:%S", time.gmtime(last_date))}\n'
+
 
         report = report + f'❤️ Здоровье: <b>{bo["health"]}</b>\n'
         report = report + f'💀 Убил: <b>{len(bo["killed"])}</b>\n'
@@ -841,6 +840,10 @@ def getBossReport(boss_name: str):
             report = report + f'💰 <b>В среднем добыто</b>:\n'
             report = report + f'      🕳 <b>{int(sum(bo["kr"]) / len(bo["kr"]))}</b>\n'
             report = report + f'      📦 <b>{int(sum(bo["mat"]) / len(bo["mat"]))}</b>\n'
+
+        report = report + f'\n'
+        last_date = max(bo["forward_date"])
+        report = report + f'⏰ Замечен {time.strftime("%d.%m.%Y %H:%M:%S", time.gmtime(last_date))}'
 
     return report 
 
