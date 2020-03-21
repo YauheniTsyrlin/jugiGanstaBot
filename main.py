@@ -655,7 +655,7 @@ def getMobDetailReport(mob_name: str, mob_class: str):
     hashstr = getMobHash(mob_name, mob_class)
     return 'В разработке...'
 
-def getMobReport(mob_name: str, mob_class: str, dart_zone=False):
+def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
     hashstr = getMobHash(mob_name, mob_class)
 
     report = f"{'🔆' if dark_zone else '🚷'}<b>Статистика сражений</b>\n"
