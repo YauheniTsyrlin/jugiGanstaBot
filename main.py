@@ -388,7 +388,7 @@ def update_warior(warior: wariors.Warior):
         WARIORS_ARR.append(wariors.importWarior(x))
         
 def get_raid_plan(raid_date, goat):
-    plan_for_date = f'План рейдов на {time.strftime("%d.%m.%Y", time.gmtime( raid_date.timestamp() ))}\n🐐<b>{goat}</b>\n\n'
+    plan_for_date = f'План рейдов на {time.strftime("%d.%m.%Y", time.gmtime( raid_date ))}\n🐐<b>{goat}</b>\n\n'
     find = False
     time_str = None
     for raid in plan_raids.find({
@@ -397,7 +397,7 @@ def get_raid_plan(raid_date, goat):
                                     {
                                         'rade_date': {
                                         '$gte': (datetime.now() + timedelta(minutes=180)).timestamp(),
-                                        '$lt': (raid_date.replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
+                                        '$lt': ( datetime.fromtimestamp(raid_date).replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
                                         }
                                     },
                                     {
@@ -2854,7 +2854,7 @@ def main_message(message):
                                             'goat': goat
                                             })
 
-                        plan_str = get_raid_plan(raid_date, goat)
+                        plan_str = get_raid_plan(raid_date.timestamp(), goat)
 
                         #markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
                         for radeloc in plan_raids.find({
@@ -3769,7 +3769,7 @@ def callback_query(call):
         # if not find:
         markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
                                 
-    text = get_raid_plan(raid_date, goat)
+    text = get_raid_plan(raid_date.timestamp(), goat)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
 def send_messages_big(chat_id: str, text: str, reply_markup=None):
