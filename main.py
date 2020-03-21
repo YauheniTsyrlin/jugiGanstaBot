@@ -652,7 +652,6 @@ def getMobHash(mob_name: str, mob_class: str):
     return hashstr
 
 def getMobByHash(hashstr: str):
-    hashstr = message.text
     dresult = mob.aggregate([ 
     {   "$match": {
                 "kr": {"$gte": 0}
