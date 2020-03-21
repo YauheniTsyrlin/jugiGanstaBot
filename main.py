@@ -1836,6 +1836,8 @@ def main_message(message):
                         mob_name = s.split('Во время вылазки на тебя напал')[1].split('(')[0].strip()
                         mob_class = s.split('(')[1].split(')')[0].strip()
                         break
+                print(f"==============================================")
+                print(f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
                 if mob_name == '':
                     pass
                 else:
