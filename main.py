@@ -1954,6 +1954,11 @@ def main_message(message):
                     if bo['health'] > row['health']:
                         row.update({'health': bo['health']})
 
+                    logger.info('=====damage=====')
+                    logger.info(bo['damage'])
+                    logger.info(damage)
+                    logger.info(bo['damage'].extend(damage))
+                    logger.info('=====damage=====')
                     damage = bo['damage'].extend(damage)
                     row.update({'damage': damage})
 
@@ -1981,6 +1986,8 @@ def main_message(message):
                 
                 logger.info('row')
                 logger.info(row)
+
+                if 1==1: return
 
                 newvalues = { "$set": row }
                 result = boss.update_one({
