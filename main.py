@@ -668,7 +668,6 @@ def getMobByHash(hashstr: str):
     for d in dresult:
         mob_name = d["_id"]["mob_name"] 
         mob_class = d["_id"]["mob_class"] 
-        s = mob_name + mob_class
         hashstr_in_bd = getMobHash(mob_name, mob_class)
         if hashstr == hashstr_in_bd:
             mobinbd = {'mob_name':mob_name, 'mob_class': mob_class}
@@ -3339,7 +3338,7 @@ def report_man_of_day(message_user_name: str):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("mob_info"))
 def callback_query(call):
-    #  logger.info(f'{call.from_user.username} {call.data}')
+    logger.info(f'{call.from_user.username} {call.data}')
     #     0              1           2        3
     # dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}
 
