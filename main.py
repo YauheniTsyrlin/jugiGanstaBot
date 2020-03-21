@@ -709,6 +709,7 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
     average_mat = 0
 
     habitat = {}
+    logger.info(f'FIND {mob_name} {mob_class} {dark_zone}')
     for one_mob in mob.find({'mob_name':mob_name, 'mob_class': mob_class, 'dark_zone':dark_zone}):
         #send_messages_big(497065022, text=f'{one_mob}')
 
@@ -1773,6 +1774,7 @@ def main_message(message):
             beaten = []
             mob_class = ''
             name = ''
+            dark_zone = False
             for s in message.text.split('\n'):
                 counter = counter + 1
                 if counter == 2 and not (s == ''):
@@ -1797,7 +1799,7 @@ def main_message(message):
                 row.update({'mob_class': mob_class})
                 
                 row.update({'km': 0})
-                row.update({'dark_zone': None})
+                row.update({'dark_zone': dark_zone})
                 row.update({'kr': 0})
                 row.update({'mat': 0})
                 row.update({'bm': userIAm.getBm()})
@@ -1815,7 +1817,7 @@ def main_message(message):
                     'date': message.forward_date,
                     'login': message.from_user.username, 
                     'km': 0,
-                    'dark_zone': None
+                    'dark_zone': dark_zone
                     }, newvalues)
                 if result.matched_count < 1:
                     logger.info('!INSERT!!!!!!!!!!!!!!!!')
@@ -1825,7 +1827,7 @@ def main_message(message):
                     logger.info('!UPDATE!!!!!!!!!!!!!!!!')
 
                 if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                    report = getMobReport(name, mob_class)
+                    report = getMobReport(name, mob_class, dark_zone)
                     send_messages_big(message.chat.id, text=report)
                 else:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
