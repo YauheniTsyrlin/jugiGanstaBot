@@ -1917,7 +1917,7 @@ def main_message(message):
                                 InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{dark_zone}")
                                 )
                 
-                        send_messages_big(message.chat.id, text=report, markupinline)
+                        send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
                     else:
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
 
