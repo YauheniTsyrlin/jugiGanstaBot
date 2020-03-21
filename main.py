@@ -822,8 +822,8 @@ def getBossReport(boss_name: str):
 
     for bo in boss.find({'boss_name': boss_name}):
 
-        last_date = 
-
+        last_date = max(bo["forward_date"])
+        report = report + f'⏰ Замечен {time.strftime("%d.%m.%Y %H:%M:%S", time.gmtime(last_date))}\n'
 
         report = report + f'❤️ Здоровье: <b>{bo["health"]}</b>\n'
         report = report + f'💀 Убил: <b>{len(bo["killed"])}</b>\n'
