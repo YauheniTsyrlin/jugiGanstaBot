@@ -3354,7 +3354,7 @@ def callback_query(call):
        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
        return
  
-    hashstr = eval(call.data.split('|')[1])
+    hashstr = call.data.split('|')[1]
     dark_zone = eval(call.data.split('|')[2])
     mobinbd = getMobByHash(hashstr)
     logger.info(f'{mobinbd}')
