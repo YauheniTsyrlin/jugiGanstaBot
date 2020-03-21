@@ -1845,11 +1845,11 @@ def main_message(message):
                         row.update({'date': bo['date']})
                     if bo['health'] > row['health']:
                         row.update({'health': bo['health']})
-                    row.update({'damage': bo['damage'].append(row['damage']))
-                    row.update({'beaten': bo['beaten'].append(row['beaten']))
-                    row.update({'killed': bo['killed'].append(row['killed']))
-                    row.update({'kr': bo['kr'].append(row['kr']))
-                    row.update({'mat': bo['mat'].append(row['mat']))
+                    row.update({'damage': bo['damage'].append(row['damage'])})
+                    row.update({'beaten': bo['beaten'].append(row['beaten'])})
+                    row.update({'killed': bo['killed'].append(row['killed'])})
+                    row.update({'kr': bo['kr'].append(row['kr'])})
+                    row.update({'mat': bo['mat'].append(row['mat'])})
                 
                 newvalues = { "$set": row }
                 result = boss.update_one({
