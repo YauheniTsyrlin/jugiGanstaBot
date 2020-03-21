@@ -1912,10 +1912,9 @@ def main_message(message):
                         report = getMobReport(mob_name, mob_class, dark_zone)
 
                         markupinline = InlineKeyboardMarkup()
-                        if dark_zone:
-                            markupinline.add(
-                                InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{dark_zone}")
-                                )
+                        markupinline.add(
+                            InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{dark_zone}")
+                            )
                 
                         send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
                     else:
