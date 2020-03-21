@@ -1802,7 +1802,7 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
                 return
 
-            if message.forward_date < (datetime.now() - timedelta(days=1000)).timestamp():
+            if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_forward').fulfillment_text) 
                 return
                 
@@ -1844,8 +1844,6 @@ def main_message(message):
                 row.update({'kr': kr})
                 row.update({'mat': mat})
                 row.update({'forward_date': forward_date})
-                
-                
 
                 for bo in boss.find({'boss_name': name}):
                     if bo['date'] > row['date']:
@@ -1898,7 +1896,7 @@ def main_message(message):
 
         return
     
-    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and message.text.startswith('Победа!'):
+    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and ('Ты присоединился к группе, которая собирается атаковать' in message.text or message.text.startswith('Победа!') or (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.tex)):
         if hasAccessToWariors(message.from_user.username):
     
             if userIAm == None:
@@ -1909,7 +1907,7 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
                 return
 
-            if message.forward_date < (datetime.now() - timedelta(days=1000)).timestamp():
+            if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_forward').fulfillment_text) 
                 return
                 
@@ -1922,16 +1920,20 @@ def main_message(message):
             mat = []
             name = ''
             forward_date = [message.forward_date]
-
-            for s in message.text.split('\n'):
-                if s.startswith('🔥'):
-                    name = s.split('🔥')[1].split('(')[0].strip()
-                if s.startswith('Получено:') and '🕳' in s and '📦' in s:
-                    kr = [int(s.split('🕳')[1].split(' ')[0].strip())]
-                    mat = [int(s.split('📦')[1].strip())]
-                if s.startswith('💀'):
-                    killed.append(s.split('💀')[1].strip())
-
+            if message.text.startswith('Победа!'):
+                for s in message.text.split('\n'):
+                    if s.startswith('🔥'):
+                        name = s.split('🔥')[1].split('(')[0].strip()
+                    if s.startswith('Получено:') and '🕳' in s and '📦' in s:
+                        kr = [int(s.split('🕳')[1].split(' ')[0].strip())]
+                        mat = [int(s.split('📦')[1].strip())]
+                    if s.startswith('💀'):
+                        killed.append(s.split('💀')[1].strip())
+            elif (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.text):
+                name = message.text.split('\n')[3].strip()
+            elif 'Ты присоединился к группе, которая собирается атаковать' in message.text:
+                name = message.text.split('Ты присоединился к группе, которая собирается атаковать')[1].split('.').strip()
+            
             if name == '':
                 pass
             else:
@@ -1948,8 +1950,6 @@ def main_message(message):
                 
 
                 for bo in boss.find({'boss_name': name}):
-                    logger.info('bo')
-                    logger.info(bo)
                     if bo['date'] > row['date']:
                         row.update({'date': bo['date']})
                     if bo['health'] > row['health']:
@@ -1995,12 +1995,9 @@ def main_message(message):
 
             if name == '':
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
-
-
         return
 
-# ⚜️Боссы.
-# ❌Нацарапать крестик
+
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
         if hasAccessToWariors(message.from_user.username):
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
