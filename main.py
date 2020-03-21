@@ -1814,7 +1814,7 @@ def main_message(message):
                 result = mob.update_one({
                     'date': message.forward_date,
                     'login': message.from_user.username, 
-                    'km': None,
+                    'km': 0,
                     'dark_zone': None
                     }, newvalues)
                 if result.matched_count < 1:
