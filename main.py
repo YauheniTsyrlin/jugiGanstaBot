@@ -707,12 +707,14 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
     average_kr = 0
     counter_mat = 0
     average_mat = 0
+    health = 0
 
     habitat = {}
-    logger.info(f'FIND {mob_name} {mob_class} {dark_zone}')
     for one_mob in mob.find({'mob_name':mob_name, 'mob_class': mob_class, 'dark_zone':dark_zone}):
         #send_messages_big(497065022, text=f'{one_mob}')
-
+        if one_mob['health'] and one_mob['health'] > health:
+            health = one_mob['health']
+        
         counter = counter + 1
         if one_mob['win']:
             win_counter = win_counter + 1
@@ -782,10 +784,14 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
             habitat_str = habitat_str + h
         else:
             habitat_str = habitat_str + ', '+ h
+
     if habitat_str == '':
         report = report + f"👣 Еще ни разу не встречали в {'🔆' if not dark_zone else '🚷'}\n"
     else:
         report = report + f'👣 Встречается: <b>{habitat_str}</b> км\n'
+
+        if health > 0:
+            report = report + f'❤️ Здоровье: <b>{health}</b>\n'
 
         report = report + f'✊ Побед: <b>{win_counter}/{counter}</b>\n'
         report = report + f'💔 <b>Урон бандитам</b>:\n'
@@ -1887,7 +1893,7 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=report)
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
-
+        return
 
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
         if hasAccessToWariors(message.from_user.username):
