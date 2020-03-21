@@ -820,7 +820,7 @@ def getBossReport(boss_name: str):
     report = f"⚜️<b>Статистика по боссам</b>\n"
     report = report + f'<b>{boss_name}</b>\n\n'
 
-    for bo in boss.find({'boss_name': boss_name})
+    for bo in boss.find({'boss_name': boss_name}):
 
         report = report + f'❤️ Здоровье: <b>{bo["health"]}</b>\n'
         report = report + f'💀 Убил: <b>{len(bo["killed"])}</b>\n'
