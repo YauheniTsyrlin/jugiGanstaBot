@@ -658,9 +658,9 @@ def getMobDetailReport(mob_name: str, mob_class: str):
 def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
     hashstr = getMobHash(mob_name, mob_class)
 
-    report = f"{'🔆' if dark_zone else '🚷'}<b>Статистика сражений</b>\n"
+    report = f"{'🔆' if not dark_zone else '🚷'}<b>Статистика сражений</b>\n"
     report = report + f'<b>{mob_name}</b> {mob_class}\n'
-    report = report + f'Подробнее {hashstr}\n\n'
+    # report = report + f'Подробнее {hashstr}\n\n'
 
     counter = 0
     win_counter = 0
@@ -685,7 +685,7 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
     average_mat = 0
 
     habitat = {}
-    for one_mob in mob.find({'mob_name':mob_name, 'mob_class': mob_class}):
+    for one_mob in mob.find({'mob_name':mob_name, 'mob_class': mob_class, 'dark_zone':dark_zone}):
         #send_messages_big(497065022, text=f'{one_mob}')
 
         counter = counter + 1
