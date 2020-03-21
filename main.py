@@ -1840,7 +1840,7 @@ def main_message(message):
                     pass
                 else:
                     report = getMobReport(mob_name, mob_class, dark_zone)
-
+                    print(f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
                     markupinline = InlineKeyboardMarkup()
                     markupinline.add(
                         InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
