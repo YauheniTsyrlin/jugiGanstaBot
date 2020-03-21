@@ -1913,7 +1913,7 @@ def main_message(message):
 
                         markupinline = InlineKeyboardMarkup()
                         markupinline.add(
-                            InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{dark_zone}")
+                            InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
                             )
                 
                         send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
