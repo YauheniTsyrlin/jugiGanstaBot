@@ -1995,10 +1995,6 @@ def main_message(message):
             if not isGoatSecretChat(message.from_user.username, message.chat.id):
                 bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_A_PINDA'), 1)[0]['value'])
                 return
-    # if 'тебя буквально размазали' in message.text.lower():
-    #     if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
-    #         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
-    #         return       
     if 'утречка' in message.text.lower() or 'добрым утром' in message.text.lower() or 'доброго утра' in message.text.lower() or 'доброго утречка' in message.text.lower() or 'доброе утро' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='MORNING_STICKER'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_MORNING'), 1)[0]['value'])
@@ -2454,8 +2450,8 @@ def main_message(message):
 
 
                             
-                            #if not find:
-                            markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
+                            if not find:
+                                markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
               
                         text = get_raid_plan(raid_date, goat)
 
