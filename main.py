@@ -659,7 +659,7 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
     hashstr = getMobHash(mob_name, mob_class)
 
     report = f"{'🔆' if not dark_zone else '🚷'}<b>Статистика сражений</b>\n"
-    report = report + f'<b>{mob_name}</b> {mob_class}\n'
+    report = report + f'<b>{mob_name}</b> {mob_class}\n\n'
     # report = report + f'Подробнее {hashstr}\n\n'
 
     counter = 0
@@ -3291,6 +3291,31 @@ def report_man_of_day(message_user_name: str):
         report = report + f'\nПидор дня <b>{pidor_user_now.getNameAndGerb()}</b> на {pidor_counter} месте\n'
     
     return report
+
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith("mob_info"))
+def callback_query(call):
+    #  logger.info(f'{call.from_user.username} {call.data}')
+    #     0              1           2        3
+    # dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}
+
+    if isUserBan(call.from_user.username):
+       bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
+       return
+ 
+    mob_name = call.data.split('|')[1]
+    mob_class = call.data.split('|')[2]
+    dark_zone = eval(call.data.split('|')[3])
+
+    markupinline = InlineKeyboardMarkup()
+    markupinline.add(
+        InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{dark_zone}")
+        )
+
+    text = getMobReport(mob_name, mob_class, dark_zone)
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+    # logger.info(f'{call.from_user.username} {text}')
+
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("dungeon"))
 def callback_query(call):
