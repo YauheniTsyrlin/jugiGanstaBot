@@ -655,7 +655,7 @@ def getMobDetailReport(mob_name: str, mob_class: str):
     hashstr = getMobHash(mob_name, mob_class)
     return 'В разработке...'
 
-def getMobReport(mob_name: str, mob_class: str):
+def getMobReport(mob_name: str, mob_class: str, dart_zone=False):
     hashstr = getMobHash(mob_name, mob_class)
 
     report = '<b>Статистика сражений</b>\n'
@@ -1909,8 +1909,15 @@ def main_message(message):
                         mob.insert_one(row)
 
                     if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                        report = getMobReport(mob_name, mob_class)
-                        send_messages_big(message.chat.id, text=report)
+                        report = getMobReport(mob_name, mob_class, dark_zone)
+
+                        markupinline = InlineKeyboardMarkup()
+                        if dark_zone:
+                            markupinline.add(
+                                InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{dark_zone}")
+                                )
+                
+                        send_messages_big(message.chat.id, text=report, markupinline)
                     else:
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
 
@@ -2419,17 +2426,6 @@ def main_message(message):
 
                         if response.split(response.split(":")[1])[1][1:].strip() == '*':
                             raid_date = getPlanedRaidLocation(goat, planRaid = True)['rade_date']
-                            # raid_date = raid_date.replace(minute=0, second=0, microsecond=0)
-
-                            # if plan_date.hour > 17 or plan_date.hour < 1:
-                            #     if not plan_date.hour < 1:
-                            #         raid_date = raid_date + timedelta(days=1)
-                            #     raid_date = raid_date.replace(hour=1)
-                            # elif plan_date.hour > 1 and plan_date.hour < 9:
-                            #     raid_date = raid_date.replace(hour=9)
-                            # else:
-                            #     raid_date = raid_date.replace(hour=17)
-
                         else:
                             raid_date = parse(response.split(response.split(":")[1])[1][1:]).timestamp()
                         
@@ -2438,18 +2434,6 @@ def main_message(message):
                         for radeloc in plan_raids.find({
                                     'rade_date': raid_date, 
                                     'goat': goat}): 
-                            # find = False
-                            # try:
-                            #     users_onraid = radeloc['users']
-                            #     for u in users_onraid:
-                            #         if u == message.from_user.username:
-                            #             find = True
-                            # except:
-                            #     pass
-
-
-                            
-                            #if not find:
                             markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date}_{goat}"))
               
                         text = get_raid_plan(raid_date, goat)
