@@ -651,6 +651,32 @@ def getMobHash(mob_name: str, mob_class: str):
     hashstr = f'/mob{int(hashlib.sha256(stringforhash.encode("utf-8")).hexdigest(), 16) % 10**8}'  
     return hashstr
 
+def getMobByHash(hashstr: str):
+    hashstr = message.text
+    dresult = mob.aggregate([ 
+    {   "$match": {
+                "kr": {"$gte": 0}
+            } 
+    },
+    {   "$group": {
+        "_id": { "mob_name":"$mob_name", "mob_class":"$mob_class"}, 
+        "count": {
+            "$sum": 1}}},
+        
+    {   "$sort" : { "count" : -1 } }
+    ])
+    
+    for d in dresult:
+        mob_name = d["_id"]["mob_name"] 
+        mob_class = d["_id"]["mob_class"] 
+        s = mob_name + mob_class
+        hashstr_in_bd = getMobHash(mob_name, mob_class)
+        if hashstr == hashstr_in_bd:
+            mob = {'mob_name':mob_name, 'mob_class': mob_class}
+            return mob
+    return None
+            
+
 def getMobDetailReport(mob_name: str, mob_class: str):
     hashstr = getMobHash(mob_name, mob_class)
     return 'В разработке...'
@@ -1836,16 +1862,15 @@ def main_message(message):
                         mob_name = s.split('Во время вылазки на тебя напал')[1].split('(')[0].strip()
                         mob_class = s.split('(')[1].split(')')[0].strip()
                         break
-                logger.info(f"==============================================")
-                logger.info(f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
+
                 if mob_name == '':
                     pass
                 else:
                     report = getMobReport(mob_name, mob_class, dark_zone)
-                    logger.info(f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
+                    hashstr = getMobHash(mob_name, mob_class)
                     markupinline = InlineKeyboardMarkup()
                     markupinline.add(
-                        InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
+                        InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
                         )
             
                     send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
@@ -1924,10 +1949,10 @@ def main_message(message):
 
                     if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
                         report = getMobReport(mob_name, mob_class, dark_zone)
-
+                        hashstr = getMobHash(mob_name, mob_class)
                         markupinline = InlineKeyboardMarkup()
                         markupinline.add(
-                            InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
+                            InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
                             )
                 
                         send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
@@ -3317,16 +3342,16 @@ def callback_query(call):
        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
        return
  
-    mob_name = call.data.split('|')[1]
-    mob_class = call.data.split('|')[2]
-    dark_zone = eval(call.data.split('|')[3])
+    hashstr = eval(call.data.split('|')[1])
+    dark_zone = eval(call.data.split('|')[2])
+    mob = getMobByHash(hashstr)
 
     markupinline = InlineKeyboardMarkup()
     markupinline.add(
-        InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
+        InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
         )
 
-    text = getMobReport(mob_name, mob_class, dark_zone)
+    text = getMobReport(mob['mob_name'], mob['mob_class'], dark_zone)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
     # logger.info(f'{call.from_user.username} {text}')
 
