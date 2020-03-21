@@ -2633,11 +2633,11 @@ mob_class = ''
 for x in mob.find({'mob_class': mob_class}):
     print(x)
 
-mob.deleteMany({'mob_class': mob_class})
+mob.delete_many({'mob_class': mob_class})
 
 for x in mob.find({'mob_class': mob_class}):
     print(x)
-    
+
 # ======================================== #
 #          Удаление дубликатов             #
 # ======================================== #
