@@ -3309,7 +3309,7 @@ def callback_query(call):
 
     markupinline = InlineKeyboardMarkup()
     markupinline.add(
-        InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{dark_zone}")
+        InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{mob_name}|{mob_class}|{not dark_zone}")
         )
 
     text = getMobReport(mob_name, mob_class, dark_zone)
