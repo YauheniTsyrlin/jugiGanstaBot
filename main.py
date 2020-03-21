@@ -1862,7 +1862,7 @@ def main_message(message):
                         return
                     else:
                         row.update({'forward_date': bo['forward_date'].append(row['forward_date'])})
-
+                logger.info(row)
                 newvalues = { "$set": row }
                 result = boss.update_one({
                     'boss_name': name
@@ -1948,7 +1948,8 @@ def main_message(message):
                         return
                     else:
                         row.update({'forward_date': bo['forward_date'].append(row['forward_date'])})
-
+                logger.info(row)
+                
                 newvalues = { "$set": row }
                 result = boss.update_one({
                     'boss_name': name
