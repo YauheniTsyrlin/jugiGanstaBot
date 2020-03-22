@@ -435,7 +435,8 @@ myquery = { "code": 'ACCESSORY_ALL' }
 newvalues = { "$set": { "value": 
                     [
                         {
-                            'name': 'CLOTHES',
+                            'id': 'CLOTHES',
+                            'name': 'Одежда',
                             'value':
                             [                               
                                 {
@@ -521,7 +522,8 @@ newvalues = { "$set": { "value":
                             ]
                         },
                         {
-                            'name': 'RAID_BOLTS',
+                            'id': 'RAID_BOLTS',
+                            'name': 'Рейдовые болты',
                             'value':
                             [
                                 {
@@ -562,7 +564,8 @@ newvalues = { "$set": { "value":
                             ]
                         },
                         {
-                            'name': 'VIRUSES',
+                            'id': 'VIRUSES',
+                            'name': 'Болезни',
                             'value':
                             [
                                 {
@@ -582,7 +585,8 @@ newvalues = { "$set": { "value":
                             ]
                         },
                         {
-                            'name': 'TATU',
+                            'id': 'TATU',
+                            'name': 'Татуировки',
                             'value':
                             [
                                 {
@@ -644,7 +648,8 @@ newvalues = { "$set": { "value":
                             ]
                         },
                         {
-                            'name': 'SKILLS',
+                            'id': 'SKILLS',
+                            'name': 'Умения',
                             'value':
                             [
                                 {
@@ -720,7 +725,8 @@ newvalues = { "$set": { "value":
                             ]
                         },
                         {
-                            'name': 'EDIBLE',
+                            'id': 'EDIBLE',
+                            'name': 'Еда',
                             'value':
                             [
                                 {
@@ -810,7 +816,8 @@ newvalues = { "$set": { "value":
                             ]
                         },
                         {
-                            'name': 'MARKS_OF_EXCELLENCE',
+                            'id': 'MARKS_OF_EXCELLENCE',
+                            'name': 'Награды',
                             'value':
                             [
                                 {
@@ -985,9 +992,19 @@ newvalues = { "$set": { "value":
                             ]
                         },
                         {
-                            'name': 'REWARDS',
+                            'id': 'REWARDS',
+                            'name': 'Подарки',
                             'value':
                             [
+                                
+                                {
+                                    'id': 'jugi_model',
+                                    'name': '🤖 Моделька "Джу"',
+                                    'cost': 100,
+                                    'type': 'decoration',
+                                    'quantity': 1
+
+                                },
                                 {
                                     'id': 'statuette_shark',
                                     'name': '🦈 Статуэтка "Акула"',
@@ -1234,12 +1251,11 @@ newvalues = { "$set": { "value":
                                     'type': 'decoration',
                                     'quantity': 1
                                 }
-
-                                                                
                             ] 
                         },
                         {
-                            'name': 'THINGS',
+                            'id': 'THINGS',
+                            'name': 'Вещи',
                             'value':
                             [
                                 {
@@ -1476,7 +1492,8 @@ newvalues = { "$set": { "value":
                             ]
                         },
                         {
-                            'name': 'PIP_BOY',
+                            'id': 'PIP_BOY',
+                            'name': 'Пип-бой',
                             'value':
                             [
                                 {

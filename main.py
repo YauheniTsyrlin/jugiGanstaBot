@@ -2432,6 +2432,7 @@ def main_message(message):
                         for registered_user in registered_users.find():
                             user = users.importUser(registered_user)
                             registered_user.update({'weight': user.getRaidWeight()})
+                            registered_user.update({'bm': user.getBm()})
                             registered_user.update({'ping': user.isPing()})
                             if band=='all':
                                 if user.getBand() in getGoatBands(getMyGoatName(userIAm.getLogin())): 
@@ -2444,7 +2445,7 @@ def main_message(message):
                         counter = 0
                         pingusers = []
                         report = f''
-                        for pu in sorted(usersarr, key = lambda i: i['weight'], reverse=True):
+                        for pu in sorted(usersarr, key = lambda i: i['bm'], reverse=True):
                             counter = counter + 1
                             pingusers.append(pu)
                             user = getUserByLogin(pu["login"])
