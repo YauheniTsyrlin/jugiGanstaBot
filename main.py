@@ -1446,7 +1446,7 @@ def main_message(message):
             goats = []
             km = 0
             dark_zone = False
-            user_in_dark_zone = []
+            user_in_dark_zone = {}
             for s in strings:
                 if ('👣' in s or '🚷' in s) and ' км' in s:
                     # km = int(s.split('👣')[1].split('км')[0])
@@ -1464,7 +1464,7 @@ def main_message(message):
                     if dark_zone:
                         user = getUserByName(name)
                         if user:
-                            user_in_dark_zone.append({user.getLogin(): 3})  
+                            user_in_dark_zone.update({user.getLogin(): 3})  
 
                     if warior:
                         if warior.getGoat():
