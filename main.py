@@ -1871,8 +1871,6 @@ def main_message(message):
             if name == '':
                 pass
             else:
-
-                markupinline = InlineKeyboardMarkup()
                 dresult = boss.aggregate([ 
                     {   "$group": {
                         "_id": { "boss_name":"$boss_name" }, 
@@ -1882,13 +1880,16 @@ def main_message(message):
                     {   "$sort" : { "count" : -1 } }
                     ])
                 
+                buttons = []
                 for d in dresult:
                     boss_name = d["_id"]["boss_name"] 
-                    if boss_name == name: continue
+                    if boss_name == bossinbd['boss_name']: continue
                     hashstr = getMobHash(boss_name, 'boss')
-                    markupinline.add(
-                        InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}")
-                        )
+                    buttons.append(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
+
+                markupinline = InlineKeyboardMarkup(row_width=2)
+                for row in build_menu(buttons=buttons, n_cols=2):
+                    markupinline.row(*row)    
 
                 row = {}
                 row.update({'date': message.forward_date})
@@ -3474,16 +3475,15 @@ def callback_query(call):
         {   "$sort" : { "count" : -1 } }
         ])
     
-    markupinline = InlineKeyboardMarkup(row_width=2)
+    
     buttons = []
     for d in dresult:
         boss_name = d["_id"]["boss_name"] 
         if boss_name == bossinbd['boss_name']: continue
         hashstr = getMobHash(boss_name, 'boss')
         buttons.append(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
-        #markupinline.add(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
 
-    #c = [[InlineKeyboardButton('boss_name1', callback_data=f"boss_info|{hashstr}"), InlineKeyboardButton('boss_name2', callback_data=f"boss_info|{hashstr}")],[InlineKeyboardButton('boss_name3', callback_data=f"boss_info|{hashstr}"), InlineKeyboardButton('boss_name4', callback_data=f"boss_info|{hashstr}")]]
+    markupinline = InlineKeyboardMarkup(row_width=2)
     for row in build_menu(buttons=buttons, n_cols=2):
         markupinline.row(*row)    
 
