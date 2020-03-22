@@ -1918,7 +1918,7 @@ def main_message(message):
 
                     if message.forward_date in bo['forward_date']:
                         pass
-                        # dublicate = True
+                        dublicate = True
                     else:
                         forward_date = bo['forward_date'] + forward_date
                         row.update({'forward_date': forward_date})
