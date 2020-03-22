@@ -1883,7 +1883,7 @@ def main_message(message):
                 buttons = []
                 for d in dresult:
                     boss_name = d["_id"]["boss_name"] 
-                    if boss_name == bossinbd['boss_name']: continue
+                    if boss_name == name: continue
                     hashstr = getMobHash(boss_name, 'boss')
                     buttons.append(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
 
