@@ -1488,14 +1488,10 @@ def main_message(message):
                     live = int(strings[i].split('...И еще')[1].split('выживших')[0].strip())
                     counter = counter + live
                 i = i + 1
-            
-                sdata = ''
-                for d in user_in_dark_zone:
-                    sdata = sdata + f'{d}:{3}|'
 
                 buttons = []
                 for d in user_in_dark_zone:
-                    buttons.append(InlineKeyboardButton(f'@{d}', callback_data=f"ping_user_in_dark_zoneping_user_in_dark_zoneping_user_in_dark_zoneping_user_in_dark_zoneping_user_in_dark_zoneping_user_in_dark_zoneping_user_in_dark_zoneping_user_in_dark_zoneping_user_in_dark_zone|{d}|1"))
+                    buttons.append(InlineKeyboardButton(f'@{d}', callback_data=f"ping_user|{d}"))
 
                 markupinline = InlineKeyboardMarkup(row_width=2)
                 for row in build_menu(buttons=buttons, n_cols=2):
@@ -3488,40 +3484,15 @@ def report_man_of_day(message_user_name: str):
 def callback_query(call):
     # logger.info(f'{call.from_user.username} {call.data}')
     #               0         1      2
-    # ping_user_in_dark_zone|{d}|{d:c#d:c#}
+    # ping_user_in_dark_zone|{d}
 
     if isUserBan(call.from_user.username):
        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
        return
  
     login = call.data.split('|')[1]
-    counter_ping = 0
-    user_in_dark_zone = call.data.split('|')[2]
-    sdata = ''
-
-    buttons = []
-    markupinline = InlineKeyboardMarkup(row_width=2)
-    for u in user_in_dark_zone.split('@'):
-        l = u.split(':')[0].strip()
-        c = int(u.split(':')[1].strip())
-        if l == login: 
-            c = c - 1
-            counter_ping = c
-        sdata = sdata + f'{l}:{c}@'            
-
-    
-    for u in sdata.split('@'):
-        d = u.split(':')[0].strip()
-        buttons.append(InlineKeyboardButton(f'@{d}', callback_data=f"ping_user_in_dark_zone|{d}|{sdata}"))
-
-    markupinline = InlineKeyboardMarkup(row_width=2)
-    for row in build_menu(buttons=buttons, n_cols=2):
-        markupinline.row(*row)  
-
     text = f'@{login}, родной!\n🚷 Не спи в ТЗ!'
     send_messages_big(call.message.chat.id, text=text, reply_markup=markupinline)
-    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
-
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("boss_info"))
 def callback_query(call):
