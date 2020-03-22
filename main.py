@@ -845,8 +845,9 @@ def getBossReport(boss_name: str):
         tz = config.SERVER_MSK_DIFF
         date = (datetime.fromtimestamp(last_date).replace(minute=0, second=0) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
 
-        if bo["onboss"]:
+        try:
             report = report + f'📋 Записались {bo["onboss"]}\n'
+        except: pass
         report = report + f'⏰ Замечен {time.strftime("%d.%m.%Y %H:%M", time.gmtime(date))} МСК'
 
     return report 
