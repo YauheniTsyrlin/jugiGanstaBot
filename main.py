@@ -3465,7 +3465,7 @@ def callback_query(call):
     hashstr = call.data.split('|')[1]
     bossinbd = getBossByHash(hashstr)
 
-    markupinline = InlineKeyboardMarkup()
+    markupinline = InlineKeyboardMarkup(row_width=2)
     dresult = boss.aggregate([ 
         {   "$group": {
             "_id": { "boss_name":"$boss_name" }, 
@@ -3481,8 +3481,8 @@ def callback_query(call):
         if boss_name == bossinbd['boss_name']: continue
         hashstr = getMobHash(boss_name, 'boss')
         buttons.append(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
-
-    markupinline.add(*build_menu(buttons, 2))
+        markupinline.add(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
+    logger.info(buttons)
 
     text = getBossReport(bossinbd['boss_name'])
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
