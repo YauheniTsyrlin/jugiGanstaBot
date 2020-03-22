@@ -1491,7 +1491,7 @@ def main_message(message):
             
                 sdata = ''
                 for d in user_in_dark_zone:
-                    sdata = sdata + f'{d}:{3}@'
+                    sdata = sdata + f'{d}:{3}|'
 
                 buttons = []
                 for d in user_in_dark_zone:
