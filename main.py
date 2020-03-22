@@ -3496,7 +3496,7 @@ def callback_query(call):
     markupinline = InlineKeyboardMarkup(row_width=2)
     if counter > 1:
         counter = counter - 1
-        markupinline.append(InlineKeyboardButton(f'@{login}', callback_data=f"ping_user_in_dark_zone|{login}|{counter}"))
+        markupinline.add(InlineKeyboardButton(f'@{login}', callback_data=f"ping_user_in_dark_zone|{login}|{counter}"))
         text = f'@{login}, родной!\n🚷 Не спи в ТЗ!'
         send_messages_big(call.message.chat.id, text=text, reply_markup=markupinline)
 
