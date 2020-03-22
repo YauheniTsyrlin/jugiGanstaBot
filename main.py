@@ -3480,11 +3480,11 @@ def report_man_of_day(message_user_name: str):
     
     return report
 
-@bot.callback_query_handler(func=lambda call: call.data.startswith("ping_user_in_dark_zone"))
+@bot.callback_query_handler(func=lambda call: call.data.startswith("ping_user"))
 def callback_query(call):
     # logger.info(f'{call.from_user.username} {call.data}')
-    #               0         1      2
-    # ping_user_in_dark_zone|{d}
+    #  0         1      2
+    # ping_user|{d}
 
     if isUserBan(call.from_user.username):
        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
