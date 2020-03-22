@@ -1162,6 +1162,8 @@ def get_message_photo(message):
             else:
                 send_messages_big(message.chat.id, text=wariorShow.getProfile())
         else:
+            logger.info('===========================================')
+            logger.info(wariorShow.getName())
             wariorShow = getWariorByName(wariorShow.getName(), wariorShow.getFraction())
 
             markupinline = None
