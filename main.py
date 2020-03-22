@@ -1874,7 +1874,7 @@ def main_message(message):
                         if '☠️' in s:
                             killed.append(s.split('☠️')[1].strip())
                 onboss = 0
-
+            logger.info(f'health {health}')
             if name == '':
                 pass
             else:
