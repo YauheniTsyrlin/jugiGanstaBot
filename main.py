@@ -1165,9 +1165,10 @@ def get_message_photo(message):
             wariorShow = getWariorByName(wariorShow.getName(), wariorShow.getFraction())
 
             markupinline = None
-            user = getUserByName(wariorShow.getName())
-            if user:
-                markupinline = InlineKeyboardMarkup(row_width=2).add(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
+            if '⚔️ /p_' in message.text:
+                user = getUserByName(wariorShow.getName())
+                if user:
+                    markupinline = InlineKeyboardMarkup(row_width=2).add(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
             send_messages_big(message.chat.id, text=wariorShow.getProfile(), reply_markup=markupinline)
     else:
         if privateChat:
@@ -3495,8 +3496,8 @@ def callback_query(call):
        return
 
     login = call.data.split('|')[1]
-    text = f'@{login}, родной!\n🚷 Не спи в ТЗ!'
-    bot.answer_callback_query(call.id, "Ты предупредил {login}!")
+    text = f'@{login}, родной!\nТы в опасности!'
+    bot.answer_callback_query(call.id, "{login} предупрежден!")
     send_messages_big(call.message.chat.id, text=text)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("boss_info"))
