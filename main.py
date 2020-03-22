@@ -450,6 +450,7 @@ def getButtonsMenu(list_buttons):
     markup.add(*groups_names)
     return markup
 
+
 def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
     menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
     if header_buttons:
@@ -1814,7 +1815,6 @@ def main_message(message):
                     InlineKeyboardButton(f"Закрыть ⛔", callback_data=f"commit_dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}")
                 )
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
-    
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('ХОД БИТВЫ:') or 'Ты присоединился к группе, которая собирается атаковать' in message.text or message.text.startswith('Победа!') or (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.text)):
         if hasAccessToWariors(message.from_user.username):
     
@@ -1951,8 +1951,6 @@ def main_message(message):
             if name == '':
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
         return
-
-
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
         if hasAccessToWariors(message.from_user.username):
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
@@ -3477,13 +3475,14 @@ def callback_query(call):
         {   "$sort" : { "count" : -1 } }
         ])
     
+    buttons = []
     for d in dresult:
         boss_name = d["_id"]["boss_name"] 
         if boss_name == bossinbd['boss_name']: continue
         hashstr = getMobHash(boss_name, 'boss')
-        markupinline.add(
-            InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}")
-            )
+        buttons.append(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
+
+    markupinline.add(build_menu(buttons, 2))
 
     text = getBossReport(bossinbd['boss_name'])
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
