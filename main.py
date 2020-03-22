@@ -1445,11 +1445,14 @@ def main_message(message):
             report_goat_info = ''
             goats = []
             km = 0
-
+            dark_zone = False
+            user_in_dark_zone = []
             for s in strings:
                 if ('👣' in s or '🚷' in s) and ' км' in s:
                     # km = int(s.split('👣')[1].split('км')[0])
                     report_goat_info = report_goat_info + f'<b>{s}</b>\n'
+                if s.startswith('🚷'):
+                    dark_zone = True
                 if '|' in strings[i]:
                     name = strings[i]
                     fraction = getWariorFraction(strings[i])
@@ -1457,6 +1460,11 @@ def main_message(message):
                     name = name.split('@')[1].split('|')[0].strip()
                     name = tools.deEmojify(name)
                     warior = getWariorByName(name, fraction)
+                    
+                    if dark_zone:
+                        user = getUserByName(name)
+                        if user:
+                            user_in_dark_zone.append(user)  
 
                     if warior:
                         if warior.getGoat():
@@ -1481,7 +1489,14 @@ def main_message(message):
                     counter = counter + live
                 i = i + 1
             
-            
+                buttons = []
+                for d in user_in_dark_zone:
+                    buttons.append(InlineKeyboardButton(f'@{d.getLogin()}', callback_data=f"ping_user_in_dark_zone|{d.getLogin()}|3"))
+
+                markupinline = InlineKeyboardMarkup(row_width=2)
+                for row in build_menu(buttons=buttons, n_cols=2):
+                    markupinline.row(*row)   
+
             if len(goats) > 0:
                 for goat in goats:
                     report_goat_info = report_goat_info + f'🐐 {goat["name"]}: <b>{goat["counter"]}</b>\n'
@@ -1493,7 +1508,7 @@ def main_message(message):
             if not find:
                 send_messages_big(message.chat.id, text='Не нашел никого!')
             else:
-                send_messages_big(message.chat.id, text=report + report_goat_info)
+                send_messages_big(message.chat.id, text=report + report_goat_info, reply_markup=markupinline)
         else:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
         return
@@ -3465,6 +3480,26 @@ def report_man_of_day(message_user_name: str):
     
     return report
 
+@bot.callback_query_handler(func=lambda call: call.data.startswith("ping_user_in_dark_zone"))
+def callback_query(call):
+    # logger.info(f'{call.from_user.username} {call.data}')
+    #               0              1              
+    # ping_user_in_dark_zone|{d.getLogin()}|3
+
+    if isUserBan(call.from_user.username):
+       bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
+       return
+ 
+    login = call.data.split('|')[1]
+    counter = int(call.data.split('|')[2])
+    
+    markupinline = InlineKeyboardMarkup(row_width=2)
+    if counter > 1:
+        counter = counter - 1
+        markupinline.append(InlineKeyboardButton(f'@{login}', callback_data=f"ping_user_in_dark_zone|{login}|{counter}"))
+        text = f'@{login}, родной!\n🚷 Не спи в ТЗ!'
+        send_messages_big(call.message.chat.id, text=text, reply_markup=markupinline)
+
 @bot.callback_query_handler(func=lambda call: call.data.startswith("boss_info"))
 def callback_query(call):
     # logger.info(f'{call.from_user.username} {call.data}')
@@ -3501,7 +3536,6 @@ def callback_query(call):
 
     text = getBossReport(bossinbd['boss_name'])
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
-
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("mob_info"))
 def callback_query(call):
