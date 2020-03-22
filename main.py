@@ -1464,7 +1464,7 @@ def main_message(message):
                     if dark_zone:
                         user = getUserByName(name)
                         if user:
-                            user_in_dark_zone.append([user.getLogin(), 3])  
+                            user_in_dark_zone.append(user.getLogin())  
 
                     if warior:
                         if warior.getGoat():
@@ -1491,7 +1491,7 @@ def main_message(message):
             
                 buttons = []
                 for d in user_in_dark_zone:
-                    buttons.append(InlineKeyboardButton(f'@{d[0]}', callback_data=f"ping_user_in_dark_zone|{d[0]}|{user_in_dark_zone}"))
+                    buttons.append(InlineKeyboardButton(f'@{d}', callback_data=f"ping_user_in_dark_zone|{d}|{*user_in_dark_zone}"))
 
                 markupinline = InlineKeyboardMarkup(row_width=2)
                 for row in build_menu(buttons=buttons, n_cols=2):
