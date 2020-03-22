@@ -3483,7 +3483,8 @@ def callback_query(call):
         #buttons.append(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
         markupinline.add(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
 
-    
+    c = [[InlineKeyboardButton('boss_name1', callback_data=f"boss_info|{hashstr}"), InlineKeyboardButton('boss_name2', callback_data=f"boss_info|{hashstr}")],[InlineKeyboardButton('boss_name3', callback_data=f"boss_info|{hashstr}"), InlineKeyboardButton('boss_name4', callback_data=f"boss_info|{hashstr}")]]
+    markupinline = InlineKeyboardMarkup(c)
 
     text = getBossReport(bossinbd['boss_name'])
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
