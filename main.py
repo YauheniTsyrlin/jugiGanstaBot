@@ -1169,6 +1169,7 @@ def get_message_photo(message):
             markupinline = None
             user = getUserByName(wariorShow.getName())
             if user:
+                logger.info(f'============{user.getLogin()}=====================')
                 markupinline = InlineKeyboardMarkup(row_width=2).add(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
             send_messages_big(message.chat.id, text=wariorShow.getProfile(), reply_markup=markupinline)
     else:
