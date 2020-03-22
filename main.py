@@ -1878,26 +1878,7 @@ def main_message(message):
             if name == '':
                 pass
             else:
-                dresult = boss.aggregate([ 
-                    {   "$group": {
-                        "_id": { "boss_name":"$boss_name" }, 
-                        "count": {
-                            "$sum": 1}}},
-                        
-                    {   "$sort" : { "count" : -1 } }
-                    ])
-                
-                buttons = []
-                for d in dresult:
-                    boss_name = d["_id"]["boss_name"] 
-                    if boss_name == name: continue
-                    hashstr = getMobHash(boss_name, 'boss')
-                    buttons.append(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
-
-                markupinline = InlineKeyboardMarkup(row_width=2)
-                for row in build_menu(buttons=buttons, n_cols=2):
-                    markupinline.row(*row)    
-
+                dublicate = False
                 row = {}
                 row.update({'date': message.forward_date})
                 row.update({'boss_name': name})
@@ -1933,23 +1914,39 @@ def main_message(message):
                     row.update({'mat': mat})
 
                     if message.forward_date in bo['forward_date']:
-                        send_messages_big(message.chat.id, text='Дубликат!')
-                        if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                            report = getBossReport(name)
-                            send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
-                        return
+                        dublicate = True
                     else:
                         forward_date = bo['forward_date'] + forward_date
                         row.update({'forward_date': forward_date})
 
-                newvalues = { "$set": row }
-                result = boss.update_one({
-                    'boss_name': name
-                    }, newvalues)
-                if result.matched_count < 1:
-                    boss.insert_one(row)
+                if not dublicate:
+                    newvalues = { "$set": row }
+                    result = boss.update_one({
+                        'boss_name': name
+                        }, newvalues)
+                    if result.matched_count < 1:
+                        boss.insert_one(row)
 
+                dresult = boss.aggregate([ 
+                    {   "$group": {
+                        "_id": { "boss_name":"$boss_name" }, 
+                        "count": {
+                            "$sum": 1}}},
+                        
+                    {   "$sort" : { "count" : -1 } }
+                    ])
                 
+                buttons = []
+                for d in dresult:
+                    boss_name = d["_id"]["boss_name"] 
+                    if boss_name == name: continue
+                    hashstr = getMobHash(boss_name, 'boss')
+                    buttons.append(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
+
+                markupinline = InlineKeyboardMarkup(row_width=2)
+                for row in build_menu(buttons=buttons, n_cols=2):
+                    markupinline.row(*row)   
+
 
                 if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
                     report = getBossReport(name)
