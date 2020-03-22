@@ -3474,15 +3474,16 @@ def callback_query(call):
         {   "$sort" : { "count" : -1 } }
         ])
     
+    markupinline = InlineKeyboardMarkup(row_width=2)
     buttons = []
     for d in dresult:
         boss_name = d["_id"]["boss_name"] 
         if boss_name == bossinbd['boss_name']: continue
         hashstr = getMobHash(boss_name, 'boss')
-        buttons.append(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
-        # markupinline.add(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
+        #buttons.append(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
+        markupinline.add(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
 
-    markupinline = InlineKeyboardMarkup(row_width=2).add(buttons)
+    
 
     text = getBossReport(bossinbd['boss_name'])
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
