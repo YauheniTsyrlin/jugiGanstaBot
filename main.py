@@ -1163,8 +1163,12 @@ def get_message_photo(message):
                 send_messages_big(message.chat.id, text=wariorShow.getProfile())
         else:
             wariorShow = getWariorByName(wariorShow.getName(), wariorShow.getFraction())
-            send_messages_big(message.chat.id, text=wariorShow.getProfile())
-            #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+
+            markupinline = None
+            user = getUserByName(wariorShow.getName())
+            if user:
+                markupinline = InlineKeyboardMarkup(row_width=2).add(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
+            send_messages_big(message.chat.id, text=wariorShow.getProfile(), reply_markup=markupinline)
     else:
         if privateChat:
             send_messages_big(message.chat.id, text=message.photo[len(message.photo)-1].file_id)
@@ -3490,9 +3494,9 @@ def callback_query(call):
        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
        return
 
-    bot.answer_callback_query(call.id, "Не спать!")
     login = call.data.split('|')[1]
     text = f'@{login}, родной!\n🚷 Не спи в ТЗ!'
+    bot.answer_callback_query(call.id, "Ты предупредил {login}!")
     send_messages_big(call.message.chat.id, text=text)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("boss_info"))
