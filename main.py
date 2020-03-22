@@ -846,7 +846,7 @@ def getBossReport(boss_name: str):
         date = (datetime.fromtimestamp(last_date).replace(minute=0, second=0) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
 
         try:
-            report = report + f'📋 Записались {bo["onboss"]}\n'
+            report = report + f'📋 <b>Записались {bo["onboss"]}</b>\n'
         except: pass
         report = report + f'⏰ Замечен {time.strftime("%d.%m.%Y %H:%M", time.gmtime(date))} МСК'
 
@@ -1915,7 +1915,7 @@ def main_message(message):
 
                     if message.forward_date in bo['forward_date']:
                         pass
-                        #dublicate = True
+                        dublicate = True
                     else:
                         forward_date = bo['forward_date'] + forward_date
                         row.update({'forward_date': forward_date})
