@@ -1871,6 +1871,25 @@ def main_message(message):
             if name == '':
                 pass
             else:
+
+                markupinline = InlineKeyboardMarkup()
+                dresult = boss.aggregate([ 
+                    {   "$group": {
+                        "_id": { "boss_name":"$boss_name" }, 
+                        "count": {
+                            "$sum": 1}}},
+                        
+                    {   "$sort" : { "count" : -1 } }
+                    ])
+                
+                for d in dresult:
+                    boss_name = d["_id"]["boss_name"] 
+                    if boss_name == name: continue
+                    hashstr = getMobHash(boss_name, 'boss')
+                    markupinline.add(
+                        InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}")
+                        )
+
                 row = {}
                 row.update({'date': message.forward_date})
                 row.update({'boss_name': name})
@@ -1908,7 +1927,7 @@ def main_message(message):
                         send_messages_big(message.chat.id, text='Дубликат!')
                         if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
                             report = getBossReport(name)
-                            send_messages_big(message.chat.id, text=report)
+                            send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
                         return
                     else:
                         forward_date = bo['forward_date'] + forward_date
@@ -1921,23 +1940,7 @@ def main_message(message):
                 if result.matched_count < 1:
                     boss.insert_one(row)
 
-                markupinline = InlineKeyboardMarkup()
-                dresult = boss.aggregate([ 
-                    {   "$group": {
-                        "_id": { "boss_name":"$boss_name" }, 
-                        "count": {
-                            "$sum": 1}}},
-                        
-                    {   "$sort" : { "count" : -1 } }
-                    ])
                 
-                for d in dresult:
-                    boss_name = d["_id"]["boss_name"] 
-                    if boss_name == name: continue
-                    hashstr = getMobHash(boss_name, 'boss')
-                    markupinline.add(
-                        InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}")
-                        )
 
                 if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
                     report = getBossReport(name)
