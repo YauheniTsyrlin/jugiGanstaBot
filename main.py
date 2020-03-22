@@ -1490,8 +1490,8 @@ def main_message(message):
                 i = i + 1
             
                 buttons = []
-                for d in user_in_dark_zone:
-                    buttons.append(InlineKeyboardButton(f'@{d.getLogin()}', callback_data=f"ping_user_in_dark_zone|{d.getLogin()}|{user_in_dark_zone}"))
+                for d in user_in_dark_zone.keys():
+                    buttons.append(InlineKeyboardButton(f'@{d}', callback_data=f"ping_user_in_dark_zone|{d}|{user_in_dark_zone}"))
 
                 markupinline = InlineKeyboardMarkup(row_width=2)
                 for row in build_menu(buttons=buttons, n_cols=2):
