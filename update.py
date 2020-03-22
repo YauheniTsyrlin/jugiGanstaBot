@@ -2629,7 +2629,7 @@ print("#==========================#")
 # 
 #  mob.remove()
 
-# boss.remove()
+#boss.remove()
 # mob_class = ''
 # for x in mob.find({'mob_class': mob_class}):
 #     print(x)

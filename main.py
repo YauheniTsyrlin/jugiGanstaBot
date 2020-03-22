@@ -845,7 +845,8 @@ def getBossReport(boss_name: str):
         tz = config.SERVER_MSK_DIFF
         date = (datetime.fromtimestamp(last_date).replace(minute=0, second=0) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
 
-
+        if bo["onboss"]:
+            report = report + f'📋 Записались {bo["onboss"]}\n'
         report = report + f'⏰ Замечен {time.strftime("%d.%m.%Y %H:%M", time.gmtime(date))} МСК'
 
     return report 
@@ -1831,6 +1832,7 @@ def main_message(message):
                 return
                 
             counter = 0
+            onboss = 0
             health = 0
             damage = []
             beaten = []
@@ -1848,10 +1850,13 @@ def main_message(message):
                         mat = [int(s.split('📦')[1].strip())]
                     if s.startswith('💀'):
                         killed.append(s.split('💀')[1].strip())
+                onboss = 0
             elif (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.text):
                 name = message.text.split('\n')[3].strip()
+                onboss = int(message.text.split('\n')[7].split('/')[0].strip())
             elif 'Ты присоединился к группе, которая собирается атаковать' in message.text:
                 name = message.text.split('Ты присоединился к группе, которая собирается атаковать')[1].split('.')[0].strip()
+                onboss = 4 - int(split('Для битвы нужно еще')[1].split('человека')[0].strip())
             elif message.text.startswith('ХОД БИТВЫ:'):
                 for s in message.text.split('\n'):
                     counter = counter + 1
@@ -1867,6 +1872,7 @@ def main_message(message):
                             damage.append(int(s.split('💥')[1].strip())) 
                         if '☠️' in s:
                             killed.append(s.split('☠️')[1].strip())
+                onboss = 0
 
             if name == '':
                 pass
@@ -1900,6 +1906,7 @@ def main_message(message):
                 row.update({'killed': killed})
                 row.update({'kr': kr})
                 row.update({'mat': mat})
+                row.update({'onboss': onboss})
                 row.update({'forward_date': forward_date})
                 
 
