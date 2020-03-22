@@ -1165,10 +1165,9 @@ def get_message_photo(message):
             wariorShow = getWariorByName(wariorShow.getName(), wariorShow.getFraction())
 
             markupinline = None
-            if '⚔️ /p_' in message.text:
-                user = getUserByName(wariorShow.getName())
-                if user:
-                    markupinline = InlineKeyboardMarkup(row_width=2).add(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
+            user = getUserByName(wariorShow.getName())
+            if user:
+                markupinline = InlineKeyboardMarkup(row_width=2).add(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
             send_messages_big(message.chat.id, text=wariorShow.getProfile(), reply_markup=markupinline)
     else:
         if privateChat:
