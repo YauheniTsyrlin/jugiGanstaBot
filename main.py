@@ -3505,7 +3505,7 @@ def callback_query(call):
 
     login = call.data.split('|')[1]
     text = f'@{login}, родной!\nТы в опасности!'
-    bot.answer_callback_query(call.id, "{login} предупрежден!")
+    bot.answer_callback_query(call.id, f"{login} предупрежден!")
     send_messages_big(call.message.chat.id, text=text)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("boss_info"))
