@@ -1857,7 +1857,7 @@ def main_message(message):
                 onboss = int(message.text.split('\n')[7].split('/')[0].strip())
             elif 'Ты присоединился к группе, которая собирается атаковать' in message.text:
                 name = message.text.split('Ты присоединился к группе, которая собирается атаковать')[1].split('.')[0].strip()
-                onboss = 4 - int(message.text.split('Для битвы нужно еще')[1].split('человека')[0].strip())
+                onboss = 4 - int(message.text.split('Для битвы нужно еще')[1].split('человек')[0].strip())
             elif message.text.startswith('ХОД БИТВЫ:'):
                 for s in message.text.split('\n'):
                     counter = counter + 1
