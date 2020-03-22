@@ -849,6 +849,24 @@ def getBossReport(boss_name: str):
 
     return report 
 
+def getBossByHash(hashstr: str):
+    dresult = boss.aggregate([ 
+    {   "$group": {
+        "_id": { "boss_name":"$boss_name"}, 
+        "count": {
+            "$sum": 1}}},
+        
+    {   "$sort" : { "count" : -1 } }
+    ])
+    
+    for d in dresult:
+        boss_name = d["_id"]["boss_name"] 
+        hashstr_in_bd = getMobHash(boss_name, 'boss')
+        if hashstr == hashstr_in_bd:
+            return {'boss_name': boss_name}
+
+    return None
+
 # Handle new_chat_members
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
 def send_welcome_and_dismiss(message):
@@ -1796,112 +1814,8 @@ def main_message(message):
                     InlineKeyboardButton(f"Закрыть ⛔", callback_data=f"commit_dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}")
                 )
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
-    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and message.text and message.text.startswith('ХОД БИТВЫ:'):
-        if hasAccessToWariors(message.from_user.username):
-
-            if userIAm == None:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
-                return
-
-            if userIAm.getTimeUpdate() < (datetime.now() - timedelta(days=1)).timestamp():
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
-                return
-
-            if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_forward').fulfillment_text) 
-                return
-                
-            counter = 0
-            health = 0
-            damage = []
-            beaten = []
-            killed = []
-            kr = []
-            mat = []
-            name = ''
-            forward_date = [message.forward_date]
-
-            for s in message.text.split('\n'):
-                counter = counter + 1
-                if counter == 2 and not (s == ''):
-                    return
-                if counter >=3:
-                    if '❤️' in s and health == 0:
-                        health = int(s.split('❤️')[1].strip())
-                        name = s.split('❤️')[0].strip()
-                    if '💔-' in s:
-                        beaten.append(int(s.split('💔-')[1].strip()))
-                    if '💥' in s:
-                        damage.append(int(s.split('💥')[1].strip())) 
-                    if '☠️' in s:
-                        killed.append(s.split('☠️')[1].strip())
-                        
-            if name == '':
-                pass
-            else:
-                row = {}
-                row.update({'date': message.forward_date})
-                row.update({'boss_name': name})
-                row.update({'health': health})
-                row.update({'damage': damage})
-                row.update({'beaten': beaten})
-                row.update({'killed': killed})
-                row.update({'kr': kr})
-                row.update({'mat': mat})
-                row.update({'forward_date': forward_date})
-
-                for bo in boss.find({'boss_name': name}):
-                    if bo['date'] > row['date']:
-                        row.update({'date': bo['date']})
-                    if bo['health'] > row['health']:
-                        row.update({'health': bo['health']})
-                    
-                    damage = bo['damage'] + damage
-                    row.update({'damage': damage})
-
-                    beaten = bo['beaten'] + beaten
-                    row.update({'beaten': beaten})
-                    
-                    killed = bo['killed'] + killed
-                    row.update({'killed': killed})
-                    
-                    kr = bo['kr'] + kr
-                    row.update({'kr': kr})
-                    
-                    mat = bo['mat']+ mat
-                    row.update({'mat': mat})
-
-                    if message.forward_date in bo['forward_date']:
-                        send_messages_big(message.chat.id, text='Дубликат!')
-                        if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                            report = getBossReport(name)
-                            send_messages_big(message.chat.id, text=report)
-                        return
-                    else:
-                        forward_date = bo['forward_date'] + forward_date
-                        row.update({'forward_date': forward_date})
-
-                logger.info(row)
-                newvalues = { "$set": row }
-                result = boss.update_one({
-                    'boss_name': name
-                    }, newvalues)
-                if result.matched_count < 1:
-                    boss.insert_one(row)
-
-                if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                    report = getBossReport(name)
-                    send_messages_big(message.chat.id, text=report)
-                else:
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
-
-            if name == '':
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
-
-
-        return
     
-    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and ('Ты присоединился к группе, которая собирается атаковать' in message.text or message.text.startswith('Победа!') or (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.text)):
+    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('ХОД БИТВЫ:') or 'Ты присоединился к группе, которая собирается атаковать' in message.text or message.text.startswith('Победа!') or (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.text)):
         if hasAccessToWariors(message.from_user.username):
     
             if userIAm == None:
@@ -1938,7 +1852,22 @@ def main_message(message):
                 name = message.text.split('\n')[3].strip()
             elif 'Ты присоединился к группе, которая собирается атаковать' in message.text:
                 name = message.text.split('Ты присоединился к группе, которая собирается атаковать')[1].split('.')[0].strip()
-            
+            elif message.text.startswith('ХОД БИТВЫ:'):
+                for s in message.text.split('\n'):
+                    counter = counter + 1
+                    if counter == 2 and not (s == ''):
+                        return
+                    if counter >=3:
+                        if '❤️' in s and health == 0:
+                            health = int(s.split('❤️')[1].strip())
+                            name = s.split('❤️')[0].strip()
+                        if '💔-' in s:
+                            beaten.append(int(s.split('💔-')[1].strip()))
+                        if '💥' in s:
+                            damage.append(int(s.split('💥')[1].strip())) 
+                        if '☠️' in s:
+                            killed.append(s.split('☠️')[1].strip())
+
             if name == '':
                 pass
             else:
@@ -1992,9 +1921,27 @@ def main_message(message):
                 if result.matched_count < 1:
                     boss.insert_one(row)
 
+                markupinline = InlineKeyboardMarkup()
+                dresult = boss.aggregate([ 
+                    {   "$group": {
+                        "_id": { "boss_name":"$boss_name" }, 
+                        "count": {
+                            "$sum": 1}}},
+                        
+                    {   "$sort" : { "count" : -1 } }
+                    ])
+                
+                for d in dresult:
+                    boss_name = d["_id"]["boss_name"] 
+                    if boss_name == name: continue
+                    hashstr = getMobHash(boss_name, 'boss')
+                    markupinline.add(
+                        InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}")
+                        )
+
                 if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
                     report = getBossReport(name)
-                    send_messages_big(message.chat.id, text=report)
+                    send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
                 else:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
 
@@ -3503,6 +3450,40 @@ def report_man_of_day(message_user_name: str):
         report = report + f'\nПидор дня <b>{pidor_user_now.getNameAndGerb()}</b> на {pidor_counter} месте\n'
     
     return report
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith("boss_info"))
+def callback_query(call):
+    # logger.info(f'{call.from_user.username} {call.data}')
+    #     0              1           2        
+    # boss_info|{hashstr}
+
+    if isUserBan(call.from_user.username):
+       bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
+       return
+ 
+    hashstr = call.data.split('|')[1]
+    bossinbd = getBossByHash(hashstr)
+
+    markupinline = InlineKeyboardMarkup()
+    dresult = boss.aggregate([ 
+        {   "$group": {
+            "_id": { "boss_name":"$boss_name" }, 
+            "count": {
+                "$sum": 1}}},
+            
+        {   "$sort" : { "count" : -1 } }
+        ])
+    
+    for d in dresult:
+        boss_name = d["_id"]["boss_name"] 
+        if boss_name == bossinbd['boss_name']: continue
+        hashstr = getMobHash(boss_name, 'boss')
+        markupinline.add(
+            InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}")
+            )
+
+    text = getBossReport(bossinbd['boss_name'])
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("mob_info"))
