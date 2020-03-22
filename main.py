@@ -1464,7 +1464,7 @@ def main_message(message):
                     if dark_zone:
                         user = getUserByName(name)
                         if user:
-                            user_in_dark_zone.append(user)  
+                            user_in_dark_zone.append({user.getLogin(): 3})  
 
                     if warior:
                         if warior.getGoat():
@@ -1491,7 +1491,7 @@ def main_message(message):
             
                 buttons = []
                 for d in user_in_dark_zone:
-                    buttons.append(InlineKeyboardButton(f'@{d.getLogin()}', callback_data=f"ping_user_in_dark_zone|{d.getLogin()}|3"))
+                    buttons.append(InlineKeyboardButton(f'@{d.getLogin()}', callback_data=f"ping_user_in_dark_zone|{d.getLogin()}|{user_in_dark_zone}"))
 
                 markupinline = InlineKeyboardMarkup(row_width=2)
                 for row in build_menu(buttons=buttons, n_cols=2):
@@ -3483,22 +3483,35 @@ def report_man_of_day(message_user_name: str):
 @bot.callback_query_handler(func=lambda call: call.data.startswith("ping_user_in_dark_zone"))
 def callback_query(call):
     # logger.info(f'{call.from_user.username} {call.data}')
-    #               0              1              
-    # ping_user_in_dark_zone|{d.getLogin()}|3
+    #               0              1              2
+    # ping_user_in_dark_zone|{d.getLogin()}|{user_in_dark_zone}
 
     if isUserBan(call.from_user.username):
        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
        return
  
     login = call.data.split('|')[1]
-    counter = int(call.data.split('|')[2])
+    user_in_dark_zone = eval(call.data.split('|')[2])
     
+    for u in user_in_dark_zone:
+        logger.info(u)
+
     markupinline = InlineKeyboardMarkup(row_width=2)
     if counter > 1:
         counter = counter - 1
         markupinline.add(InlineKeyboardButton(f'@{login}', callback_data=f"ping_user_in_dark_zone|{login}|{counter}"))
         text = f'@{login}, родной!\n🚷 Не спи в ТЗ!'
         send_messages_big(call.message.chat.id, text=text, reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+
+    buttons = []
+    for d in user_in_dark_zone:
+        buttons.append(InlineKeyboardButton(f'@{d.getLogin()}', callback_data=f"ping_user_in_dark_zone|{d.getLogin()}|{user_in_dark_zone}"))
+
+    markupinline = InlineKeyboardMarkup(row_width=2)
+    for row in build_menu(buttons=buttons, n_cols=2):
+        markupinline.row(*row)
+        
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("boss_info"))
 def callback_query(call):
