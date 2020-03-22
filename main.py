@@ -1489,9 +1489,13 @@ def main_message(message):
                     counter = counter + live
                 i = i + 1
             
+                sdata = ''
+                for d in user_in_dark_zone:
+                    sdata = sdata + f'{d}:{3}#'
+
                 buttons = []
                 for d in user_in_dark_zone:
-                    buttons.append(InlineKeyboardButton(f'@{d}', callback_data=f"ping_user_in_dark_zone|{d}|{user_in_dark_zone}"))
+                    buttons.append(InlineKeyboardButton(f'@{d}', callback_data=f"ping_user_in_dark_zone|{d}|{sdata}"))
 
                 markupinline = InlineKeyboardMarkup(row_width=2)
                 for row in build_menu(buttons=buttons, n_cols=2):
