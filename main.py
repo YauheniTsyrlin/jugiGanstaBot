@@ -3504,7 +3504,7 @@ def callback_query(call):
     for u in user_in_dark_zone.split('#'):
         l = u.split(':')[0].strip()
         c = int(u.split(':')[1].strip())
-        if l == login    
+        if l == login: 
             c = c - 1
             counter_ping = c
         sdata = sdata + f'{l}:{c}#'            
@@ -3521,7 +3521,7 @@ def callback_query(call):
     text = f'@{login}, родной!\n🚷 Не спи в ТЗ!'
     send_messages_big(call.message.chat.id, text=text, reply_markup=markupinline)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
-    
+
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("boss_info"))
 def callback_query(call):
