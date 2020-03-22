@@ -3489,7 +3489,8 @@ def callback_query(call):
     if isUserBan(call.from_user.username):
        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
        return
- 
+
+    bot.answer_callback_query(call.id, "Не спать!")
     login = call.data.split('|')[1]
     text = f'@{login}, родной!\n🚷 Не спи в ТЗ!'
     send_messages_big(call.message.chat.id, text=text)
