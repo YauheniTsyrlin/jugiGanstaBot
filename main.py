@@ -1874,7 +1874,7 @@ def main_message(message):
                         if '☠️' in s:
                             killed.append(s.split('☠️')[1].strip())
                 onboss = 0
-            logger.info(f'health {health}')
+
             if name == '':
                 pass
             else:
@@ -1895,7 +1895,10 @@ def main_message(message):
                 for bo in boss.find({'boss_name': name}):
                     if bo['date'] > row['date']:
                         row.update({'date': bo['date']})
-                    if bo['health'] > row['health']:
+                    
+                    if row['health'] > bo['health']:
+                        pass
+                    else:
                         row.update({'health': bo['health']})
 
                     damage = bo['damage'] + damage
@@ -1915,7 +1918,7 @@ def main_message(message):
 
                     if message.forward_date in bo['forward_date']:
                         pass
-                        dublicate = True
+                        # dublicate = True
                     else:
                         forward_date = bo['forward_date'] + forward_date
                         row.update({'forward_date': forward_date})
