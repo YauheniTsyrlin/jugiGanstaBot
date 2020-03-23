@@ -1182,7 +1182,7 @@ def get_message_photo(message):
 
             markupinline = None
             user = getUserByName(wariorShow.getName())
-            if user:
+            if user and (not user.getLogin() == message.from_user.username):
                 buttons = []
                 buttons.append(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
                 markupinline = InlineKeyboardMarkup(row_width=2)
@@ -4266,7 +4266,8 @@ def rade():
 
             old_pidors = []
             for d in dresult:
-                user_login = d.get("_id")  
+                user_login = d.get("_id")
+                if user_login == userWin.getLogin(): continue
                 user = getUserByLogin(user_login)
                 if user:
                     old_pidors.append(user)
