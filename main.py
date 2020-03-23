@@ -2831,7 +2831,7 @@ def main_message(message):
                             if user:
                                 inventory_category = [{'type':'decoration', 'name':'🎁 Подарки'}]
                                 report = user.getInventoryReport(inventory_category)
-                                msg = send_messages_big(message.chat.id, text=f'🎁 Подарки {user.getNameAndGerb()}:\n{report}', reply_markup=markupinline)
+                                msg = send_messages_big(message.chat.id, text=f'{user.getNameAndGerb()}:\n{report}', reply_markup=markupinline)
                             else:
                                 msg = send_messages_big(message.chat.id, text=f'Всем бандитам будет выдан...' , reply_markup=markupinline)
 
@@ -3853,7 +3853,7 @@ def callback_query(call):
         if user:
             inventory_category = [{'type':'decoration', 'name':'🎁 Подарки'}]
             report = user.getInventoryReport(inventory_category)
-            text=f'🎁 Подарки {user.getNameAndGerb()}:\n{report}'
+            text=f'{user.getNameAndGerb()}:\n{report}'
         
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
         return
@@ -3890,7 +3890,7 @@ def callback_query(call):
 
         inventory_category = [{'type':'decoration', 'name':'🎁 Подарки'}]
         report = user.getInventoryReport(inventory_category)
-        text=f'🎁 Подарки {user.getNameAndGerb()}:\n{report}'
+        text=f'{user.getNameAndGerb()}:\n{report}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
         return
 
@@ -3937,7 +3937,7 @@ def callback_query(call):
     if user:
         inventory_category = [{'type':'decoration', 'name':'🎁 Подарки'}]
         report = user.getInventoryReport(inventory_category)
-        text=f'🎁 Подарки {user.getNameAndGerb()}:\n{report}'
+        text=f'{user.getNameAndGerb()}:\n{report}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("pickupaccessory"))
