@@ -4194,31 +4194,34 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 20 and now_date.minute == 5 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 5 and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
         for user in USERS_ARR:
-            if user.getRank()['update'] == 'auto':
-                for rank in getSetting(code='RANK', name='MILITARY'):
-                    if rank['bm'] > user.getBm():
-                        break
+            try:
+                if user.getRank()['update'] == 'auto':
+                    for rank in getSetting(code='RANK', name='MILITARY'):
+                        if rank['bm'] > user.getBm():
+                            break
 
-                if rank['name'] == user.getRank()['name']:
-                    pass
-                else:
-                    report = report + f'За достижение {rank["bm"]} бандит {user.getNameAndGerb()} повышен в звании. Теперь он {rank["value"]}\n'
-                    user.setRank(rank)
-                    updateUser(user)
-                    goat = getMyGoat(user.getLogin())
-                    send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {rank["value"]}')
+                    if rank['name'] == user.getRank()['name']:
+                        pass
+                    else:
+                        report = report + f'За достижение {rank["bm"]} бандит {user.getNameAndGerb()} повышен в звании. Теперь он {rank["value"]}\n'
+                        user.setRank(rank)
+                        updateUser(user)
+                        goat = getMyGoat(user.getLogin())
+                        send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {rank["value"]}')
+            except:
+                send_message_to_admin(f'Сломались на раздачи званий на {user.getNameAndGerb()}')    
         if report == '':
             pass
         else:
             send_message_to_admin(report)
     
     # Пидор дня
-    if now_date.hour == 10 and now_date.minute == 10 and now_date.second < 15:
+    if now_date.hour == 20 and now_date.minute == 35 and now_date.second < 15:
         logger.info('Pidor of the day!')
         updateUser(None)
         user_in_game = []
