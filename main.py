@@ -4221,7 +4221,7 @@ def rade():
             send_message_to_admin(report)
     
     # Пидор дня
-    if now_date.hour == 20 and now_date.minute == 35 and now_date.second < 15:
+    if now_date.hour == 20 and now_date.minute == 34 and now_date.second < 15:
         logger.info('Pidor of the day!')
         updateUser(None)
         user_in_game = []
