@@ -85,7 +85,11 @@ def updateUser(newUser, oldUser):
     if hasattr(newUser, 'accessory'):
         if newUser.accessory:
             oldUser.accessory = newUser.accessory
-    
+
+    if hasattr(newUser, 'inventory'):
+        if newUser.inventory:
+            oldUser.inventory = newUser.inventory
+
     if hasattr(newUser, 'settings'):
         if newUser.settings:
             oldUser.settings = newUser.settings
@@ -143,9 +147,10 @@ def importUser(registered_user):
         u.chat     = registered_user['chat']
     if (registered_user.get('accessory')):    
         u.accessory     = registered_user['accessory']
+    if (registered_user.get('inventory')):    
+        u.inventory     = registered_user['inventory']
     if (registered_user.get('settings')):    
         u.settings     = registered_user['settings']
-    
     u.setRaidLocation(registered_user['raidlocation'])
     if (registered_user.get('wastelandLocation')):
         u.setWastelandLocation(registered_user['wastelandLocation'])
@@ -175,6 +180,7 @@ class User(object):
         self.ping = None
         self.chat = None
         self.accessory = None
+        self.inventory = None
         self.settings = None
         self.maxkm = None
         self.birthday = None
@@ -321,6 +327,19 @@ class User(object):
         
         string = string + self.getSettingsReport() + '\n'
 
+        # inventory_category = [
+        #                         {'type':'skill', 'name':'💡 Умения'},
+        #                         {'type':'disease', 'name':'🦠 Болезни'},
+        #                         {'type':'tatu', 'name':'☮️ Татуировки'},
+        #                         {'type':'clothes', 'name':'🧥 Одежда'},
+        #                         {'type':'food', 'name':'🍗 Еда'},
+        #                         {'type':'marks_of_excellence', 'name':'🏵 Награды'},
+        #                         {'type':'decoration', 'name':'🎁 Подарки'},
+        #                         {'type':'things', 'name':'📦 Вещи'},
+        #                         {'type':'bolt', 'name':'🔩 Рейдовые болты'}
+        #                     ]
+
+        # string = string + self.getInventoryReport(inventory_category)
 
         string = string + f'🛒Аксессуары:\n'
         if self.accessory and len(self.accessory) > 0:
@@ -476,7 +495,67 @@ class User(object):
     def getRank(self):
         return self.rank
     def getRankName(self):
-        return self.rank['value']
+        try:
+            return self.rank['value']
+        except: return None
+# =================== Inventory ========================== #
+    def setInventory(self, inventory):
+        self.inventory = inventory  
+
+    def getInventory(self):
+        if self.inventory == None:
+            self.inventory = []
+        return self.inventory
+
+    def getInventoryReport(self, types):
+        
+        full_report = ''
+        for type in types:
+            report = ''
+            cost = 0
+            for i in self.getInventory():
+                if i['type'] == type['type']:
+                    report = report + f'▫️ {i["name"]}\n'
+                    cost = cost + i["cost"]
+            if not report == '':
+                report = type['name'] + f' (🕳️ {cost}):\n' + report + '\n'
+            full_report = full_report + report
+        return full_report
+
+    def getInventoryThing(self, thing):
+        for i in self.getInventory():
+            if i['id'] == thing['id'] and i['type'] == thing['type']:
+                return i
+        return None
+
+    def getInventoryThingCount(self, thing):
+        counter = 0
+        for i in self.getInventory():
+            if i['id'] == thing['id'] and i['type'] == thing['type']:
+                counter = counter + 1
+        return counter
+
+    def isInventoryThing(self, thing):
+        for i in self.getInventory():
+            if i['id'] == thing['id'] and i['type'] == thing['type']:
+                return True
+        return False
+
+    def removeInventoryThing(self, thing, count=1):
+        counter = 0
+        for i in self.getInventory():
+            if i['id'] == thing['id'] and i['type'] == thing['type']:
+                self.getInventory().remove(i)
+                counter = counter + 1
+                if counter == count: return
+
+    def addInventoryThing(self, thing, count=1):
+        if count == None:
+            self.getInventory().append(thing)
+        elif self.getInventoryThingCount(thing) < count:
+            self.getInventory().append(thing)    
+
+# =================== Inventory ========================== #
 
     def setAccessory(self, accessory):
         self.accessory = accessory  
@@ -578,7 +657,7 @@ class User(object):
 
         if not (sett == None):
             self.settings.remove(sett)
-# ------------------------------------------
+
     def setTimeBan(self, timeBan):
         self.timeBan = timeBan  
     def getTimeBan(self):

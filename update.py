@@ -26,6 +26,7 @@ for x in registered_users.find():
 def getSetting(code: str, name=None, value=None, id=None):
     """ Получение настройки """
     result = settings.find_one({'code': code})
+
     if (result):
         if name:
             for arr in result.get('value'):
@@ -34,6 +35,7 @@ def getSetting(code: str, name=None, value=None, id=None):
         elif value:
             for arr in result.get('value'):
                 if arr['value'] == value:
+                    print()
                     return arr['name'] 
         elif id:
             for arr in result.get('value'):
@@ -185,15 +187,45 @@ if (not result):
         'value': ''   
              })   
 
+result = settings.find_one({'code': 'INVENTORY_CATEGORY'})
+if (not result):
+    print('Not Find setting. Insert INVENTORY_CATEGORY')
+    settings.insert_one({
+        'code': 'INVENTORY_CATEGORY', 
+        'description': ' Категории для инвентаря', 
+        'value': ''   
+             })  
 
 print("#==========================#")              
 print("#     UPDATE SETTINGS      #")              
 print("#==========================#")              
 
+
+myquery = { "code": 'INVENTORY_CATEGORY' }
+newvalues = { "$set": { "value": 
+                    [
+                        {
+                            'id': 'CLOTHES',
+                            'catrgoty': 'clothes'
+                        },
+                        {
+                            'id': 'RAID_BOLTS',
+                            'catrgoty': 'bolt'
+                        },
+                        {
+                            'id': 'VIRUSES',
+                            'catrgoty': 'disease'
+                        }
+                    ]
+                } 
+            } 
+u = settings.update_one(myquery, newvalues)
+
 myquery = { "code": 'RANK' }
 newvalues = { "$set": { "value": 
                     [
                         {
+                            'id': 'MILITARY',
                             'name': 'MILITARY',
                             'value':
                             [
@@ -338,6 +370,7 @@ newvalues = { "$set": { "value":
                             ] 
                         },
                         {
+                            'id': 'MEDICS',
                             'name': 'MEDICS',
                             'value':
                             [
@@ -361,17 +394,20 @@ newvalues = { "$set": { "value":
                             ] 
                         },
                         {
-                            'name': 'POSITIONS',
+                            'id': 'POSITIONS',
+                            'name': '🧗 Должность',
                             'value':
                             [
                                 {
                                     'id': 'pedal_director',
                                     'name': '🚵 Директор педального завода',
+                                    'type': 'position',
                                     'cost': 0
                                 },
                                 {
                                     'id': 'Chinese',
                                     'name': '😷 Китаец',
+                                    'type': 'position',
                                     'cost': 0
                                 }
                             ] 
@@ -436,7 +472,7 @@ newvalues = { "$set": { "value":
                     [
                         {
                             'id': 'CLOTHES',
-                            'name': 'Одежда',
+                            'name': '🧥 Одежда',
                             'value':
                             [                               
                                 {
@@ -523,7 +559,7 @@ newvalues = { "$set": { "value":
                         },
                         {
                             'id': 'RAID_BOLTS',
-                            'name': 'Рейдовые болты',
+                            'name': '🔩 Рейдовые болты',
                             'value':
                             [
                                 {
@@ -565,7 +601,7 @@ newvalues = { "$set": { "value":
                         },
                         {
                             'id': 'VIRUSES',
-                            'name': 'Болезни',
+                            'name': '🦠 Болезни',
                             'value':
                             [
                                 {
@@ -586,7 +622,7 @@ newvalues = { "$set": { "value":
                         },
                         {
                             'id': 'TATU',
-                            'name': 'Татуировки',
+                            'name': '☮️ Татуировки',
                             'value':
                             [
                                 {
@@ -649,7 +685,7 @@ newvalues = { "$set": { "value":
                         },
                         {
                             'id': 'SKILLS',
-                            'name': 'Умения',
+                            'name': '💡 Умения',
                             'value':
                             [
                                 {
@@ -726,7 +762,7 @@ newvalues = { "$set": { "value":
                         },
                         {
                             'id': 'EDIBLE',
-                            'name': 'Еда',
+                            'name': '🍗 Еда',
                             'value':
                             [
                                 {
@@ -817,7 +853,7 @@ newvalues = { "$set": { "value":
                         },
                         {
                             'id': 'MARKS_OF_EXCELLENCE',
-                            'name': 'Награды',
+                            'name': '🏵 Награды',
                             'value':
                             [
                                 {
@@ -993,7 +1029,7 @@ newvalues = { "$set": { "value":
                         },
                         {
                             'id': 'REWARDS',
-                            'name': 'Подарки',
+                            'name': '🎁 Подарки',
                             'value':
                             [
                                 
@@ -1255,7 +1291,7 @@ newvalues = { "$set": { "value":
                         },
                         {
                             'id': 'THINGS',
-                            'name': 'Вещи',
+                            'name': '📦 Вещи',
                             'value':
                             [
                                 {
@@ -1493,7 +1529,7 @@ newvalues = { "$set": { "value":
                         },
                         {
                             'id': 'PIP_BOY',
-                            'name': 'Пип-бой',
+                            'name': '📟 Пип-бой',
                             'value':
                             [
                                 {
@@ -2539,73 +2575,127 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
+
 # updateUser(None)
 # for user in USERS_ARR:
 #     for acc in user.getAccessory():
 #         acc = tools.deEmojify(acc).strip()
 #         pref = ''
-#         for x in getSetting(code='ACCESSORY_ALL', name='PIP_BOY', value=None, id=None):
-#             if tools.deEmojify(x['name']).strip() == acc:
-#                 pref = '📟'
-#                 break
-#         for x in getSetting(code='ACCESSORY_ALL', name='THINGS', value=None, id=None):
-#             if tools.deEmojify(x['name']).strip() == acc:
-#                 pref = '🕹️'
-#                 break
-#         for x in getSetting(code='ACCESSORY_ALL', name='REWARDS', value=None, id=None):
-#             if tools.deEmojify(x['name']).strip() == acc:
-#                 pref = '🦈'
-#                 break
-#         for x in getSetting(code='ACCESSORY_ALL', name='MARKS_OF_EXCELLENCE', value=None, id=None):
-#             if tools.deEmojify(x['name']).strip() == acc:
-#                 pref = '📜'
-#                 break
-#         for x in getSetting(code='ACCESSORY_ALL', name='EDIBLE', value=None, id=None):
-#             if tools.deEmojify(x['name']).strip() == acc:
-#                 pref = '🍫'
-#                 break
-#         for x in getSetting(code='ACCESSORY_ALL', name='SKILLS', value=None, id=None):
-#             if tools.deEmojify(x['name']).strip() == acc:
-#                 pref = '🥋'
-#                 break            
-#         for x in getSetting(code='ACCESSORY_ALL', name='TATU', value=None, id=None):
-#             if tools.deEmojify(x['name']).strip() == acc:
-#                 pref = '♂️'
-#                 break  
-#         for x in getSetting(code='ACCESSORY_ALL', name='VIRUSES', value=None, id=None):
-#             if tools.deEmojify(x['name']).strip() == acc:
-#                 pref = '🦇'
-#                 break  
-#         for x in getSetting(code='ACCESSORY_ALL', name='RAID_BOLTS', value=None, id=None):
-#             if tools.deEmojify(x['name']).strip() == acc:
-#                 pref = '🔩'
-#                 break             
-#         for x in getSetting(code='ACCESSORY_ALL', name='CLOTHES', value=None, id=None):
-#             if tools.deEmojify(x['name']).strip() == acc:
-#                 pref = '👒'
-#                 break             
-#         for x in getSetting(code='RANK', name='POSITIONS', value=None, id=None):
-#             if tools.deEmojify(x['name']).strip() == acc:
-#                 pref = '👒'
-#                 break    
-#         if 'Грамота за ' in acc and 'Дзен' in acc:
-#             num = int(acc.split('Грамота за ')[1].split('-')[0].strip())
-#             row =   {
-#                         'id': f'marks_of_dzen_{num}',
-#                         'name': f'🏵️ Грамота за {num}-й Дзен',
-#                         'cost': 0,
-#                         'type': 'marks_of_excellence',
-#                         'quantity': 1000
-#                     }
-#             pref = '🏵️'
+#         find = False
+        
+#         if not find:
+#             for x in getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value']:
+#                 if tools.deEmojify(x['name']).strip() == acc:
+#                     user.addInventoryThing(x)
+#                     pref = '📟'
+#                     find = True
+#                     break
+#         if not find:
+#             for x in getSetting(code='ACCESSORY_ALL', id='THINGS')['value']:
+#                 if tools.deEmojify(x['name']).strip() == acc:
+#                     user.addInventoryThing(x)
+#                     pref = '🕹️'
+#                     find = True
+#                     break
+#         if not find:
+#             for x in getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']:
+#                 if tools.deEmojify(x['name']).strip() == acc:
+#                     user.addInventoryThing(x)
+#                     pref = '🦈'
+#                     find = True
+#                     break
+#         if not find:
+#             for x in getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value']:
+#                 if tools.deEmojify(x['name']).strip() == acc:
+#                     user.addInventoryThing(x)
+#                     pref = '📜'
+#                     find = True
+#                     break
+#         if not find:
+#             for x in getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']:
+#                 if tools.deEmojify(x['name']).strip() == acc:
+#                     user.addInventoryThing(x)
+#                     pref = '🍫'
+#                     find = True
+#                     break
+#         if not find:
+#             for x in getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']:
+#                 if tools.deEmojify(x['name']).strip() == acc:
+#                     user.addInventoryThing(x)
+#                     pref = '🥋'
+#                     find = True
+#                     break            
+#         if not find:
+#             for x in getSetting(code='ACCESSORY_ALL', id='TATU')['value']:
+#                 if tools.deEmojify(x['name']).strip() == acc:
+#                     user.addInventoryThing(x)
+#                     pref = '♂️'
+#                     find = True
+#                     break  
+#         if not find:
+#             for x in getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']:
+#                 if tools.deEmojify(x['name']).strip() == acc:
+#                     user.addInventoryThing(x)
+#                     pref = '🦇'
+#                     find = True
+#                     break  
+#         if not find:
+#             for x in getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']:
+#                 if tools.deEmojify(x['name']).strip() == acc:
+#                     user.addInventoryThing(x)
+#                     pref = '🔩'
+#                     find = True
+#                     break             
+#         if not find:
+#             for x in getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value']:
+#                 if tools.deEmojify(x['name']).strip() == acc:
+#                     user.addInventoryThing(x)
+#                     pref = '👒'
+#                     find = True
+#                     break             
+#         if not find:
+#             for x in getSetting(code='RANK', id='POSITIONS')['value']:
+#                 if tools.deEmojify(x['name']).strip() == acc:
+#                     user.addInventoryThing(x)
+#                     pref = '👒'
+#                     find = True
+#                     break    
+#         if not find:
+#             if 'Грамота за ' in acc and 'Дзен' in acc:
+#                 num = int(acc.split('Грамота за ')[1].split('-')[0].strip())
+#                 row =   {
+#                             'id': f'marks_of_dzen_{num}',
+#                             'name': f'🏵️ Грамота за {num}-й Дзен',
+#                             'cost': 0,
+#                             'type': 'marks_of_excellence',
+#                             'quantity': 1000
+#                         }
+#                 user.addInventoryThing(row)
+#                 find = True
+#                 pref = '🏵️'
+#         if not find:
+#             print(f'Не нешел {acc}, выдаем 💰 Мешочек с монетами 100')
 
 
-
-#         if pref == '':
-
-#             pref = 'выдать bag_of_coins'
-#             print(f'{pref} {user.getLogin()} за {acc}')
-
+#     if not find:
+#         row =   {
+#                     'id': 'bag_of_coins_100',
+#                     'name': '💰 Мешочек с монетами 100',
+#                     'cost': 100,
+#                     'type': 'things',
+#                     'quantity': 1000,
+#                     'composition':
+#                     [
+#                         {
+#                             'id': 'coin',
+#                             'counter': 100
+#                         }
+#                     ]
+#                 }
+#         user.addInventoryThing(row)    
+        
+#     updateUser(user)
+    
 
 
 

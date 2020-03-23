@@ -843,7 +843,7 @@ def getBossReport(boss_name: str):
         last_date = max(bo["forward_date"])
 
         tz = config.SERVER_MSK_DIFF
-        date = (datetime.fromtimestamp(last_date).replace(minute=0, second=0) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
+        date = (datetime.fromtimestamp(last_date).replace(second=0) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
 
         try:
             report = report + f'📋 <b>Записались {bo["onboss"]}</b>\n'
@@ -936,6 +936,22 @@ def send_back_from_usset(message):
     matplot.getPlot(cursor, message.from_user.username)
     img = open(config.PATH_IMAGE + f'plot_{message.from_user.username}.png', 'rb')
     bot.send_photo(message.chat.id, img)
+
+
+# @bot.message_handler(func=lambda message: message.text and ('📜 Профиль' in message.text ))
+# def send_back_from_usset(message):
+#     privateChat = ('private' in message.chat.type)
+#     if not privateChat:
+#         bot.send_message(message.chat.id, text='Иди в личный чат!')
+#         return
+
+#     user = getUserByLogin(message.from_user.username)
+    
+
+#     markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+#     markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
+#     bot.send_message(message.chat.id, text=user.getInventoryReport(), reply_markup=markup)
+
 
 @bot.message_handler(func=lambda message: message.text and ('Участвую 👨‍❤️‍👨!' in message.text or 'Сам ты пидор 👨‍❤️‍👨!' in message.text))
 def send_back_from_usset(message):
@@ -1162,15 +1178,11 @@ def get_message_photo(message):
             else:
                 send_messages_big(message.chat.id, text=wariorShow.getProfile())
         else:
-            logger.info('===========================================')
-            logger.info(wariorShow.getName())
             wariorShow = getWariorByName(wariorShow.getName(), wariorShow.getFraction())
 
             markupinline = None
             user = getUserByName(wariorShow.getName())
             if user:
-                logger.info(f'============{user.getLogin()}=====================')
-
                 buttons = []
                 buttons.append(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
                 markupinline = InlineKeyboardMarkup(row_width=2)
