@@ -1342,7 +1342,7 @@ def main_message(message):
         # ⚙️Машенька постиг 8-й 🏵Дзен !
         name = message.text.split(' постиг ')[0]
         name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
-        name = name.split('@')[1].split(' ')[0].strip()
+        name = name.split('@')[1].split('постиг')[0].strip()
         num_dzen = message.text.split(' постиг ')[1].split('-й')[0]
         fraction = getWariorFraction(message.text)
         acc = f'🏵️ Грамота за {num_dzen}-й Дзен' 
