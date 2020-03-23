@@ -589,6 +589,7 @@ def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABIL
                     # Маска снижает заражение на %%%  
                     if (random.random() < int(getSetting(code='PROBABILITY', name='MASK_DEFENCE'))):
                         return
+                
                 user.addAccessory(acc_koronavirus)
                 updateUser(user)
                 counter_infected = counter_infected + 1
@@ -1337,27 +1338,28 @@ def main_message(message):
     findUser = not (userIAm == None)
 
     if message.forward_from_chat and message.forward_from_chat.username == 'wwkeeperhorn' and ' постиг ' in message.text:
-        logger.info('========0===========')
-
         # ⚙️Машенька постиг 8-й 🏵Дзен !
         name = message.text.split(' постиг ')[0]
         name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
         name = name.split('@')[1].split('постиг')[0].strip()
         num_dzen = message.text.split(' постиг ')[1].split('-й')[0]
         fraction = getWariorFraction(message.text)
-        acc = f'🏵️ Грамота за {num_dzen}-й Дзен' 
-        logger.info('========1===========')
+        elem =   {
+                    'id': f'marks_of_dzen_{num_dzen}',
+                    'name': f'🏵️ Грамота за {num_dzen}-й Дзен',
+                    'cost': 0,
+                    'type': 'marks_of_excellence',
+                    'quantity': 1000
+                }
+        # acc = f'🏵️ Грамота за {num_dzen}-й Дзен' 
         user = getUserByName(name)
         if user:
-            logger.info('========2===========')
-            if user.isAccessoryItem(acc):
-                logger.info('========3===========')
+            if user.isInventoryThing(elem):
                 pass
             else:
-                logger.info('========4===========')
-                user.addAccessory(acc)
+                user.addInventoryThing(elem)
                 updateUser(user)
-                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
+                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
         return
 
     if (message.text.startswith('📟Пип-бой 3000')):
@@ -1394,9 +1396,11 @@ def main_message(message):
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'pip_me').fulfillment_text)
                     return
                 else:
-                    acc = random.sample(getSetting(code='ACCESSORY', name='PIP_BOY'), 1)[0]["value"]
+                    # bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_2'), None)
+
+                    elem = random.sample(getSetting(code='ACCESSORY_ALL', id='PIP_BOY')["value"], 1)[0]
                     user.setChat(message.chat.id)
-                    user.addAccessory(acc)
+                    user.addInventoryThing(elem)
                     user.setPing(True)
 
                     newRank = None
@@ -1408,7 +1412,7 @@ def main_message(message):
                     x = registered_users.insert_one(json.loads(user.toJSON()))
                     updateUser(None)
 
-                    send_messages_big(message.chat.id, text=f'Поздравляю! \nТебе выдали "{acc}" и вытолкнули за дверь!')
+                    send_messages_big(message.chat.id, text=f'Поздравляю! \nТебе выдали {elem["name"]} и вытолкнули за дверь!')
                     send_message_to_admin(f'⚠️Внимание! Зарегистрировался новый пользователь.\n {user.getProfile()}')
             else:
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
@@ -2814,32 +2818,36 @@ def main_message(message):
                             markupinline = InlineKeyboardMarkup()
                             counter = 10
                             i = 1
-                            for acc in getSetting(code='ACCESSORY', name='REWARDS'):
-                                if user and user.getAccessory() and acc['value'] in user.getAccessory():
+                            for elem in getSetting(code='ACCESSORY_ALL', id='REWARDS')["value"]:
+                                if user and user.isInventoryThing(elem):
                                     continue    
 
-                                markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward|{login}|{acc['name']}"))
+                                markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}"))
                                 if i == counter :
                                     markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter}"))
                                     markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
                                     break
                                 i = i + 1
                             if user:
-                                msg = send_messages_big(message.chat.id, text=f'Аксессуары {user.getNameAndGerb()}:\n{user.getAccessoryReport()}' , reply_markup=markupinline)
+                                inventory_category = [{'type':'decoration', 'name':'🎁 Подарки'}]
+                                report = user.getInventoryReport(inventory_category)
+                                msg = send_messages_big(message.chat.id, text=f'🎁 Подарки {user.getNameAndGerb()}:\n{report}', reply_markup=markupinline)
                             else:
                                 msg = send_messages_big(message.chat.id, text=f'Всем бандитам будет выдан...' , reply_markup=markupinline)
 
                         else:
-                            acc = response.split(':')[3]
-                            if user:
-                                user.addAccessory(acc)
-                                updateUser(user)
-                                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
-                            else:
-                                for user in list(USERS_ARR):
-                                    user.addAccessory(acc)
-                                    updateUser(user)
-                                send_messages_big(message.chat.id, text='Бандиты!\n' + getResponseDialogFlow(message, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {acc}') 
+                            # acc = response.split(':')[3]
+                            # if user:
+                            #     user.addAccessory(acc)
+                            #     updateUser(user)
+                            #     send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
+                            # else:
+                            #     for user in list(USERS_ARR):
+                            #         user.addAccessory(acc)
+                            #         updateUser(user)
+                            # send_messages_big(message.chat.id, text='Бандиты!\n' + getResponseDialogFlow(message, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {acc}') 
+                            send_messages_big(message.chat.id, text='Нет выдачи по одному Подарку') 
+
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
                         # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
                         logger.info(response)
@@ -3466,7 +3474,10 @@ def report_man_of_day(message_user_name: str):
         {   "$sort" : { "count" : -1 } }
         ])
     
-    acc = '👑 "Пидор дня"'
+
+    # acc = '👑 "Пидор дня"'
+    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
+
     findInLoser = 0
     i = 0
     pidor_counter = 0
@@ -3488,7 +3499,7 @@ def report_man_of_day(message_user_name: str):
         user_name = user_login
         if user:
             user_name = f'{user.getNameAndGerb()}'
-            if user.isAccessoryItem(acc):
+            if user.isInventoryThing(elem):
                 pidor_counter = i
                 pidor_user_now = user
         else:
@@ -3820,14 +3831,14 @@ def callback_query(call):
         markupinline = InlineKeyboardMarkup()
         i = 1
         addExit = False
-        for acc in getSetting(code='ACCESSORY',name='REWARDS'):
-            if user and user.getAccessory() and acc['value'] in user.getAccessory():
+        for elem in getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']:
+            if user and user.isInventoryThing(elem):
                 continue    
 
             if i <= counter:
                 pass
             else:
-                markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward|{login}|{acc['name']}"))
+                markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}"))
                 if i == counter + 10:
                     markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back|{login}|{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter + 10}"))
                     markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
@@ -3840,7 +3851,9 @@ def callback_query(call):
         
         text=f'Всем бандитам будет что-то выдано! Просмотрено {counter} аксессуаров'
         if user:
-            text=f'Аксессуары {user.getNameAndGerb()}:\n{user.getAccessoryReport()}'
+            inventory_category = [{'type':'decoration', 'name':'🎁 Подарки'}]
+            report = user.getInventoryReport(inventory_category)
+            text=f'🎁 Подарки {user.getNameAndGerb()}:\n{report}'
         
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
         return
@@ -3853,14 +3866,14 @@ def callback_query(call):
         markupinline = InlineKeyboardMarkup()
         i = 1
         addExit = False
-        for acc in getSetting(code='ACCESSORY',name='REWARDS'):
-            if user.getAccessory() and acc['value'] in user.getAccessory():
+        for elem in getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']:
+            if user and user.isInventoryThing(elem):
                 continue    
 
             if i <= counter:
                 pass
             else:
-                markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward|{login}|{acc['name']}"))
+                markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}"))
                 if i == counter + 10:
                     if counter == 0:
                         markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter + 10}"))
@@ -3875,7 +3888,9 @@ def callback_query(call):
             markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_next|{login}|{i+10}"))
             markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
 
-        text=f'Аксессуары {user.getNameAndGerb()}:\n{user.getAccessoryReport()}'
+        inventory_category = [{'type':'decoration', 'name':'🎁 Подарки'}]
+        report = user.getInventoryReport(inventory_category)
+        text=f'🎁 Подарки {user.getNameAndGerb()}:\n{report}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
         return
 
@@ -3883,44 +3898,46 @@ def callback_query(call):
     login = call.data.split('|')[1]
     user = getUserByLogin(login)
     
-    for acc in getSetting(code='ACCESSORY', name='REWARDS'):
-        if acc['name'] == call.data.split('|')[2]:
+    for elem in getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']:
+        if elem['id'] == call.data.split('|')[2]:
 
-            try:
-                if acc['mode'] == 'arhive':
-                    bot.answer_callback_query(call.id, "Это нельзя нельзя никому больше выдавать!")
-                    return
-            except:
-                pass
+            # try:
+            #     if acc['mode'] == 'arhive':
+            #         bot.answer_callback_query(call.id, "Это нельзя нельзя никому больше выдавать!")
+            #         return
+            # except:
+            #     pass
 
             bot.answer_callback_query(call.id, "Ты сделал свой выбор")
             if login.lower() == 'всем':
                 for user in list(USERS_ARR):
-                    user.addAccessory(acc['value'])
+                    user.addInventoryThing(elem)
                     updateUser(user)
-                send_messages_big(call.message.chat.id, text= 'Бандиты!\n' + getResponseDialogFlow(call.message, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {acc["value"]}') 
+                send_messages_big(call.message.chat.id, text= 'Бандиты!\n' + getResponseDialogFlow(call.message, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
                 break
             else:
-                user.addAccessory(acc['value'])
+                user.addInventoryThing(elem)
                 updateUser(user)
-                send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc["value"]}') 
+                send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
                 break
 
     markupinline = InlineKeyboardMarkup()
     counter = 10
     i = 1
-    for acc in getSetting(code='ACCESSORY', name='REWARDS'):
-        if user and user.getAccessory() and acc['value'] in user.getAccessory():
+    for elem in getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']:
+        if user and user.isInventoryThing(elem):
             continue    
 
-        markupinline.add(InlineKeyboardButton(f"{acc['value']}", callback_data=f"toreward|{login}|{acc['name']}"))
+        markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['value']}"))
         if i == counter :
             markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter}"))
             markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
             break
         i = i + 1
     if user:
-        text=f'Аксессуары {user.getNameAndGerb()}:\n{user.getAccessoryReport()}'
+        inventory_category = [{'type':'decoration', 'name':'🎁 Подарки'}]
+        report = user.getInventoryReport(inventory_category)
+        text=f'🎁 Подарки {user.getNameAndGerb()}:\n{report}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("pickupaccessory"))
@@ -4288,11 +4305,13 @@ def rade():
                 pidor1 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
                 pidor2 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
 
-            acc = '👑 "Пидор дня"'
+            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
+            # acc = '👑 "Пидор дня"'
+
             lastWinner = None
             for user in USERS_ARR:
-                if acc in user.getAccessory():
-                    user.removeAccessory(acc)
+                if user.isInventoryThing(elem):
+                    user.removeInventoryThing(elem)
                     updateUser(user)
                     lastWinner = user
                     break
@@ -4304,13 +4323,13 @@ def rade():
                 chat = getMyGoat(userWin.getLogin())['chats']['info']
                 send_messages_big(chat, text=text)
 
-            userWin.addAccessory(acc)
+            userWin.addInventoryThing(elem)
             updateUser(userWin)
-            send_messages_big(chat, text=userWin.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
+            send_messages_big(chat, text=userWin.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
             row = {}
             row.update({'date':now_date.timestamp()})
             row.update({'login':userWin.getLogin()})
-            row.update({'description':acc})
+            row.update({'description':elem['name']})
             man_of_day.insert_one(row)
             send_messages_big(chat, text=report_man_of_day('')) 
 
@@ -4507,22 +4526,32 @@ def setGiftsForRaid(goat):
         }):
         user = getUserByLogin(raid["login"])
         if user:
-            acc = '🔩 Болт М69, возложенный на рейд'
-            if user.isAccessoryItem(acc):
-                acc = '🔩🔩 Болт М228, возложенный на рейд'
-                if user.isAccessoryItem(acc):
-                    acc = '🔩🔩🔩 Болт М404, возложенный на рейд'
-                    if user.isAccessoryItem(acc):
-                        acc = '🔩🔩🔩🔩 Болт М1488, возложенный на рейд'
-                        if user.isAccessoryItem(acc):
-                            acc = '🎫🍼 Билет на гигантскую бутылку'
-                            if user.isAccessoryItem(acc):
+            #acc = '🔩 Болт М69, возложенный на рейд'
+            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_1'), None)
+
+            if user.isInventoryThing(bolt):
+                #acc = '🔩🔩 Болт М228, возложенный на рейд'
+                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_2'), None)
+
+                if user.isInventoryThing(bolt):
+                    #acc = '🔩🔩🔩 Болт М404, возложенный на рейд'
+                    bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_3'), None)
+
+                    if user.isInventoryThing(bolt):
+                        #acc = '🔩🔩🔩🔩 Болт М1488, возложенный на рейд'
+                        bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_4'), None)
+
+                        if user.isInventoryThing(bolt):
+                            #acc = '🎫🍼 Билет на гигантскую бутылку'
+                            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_5'), None)
+
+                            if user.isInventoryThing(bolt):
                                 send_message_to_admin(f'⚠️ {user.getNameAndGerb()} {user.getLogin()}\nНа выход за проёбы рейдов!')
                                 continue
 
-            send_message_to_admin(f'⚠️ {user.getNameAndGerb()} @{user.getLogin()}\n▫️ {acc}!')
-            user.addAccessory(acc)
-            send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}')    
+            send_message_to_admin(f'⚠️ {user.getNameAndGerb()} @{user.getLogin()}\n▫️ {bolt["name"]}!')
+            user.addInventoryThing(bolt)
+            send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {bolt["name"]}')    
             updateUser(user)
 
     for raid in report_raids.find(
@@ -4533,28 +4562,37 @@ def setGiftsForRaid(goat):
             }):
             user = getUserByLogin(raid["login"])
             if user:
-                acc = '🎫🍼 Билет на гигантскую бутылку'
-                if user.isAccessoryItem(acc):
+                #acc = '🎫🍼 Билет на гигантскую бутылку'
+                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_5'), None)
+                if user.isInventoryThing(bolt):
                     pass
                 else:
-                    acc = '🔩🔩🔩🔩 Болт М1488, возложенный на рейд'
-                    if user.isAccessoryItem(acc):
+                    #acc = '🔩🔩🔩🔩 Болт М1488, возложенный на рейд'
+                    bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_4'), None)
+                    if user.isInventoryThing(bolt):
                         pass
                     else:
-                        acc = '🔩🔩 Болт М228, возложенный на рейд'
-                        if user.isAccessoryItem(acc):
+                        #acc = '🔩🔩🔩 Болт М404, возложенный на рейд'
+                        bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_3'), None)
+                        if user.isInventoryThing(bolt):
                             pass
                         else:
-                            acc = '🔩 Болт М69, возложенный на рейд'
-                            if user.isAccessoryItem(acc):
+                            #acc = '🔩🔩 Болт М228, возложенный на рейд'
+                            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_2'), None)
+                            if user.isInventoryThing(bolt):
                                 pass
                             else:
-                                continue
+                                #acc = '🔩 Болт М69, возложенный на рейд'
+                                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_1'), None)
+                                if user.isInventoryThing(bolt):
+                                    pass
+                                else:
+                                    continue
 
-                if user.isAccessoryItem(acc):
-                    send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {acc}!')
-                    user.removeAccessory(acc)
-                    send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {acc}')    
+                if user.isInventoryThing(bolt):
+                    send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {bolt["name"]}!')
+                    user.removeInventoryThing(bolt)
+                    send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {bolt["name"]}')    
                     updateUser(user)
 
 def statistic(goatName: str):

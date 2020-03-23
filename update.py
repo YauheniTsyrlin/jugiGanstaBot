@@ -605,18 +605,28 @@ newvalues = { "$set": { "value":
                             'value':
                             [
                                 {
-                                    'id': 'COVID-19',
+                                    'id': 'covid-19',
                                     'name': '🦇 Коронавирус',
                                     'cost': 0,
                                     'type': 'disease',
-                                    'quantity': 1000
+                                    'quantity': 1000,
+                                    'skill':
+                                    [
+                                        {'contagiousness': 0.01},
+                                        {'mortality': 0.01}
+                                    ]
                                 },
                                 {
                                     'id': 'mirror_disease',
                                     'name': '🔬 Зеркальная болезнь',
                                     'cost': 0,
                                     'type': 'disease',
-                                    'quantity': 1000
+                                    'quantity': 1000,
+                                    'skill':
+                                    [
+                                        {'contagiousness': 0.0001},
+                                        {'mortality': 1.00}
+                                    ]
                                 }
                             ]
                         },
@@ -2575,126 +2585,129 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
+#elem = {k: v for k, v in getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'].items() if v['id'] <= 'crown_pidor_of_the_day'}
+# elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
+# print(elem)
 
-# updateUser(None)
-# for user in USERS_ARR:
-#     for acc in user.getAccessory():
-#         acc = tools.deEmojify(acc).strip()
-#         pref = ''
-#         find = False
+updateUser(None)
+for user in USERS_ARR:
+    for acc in user.getAccessory():
+        acc = tools.deEmojify(acc).strip()
+        pref = ''
+        find = False
         
-#         if not find:
-#             for x in getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value']:
-#                 if tools.deEmojify(x['name']).strip() == acc:
-#                     user.addInventoryThing(x)
-#                     pref = '📟'
-#                     find = True
-#                     break
-#         if not find:
-#             for x in getSetting(code='ACCESSORY_ALL', id='THINGS')['value']:
-#                 if tools.deEmojify(x['name']).strip() == acc:
-#                     user.addInventoryThing(x)
-#                     pref = '🕹️'
-#                     find = True
-#                     break
-#         if not find:
-#             for x in getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']:
-#                 if tools.deEmojify(x['name']).strip() == acc:
-#                     user.addInventoryThing(x)
-#                     pref = '🦈'
-#                     find = True
-#                     break
-#         if not find:
-#             for x in getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value']:
-#                 if tools.deEmojify(x['name']).strip() == acc:
-#                     user.addInventoryThing(x)
-#                     pref = '📜'
-#                     find = True
-#                     break
-#         if not find:
-#             for x in getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']:
-#                 if tools.deEmojify(x['name']).strip() == acc:
-#                     user.addInventoryThing(x)
-#                     pref = '🍫'
-#                     find = True
-#                     break
-#         if not find:
-#             for x in getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']:
-#                 if tools.deEmojify(x['name']).strip() == acc:
-#                     user.addInventoryThing(x)
-#                     pref = '🥋'
-#                     find = True
-#                     break            
-#         if not find:
-#             for x in getSetting(code='ACCESSORY_ALL', id='TATU')['value']:
-#                 if tools.deEmojify(x['name']).strip() == acc:
-#                     user.addInventoryThing(x)
-#                     pref = '♂️'
-#                     find = True
-#                     break  
-#         if not find:
-#             for x in getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']:
-#                 if tools.deEmojify(x['name']).strip() == acc:
-#                     user.addInventoryThing(x)
-#                     pref = '🦇'
-#                     find = True
-#                     break  
-#         if not find:
-#             for x in getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']:
-#                 if tools.deEmojify(x['name']).strip() == acc:
-#                     user.addInventoryThing(x)
-#                     pref = '🔩'
-#                     find = True
-#                     break             
-#         if not find:
-#             for x in getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value']:
-#                 if tools.deEmojify(x['name']).strip() == acc:
-#                     user.addInventoryThing(x)
-#                     pref = '👒'
-#                     find = True
-#                     break             
-#         if not find:
-#             for x in getSetting(code='RANK', id='POSITIONS')['value']:
-#                 if tools.deEmojify(x['name']).strip() == acc:
-#                     user.addInventoryThing(x)
-#                     pref = '👒'
-#                     find = True
-#                     break    
-#         if not find:
-#             if 'Грамота за ' in acc and 'Дзен' in acc:
-#                 num = int(acc.split('Грамота за ')[1].split('-')[0].strip())
-#                 row =   {
-#                             'id': f'marks_of_dzen_{num}',
-#                             'name': f'🏵️ Грамота за {num}-й Дзен',
-#                             'cost': 0,
-#                             'type': 'marks_of_excellence',
-#                             'quantity': 1000
-#                         }
-#                 user.addInventoryThing(row)
-#                 find = True
-#                 pref = '🏵️'
-#         if not find:
-#             print(f'Не нешел {acc}, выдаем 💰 Мешочек с монетами 100')
+        if not find:
+            for x in getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value']:
+                if tools.deEmojify(x['name']).strip() == acc:
+                    user.addInventoryThing(x)
+                    pref = '📟'
+                    find = True
+                    break
+        if not find:
+            for x in getSetting(code='ACCESSORY_ALL', id='THINGS')['value']:
+                if tools.deEmojify(x['name']).strip() == acc:
+                    user.addInventoryThing(x)
+                    pref = '🕹️'
+                    find = True
+                    break
+        if not find:
+            for x in getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']:
+                if tools.deEmojify(x['name']).strip() == acc:
+                    user.addInventoryThing(x)
+                    pref = '🦈'
+                    find = True
+                    break
+        if not find:
+            for x in getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value']:
+                if tools.deEmojify(x['name']).strip() == acc:
+                    user.addInventoryThing(x)
+                    pref = '📜'
+                    find = True
+                    break
+        if not find:
+            for x in getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']:
+                if tools.deEmojify(x['name']).strip() == acc:
+                    user.addInventoryThing(x)
+                    pref = '🍫'
+                    find = True
+                    break
+        if not find:
+            for x in getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']:
+                if tools.deEmojify(x['name']).strip() == acc:
+                    user.addInventoryThing(x)
+                    pref = '🥋'
+                    find = True
+                    break            
+        if not find:
+            for x in getSetting(code='ACCESSORY_ALL', id='TATU')['value']:
+                if tools.deEmojify(x['name']).strip() == acc:
+                    user.addInventoryThing(x)
+                    pref = '♂️'
+                    find = True
+                    break  
+        if not find:
+            for x in getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']:
+                if tools.deEmojify(x['name']).strip() == acc:
+                    user.addInventoryThing(x)
+                    pref = '🦇'
+                    find = True
+                    break  
+        if not find:
+            for x in getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']:
+                if tools.deEmojify(x['name']).strip() == acc:
+                    user.addInventoryThing(x)
+                    pref = '🔩'
+                    find = True
+                    break             
+        if not find:
+            for x in getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value']:
+                if tools.deEmojify(x['name']).strip() == acc:
+                    user.addInventoryThing(x)
+                    pref = '👒'
+                    find = True
+                    break             
+        if not find:
+            for x in getSetting(code='RANK', id='POSITIONS')['value']:
+                if tools.deEmojify(x['name']).strip() == acc:
+                    user.addInventoryThing(x)
+                    pref = '👒'
+                    find = True
+                    break    
+        if not find:
+            if 'Грамота за ' in acc and 'Дзен' in acc:
+                num = int(acc.split('Грамота за ')[1].split('-')[0].strip())
+                row =   {
+                            'id': f'marks_of_dzen_{num}',
+                            'name': f'🏵️ Грамота за {num}-й Дзен',
+                            'cost': 0,
+                            'type': 'marks_of_excellence',
+                            'quantity': 1000
+                        }
+                user.addInventoryThing(row)
+                find = True
+                pref = '🏵️'
+        if not find:
+            print(f'Не нешел {acc}, выдаем 💰 Мешочек с монетами 100')
 
 
-#     if not find:
-#         row =   {
-#                     'id': 'bag_of_coins_100',
-#                     'name': '💰 Мешочек с монетами 100',
-#                     'cost': 100,
-#                     'type': 'things',
-#                     'quantity': 1000,
-#                     'composition':
-#                     [
-#                         {
-#                             'id': 'coin',
-#                             'counter': 100
-#                         }
-#                     ]
-#                 }
-#         user.addInventoryThing(row)    
+    if not find:
+        row =   {
+                    'id': 'bag_of_coins_100',
+                    'name': '💰 Мешочек с монетами 100',
+                    'cost': 100,
+                    'type': 'things',
+                    'quantity': 1000,
+                    'composition':
+                    [
+                        {
+                            'id': 'coin',
+                            'counter': 100
+                        }
+                    ]
+                }
+        user.addInventoryThing(row)    
         
-#     updateUser(user)
+    updateUser(user)
     
 
 

@@ -327,27 +327,27 @@ class User(object):
         
         string = string + self.getSettingsReport() + '\n'
 
-        # inventory_category = [
-        #                         {'type':'skill', 'name':'💡 Умения'},
-        #                         {'type':'disease', 'name':'🦠 Болезни'},
-        #                         {'type':'tatu', 'name':'☮️ Татуировки'},
-        #                         {'type':'clothes', 'name':'🧥 Одежда'},
-        #                         {'type':'food', 'name':'🍗 Еда'},
-        #                         {'type':'marks_of_excellence', 'name':'🏵 Награды'},
-        #                         {'type':'decoration', 'name':'🎁 Подарки'},
-        #                         {'type':'things', 'name':'📦 Вещи'},
-        #                         {'type':'bolt', 'name':'🔩 Рейдовые болты'}
-        #                     ]
+        inventory_category = [
+                                {'type':'skill', 'name':'💡 Умения'},
+                                {'type':'disease', 'name':'🦠 Болезни'},
+                                {'type':'tatu', 'name':'☮️ Татуировки'},
+                                {'type':'clothes', 'name':'🧥 Одежда'},
+                                {'type':'food', 'name':'🍗 Еда'},
+                                {'type':'marks_of_excellence', 'name':'🏵 Награды'},
+                                {'type':'decoration', 'name':'🎁 Подарки'},
+                                {'type':'things', 'name':'📦 Вещи'},
+                                {'type':'bolt', 'name':'🔩 Рейдовые болты'}
+                            ]
 
-        # string = string + self.getInventoryReport(inventory_category)
+        string = string + self.getInventoryReport(inventory_category)
 
-        string = string + f'🛒Аксессуары:\n'
-        if self.accessory and len(self.accessory) > 0:
-            for acc in self.accessory:
-                string = string + f'▫️ {acc}\n'
-            string = string + f'\n'
-        else:
-            string = string + f'▫️ У тебя ничего нет\n\n'
+        # string = string + f'🛒Аксессуары:\n'
+        # if self.accessory and len(self.accessory) > 0:
+        #     for acc in self.accessory:
+        #         string = string + f'▫️ {acc}\n'
+        #     string = string + f'\n'
+        # else:
+        #     string = string + f'▫️ У тебя ничего нет\n\n'
 
         string = string + f'⏰{tools.getTimeEmoji(self.timeUpdate)} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeUpdate))) +'\n'
         if self.timeBan:
