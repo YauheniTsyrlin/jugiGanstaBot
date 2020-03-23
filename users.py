@@ -211,28 +211,28 @@ class User(object):
                 #'armor': '145 (+30)'
                 self.setArmor(int(strings[i].split(':')[2].split('(+')[0].strip()))
                 if '(+' in strings[i]:
-                    self.setArmor(int(self.getArmor()) + int(strings[i].split(':')[2].split('(+')[1].split(')')[0].strip()))
+                    self.setArmor(int(self.getArmor()) - int(strings[i].split(':')[2].split('(+')[1].split(')')[0].strip()))
 
             if ('Сила' in strings[i]):
                 self.setForce(int(strings[i].split(':')[1].split('🎯')[0].split('(+')[0].strip()))
                 if '(+' in strings[i].split('Меткость')[0]:
-                    self.setForce(int(self.getForce()) + int(strings[i].split(':')[1].split('🎯')[0].split('(+')[1].split(')')[0].strip()))
+                    self.setForce(int(self.getForce()) - int(strings[i].split(':')[1].split('🎯')[0].split('(+')[1].split(')')[0].strip()))
 
             if ('Меткость' in strings[i]):
                 self.setAccuracy(int(strings[i].split(':')[2].split('(+')[0].strip()))
                 if '(+' in strings[i].split('Меткость')[1]:
-                    self.setAccuracy(int(self.getAccuracy()) + int(strings[i].split(':')[2].split('(+')[1].split(')')[0].strip()))
+                    self.setAccuracy(int(self.getAccuracy()) - int(strings[i].split(':')[2].split('(+')[1].split(')')[0].strip()))
 
             # 9 - |🗣Харизма: 80 ��🏽🏽‍♂️Ловкость: 318(+30)|
             if ('Харизма' in strings[i]):
                 self.setCharisma(int(strings[i].split(': ')[1].split(' ')[0].split('(+')[0].strip()))
                 if '(+' in strings[i].split('Ловкость')[0]:
-                    self.setCharisma(int(self.getCharisma()) + int(strings[i].split(': ')[1].split('(+')[1].split(')')[0].strip()))
+                    self.setCharisma(int(self.getCharisma()) - int(strings[i].split(': ')[1].split('(+')[1].split(')')[0].strip()))
 
             if ('Ловкость' in strings[i]):
                 self.setAgility(int(strings[i].split(':')[2].split('(+')[0].strip()))
                 if '(+' in strings[i].split('Ловкость')[1]:
-                    self.setAgility(int(self.getAgility()) + int(strings[i].split(':')[2].split('(+')[1].split(')')[0].strip()))
+                    self.setAgility(int(self.getAgility()) - int(strings[i].split(':')[2].split('(+')[1].split(')')[0].strip()))
 
             # 11 - |�🔋Выносливость: 8/16 /ref|
             if ('Выносливость' in strings[i]):
