@@ -1337,6 +1337,8 @@ def main_message(message):
     findUser = not (userIAm == None)
 
     if message.forward_from_chat and message.forward_from_chat.username == 'wwkeeperhorn' and ' постиг ' in message.text:
+        logger.info('========0===========')
+
         # ⚙️Машенька постиг 8-й 🏵Дзен !
         name = message.text.split(' постиг ')[0]
         name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
@@ -1344,12 +1346,15 @@ def main_message(message):
         num_dzen = message.text.split(' постиг ')[1].split('-й')[0]
         fraction = getWariorFraction(message.text)
         acc = f'🏵️ Грамота за {num_dzen}-й Дзен' 
-        
+        logger.info('========1===========')
         user = getUserByName(name)
         if user:
+            logger.info('========2===========')
             if user.isAccessoryItem(acc):
+                logger.info('========3===========')
                 pass
             else:
+                logger.info('========4===========')
                 user.addAccessory(acc)
                 updateUser(user)
                 send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
@@ -4295,7 +4300,7 @@ def rade():
             if lastWinner:
                 text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, вырвали из рук {lastWinner.getNameAndGerb()} 👑 золотую корону с гравировкой "Pidor of the day" и водрузили её на твой голову!\n🎁 Самое время поздравить сегодняшнего победителя!'
                 if lastWinner.getLogin() == userWin.getLogin():
-                    text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, в шоке! Кому ты отдался, чтобы выигывать так часто?!! 👑 золотая корона с гравировкой "Pidor of the day" остаётся у тебя!\n🎁 Самое время поздравить сегодняшнего победителя!'
+                    text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, в шоке! Кому ты отдался, чтобы выигывать так часто?!! 👑 золотая корона с гравировкой "Pidor of the day" остаётся у тебя !\n🎁 Самое время поздравить сегодняшнего победителя!'
                 chat = getMyGoat(userWin.getLogin())['chats']['info']
                 send_messages_big(chat, text=text)
 
