@@ -4229,7 +4229,7 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 23 and now_date.minute == 53 and now_date.second < 15:
+    if now_date.hour == 23 and now_date.minute == 58 and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
@@ -4240,7 +4240,14 @@ def rade():
                     if rank['bm'] > user.getBm():
                         break
 
-                if rank['id'] == user.getRank()['id']:
+                f = False
+                id = ''
+                try:
+                    id = user.getRank()['id']
+                except:
+                    f = True
+
+                if not f and rank['id'] == user.getRank()['id']:
                     pass
                 else:
                     report = report + f'{rank["bm"]} бандит {user.getNameAndGerb()} теперь он {rank["name"]}\n'
