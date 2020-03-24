@@ -3538,6 +3538,7 @@ def callback_query(call):
     if login == call.from_user.username:
         bot.answer_callback_query(call.id, f"Понял!")
         bot.delete_message(call.message.chat.id, call.message.message_id)
+        return
 
     hwois = f'🗣 <b>{call.from_user.username}</b>'
     user = getUserByLogin(call.from_user.username)
