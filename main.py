@@ -1344,22 +1344,24 @@ def main_message(message):
         name = name.split('@')[1].split('постиг')[0].strip()
         num_dzen = message.text.split(' постиг ')[1].split('-й')[0]
         fraction = getWariorFraction(message.text)
-        elem =   {
-                    'id': f'marks_of_dzen_{num_dzen}',
-                    'name': f'🏵️ Грамота за {num_dzen}-й Дзен',
-                    'cost': 0,
-                    'type': 'marks_of_excellence',
-                    'quantity': 1000
-                }
         # acc = f'🏵️ Грамота за {num_dzen}-й Дзен' 
         user = getUserByName(name)
         if user:
-            if user.isInventoryThing(elem):
-                pass
-            else:
-                user.addInventoryThing(elem)
-                updateUser(user)
-                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+            for i in range(1, num_dzen+1):
+                elem =   {
+                            'id': f'marks_of_dzen_{i}',
+                            'name': f'🏵️ Грамота за {i}-й Дзен',
+                            'cost': 0,
+                            'type': 'marks_of_excellence',
+                            'quantity': 1000
+                        }
+
+                if user.isInventoryThing(elem):
+                    pass
+                else:
+                    user.addInventoryThing(elem)
+                    updateUser(user)
+                    send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
         return
 
     if (message.text.startswith('📟Пип-бой 3000')):
