@@ -1337,7 +1337,7 @@ def main_message(message):
                 )
     findUser = not (userIAm == None)
 
-    if message.forward_from_chat and message.forward_from_chat.username == 'wwkeeperhorn' and ' постиг ' in message.text:
+    if message.forward_from_chat and (message.forward_from_chat.username == 'wwkeeperhorn' or message.forward_from_chat.username == 'tolylya') and ' постиг ' in message.text:
         # ⚙️Машенька постиг 8-й 🏵Дзен !
         name = message.text.split(' постиг ')[0]
         name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
