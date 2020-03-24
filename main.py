@@ -1406,7 +1406,7 @@ def main_message(message):
                     user.setPing(True)
 
                     newRank = None
-                    for rank in getSetting(code='RANK', name='MILITARY'):
+                    for rank in getSetting(code='RANK', id='MILITARY')['value']:
                         if rank['bm'] < user.getBm():
                             newRank = rank  
                     user.setRank(newRank)
@@ -2786,11 +2786,11 @@ def main_message(message):
                         markupinline = InlineKeyboardMarkup()
                         counter = 10
                         i = 1
-                        for rank in getSetting(code='RANK', name='MILITARY'):
-                            if user and user.getRankName() == rank['value']:
+                        for rank in getSetting(code='RANK', id='MILITARY')['value']:
+                            if user and user.getRankId() == rank['id']:
                                 continue    
 
-                            markupinline.add(InlineKeyboardButton(f"{rank['value']}", callback_data=f"setrank|{login}|{rank['name']}"))
+                            markupinline.add(InlineKeyboardButton(f"{rank['name']}", callback_data=f"setrank|{login}|{rank['id']}"))
                             if i == counter :
                                 markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"setrank_next|{login}|{counter}"))
                                 break
@@ -3730,14 +3730,14 @@ def callback_query(call):
         markupinline = InlineKeyboardMarkup()
         i = 1
         addExit = False
-        for rank in getSetting(code='RANK',name='MILITARY'):
-            if user and user.getRankName() == rank['value']:
+        for rank in getSetting(code='RANK',name='MILITARY')['value']:
+            if user and user.getRankId() == rank['id']:
                 continue    
 
             if i <= counter:
                 pass
             else:
-                markupinline.add(InlineKeyboardButton(f"{rank['value']}", callback_data=f"setrank|{login}|{rank['name']}"))
+                markupinline.add(InlineKeyboardButton(f"{rank['name']}", callback_data=f"setrank|{login}|{rank['id']}"))
                 if i == counter + 10:
                     markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"setrank_back|{login}|{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"setrank_next|{login}|{counter + 10}"))
                     addExit = True
@@ -3762,14 +3762,14 @@ def callback_query(call):
         markupinline = InlineKeyboardMarkup()
         i = 1
         addExit = False
-        for rank in getSetting(code='RANK',name='MILITARY'):
-            if user.getRankName() == rank['value']:
+        for rank in getSetting(code='RANK',name='MILITARY')['value']:
+            if user.getRankId() == rank['id']:
                 continue    
 
             if i <= counter:
                 pass
             else:
-                markupinline.add(InlineKeyboardButton(f"{rank['value']}", callback_data=f"setrank|{login}|{rank['name']}"))
+                markupinline.add(InlineKeyboardButton(f"{rank['name']}", callback_data=f"setrank|{login}|{rank['id']}"))
                 if i == counter + 10:
                     if counter == 0:
                         markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"setrank_next|{login}|{counter + 10}"))
@@ -3792,22 +3792,22 @@ def callback_query(call):
     login = call.data.split('|')[1]
     user = getUserByLogin(login)
     
-    for rank in getSetting(code='RANK', name='MILITARY'):
-        if rank['name'] == call.data.split('|')[2]:
+    for rank in getSetting(code='RANK', name='MILITARY')['value']:
+        if rank['id'] == call.data.split('|')[2]:
             rank.update({'update':'hand'})
             user.setRank(rank)
             updateUser(user)
-            send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message, 'set_new_rank').fulfillment_text + f'\n\n▫️ {rank["value"]}') 
+            send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message, 'set_new_rank').fulfillment_text + f'\n\n▫️ {rank["name"]}') 
             break
 
     markupinline = InlineKeyboardMarkup()
     counter = 10
     i = 1
-    for rank in getSetting(code='RANK', name='MILITARY'):
-        if user and user.getRankName() == rank['value']:
+    for rank in getSetting(code='RANK', name='MILITARY')['value']:
+        if user and user.getRankId() == rank['id']:
             continue    
 
-        markupinline.add(InlineKeyboardButton(f"{rank['value']}", callback_data=f"setrank|{login}|{rank['name']}"))
+        markupinline.add(InlineKeyboardButton(f"{rank['name']}", callback_data=f"setrank|{login}|{rank['id']}"))
         if i == counter :
             markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"setrank_next|{login}|{counter}"))
             #markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"setrank_exit"))
@@ -4229,25 +4229,25 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 10 and now_date.minute == 5 and now_date.second < 15:
+    if now_date.hour == 23 and now_date.minute == 47 and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
         for user in USERS_ARR:
             try:
                 if user.getRank()['update'] == 'auto':
-                    for rank in getSetting(code='RANK', name='MILITARY'):
+                    for rank in getSetting(code='RANK', name='MILITARY')['value']:
                         if rank['bm'] > user.getBm():
                             break
 
-                    if rank['name'] == user.getRank()['name']:
+                    if rank['id'] == user.getRank()['id']:
                         pass
                     else:
-                        report = report + f'За достижение {rank["bm"]} бандит {user.getNameAndGerb()} повышен в звании. Теперь он {rank["value"]}\n'
+                        report = report + f'{rank["bm"]} бандит {user.getNameAndGerb()} теперь он {rank["name"]}\n'
                         user.setRank(rank)
                         updateUser(user)
                         goat = getMyGoat(user.getLogin())
-                        send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {rank["value"]}')
+                        send_messages_big(goat['chats']['secret'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {rank["name"]}')
             except:
                 send_message_to_admin(f'Сломались на раздачи званий на {user.getNameAndGerb()}')    
         if report == '':

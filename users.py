@@ -496,7 +496,11 @@ class User(object):
         return self.rank
     def getRankName(self):
         try:
-            return self.rank['value']
+            return self.rank['name']
+        except: return None
+    def getRankId(self):
+        try:
+            return self.rank['id']
         except: return None
 # =================== Inventory ========================== #
     def setInventory(self, inventory):
