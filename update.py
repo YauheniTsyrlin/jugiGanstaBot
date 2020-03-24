@@ -9,15 +9,29 @@ myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 
 mydb = myclient["jugidb"]
 registered_users = mydb["users"]
-try_counters = mydb["try_counter"]
+tg_users        = mydb["tg_users"]
 registered_wariors = mydb["wariors"]
-battle = mydb["battle"]
-settings = mydb["settings"]
-report_raids    = mydb["report_raids"]
-plan_raids      = mydb["rades"]
+battle          = mydb["battle"]
+competition     = mydb["competition"]
+settings        = mydb["settings"]
 pending_messages = mydb["pending_messages"]
+plan_raids      = mydb["rades"]
+dungeons        = mydb["dungeons"]
+report_raids    = mydb["report_raids"]
+man_of_day      = mydb["man_of_day"]
+pip_history     = mydb["pip_history"]
 mob             = mydb["mob"]
 boss            = mydb["boss"]
+
+battle.delete_many({'login':'szpavel'})
+competition.delete_many({'login':'szpavel'})
+dungeons.delete_many({'login':'szpavel'})
+man_of_day.delete_many({'login':'szpavel'})
+pip_history.delete_many({'login':'szpavel'})
+plan_raids.delete_many({'login':'szpavel'})
+report_raids.delete_many({'login':'szpavel'})
+registered_users.delete_many({'login':'szpavel'})
+registered_wariors.delete_many({'name':'szpavel'})
 
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
@@ -2716,7 +2730,6 @@ print("#==========================#")
         
 #     updateUser(user)
     
-
 
 
 # x = plan_raids.delete_many({'rade_date':1580162400.0})
