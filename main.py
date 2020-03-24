@@ -2520,9 +2520,10 @@ def main_message(message):
                         #jugi:letsgame:partizan
                         if response.split(":")[2] == 'partizan':
                             if not (message.from_user.username == 'Lena_Lenochka_32'):
-                                if not isAdmin(message.from_user.username):
-                                    send_messages_big(message.chat.id, text='Тебе это не положено! \nПозови ЛеДонну и убери свои шаловливые руки от клавиатуры!')
-                                    return
+                                #if not isAdmin(message.from_user.username):
+                                send_messages_big(message.chat.id, text='Тебе это не положено! \nПозови ЛеДонну и убери свои шаловливые руки от клавиатуры!')
+                                return
+                                
                             counter = 0
                             usersarr = []
                             for user in list(USERS_ARR):
@@ -4229,7 +4230,7 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 23 and now_date.minute == 58 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 5 and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
