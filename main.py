@@ -4230,7 +4230,7 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 0 and now_date.minute == 22 and now_date.second < 15:
+    if now_date.hour == 0 and now_date.minute == 23 and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
