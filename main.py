@@ -4229,12 +4229,12 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 23 and now_date.minute == 47 and now_date.second < 15:
+    if now_date.hour == 23 and now_date.minute == 50 and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
         for user in USERS_ARR:
-            try:
+            if user.getLogin() == 'GonzikBenzyavsky':
                 if user.getRank()['update'] == 'auto':
                     for rank in getSetting(code='RANK', name='MILITARY')['value']:
                         if rank['bm'] > user.getBm():
@@ -4248,8 +4248,8 @@ def rade():
                         updateUser(user)
                         goat = getMyGoat(user.getLogin())
                         send_messages_big(goat['chats']['secret'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {rank["name"]}')
-            except:
-                send_message_to_admin(f'Сломались на раздачи званий на {user.getNameAndGerb()}')    
+            #except:
+                #send_message_to_admin(f'Сломались на раздачи званий на {user.getNameAndGerb()}')    
         if report == '':
             pass
         else:
