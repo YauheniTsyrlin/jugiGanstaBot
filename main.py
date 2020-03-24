@@ -1342,7 +1342,7 @@ def main_message(message):
         name = message.text.split(' постиг ')[0]
         name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
         name = name.split('@')[1].split('постиг')[0].strip()
-        num_dzen = message.text.split(' постиг ')[1].split('-й')[0]
+        num_dzen = int(message.text.split(' постиг ')[1].split('-й')[0])
         fraction = getWariorFraction(message.text)
         # acc = f'🏵️ Грамота за {num_dzen}-й Дзен' 
         user = getUserByName(name)
