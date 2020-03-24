@@ -4230,32 +4230,26 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
 
     # Присвоение званий
-    if now_date.hour == 0 and now_date.minute == 16 and now_date.second < 15:
+    if now_date.hour == 0 and now_date.minute == 22 and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
         for user in USERS_ARR:
             #if user.getLogin() == 'GonzikBenzyavsky':
-            if user.getRank()['update'] == 'auto':
-                for rank in getSetting(code='RANK', id='MILITARY')['value']:
-                    if rank['bm'] > user.getBm():
-                        break
+            #if user.getRank()['update'] == 'auto':
+            for rank in getSetting(code='RANK', id='MILITARY')['value']:
+                if rank['bm'] > user.getBm():
+                    break
 
-                f = False
-                id = ''
-                try:
-                    id = user.getRank()['id']
-                except:
-                    f = True
+            # if rank['id'] == user.getRank()['id']:
+            #     pass
+            # else:
 
-                if not f and rank['id'] == user.getRank()['id']:
-                    pass
-                else:
-                    report = report + f'{rank["bm"]} бандит {user.getNameAndGerb()} теперь он {rank["name"]}\n'
-                    user.setRank(rank)
-                    updateUser(user)
-                    goat = getMyGoat(user.getLogin())
-                    send_messages_big(goat['chats']['secret'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {rank["name"]}')
+            #report = report + f'{rank["bm"]} бандит {user.getNameAndGerb()} теперь он {rank["name"]}\n'
+            user.setRank(rank)
+            updateUser(user)
+            #goat = getMyGoat(user.getLogin())
+            #send_messages_big(goat['chats']['secret'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {rank["name"]}')
             #except:
                 #send_message_to_admin(f'Сломались на раздачи званий на {user.getNameAndGerb()}')    
         if report == '':
