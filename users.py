@@ -545,7 +545,7 @@ class User(object):
             for user in user_arr:
                 if user.isInventoryThing(thing):
                    counter = counter + 1 
-            if thing['quantity'] > counter:
+            if thing['quantity'] <= counter:
                 return True
         except:
             return False
