@@ -2839,7 +2839,10 @@ def main_message(message):
                                     break
                                 i = i + 1
                             if user:
-                                inventory_category = [{'type':'decoration', 'name':'🎁 Подарки'}]
+                                inventory_category = [{'type':'food', 'name':'🍗 Еда'},
+                                                    {'type':'decoration', 'name':'🎁 Подарки'},
+                                                    {'type':'things', 'name':'📦 Вещи'}]
+
                                 report = user.getInventoryReport(inventory_category)
                                 msg = send_messages_big(message.chat.id, text=f'{user.getNameAndGerb()}:\n{report}', reply_markup=markupinline)
                             else:
@@ -3874,7 +3877,9 @@ def callback_query(call):
         
         text=f'Всем бандитам будет что-то выдано! Просмотрено {counter} аксессуаров'
         if user:
-            inventory_category = [{'type':'decoration', 'name':'🎁 Подарки'}]
+            inventory_category = [{'type':'food', 'name':'🍗 Еда'},
+                                    {'type':'decoration', 'name':'🎁 Подарки'},
+                                    {'type':'things', 'name':'📦 Вещи'}]
             report = user.getInventoryReport(inventory_category)
             text=f'{user.getNameAndGerb()}:\n{report}'
         
@@ -3913,7 +3918,9 @@ def callback_query(call):
             markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_next|{login}|{i+10}"))
             markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
 
-        inventory_category = [{'type':'decoration', 'name':'🎁 Подарки'}]
+        inventory_category = [{'type':'food', 'name':'🍗 Еда'},
+                                {'type':'decoration', 'name':'🎁 Подарки'},
+                                {'type':'things', 'name':'📦 Вещи'}]
         report = user.getInventoryReport(inventory_category)
         text=f'{user.getNameAndGerb()}:\n{report}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
@@ -3954,7 +3961,9 @@ def callback_query(call):
             break
         i = i + 1
     if user:
-        inventory_category = [{'type':'decoration', 'name':'🎁 Подарки'}]
+        inventory_category = [{'type':'food', 'name':'🍗 Еда'},
+                        {'type':'decoration', 'name':'🎁 Подарки'},
+                        {'type':'things', 'name':'📦 Вещи'}]
         report = user.getInventoryReport(inventory_category)
         text=f'{user.getNameAndGerb()}:\n{report}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
