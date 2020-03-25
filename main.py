@@ -2826,7 +2826,7 @@ def main_message(message):
                             markupinline = InlineKeyboardMarkup()
                             counter = 10
                             i = 1
-                            for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']):
+                            for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']):
                                 if user and user.isInventoryThing(elem):
                                     continue    
 
@@ -3850,7 +3850,7 @@ def callback_query(call):
         markupinline = InlineKeyboardMarkup()
         i = 1
         addExit = False
-        for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']):
+        for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] ):
             if user and user.isInventoryThing(elem):
                 continue    
 
@@ -3885,7 +3885,7 @@ def callback_query(call):
         markupinline = InlineKeyboardMarkup()
         i = 1
         addExit = False
-        for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']):
+        for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']):
             if user and user.isInventoryThing(elem):
                 continue    
 
@@ -3917,7 +3917,7 @@ def callback_query(call):
     login = call.data.split('|')[1]
     user = getUserByLogin(login)
     
-    for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']):
+    for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']):
         if elem['id'] == call.data.split('|')[2]:
 
             # try:
@@ -3943,7 +3943,7 @@ def callback_query(call):
     markupinline = InlineKeyboardMarkup()
     counter = 10
     i = 1
-    for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']):
+    for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']):
         if user and user.isInventoryThing(elem):
             continue    
 

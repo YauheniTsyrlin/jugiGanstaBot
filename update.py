@@ -1005,7 +1005,14 @@ newvalues = { "$set": { "value":
                             'name': '🍗 Еда',
                             'value':
                             [
+                                
                                 {
+                                    'id': 'sugar_seed',
+                                    'name': '🦴 Сахарная косточка',
+                                    'cost': 2,
+                                    'type': 'food',
+                                    'quantity': 1000
+                                },{
                                     'id': 'salt',
                                     'name': '🧂 Соль на рану',
                                     'cost': 1,
