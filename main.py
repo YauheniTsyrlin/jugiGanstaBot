@@ -2827,6 +2827,8 @@ def main_message(message):
                             counter = 10
                             i = 1
                             for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']):
+                                if user and user.isMaxInventoryThing(elem, USERS_ARR):
+                                    continue
                                 if user and user.isInventoryThing(elem):
                                     continue    
 
@@ -3851,6 +3853,8 @@ def callback_query(call):
         i = 1
         addExit = False
         for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] ):
+            if user and user.isMaxInventoryThing(elem, USERS_ARR):
+                continue
             if user and user.isInventoryThing(elem):
                 continue    
 
@@ -3886,6 +3890,8 @@ def callback_query(call):
         i = 1
         addExit = False
         for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']):
+            if user and user.isMaxInventoryThing(elem, USERS_ARR):
+                continue
             if user and user.isInventoryThing(elem):
                 continue    
 
@@ -3919,14 +3925,6 @@ def callback_query(call):
     
     for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']):
         if elem['id'] == call.data.split('|')[2]:
-
-            # try:
-            #     if acc['mode'] == 'arhive':
-            #         bot.answer_callback_query(call.id, "Это нельзя нельзя никому больше выдавать!")
-            #         return
-            # except:
-            #     pass
-
             bot.answer_callback_query(call.id, "Ты сделал свой выбор")
             if login.lower() == 'всем':
                 for user in list(USERS_ARR):
@@ -3944,6 +3942,8 @@ def callback_query(call):
     counter = 10
     i = 1
     for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']):
+        if user and user.isMaxInventoryThing(elem, USERS_ARR):
+            continue
         if user and user.isInventoryThing(elem):
             continue    
 

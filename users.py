@@ -539,6 +539,18 @@ class User(object):
                 counter = counter + 1
         return counter
 
+    def isMaxInventoryThing(self, thing, user_arr):
+        try:
+            counter = 0
+            for user in user_arr:
+                if user.isInventoryThing(thing):
+                   counter = counter + 1 
+            if thing['quantity'] > counter:
+                return True
+        except:
+            return False
+        return False
+
     def isInventoryThing(self, thing):
         for i in self.getInventory():
             if i['id'] == thing['id'] and i['type'] == thing['type']:
