@@ -871,6 +871,23 @@ def getBossByHash(hashstr: str):
 
     return None
 
+def dzen_rewards(user, num_dzen, message):
+    for i in range(1, num_dzen+1):
+        elem =   {
+                    'id': f'marks_of_dzen_{i}',
+                    'name': f'🏵️ Грамота за {i}-й Дзен',
+                    'cost': 0,
+                    'type': 'marks_of_excellence',
+                    'quantity': 1000
+                }
+
+        if user.isInventoryThing(elem):
+            pass
+        else:
+            user.addInventoryThing(elem)
+            updateUser(user)
+            send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+
 # Handle new_chat_members
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
 def send_welcome_and_dismiss(message):
@@ -1347,22 +1364,8 @@ def main_message(message):
         # acc = f'🏵️ Грамота за {num_dzen}-й Дзен' 
         user = getUserByName(name)
         if user:
-            for i in range(1, num_dzen+1):
-                elem =   {
-                            'id': f'marks_of_dzen_{i}',
-                            'name': f'🏵️ Грамота за {i}-й Дзен',
-                            'cost': 0,
-                            'type': 'marks_of_excellence',
-                            'quantity': 1000
-                        }
-
-                if user.isInventoryThing(elem):
-                    pass
-                else:
-                    user.addInventoryThing(elem)
-                    updateUser(user)
-                    send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
-        return
+            dzen_rewards(user, num_dzen, message)
+            return
 
     if (message.text.startswith('📟Пип-бой 3000')):
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
@@ -1410,6 +1413,7 @@ def main_message(message):
                         if rank['bm'] < user.getBm():
                             newRank = rank  
                     user.setRank(newRank)
+                    dzen_rewards(user, user.getDzen(), message)
 
                     x = registered_users.insert_one(json.loads(user.toJSON()))
                     updateUser(None)
@@ -1418,6 +1422,7 @@ def main_message(message):
                     send_message_to_admin(f'⚠️Внимание! Зарегистрировался новый пользователь.\n {user.getProfile()}')
             else:
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
+                dzen_rewards(updatedUser, updatedUser.getDzen(), message)
                 updateUser(updatedUser)
 
             addToUserHistory(user)
