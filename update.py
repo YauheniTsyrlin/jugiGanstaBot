@@ -1535,6 +1535,12 @@ newvalues = { "$set": { "value":
                             'value':
                             [
                                 {
+                                    'id': 'bouquet_of_flowers',
+                                    'name': '💐 Букет цветов',
+                                    'cost': 12,
+                                    'type': 'things',
+                                    'quantity': 1000
+                                },{
                                     'id': 'nettle_list',
                                     'name': '🌿 Лечебная трава',
                                     'cost': 1,
