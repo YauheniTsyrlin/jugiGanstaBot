@@ -3987,7 +3987,7 @@ def callback_query(call):
     user = getUserByLogin(login)
 
     elem = user.getInventoryThing({'id':'{elemId}','type': None})
-
+    print(elem)
     markupinline = InlineKeyboardMarkup()
 
     inventory_category = getSetting(code='INVENTORY_CATEGORY')
