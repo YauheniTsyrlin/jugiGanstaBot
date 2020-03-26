@@ -3972,7 +3972,7 @@ def callback_query(call):
 @bot.callback_query_handler(func=lambda call: call.data.startswith("pickupaccessory"))
 def callback_query(call):
     # pickupaccessory|{login}|{acc}
-
+    logger.info(call.data)
     if isUserBan(call.from_user.username):
         bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
         return
@@ -3985,9 +3985,9 @@ def callback_query(call):
     login  = call.data.split('|')[1]
     elemId = call.data.split('|')[2]
     user = getUserByLogin(login)
-    print(elemId)
+    logger.info(elemId)
     elem = user.getInventoryThing({'id':'{elemId}','type': None})
-    print(elem)
+    logger.info(elem)
     markupinline = InlineKeyboardMarkup()
 
     inventory_category = getSetting(code='INVENTORY_CATEGORY')
