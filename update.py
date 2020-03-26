@@ -216,20 +216,18 @@ print("#==========================#")
 
 
 myquery = { "code": 'INVENTORY_CATEGORY' }
-newvalues = { "$set": { "value": 
+newvalues = { "$set": 
+                { "value": 
                     [
-                        {
-                            'id': 'CLOTHES',
-                            'catrgoty': 'clothes'
-                        },
-                        {
-                            'id': 'RAID_BOLTS',
-                            'catrgoty': 'bolt'
-                        },
-                        {
-                            'id': 'VIRUSES',
-                            'catrgoty': 'disease'
-                        }
+                        {'id':'skill', 'name':'💡 Умения'},
+                        {'id':'disease', 'name':'🦠 Болезни'},
+                        {'id':'tatu', 'name':'☮️ Татуировки'},
+                        {'id':'clothes', 'name':'🧥 Одежда'},
+                        {'id':'food', 'name':'🍗 Еда'},
+                        {'id':'marks_of_excellence', 'name':'🏵 Награды'},
+                        {'id':'decoration', 'name':'🎁 Подарки'},
+                        {'id':'things', 'name':'📦 Вещи'},
+                        {'id':'bolt', 'name':'🔩 Рейдовые болты'}
                     ]
                 } 
             } 

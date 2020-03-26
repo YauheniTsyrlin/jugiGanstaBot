@@ -2759,16 +2759,17 @@ def main_message(message):
 
                         markupinline = InlineKeyboardMarkup()
 
-                        accessory = ''
-                        if user.getAccessory() and len(user.getAccessory())>0:
-                            i = 0
-                            for acc in user.getAccessory():
-                                accessory = accessory + f'▫️ {acc}\n'
-                                markupinline.add(InlineKeyboardButton(f"{acc}", callback_data=f"pickupaccessory|{login}|{i}"))
-                                i = i + 1
-                        if not accessory == '':
+                        counter = 0
+                        for elem in user.getInventory():
+                            markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"pickupaccessory|{login}|{elem['id']}"))
+                            counter = counter + 1 
+                        
+                        if counter > 0:
+                            inventory_category = getSetting(code='INVENTORY_CATEGORY')['value']
+                            report = user.getInventoryReport(inventory_category)
+
                             markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickupaccessory_exit|{login}"))
-                            msg = send_messages_big(message.chat.id, text=getResponseDialogFlow(message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{accessory}\nЧто изьять?', reply_markup=markupinline)
+                            msg = send_messages_big(message.chat.id, text=getResponseDialogFlow(message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{report}\nЧто изьять?', reply_markup=markupinline)
                         else:
                             msg = send_messages_big(message.chat.id, text='У него ничего нет, он голодранец!' , reply_markup=markupinline)
                     elif 'setrank' == response.split(':')[1]:
@@ -3981,43 +3982,39 @@ def callback_query(call):
             bot.answer_callback_query(call.id, "Тебе не положено!")
             return
 
-    login = call.data.split('|')[1]
+    login  = call.data.split('|')[1]
+    elemId = call.data.split('|')[2]
     user = getUserByLogin(login)
+
+    elem = user.getInventoryThing({'id':'{elemId}','type': None})
+
     markupinline = InlineKeyboardMarkup()
 
-    accessory = ''
-    if user.getAccessory() and len(user.getAccessory())>0:
-        i = 0
-        for acc in user.getAccessory():
-            accessory = accessory + f'▫️ {acc}\n'
-            i = i + 1
-    text = 'У него больше ничего нет!'
+    inventory_category = getSetting(code='INVENTORY_CATEGORY')['value']
+    report = user.getInventoryReport(inventory_category)
+    if report == '':
+        report = 'У него больше ничего нет!'
 
     if 'pickupaccessory_exit' in call.data:
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'Отъём завершен!\nОстались аксессуары:\n{accessory}', parse_mode='HTML')
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'Отъём завершен!\nОстались аксессуары:\n{report}', parse_mode='HTML')
         return
 
-    acc = user.getAccessory()[int(call.data.split('|')[2])]
     
-    if acc == acc_koronavirus:
-        bot.answer_callback_query(call.id, "Это болезнь, ее нельзя забрать, только вылечить!")
+    if elem['type'] in ('skill', 'disease', 'tatu'):
+        bot.answer_callback_query(call.id, "Это нельзя забрать!")
         return    
 
-    bot.answer_callback_query(call.id, "Ты забрал это с полки...")
-    user.removeAccessory(acc)
+    bot.answer_callback_query(call.id, "Ты забрал это ...")
+    user.removeInventoryThing(elem)
     updateUser(user)
 
-    accessory = ''
-    if user.getAccessory() and len(user.getAccessory())>0:
-        i = 0
-        for acc in user.getAccessory():
-            accessory = accessory + f'▫️ {acc}\n'
-            markupinline.add(InlineKeyboardButton(f"{acc}", callback_data=f"pickupaccessory|{login}|{i}"))
-            i = i + 1
-    text = 'У него больше ничего нет!'
+    for elem in user.getInventory():
+        markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"pickupaccessory|{login}|{elem['id']}"))
 
-    if not accessory == '':
-        text = getResponseDialogFlow(call.message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{accessory}\nЧто изьять?'
+    text = 'У него больше нечего забрать!'
+    report = user.getInventoryReport(inventory_category)
+    if not report == '':
+           text = getResponseDialogFlow(call.message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{report}\nЧто изьять?'
         
     markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickupaccessory_exit|{login}"))
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)

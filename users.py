@@ -518,7 +518,7 @@ class User(object):
             report = ''
             cost = 0
             for i in self.getInventory():
-                if i['type'] == type['type']:
+                if i['type'] == type['id']:
                     report = report + f'▫️ {i["name"]}\n'
                     cost = cost + i["cost"]
             if not report == '':
@@ -528,7 +528,7 @@ class User(object):
 
     def getInventoryThing(self, thing):
         for i in self.getInventory():
-            if i['id'] == thing['id'] and i['type'] == thing['type']:
+            if i['id'] == thing['id'] and ( thing['type'] == None or i['type'] == thing['type']):
                 return i
         return None
 
