@@ -4580,7 +4580,7 @@ def setGiftsForRaid(goat):
             user.addInventoryThing(bolt)
             #send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {bolt["name"]}')    
             updateUser(user)
-            boltReport = boltReport + f'{counter}. {bolt["name"].split(" ")[0]} {user.getLogin()} {user.getNameAndGerb()}\n'
+            boltReport = boltReport + f'{counter}. {bolt["name"].split(" ")[0]} @{user.getLogin()} {user.getNameAndGerb()}\n'
     if counter > 0:
         boltReport = '<b>Получили болты 🔩</b>\n' + boltReport
     
