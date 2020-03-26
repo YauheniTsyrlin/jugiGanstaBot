@@ -3986,7 +3986,7 @@ def callback_query(call):
     elemId = call.data.split('|')[2]
     user = getUserByLogin(login)
     logger.info(elemId)
-    elem = user.getInventoryThing({'id':'{elemId}','type': None})
+    elem = user.getInventoryThing({'id':f'{elemId}','type': None})
     logger.info(elem)
     markupinline = InlineKeyboardMarkup()
 
