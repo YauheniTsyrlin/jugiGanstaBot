@@ -3983,11 +3983,8 @@ def callback_query(call):
             return
 
     login  = call.data.split('|')[1]
-    elemId = call.data.split('|')[2]
+
     user = getUserByLogin(login)
-    logger.info(elemId)
-    elem = user.getInventoryThing({'id':f'{elemId}','type': None})
-    logger.info(elem)
     markupinline = InlineKeyboardMarkup()
 
     inventory_category = getSetting(code='INVENTORY_CATEGORY')
@@ -3999,6 +3996,8 @@ def callback_query(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'Отъём завершен!\nОстались аксессуары:\n{report}', parse_mode='HTML')
         return
 
+    elemId = call.data.split('|')[2]
+    elem = user.getInventoryThing({'id':f'{elemId}','type': None})
     
     if elem['type'] in ('skill', 'disease', 'tatu'):
         bot.answer_callback_query(call.id, "Это нельзя забрать!")
