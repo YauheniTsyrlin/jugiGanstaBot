@@ -328,15 +328,15 @@ class User(object):
         string = string + self.getSettingsReport() + '\n'
 
         inventory_category = [
-                                {'type':'skill', 'name':'💡 Умения'},
-                                {'type':'disease', 'name':'🦠 Болезни'},
-                                {'type':'tatu', 'name':'☮️ Татуировки'},
-                                {'type':'clothes', 'name':'🧥 Одежда'},
-                                {'type':'food', 'name':'🍗 Еда'},
-                                {'type':'marks_of_excellence', 'name':'🏵 Награды'},
-                                {'type':'decoration', 'name':'🎁 Подарки'},
-                                {'type':'things', 'name':'📦 Вещи'},
-                                {'type':'bolt', 'name':'🔩 Рейдовые болты'}
+                                {'id':'skill', 'name':'💡 Умения'},
+                                {'id':'disease', 'name':'🦠 Болезни'},
+                                {'id':'tatu', 'name':'☮️ Татуировки'},
+                                {'id':'clothes', 'name':'🧥 Одежда'},
+                                {'id':'food', 'name':'🍗 Еда'},
+                                {'id':'marks_of_excellence', 'name':'🏵 Награды'},
+                                {'id':'decoration', 'name':'🎁 Подарки'},
+                                {'id':'things', 'name':'📦 Вещи'},
+                                {'id':'bolt', 'name':'🔩 Рейдовые болты'}
                             ]
 
         string = string + self.getInventoryReport(inventory_category)
