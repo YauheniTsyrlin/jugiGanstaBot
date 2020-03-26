@@ -2763,10 +2763,10 @@ def main_message(message):
                         for elem in user.getInventory():
                             logger.info(f"pickupaccessory|{login}|{elem['id']}")
                             logger.info(str(len(f"pickupaccessory|{login}|{elem['id']}")))
-                            try:
-                                markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"pickupaccessory|{login}|{elem['id'][:100]}"))
-                                counter = counter + 1 
-                            except: pass
+                            # try:
+                            #     markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"pickupaccessory|{login}|{elem['id'][:100]}"))
+                            #     counter = counter + 1 
+                            # except: pass
                         if counter > 0:
                             inventory_category = getSetting(code='INVENTORY_CATEGORY')
                             report = user.getInventoryReport(inventory_category)
