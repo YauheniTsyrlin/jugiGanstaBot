@@ -6,7 +6,8 @@ import tools
 def mergeWariors(warior, wariorToUpdate):
     if (warior.damage):
         if wariorToUpdate.damage:
-            wariorToUpdate.damage = warior.damage
+            if (wariorToUpdate.damage < warior.damage):
+                wariorToUpdate.damage = warior.damage
         else: 
             wariorToUpdate.damage = warior.damage
 
@@ -82,7 +83,9 @@ def importWarior(warior):
     if (warior.get('goat')):
         war.goat                = warior.get('goat')        
     war.health                  = warior.get('health')
+    
     war.damage                  = warior.get('damage')
+    
     war.bm                      = warior.get('bm')
     if (warior.get('hithimself')):
         war.hithimself          = warior.get('hithimself')
