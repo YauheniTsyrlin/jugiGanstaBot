@@ -2761,6 +2761,9 @@ def main_message(message):
 
                         counter = 0
                         for elem in user.getInventory():
+                            logger.info(f"pickupaccessory|{login}|{elem['id']}")
+                            logger.info(str(len(f"pickupaccessory|{login}|{elem['id']}")))
+                            
                             markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"pickupaccessory|{login}|{elem['id']}"))
                             counter = counter + 1 
                         
@@ -3998,7 +4001,7 @@ def callback_query(call):
 
     elemId = call.data.split('|')[2]
     elem = user.getInventoryThing({'id':f'{elemId}','type': None})
-    
+
     if elem['type'] in ('skill', 'disease', 'tatu'):
         bot.answer_callback_query(call.id, "Это нельзя забрать!")
         return    
