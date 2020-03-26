@@ -2765,7 +2765,7 @@ def main_message(message):
                             counter = counter + 1 
                         
                         if counter > 0:
-                            inventory_category = getSetting(code='INVENTORY_CATEGORY')['value']
+                            inventory_category = getSetting(code='INVENTORY_CATEGORY')
                             report = user.getInventoryReport(inventory_category)
 
                             markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickupaccessory_exit|{login}"))
@@ -3990,7 +3990,7 @@ def callback_query(call):
 
     markupinline = InlineKeyboardMarkup()
 
-    inventory_category = getSetting(code='INVENTORY_CATEGORY')['value']
+    inventory_category = getSetting(code='INVENTORY_CATEGORY')
     report = user.getInventoryReport(inventory_category)
     if report == '':
         report = 'У него больше ничего нет!'
@@ -4580,7 +4580,7 @@ def setGiftsForRaid(goat):
             user.addInventoryThing(bolt)
             #send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {bolt["name"]}')    
             updateUser(user)
-            boltReport = boltReport + f'{counter}. {bolt["name"].split(" ")[0]} @{user.getLogin()} {user.getNameAndGerb()}\n'
+            boltReport = boltReport + f'{counter}. {bolt["name"].split(" ")[0]} {"@" if user.isPing() else ""} {user.getLogin()} {user.getNameAndGerb()}\n'
     if counter > 0:
         boltReport = '<b>Получили болты 🔩</b>\n' + boltReport
     
