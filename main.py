@@ -2761,8 +2761,6 @@ def main_message(message):
 
                         counter = 0
                         for elem in user.getInventory():
-                            logger.info(f"pickup|{login}|{elem['id']}")
-                            logger.info(str(len(f"pickup|{login}|{elem['id']}")))
                             try:
                                 markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"pickup|{login}|{elem['id'][:100]}"))
                                 counter = counter + 1 
@@ -2771,7 +2769,7 @@ def main_message(message):
                             inventory_category = getSetting(code='INVENTORY_CATEGORY')
                             report = user.getInventoryReport(inventory_category)
 
-                            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickup|{login}"))
+                            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickup_exit|{login}"))
                             msg = send_messages_big(message.chat.id, text=getResponseDialogFlow(message, None, 'shot_message_pickupaccessory').fulfillment_text + f'\n\n{report}\nЧто изьять?', reply_markup=markupinline)
                         else:
                             msg = send_messages_big(message.chat.id, text='У него ничего нет, он голодранец!' , reply_markup=markupinline)
