@@ -1277,7 +1277,14 @@ newvalues = { "$set": { "value":
                             'name': '🎁 Подарки',
                             'value':
                             [
-                                
+                                {
+                                    'id': 'rubber_swimmer',
+                                    'name': '🐏 Резиновая электроовца',
+                                    'cost': 75,
+                                    'type': 'decoration',
+                                    'quantity': 1
+
+                                },
                                 {
                                     'id': 'jugi_model',
                                     'name': '🤖 Моделька "Джу"',
