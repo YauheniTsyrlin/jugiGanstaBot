@@ -2764,7 +2764,7 @@ def main_message(message):
                             logger.info(f"pickupaccessory|{login}|{elem['id']}")
                             logger.info(str(len(f"pickupaccessory|{login}|{elem['id']}")))
                             try:
-                                markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"pickupaccessory|{login}|{elem['id'][:120]}"))
+                                markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"pickupaccessory|{login}|{elem['id'][:100]}"))
                                 counter = counter + 1 
                             except: pass
                         if counter > 0:
