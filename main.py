@@ -1471,7 +1471,7 @@ def main_message(message):
                                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
                                     ourBandUser.addInventoryThing(elem, 1000)
                                     updateUser(ourBandUser)
-                                    send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+                                    send_messages_big(message.chat.id, text=ourBandUser.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
 
                     if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
                         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
