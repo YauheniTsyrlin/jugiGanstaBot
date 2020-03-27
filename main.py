@@ -1444,30 +1444,34 @@ def main_message(message):
         if ww == None:
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'dublicate').fulfillment_text)
             return
+        ourBandUser = None
         for warior in ww:
+            if ourBandUser == None:
+                ourBandUser = getUserByName(warior.getName())
             update_warior(warior)
         
-        for w in battle.find({
-            'login': message.from_user.username, 
-            'date': message.forward_date,
-            'band': userIAm.getBand()}):
-            if w['winnerWarior'] == userIAm.getName():
-                for war in ww:
-                    # Вручаем скалп за машинку
-                    if war.getName() == w['loseWarior']:
-                        loser = getWariorByName(war.getName(), war.getFraction())
-                        if loser and loser.getBand():
-                            if loser.getBand() == 'Deus Ex Machina':
-                                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
-                                userIAm.addInventoryThing(elem, 1000)
-                                updateUser(userIAm)
-                                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+        if ourBandUser:
+            for w in battle.find({
+                # 'login': message.from_user.username, 
+                'date': message.forward_date}):
+                if w['winnerWarior'] == ourBandUser.getName():
+                    for war in ww:
+                        logger.info(ww.getName())
+                        # Вручаем скалп за машинку
+                        if war.getName() == w['loseWarior']:
+                            loser = getWariorByName(war.getName(), war.getFraction())
+                            if loser and loser.getBand():
+                                if loser.getBand() == 'Deus Ex Machina':
+                                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
+                                    ourBandUser.addInventoryThing(elem, 1000)
+                                    updateUser(ourBandUser)
+                                    send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
 
-                if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
-                    bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
-            else:
-                if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_LOSER'))):
-                    bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
+                    if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
+                        bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
+                else:
+                    if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_LOSER'))):
+                        bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '/accept' in message.text and '/decline' in message.text):
