@@ -2523,9 +2523,9 @@ def main_message(message):
                             pingusers.append(pu)
                             user = getUserByLogin(pu["login"])
                             if pu["ping"] == True:
-                                report = report + f'{counter}. @{pu["login"]} {user.getNameAndGerb()} {"📯"+ str(user.getBm())+ " 🏵"+str(user.getDzen()) if bm and user.getDzen()>0 else ""}\n'
+                                report = report + f'{counter}. @{pu["login"]} {user.getNameAndGerb()} {"📯"+ str(user.getBm()) if bm else ""} {"🏵"+str(user.getDzen()) if bm and user.getDzen()>0 else ""}\n'
                             else:
-                                report = report + f'{counter}. 🔕{pu["login"]} {user.getNameAndGerb()} {"📯"+ str(user.getBm())+ " 🏵"+str(user.getDzen()) if bm and user.getDzen()>0 else ""}\n'
+                                report = report + f'{counter}. 🔕{pu["login"]} {user.getNameAndGerb()} {"📯"+ str(user.getBm()) if bm else ""} {"🏵"+str(user.getDzen()) if bm and user.getDzen()>0 else ""}\n'
                             if counter % 5 == 0:
                                 send_messages_big(message.chat.id, text=first_string + report)
                                 pingusers = []
