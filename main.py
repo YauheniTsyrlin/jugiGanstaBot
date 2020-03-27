@@ -1454,20 +1454,13 @@ def main_message(message):
             for w in battle.find({
                 # 'login': message.from_user.username, 
                 'date': message.forward_date}):
-                logger.info("w: " + w['winnerWarior'])
                 if w['winnerWarior'] == ourBandUser.getName():
                     for war in ww:
                         # Вручаем скалп за машинку
-                        logger.info("war: " + war.getName())
                         if war.getName() == w['loseWarior']:
-                            logger.info("in 1")
-
                             loser = getWariorByName(war.getName(), war.getFraction())
                             if loser and loser.getGoat():
-                                logger.info("loser not null")
-                                logger.info("loser band: loser.getBand()")
                                 if loser.getGoat() == 'Deus Ex Machina':
-                                    logger.info("add inventory")
                                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
                                     ourBandUser.addInventoryThing(elem, 1000)
                                     updateUser(ourBandUser)
