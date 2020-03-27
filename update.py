@@ -864,12 +864,13 @@ newvalues = { "$set": { "value":
                             'value':
                             [
                                 {
-                                    'id': 'tatu_arthouse_1',
+                                    'id': 'sassicaia',
                                     'name': '🍷 Тату "Sassicaia"',
                                     'cost': 100,
                                     'type': 'tatu',
                                     'quantity': 1
-                                }, {
+                                }, 
+                                {
                                     'id': 'tatu_arthouse_1',
                                     'name': '♀️ Тату "Не забуду Кешу и АртхǁȺǁус!"',
                                     'cost': 100,
