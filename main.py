@@ -725,7 +725,7 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
             win_counter = win_counter + 1
         
         habitat.update({f'{one_mob["km"]}':True})
-        logger.info(habitat)
+        
         one_average_beaten = 0
         one_counter_beaten = 0
         for b in one_mob['beaten']:
@@ -785,6 +785,7 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
     habitat_str = ''
 
     for h in sorted(habitat):
+        logger.info(h)
         if habitat_str == '':
             habitat_str = habitat_str + h
         else:
@@ -793,24 +794,23 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
     if habitat_str == '':
         report = report + f"👣 Еще ни разу не встречали в {'🔆' if not dark_zone else '🚷'}\n"
     else:
-        if health > 0:
-            report = report + f'👣 Встречается: <b>{habitat_str}</b> км\n'
+        report = report + f'👣 Встречается: <b>{habitat_str}</b> км\n'
 
-        if health > 0:
-            report = report + f'❤️ Здоровье: <b>{health}</b>\n'
+    if health > 0:
+        report = report + f'❤️ Здоровье: <b>{health}</b>\n'
 
-        report = report + f'✊ Побед: <b>{win_counter}/{counter}</b>\n'
-        report = report + f'💔 <b>Урон бандитам</b>:\n'
-        report = report + f'      Min <b>{min_beaten}</b> при 🛡<b>{min_beaten_user_armor}</b>\n'
-        report = report + f'      В среднем <b>{average_beaten}</b>\n'
-        report = report + f'      Max <b>{max_beaten}</b> при 🛡<b>{max_beaten_user_armor}</b>\n'
-        report = report + f'💥 <b>Получил от бандитов</b>:\n'
-        report = report + f'      Min <b>{min_damage}</b> при ⚔<b>{min_damage_user_damage}</b>\n'
-        report = report + f'      В среднем <b>{average_damage}</b>\n'
-        report = report + f'      Max <b>{max_damage}</b> при ⚔<b>{max_damage_user_damage}</b>\n' 
-        report = report + f'💰 <b>В среднем добыто</b>:\n'
-        report = report + f'      🕳 <b>{average_kr}</b>\n'
-        report = report + f'      📦 <b>{average_mat}</b>\n'
+    report = report + f'✊ Побед: <b>{win_counter}/{counter}</b>\n'
+    report = report + f'💔 <b>Урон бандитам</b>:\n'
+    report = report + f'      Min <b>{min_beaten}</b> при 🛡<b>{min_beaten_user_armor}</b>\n'
+    report = report + f'      В среднем <b>{average_beaten}</b>\n'
+    report = report + f'      Max <b>{max_beaten}</b> при 🛡<b>{max_beaten_user_armor}</b>\n'
+    report = report + f'💥 <b>Получил от бандитов</b>:\n'
+    report = report + f'      Min <b>{min_damage}</b> при ⚔<b>{min_damage_user_damage}</b>\n'
+    report = report + f'      В среднем <b>{average_damage}</b>\n'
+    report = report + f'      Max <b>{max_damage}</b> при ⚔<b>{max_damage_user_damage}</b>\n' 
+    report = report + f'💰 <b>В среднем добыто</b>:\n'
+    report = report + f'      🕳 <b>{average_kr}</b>\n'
+    report = report + f'      📦 <b>{average_mat}</b>\n'
 
     all_counter = mob.find().count()
     report = report + f'\n'
