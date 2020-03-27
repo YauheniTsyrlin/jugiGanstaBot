@@ -1452,6 +1452,17 @@ def main_message(message):
             'date': message.forward_date,
             'band': userIAm.getBand()}):
             if w['winnerWarior'] == userIAm.getName():
+                for war in ww:
+                    # Вручаем скалп за машинку
+                    if war.getName() == w['loseWarior']:
+                        loser = getWariorByName(war.getName(), war.getFraction())
+                        if loser and loser.getBand():
+                            if loser.getBand() == 'Deus Ex Machina':
+                                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
+                                userIAm.addInventoryThing(elem, 1000)
+                                updateUser(userIAm)
+                                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+
                 if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
                     bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
             else:
