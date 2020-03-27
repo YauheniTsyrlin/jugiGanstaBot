@@ -725,7 +725,7 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
             win_counter = win_counter + 1
         
         habitat.update({f'{one_mob["km"]}':True})
-
+        logger.info(habitat)
         one_average_beaten = 0
         one_counter_beaten = 0
         for b in one_mob['beaten']:
@@ -4595,7 +4595,7 @@ def setGiftsForRaid(goat):
             user.addInventoryThing(bolt)
             #send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {bolt["name"]}')    
             updateUser(user)
-            boltReport = boltReport + f'{counter}. {bolt["name"].split(" ")[0]} {"@" if user.isPing() else ""} {user.getLogin()} {user.getNameAndGerb()}\n'
+            boltReport = boltReport + f'{counter}. {bolt["name"].split(" ")[0]} {"@" if user.isPing() else ""}{user.getLogin()} {user.getNameAndGerb()}\n'
     if counter > 0:
         boltReport = '<b>Получили болты 🔩</b>\n' + boltReport
     
