@@ -2476,7 +2476,7 @@ def main_message(message):
             parameters = result.parameters
             if response:
                 if (response.startswith('jugi:')):
-                    #jugi:ping:Артхаус
+                    #jugi:ping:Артхаус:bm
                     if 'ping' == response.split(':')[1]:
                         # if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                         #     pass
@@ -2488,7 +2488,8 @@ def main_message(message):
                         band = response.split(':')[2]
                         if response.split(":")[2] == '*':
                             band = userIAm.getBand()
-                        if band == 'all':
+                        bm = eval(response.split(":")[3])
+                        if band == 'all' or bm:
                             if not isGoatBoss(message.from_user.username):
                                 if not isAdmin(message.from_user.username):
                                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_not_goat_boss').fulfillment_text)
@@ -2522,9 +2523,9 @@ def main_message(message):
                             pingusers.append(pu)
                             user = getUserByLogin(pu["login"])
                             if pu["ping"] == True:
-                                report = report + f'{counter}. @{pu["login"]} {user.getNameAndGerb()} 📯{user.getBm()} {"🏵"+str(user.getDzen()) if user.getDzen()>0 else ""}\n'
+                                report = report + f'{counter}. @{pu["login"]} {user.getNameAndGerb()} {"📯"+ str(user.getBm())+ " 🏵"+str(user.getDzen()) if bm and user.getDzen()>0 else ""}\n'
                             else:
-                                report = report + f'{counter}. 🔕{pu["login"]} {user.getNameAndGerb()} 📯{user.getBm()} {"🏵"+str(user.getDzen()) if user.getDzen()>0 else ""}\n'
+                                report = report + f'{counter}. 🔕{pu["login"]} {user.getNameAndGerb()} {"📯"+ str(user.getBm())+ " 🏵"+str(user.getDzen()) if bm and user.getDzen()>0 else ""}\n'
                             if counter % 5 == 0:
                                 send_messages_big(message.chat.id, text=first_string + report)
                                 pingusers = []
