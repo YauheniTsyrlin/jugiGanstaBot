@@ -1463,10 +1463,10 @@ def main_message(message):
                             logger.info("in 1")
 
                             loser = getWariorByName(war.getName(), war.getFraction())
-                            if loser and loser.getBand():
+                            if loser and loser.getGoat():
                                 logger.info("loser not null")
                                 logger.info("loser band: loser.getBand()")
-                                if loser.getBand() == 'Deus Ex Machina':
+                                if loser.getGoat() == 'Deus Ex Machina':
                                     logger.info("add inventory")
                                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
                                     ourBandUser.addInventoryThing(elem, 1000)
