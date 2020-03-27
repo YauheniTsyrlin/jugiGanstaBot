@@ -785,7 +785,6 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
     habitat_str = ''
 
     for h in sorted(habitat):
-        logger.info(h)
         if habitat_str == '':
             habitat_str = habitat_str + h
         else:
