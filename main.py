@@ -781,9 +781,9 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
         average_kr = int(average_kr / counter_kr)
     if counter_mat > 0:
         average_mat = int(average_mat / counter_mat)
-    
+   
     habitat_str = ''
-
+ 
     for h in sorted(habitat):
         if habitat_str == '':
             habitat_str = habitat_str + h
@@ -1461,7 +1461,7 @@ def main_message(message):
                             if loser and loser.getGoat():
                                 if loser.getGoat() == 'Deus Ex Machina':
                                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
-                                    ourBandUser.addInventoryThing(elem, 1000)
+                                    ourBandUser.addInventoryThing(elem, elem['quantity'])
                                     updateUser(ourBandUser)
                                     send_messages_big(message.chat.id, text=ourBandUser.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
 
@@ -2845,8 +2845,8 @@ def main_message(message):
                             for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']):
                                 if user and user.isMaxInventoryThing(elem, USERS_ARR):
                                     continue
-                                if user and user.isInventoryThing(elem):
-                                    continue    
+                                # if user and user.isInventoryThing(elem):
+                                #     continue    
 
                                 markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}"))
                                 if i == counter :
@@ -2855,9 +2855,9 @@ def main_message(message):
                                     break
                                 i = i + 1
                             if user:
-                                inventory_category = [{'type':'food', 'name':'🍗 Еда'},
-                                                    {'type':'decoration', 'name':'🎁 Подарки'},
-                                                    {'type':'things', 'name':'📦 Вещи'}]
+                                inventory_category = [{'id':'food', 'name':'🍗 Еда'},
+                                                    {'id':'decoration', 'name':'🎁 Подарки'},
+                                                    {'id':'things', 'name':'📦 Вещи'}]
 
                                 report = user.getInventoryReport(inventory_category)
                                 msg = send_messages_big(message.chat.id, text=f'{user.getNameAndGerb()}:\n{report}', reply_markup=markupinline)
@@ -2876,7 +2876,7 @@ def main_message(message):
                             #         updateUser(user)
                             # send_messages_big(message.chat.id, text='Бандиты!\n' + getResponseDialogFlow(message, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {acc}') 
                             send_messages_big(message.chat.id, text='Нет выдачи по одному Подарку') 
-
+                        return
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
                         # jugi:ban:@gggg на:2019-12-01T13:21:52/2019-12-01T13:31:52
                         logger.info(response)
@@ -3874,8 +3874,8 @@ def callback_query(call):
         for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] ):
             if user and user.isMaxInventoryThing(elem, USERS_ARR):
                 continue
-            if user and user.isInventoryThing(elem):
-                continue    
+            # if user and user.isInventoryThing(elem):
+            #     continue    
 
             if i <= counter:
                 pass
@@ -3893,9 +3893,9 @@ def callback_query(call):
         
         text=f'Всем бандитам будет что-то выдано! Просмотрено {counter} аксессуаров'
         if user:
-            inventory_category = [{'type':'food', 'name':'🍗 Еда'},
-                                    {'type':'decoration', 'name':'🎁 Подарки'},
-                                    {'type':'things', 'name':'📦 Вещи'}]
+            inventory_category = [{'id':'food', 'name':'🍗 Еда'},
+                                    {'id':'decoration', 'name':'🎁 Подарки'},
+                                    {'id':'things', 'name':'📦 Вещи'}]
             report = user.getInventoryReport(inventory_category)
             text=f'{user.getNameAndGerb()}:\n{report}'
         
@@ -3913,8 +3913,8 @@ def callback_query(call):
         for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']):
             if user and user.isMaxInventoryThing(elem, USERS_ARR):
                 continue
-            if user and user.isInventoryThing(elem):
-                continue    
+            # if user and user.isInventoryThing(elem):
+            #     continue    
 
             if i <= counter:
                 pass
@@ -3934,9 +3934,9 @@ def callback_query(call):
             markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_next|{login}|{i+10}"))
             markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
 
-        inventory_category = [{'type':'food', 'name':'🍗 Еда'},
-                                {'type':'decoration', 'name':'🎁 Подарки'},
-                                {'type':'things', 'name':'📦 Вещи'}]
+        inventory_category = [{'id':'food', 'name':'🍗 Еда'},
+                                {'id':'decoration', 'name':'🎁 Подарки'},
+                                {'id':'things', 'name':'📦 Вещи'}]
         report = user.getInventoryReport(inventory_category)
         text=f'{user.getNameAndGerb()}:\n{report}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
@@ -3950,16 +3950,16 @@ def callback_query(call):
         if elem['id'] == call.data.split('|')[2]:
             bot.answer_callback_query(call.id, "Ты сделал свой выбор")
             if login.lower() == 'всем':
-                for user in list(USERS_ARR):
-                    user.addInventoryThing(elem)
-                    updateUser(user)
+                for useradd in list(USERS_ARR):
+                    useradd.addInventoryThing(elem, elem['quantity'])
+                    updateUser(useradd)
                 send_messages_big(call.message.chat.id, text= 'Бандиты!\n' + getResponseDialogFlow(call.message, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
-                break
             else:
-                user.addInventoryThing(elem)
+                user.addInventoryThing(elem, elem['quantity'])
                 updateUser(user)
                 send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
-                break
+
+            break
 
     markupinline = InlineKeyboardMarkup()
     counter = 10
@@ -3967,8 +3967,8 @@ def callback_query(call):
     for elem in (getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']):
         if user and user.isMaxInventoryThing(elem, USERS_ARR):
             continue
-        if user and user.isInventoryThing(elem):
-            continue    
+        # if user and user.isInventoryThing(elem):
+        #     continue    
 
         markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}"))
         if i == counter :
@@ -3977,9 +3977,9 @@ def callback_query(call):
             break
         i = i + 1
     if user:
-        inventory_category = [{'type':'food', 'name':'🍗 Еда'},
-                        {'type':'decoration', 'name':'🎁 Подарки'},
-                        {'type':'things', 'name':'📦 Вещи'}]
+        inventory_category = [{'id':'food', 'name':'🍗 Еда'},
+                        {'id':'decoration', 'name':'🎁 Подарки'},
+                        {'id':'things', 'name':'📦 Вещи'}]
         report = user.getInventoryReport(inventory_category)
         text=f'{user.getNameAndGerb()}:\n{report}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)

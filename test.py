@@ -387,9 +387,29 @@ print('\n======== radeReport ==========\n')
 # raid = getPlanedRaidLocation('FǁȺǁggǁØǁAT', False)
 # print(raid)
 # print(datetime.fromtimestamp(raid["rade_date"]))
-a = '111'
-b = None
-print(a+b)
+import itertools
+from operator import itemgetter
+
+# inventory_arr = getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']
+
+user = getUserByLogin('GonzikBenzyavsky')
+
+
+filtered_arr = list(filter(lambda x : x['type'] == 'decoration', user.getInventory())) 
+sorted_arr = sorted(filtered_arr, key=itemgetter('id'))
+# print(sorted_arr)
+# for i in sorted_arr:
+#     print(i)
+
+print('============================================')
+report = ''
+for key, group in itertools.groupby(sorted_arr, key=lambda x: x['id']):
+        # print (key)
+        gr = list(group)
+        report = f'▫️ {gr[0]["name"]} {str(len(gr)) if len(gr)>1 else str(len(gr))}\n'
+        print(report)  
+
+
 sys.exit(0)
 
 # import pandas as pd

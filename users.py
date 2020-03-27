@@ -4,6 +4,9 @@ import time
 from datetime import datetime
 from datetime import timedelta
 import tools
+from operator import itemgetter
+import itertools
+from operator import itemgetter
 
 def normalize(string):
     if not string:
@@ -512,15 +515,19 @@ class User(object):
         return self.inventory
 
     def getInventoryReport(self, types):
-        
         full_report = ''
         for type in types:
             report = ''
             cost = 0
-            for i in self.getInventory():
-                if i['type'] == type['id']:
-                    report = report + f'▫️ {i["name"]}\n'
-                    cost = cost + i["cost"]
+            filtered_arr = list(filter(lambda x : x['type'] == type['id'], self.getInventory())) 
+            sorted_arr = sorted(filtered_arr, key=itemgetter('id'))
+            # for i in sorted_arr:
+            for key, gr in itertools.groupby(sorted_arr, key=lambda x:x['id']):
+                group = list(gr)
+                report = report + f'▫️ {list(group)[0]["name"]} {"("+str(len(list(group)))+")" if len(list(group))>1 else ""}\n'
+                for elem in list(group):
+                    cost = cost + elem["cost"]
+
             if not report == '':
                 report = type['name'] + f' (🕳️ {cost}):\n' + report + '\n'
             full_report = full_report + report
@@ -543,8 +550,7 @@ class User(object):
         try:
             counter = 0
             for user in user_arr:
-                if user.isInventoryThing(thing):
-                   counter = counter + 1 
+                counter = counter + user.getInventoryThingCount(thing)
             if thing['quantity'] <= counter:
                 return True
         except:
