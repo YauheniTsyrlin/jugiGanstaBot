@@ -1456,7 +1456,6 @@ def main_message(message):
                 'date': message.forward_date}):
                 if w['winnerWarior'] == ourBandUser.getName():
                     for war in ww:
-                        logger.info(ww.getName())
                         # Вручаем скалп за машинку
                         if war.getName() == w['loseWarior']:
                             loser = getWariorByName(war.getName(), war.getFraction())
