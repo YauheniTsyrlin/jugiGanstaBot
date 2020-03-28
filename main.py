@@ -2069,10 +2069,17 @@ def main_message(message):
                                 count = count + int(s.split(' x')[1])
                             else: count = count + 1
                     if count > 0:
-                        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
                         if not userIAm.isInventoryThing(elem):
-                            pass
-
+                            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
+                            elem.update({'storage': elem['storage'] + count})
+                            userIAm.addInventoryThing(elem)
+                            send_messages_big(message.chat.id, text=f'Ты начал изучение умения:\n▫️ {elem["name"]}') 
+                        else:
+                            elem = userIAm.getInventoryThing(elem)
+                            elem.update({'storage': elem['storage'] + count})
+                            percent = int(elem['max']/100*count)
+                            send_messages_big(message.chat.id, text=f'▫️ {elem["name"]} {percent}%') 
+                        updateUser(userIAm)
             
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
                 pass

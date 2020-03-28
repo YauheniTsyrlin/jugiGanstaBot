@@ -1018,7 +1018,9 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'skill',
                                     'quantity': None,
-                                    'update': []
+                                    'min': 10,
+                                    'max': 100,
+                                    'storage': 0
                                 }
                             ]
                         },
