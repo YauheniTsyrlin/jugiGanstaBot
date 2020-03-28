@@ -1379,7 +1379,8 @@ def main_message(message):
                 'ПРИПАСЫ В РЮКЗАКЕ' in message.text or 
                 '🏆ТОП КОЗЛОВ:' in message.text or
                 'РЕСУРСЫ и ХЛАМ' in message.text or
-                '🔧РЕСУРСЫ И ХЛАМ' in message.text):
+                '🔧РЕСУРСЫ И ХЛАМ' in message.text or
+                '🏆ТОП МАГНАТОВ' in message.text):
                 return
 
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
