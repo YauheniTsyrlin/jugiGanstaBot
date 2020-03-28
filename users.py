@@ -571,7 +571,10 @@ class User(object):
                 counter = counter + 1
                 if counter == count: return
 
-    def addInventoryThing(self, thing, count=1):
+    def addInventoryThing(self, thing, count=1, replace=False):
+        if replace:
+            self.removeInventoryThing(thing)
+            
         if count == None:
             self.getInventory().append(thing)
         elif self.getInventoryThingCount(thing) < count:

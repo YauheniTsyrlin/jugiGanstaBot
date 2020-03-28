@@ -3,13 +3,14 @@ from telebot.types import Message
 
 def new_message(message: Message, filter):
     row = {}
-    row = {'id': message.message_id}
-    row = {'username': message.from_user.username}
-    row = {'chat': message.chat.id}
-    row = {'forward_date': message.forward_date if message.forward_date else None}
-    row = {'forward_from_username': message.from_user.username if message.forward_from else None}
-    row = {'text': message.text}
-    row = {'json': message.json}
+    row.update({'id': message.message_id})
+    row.update({'date': message.date})
+    row.update({'username': message.from_user.username})
+    row.update({'chat': message.chat.id})
+    row.update({'forward_date': message.forward_date if message.forward_date else None})
+    row.update({'forward_from_username': message.forward_from.username if message.forward_from else None})
+    row.update({'text': message.text})
+    row.update({'json': message.json})
 
     newvalues = { "$set":  row}
     result = messages.update_one(filter, newvalues)
@@ -18,5 +19,5 @@ def new_message(message: Message, filter):
         return True
     return False
 
-    
+
 

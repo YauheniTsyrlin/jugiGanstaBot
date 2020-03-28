@@ -394,20 +394,22 @@ from operator import itemgetter
 
 user = getUserByLogin('GonzikBenzyavsky')
 
+filter = {  "forward_from_username": message.from_user.username, 
+                        "date": message.date}   
 
-filtered_arr = list(filter(lambda x : x['type'] == 'decoration', user.getInventory())) 
-sorted_arr = sorted(filtered_arr, key=itemgetter('id'))
+# filtered_arr = list(filter(lambda x : x['type'] == 'decoration', user.getInventory())) 
+# sorted_arr = sorted(filtered_arr, key=itemgetter('id'))
 # print(sorted_arr)
 # for i in sorted_arr:
 #     print(i)
 
-print('============================================')
-report = ''
-for key, group in itertools.groupby(sorted_arr, key=lambda x: x['id']):
-        # print (key)
-        gr = list(group)
-        report = f'▫️ {gr[0]["name"]} {str(len(gr)) if len(gr)>1 else str(len(gr))}\n'
-        print(report)  
+# print('============================================')
+# report = ''
+# for key, group in itertools.groupby(sorted_arr, key=lambda x: x['id']):
+#         # print (key)
+#         gr = list(group)
+#         report = f'▫️ {gr[0]["name"]} {str(len(gr)) if len(gr)>1 else str(len(gr))}\n'
+#         print(report)  
 
 
 sys.exit(0)
