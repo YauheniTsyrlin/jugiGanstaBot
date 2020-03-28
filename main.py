@@ -2071,7 +2071,7 @@ def main_message(message):
                     if count > 0:
                         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
                         if not userIAm.isInventoryThing(elem):
-                            
+                            pass
 
             
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
