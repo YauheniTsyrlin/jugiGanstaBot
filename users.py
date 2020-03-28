@@ -524,12 +524,22 @@ class User(object):
             # for i in sorted_arr:
             for key, gr in itertools.groupby(sorted_arr, key=lambda x:x['id']):
                 group = list(gr)
-                report = report + f'▫️ {list(group)[0]["name"]} {"("+str(len(list(group)))+")" if len(list(group))>1 else ""}\n'
+                
+                percent = 0
+                if list(group)[0]["type"] == 'skill':
+                    try:
+                        storage = list(group)[0]['storage']
+                        if storage > 0:
+                            percent = int(list(group)[0]['max']/100*storage)
+                    except: pass
+
+
+                report = report + f'▫️ {list(group)[0]["name"]} {str(percent)+"%" if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""}\n'
                 for elem in list(group):
                     cost = cost + elem["cost"]
 
             if not report == '':
-                report = type['name'] + f' (🕳️ {cost}):\n' + report + '\n'
+                report = type['name'] + (f' (🕳️ {cost}):\n' if cost>0 else ':\n') + report + '\n'
             full_report = full_report + report
         return full_report
 
@@ -574,7 +584,7 @@ class User(object):
     def addInventoryThing(self, thing, count=1, replace=False):
         if replace:
             self.removeInventoryThing(thing)
-            
+
         if count == None:
             self.getInventory().append(thing)
         elif self.getInventoryThingCount(thing) < count:
