@@ -1469,7 +1469,8 @@ def main_message(message):
                                     if loser.getGoat() == 'Deus Ex Machina':
                                         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
                                         k =3
-                                elem.update({"cost", elem["cost"] * k})
+
+                                elem.update({"cost": elem["cost"] * k})
 
                                 if ourBandUser.addInventoryThing(elem, elem['quantity']):
                                     updateUser(ourBandUser)
