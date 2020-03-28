@@ -1371,6 +1371,10 @@ def main_message(message):
             dzen_rewards(user, num_dzen, message)
             return
 
+        # filter = {  "forward_from_username": message.from_user.username, 
+        #             "forward_date": message.forward_date}    
+        # newMess = messager.new_message(message, filter)
+
     if (message.text.startswith('📟Пип-бой 3000')):
         if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
             if ('/killdrone' in message.text or 
@@ -1506,9 +1510,6 @@ def main_message(message):
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты оценил обстановку вокруг.' in message.text and 'Рядом кто-то есть.' in message.text):
         #write_json(message.json)
-        filter = {  "forward_from_username": message.from_user.username, 
-                    "forward_date": message.forward_date}    
-        messager.write_message(message, filter)
 
         if hasAccessToWariors(message.from_user.username):
             # 🚷/👣52 км.
@@ -2055,6 +2056,24 @@ def main_message(message):
         return
     elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
         if hasAccessToWariors(message.from_user.username):
+            
+            if message.forward_date > (datetime.now() - timedelta(minutes=5)).timestamp():
+                filter = {  "forward_from_username": message.from_user.username, 
+                            "forward_date": message.forward_date}    
+                newMess = messager.new_message(message, filter)
+                if newMess:
+                    count = 0
+                    for s in message.text.split('\n'):
+                        if (s.startswith('Получено:') or s.startswith('Бонус:')) and 'Эфедрин' in s: # x2
+                            if ' x' in s:
+                                count = count + int(s.split(' x')[1])
+                            else: count = count + 1
+                    if count > 0:
+                        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
+                        if not userIAm.isInventoryThing(elem):
+                            
+
+            
             if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
                 pass
             else:

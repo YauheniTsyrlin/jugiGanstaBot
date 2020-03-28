@@ -863,6 +863,15 @@ newvalues = { "$set": { "value":
                             'name': '☮️ Татуировки',
                             'value':
                             [
+
+                                
+                                {
+                                    'id': 'corruptionist',
+                                    'name': '💰 Коррупционер',
+                                    'cost': 100,
+                                    'type': 'tatu',
+                                    'quantity': 1
+                                }, 
                                 {
                                     'id': 'sassicaia',
                                     'name': '🍷 Тату "Sassicaia"',
@@ -938,70 +947,78 @@ newvalues = { "$set": { "value":
                                     'name': '🍾 Бармен',
                                     'cost': 0,
                                     'type': 'skill',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'moonshiner',
                                     'name': '📖 «Как перегонять спирт»',
                                     'cost': 0,
                                     'type': 'skill',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'fighter',
                                     'name': '🥋 Чёрный пояс по PvP',
                                     'cost': 0,
                                     'type': 'skill',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'boss',
                                     'name': '📿 четки босса банды',
                                     'cost': 0,
                                     'type': 'skill',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'boss',
                                     'name': '📿 Чётки босса банды',
                                     'cost': 0,
                                     'type': 'skill',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'programmer',
                                     'name': '🉐💮 Язык программирования',
                                     'cost': 0,
                                     'type': 'skill',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'perfectionist',
                                     'name': '🛑 Круг перфекциониста',
                                     'cost': 0,
                                     'type': 'skill',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'seducer',
                                     'name': '🗣 Соблазнитель ванаМинго',
                                     'cost': 0,
                                     'type': 'skill',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'the_running_man',
                                     'name': '🏃 Бегущий человек',
                                     'cost': 0,
                                     'type': 'skill',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'alien',
                                     'name': '🚼 Чужой',
                                     'cost': 0,
                                     'type': 'skill',
-                                    'quantity': 1000
+                                    'quantity': None
+                                },
+                                {
+                                    'id': 'medic',
+                                    'name': '💉 Медик',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': None,
+                                    'update': []
                                 }
                             ]
                         },
