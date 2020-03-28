@@ -1573,7 +1573,7 @@ newvalues = { "$set": { "value":
                                     'name': '🤯 Скальп Deus Ex Machina',
                                     'cost': 50,
                                     'type': 'things',
-                                    'quantity': 0
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'bouquet_of_flowers',
