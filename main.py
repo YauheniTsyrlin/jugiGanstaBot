@@ -1199,7 +1199,7 @@ def get_message_photo(message):
 
             markupinline = None
             user = getUserByName(wariorShow.getName())
-            if user and (not user.getLogin() == message.from_user.username):
+            if user and (not user.getLogin() == message.from_user.username) and user.getBand() and user.getBand() in getGoatBands(getMyGoatName(message.from_user.username)):
                 buttons = []
                 buttons.append(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
                 markupinline = InlineKeyboardMarkup(row_width=2)
