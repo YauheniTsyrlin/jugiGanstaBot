@@ -1285,6 +1285,14 @@ newvalues = { "$set": { "value":
                             'value':
                             [
                                 {
+                                    'id': 'stuffed_enclave',
+                                    'name': '🚨 Чучело "Анклав"',
+                                    'cost': 20,
+                                    'type': 'decoration',
+                                    'quantity': 1
+
+                                },
+                                {
                                     'id': 'rubber_swimmer',
                                     'name': '🐏 Резиновая электроовца',
                                     'cost': 75,
