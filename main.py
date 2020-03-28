@@ -60,6 +60,9 @@ man_of_day      = mydb["man_of_day"]
 pip_history     = mydb["pip_history"]
 mob             = mydb["mob"]
 boss            = mydb["boss"]
+messages        = mydb["messages"]
+
+import messager
 
 flexFlag = False
 logger = telebot.logger
@@ -538,7 +541,7 @@ def isDoctor(user_login: str):
                 return True
     return False
 
-def isInfected(logins):
+def isInfected(logins):  
     for user_login in logins:
         user = getUserByLogin(user_login)
         if user:
@@ -1476,7 +1479,7 @@ def main_message(message):
                                     updateUser(ourBandUser)
                                     send_messages_big(message.chat.id, text = f'Тебе выдали:\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
                                 else:
-                                    send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
+                                    send_messages_big(message.chat.id, text=ourBandUser.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
 
                     if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
                         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
@@ -1502,6 +1505,10 @@ def main_message(message):
         return
     elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты оценил обстановку вокруг.' in message.text and 'Рядом кто-то есть.' in message.text):
         #write_json(message.json)
+        filter = {  "forward_from_username": message.from_user.username, 
+                    "forward_date": message.forward_date}    
+        messager.write_message(message, filter)
+
         if hasAccessToWariors(message.from_user.username):
             # 🚷/👣52 км.
             strings = message.text.split('\n')
