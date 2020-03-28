@@ -1562,11 +1562,18 @@ newvalues = { "$set": { "value":
                             'value':
                             [
                                 {
-                                    'id': 'scalp_of_deus_ex_machina',
-                                    'name': '🤯 Скальп Deus Ex Machina',
-                                    'cost': 3,
+                                    'id': 'scalp_of_banditos',
+                                    'name': '🤯 Скальп бандита',
+                                    'cost': 50,
                                     'type': 'things',
                                     'quantity': 1000
+                                },
+                                {
+                                    'id': 'scalp_of_deus_ex_machina',
+                                    'name': '🤯 Скальп Deus Ex Machina',
+                                    'cost': 50,
+                                    'type': 'things',
+                                    'quantity': 0
                                 },
                                 {
                                     'id': 'bouquet_of_flowers',
@@ -1574,7 +1581,8 @@ newvalues = { "$set": { "value":
                                     'cost': 12,
                                     'type': 'things',
                                     'quantity': 1000
-                                },{
+                                },
+                                {
                                     'id': 'nettle_list',
                                     'name': '🌿 Лечебная трава',
                                     'cost': 1,

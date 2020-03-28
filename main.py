@@ -1455,15 +1455,24 @@ def main_message(message):
                 'date': message.forward_date}):
                 if w['winnerWarior'] == ourBandUser.getName():
                     for war in ww:
-                        # Вручаем скалп за машинку
+                        # Вручаем скальп за машинку
                         if war.getName() == w['loseWarior']:
                             loser = getWariorByName(war.getName(), war.getFraction())
-                            if loser and loser.getGoat():
-                                if loser.getGoat() == 'Deus Ex Machina':
-                                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
-                                    ourBandUser.addInventoryThing(elem, elem['quantity'])
+
+                            if loser:
+                                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_banditos'), None) 
+                                k = 1
+                                if loser.getGoat():
+                                    k = 2
+                                    if loser.getGoat() == 'Deus Ex Machina':
+                                        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
+                                        k =3
+                                elem.update("cost", elem["cost"] * k)
+                                if ourBandUser.addInventoryThing(elem, elem['quantity']):
                                     updateUser(ourBandUser)
-                                    send_messages_big(message.chat.id, text=ourBandUser.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+                                    send_messages_big(message.chat.id, text = f'Тебе выдали:\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
+                                else:
+                                    send_messages_big(message.chat.id, text = f'Извини, но на складе закончились:\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
 
                     if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
                         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])

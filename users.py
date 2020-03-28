@@ -575,7 +575,10 @@ class User(object):
         if count == None:
             self.getInventory().append(thing)
         elif self.getInventoryThingCount(thing) < count:
-            self.getInventory().append(thing)    
+            self.getInventory().append(thing)
+        else:
+            return False
+        return True
 
 # =================== Inventory ========================== #
 
