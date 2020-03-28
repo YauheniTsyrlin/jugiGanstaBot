@@ -795,35 +795,35 @@ newvalues = { "$set": { "value":
                                     'name': '🔩 Болт М69',
                                     'cost': 0,
                                     'type': 'bolt',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'bolt_2',
                                     'name': '🔩🔩 Болт М228',
                                     'cost': 0,
                                     'type': 'bolt',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'bolt_3',
                                     'name': '🔩🔩🔩 Болт М404',
                                     'cost': 0,
                                     'type': 'bolt',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'bolt_4',
                                     'name': '🔩🔩🔩🔩 Болт М1488',
                                     'cost': 0,
                                     'type': 'bolt',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'bolt_5',
                                     'name': '🎫🍼 Билет на гигантскую бутылку',
                                     'cost': 0,
                                     'type': 'bolt',
-                                    'quantity': 1000
+                                    'quantity': None
                                 }
                             ]
                         },
@@ -1552,7 +1552,7 @@ newvalues = { "$set": { "value":
                                     'name': '👑 "Пидор дня"',
                                     'cost': 100,
                                     'type': 'decoration',
-                                    'quantity': 1
+                                    'quantity': None
                                 }
                             ] 
                         },
@@ -1566,7 +1566,7 @@ newvalues = { "$set": { "value":
                                     'name': '🤯 Скальп бандита',
                                     'cost': 50,
                                     'type': 'things',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'scalp_of_deus_ex_machina',
@@ -1587,7 +1587,7 @@ newvalues = { "$set": { "value":
                                     'name': '🌿 Лечебная трава',
                                     'cost': 1,
                                     'type': 'things',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'wafelnitsa',
@@ -1832,42 +1832,42 @@ newvalues = { "$set": { "value":
                                     'name': '📟 антена от Пип-боя',
                                     'cost': 20,
                                     'type': 'things',
-                                    'quantity': 5
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'pip_battery',
                                     'name': '📟 аккумулятор от Пип-боя',
                                     'cost': 20,
                                     'type': 'things',
-                                    'quantity': 5
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'pip_packaging',
                                     'name': '📟 упаковка от Пип-боя',
                                     'cost': 1,
                                     'type': 'things',
-                                    'quantity': 5
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'pip_spare_part',
                                     'name': '📟 запчасть от Пип-боя',
                                     'cost': 25,
                                     'type': 'things',
-                                    'quantity': 5
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'pip_broken_part',
                                     'name': '📟 сломанный Пип-бой',
                                     'cost': 50,
                                     'type': 'things',
-                                    'quantity': 5
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'pip_bolt',
                                     'name': '📟 болт от Пип-боя',
                                     'cost': 20,
                                     'type': 'things',
-                                    'quantity': 30
+                                    'quantity': None
                                 }
                             ] 
                         }

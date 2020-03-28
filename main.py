@@ -883,9 +883,11 @@ def dzen_rewards(user, num_dzen, message):
         if user.isInventoryThing(elem):
             pass
         else:
-            user.addInventoryThing(elem)
-            updateUser(user)
-            send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+            if user.addInventoryThing(elem, elem['quantity']):
+                updateUser(user)
+                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
+            else:
+                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
 
 # Handle new_chat_members
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
@@ -1404,7 +1406,7 @@ def main_message(message):
 
                     elem = random.sample(getSetting(code='ACCESSORY_ALL', id='PIP_BOY')["value"], 1)[0]
                     user.setChat(message.chat.id)
-                    user.addInventoryThing(elem)
+                    user.addInventoryThing(elem, elem['quantity'])
                     user.setPing(True)
 
                     newRank = None
@@ -1468,11 +1470,12 @@ def main_message(message):
                                         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
                                         k =3
                                 elem.update("cost", elem["cost"] * k)
+
                                 if ourBandUser.addInventoryThing(elem, elem['quantity']):
                                     updateUser(ourBandUser)
                                     send_messages_big(message.chat.id, text = f'Тебе выдали:\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
                                 else:
-                                    send_messages_big(message.chat.id, text = f'Извини, но на складе закончились:\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
+                                    send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
 
                     if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
                         bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
@@ -3964,7 +3967,7 @@ def callback_query(call):
                     updateUser(useradd)
                 send_messages_big(call.message.chat.id, text= 'Бандиты!\n' + getResponseDialogFlow(call.message, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
             else:
-                user.addInventoryThing(elem, elem['quantity'])
+                user.addInventoryThing(elem, None)
                 updateUser(user)
                 send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
 
@@ -4368,7 +4371,7 @@ def rade():
                 chat = getMyGoat(userWin.getLogin())['chats']['info']
                 send_messages_big(chat, text=text)
 
-            userWin.addInventoryThing(elem)
+            userWin.addInventoryThing(elem, elem['quantity'])
             updateUser(userWin)
             send_messages_big(chat, text=userWin.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
             row = {}
@@ -4600,7 +4603,7 @@ def setGiftsForRaid(goat):
                                 continue
 
             # send_message_to_admin(f'⚠️ {user.getNameAndGerb()} @{user.getLogin()}\n▫️ {bolt["name"]}!')
-            user.addInventoryThing(bolt)
+            user.addInventoryThing(bolt, bolt['quantity'])
             #send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {bolt["name"]}')    
             updateUser(user)
             boltReport = boltReport + f'{counter}. {bolt["name"].split(" ")[0]} {"@" if user.isPing() else ""}{user.getLogin()} {user.getNameAndGerb()}\n'
