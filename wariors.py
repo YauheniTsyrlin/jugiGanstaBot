@@ -254,9 +254,9 @@ def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
             break
     
     isReplay = False
-    for x in battle.find({'winnerWarior': winnerName, 'loseWarior': loserName, 'date': forward_date } ):
-        isReplay = True
-        return None
+    # for x in battle.find({'winnerWarior': winnerName, 'loseWarior': loserName, 'date': forward_date } ):
+    #     isReplay = True
+    #     return None
 
 
     user = getUserByLogin(message.from_user.username)
