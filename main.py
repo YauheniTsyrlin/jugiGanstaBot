@@ -1167,7 +1167,6 @@ def get_message_photo(message):
     #write_json(message.json)
     
     privateChat = ('private' in message.chat.type)
-
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то показать, но у него получилось лишь:\n' + getResponseDialogFlow(message, 'user_banned').fulfillment_text)
@@ -1176,46 +1175,40 @@ def get_message_photo(message):
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
         for warior in ww:
-            row = {
-                    "timeUpdate": message.forward_date, 
-                    "name": f"{warior.getName()}", 
-                    "fraction": f"{warior.getFraction()}",
-                    'band': warior.getBand(), 
-                    'goat': warior.getGoat(),
-                    'photo': message.photo[0].file_id
-                }
-            newvalues = { "$set":  row}
-            result = registered_wariors.update_one({
-                "name": f"{warior.getName()}", 
-                "fraction": f"{warior.getFraction()}"
-                }, newvalues)
-            if result.matched_count < 1:
-                registered_wariors.insert_one(row)
-                send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}\n\n{row}')
+            update_warior(warior)
+            # row = {
+            #         "timeUpdate": message.forward_date, 
+            #         "name": f"{warior.getName()}", 
+            #         "fraction": f"{warior.getFraction()}",
+            #         'band': warior.getBand(), 
+            #         'goat': warior.getGoat(),
+            #         'photo': message.photo[0].file_id
+            #     }
+            # newvalues = { "$set":  row}
+            # result = registered_wariors.update_one({
+            #     "name": f"{warior.getName()}", 
+            #     "fraction": f"{warior.getFraction()}"
+            #     }, newvalues)
+            # update_warior(warior)
+            # if result.matched_count < 1:
+            #     registered_wariors.insert_one(row)
+            #     send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}\n\n{row}')
 
                 
-            update_warior(None)
-            wariorShow = warior
-        
-        if privateChat:
-            wariorShow = getWariorByName(wariorShow.getName(), wariorShow.getFraction())
-            if (wariorShow.photo):
-                bot.send_photo(message.chat.id, wariorShow.photo, wariorShow.getProfile())
-            else:
-                send_messages_big(message.chat.id, text=wariorShow.getProfile())
-        else:
-            wariorShow = getWariorByName(wariorShow.getName(), wariorShow.getFraction())
+            # update_warior(None)
+            # wariorShow = warior
 
-            markupinline = None
-            user = getUserByName(wariorShow.getName())
-            if user and (not user.getLogin() == message.from_user.username) and user.getBand() and user.getBand() in getGoatBands(getMyGoatName(message.from_user.username)):
-                buttons = []
-                buttons.append(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
-                markupinline = InlineKeyboardMarkup(row_width=2)
-                for row in build_menu(buttons=buttons, n_cols=2):
-                    markupinline.row(*row) 
-
-            send_messages_big(message.chat.id, text=wariorShow.getProfile(), reply_markup=markupinline)
+            wariorShow = getWariorByName(warior.getName(), warior.getFraction())
+            if not privateChat:
+                markupinline = None
+                user = getUserByName(wariorShow.getName())
+                if user and (not user.getLogin() == message.from_user.username) and user.getBand() and user.getBand() in getGoatBands(getMyGoatName(message.from_user.username)):
+                    buttons = []
+                    buttons.append(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
+                    markupinline = InlineKeyboardMarkup(row_width=2)
+                    for row in build_menu(buttons=buttons, n_cols=2):
+                        markupinline.row(*row) 
+                send_messages_big(message.chat.id, text=wariorShow.getProfile(), reply_markup=markupinline)
     else:
         if privateChat:
             send_messages_big(message.chat.id, text=message.photo[len(message.photo)-1].file_id)
