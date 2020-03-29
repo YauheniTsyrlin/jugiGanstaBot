@@ -403,12 +403,12 @@ def getWariorByName(name: str, fraction: str):
             return warior
     return None
 
-print(getWariorByName('ЛеДонна ŇṼ','⚛️Республика').getName())
+# print(getWariorByName('ЛеДонна ŇṼ','⚛️Республика').getName())
 
-# user = getUserByLogin('GonzikBenzyavsky')
+user = getUserByLogin('GonzikBenzyavsky')
 
-# for x in report_raids.find({'login':f'{user.getLogin()}'}):
-#     print(f'{datetime.fromtimestamp(x["date"])} {x["on_raid"]}')
+for x in report_raids.find({'login':f'{user.getLogin()}'}):
+    print(f'{datetime.fromtimestamp(x["date"])} {x["on_raid"]}')
 
 # filtered_arr = list(filter(lambda x : x['type'] == 'decoration', user.getInventory())) 
 # sorted_arr = sorted(filtered_arr, key=itemgetter('id'))
