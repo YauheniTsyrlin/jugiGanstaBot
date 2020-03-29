@@ -394,6 +394,8 @@ def update_warior(warior: wariors.Warior):
     arr = []
     for x in registered_wariors.find():
         arr.append(wariors.importWarior(x))
+    
+    global WARIORS_ARR
     WARIORS_ARR.clear() 
     WARIORS_ARR = WARIORS_ARR + arr 
 
