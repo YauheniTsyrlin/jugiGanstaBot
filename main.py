@@ -388,12 +388,14 @@ def update_warior(warior: wariors.Warior):
         else:
             logger.info(f'======= НЕ нашли бандита')
             registered_wariors.insert_one(json.loads(warior.toJSON()))
-            send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}\n\nwarior.toJSON()')
+            send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}\n\n{json.loads(warior.toJSON())}')
 
-    WARIORS_ARR.clear()
+    TEMP_ARR = [] 
     for x in registered_wariors.find():
-        WARIORS_ARR.append(wariors.importWarior(x))
-        
+        TEMP_ARR.append(wariors.importWarior(x))
+    WARIORS_ARR = TEMP_ARR 
+
+
 def get_raid_plan(raid_date, goat):
     plan_for_date = f'План рейдов на {time.strftime("%d.%m.%Y", time.gmtime( raid_date ))}\n🐐<b>{goat}</b>\n\n'
     find = False
@@ -4321,8 +4323,22 @@ def rade():
             if d.get("count") > 1:
                 i = i + 1
                 result = result + f'{i}. {d.get("_id")} {d.get("count")}\n'
+                dresult2 = registered_wariors.aggregate([ 
+                    {   "$match": {
+                                "name": d.get("_id")
+                            } 
+                    },   
+                    {   "$sort" : { "timeUpdate" : 1 } }
+                    ])
+                z = 1
+                for m in dresult2:
+                    if z == d.get("count"): break
+                    string =  f'    ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(m.get("timeUpdate")))
+                    #print(m.get('_id'))
+                    registered_wariors.delete_many({'_id': m.get('_id')})
+                    z = z + 1
         if i > 0:
-            send_message_to_admin(f'⚠️Выявлены дубликаты бандитов⚠️\n{result}')
+            send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
 
     # Присвоение званий
     if now_date.hour == 10 and now_date.minute == 5 and now_date.second < 15:

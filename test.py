@@ -37,6 +37,10 @@ USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
     USERS_ARR.append(users.importUser(x))
 
+WARIORS_ARR = [] # Зарегистрированные жители пустоши
+for x in registered_wariors.find():
+    WARIORS_ARR.append(wariors.importWarior(x))
+
 SETTINGS_ARR = [] # Зарегистрированные настройки
 for setting in settings.find():
     SETTINGS_ARR.append(setting)
@@ -392,10 +396,19 @@ from operator import itemgetter
 
 # inventory_arr = getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']
 
-user = getUserByLogin('GonzikBenzyavsky')
+def getWariorByName(name: str, fraction: str):
+    name = tools.deEmojify(name).strip()
+    for warior in list(WARIORS_ARR):
+        if name == warior.getName().strip() and fraction == warior.getFraction(): 
+            return warior
+    return None
 
-filter = {  "forward_from_username": message.from_user.username, 
-                        "date": message.date}   
+print(getWariorByName('ЛеДонна ŇṼ','⚛️Республика').getName())
+
+# user = getUserByLogin('GonzikBenzyavsky')
+
+# for x in report_raids.find({'login':f'{user.getLogin()}'}):
+#     print(f'{datetime.fromtimestamp(x["date"])} {x["on_raid"]}')
 
 # filtered_arr = list(filter(lambda x : x['type'] == 'decoration', user.getInventory())) 
 # sorted_arr = sorted(filtered_arr, key=itemgetter('id'))
