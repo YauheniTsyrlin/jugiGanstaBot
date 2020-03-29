@@ -390,10 +390,12 @@ def update_warior(warior: wariors.Warior):
             registered_wariors.insert_one(json.loads(warior.toJSON()))
             send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}\n\n{json.loads(warior.toJSON())}')
 
-    WARIORS_ARR.clear() 
+    
+    arr = []
     for x in registered_wariors.find():
-        WARIORS_ARR.append(wariors.importWarior(x))
-
+        arr.append(wariors.importWarior(x))
+    WARIORS_ARR.clear() 
+    WARIORS_ARR = WARIORS_ARR + arr 
 
 def get_raid_plan(raid_date, goat):
     plan_for_date = f'План рейдов на {time.strftime("%d.%m.%Y", time.gmtime( raid_date ))}\n🐐<b>{goat}</b>\n\n'
