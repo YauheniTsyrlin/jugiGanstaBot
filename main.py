@@ -2272,7 +2272,7 @@ def main_message(message):
             return
     if 'тык' == message.text.lower() or 'тык!' == message.text.lower() or 'тык!)' == message.text.lower() or 'тык)' == message.text.lower() or ' тык' in message.text.lower() or ' тык' in message.text.lower():
         if not isGoatSecretChat(message.from_user.username, message.chat.id):
-            if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
+            if (random.random() <= float(getSetting(code='PROBABILITY', name='FINGER_TYK'))):
                 bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_FINGER_TYK'), 1)[0]['value'])
                 logger.info(mem_top())
                 return
