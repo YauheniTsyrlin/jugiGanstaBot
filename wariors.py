@@ -324,7 +324,6 @@ class Warior(object):
                         if (regen_tmp > self.getRegeneration()):
                             self.setRegeneration(regen_tmp)
 
-                            
 
                     if ('💔' in strings[i]):
                         self.hithimself = self.hithimself + 1    
@@ -486,15 +485,15 @@ class Warior(object):
         
         if self.enemy_armor:
             if self.damage:
-                string = string + f'├💥{self.damage} при 🛡 {self.enemy_armor}\n'
+                string = string + f'├💥{self.damage} при 🛡 {self.enemy_armor} {"⚡️"+str(self.criticalhit) if self.criticalhit and self.criticalhit>0 else ""}\n'
             else:
                 pass
         else:
             if self.damage:
-                string = string + f'├💥{self.damage}\n'  
+                string = string + f'├💥{self.damage} {"⚡️"+str(self.criticalhit) if self.criticalhit and self.criticalhit>0 else ""}\n'  
         
         if self.health:
-            string = string + f'├❤{self.health}\n'
+            string = string + f'├❤{self.health} {"❣️"+str(self.regeneration) if self.regeneration and self.regeneration>0 else ""}\n'
         else: 
             pass
 
