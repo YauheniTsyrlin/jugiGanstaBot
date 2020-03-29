@@ -386,6 +386,7 @@ def update_warior(warior: wariors.Warior):
                 }, newvalues)
         else:
             registered_wariors.insert_one(json.loads(warior.toJSON()))
+            send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}\n\nwarior.toJSON()')
 
     WARIORS_ARR.clear()
     for x in registered_wariors.find():
@@ -1190,6 +1191,9 @@ def get_message_photo(message):
                 }, newvalues)
             if result.matched_count < 1:
                 registered_wariors.insert_one(row)
+                send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}\n\n{row}')
+
+                
             update_warior(None)
             wariorShow = warior
         
@@ -2467,7 +2471,6 @@ def main_message(message):
                     send_messages_big(message.chat.id, text=f'В базе зарегистрированнных бандитов {login} не найден')
 
             for x in registered_wariors.find({'name':f'{name}'}):
-                print(f'find {name}')
                 warior = wariors.importWarior(x)
                 if (warior and warior.photo):
                     try:
