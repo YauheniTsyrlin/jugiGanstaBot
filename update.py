@@ -1130,171 +1130,171 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'fucking_i',
                                     'name': '🖕 Нихуя І степени',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'fucking_ii',
                                     'name': '🖕🖕 Нихуя ІІ степени',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'fucking_iii',
                                     'name': '🖕🖕🖕 Нихуя ІІІ степени',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'fucking_iv',
                                     'name': '🖕🖕🖕🖕 Нихуя IV степени',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'fucking_v',
                                     'name': '🖕🖕🖕🖕🖕 Нихуя V степени',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'fucking_full',
                                     'name': '🎖️ Полный кавалер ордена "Нихуя"',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'diploma_1',
                                     'name': '📄 Грамота за правильный вопрос!',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'diploma_2',
                                     'name': '📜 Грамота от вМ за групповой захват Научного комплекса',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'diploma_3',
                                     'name': '💪 За храбрость и мужество!',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'certificate_gv',
                                     'name': '💉 Удостоверение "Главврач"',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                     
                                 },
                                 {
                                     'id': 'certificate_mb',
                                     'name': '💉 Удостоверение "Медбрат"',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'certificate_mm',
                                     'name': '💉 Удостоверение "Медсестричка"',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'certificate_honorary_donor',
                                     'name': '🩸 Почётный донор',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'certificate_honorary_donor_i',
                                     'name': '🩸 Значёк "Почетный донор" I-степени',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'certificate_honorary_donor_ii',
                                     'name': '🩸 Значёк "Почетный донор" II-степени',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'certificate_honorary_donor_iii',
                                     'name': '🩸 Значёк "Почетный донор" III-степени',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'photo_8_bandits_in_scientific_complex',
                                     'name': '🎞️Фото 8-ми бандитов на фоне Научного комплекса',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 1
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'sign_from_the_door_of_the_scientific_complex',
                                     'name': '☢️Табличка с двери Научного комплекса с 8-ю подписями бойцов АртхǁȺǁус',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 1
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'test_tube_from_the_scientific_complex',
                                     'name': '🍼 Пробирка из Научного комплекса с надписью - здэс был Артоха̶уз',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 1
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'trolley_bus_ticket_scientific_complex',
                                     'name': '🎫 Билет на троллебус на групповую поездку до Научного комплекса',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 1
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'capture_medal_scientific_complex',
                                     'name': '🎖️ Медаль за захват 7-ми данже подряд 1-ой степени',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 1
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'newspaper_article_scientific_complex',
                                     'name': '📰 Статья в газете о легендарном походе за семью данжами',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 1
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'vacation_to_sanatorium',
                                     'name': '📃 Путёвка в санаторий "SPA Пустошь" за захват 7-ми данжей',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 1
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'burning_fart',
                                     'name': '🔥 Горящий пердак',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'marks_of_excellence',
-                                    'quantity': 30
+                                    'quantity': None
                                 }
                             ]
                         },

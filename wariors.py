@@ -10,6 +10,20 @@ def mergeWariors(warior, wariorToUpdate):
                 wariorToUpdate.damage = warior.damage
         else: 
             wariorToUpdate.damage = warior.damage
+    
+    if (warior.criticalhit):
+        if wariorToUpdate.criticalhit:
+            if (wariorToUpdate.criticalhit < warior.criticalhit):
+                wariorToUpdate.criticalhit = warior.criticalhit
+        else: 
+            wariorToUpdate.criticalhit = warior.criticalhit
+
+    if (warior.regeneration):
+        if wariorToUpdate.regeneration:
+            if (wariorToUpdate.regeneration < warior.regeneration):
+                wariorToUpdate.regeneration = warior.regeneration
+        else: 
+            wariorToUpdate.regeneration = warior.regeneration
 
     if (warior.health): 
         if wariorToUpdate.health:       
@@ -86,6 +100,16 @@ def importWarior(warior):
     
     war.damage                  = warior.get('damage')
     
+    if (warior.get('criticalhit')):
+        war.criticalhit              = warior.get('criticalhit')
+    else:
+        war.criticalhit              = 0
+
+    if (warior.get('regeneration')):
+        war.regeneration              = warior.get('regeneration')
+    else:
+        war.regeneration              = 0
+
     war.bm                      = warior.get('bm')
     if (warior.get('hithimself')):
         war.hithimself          = warior.get('hithimself')
@@ -255,6 +279,8 @@ class Warior(object):
         self.fraction = None
         self.bm = None
         self.damage = None
+        self.criticalhit = None
+        self.regeneration = None
         self.health = None
         self.hithimself = None
         self.missed = None
@@ -268,6 +294,8 @@ class Warior(object):
             self.bm = 0
             self.damage = 0
             self.health = 0
+            self.criticalhit = 0
+            self.regeneration = 0
             self.hithimself = 0
             self.missed = 0
             self.kills = 0
@@ -283,15 +311,26 @@ class Warior(object):
                     if (health_tmp > self.getHealth()):
                         self.setHealth(health_tmp)
 
-                    if ('💥' in strings[i]):
+                    if ('💥' in strings[i] and '⚡️' not in strings[i]):
                         damage_tmp = int(strings[i].split(name)[1].split('💥')[1].split(')')[0])
                         if (damage_tmp > self.getDamage()):
                             self.setDamage(damage_tmp)
+                    elif ('💥' in strings[i] and '⚡️' in strings[i]):
+                        crit_tmp = int(strings[i].split(name)[1].split('💥')[1].split(')')[0])
+                        if (crit_tmp > self.getCriticalhit()):
+                            self.setCriticalhit(crit_tmp)
+                    if ('💥' in strings[i] and '❣️' in strings[i]):
+                        regen_tmp = int(strings[i].split(name)[1].split('❣️')[1].strip())
+                        if (regen_tmp > self.getRegeneration()):
+                            self.setRegeneration(regen_tmp)
+
+                            
 
                     if ('💔' in strings[i]):
                         self.hithimself = self.hithimself + 1    
                     if ('💫' in strings[i]):
                         self.missed = self.missed + 1
+                    
                 i=i+1
         if (photo):
             for s in strings:
@@ -503,6 +542,16 @@ class Warior(object):
         self.damage = damage
     def getDamage(self):
         return self.damage
+            
+    def setCriticalhit(self, criticalhit):
+        self.criticalhit = criticalhit
+    def getCriticalhit(self):
+        return self.criticalhit
+
+    def setRegeneration(self, regeneration):
+        self.regeneration = regeneration
+    def getRegeneration(self):
+        return self.regeneration
 
     def setBm(self, bm):
         self.bm = bm

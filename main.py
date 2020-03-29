@@ -3613,16 +3613,18 @@ def callback_query(call):
        return
 
     login = call.data.split('|')[1]
-
-    if login == call.from_user.username:
-        bot.answer_callback_query(call.id, f"Понял!")
-        bot.delete_message(call.message.chat.id, call.message.message_id)
-        return
-
     hwois = f'🗣 <b>{call.from_user.username}</b>'
     user = getUserByLogin(call.from_user.username)
     if user:
         hwois = f'🗣 <b>{user.getLogin()}</b>'
+
+    if login == call.from_user.username:
+        bot.answer_callback_query(call.id, f"Понял!")
+        bot.delete_message(call.message.chat.id, call.message.message_id)
+        send_messages_big(call.message.chat.id, text=f'{hwois}\n👌Благодарю!🙏')
+        return
+
+
 
     text = f'{hwois}\n@{login}, родной!\nТы в опасности!'
     bot.answer_callback_query(call.id, f"{login} предупрежден!")
