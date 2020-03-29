@@ -3094,7 +3094,7 @@ for d in dresult:
             if z == d.get("count"): break
             string =  f'    ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(m.get("timeUpdate")))
             print(m.get('_id'))
-            registered_wariors.delete_many({'_id': m.get('_id')})
+            #registered_wariors.delete_many({'_id': m.get('_id')})
             z = z + 1
     i = i + 1
 # ======================================== #

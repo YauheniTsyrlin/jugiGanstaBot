@@ -393,7 +393,9 @@ def update_warior(warior: wariors.Warior):
     TEMP_ARR = [] 
     for x in registered_wariors.find():
         TEMP_ARR.append(wariors.importWarior(x))
-    WARIORS_ARR = TEMP_ARR 
+    
+    WARIORS_ARR.clear()
+    WARIORS_ARR = WARIORS_ARR + TEMP_ARR 
 
 
 def get_raid_plan(raid_date, goat):
