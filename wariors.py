@@ -3,6 +3,8 @@ import datetime
 import time
 import tools
 
+fractions = ['⚙️Убежище 4','🔪Головорезы','💣Мегатонна','⚛️Республика','👙Клуб бикини','🔰Конкорд','⚙️Убежище 11']
+
 def mergeWariors(warior, wariorToUpdate):
     if (warior.damage):
         if wariorToUpdate.damage:
@@ -212,10 +214,15 @@ def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
     loserName = ''
     for s in strings:
         if (strings[i].startswith('VS.')):
-            w1 = Warior(strings[i-1].split(' из ')[0].strip(), forward_date, message.text, None)
 
+            name1 = strings[i-1]
+            name2 = strings[i+1]
+            for fstr in fractions:
+                name1 = name1.replace(' из '+fstr, '').strip()
+                name2 = name2.replace(' из '+fstr, '').strip()
 
-            w2 = Warior(strings[i+1].split(' из ')[0].strip(), forward_date, message.text, None)
+            w1 = Warior(name1, forward_date, message.text, None)
+            w2 = Warior(name2, forward_date, message.text, None)
             
             result.append(w1)
             result.append(w2)
@@ -247,9 +254,9 @@ def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
             break
     
     isReplay = False
-    for x in battle.find({'winnerWarior': winnerName, 'loseWarior': loserName, 'date': forward_date } ):
-        isReplay = True
-        return None
+    # for x in battle.find({'winnerWarior': winnerName, 'loseWarior': loserName, 'date': forward_date } ):
+    #     isReplay = True
+    #     return None
 
 
     user = getUserByLogin(message.from_user.username)
