@@ -367,16 +367,17 @@ def getWariorByName(name: str, fraction: str):
     return None
 
 def isKnownWarior(name: str, fraction: str):
-    for warior in list(WARIORS_ARR):
-        if warior.getName() and name.lower().strip() == warior.getName().lower().strip() and warior.getFraction() == fraction: 
-            return True
+    if getWariorByName(name, fraction):
+        return True
     return False
 
 def update_warior(warior: wariors.Warior):
     if warior == None:
         pass
     else:
+        logger.info(f'======= Ищем Бандита с именем {warior.getName()} {warior.getFraction()}')
         if isKnownWarior(warior.getName(), warior.getFraction()):
+            logger.info(f'======= Это известный бандит')
             wariorToUpdate = getWariorByName(warior.getName(), warior.getFraction())
             updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
             newvalues = { "$set": json.loads(updatedWarior.toJSON()) }
@@ -385,6 +386,7 @@ def update_warior(warior: wariors.Warior):
                 "fraction": f"{updatedWarior.getFraction()}"
                 }, newvalues)
         else:
+            logger.info(f'======= НЕ нашли бандита')
             registered_wariors.insert_one(json.loads(warior.toJSON()))
             send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}\n\nwarior.toJSON()')
 
@@ -4303,6 +4305,24 @@ def rade():
                 bday = datetime.fromtimestamp(user.getBirthday())
                 if now_date.day == bday.day and now_date.month == bday.month: 
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
+    
+    # Проверка на дубликаты бандитов
+    if now_date.hour in (9,10,11,12,13,14,15,16,17,18,19,20,21,22) and now_date.minute == 0 and now_date.second < 15:
+        dresult = registered_wariors.aggregate([ 
+                                                {   "$group": {
+                                                    "_id": "$name", 
+                                                    "count": {
+                                                        "$sum": 1}}},
+                                                {   "$sort" : { "count" : -1 } }
+                                                ])
+        i = 0
+        result = ''
+        for d in dresult:
+            if d.get("count") > 1:
+                i = i + 1
+                result = result + f'{i}. {d.get("_id")} {d.get("count")}\n'
+        if i > 0:
+            send_message_to_admin(f'⚠️Выявлены дубликаты бандитов⚠️\n{result}')
 
     # Присвоение званий
     if now_date.hour == 10 and now_date.minute == 5 and now_date.second < 15:
