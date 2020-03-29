@@ -4307,7 +4307,7 @@ def rade():
                     send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
     
     # Проверка на дубликаты бандитов
-    if now_date.hour in (9,10,11,12,13,14,15,16,17,18,19,20,21,22) and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour in (9,10,11,12,13,14,15,16,17,18,19,20,21,22) and now_date.minute in (0,10,20,30,40,50) and now_date.second < 15:
         dresult = registered_wariors.aggregate([ 
                                                 {   "$group": {
                                                     "_id": "$name", 
