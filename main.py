@@ -4696,6 +4696,17 @@ def setGiftsForRaid(goat):
                 "planed_location": {'$ne':None}   
             }):
             user = getUserByLogin(raid["login"])
+
+            # Снимаем больы, если последние два рейда были зачетными
+            counter_r = report_raids.find({'login': user.getLogin()}).count()
+            cursor = report_raids.find({'login': user.getLogin()}).skip(counter_r - 2)
+            alltrue = True
+            for x in cursor:
+                if not x["on_raid"]:
+                    alltrue = False 
+            if not alltrue: 
+                continue
+
             if user:
                 counter = counter + 1
                 #acc = '🎫🍼 Билет на гигантскую бутылку'

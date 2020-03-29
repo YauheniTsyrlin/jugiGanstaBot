@@ -407,8 +407,14 @@ def getWariorByName(name: str, fraction: str):
 
 user = getUserByLogin('GonzikBenzyavsky')
 
-for x in report_raids.find({'login':f'{user.getLogin()}'}):
+counter = report_raids.find({'login': user.getLogin()}).count()
+cursor = report_raids.find({'login': user.getLogin()}).skip(counter - 2)
+alltrue = True
+for x in cursor:
+    if not x["on_raid"]:
+        alltrue = False 
     print(f'{datetime.fromtimestamp(x["date"])} {x["on_raid"]}')
+print(alltrue)
 
 # filtered_arr = list(filter(lambda x : x['type'] == 'decoration', user.getInventory())) 
 # sorted_arr = sorted(filtered_arr, key=itemgetter('id'))
