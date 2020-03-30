@@ -2810,7 +2810,7 @@ newvalues = { "$set": { "value":
                         },
                         {
                             'login': 'WestMoscow',
-                            'chat' : 214221494
+                            'chat' : 0 #214221494
                         }
                     ]
                 }
@@ -2897,10 +2897,9 @@ newvalues = { "$set":
                                     ],
                             'chats': 
                                     {
-                                        'secret' : -1001326436156,
-                                        'info' : -1001377870371
+                                        'secret' : -1001240140243,
+                                        'info' : -488189089
                                     }
-
                         }
                     ]   
                 } 
