@@ -367,6 +367,7 @@ def getWariorByName(name: str, fraction: str):
     return None
 
 def isKnownWarior(name: str, fraction: str):
+    
     if getWariorByName(name, fraction):
         return True
     return False
@@ -375,18 +376,19 @@ def update_warior(warior: wariors.Warior):
     if warior == None:
         pass
     else:
-        logger.info(f'======= Ищем Бандита с именем {warior.getName()} {warior.getFraction()}')
-        if isKnownWarior(warior.getName(), warior.getFraction()):
-            logger.info(f'======= Это известный бандит')
-            wariorToUpdate = getWariorByName(warior.getName(), warior.getFraction())
-            updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
-            newvalues = { "$set": json.loads(updatedWarior.toJSON()) }
-            z = registered_wariors.update_one({
-                "name": f"{updatedWarior.getName()}", 
-                "fraction": f"{updatedWarior.getFraction()}"
-                }, newvalues)
-        else:
-            logger.info(f'======= НЕ нашли бандита')
+        # logger.info(f'======= Ищем Бандита с именем {warior.getName()} {warior.getFraction()}')
+        # if isKnownWarior(warior.getName(), warior.getFraction()):
+        # logger.info(f'======= Это известный бандит')
+        wariorToUpdate = getWariorByName(warior.getName(), warior.getFraction())
+        updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
+        newvalues = { "$set": json.loads(updatedWarior.toJSON()) }
+        result = registered_wariors.update_one({
+            "name": f"{updatedWarior.getName()}", 
+            "fraction": f"{updatedWarior.getFraction()}"
+            }, newvalues)
+        if result.matched_count < 1:
+            # else:
+            #     logger.info(f'======= НЕ нашли бандита')
             registered_wariors.insert_one(json.loads(warior.toJSON()))
             send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}\n\n{json.loads(warior.toJSON())}')
 
