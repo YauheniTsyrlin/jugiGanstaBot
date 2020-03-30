@@ -2826,6 +2826,7 @@ newvalues = { "$set": { "value":
                 {'band': 'Crewname'},
                 {'band': 'ЭнтрǁØǁпия'},
                 {'band': 'ЩекØтилы БанȺнов'},
+
                 {'band': 'Легенды Пустоши'}
             ]
         } 
@@ -2874,6 +2875,26 @@ newvalues = { "$set":
                                         'secret' : -1001297175242,
                                         'info' : -351796836
                                     },
+                            'chats': 
+                                    {
+                                        'secret' : -1001326436156,
+                                        'info' : -1001377870371
+                                    }
+
+                        },
+                        { 
+                            'name': 'Легенды Пустоши',
+                            'boss': [
+                                        'EkoveS',
+                                        'PutayuPedali',
+                                    ],
+                            'bands': 
+                                    [
+                                        {
+                                            'name': 'Легенды Пустоши',
+                                            'boss': 'EkoveS'
+                                        }
+                                    ],
                             'chats': 
                                     {
                                         'secret' : -1001326436156,
