@@ -463,7 +463,6 @@ def getButtonsMenu(list_buttons):
     markup.add(*groups_names)
     return markup
 
-
 def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
     menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
     if header_buttons:
@@ -4489,7 +4488,7 @@ def rade():
                 saveRaidResult(goat)
                 statistic(goat['name'])
 
-    if now_date.hour in (1, 9, 17) and now_date.minute == 30 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 23) and now_date.minute == 14 and now_date.second < 15:
         logger.info('Clear raid info!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
@@ -4703,7 +4702,10 @@ def setGiftsForRaid(goat):
 
             # Снимаем больы, если последние два рейда были зачетными
             counter_r = report_raids.find({'login': user.getLogin()}).count()
-            cursor = report_raids.find({'login': user.getLogin()}).skip(counter_r - 2)
+            N = 2
+            if counter_r < N:
+                continue
+            cursor = report_raids.find({'login': user.getLogin()}).skip(counter_r - N)
             alltrue = True
             for x in cursor:
                 if not x["on_raid"]:
