@@ -4376,9 +4376,11 @@ def rade():
         updateUser(None)
         user_in_game = []
         for user in USERS_ARR:
-            usersettings = getUserSetting(user.getLogin(), '👨‍❤️‍👨Участник "Пидор дня"')
-            if usersettings:
-                user_in_game.append(user)
+            # Пока играет только FǁȺǁggǁØǁAT
+            if user.getGoat() and user.getGoat() == 'FǁȺǁggǁØǁAT':
+                usersettings = getUserSetting(user.getLogin(), '👨‍❤️‍👨Участник "Пидор дня"')
+                if usersettings:
+                    user_in_game.append(user)
 
         winners = random.sample(user_in_game, 1)
         if len(winners)>0:
