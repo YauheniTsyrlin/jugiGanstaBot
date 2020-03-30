@@ -4488,7 +4488,7 @@ def rade():
                 saveRaidResult(goat)
                 statistic(goat['name'])
 
-    if now_date.hour in (1, 9, 17, 23) and now_date.minute == 14 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 30 and now_date.second < 15:
         logger.info('Clear raid info!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
