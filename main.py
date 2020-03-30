@@ -2049,11 +2049,11 @@ def main_message(message):
                     markupinline.row(*row)   
 
 
-                if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                    report = getBossReport(name)
-                    send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
-                else:
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+                #if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                report = getBossReport(name)
+                send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
+                #else:
+                #    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
 
             if name == '':
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
