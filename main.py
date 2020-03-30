@@ -2084,6 +2084,8 @@ def main_message(message):
                         else:
                             elem = userIAm.getInventoryThing(elem)
                             count = elem['storage'] + count
+                            if count >= elem['max']:
+                                count = elem['max']
                             elem.update({'storage': count})
                             percent = int(elem['max']/100*count)
                             userIAm.addInventoryThing(elem, replace=True)

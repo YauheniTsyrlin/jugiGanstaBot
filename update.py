@@ -837,7 +837,7 @@ newvalues = { "$set": { "value":
                                     'name': '🦇 Коронавирус',
                                     'cost': 0,
                                     'type': 'disease',
-                                    'quantity': 1000,
+                                    'quantity': None,
                                     'skill':
                                     [
                                         {'contagiousness': 0.01},
@@ -1018,7 +1018,7 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'skill',
                                     'quantity': None,
-                                    'min': 100,
+                                    'min': 150,
                                     'max': 200,
                                     'storage': 0
                                 }
@@ -1127,6 +1127,14 @@ newvalues = { "$set": { "value":
                             'name': '🏵 Награды',
                             'value':
                             [
+                                
+                                {
+                                    'id': 'bolt_5_season',
+                                    'name': '🔩 Рейдовый болт 5-го сезона',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
+                                },
                                 {
                                     'id': 'fucking_i',
                                     'name': '🖕 Нихуя І степени',
