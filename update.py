@@ -2639,6 +2639,11 @@ newvalues = { "$set": { "value":
                             'value': 0.10
                         },
                         {
+                            # Вероятность Нет!
+                            'name': 'NO_STICKER',
+                            'value': 0.10
+                        },
+                        {
                             # Вероятность Тык!
                             'name': 'FINGER_TYK',
                             'value': 1.00
