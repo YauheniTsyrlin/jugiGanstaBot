@@ -380,7 +380,12 @@ def update_warior(warior: wariors.Warior):
         # if isKnownWarior(warior.getName(), warior.getFraction()):
         # logger.info(f'======= Это известный бандит')
         wariorToUpdate = getWariorByName(warior.getName(), warior.getFraction())
-        updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
+        updatedWarior = None
+        if wariorToUpdate == None:
+            updatedWarior = warior 
+        else:
+            updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
+
         newvalues = { "$set": json.loads(updatedWarior.toJSON()) }
         result = registered_wariors.update_one({
             "name": f"{updatedWarior.getName()}", 
@@ -390,7 +395,7 @@ def update_warior(warior: wariors.Warior):
             # else:
             #     logger.info(f'======= НЕ нашли бандита')
             registered_wariors.insert_one(json.loads(warior.toJSON()))
-            send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}\n\n{json.loads(warior.toJSON())}')
+            send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}')
 
     
     arr = []
@@ -1184,28 +1189,6 @@ def get_message_photo(message):
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
         for warior in ww:
             update_warior(warior)
-            # row = {
-            #         "timeUpdate": message.forward_date, 
-            #         "name": f"{warior.getName()}", 
-            #         "fraction": f"{warior.getFraction()}",
-            #         'band': warior.getBand(), 
-            #         'goat': warior.getGoat(),
-            #         'photo': message.photo[0].file_id
-            #     }
-            # newvalues = { "$set":  row}
-            # result = registered_wariors.update_one({
-            #     "name": f"{warior.getName()}", 
-            #     "fraction": f"{warior.getFraction()}"
-            #     }, newvalues)
-            # update_warior(warior)
-            # if result.matched_count < 1:
-            #     registered_wariors.insert_one(row)
-            #     send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}\n\n{row}')
-
-                
-            # update_warior(None)
-            # wariorShow = warior
-
             wariorShow = getWariorByName(warior.getName(), warior.getFraction())
             markupinline = None
             if not privateChat:
