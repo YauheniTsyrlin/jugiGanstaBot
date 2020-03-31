@@ -6,6 +6,7 @@ import config
 import users
 from google.protobuf import struct_pb2
 from telebot.types import Message
+from main import logger
 
 credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON))
 session_client = dialogflow_v2.SessionsClient(credentials=credentials)
@@ -18,14 +19,14 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
 
     contexts = get_contexts(config.DIALOG_FLOW_JSON['project_id'], session_id, "user")
     if not contexts:
-        print(f'Create context user for {session_id}')
+        logger.info(f'Create context user for {session_id}')
         parameters = struct_pb2.Struct()
         if user:
             parameters['login'] = user.getLogin()
             parameters['name'] = user.getName()
         else:
             parameters['login'] = session_id
-        create_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "user", 5, parameters)
+        create_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "user", 1, parameters)
         
 
     if message and message.reply_to_message:
