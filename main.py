@@ -576,7 +576,6 @@ def checkCure(logins, chat_id):
     
     try: 
         a = GLOBAL_VARS[chat]
-        print(a)
     except: 
         GLOBAL_VARS.update({chat: {'inventory': []} })
         GLOBAL_VARS.update({chat: {'medics': []} })
@@ -622,7 +621,7 @@ def infect(logins, chat_id):
                         'state': 'WAIT',
                         'pending_date': pending_date.timestamp(),
                         'dialog_flow_text': 'virus_new_member',
-                        'text': None})
+                        'text': f'▫️ {vir["name"]}'})
                     send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен вирусом {vir["name"]}!')
 
 def cure(logins, chat_id):
@@ -669,7 +668,7 @@ def cure(logins, chat_id):
                             'state': 'WAIT',
                             'pending_date': pending_date.timestamp(),
                             'dialog_flow_text': 'virus_minus_member',
-                            'text': None})
+                            'text': f'{medic.getNameAndGerb()} вылечил {infected.getNameAndGerb()} от:\n▫️ {vir["name"]}'})
 
 def getMobHash(mob_name: str, mob_class: str):
     stringforhash = mob_name + mob_class
