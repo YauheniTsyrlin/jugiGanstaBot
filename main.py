@@ -1372,7 +1372,7 @@ def main_message(message):
             "forward_from_username": message.forward_from.username, 
             "forward_date": message.forward_date}
         new_Message = messager.new_message(message, filter_message)
-        time_over = message.forward_date > (datetime.now() - timedelta(minutes=5)).timestamp()
+        time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
         
         if (message.text.startswith('📟Пип-бой 3000')):
             if ('/killdrone' in message.text or 
@@ -2057,7 +2057,7 @@ def main_message(message):
                         updateUser(userIAm)
 
                 # Учимся умению "Медик"
-                if new_Message:
+                if not new_Message:
                     count = 0
                     for s in message.text.split('\n'):
                         if (s.startswith('Получено:') or s.startswith('Бонус:')) and 'Эфедрин' in s: # x2
