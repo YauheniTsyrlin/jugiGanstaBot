@@ -1625,6 +1625,8 @@ def main_message(message):
             if hasAccessToWariors(message.from_user.username):
 
                 if time_over:
+                    send_messages_big(f'forward_date: {datetime.fromtimestamp(message.forward_date)}')
+                    send_messages_big(f'forward_date: {(datetime.now() - timedelta(minutes=5)).timestamp()}')
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
                     return
 
