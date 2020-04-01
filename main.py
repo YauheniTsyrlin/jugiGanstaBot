@@ -1543,8 +1543,8 @@ def main_message(message):
                                 findGoat = False
                                 for g in goats:
                                     if g['name'] == warior.getGoat():
-                                    g.update({'counter': g['counter']+1})
-                                    findGoat = True
+                                        g.update({'counter': g['counter']+1})
+                                        findGoat = True
                                 
                                 if not findGoat:
                                     goat = {}
