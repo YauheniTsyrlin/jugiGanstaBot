@@ -572,7 +572,7 @@ def checkInfected(logins, chat_id):
 
 def checkCure(logins, chat_id):
     chat = f'chat_{chat_id}' 
-    skill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic`'), None) 
+    medicskill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic`'), None) 
     
     try: 
         a = GLOBAL_VARS[chat]
@@ -587,7 +587,7 @@ def checkCure(logins, chat_id):
     for user_login in logins:
         user = getUserByLogin(user_login)
         if user:
-            if user.getInventoryThingCount(skill)>0:
+            if user.getInventoryThingCount(medicskill)>0:
                 GLOBAL_VARS[chat]['medics'].append(user)
    
 def infect(logins, chat_id):
@@ -630,35 +630,46 @@ def cure(logins, chat_id):
     if len(logins) < 1:
         return
     users_in_danger = []
-
+    viruses = getSetting(code='ACCESSORY_ALL', id='VIRUSES')["value"]
+    medicskill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic`'), None) 
+    
     for user_login in logins:
         user = getUserByLogin(user_login)
         if user:
-            users_in_danger.append(user)
+            for vir in viruses:
+                if user.getInventoryThingCount(vir) > 0:
+                    users_in_danger.append(user)
 
+    for medic in GLOBAL_VARS[chat]['medics']:
+        # сила умения
+        skill = medic.getInventoryThing(medicskill)
+        power_skill = 0
+        if skill['storage'] >= skill['min']:
+            power_skill = (skill['storage'] - skill['min'])/(skill['max'] - skill['min'])
 
-    #     for user in users_in_danger:
-    #         if user.isAccessoryItem(acc_koronavirus):
-    #             if (random.random() <= probability):
-    #                 user.removeAccessory(acc_koronavirus)
-    #                 updateUser(user)
-    #                 counter_cured = counter_cured + 1
-    #                 names = names + f'{user.getNameAndGerb()}\n'
-    #                 send_message_to_admin(f'⚠️❤️ Внимание! \n {user.getLogin()} выздоровел от 🦇 коронавируса!')
+        for infected in users_in_danger:
+            if power_skill == 0:
+                # медик не готов лечить
+                break
 
-    # if counter_cured > 0:
-    #     sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
-    #     pending_date = datetime.now() + timedelta(seconds=sec)
+            for vir in viruses:
+                if infected.getInventoryThingCount(vir) > 0:
+                    if (random.random() <= (vir['skill']['treatability'] + power_skill)/2):
+                        infected.removeInventoryThing(vir)
+                        send_message_to_admin(f'⚠️❤️ Внимание! \n {infected.getLogin()} вылечен {medic.getLogin()} от 🦇 {vir["name"]}!')
+    
+                        sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_2')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_2'))))
+                        pending_date = datetime.now() + timedelta(seconds=sec)
 
-    #     pending_messages.insert_one({ 
-    #         'chat_id': chat,
-    #         'reply_message': None,
-    #         'create_date': datetime.now().timestamp(),
-    #         'user_id': logins[0],  
-    #         'state': 'WAIT',
-    #         'pending_date': pending_date.timestamp(),
-    #         'dialog_flow_text': 'koronavirus_minus_member',
-    #         'text': f'{names}'})
+                        pending_messages.insert_one({ 
+                            'chat_id': chat,
+                            'reply_message': None,
+                            'create_date': datetime.now().timestamp(),
+                            'user_id': infected.getLogin(),  
+                            'state': 'WAIT',
+                            'pending_date': pending_date.timestamp(),
+                            'dialog_flow_text': 'virus_minus_member',
+                            'text': None})
 
 def getMobHash(mob_name: str, mob_class: str):
     stringforhash = mob_name + mob_class
@@ -1324,8 +1335,8 @@ def main_message(message):
     if message.forward_from_chat and (message.forward_from_chat.username == 'wwkeeperhorn' or message.forward_from_chat.username == 'tolylya') and ' постиг ' in message.text:
         # ⚙️Машенька постиг 8-й 🏵Дзен !
         name = message.text.split(' постиг ')[0]
-        name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
-        name = name.split('@')[1].split('постиг')[0].strip()
+        name = name.replace('⚙️', '#@#').replace('🔪', '#@#').replace('💣', '#@#').replace('⚛️', '#@#').replace('👙', '#@#').replace('🔰', '#@#')
+        name = name.split('#@#')[1].split('постиг')[0].strip()
         num_dzen = int(message.text.split(' постиг ')[1].split('-й')[0])
         fraction = getWariorFraction(message.text)
         # acc = f'🏵️ Грамота за {num_dzen}-й Дзен' 
@@ -1667,8 +1678,8 @@ def main_message(message):
 
                     if '👂' in strings[i]:
                         name = strings[i]
-                        name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
-                        name = name.split('@')[1].split('👂')[0].strip()
+                        name = name.replace('⚙️', '#@#').replace('🔪', '#@#').replace('💣', '#@#').replace('⚛️', '#@#').replace('👙', '#@#').replace('🔰', '#@#')
+                        name = name.split('#@#')[1].split('👂')[0].strip()
                         u = getUserByName(name)
                         
                         if u and (not u.getBand() == band):
@@ -2182,8 +2193,8 @@ def main_message(message):
                     for a in arr:
                         if a in s:
                             name = s.split(a)[0].strip()
-                            name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
-                            name = name.split('@')[1].strip()
+                            name = name.replace('⚙️', '#@#').replace('🔪', '#@#').replace('💣', '#@#').replace('⚛️', '#@#').replace('👙', '#@#').replace('🔰', '#@#')
+                            name = name.split('#@#')[1].strip()
                             name = tools.deEmojify(name)
                             fraction = getWariorFraction(s)
                             break

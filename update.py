@@ -841,9 +841,10 @@ newvalues = { "$set": { "value":
                                     'skill':
                                             {
                                                 'contagiousness': 0.05,
-                                                'halflife': 0.5,
+                                                'halflife': 0.50,
                                                 'mortality': 0.01,
-                                                'immunity': 0.95
+                                                'immunity': 0.95,
+                                                'treatability': 0.10
                                             }
                                 },
                                 {
@@ -857,7 +858,8 @@ newvalues = { "$set": { "value":
                                                 'contagiousness': 0.00,
                                                 'halflife': 0.5,
                                                 'mortality': 0.01,
-                                                'immunity': 0.9
+                                                'immunity': 0.9,
+                                                'treatability': 0.10
                                             }
                                 }
                             ]
