@@ -1624,7 +1624,7 @@ def main_message(message):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
 
-                if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+                if time_over:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
                     return
 
@@ -4337,7 +4337,7 @@ def rade():
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
 
     # Присвоение званий
-    if now_date.hour == 17 and now_date.minute == 10 and now_date.second < 15:
+    if now_date.hour == 17 and now_date.minute == 11 and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
