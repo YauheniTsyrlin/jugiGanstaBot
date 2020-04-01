@@ -844,7 +844,7 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
 def getBossReport(boss_name: str):
     report = f"⚜️<b>Статистика по боссам</b>\n"
     report = report + f'<b>{boss_name}</b>\n\n'
-    counter_all_boss = boss.find({'boss_name': boss_name}).count()
+    counter_all_boss = boss.find({'boss_name': boss_name}).count()*4
 
     for bo in boss.find({'boss_name': boss_name}):
         report = report + f'❤️ Здоровье: <b>{bo["health"]}</b>\n'
