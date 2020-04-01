@@ -2029,9 +2029,9 @@ def main_message(message):
                     ])
                 
                 buttons = []
-                for d in dresult:
+                for d in sorted(dresult, key = lambda i: tools.deEmojify(i["_id"]["boss_name"]), reverse=False):
                     boss_name = d["_id"]["boss_name"] 
-                    if boss_name == name: continue
+                    #if boss_name == name: continue
                     hashstr = getMobHash(boss_name, 'boss')
                     boss_name_small = boss_name
                     for n_boss in bosses:
@@ -3653,9 +3653,9 @@ def callback_query(call):
     
     
     buttons = []
-    for d in sorted(dresult, key = lambda i: i["_id"]["boss_name"], reverse=True):
+    for d in sorted(dresult, key = lambda i: tools.deEmojify(i["_id"]["boss_name"]), reverse=False):
         boss_name = d["_id"]["boss_name"] 
-        if boss_name == bossinbd['boss_name']: continue
+        #if boss_name == bossinbd['boss_name']: continue
         hashstr = getMobHash(boss_name, 'boss')
         boss_name_small = boss_name
         for n_boss in bosses:
