@@ -2212,8 +2212,9 @@ def main_message(message):
                 else:
                     send_messages_big(message.chat.id, text='К чему ты это мне прислал?')
             return   
-    # else:
-    #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text) 
+        else:
+            return 
+            #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text) 
 
     if 'gratz' in message.text.lower() or 'грац' in message.text.lower() or 'грац!' in message.text.lower() or  'лол' in message.text.lower() or 'lol' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
