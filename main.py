@@ -2057,7 +2057,7 @@ def main_message(message):
                         updateUser(userIAm)
 
                 # Учимся умению "Медик"
-                if not new_Message:
+                if new_Message:
                     count = 0
                     for s in message.text.split('\n'):
                         if (s.startswith('Получено:') or s.startswith('Бонус:')) and 'Эфедрин' in s: # x2
