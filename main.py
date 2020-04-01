@@ -3653,7 +3653,7 @@ def callback_query(call):
     
     
     buttons = []
-    for d in dresult:
+    for d in sorted(dresult, key = lambda i: i["_id"]["boss_name"], reverse=True):
         boss_name = d["_id"]["boss_name"] 
         if boss_name == bossinbd['boss_name']: continue
         hashstr = getMobHash(boss_name, 'boss')
