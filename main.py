@@ -4337,7 +4337,7 @@ def rade():
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
 
     # Присвоение званий
-    if now_date.hour == 15 and now_date.minute == 39 and now_date.second < 15:
+    if now_date.hour == 15 and now_date.minute == 40 and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
@@ -4363,7 +4363,7 @@ def rade():
                 send_message_to_admin(report)
     
     # Пидор дня
-    if now_date.hour == 15 and now_date.minute == 40 and now_date.second < 15:
+    if now_date.hour == 15 and now_date.minute == 41 and now_date.second < 15:
         logger.info('Pidor of the day!')
         updateUser(None)
         user_in_game = []
