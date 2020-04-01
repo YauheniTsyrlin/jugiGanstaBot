@@ -839,22 +839,26 @@ newvalues = { "$set": { "value":
                                     'type': 'disease',
                                     'quantity': None,
                                     'skill':
-                                    [
-                                        {'contagiousness': 0.01},
-                                        {'mortality': 0.01}
-                                    ]
+                                            {
+                                                'contagiousness': 0.05,
+                                                'halflife': 0.5,
+                                                'mortality': 0.01,
+                                                'immunity': 0.95
+                                            }
                                 },
                                 {
                                     'id': 'mirror_disease',
                                     'name': '🔬 Зеркальная болезнь',
                                     'cost': 0,
                                     'type': 'disease',
-                                    'quantity': 1000,
+                                    'quantity': None,
                                     'skill':
-                                    [
-                                        {'contagiousness': 0.0001},
-                                        {'mortality': 1.00}
-                                    ]
+                                            {
+                                                'contagiousness': 0.00,
+                                                'halflife': 0.5,
+                                                'mortality': 0.01,
+                                                'immunity': 0.9
+                                            }
                                 }
                             ]
                         },
@@ -2706,12 +2710,12 @@ newvalues = { "$set": { "value":
                         {
                             # Range
                             'name': 'PANDING_WAIT_START_2',
-                            'value': 5
+                            'value': 15
                         },
                         {
                             # Range
                             'name': 'PANDING_WAIT_END_2',
-                            'value': 10
+                            'value': 20
                         },
                         {
                             # Range

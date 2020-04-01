@@ -85,13 +85,21 @@ SETTINGS_ARR = [] # Зарегистрированные настройки
 for setting in settings.find():
     SETTINGS_ARR.append(setting)
 
+GLOBAL_VARS = {
+    'inventory':[],
+    'chat_id':
+                {
+                    'inventory':[]
+                },
+    'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'] 
+}
+
 INFECT_OR_CURE_PROBABILITY = {}
 acc_koronavirus = '🦇 Коронавирус'
 acc_doctor_mask = '🥽 Медицинская маска'
 acc_doctor_main = '💉 Удостоверение "Главврач"'
 doctors = ['💉 Удостоверение "Медбрат"', '💉 Удостоверение "Медсестричка"', '💉 Удостоверение "Главврач"']
 
-bosses = ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти']
 
 def getSetting(code: str, name=None, value=None, id=None):
     """ Получение настройки """
@@ -213,10 +221,10 @@ def isGoatSecretChat(login: str, secretchat: str):
         return False
     return True
 
-def isGoatInfoChat(login: str, secretchat: str):
+def isGoatInfoChat(login: str, infochat: str):
     goat = getMyGoat(login)
     if goat:
-        if goat['chats']['info'] == secretchat:
+        if goat['chats']['info'] == infochat:
             return True
         else:
             return False    
@@ -520,14 +528,6 @@ def isDoctor(user_login: str):
                 return True
     return False
 
-def isInfected(logins):  
-    for user_login in logins:
-        user = getUserByLogin(user_login)
-        if user:
-            if user.isAccessoryItem(acc_koronavirus):
-                return True
-    return False
-
 def hasDoctorMask(user_login):
     user = getUserByLogin(user_login)
     if user:
@@ -547,89 +547,118 @@ def isDoctorMainIn(logins):
         if user and user.isAccessoryItem(acc_doctor_main):
             return True
     return False
-    
-def koronavirus(logins, chat: str, probability = float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))):
-    if len(logins) < 1:
-        return
-    if probability == 0:
-        return
+ 
+def checkInfected(logins, chat_id):
+    chat = f'chat_{chat_id}' 
+    viruses = getSetting(code='ACCESSORY_ALL', id='VIRUSES')["value"]
+    try: 
+        a = GLOBAL_VARS[chat]
+        print(a)
+    except: 
+        GLOBAL_VARS.update({chat: {'inventory': []} })
+        GLOBAL_VARS.update({chat: {'skills': []} })
 
-    users_in_danger = []
+    # Применяем коэффциент полураспада ко всем текущим вирусам
+    for vir in  filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory']):
+        vir['skill'].update('contagiousness',  vir['skill']['contagiousness'] * vir['skill']['halflife'] )
+
+    # Добавляем новые вирусы, если есть у бандитов
+    for user_login in logins:
+        user = getUserByLogin(user_login)
+        if user:
+            for vir in list(filter(lambda x : x['skill']['contagiousness'] > 0, viruses)):
+                if user.getInventoryThingCount(vir) > 0:
+                    GLOBAL_VARS[chat]['inventory'].append(vir)
+
+def checkCure(logins, chat_id):
+    chat = f'chat_{chat_id}' 
+    skill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic`'), None) 
+    
+    try: 
+        a = GLOBAL_VARS[chat]
+        print(a)
+    except: 
+        GLOBAL_VARS.update({chat: {'inventory': []} })
+        GLOBAL_VARS.update({chat: {'medics': []} })
+
+    # Удаляем информацию о всех предыдущих медиках
+    GLOBAL_VARS[chat]['medics'].clear()
+      
+    for user_login in logins:
+        user = getUserByLogin(user_login)
+        if user:
+            if user.getInventoryThingCount(skill)>0:
+                GLOBAL_VARS[chat]['medics'].append(user)
    
+def infect(logins, chat_id):
+    chat = f'chat_{chat_id}' 
+    if len(logins) < 1:
+        return
+
+    users_in_danger = []
     for user_login in logins:
         user = getUserByLogin(user_login)
         if user:
+            # TODO Вставить проверку на иммунитет, иммунитет получаешь если переболел 'immunity'
             users_in_danger.append(user)
-    
-    counter_infected = 0
-    names = ''
-    for user in users_in_danger:
-        if not user.isAccessoryItem(acc_koronavirus):
-            r = random.random()
-            if (r <= probability):
-                if hasDoctorMask(user.getLogin()):
-                    # Маска снижает заражение на %%%  
-                    if (random.random() < int(getSetting(code='PROBABILITY', name='MASK_DEFENCE'))):
-                        return
-                
-                user.addAccessory(acc_koronavirus)
-                updateUser(user)
-                counter_infected = counter_infected + 1
-                names = names + f'{user.getNameAndGerb()}\n'
-                send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен коронавирусом!')
 
-    if counter_infected > 0:
-        sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
-        pending_date = datetime.now() + timedelta(seconds=sec)
+    for vir in filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory']):
+        for user in users_in_danger:
+            if user.isInventoryThing(vir):
+                pass
+            else:
+                if (random.random() <= vir['skill']['contagiousness']):
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']) if x['id']==vir['id']), None) 
+                    user.addInventoryThing(elem)
+                    updateUser(user)
 
-        pending_messages.insert_one({ 
-            'chat_id': chat,
-            'reply_message': None,
-            'create_date': datetime.now().timestamp(),
-            'user_id': logins[0],  
-            'state': 'WAIT',
-            'pending_date': pending_date.timestamp(),
-            'dialog_flow_text': 'koronavirus_new_member',
-            'text': f'{names}'})
+                    sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
+                    pending_date = datetime.now() + timedelta(seconds=sec)
+                    pending_messages.insert_one({ 
+                        'chat_id': chat_id,
+                        'reply_message': None,
+                        'create_date': datetime.now().timestamp(),
+                        'user_id': user.getLogin(),  
+                        'state': 'WAIT',
+                        'pending_date': pending_date.timestamp(),
+                        'dialog_flow_text': 'virus_new_member',
+                        'text': None})
+                    send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен вирусом {vir["name"]}!')
 
-def cure(logins, chat: str, probability = float(getSetting(code='PROBABILITY', name='DOCTOR_CURED'))):
+def cure(logins, chat_id):
+    chat = f'chat_{chat_id}' 
     if len(logins) < 1:
         return
-    if probability == 0:
-        return
-
     users_in_danger = []
 
     for user_login in logins:
         user = getUserByLogin(user_login)
         if user:
             users_in_danger.append(user)
-    
-    counter_cured = 0
-    names = ''
 
-    for user in users_in_danger:
-        if user.isAccessoryItem(acc_koronavirus):
-            if (random.random() <= probability):
-                user.removeAccessory(acc_koronavirus)
-                updateUser(user)
-                counter_cured = counter_cured + 1
-                names = names + f'{user.getNameAndGerb()}\n'
-                send_message_to_admin(f'⚠️❤️ Внимание! \n {user.getLogin()} выздоровел от 🦇 коронавируса!')
 
-    if counter_cured > 0:
-        sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
-        pending_date = datetime.now() + timedelta(seconds=sec)
+    #     for user in users_in_danger:
+    #         if user.isAccessoryItem(acc_koronavirus):
+    #             if (random.random() <= probability):
+    #                 user.removeAccessory(acc_koronavirus)
+    #                 updateUser(user)
+    #                 counter_cured = counter_cured + 1
+    #                 names = names + f'{user.getNameAndGerb()}\n'
+    #                 send_message_to_admin(f'⚠️❤️ Внимание! \n {user.getLogin()} выздоровел от 🦇 коронавируса!')
 
-        pending_messages.insert_one({ 
-            'chat_id': chat,
-            'reply_message': None,
-            'create_date': datetime.now().timestamp(),
-            'user_id': logins[0],  
-            'state': 'WAIT',
-            'pending_date': pending_date.timestamp(),
-            'dialog_flow_text': 'koronavirus_minus_member',
-            'text': f'{names}'})
+    # if counter_cured > 0:
+    #     sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
+    #     pending_date = datetime.now() + timedelta(seconds=sec)
+
+    #     pending_messages.insert_one({ 
+    #         'chat_id': chat,
+    #         'reply_message': None,
+    #         'create_date': datetime.now().timestamp(),
+    #         'user_id': logins[0],  
+    #         'state': 'WAIT',
+    #         'pending_date': pending_date.timestamp(),
+    #         'dialog_flow_text': 'koronavirus_minus_member',
+    #         'text': f'{names}'})
 
 def getMobHash(mob_name: str, mob_class: str):
     stringforhash = mob_name + mob_class
@@ -1249,12 +1278,11 @@ def get_message_stiker(message):
 def main_message(message):
     #write_json(message.json)
     chat = message.chat.id
-    
     privateChat = ('private' in message.chat.type)
     logger.info(f'chat:{message.chat.id}:{privateChat}:{message.from_user.username} : {message.text}')
-
     if message.from_user.username == None: return
-
+    
+    # Проверка на присутствие в черном списке
     black_list = getSetting(code='BLACK_LIST', name=message.from_user.username)
     if black_list:
         send_messages_big(message.chat.id, text=f'{message.from_user.username} заслужил пожизненный бан {black_list}', reply_markup=None)
@@ -1265,35 +1293,20 @@ def main_message(message):
     userIAm = getUserByLogin(message.from_user.username)
     
     if not privateChat and userIAm and isGoatInfoChat(message.from_user.username, message.chat.id):
+        # Собрали группу бандитов
         may_be_cured_or_infected = []
         may_be_cured_or_infected.append(message.from_user.username)
         if message.reply_to_message and not message.reply_to_message.from_user.is_bot:
             may_be_cured_or_infected.append(message.reply_to_message.from_user.username)
 
-        # Если есть зараженные
-        if isInfected(may_be_cured_or_infected):
-            INFECT_OR_CURE_PROBABILITY.update({f'infected_{chat}': float(getSetting(code='PROBABILITY', name='KORONOVIRUS'))})
-        else:
-            try:
-                new_probability = INFECT_OR_CURE_PROBABILITY[f'infected_{chat}']
-                new_probability = new_probability * float(getSetting(code='PROBABILITY', name='KORONOVIRUS_HALFLIFE'))
-                if new_probability < 0.01:
-                    new_probability = 0
-                INFECT_OR_CURE_PROBABILITY.update({f'infected_{chat}': new_probability})
-            except: 
-                INFECT_OR_CURE_PROBABILITY.update({f'infected_{chat}': 0}) 
-
-        # Если есть доктор
-        if isDoctorIn(may_be_cured_or_infected):
-            if isDoctorMainIn(may_be_cured_or_infected):
-                INFECT_OR_CURE_PROBABILITY.update({f'cure_{chat}': float(getSetting(code='PROBABILITY', name='DOCTOR_MAIN_CURED'))})
-            else:                
-                INFECT_OR_CURE_PROBABILITY.update({f'cure_{chat}': float(getSetting(code='PROBABILITY', name='DOCTOR_CURED'))})
-        else:
-            INFECT_OR_CURE_PROBABILITY.update({f'cure_{chat}': 0})
-
-        koronavirus(may_be_cured_or_infected, message.chat.id, probability=float(INFECT_OR_CURE_PROBABILITY[f'infected_{chat}']))
-        cure(may_be_cured_or_infected, message.chat.id, probability=float(INFECT_OR_CURE_PROBABILITY[f'cure_{chat}']))
+        # Определили заражение
+        checkInfected(may_be_cured_or_infected, message.chat.id)
+        # Заражаем бандитов
+        infect(may_be_cured_or_infected, message.chat.id)
+        # Определили способных лечить
+        checkCure(may_be_cured_or_infected, message.chat.id)
+        # лечим бандитов
+        cure(may_be_cured_or_infected, message.chat.id)
 
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
@@ -1327,9 +1340,7 @@ def main_message(message):
 
     # Форварды от WastelandWarsBot
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
-        filter_message = {  "username": message.from_user.username,
-            "forward_from_username": message.forward_from.username, 
-            "forward_date": message.forward_date}
+        filter_message = {  "username": message.from_user.username, "forward_from_username": message.forward_from.username, "forward_date": message.forward_date}
         new_Message = messager.new_message(message, filter_message)
         time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
         
@@ -1488,8 +1499,8 @@ def main_message(message):
                     if '|' in strings[i]:
                         name = strings[i]
                         fraction = getWariorFraction(strings[i])
-                        name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
-                        name = name.split('@')[1].split('|')[0].strip()
+                        name = name.replace('⚙️', '#@#').replace('🔪', '#@#').replace('💣', '#@#').replace('⚛️', '#@#').replace('👙', '#@#').replace('🔰', '#@#')
+                        name = name.split('#@#')[1].split('|')[0].strip()
                         name = tools.deEmojify(name)
                         warior = getWariorByName(name, fraction)
                         
@@ -1985,7 +1996,7 @@ def main_message(message):
                         #if boss_name == name: continue
                         hashstr = getMobHash(boss_name, 'boss')
                         boss_name_small = boss_name
-                        for n_boss in bosses:
+                        for n_boss in GLOBAL_VARS['bosses']:
                             boss_name_small = boss_name_small.replace(n_boss, '') 
                         buttons.append(InlineKeyboardButton(boss_name_small, callback_data=f"boss_info|{hashstr}"))
 
@@ -2256,7 +2267,6 @@ def main_message(message):
         if (random.random() <= float(getSetting(code='PROBABILITY', name='DOOR_STICKER'))):
             bot.send_photo(message.chat.id, random.sample(getSetting(code='STICKERS', name='DOOR'), 1)[0]['value'])
             return   
-            
     # Хуификация
     if message.reply_to_message and 'хуифицируй' in message.text.lower():
         if not isGoatSecretChat(message.from_user.username, message.chat.id):
@@ -3608,7 +3618,7 @@ def callback_query(call):
         #if boss_name == bossinbd['boss_name']: continue
         hashstr = getMobHash(boss_name, 'boss')
         boss_name_small = boss_name
-        for n_boss in bosses:
+        for n_boss in GLOBAL_VARS['bosses']:
             boss_name_small = boss_name_small.replace(n_boss, '') 
         buttons.append(InlineKeyboardButton(boss_name_small, callback_data=f"boss_info|{hashstr}"))
 
