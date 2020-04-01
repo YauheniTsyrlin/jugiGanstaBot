@@ -1290,7 +1290,7 @@ def get_message_stiker(message):
 def main_message(message):
     #write_json(message.json)
     chat = message.chat.id
-    time_over = message.forward_date > (datetime.now() - timedelta(minutes=5)).timestamp()
+    
     privateChat = ('private' in message.chat.type)
     logger.info(f'chat:{message.chat.id}:{privateChat}:{message.from_user.username} : {message.text}')
 
@@ -1372,7 +1372,8 @@ def main_message(message):
             "forward_from_username": message.forward_from.username, 
             "forward_date": message.forward_date}
         new_Message = messager.new_message(message, filter_message)
-
+        time_over = message.forward_date > (datetime.now() - timedelta(minutes=5)).timestamp()
+        
         if (message.text.startswith('📟Пип-бой 3000')):
             if ('/killdrone' in message.text or 
                 'ТОП ФРАКЦИЙ' in message.text or 
