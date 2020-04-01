@@ -55,8 +55,8 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
     finally:
         pass
 
-    #if clear_message_context:
-    delete_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message")
+    if clear_message_context:
+        delete_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message")
 
     return response.query_result
 

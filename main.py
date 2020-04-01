@@ -91,6 +91,8 @@ acc_doctor_mask = '🥽 Медицинская маска'
 acc_doctor_main = '💉 Удостоверение "Главврач"'
 doctors = ['💉 Удостоверение "Медбрат"', '💉 Удостоверение "Медсестричка"', '💉 Удостоверение "Главврач"']
 
+bosses = ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти']
+
 def getSetting(code: str, name=None, value=None, id=None):
     """ Получение настройки """
     result = settings.find_one({'code': code})
@@ -301,9 +303,14 @@ def updateUser(newuser: users.User):
     else:
         newvalues = { "$set": json.loads(newuser.toJSON()) }
         z = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
-    USERS_ARR.clear()
+    
+    arr = []
     for x in registered_users.find():
-        USERS_ARR.append(users.importUser(x))
+        arr.append(users.importUser(x))
+
+    global USERS_ARR
+    USERS_ARR.clear() 
+    USERS_ARR = USERS_ARR + arr 
 
 def isUserBan(login: str):
     tz = config.SERVER_MSK_DIFF
@@ -2026,10 +2033,13 @@ def main_message(message):
                     boss_name = d["_id"]["boss_name"] 
                     if boss_name == name: continue
                     hashstr = getMobHash(boss_name, 'boss')
-                    buttons.append(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
+                    boss_name_small = boss_name
+                    for n_boss in bosses:
+                        boss_name_small = boss_name_small.replace(n_boss, '') 
+                    buttons.append(InlineKeyboardButton(boss_name_small, callback_data=f"boss_info|{hashstr}"))
 
-                markupinline = InlineKeyboardMarkup(row_width=2)
-                for row in build_menu(buttons=buttons, n_cols=2):
+                markupinline = InlineKeyboardMarkup(row_width=3)
+                for row in build_menu(buttons=buttons, n_cols=3):
                     markupinline.row(*row)   
 
 
@@ -2267,7 +2277,7 @@ def main_message(message):
         if not isGoatSecretChat(message.from_user.username, message.chat.id):
             if (random.random() <= float(getSetting(code='PROBABILITY', name='FINGER_TYK'))):
                 bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_FINGER_TYK'), 1)[0]['value'])
-                logger.info(mem_top())
+                #logger.info(mem_top())
                 return
     if 'да' == message.text.lower() or 'да!' == message.text.lower() or 'да?' == message.text.lower() or 'да!)' == message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='YES_STICKER'))):
@@ -3647,10 +3657,13 @@ def callback_query(call):
         boss_name = d["_id"]["boss_name"] 
         if boss_name == bossinbd['boss_name']: continue
         hashstr = getMobHash(boss_name, 'boss')
-        buttons.append(InlineKeyboardButton(boss_name, callback_data=f"boss_info|{hashstr}"))
+        boss_name_small = boss_name
+        for n_boss in bosses:
+            boss_name_small = boss_name_small.replace(n_boss, '') 
+        buttons.append(InlineKeyboardButton(boss_name_small, callback_data=f"boss_info|{hashstr}"))
 
-    markupinline = InlineKeyboardMarkup(row_width=2)
-    for row in build_menu(buttons=buttons, n_cols=2):
+    markupinline = InlineKeyboardMarkup(row_width=3)
+    for row in build_menu(buttons=buttons, n_cols=3):
         markupinline.row(*row)    
 
     text = getBossReport(bossinbd['boss_name'])
