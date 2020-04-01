@@ -413,48 +413,6 @@ def update_warior(warior: wariors.Warior):
     WARIORS_ARR.clear() 
     WARIORS_ARR = WARIORS_ARR + arr 
 
-def get_raid_plan(raid_date, goat):
-    plan_for_date = f'План рейдов на {time.strftime("%d.%m.%Y", time.gmtime( raid_date ))}\n🐐<b>{goat}</b>\n\n'
-    find = False
-    time_str = None
-    for raid in plan_raids.find({
-                                '$and' : 
-                                [
-                                    {
-                                        'rade_date': {
-                                        '$gte': (datetime.now() + timedelta(minutes=180)).timestamp(),
-                                        '$lt': ( datetime.fromtimestamp(raid_date).replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
-                                        }
-                                    },
-                                    {
-                                        'goat': goat
-                                    }
-                                ]
-                            }):
-
-        t = datetime.fromtimestamp(raid.get('rade_date') ) 
-        if not (time_str == t):
-            plan_for_date = plan_for_date + f'<b>Рейд в {str(t.hour).zfill(2)}:{str(t.minute).zfill(2)}</b>\n'
-            time_str = t
-
-        plan_for_date = plan_for_date + f'<b>{raid.get("rade_text")}</b>\n'
-        users_onraid = raid.get("users")
-        if users_onraid == None or len(users_onraid) == 0:
-            plan_for_date = plan_for_date + f'    Никто не записался\n'
-        else:
-            i = 0
-            for u in users_onraid:
-                i = i + 1
-                reg_usr = getUserByLogin(u)
-                plan_for_date = plan_for_date + f'    {i}. {reg_usr.getNameAndGerb()}\n'
-        
-        find = True
-
-    if find == False:
-        plan_for_date = plan_for_date + '<b>Нет запланированных рейдов</b>'
-
-    return plan_for_date
-
 def setSetting(code: str, value: str):
 
     """ Сохранение настройки """
@@ -1063,7 +1021,8 @@ def process_partizan_step(message):
 
 def process_gerb_step(message):
     if tools.isOneEmojify(message.text):
-        for user in list(USERS_ARR):
+        goat_bands = getGoatBands(getMyGoatName(message.from_user.username))
+        for user in list( filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR) ):
             if user.getSettingValue(name='🃏Мой герб') and user.getSettingValue(name='🃏Мой герб') == message.text:
                 bot.send_message(message.chat.id, text=f'Поздняк, этот герб уже забил за собой {user.getLogin()}')
                 return
@@ -4258,6 +4217,48 @@ def ping_on_raid(fuckupusers, chat_id, raidInfo, goatName):
 
     if len(fusers) > 0:
         send_messages_big(chat_id, text=fuckupusersReport)
+
+def get_raid_plan(raid_date, goat):
+    plan_for_date = f'План рейдов на {time.strftime("%d.%m.%Y", time.gmtime( raid_date ))}\n🐐<b>{goat}</b>\n\n'
+    find = False
+    time_str = None
+    for raid in plan_raids.find({
+                                '$and' : 
+                                [
+                                    {
+                                        'rade_date': {
+                                        '$gte': (datetime.now() + timedelta(minutes=180)).timestamp(),
+                                        '$lt': ( datetime.fromtimestamp(raid_date).replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
+                                        }
+                                    },
+                                    {
+                                        'goat': goat
+                                    }
+                                ]
+                            }):
+
+        t = datetime.fromtimestamp(raid.get('rade_date') ) 
+        if not (time_str == t):
+            plan_for_date = plan_for_date + f'<b>Рейд в {str(t.hour).zfill(2)}:{str(t.minute).zfill(2)}</b>\n'
+            time_str = t
+
+        plan_for_date = plan_for_date + f'<b>{raid.get("rade_text")}</b>\n'
+        users_onraid = raid.get("users")
+        if users_onraid == None or len(users_onraid) == 0:
+            plan_for_date = plan_for_date + f'    Никто не записался\n'
+        else:
+            i = 0
+            for u in users_onraid:
+                i = i + 1
+                reg_usr = getUserByLogin(u)
+                plan_for_date = plan_for_date + f'    {i}. {reg_usr.getNameAndGerb()}\n'
+        
+        find = True
+
+    if find == False:
+        plan_for_date = plan_for_date + '<b>Нет запланированных рейдов</b>'
+
+    return plan_for_date
 
 def rade():
     tz = config.SERVER_MSK_DIFF
