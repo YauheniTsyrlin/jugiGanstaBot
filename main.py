@@ -1290,12 +1290,11 @@ def get_message_stiker(message):
 def main_message(message):
     #write_json(message.json)
     chat = message.chat.id
-
+    time_over = message.forward_date > (datetime.now() - timedelta(minutes=5)).timestamp()
     privateChat = ('private' in message.chat.type)
     logger.info(f'chat:{message.chat.id}:{privateChat}:{message.from_user.username} : {message.text}')
 
-    if message.from_user.username == None:
-        return
+    if message.from_user.username == None: return
 
     black_list = getSetting(code='BLACK_LIST', name=message.from_user.username)
     if black_list:
@@ -1346,14 +1345,10 @@ def main_message(message):
         send_messages_big(message.chat.id, text=f'{name} хотел что-то сказать, но у него получилось лишь:\n{getResponseDialogFlow(message, "user_banned").fulfillment_text}' )
         return
     
-    callJugi = (privateChat 
-                            or message.text.lower().startswith('джу') 
-                            or (message.reply_to_message 
-                                and message.reply_to_message.from_user.is_bot 
-                                and message.reply_to_message.from_user.username in ('FriendsBrotherBot', 'JugiGanstaBot') )
-                )
+    callJugi = (privateChat or message.text.lower().startswith('джу') or (message.reply_to_message and message.reply_to_message.from_user.is_bot and message.reply_to_message.from_user.username in ('FriendsBrotherBot', 'JugiGanstaBot') ))
     findUser = not (userIAm == None)
 
+    # Форварды от Рупора Пустоши
     if message.forward_from_chat and (message.forward_from_chat.username == 'wwkeeperhorn' or message.forward_from_chat.username == 'tolylya') and ' постиг ' in message.text:
         # ⚙️Машенька постиг 8-й 🏵Дзен !
         name = message.text.split(' постиг ')[0]
@@ -1371,8 +1366,14 @@ def main_message(message):
         #             "forward_date": message.forward_date}    
         # newMess = messager.new_message(message, filter)
 
-    if (message.text.startswith('📟Пип-бой 3000')):
-        if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
+    # Форварды от WastelandWarsBot
+    if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
+        filter_message = {  "username": message.from_user.username,
+            "forward_from_username": message.forward_from.username, 
+            "forward_date": message.forward_date}
+        new_Message = messager.new_message(message, filter_message)
+
+        if (message.text.startswith('📟Пип-бой 3000')):
             if ('/killdrone' in message.text or 
                 'ТОП ФРАКЦИЙ' in message.text or 
                 'СОДЕРЖИМОЕ РЮКЗАКА' in message.text or 
@@ -1436,698 +1437,469 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'setpip').fulfillment_text)
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
-        else:
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text) 
-        return
-    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'FIGHT!' in message.text):
-        # if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-        #     pass
-        # else:
-        #     censored(message)
-
-        ww = wariors.fromFightToWarioirs(message.forward_date, message, USERS_ARR, battle)
-        if ww == None:
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'dublicate').fulfillment_text)
+            
             return
-        ourBandUser = None
-        for warior in ww:
-            if ourBandUser == None:
-                ourBandUser = getUserByName(warior.getName())
-            update_warior(warior)
-        
-        if ourBandUser:
-            for w in battle.find({
-                # 'login': message.from_user.username, 
-                'date': message.forward_date}):
-                if w['winnerWarior'] == ourBandUser.getName():
-                    for war in ww:
-                        # Вручаем скальп за машинку
-                        if war.getName() == w['loseWarior']:
-                            loser = getWariorByName(war.getName(), war.getFraction())
+        elif ('FIGHT!' in message.text):
+            # if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+            #     pass
+            # else:
+            #     censored(message)
 
-                            if loser:
-                                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_banditos'), None) 
-                                k = 1
-                                if loser.getGoat():
-                                    k = 2
-                                    if loser.getGoat() == 'Deus Ex Machina':
-                                        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
-                                        k =3
+            ww = wariors.fromFightToWarioirs(message.forward_date, message, USERS_ARR, battle)
+            if ww == None:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'dublicate').fulfillment_text)
+                return
+            ourBandUser = None
+            for warior in ww:
+                if ourBandUser == None:
+                    ourBandUser = getUserByName(warior.getName())
+                update_warior(warior)
+            
+            if ourBandUser:
+                for w in battle.find({
+                    # 'login': message.from_user.username, 
+                    'date': message.forward_date}):
+                    if w['winnerWarior'] == ourBandUser.getName():
+                        for war in ww:
+                            # Вручаем скальп за машинку
+                            if war.getName() == w['loseWarior']:
+                                loser = getWariorByName(war.getName(), war.getFraction())
 
-                                elem.update({"cost": elem["cost"] * k})
+                                if loser:
+                                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_banditos'), None) 
+                                    k = 1
+                                    if loser.getGoat():
+                                        k = 2
+                                        if loser.getGoat() == 'Deus Ex Machina':
+                                            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
+                                            k =3
 
-                                if ourBandUser.addInventoryThing(elem, elem['quantity']):
-                                    updateUser(ourBandUser)
-                                    send_messages_big(message.chat.id, text = f'Тебе выдали:\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
-                                else:
-                                    send_messages_big(message.chat.id, text=ourBandUser.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
+                                    elem.update({"cost": elem["cost"] * k})
 
-                    if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
-                        bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
+                                    if ourBandUser.addInventoryThing(elem, elem['quantity']):
+                                        updateUser(ourBandUser)
+                                        send_messages_big(message.chat.id, text = f'Тебе выдали:\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
+                                    else:
+                                        send_messages_big(message.chat.id, text=ourBandUser.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
+
+                        if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
+                            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
+                    else:
+                        if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_LOSER'))):
+                            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
+            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+            return
+        elif ('/accept' in message.text and '/decline' in message.text):
+            #write_json(message.json)
+            if hasAccessToWariors(message.from_user.username):
+                fraction = getWariorFraction(message.text.split(' из ')[1].strip())
+                warior = getWariorByName(message.text.split('👤')[1].split(' из ')[0], fraction)
+
+                if warior == None:
+                    send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
+                elif (warior and warior.photo):
+                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
                 else:
-                    if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_LOSER'))):
-                        bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
-        send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
-        return
-    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '/accept' in message.text and '/decline' in message.text):
-        #write_json(message.json)
-        if hasAccessToWariors(message.from_user.username):
-            fraction = getWariorFraction(message.text.split(' из ')[1].strip())
-            warior = getWariorByName(message.text.split('👤')[1].split(' из ')[0], fraction)
-
-            if warior == None:
-                send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
-            elif (warior and warior.photo):
-                bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                    send_messages_big(message.chat.id, text=warior.getProfile())
             else:
-                send_messages_big(message.chat.id, text=warior.getProfile())
-        else:
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
-        return
-    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты оценил обстановку вокруг.' in message.text and 'Рядом кто-то есть.' in message.text):
-        #write_json(message.json)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
+            return
+        elif ('Ты оценил обстановку вокруг.' in message.text and 'Рядом кто-то есть.' in message.text):
+            #write_json(message.json)
 
-        if hasAccessToWariors(message.from_user.username):
-            # 🚷/👣52 км.
-            strings = message.text.split('\n')
-            i = 0
-            find = False
-            report = ''
-            counter = 0
-            report_goat_info = ''
-            goats = []
-            km = 0
-            dark_zone = False
-            user_in_dark_zone = []
-            for s in strings:
-                if ('👣' in s or '🚷' in s) and ' км' in s:
-                    # km = int(s.split('👣')[1].split('км')[0])
-                    report_goat_info = report_goat_info + f'<b>{s}</b>\n'
-                if s.startswith('🚷'):
-                    dark_zone = True
-                if '|' in strings[i]:
-                    name = strings[i]
-                    fraction = getWariorFraction(strings[i])
-                    name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
-                    name = name.split('@')[1].split('|')[0].strip()
-                    name = tools.deEmojify(name)
-                    warior = getWariorByName(name, fraction)
-                    
-                    if dark_zone:
-                        user = getUserByName(name)
-                        if user:
-                            user_in_dark_zone.append(user.getLogin())  
+            if hasAccessToWariors(message.from_user.username):
+                # 🚷/👣52 км.
+                strings = message.text.split('\n')
+                i = 0
+                find = False
+                report = ''
+                counter = 0
+                report_goat_info = ''
+                goats = []
+                km = 0
+                dark_zone = False
+                user_in_dark_zone = []
+                for s in strings:
+                    if ('👣' in s or '🚷' in s) and ' км' in s:
+                        # km = int(s.split('👣')[1].split('км')[0])
+                        report_goat_info = report_goat_info + f'<b>{s}</b>\n'
+                    if s.startswith('🚷'):
+                        dark_zone = True
+                    if '|' in strings[i]:
+                        name = strings[i]
+                        fraction = getWariorFraction(strings[i])
+                        name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
+                        name = name.split('@')[1].split('|')[0].strip()
+                        name = tools.deEmojify(name)
+                        warior = getWariorByName(name, fraction)
+                        
+                        if dark_zone:
+                            user = getUserByName(name)
+                            if user:
+                                user_in_dark_zone.append(user.getLogin())  
 
-                    if warior:
-                        if warior.getGoat():
-                            findGoat = False
-                            for g in goats:
-                                if g['name'] == warior.getGoat():
-                                   g.update({'counter': g['counter']+1})
-                                   findGoat = True
+                        if warior:
+                            if warior.getGoat():
+                                findGoat = False
+                                for g in goats:
+                                    if g['name'] == warior.getGoat():
+                                    g.update({'counter': g['counter']+1})
+                                    findGoat = True
+                                
+                                if not findGoat:
+                                    goat = {}
+                                    goat.update({'counter': 1})
+                                    goat.update({'name': warior.getGoat()})
+                                    goats.append(goat)
+
+                            find = True
+                            report = report + f'{warior.getProfileSmall()}\n'
+                        else:
+                            counter = counter + 1    
+                    if '...И еще' in strings[i]:
+                        live = int(strings[i].split('...И еще')[1].split('выживших')[0].strip())
+                        counter = counter + live
+                    i = i + 1
+
+                    buttons = []
+                    for d in user_in_dark_zone:
+                        buttons.append(InlineKeyboardButton(f'@{d}', callback_data=f"ping_user|{d}"))
+
+                    markupinline = InlineKeyboardMarkup(row_width=2)
+                    for row in build_menu(buttons=buttons, n_cols=2):
+                        markupinline.row(*row)   
+
+                if len(goats) > 0:
+                    for goat in goats:
+                        report_goat_info = report_goat_info + f'🐐 {goat["name"]}: <b>{goat["counter"]}</b>\n'
+                    report_goat_info = report_goat_info + '\n'
+                
+                if counter > 0:
+                    report_goat_info = report_goat_info + f'...И еще {str(counter)} выживших.'
+
+                if not find:
+                    send_messages_big(message.chat.id, text='Не нашел никого!')
+                else:
+                    send_messages_big(message.chat.id, text=report + report_goat_info, reply_markup=markupinline)
+            else:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
+            return
+        elif ('Ты либо очень смел, либо очень глуп, раз переступил порог ⚡️Купола Грома.' in message.text):
+            if hasAccessToWariors(message.from_user.username):
+
+                strings = message.text.split('\n')
+                start = False
+                report = ''
+
+                for s in strings:
+                    if 'Сейчас Купол Грома пуст, но ты можешь позвать сюда кого-нибудь из своих знакомых' in message.text:
+                        break
+
+                    if start: 
+                        if s.startswith('⚔️'):
+                            continue
+
+                        fraction = s.split('(')[1].split(')')[0].strip()
+                        pref = ''
+                        band = ''
+                        if '(Без банды' in s:
+                            pref = '(Без банды'
+                        elif '🤘' in s:
+                            pref = '🤘'
+                            band = s.split('🤘')[1].strip()
+                        name = s.split(')')[1].split(pref)[0].strip()
+                        fraction_full = getWariorFraction(fraction)
+                        warior = getWariorByName(name, fraction_full)
+                        if warior:
+                            report = report + f'{warior.getProfileSmall()}\n'
+                        else:
+                            if band == '':
+                                report = report + f'┌{fraction} {name}\n└...\n'
+                            else:
+                                report = report + f'┌{fraction} {name}\n├🤘{band}\n└...\n'
                             
-                            if not findGoat:
-                                goat = {}
-                                goat.update({'counter': 1})
-                                goat.update({'name': warior.getGoat()})
-                                goats.append(goat)
-
-                        find = True
-                        report = report + f'{warior.getProfileSmall()}\n'
-                    else:
-                        counter = counter + 1    
-                if '...И еще' in strings[i]:
-                    live = int(strings[i].split('...И еще')[1].split('выживших')[0].strip())
-                    counter = counter + live
-                i = i + 1
-
-                buttons = []
-                for d in user_in_dark_zone:
-                    buttons.append(InlineKeyboardButton(f'@{d}', callback_data=f"ping_user|{d}"))
-
-                markupinline = InlineKeyboardMarkup(row_width=2)
-                for row in build_menu(buttons=buttons, n_cols=2):
-                    markupinline.row(*row)   
-
-            if len(goats) > 0:
-                for goat in goats:
-                    report_goat_info = report_goat_info + f'🐐 {goat["name"]}: <b>{goat["counter"]}</b>\n'
-                report_goat_info = report_goat_info + '\n'
-            
-            if counter > 0:
-                report_goat_info = report_goat_info + f'...И еще {str(counter)} выживших.'
-
-            if not find:
-                send_messages_big(message.chat.id, text='Не нашел никого!')
-            else:
-                send_messages_big(message.chat.id, text=report + report_goat_info, reply_markup=markupinline)
-        else:
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
-        return
-    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты либо очень смел, либо очень глуп, раз переступил порог ⚡️Купола Грома.' in message.text):
-        if hasAccessToWariors(message.from_user.username):
-
-            strings = message.text.split('\n')
-            start = False
-            report = ''
-
-            for s in strings:
-                if 'Сейчас Купол Грома пуст, но ты можешь позвать сюда кого-нибудь из своих знакомых' in message.text:
-                    break
-
-                if start: 
-                    if s.startswith('⚔️'):
-                        continue
-
-                    fraction = s.split('(')[1].split(')')[0].strip()
-                    pref = ''
-                    band = ''
-                    if '(Без банды' in s:
-                        pref = '(Без банды'
-                    elif '🤘' in s:
-                        pref = '🤘'
-                        band = s.split('🤘')[1].strip()
-                    name = s.split(')')[1].split(pref)[0].strip()
-                    fraction_full = getWariorFraction(fraction)
-                    warior = getWariorByName(name, fraction_full)
-                    if warior:
-                        report = report + f'{warior.getProfileSmall()}\n'
-                    else:
-                        if band == '':
-                            report = report + f'┌{fraction} {name}\n└...\n'
-                        else:
-                            report = report + f'┌{fraction} {name}\n├🤘{band}\n└...\n'
-                        
-                
-                if 'ТОП Купола /tdtop' in s:
-                    start = True
-            if report == '':
-                send_messages_big(message.chat.id, text='Никого не нашел!')
-            else:
-                report = '<b>⚡️Купола Грома.</b>\n\n' + report
-                send_messages_big(message.chat.id, text=report)
-        return
-    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты уже записался.' in message.text):
-        #write_json(message.json)
-        if hasAccessToWariors(message.from_user.username):
-            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-                return
-
-            u = getUserByLogin(message.from_user.username)
-            u.setRaidLocation(1)
-            updateUser(u)
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
-        else:
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
-        return
-    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' and 'Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
-        #write_json(message.json)
-        if hasAccessToWariors(message.from_user.username):
-            if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
-                #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-                send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
-                return
-
-            if '7ч.' in message.text.split('Рейд начнётся через ⏱')[1]:
-                send_messages_big(message.chat.id, text='Это захват на следующий рейд. Сбрось мне его позже!')
-                return
-
-            u = getUserByLogin(message.from_user.username)
-            u.setRaidLocation(1)
-            updateUser(u)
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
-        else:
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
-        return
-    elif (message.forward_from and 'Панель банды.' in message.text and message.forward_from.username == 'WastelandWarsBot'):
-        #write_json(message.json)
-        if hasAccessToWariors(message.from_user.username):
-
-            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-                return
-
-            strings = message.text.split('\n')
-            i = 0
-            band = ''
-            allrw = 0
-            allcounter = 0
-            onraidrw = 0
-            onraidcounter = 0
-            onraidReport = ''
-            onraidusers = []
-
-            report = 'Информация о рейдерах!\n'
-            fuckupraidrw = 0
-            fuckupraidcounter = 0
-            fuckupusersReport = ''
-            fuckupusers = []
-            alianusersReport = ''
-            aliancounter = 0
-
-            # 🤘👊🏅
-            for s in strings:
-                if '🏅' in strings[i] and '🤘' in strings[i]:
-                    band = strings[i].split('🤘')[1].split('🏅')[0].strip()
                     
-                    if not isGoatBoss(message.from_user.username):
-                        if not isUsersBand(message.from_user.username, band):
-                            send_messages_big(message.chat.id, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow(message, 'not_right_band').fulfillment_text)
-                            return
-
-                if '👂' in strings[i]:
-                    name = strings[i]
-                    name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
-                    name = name.split('@')[1].split('👂')[0].strip()
-                    u = getUserByName(name)
-                    
-                    if u and (not u.getBand() == band):
-                        u.setBand(band)
-
-                    spliter = ''
-                    km = ''
-                    if '📍' in strings[i]:
-                        km =  int(strings[i].split('📍')[1].split('km')[0].strip())
-                        spliter = '📍'
-
-                    elif '👟' in strings[i]:
-                        km =  int(strings[i].split('👟')[1].split('km')[0].strip())
-                        spliter = '👟'
-                    else:
-                        km =  int(strings[i].split('👊')[1].split('km')[0].strip())
-                        spliter = '👊'
-
-
-                    if u:
-                        allrw = allrw + u.getRaidWeight()
-                        allcounter = allcounter + 1
-                        u.setWastelandLocation(km)
-                        u.setMaxkm(km)
-                        if '👊' in strings[i]:
-                            onraidcounter = onraidcounter + 1
-                            onraidrw = onraidrw + u.getRaidWeight()
-                            u.setRaidLocation(km)
-                            onraidusers.append(u)
-                        else:
-                            fuckupraidrw = fuckupraidrw + u.getRaidWeight()
-                            fuckupusers.append(u)
-                            u.setRaidLocation(0)
-                        updateUser(u)
-                    else:
-                        aliancounter  = aliancounter + 1
-                        alianusersReport = alianusersReport + f'{aliancounter}. {name} {spliter}{km}км\n'
-                    
-                i = i + 1
-            
-            report = report + f'🤘 <b>{band}</b>\n\n' 
-            if onraidcounter > 0:
-                report = report + f'🧘‍♂️ <b>на рейде</b>: <b>{onraidcounter}/{allcounter}</b>\n'
-                i = 1
-                for onu in sorted(onraidusers, key = lambda i: i.getRaidWeight(), reverse=True):
-                    report = report +  f'{i}.{onu.getFraction()[0:1]}{onu.getRaidWeight()} {onu.getNameAndGerb()} 👊{onu.getRaidLocation()}км\n'
-                    i = i + 1
-                report = report + f'\n<b>Общий вес</b>: 🏋️‍♂️{onraidrw}/{allrw} <b>{str(int(onraidrw/allrw*100))}%</b>\n'
-            report = report + '\n'
-            if fuckupraidrw > 0:
-                report = report + '🐢 <b>Бандиты в проёбе</b>:\n'
-                i = 1
-                for offu in sorted(fuckupusers, key = lambda i: i.getRaidWeight(), reverse=True):
-                    ping = ''
-                    if not offu.isPing():
-                        ping = '🔕' 
-                    report = report +  f'{i}.{offu.getFraction()[0:1]}{offu.getRaidWeight()} {ping} {offu.getNameAndGerb()} 📍{offu.getWastelandLocation()}км\n'
-                    i = i + 1
-            report = report + '\n'
-            if alianusersReport == '':
-                pass
-            else:
-                report = report + '🐀 <b>Крысы в банде</b> (нет регистрации):\n'
-                report = report + alianusersReport
-            
-            if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                bot.delete_message(message.chat.id, message.message_id)
-                send_messages_big(message.chat.id, text=report)
-            else:
-                pass
-                #censored(message)
-        else:
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
-        return
-    elif (message.forward_from and message.forward_from.username == 'WastelandWarsBot' 
-                and 
-                    (
-                        (message.text.startswith('Теперь') and 'под контролем' in message.text)
-                        or
-                        (message.text.startswith('✊️Захват') and ('Захват начался!' in message.text or 'Вы автоматически отправитесь на совместную зачистку локации' in message.text)) 
-                    )
-                ):
-        if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-            return        
-        
-        band = ''
-        dungeon_km = 0
-        dungeon_name = ''
-        usesrOnDungeon = []
-        text = ''
-        for s in message.text.split('\n'):
-            #Теперь Гексагон под контролем 🤘АртхǁȺǁус
-            if s.startswith('Теперь'): 
-                band = s.split('🤘')[1].split('!')[0]
-                dungeon_tmp = s.split('Теперь')[1].split('под контролем')[0].strip().lower()
-                for d in getSetting(code='DUNGEONS'):
-                    if dungeon_tmp in d['name'].lower():
-                        dungeon_km = int(d['value'])
-                        dungeon_name = d['name']     
-                        break
-                text = f'✊️Теперь <b>{dungeon_km}км {dungeon_name}</b>\nпод контролем 🤟<b>{band}</b>\n\nУдарный отряд\n'
-       
-            elif s.startswith('✊️Захват'):
-                for d in getSetting(code='DUNGEONS'):
-                    if tools.deEmojify(s.replace('✊️Захват ','')) in d['name'] :
-                        dungeon_name = d['name']
-                        dungeon_km = int(d['value'])
-                        break
-            elif s.startswith('🤘'):
-                band = s.replace('🤘','')
-                text = f'✊️Захват <b>{dungeon_name}</b>\n🤘{band}\n\n'
-            elif 'в сборе.' in s:
-                text = text + f'<b>{s}</b>' + '\n'
-            elif s.startswith('👊'):
-                name = s.split('👊')[1].split('❤️')[0].strip()
-                user = getUserByName(name)
-                if user:
-                    usesrOnDungeon.append(user)
+                    if 'ТОП Купола /tdtop' in s:
+                        start = True
+                if report == '':
+                    send_messages_big(message.chat.id, text='Никого не нашел!')
                 else:
-                    print(f'Не найден бандит {name}')
-        
-        i = 1
-        for user in usesrOnDungeon:
-            text = text + f'  {i}. <b>{user.getNameAndGerb()}</b>\n'
-            i = i + 1
-
-        bot.delete_message(message.chat.id, message.message_id)
-        send_messages_big(message.chat.id, text=text)
-
-        goatName = getMyGoatName(usesrOnDungeon[0].getLogin()) 
-        
-        dresult = dungeons.aggregate([ 
-            {   "$match": {
-                        "band": band,
-                        "dungeon_km": dungeon_km,
-                        "state": "NEW"
-                    } 
-            },
-            {   "$group": {
-                "_id": "$date", 
-                "count": {
-                    "$sum": 1}}},
-                
-            {   "$sort" : { "count" : -1 } }
-            ])
-        
-        date_arr = []
-        for d in dresult:
-            date_arr.append(d.get("_id"))
-
-        if len(date_arr) == 0:
-            tz = config.SERVER_MSK_DIFF
-            dungeon_date = (datetime.now() + timedelta(hours=tz.hour)).timestamp()
-            for user in usesrOnDungeon:
-                row = {}
-                row.update({'date': dungeon_date})
-                row.update({'login': user.getLogin()})
-                row.update({'band': band})
-                row.update({'goat': goatName})
-                row.update({'dungeon_km': dungeon_km})
-                row.update({'dungeon': dungeon_name})
-                row.update({'signedup': True})
-                row.update({'invader': True})
-                row.update({'state': 'CLOSED'})
-                dungeons.insert_one(row)
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+                    report = '<b>⚡️Купола Грома.</b>\n\n' + report
+                    send_messages_big(message.chat.id, text=report)
             return
-        elif len(date_arr) == 1:
-            dungeon_date = date_arr[0]
-            for user in usesrOnDungeon:
-                row = {}
-                row.update({'date': dungeon_date})
-                row.update({'login': user.getLogin()})
-                row.update({'band': band})
-                row.update({'goat': goatName})
-                row.update({'dungeon_km': dungeon_km})
-                row.update({'dungeon': dungeon_name})
-                row.update({'signedup': True})
-                row.update({'invader': True})
-                row.update({'state': 'CLOSED'})
+        elif ('Ты уже записался.' in message.text):
+            #write_json(message.json)
+            if hasAccessToWariors(message.from_user.username):
+                if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+                    return
 
-                newvalues = { "$set": row }
-                result = dungeons.update_one({
-                    'login': user.getLogin(), 
-                    'date': dungeon_date,
-                    'band': band,
-                    'goat': goatName,
-                    'dungeon_km': dungeon_km
-                    }, newvalues)
-                if result.matched_count < 1:
-                    dungeons.insert_one(row)
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
-        else:
-            markupinline = InlineKeyboardMarkup()
-            
-            for date in date_arr:
-                dt = datetime.fromtimestamp(date)
-                markupinline.add(
-                    InlineKeyboardButton(f"{dt.hour}:{d.minute}", callback_data=f"commit_dungeon_time|{dt.timestamp()}|{band}|{dungeon_km}"),
-                    InlineKeyboardButton(f"Готово ✅", callback_data=f"commit_dungeon_yes|{dt.timestamp()}|{band}|{dungeon_km}"),
-                    InlineKeyboardButton(f"Закрыть ⛔", callback_data=f"commit_dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}")
-                )
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
-    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('ХОД БИТВЫ:') or 'Ты присоединился к группе, которая собирается атаковать' in message.text or message.text.startswith('Победа!') or (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.text)):
-        if hasAccessToWariors(message.from_user.username):
-    
-            if userIAm == None:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
-                return
-
-            if userIAm.getTimeUpdate() < (datetime.now() - timedelta(days=1)).timestamp():
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
-                return
-
-            if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_forward').fulfillment_text) 
-                return
-                
-            counter = 0
-            onboss = 0
-            health = 0
-            damage = []
-            beaten = []
-            killed = []
-            kr = []
-            mat = []
-            name = ''
-            forward_date = [message.forward_date]
-            if message.text.startswith('Победа!'):
-                for s in message.text.split('\n'):
-                    if s.startswith('🔥'):
-                        name = s.split('🔥')[1].split('(')[0].strip()
-                    if s.startswith('Получено:') and '🕳' in s and '📦' in s:
-                        kr = [int(s.split('🕳')[1].split(' ')[0].strip())]
-                        mat = [int(s.split('📦')[1].strip())]
-                    if s.startswith('💀'):
-                        killed.append(s.split('💀')[1].strip())
-                onboss = 0
-            elif (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.text):
-                name = message.text.split('\n')[3].strip()
-                onboss = int(message.text.split('\n')[7].split('/')[0].strip())
-            elif 'Ты присоединился к группе, которая собирается атаковать' in message.text:
-                name = message.text.split('Ты присоединился к группе, которая собирается атаковать')[1].split('.')[0].strip()
-                onboss = 4 - int(message.text.split('Для битвы нужно еще')[1].split('человек')[0].strip())
-            elif message.text.startswith('ХОД БИТВЫ:'):
-                for s in message.text.split('\n'):
-                    counter = counter + 1
-                    if counter == 2 and not (s == ''):
-                        return
-                    if counter >=3:
-                        if '❤️' in s and health == 0:
-                            health = int(s.split('❤️')[1].strip())
-                            name = s.split('❤️')[0].strip()
-                        if '💔-' in s:
-                            beaten.append(int(s.split('💔-')[1].strip()))
-                        if '💥' in s:
-                            damage.append(int(s.split('💥')[1].strip())) 
-                        if '☠️' in s:
-                            killed.append(s.split('☠️')[1].strip())
-                onboss = 0
-
-            if name == '':
-                pass
-            else:
-                dublicate = False
-                row = {}
-                row.update({'date': message.forward_date})
-                row.update({'boss_name': name})
-                row.update({'health': health})
-                row.update({'damage': damage})
-                row.update({'beaten': beaten})
-                row.update({'killed': killed})
-                row.update({'kr': kr})
-                row.update({'mat': mat})
-                row.update({'onboss': onboss})
-                row.update({'forward_date': forward_date})
-                
-
-                for bo in boss.find({'boss_name': name}):
-                    if bo['date'] > row['date']:
-                        row.update({'date': bo['date']})
-                    
-                    if row['health'] > bo['health']:
-                        pass
-                    else:
-                        row.update({'health': bo['health']})
-
-                    damage = bo['damage'] + damage
-                    row.update({'damage': damage})
-
-                    beaten = bo['beaten'] + beaten
-                    row.update({'beaten': beaten})
-                    
-                    killed = bo['killed']+ killed
-                    row.update({'killed': killed})
-                    
-                    kr = bo['kr'] + kr
-                    row.update({'kr': kr})
-                    
-                    mat = bo['mat']+ mat
-                    row.update({'mat': mat})
-
-                    if message.forward_date in bo['forward_date']:
-                        pass
-                        dublicate = True
-                    else:
-                        forward_date = bo['forward_date'] + forward_date
-                        row.update({'forward_date': forward_date})
-
-                if not dublicate:
-                    newvalues = { "$set": row }
-                    result = boss.update_one({
-                        'boss_name': name
-                        }, newvalues)
-                    logger.info(f'UPDATE {newvalues}')
-                    if result.matched_count < 1:
-                        boss.insert_one(row)
-                        logger.info(f'insert_one {row}')
-
-                dresult = boss.aggregate([ 
-                    {   "$group": {
-                        "_id": { "boss_name":"$boss_name" }, 
-                        "count": {
-                            "$sum": 1}}},
-                        
-                    {   "$sort" : { "count" : -1 } }
-                    ])
-                
-                buttons = []
-                for d in sorted(dresult, key = lambda i: tools.deEmojify(i["_id"]["boss_name"]), reverse=False):
-                    boss_name = d["_id"]["boss_name"] 
-                    #if boss_name == name: continue
-                    hashstr = getMobHash(boss_name, 'boss')
-                    boss_name_small = boss_name
-                    for n_boss in bosses:
-                        boss_name_small = boss_name_small.replace(n_boss, '') 
-                    buttons.append(InlineKeyboardButton(boss_name_small, callback_data=f"boss_info|{hashstr}"))
-
-                markupinline = InlineKeyboardMarkup(row_width=3)
-                for row in build_menu(buttons=buttons, n_cols=3):
-                    markupinline.row(*row)   
-
-
-                #if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                report = getBossReport(name)
-                send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
-                #else:
-                #    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
-
-            if name == '':
+                u = getUserByLogin(message.from_user.username)
+                u.setRaidLocation(1)
+                updateUser(u)
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
-        return
-    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
-        if hasAccessToWariors(message.from_user.username):
-            
-            if message.forward_date > (datetime.now() - timedelta(minutes=5)).timestamp():
-                filter = {  "username": message.from_user.username,
-                            "forward_from_username": message.forward_from.username, 
-                            "forward_date": message.forward_date}
-
-                newMess = messager.new_message(message, filter)
-                print(newMess)
-                if newMess:
-                    count = 0
-                    for s in message.text.split('\n'):
-                        if (s.startswith('Получено:') or s.startswith('Бонус:')) and 'Эфедрин' in s: # x2
-                            if ' x' in s:
-                                count = count + int(s.split(' x')[1])
-                            else: count = count + 1
-                    if count > 0:
-                        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
-                        if not userIAm.isInventoryThing(elem):
-                            elem.update({'storage': elem['storage'] + count})
-                            userIAm.addInventoryThing(elem)
-                            send_messages_big(message.chat.id, text=f'Ты начал изучение умения:\n▫️ {elem["name"]}') 
-                        else:
-                            elem = userIAm.getInventoryThing(elem)
-                            count = elem['storage'] + count
-                            if count >= elem['max']:
-                                count = elem['max']
-                            elem.update({'storage': count})
-                            percent = int(elem['max']/100*count)
-                            userIAm.addInventoryThing(elem, replace=True)
-                            send_messages_big(message.chat.id, text=f'▫️ {elem["name"]} {percent}%') 
-                        updateUser(userIAm)
-            
-            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-                pass
             else:
-                # сохраняем км, если он больше максимального
-                km = int(message.text.split('👣')[1].split('км')[0])
-                if userIAm.getMaxkm() < km:
-                    userIAm.setMaxkm(km)
-                    updateUser(userIAm)
-            if 'Во время вылазки на тебя напал' in message.text:
-                if userIAm == None:
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
+            return
+        elif ('Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
+            #write_json(message.json)
+            if hasAccessToWariors(message.from_user.username):
+                if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
+                    #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+                    send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
+                    return
+
+                if '7ч.' in message.text.split('Рейд начнётся через ⏱')[1]:
+                    send_messages_big(message.chat.id, text='Это захват на следующий рейд. Сбрось мне его позже!')
+                    return
+
+                u = getUserByLogin(message.from_user.username)
+                u.setRaidLocation(1)
+                updateUser(u)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+            else:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
+            return
+        elif ('Панель банды.' in message.text):
+            #write_json(message.json)
+            if hasAccessToWariors(message.from_user.username):
+
+                if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
                     return
 
                 strings = message.text.split('\n')
-                mob_name = ''
-                mob_class = ''
-                dark_zone = False
-                for s in strings:
-                    if s.startswith('🚷'):
-                        dark_zone = True
-                    if s.startswith('Во время вылазки на тебя напал'):
-                        mob_name = s.split('Во время вылазки на тебя напал')[1].split('(')[0].strip()
-                        mob_class = s.split('(')[1].split(')')[0].strip()
-                        break
+                i = 0
+                band = ''
+                allrw = 0
+                allcounter = 0
+                onraidrw = 0
+                onraidcounter = 0
+                onraidReport = ''
+                onraidusers = []
 
-                if mob_name == '':
+                report = 'Информация о рейдерах!\n'
+                fuckupraidrw = 0
+                fuckupraidcounter = 0
+                fuckupusersReport = ''
+                fuckupusers = []
+                alianusersReport = ''
+                aliancounter = 0
+
+                # 🤘👊🏅
+                for s in strings:
+                    if '🏅' in strings[i] and '🤘' in strings[i]:
+                        band = strings[i].split('🤘')[1].split('🏅')[0].strip()
+                        
+                        if not isGoatBoss(message.from_user.username):
+                            if not isUsersBand(message.from_user.username, band):
+                                send_messages_big(message.chat.id, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow(message, 'not_right_band').fulfillment_text)
+                                return
+
+                    if '👂' in strings[i]:
+                        name = strings[i]
+                        name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
+                        name = name.split('@')[1].split('👂')[0].strip()
+                        u = getUserByName(name)
+                        
+                        if u and (not u.getBand() == band):
+                            u.setBand(band)
+
+                        spliter = ''
+                        km = ''
+                        if '📍' in strings[i]:
+                            km =  int(strings[i].split('📍')[1].split('km')[0].strip())
+                            spliter = '📍'
+
+                        elif '👟' in strings[i]:
+                            km =  int(strings[i].split('👟')[1].split('km')[0].strip())
+                            spliter = '👟'
+                        else:
+                            km =  int(strings[i].split('👊')[1].split('km')[0].strip())
+                            spliter = '👊'
+
+
+                        if u:
+                            allrw = allrw + u.getRaidWeight()
+                            allcounter = allcounter + 1
+                            u.setWastelandLocation(km)
+                            u.setMaxkm(km)
+                            if '👊' in strings[i]:
+                                onraidcounter = onraidcounter + 1
+                                onraidrw = onraidrw + u.getRaidWeight()
+                                u.setRaidLocation(km)
+                                onraidusers.append(u)
+                            else:
+                                fuckupraidrw = fuckupraidrw + u.getRaidWeight()
+                                fuckupusers.append(u)
+                                u.setRaidLocation(0)
+                            updateUser(u)
+                        else:
+                            aliancounter  = aliancounter + 1
+                            alianusersReport = alianusersReport + f'{aliancounter}. {name} {spliter}{km}км\n'
+                        
+                    i = i + 1
+                
+                report = report + f'🤘 <b>{band}</b>\n\n' 
+                if onraidcounter > 0:
+                    report = report + f'🧘‍♂️ <b>на рейде</b>: <b>{onraidcounter}/{allcounter}</b>\n'
+                    i = 1
+                    for onu in sorted(onraidusers, key = lambda i: i.getRaidWeight(), reverse=True):
+                        report = report +  f'{i}.{onu.getFraction()[0:1]}{onu.getRaidWeight()} {onu.getNameAndGerb()} 👊{onu.getRaidLocation()}км\n'
+                        i = i + 1
+                    report = report + f'\n<b>Общий вес</b>: 🏋️‍♂️{onraidrw}/{allrw} <b>{str(int(onraidrw/allrw*100))}%</b>\n'
+                report = report + '\n'
+                if fuckupraidrw > 0:
+                    report = report + '🐢 <b>Бандиты в проёбе</b>:\n'
+                    i = 1
+                    for offu in sorted(fuckupusers, key = lambda i: i.getRaidWeight(), reverse=True):
+                        ping = ''
+                        if not offu.isPing():
+                            ping = '🔕' 
+                        report = report +  f'{i}.{offu.getFraction()[0:1]}{offu.getRaidWeight()} {ping} {offu.getNameAndGerb()} 📍{offu.getWastelandLocation()}км\n'
+                        i = i + 1
+                report = report + '\n'
+                if alianusersReport == '':
                     pass
                 else:
-                    report = getMobReport(mob_name, mob_class, dark_zone)
-                    hashstr = getMobHash(mob_name, mob_class)
-                    mobindb = getMobByHash(hashstr)
-                    markupinline = None
-                    if mobindb:
-                        markupinline = InlineKeyboardMarkup()
-                        markupinline.add(
-                            InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
-                            )
+                    report = report + '🐀 <b>Крысы в банде</b> (нет регистрации):\n'
+                    report = report + alianusersReport
+                
+                if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                    bot.delete_message(message.chat.id, message.message_id)
+                    send_messages_big(message.chat.id, text=report)
+                else:
+                    pass
+                    #censored(message)
+            else:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
+            return
+        elif ((message.text.startswith('Теперь') and 'под контролем' in message.text) or (message.text.startswith('✊️Захват') and ('Захват начался!' in message.text or 'Вы автоматически отправитесь на совместную зачистку локации' in message.text))):
+            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+                return        
             
-                    send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
+            band = ''
+            dungeon_km = 0
+            dungeon_name = ''
+            usesrOnDungeon = []
+            text = ''
+            for s in message.text.split('\n'):
+                #Теперь Гексагон под контролем 🤘АртхǁȺǁус
+                if s.startswith('Теперь'): 
+                    band = s.split('🤘')[1].split('!')[0]
+                    dungeon_tmp = s.split('Теперь')[1].split('под контролем')[0].strip().lower()
+                    for d in getSetting(code='DUNGEONS'):
+                        if dungeon_tmp in d['name'].lower():
+                            dungeon_km = int(d['value'])
+                            dungeon_name = d['name']     
+                            break
+                    text = f'✊️Теперь <b>{dungeon_km}км {dungeon_name}</b>\nпод контролем 🤟<b>{band}</b>\n\nУдарный отряд\n'
+        
+                elif s.startswith('✊️Захват'):
+                    for d in getSetting(code='DUNGEONS'):
+                        if tools.deEmojify(s.replace('✊️Захват ','')) in d['name'] :
+                            dungeon_name = d['name']
+                            dungeon_km = int(d['value'])
+                            break
+                elif s.startswith('🤘'):
+                    band = s.replace('🤘','')
+                    text = f'✊️Захват <b>{dungeon_name}</b>\n🤘{band}\n\n'
+                elif 'в сборе.' in s:
+                    text = text + f'<b>{s}</b>' + '\n'
+                elif s.startswith('👊'):
+                    name = s.split('👊')[1].split('❤️')[0].strip()
+                    user = getUserByName(name)
+                    if user:
+                        usesrOnDungeon.append(user)
+                    else:
+                        print(f'Не найден бандит {name}')
+            
+            i = 1
+            for user in usesrOnDungeon:
+                text = text + f'  {i}. <b>{user.getNameAndGerb()}</b>\n'
+                i = i + 1
+
+            bot.delete_message(message.chat.id, message.message_id)
+            send_messages_big(message.chat.id, text=text)
+
+            goatName = getMyGoatName(usesrOnDungeon[0].getLogin()) 
+            
+            dresult = dungeons.aggregate([ 
+                {   "$match": {
+                            "band": band,
+                            "dungeon_km": dungeon_km,
+                            "state": "NEW"
+                        } 
+                },
+                {   "$group": {
+                    "_id": "$date", 
+                    "count": {
+                        "$sum": 1}}},
+                    
+                {   "$sort" : { "count" : -1 } }
+                ])
+            
+            date_arr = []
+            for d in dresult:
+                date_arr.append(d.get("_id"))
+
+            if len(date_arr) == 0:
+                tz = config.SERVER_MSK_DIFF
+                dungeon_date = (datetime.now() + timedelta(hours=tz.hour)).timestamp()
+                for user in usesrOnDungeon:
+                    row = {}
+                    row.update({'date': dungeon_date})
+                    row.update({'login': user.getLogin()})
+                    row.update({'band': band})
+                    row.update({'goat': goatName})
+                    row.update({'dungeon_km': dungeon_km})
+                    row.update({'dungeon': dungeon_name})
+                    row.update({'signedup': True})
+                    row.update({'invader': True})
+                    row.update({'state': 'CLOSED'})
+                    dungeons.insert_one(row)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
                 return
-            if 'Сражение с' in message.text:
+            elif len(date_arr) == 1:
+                dungeon_date = date_arr[0]
+                for user in usesrOnDungeon:
+                    row = {}
+                    row.update({'date': dungeon_date})
+                    row.update({'login': user.getLogin()})
+                    row.update({'band': band})
+                    row.update({'goat': goatName})
+                    row.update({'dungeon_km': dungeon_km})
+                    row.update({'dungeon': dungeon_name})
+                    row.update({'signedup': True})
+                    row.update({'invader': True})
+                    row.update({'state': 'CLOSED'})
+
+                    newvalues = { "$set": row }
+                    result = dungeons.update_one({
+                        'login': user.getLogin(), 
+                        'date': dungeon_date,
+                        'band': band,
+                        'goat': goatName,
+                        'dungeon_km': dungeon_km
+                        }, newvalues)
+                    if result.matched_count < 1:
+                        dungeons.insert_one(row)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+            else:
+                markupinline = InlineKeyboardMarkup()
+                
+                for date in date_arr:
+                    dt = datetime.fromtimestamp(date)
+                    markupinline.add(
+                        InlineKeyboardButton(f"{dt.hour}:{d.minute}", callback_data=f"commit_dungeon_time|{dt.timestamp()}|{band}|{dungeon_km}"),
+                        InlineKeyboardButton(f"Готово ✅", callback_data=f"commit_dungeon_yes|{dt.timestamp()}|{band}|{dungeon_km}"),
+                        InlineKeyboardButton(f"Закрыть ⛔", callback_data=f"commit_dungeon_no|{dt.timestamp()}|{band}|{dungeon_km}")
+                    )
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
+        elif (message.text.startswith('ХОД БИТВЫ:') or 'Ты присоединился к группе, которая собирается атаковать' in message.text or message.text.startswith('Победа!') or (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.text)):
+            if hasAccessToWariors(message.from_user.username):
+        
                 if userIAm == None:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
                     return
@@ -2139,129 +1911,348 @@ def main_message(message):
                 if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_forward').fulfillment_text) 
                     return
-
-                strings = message.text.split('\n')
-                mob_name = ''
-                mob_class = ''
-                km = int(message.text.split('👣')[1].split('км')[0])
-                kr = 0
-                mat = 0
+                    
+                counter = 0
+                onboss = 0
                 health = 0
                 damage = []
                 beaten = []
-                you_win = False
-                dark_zone = False
-                for s in strings:
-                    if s.startswith('👊'):
-                        send_messages_big(message.chat.id, text='Это моб из митспина, не записываю...')
-                        return
-                    if s.startswith('🚷') or s.startswith('📯🚷'):
-                        dark_zone = True
-                    if s.startswith('Сражение с'):
-                        mob_name = s.split('Сражение с')[1].split('(')[0].strip()
-                        mob_class = s.split('(')[1].split(')')[0].strip()
-                    if s.startswith('Получено:') and '🕳' in s and '📦' in s:
-                        kr = int(s.split('🕳')[1].split(' ')[0].strip())
-                        mat = int(s.split('📦')[1].strip())
-                    if s.startswith('👤Ты') and '💥' in s:
-                        damage.append(int(s.split('💥')[1].strip()))
-                    if 'нанес тебе удар' in s and '💔' in s:
-                        beaten.append(-1*int(s.split('💔')[1].strip()))
-                    if s.startswith('Ты одержал победу!'):
-                        you_win = True
+                killed = []
+                kr = []
+                mat = []
+                name = ''
+                forward_date = [message.forward_date]
+                if message.text.startswith('Победа!'):
+                    for s in message.text.split('\n'):
+                        if s.startswith('🔥'):
+                            name = s.split('🔥')[1].split('(')[0].strip()
+                        if s.startswith('Получено:') and '🕳' in s and '📦' in s:
+                            kr = [int(s.split('🕳')[1].split(' ')[0].strip())]
+                            mat = [int(s.split('📦')[1].strip())]
+                        if s.startswith('💀'):
+                            killed.append(s.split('💀')[1].strip())
+                    onboss = 0
+                elif (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.text):
+                    name = message.text.split('\n')[3].strip()
+                    onboss = int(message.text.split('\n')[7].split('/')[0].strip())
+                elif 'Ты присоединился к группе, которая собирается атаковать' in message.text:
+                    name = message.text.split('Ты присоединился к группе, которая собирается атаковать')[1].split('.')[0].strip()
+                    onboss = 4 - int(message.text.split('Для битвы нужно еще')[1].split('человек')[0].strip())
+                elif message.text.startswith('ХОД БИТВЫ:'):
+                    for s in message.text.split('\n'):
+                        counter = counter + 1
+                        if counter == 2 and not (s == ''):
+                            return
+                        if counter >=3:
+                            if '❤️' in s and health == 0:
+                                health = int(s.split('❤️')[1].strip())
+                                name = s.split('❤️')[0].strip()
+                            if '💔-' in s:
+                                beaten.append(int(s.split('💔-')[1].strip()))
+                            if '💥' in s:
+                                damage.append(int(s.split('💥')[1].strip())) 
+                            if '☠️' in s:
+                                killed.append(s.split('☠️')[1].strip())
+                    onboss = 0
 
-                if mob_name == '':
+                if name == '':
                     pass
                 else:
+                    dublicate = False
                     row = {}
                     row.update({'date': message.forward_date})
-                    row.update({'login': message.from_user.username})
-                    row.update({'mob_name': mob_name})
-                    row.update({'mob_class': mob_class})
-                    
-                    row.update({'km': km})
-                    row.update({'dark_zone': dark_zone})
-                    row.update({'kr': kr})
-                    row.update({'mat': mat})
-                    row.update({'bm': userIAm.getBm()})
-                    row.update({'user_damage': userIAm.getDamage()})
-                    row.update({'user_armor': userIAm.getArmor()})
+                    row.update({'boss_name': name})
+                    row.update({'health': health})
                     row.update({'damage': damage})
                     row.update({'beaten': beaten})
-                    row.update({'win': you_win})
-                    row.update({'health': None})
+                    row.update({'killed': killed})
+                    row.update({'kr': kr})
+                    row.update({'mat': mat})
+                    row.update({'onboss': onboss})
+                    row.update({'forward_date': forward_date})
                     
 
-                    newvalues = { "$set": row }
-                    result = mob.update_one({
-                        'date': message.forward_date,
-                        'login': message.from_user.username, 
-                        'km': km,
-                        'dark_zone': dark_zone
-                        }, newvalues)
-                    if result.matched_count < 1:
-                        mob.insert_one(row)
+                    for bo in boss.find({'boss_name': name}):
+                        if bo['date'] > row['date']:
+                            row.update({'date': bo['date']})
+                        
+                        if row['health'] > bo['health']:
+                            pass
+                        else:
+                            row.update({'health': bo['health']})
 
-                    if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                        damage = bo['damage'] + damage
+                        row.update({'damage': damage})
+
+                        beaten = bo['beaten'] + beaten
+                        row.update({'beaten': beaten})
+                        
+                        killed = bo['killed']+ killed
+                        row.update({'killed': killed})
+                        
+                        kr = bo['kr'] + kr
+                        row.update({'kr': kr})
+                        
+                        mat = bo['mat']+ mat
+                        row.update({'mat': mat})
+
+                        if message.forward_date in bo['forward_date']:
+                            pass
+                            dublicate = True
+                        else:
+                            forward_date = bo['forward_date'] + forward_date
+                            row.update({'forward_date': forward_date})
+
+                    if not dublicate:
+                        newvalues = { "$set": row }
+                        result = boss.update_one({
+                            'boss_name': name
+                            }, newvalues)
+                        logger.info(f'UPDATE {newvalues}')
+                        if result.matched_count < 1:
+                            boss.insert_one(row)
+                            logger.info(f'insert_one {row}')
+
+                    dresult = boss.aggregate([ 
+                        {   "$group": {
+                            "_id": { "boss_name":"$boss_name" }, 
+                            "count": {
+                                "$sum": 1}}},
+                            
+                        {   "$sort" : { "count" : -1 } }
+                        ])
+                    
+                    buttons = []
+                    for d in sorted(dresult, key = lambda i: tools.deEmojify(i["_id"]["boss_name"]), reverse=False):
+                        boss_name = d["_id"]["boss_name"] 
+                        #if boss_name == name: continue
+                        hashstr = getMobHash(boss_name, 'boss')
+                        boss_name_small = boss_name
+                        for n_boss in bosses:
+                            boss_name_small = boss_name_small.replace(n_boss, '') 
+                        buttons.append(InlineKeyboardButton(boss_name_small, callback_data=f"boss_info|{hashstr}"))
+
+                    markupinline = InlineKeyboardMarkup(row_width=3)
+                    for row in build_menu(buttons=buttons, n_cols=3):
+                        markupinline.row(*row)   
+
+
+                    #if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                    report = getBossReport(name)
+                    send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
+                    #else:
+                    #    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+
+                if name == '':
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+            return
+        elif '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
+            if hasAccessToWariors(message.from_user.username):
+                if not time_over:
+                    # сохраняем км, если он больше максимального
+                    km = int(message.text.split('👣')[1].split('км')[0])
+                    if userIAm.getMaxkm() < km:
+                        userIAm.setMaxkm(km)
+                        updateUser(userIAm)
+
+                # Учимся умению "Медик"
+                if new_Message:
+                    count = 0
+                    for s in message.text.split('\n'):
+                        if (s.startswith('Получено:') or s.startswith('Бонус:')) and 'Эфедрин' in s: # x2
+                            if ' x' in s:
+                                count = count + int(s.split(' x')[1])
+                            else: count = count + 1
+                    if count > 0:
+                        if not time_over:
+                            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
+                            if not userIAm.isInventoryThing(elem):
+                                elem.update({'storage': elem['storage'] + count})
+                                userIAm.addInventoryThing(elem)
+                                send_messages_big(message.chat.id, text=f'Ты начал изучение умения:\n▫️ {elem["name"]}') 
+                            else:
+                                elem = userIAm.getInventoryThing(elem)
+                                count = elem['storage'] + count
+                                if count >= elem['max']:
+                                    count = elem['max']
+                                elem.update({'storage': count})
+                                percent = int(elem['max']/100*count)
+                                userIAm.addInventoryThing(elem, replace=True)
+                                send_messages_big(message.chat.id, text=f'▫️ {elem["name"]} {percent}%') 
+                            updateUser(userIAm)
+                        else:
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_ephedrine').fulfillment_text)
+                
+                if 'Во время вылазки на тебя напал' in message.text:
+                    if userIAm == None:
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
+                        return
+
+                    strings = message.text.split('\n')
+                    mob_name = ''
+                    mob_class = ''
+                    dark_zone = False
+                    for s in strings:
+                        if s.startswith('🚷'):
+                            dark_zone = True
+                        if s.startswith('Во время вылазки на тебя напал'):
+                            mob_name = s.split('Во время вылазки на тебя напал')[1].split('(')[0].strip()
+                            mob_class = s.split('(')[1].split(')')[0].strip()
+                            break
+
+                    if mob_name == '':
+                        pass
+                    else:
                         report = getMobReport(mob_name, mob_class, dark_zone)
                         hashstr = getMobHash(mob_name, mob_class)
-                        markupinline = InlineKeyboardMarkup()
-                        markupinline.add(
-                            InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
-                            )
+                        mobindb = getMobByHash(hashstr)
+                        markupinline = None
+                        if mobindb:
+                            markupinline = InlineKeyboardMarkup()
+                            markupinline.add(
+                                InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
+                                )
                 
                         send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
-                    else:
-                        send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+                    return
+                if 'Сражение с' in message.text:
+                    if userIAm == None:
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 
+                        return
 
-            return
-    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('Неподалеку ты заметил другого выжившего.') or message.text.startswith('Неподалеку ты заметил какую-то потасовку.')):
-        arr = ['одержал победу над', 'не оставил живого места от', 'гордо наступил на полудохлого', 'оставил бездыханное тело', 'сделал сиротами детишек', 'добил с пинка', 'добил лежачего', 'выписал пропуск в Вальхаллу', 'добил фаталити', 'стоит над поверженным', 'одержал победу над']
-        counter = 0
-        name = ''
-        fraction = ''
-        for s in message.text.split('\n'):
-            counter = counter + 1
-            if counter > 1:
-                for a in arr:
-                    if a in s:
-                        name = s.split(a)[0].strip()
-                        name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
-                        name = name.split('@')[1].strip()
-                        name = tools.deEmojify(name)
-                        fraction = getWariorFraction(s)
-                        break
-        if name == '':
-            pass
-        else:
-            warior = getWariorByName(name, fraction)
-            if warior == None:
-                send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
-            elif (warior and warior.photo):
-                bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
-            else:
-                send_messages_big(message.chat.id, text=warior.getProfile())
-        return
-    elif message.forward_from and message.forward_from.username == 'WastelandWarsBot' and (message.text.startswith('Рейд в 17:00') or message.text.startswith('Рейд в 9:00') or message.text.startswith('Рейд в 01:00')):
-        
-        if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
-            #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-            send_messages_big(message.chat.id, text='Поздняк! У тебя было 30 минут, чтобы прислать это. Статистика уже собрана и отправлена в библиотеку пустоши!')
-            return
-        
-        tz = config.SERVER_MSK_DIFF
-        date = (datetime.fromtimestamp(message.forward_date).replace(minute=0, second=0) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
-        raid = getPlanedRaidLocation(getMyGoatName(message.from_user.username), planRaid = False)
-        if raid['rade_location']:
-            if raid['rade_date'] == date:
-                u = getUserByLogin(message.from_user.username)
-                u.setRaidLocation(1)
-                updateUser(u)
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+                    if userIAm.getTimeUpdate() < (datetime.now() - timedelta(days=1)).timestamp():
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'update_pip').fulfillment_text) 
+                        return
+
+                    if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_forward').fulfillment_text) 
+                        return
+
+                    strings = message.text.split('\n')
+                    mob_name = ''
+                    mob_class = ''
+                    km = int(message.text.split('👣')[1].split('км')[0])
+                    kr = 0
+                    mat = 0
+                    health = 0
+                    damage = []
+                    beaten = []
+                    you_win = False
+                    dark_zone = False
+                    for s in strings:
+                        if s.startswith('👊'):
+                            send_messages_big(message.chat.id, text='Это моб из митспина, не записываю...')
+                            return
+                        if s.startswith('🚷') or s.startswith('📯🚷'):
+                            dark_zone = True
+                        if s.startswith('Сражение с'):
+                            mob_name = s.split('Сражение с')[1].split('(')[0].strip()
+                            mob_class = s.split('(')[1].split(')')[0].strip()
+                        if s.startswith('Получено:') and '🕳' in s and '📦' in s:
+                            kr = int(s.split('🕳')[1].split(' ')[0].strip())
+                            mat = int(s.split('📦')[1].strip())
+                        if s.startswith('👤Ты') and '💥' in s:
+                            damage.append(int(s.split('💥')[1].strip()))
+                        if 'нанес тебе удар' in s and '💔' in s:
+                            beaten.append(-1*int(s.split('💔')[1].strip()))
+                        if s.startswith('Ты одержал победу!'):
+                            you_win = True
+
+                    if mob_name == '':
+                        pass
+                    else:
+                        row = {}
+                        row.update({'date': message.forward_date})
+                        row.update({'login': message.from_user.username})
+                        row.update({'mob_name': mob_name})
+                        row.update({'mob_class': mob_class})
+                        
+                        row.update({'km': km})
+                        row.update({'dark_zone': dark_zone})
+                        row.update({'kr': kr})
+                        row.update({'mat': mat})
+                        row.update({'bm': userIAm.getBm()})
+                        row.update({'user_damage': userIAm.getDamage()})
+                        row.update({'user_armor': userIAm.getArmor()})
+                        row.update({'damage': damage})
+                        row.update({'beaten': beaten})
+                        row.update({'win': you_win})
+                        row.update({'health': None})
+                        
+
+                        newvalues = { "$set": row }
+                        result = mob.update_one({
+                            'date': message.forward_date,
+                            'login': message.from_user.username, 
+                            'km': km,
+                            'dark_zone': dark_zone
+                            }, newvalues)
+                        if result.matched_count < 1:
+                            mob.insert_one(row)
+
+                        if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                            report = getMobReport(mob_name, mob_class, dark_zone)
+                            hashstr = getMobHash(mob_name, mob_class)
+                            markupinline = InlineKeyboardMarkup()
+                            markupinline.add(
+                                InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
+                                )
+                    
+                            send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
+                        else:
+                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+
                 return
+        elif (message.text.startswith('Неподалеку ты заметил другого выжившего.') or message.text.startswith('Неподалеку ты заметил какую-то потасовку.')):
+            arr = ['одержал победу над', 'не оставил живого места от', 'гордо наступил на полудохлого', 'оставил бездыханное тело', 'сделал сиротами детишек', 'добил с пинка', 'добил лежачего', 'выписал пропуск в Вальхаллу', 'добил фаталити', 'стоит над поверженным', 'одержал победу над']
+            counter = 0
+            name = ''
+            fraction = ''
+            for s in message.text.split('\n'):
+                counter = counter + 1
+                if counter > 1:
+                    for a in arr:
+                        if a in s:
+                            name = s.split(a)[0].strip()
+                            name = name.replace('⚙️', '@').replace('🔪', '@').replace('💣', '@').replace('⚛️', '@').replace('👙', '@').replace('🔰', '@')
+                            name = name.split('@')[1].strip()
+                            name = tools.deEmojify(name)
+                            fraction = getWariorFraction(s)
+                            break
+            if name == '':
+                pass
             else:
-                send_messages_big(message.chat.id, text='К чему ты это мне прислал?')
-        return
+                warior = getWariorByName(name, fraction)
+                if warior == None:
+                    send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
+                elif (warior and warior.photo):
+                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                else:
+                    send_messages_big(message.chat.id, text=warior.getProfile())
+            return
+        elif (message.text.startswith('Рейд в 17:00') or message.text.startswith('Рейд в 9:00') or message.text.startswith('Рейд в 01:00')):
+            
+            if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
+                #send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
+                send_messages_big(message.chat.id, text='Поздняк! У тебя было 30 минут, чтобы прислать это. Статистика уже собрана и отправлена в библиотеку пустоши!')
+                return
+            
+            tz = config.SERVER_MSK_DIFF
+            date = (datetime.fromtimestamp(message.forward_date).replace(minute=0, second=0) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
+            raid = getPlanedRaidLocation(getMyGoatName(message.from_user.username), planRaid = False)
+            if raid['rade_location']:
+                if raid['rade_date'] == date:
+                    u = getUserByLogin(message.from_user.username)
+                    u.setRaidLocation(1)
+                    updateUser(u)
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+                    return
+                else:
+                    send_messages_big(message.chat.id, text='К чему ты это мне прислал?')
+            return   
+    # else:
+    #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text) 
+
     if 'gratz' in message.text.lower() or 'грац' in message.text.lower() or 'грац!' in message.text.lower() or  'лол' in message.text.lower() or 'lol' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_LOVE'), 1)[0]['value'])
