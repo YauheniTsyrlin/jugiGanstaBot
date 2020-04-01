@@ -1623,13 +1623,9 @@ def main_message(message):
         elif ('Панель банды.' in message.text):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
-
                 if time_over:
-                    send_messages_big(f'forward_date: {datetime.fromtimestamp(message.forward_date)}')
-                    send_messages_big(f'forward_date: {(datetime.now() - timedelta(minutes=5)).timestamp()}')
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
-                    return
-
+                    return 
                 strings = message.text.split('\n')
                 i = 0
                 band = ''
@@ -1731,8 +1727,7 @@ def main_message(message):
                     bot.delete_message(message.chat.id, message.message_id)
                     send_messages_big(message.chat.id, text=report)
                 else:
-                    pass
-                    #censored(message)
+                   censored(message)
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
             return
