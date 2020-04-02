@@ -4366,19 +4366,14 @@ def rade():
             logger.info(goat_bands)
             logger.info(len(USERS_ARR))
             
-            for user in USERS_ARR:
-                logger.info(f'* {user.getLogin()}')
-            
-            for user in filter(lambda x : x.getBand() in goat_bands, USERS_ARR):
-                logger.info(f'% {user.getLogin()}')
-
             for user in filter(lambda x : x.getBand() in goat_bands, USERS_ARR):
                 logger.info(f'@ {user.getLogin()}')
-                if user.getRank()['update'] == 'auto':
+                if user.getRank() == None or user.getRank()['update'] == 'auto':
                     newRank = None
                     for rank in getSetting(code='RANK', id='MILITARY')['value']:
                         if user.getBm() > rank['bm']:
                             newRank = rank
+                    
                     logger.info(f'{user.getBm()} {user.getLogin()} {newRank["bm"]} {newRank["name"]}')
                     if newRank['id'] == user.getRank()['id']:
                         pass
@@ -4386,7 +4381,7 @@ def rade():
                         report = report + f'{newRank["bm"]} бандит {user.getNameAndGerb()} теперь {newRank["name"]}\n'
                         user.setRank(newRank)
                         updateUser(user)
-                        #send_messages_big(goat['chats']['secret'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {newRank["name"]}')
+                        send_messages_big(goat['chats']['secret'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {newRank["name"]}')
             if report == '':
                 pass
             else:
