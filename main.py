@@ -4355,7 +4355,7 @@ def rade():
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
 
     # Присвоение званий
-    if now_date.hour == 13 and now_date.minute == 42   and now_date.second < 15:
+    if now_date.hour == 13 and now_date.minute == 47   and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
@@ -4364,9 +4364,8 @@ def rade():
             goat_bands = getGoatBands(goat['name'])
             logger.info(goat['name'])
             logger.info(goat_bands)
-            logger.info(len(USERS_ARR))
             
-            for user in filter(lambda x : x.getBand() in goat_bands, USERS_ARR):
+            for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
                 logger.info(f'@ {user.getLogin()}')
                 if user.getRank() == None or user.getRank()['update'] == 'auto':
                     newRank = None
