@@ -4355,7 +4355,7 @@ def rade():
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
 
     # Присвоение званий
-    if now_date.hour == 13 and now_date.minute == 55   and now_date.second < 15:
+    if now_date.hour == 14 and now_date.minute == 1   and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
@@ -4370,6 +4370,7 @@ def rade():
                 if user.getRank() == None or user.getRank()['update'] == 'auto':
                     newRank = None
                     for rank in getSetting(code='RANK', id='MILITARY')['value']:
+                        logger.info(f'* {rank["bm"]} {rank["name"]}')
                         newRank = rank
                         if user.getBm() < rank['bm']:
                             break 
@@ -4379,9 +4380,9 @@ def rade():
                         pass
                     else:
                         report = report + f'{newRank["bm"]} бандит {user.getNameAndGerb()} теперь {newRank["name"]}\n'
-                        user.setRank(newRank)
-                        updateUser(user)
-                        send_messages_big(goat['chats']['secret'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {newRank["name"]}')
+                        #user.setRank(newRank)
+                        #updateUser(user)
+                        #send_messages_big(goat['chats']['secret'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {newRank["name"]}')
             if report == '':
                 pass
             else:
