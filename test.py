@@ -522,9 +522,26 @@ def setGiftsForRaid(goat):
 
 user = getUserByLogin('GonzikBenzyavsky')
 
+chat_id = 12345678
+chat = f'chat_{chat_id}' 
+viruses = getSetting(code='ACCESSORY_ALL', id='VIRUSES')["value"]
+GLOBAL_VARS = {}
+try: 
+    for z in GLOBAL_VARS[chat]['inventory']:
+        pass
+        print(z)
+    for m in GLOBAL_VARS[chat]['medics']:
+        pass
+        print(m)
+except: 
+    GLOBAL_VARS.update({chat: {'inventory': [], 'medics': []} })
 
-for goat in getSetting(code='GOATS_BANDS'):
-    setGiftsForRaid(goat)
+print(GLOBAL_VARS[chat])
+# Применяем коэффциент полураспада ко всем текущим вирусам
+for vir in  filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory']):
+    vir['skill'].update('contagiousness',  vir['skill']['contagiousness'] * vir['skill']['halflife'] )
+
+
 
 # counter = report_raids.find({'login': user.getLogin()}).count()
 # cursor = report_raids.find({'login': user.getLogin()}).skip(counter - 2)

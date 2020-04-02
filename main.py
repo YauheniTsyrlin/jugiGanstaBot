@@ -559,8 +559,7 @@ def checkInfected(logins, chat_id):
             pass
             print(m)
     except: 
-        GLOBAL_VARS.update({chat: {'inventory': []} })
-        GLOBAL_VARS.update({chat: {'medics': []} })
+        GLOBAL_VARS.update({chat: {'inventory': [], 'medics': []} })
 
     # Применяем коэффциент полураспада ко всем текущим вирусам
     for vir in  filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory']):
@@ -4515,6 +4514,7 @@ def rade():
                 saveRaidResult(goat)
                 statistic(goat['name'])
 
+    # Раздача рейдовых болтов
     if now_date.hour in (1, 9, 17) and now_date.minute == 35 and now_date.second < 15:
         logger.info('raid bolt info!')
         updateUser(None)
