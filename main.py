@@ -94,7 +94,7 @@ GLOBAL_VARS = {
     'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'] 
 }
 
-INFECT_OR_CURE_PROBABILITY = {}
+
 acc_koronavirus = '🦇 Коронавирус'
 acc_doctor_mask = '🥽 Медицинская маска'
 acc_doctor_main = '💉 Удостоверение "Главврач"'
@@ -552,7 +552,7 @@ def checkInfected(logins, chat_id):
     chat = f'chat_{chat_id}' 
     viruses = getSetting(code='ACCESSORY_ALL', id='VIRUSES')["value"]
     try: 
-        a = GLOBAL_VARS[chat]
+        a = GLOBAL_VARS[chat]['inventory']
         print(a)
     except: 
         GLOBAL_VARS.update({chat: {'inventory': []} })
