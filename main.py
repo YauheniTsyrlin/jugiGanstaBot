@@ -4355,13 +4355,15 @@ def rade():
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
 
     # Присвоение званий
-    if now_date.hour == 13 and now_date.minute == 9   and now_date.second < 15:
+    if now_date.hour == 13 and now_date.minute == 11   and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
 
         for goat in getSetting(code='GOATS_BANDS'):
             goat_bands = getGoatBands(goat['name'])
+            logger.info(goat['name'])
+            logger.info(goat_bands)
             for user in filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR):
                 logger.info(f'{user.getBm()}')
                 if user.getRank()['update'] == 'auto':
