@@ -4355,7 +4355,7 @@ def rade():
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
 
     # Присвоение званий
-    if now_date.hour == 11 and now_date.minute == 21 and now_date.second < 15:
+    if now_date.hour == 12 and now_date.minute == 20 and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
@@ -4363,6 +4363,7 @@ def rade():
         for goat in getSetting(code='GOATS_BANDS'):
             goat_bands = getGoatBands(goat['name'])
             for user in filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR):
+                
                 if user.getRank()['update'] == 'auto':
                     newRank = None
                     for rank in getSetting(code='RANK', id='MILITARY')['value']:
@@ -4373,7 +4374,7 @@ def rade():
                         pass
                     else:
                         report = report + f'{newRank["bm"]} бандит {user.getNameAndGerb()} теперь {newRank["name"]}\n'
-                        user.setRank(rank)
+                        user.setRank(newRank)
                         updateUser(user)
                         send_messages_big(goat['chats']['secret'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {newRank["name"]}')
             if report == '':
