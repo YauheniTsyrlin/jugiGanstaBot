@@ -552,10 +552,10 @@ def checkInfected(logins, chat_id):
     chat = f'chat_{chat_id}' 
     viruses = getSetting(code='ACCESSORY_ALL', id='VIRUSES')["value"]
     try: 
-        for z in GLOBAL_VARS[chat]['inventory']
+        for z in GLOBAL_VARS[chat]['inventory']:
             pass
             print(z)
-        for m in GLOBAL_VARS[chat]['medics']
+        for m in GLOBAL_VARS[chat]['medics']:
             pass
             print(m)
     except: 
