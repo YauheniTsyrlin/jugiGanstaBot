@@ -552,11 +552,15 @@ def checkInfected(logins, chat_id):
     chat = f'chat_{chat_id}' 
     viruses = getSetting(code='ACCESSORY_ALL', id='VIRUSES')["value"]
     try: 
-        a = GLOBAL_VARS[chat]['inventory']
-        print(a)
+        for z in GLOBAL_VARS[chat]['inventory']
+            pass
+            print(z)
+        for m in GLOBAL_VARS[chat]['medics']
+            pass
+            print(m)
     except: 
         GLOBAL_VARS.update({chat: {'inventory': []} })
-        GLOBAL_VARS.update({chat: {'skills': []} })
+        GLOBAL_VARS.update({chat: {'medics': []} })
 
     # Применяем коэффциент полураспада ко всем текущим вирусам
     for vir in  filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory']):
