@@ -607,26 +607,27 @@ def infect(logins, chat_id):
 
     for vir in filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory']):
         for user in users_in_danger:
-            if user.isInventoryThing(vir):
-                pass
-            else:
-                if (random.random() <= vir['skill']['contagiousness']):
-                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']) if x['id']==vir['id']), None) 
-                    user.addInventoryThing(elem)
-                    updateUser(user)
+            # if user.isInventoryThing(vir):
+            #     pass
+            # else:
+            send_message_to_admin(f'{user.getLogin()} может заразиться вирусом {vir["name"]}...')
+            if (random.random() <= vir['skill']['contagiousness']):
+                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']) if x['id']==vir['id']), None) 
+                #user.addInventoryThing(elem)
+                #updateUser(user)
 
-                    sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
-                    pending_date = datetime.now() + timedelta(seconds=sec)
-                    pending_messages.insert_one({ 
-                        'chat_id': chat_id,
-                        'reply_message': None,
-                        'create_date': datetime.now().timestamp(),
-                        'user_id': user.getLogin(),  
-                        'state': 'WAIT',
-                        'pending_date': pending_date.timestamp(),
-                        'dialog_flow_text': 'virus_new_member',
-                        'text': f'▫️ {vir["name"]}'})
-                    send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен вирусом {vir["name"]}!')
+                sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
+                # pending_date = datetime.now() + timedelta(seconds=sec)
+                # pending_messages.insert_one({ 
+                #     'chat_id': chat_id,
+                #     'reply_message': None,
+                #     'create_date': datetime.now().timestamp(),
+                #     'user_id': user.getLogin(),  
+                #     'state': 'WAIT',
+                #     'pending_date': pending_date.timestamp(),
+                #     'dialog_flow_text': 'virus_new_member',
+                #     'text': f'▫️ {vir["name"]}'})
+                send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен вирусом {vir["name"]} с вероятностью {vir["skill"]["contagiousness"]}')
 
 def cure(logins, chat_id):
     chat = f'chat_{chat_id}' 
