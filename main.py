@@ -634,7 +634,7 @@ def cure(logins, chat_id):
         return
     users_in_danger = []
     viruses = getSetting(code='ACCESSORY_ALL', id='VIRUSES')["value"]
-    medicskill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic`'), None) 
+    medicskill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
     
     for user_login in logins:
         user = getUserByLogin(user_login)
