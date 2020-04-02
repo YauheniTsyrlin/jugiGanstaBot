@@ -4355,7 +4355,7 @@ def rade():
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
 
     # Присвоение званий
-    if now_date.hour == 11 and now_date.minute == 7 and now_date.second < 15:
+    if now_date.hour == 11 and now_date.minute == 19 and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
