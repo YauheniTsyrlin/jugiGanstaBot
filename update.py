@@ -2933,6 +2933,21 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
+updateUser(None)
+covid_19 = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']) if x['id']=='covid-19'), None) 
+mirror_disease = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']) if x['id']=='mirror_disease'), None) 
+
+for user in USERS_ARR:
+    for inv in list(filter(lambda x : x['type'] == 'disease', user.getInventory())):
+        if inv['id'] == 'covid-19':
+            user.removeInventoryThing(covid_19)
+            user.addInventoryThing(covid_19)
+        elif inv['id'] == 'mirror_disease':
+            user.removeInventoryThing(mirror_disease)
+            user.addInventoryThing(mirror_disease)
+    updateUser(user)
+    print(f'Update {user.getLogin()} VIRUSES')
+
 #elem = {k: v for k, v in getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'].items() if v['id'] <= 'crown_pidor_of_the_day'}
 # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
 # print(elem)

@@ -562,7 +562,7 @@ def checkInfected(logins, chat_id):
         GLOBAL_VARS.update({chat: {'inventory': [], 'medics': []} })
 
     # Применяем коэффциент полураспада ко всем текущим вирусам
-    for vir in  filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory']):
+    for vir in list(filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
         vir['skill'].update('contagiousness',  vir['skill']['contagiousness'] * vir['skill']['halflife'] )
 
     # Добавляем новые вирусы, если есть у бандитов
@@ -604,7 +604,7 @@ def infect(logins, chat_id):
             # TODO Вставить проверку на иммунитет, иммунитет получаешь если переболел 'immunity'
             users_in_danger.append(user)
 
-    for vir in filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory']):
+    for vir in list(filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
         for user in users_in_danger:
             # if user.isInventoryThing(vir):
             #     pass
@@ -4414,7 +4414,7 @@ def rade():
         
         for goat in getSetting(code='GOATS_BANDS'):
             goat_bands = getGoatBands(goat['name'])
-            for user in filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR):
+            for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
                 usersettings = getUserSetting(user.getLogin(), '👨‍❤️‍👨Участник "Пидор дня"')
                 if usersettings:
                     user_in_game.append(user)
