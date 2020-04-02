@@ -782,6 +782,20 @@ newvalues = { "$set": { "value":
                                     'cost': 50,
                                     'type': 'clothes',
                                     'quantity': 1
+                                },
+                                {
+                                    'id': 'suit_of_the_bride',
+                                    'name': '🥋 Платье невесты',
+                                    'cost': 200,
+                                    'type': 'clothes',
+                                    'quantity': 1
+                                },
+                                {
+                                    'id': 'suit_of_the_groom',
+                                    'name': '🕺 Костюм жениха',
+                                    'cost': 6,
+                                    'type': 'clothes',
+                                    'quantity': 1
                                 }
                             ]
                         },
@@ -1027,7 +1041,18 @@ newvalues = { "$set": { "value":
                                     'min': 150,
                                     'max': 200,
                                     'storage': 0
+                                },
+                                {
+                                    'id': 'operator',
+                                    'name': '📽 Оператор',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': None,
+                                    'min': 0,
+                                    'max': 1,
+                                    'storage': 1
                                 }
+                                
                             ]
                         },
                         {
@@ -1317,6 +1342,31 @@ newvalues = { "$set": { "value":
                             'name': '🎁 Подарки',
                             'value':
                             [
+                                
+                                {
+                                    'id': 'memory_of_the_wedding',
+                                    'name': '📼 Память о свадьбе',
+                                    'cost': 2,
+                                    'type': 'decoration',
+                                    'quantity': 1
+
+                                },
+                                {
+                                    'id': 'grooms_ring',
+                                    'name': '🕳 Кольцо жениха',
+                                    'cost': 7,
+                                    'type': 'decoration',
+                                    'quantity': 1
+
+                                },
+                                {
+                                    'id': 'brides_ring',
+                                    'name': '💍 Кольцо невесты',
+                                    'cost': 100,
+                                    'type': 'decoration',
+                                    'quantity': 1
+
+                                },
                                 {
                                     'id': 'stuffed_enclave',
                                     'name': '🚨 Чучело "Анклав"',
