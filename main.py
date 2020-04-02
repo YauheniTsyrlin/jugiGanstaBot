@@ -1649,7 +1649,7 @@ def main_message(message):
         elif ('Панель банды.' in message.text):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
-                if time_over:
+                if message.forward_date < (datetime.now() - timedelta(minutes=20)).timestamp():
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'deceive').fulfillment_text)
                     return 
                 strings = message.text.split('\n')
