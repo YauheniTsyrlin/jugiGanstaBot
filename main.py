@@ -4380,7 +4380,7 @@ def rade():
             if report == '':
                 pass
             else:
-                send_message_to_admin(f"goat['name']\n\n{report}")
+                send_message_to_admin(f"{goat['name']}\n\n{report}")
             report = ''
     
     # Пидор дня
