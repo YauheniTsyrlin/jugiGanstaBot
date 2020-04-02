@@ -563,7 +563,7 @@ def checkInfected(logins, chat_id):
 
     # Применяем коэффциент полураспада ко всем текущим вирусам
     for vir in list(filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
-        vir['skill'].update('contagiousness',  vir['skill']['contagiousness'] * vir['skill']['halflife'] )
+        vir['skill'].update({'contagiousness':  vir['skill']['contagiousness'] * vir['skill']['halflife']})
 
     # Добавляем новые вирусы, если есть у бандитов
     for user_login in logins:
