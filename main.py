@@ -4355,7 +4355,7 @@ def rade():
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
 
     # Присвоение званий
-    if now_date.hour == 12 and now_date.minute == 20 and now_date.second < 15:
+    if now_date.hour == 13 and now_date.minute == 5   and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
@@ -4369,7 +4369,7 @@ def rade():
                     for rank in getSetting(code='RANK', id='MILITARY')['value']:
                         if user.getBm() > rank['bm']:
                             newRank = rank
-
+                    logger.info(f'{user.getBm()} {user.getLogin()} {newRank["bm"]} {newRank["name"]}')
                     if newRank['id'] == user.getRank()['id']:
                         pass
                     else:
