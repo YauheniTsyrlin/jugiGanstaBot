@@ -575,7 +575,7 @@ def checkInfected(logins, chat_id):
 
 def checkCure(logins, chat_id):
     chat = f'chat_{chat_id}' 
-    medicskill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic`'), None) 
+    medicskill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
     
     try: 
         a = GLOBAL_VARS[chat]
