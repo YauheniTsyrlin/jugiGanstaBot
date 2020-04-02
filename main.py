@@ -4376,7 +4376,7 @@ def rade():
                         report = report + f'{newRank["bm"]} бандит {user.getNameAndGerb()} теперь {newRank["name"]}\n'
                         user.setRank(newRank)
                         updateUser(user)
-                        send_messages_big(goat['chats']['secret'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {newRank["name"]}')
+                        #send_messages_big(goat['chats']['secret'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {newRank["name"]}')
             if report == '':
                 pass
             else:
