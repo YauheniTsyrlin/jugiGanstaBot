@@ -377,7 +377,7 @@ def getWariorFraction(string: str):
 def getWariorByName(name: str, fraction: str):
     name = tools.deEmojify(name).strip()
     for warior in list(WARIORS_ARR):
-        if name == warior.getName().strip() and fraction == warior.getFraction(): 
+        if name == warior.getName().strip() and (fraction == None or fraction == warior.getFraction()): 
             return warior
     return None
 
@@ -1473,6 +1473,20 @@ def main_message(message):
                         if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_LOSER'))):
                             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
+            return
+        elif ('Рядом с тобой другой выживший.' in message.text and 'Для ответа используй' in message.text):
+            #write_json(message.json)
+            if hasAccessToWariors(message.from_user.username):
+                warior = getWariorByName(message.text.split(':')[0].strip(), None)
+
+                if warior == None:
+                    send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
+                elif (warior and warior.photo):
+                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                else:
+                    send_messages_big(message.chat.id, text=warior.getProfile())
+            else:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_you_cant').fulfillment_text)
             return
         elif ('/accept' in message.text and '/decline' in message.text):
             #write_json(message.json)
