@@ -4355,27 +4355,21 @@ def rade():
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
 
     # Присвоение званий
-    if now_date.hour == 14 and now_date.minute == 20   and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 10   and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
 
         for goat in getSetting(code='GOATS_BANDS'):
             goat_bands = getGoatBands(goat['name'])
-            logger.info(goat['name'])
-            logger.info(goat_bands)
             
             for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
-                logger.info(f'@ {user.getLogin()}')
                 if user.getRank() == None or user.getRank()['update'] == 'auto':
                     newRank = None
                     for rank in getSetting(code='RANK', id='MILITARY')['value']:
-                        logger.info(f'* {rank["bm"]} {rank["name"]}')
                         newRank = rank
                         if user.getBm() < rank['bm']:
                             break 
-                    
-                    logger.info(f'{user.getBm()} {user.getLogin()} {newRank["bm"]} {newRank["name"]}')
                     if not user.getRank() == None and newRank['id'] == user.getRank()['id']:
                         pass
                     else:
