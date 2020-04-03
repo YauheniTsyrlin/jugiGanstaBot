@@ -3019,7 +3019,7 @@ covid_19 = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SK
 mirror_disease = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
 
 for user in USERS_ARR:
-    for inv in list(filter(lambda x : x['type'] == 'disease', user.getInventory())):
+    for inv in list(filter(lambda x : x['type'] == 'skill', user.getInventory())):
         if inv['id'] == 'programmer':
             user.removeInventoryThing(covid_19)
             user.addInventoryThing(covid_19)
