@@ -1289,7 +1289,7 @@ def main_message(message):
     #write_json(message.json)
     chat = message.chat.id
     privateChat = ('private' in message.chat.type)
-    logger.info(f'chat:{message.chat.id}:{"private" if privateChat else "Group"}:{message.from_user.username}:{message.forward_date if message.forward_date else ""}:{message.text}')
+    logger.info(f'chat:{message.chat.id}:{"private" if privateChat else "Group"}:{message.from_user.username}:{datetime.fromtimestamp(message.forward_date) if message.forward_date else ""}:{message.text}')
     if message.from_user.username == None: return
     
     # Проверка на присутствие в черном списке
@@ -2050,7 +2050,7 @@ def main_message(message):
                 if new_Message:
                     # Учимся умению "Программист"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None)
-                    check_skills(message.text, message.chat.id, time_over, userIAm, elem)
+                    check_skills(message.text, message.chat.id, False, userIAm, elem)
                      # Учимся умению "Медик"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
                     check_skills(message.text, message.chat.id, time_over, userIAm, elem)
@@ -2176,7 +2176,6 @@ def main_message(message):
                             send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
                         else:
                             send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
-
                 return
         elif (message.text.startswith('Неподалеку ты заметил другого выжившего.') or message.text.startswith('Неподалеку ты заметил какую-то потасовку.')):
             arr = ['отдал на съедение кротокрысам', 'одержал победу над', 'не оставил живого места от', 'гордо наступил на полудохлого', 'оставил бездыханное тело', 'сделал сиротами детишек', 'добил с пинка', 'добил лежачего', 'выписал пропуск в Вальхаллу', 'добил фаталити', 'стоит над поверженным', 'одержал победу над']
