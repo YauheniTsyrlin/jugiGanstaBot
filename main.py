@@ -4335,13 +4335,15 @@ def rade():
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='8_MARCH'), 1)[0]['value']) 
     
     # День рождения
-    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour == 12 and now_date.minute == 50 and now_date.second < 15:
         updateUser(None)
-        for user in USERS_ARR:
-            if user.getBirthday():
-                bday = datetime.fromtimestamp(user.getBirthday())
-                if now_date.day == bday.day and now_date.month == bday.month: 
-                    send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
+        for goat in getSetting(code='GOATS_BANDS'):
+            goat_bands = getGoatBands(goat['name'])
+            for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
+                if user.getBirthday():
+                    bday = datetime.fromtimestamp(user.getBirthday())
+                    if now_date.day == bday.day and now_date.month == bday.month: 
+                        send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
     
     # Проверка на дубликаты бандитов
     if now_date.hour in (9,10,11,12,13,14,15,16,17,18,19,20,21,22) and now_date.minute in (0,10,20,30,40,50) and now_date.second < 15:
@@ -4376,7 +4378,7 @@ def rade():
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
 
     # Присвоение званий
-    if now_date.hour == 10 and now_date.minute == 10   and now_date.second < 15:
+    if now_date.hour == 12 and now_date.minute == 51   and now_date.second < 15:
         logger.info('Присвоение званий!')
         report = ''
         updateUser(None)
@@ -4406,14 +4408,10 @@ def rade():
             report = ''
     
     # Пидор дня
-    if now_date.hour == 10 and now_date.minute == 5 and now_date.second < 15:
+    if now_date.hour == 12 and now_date.minute == 52 and now_date.second < 15:
         logger.info('Pidor of the day!')
         updateUser(None)
         user_in_game = []
-
-        
-        # for user in list( filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR) ):
-        # goat_bands = getGoatBands(getMyGoatName(message.from_user.username))
         
         for goat in getSetting(code='GOATS_BANDS'):
             goat_bands = getGoatBands(goat['name'])
