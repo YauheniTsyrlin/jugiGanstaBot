@@ -998,8 +998,24 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
+                                    'id': 'architect',
+                                    'name': '🉐💮 Архитектор',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': None,
+                                    'min': 45,
+                                    'max': 50,
+                                    'storage': 0,
+                                    'subjects_of_study':
+                                    [
+                                        'Потенциометр',
+                                        'Абсент'
+                                    ],
+                                    'dialog_old_text': 'default_old_things'
+                                },
+                                {
                                     'id': 'programmer',
-                                    'name': '🉐💮 Программист',
+                                    'name': '🉐 Программист',
                                     'cost': 0,
                                     'type': 'skill',
                                     'quantity': None,
