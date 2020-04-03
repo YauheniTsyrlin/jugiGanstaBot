@@ -539,7 +539,7 @@ class User(object):
                     cost = cost + elem["cost"]
 
             if not report == '':
-                report = type['name'] + (f' (🕳️ {cost}):\n' if cost>0 else ':\n') + report + '\n'
+                report = type['name'] + (f' (🔘 {cost}):\n' if cost>0 else ':\n') + report + '\n'
             full_report = full_report + report
         return full_report
 

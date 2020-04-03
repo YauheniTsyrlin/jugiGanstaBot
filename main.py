@@ -914,9 +914,9 @@ def dzen_rewards(user, num_dzen, message):
         else:
             if user.addInventoryThing(elem, elem['quantity']):
                 updateUser(user)
-                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
+                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
             else:
-                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
+                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
 
 # Handle new_chat_members
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
@@ -1466,9 +1466,9 @@ def main_message(message):
 
                                     if ourBandUser.addInventoryThing(elem, elem['quantity']):
                                         updateUser(ourBandUser)
-                                        send_messages_big(message.chat.id, text = f'Тебе выдали:\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
+                                        send_messages_big(message.chat.id, text = f'Тебе выдали:\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
                                     else:
-                                        send_messages_big(message.chat.id, text=ourBandUser.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🕳️{elem["cost"]}') 
+                                        send_messages_big(message.chat.id, text=ourBandUser.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
 
                         if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
                             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])

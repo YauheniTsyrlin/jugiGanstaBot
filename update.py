@@ -1884,10 +1884,10 @@ newvalues = { "$set": { "value":
                                 },
                                 {
                                     'id': 'bag_of_coins_100',
-                                    'name': '💰 Мешочек с монетами 100',
+                                    'name': '🔘 Флэшка с 100 Crypto',
                                     'cost': 100,
                                     'type': 'things',
-                                    'quantity': 1000,
+                                    'quantity': None,
                                     'composition':
                                     [
                                         {
@@ -1898,10 +1898,10 @@ newvalues = { "$set": { "value":
                                 },
                                 {
                                     'id': 'coin',
-                                    'name': '🕳️ Чеканная монета',
+                                    'name': '🔘 Crypto',
                                     'cost': 1,
                                     'type': 'things',
-                                    'quantity': 1000000,
+                                    'quantity': None,
                                 }
                             ]
                         },
