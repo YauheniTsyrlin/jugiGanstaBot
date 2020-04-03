@@ -3019,7 +3019,7 @@ medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILL
 user = getUserByLogin('Lena_Lenochka_32')
 # 52 == 31
 # 26 == 13
-medic.update({'szvika': 17})
+medic.update({'VirtusX': 27})
 user.removeInventoryThing(medic)
 user.addInventoryThing(medic)
 updateUser(user)
