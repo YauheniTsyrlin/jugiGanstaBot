@@ -4752,7 +4752,7 @@ def setGiftsForRaid(goat):
             user.addInventoryThing(bolt, bolt['quantity'])
             #send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {bolt["name"]}')    
             updateUser(user)
-            boltReport = boltReport + f'{counter}. {bolt["name"].split(" ")[0]} {"@" if user.isPing() else ""}{user.getLogin()} {user.getNameAndGerb()}\n'
+            boltReport = boltReport + f'{counter}. {"@" if user.isPing() else ""}{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
     if counter > 0:
         boltReport = '<b>Получили болты 🔩</b>\n' + boltReport
     
@@ -4813,7 +4813,7 @@ def setGiftsForRaid(goat):
                     user.removeInventoryThing(bolt)
                     # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {bolt["name"]}')    
                     updateUser(user)
-                    antyBoltReport = antyBoltReport + f'{counter}. {bolt["name"].split(" ")[0]} {user.getNameAndGerb()}\n'
+                    antyBoltReport = antyBoltReport + f'{counter}. {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
     if counter > 0:
         antyBoltReport = '<b>Сдали болты ❎</b>\n' + antyBoltReport
 
