@@ -520,34 +520,6 @@ def addToUserHistory(user: users.User):
     if result.matched_count < 1:
         pip_history.insert_one(row)
 
-def isDoctor(user_login: str):
-    user = getUserByLogin(user_login)
-    if user:
-        for doc in doctors:
-            if user.isAccessoryItem(doc):
-                return True
-    return False
-
-def hasDoctorMask(user_login):
-    user = getUserByLogin(user_login)
-    if user:
-        if user.isAccessoryItem(acc_doctor_mask):
-            return True
-    return False
-
-def isDoctorIn(logins):
-    for user_login in logins:
-        if isDoctor(user_login):
-            return True
-    return False
-
-def isDoctorMainIn(logins):
-    for user_login in logins:
-        user = getUserByLogin(user_login)
-        if user and user.isAccessoryItem(acc_doctor_main):
-            return True
-    return False
- 
 def checkInfected(logins, chat_id):
     chat = f'chat_{chat_id}' 
     viruses = getSetting(code='ACCESSORY_ALL', id='VIRUSES')["value"]
@@ -559,7 +531,7 @@ def checkInfected(logins, chat_id):
             pass
             #print(m)
     except: 
-        GLOBAL_VARS.update({chat: {'inventory': [], 'medics': [], 'gangsters': []} })
+        GLOBAL_VARS.update({chat: {'inventory': [], 'medics': []} })
 
     # Применяем коэффциент полураспада ко всем текущим вирусам
     for vir in list(filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
@@ -576,19 +548,6 @@ def checkInfected(logins, chat_id):
                 if user.getInventoryThingCount(vir) > 0:
                     GLOBAL_VARS[chat]['inventory'].append(vir)
 
-def checkCure(logins, chat_id):
-    chat = f'chat_{chat_id}' 
-    medicskill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
-    
-    # Удаляем информацию о всех предыдущих медиках
-    GLOBAL_VARS[chat]['medics'].clear()
-      
-    for user_login in logins:
-        user = getUserByLogin(user_login)
-        if user:
-            if user.getInventoryThingCount(medicskill)>0:
-                GLOBAL_VARS[chat]['medics'].append(user)
-   
 def infect(logins, chat_id):
     chat = f'chat_{chat_id}' 
     if len(logins) < 1:
@@ -624,6 +583,19 @@ def infect(logins, chat_id):
                         'dialog_flow_text': 'virus_new_member',
                         'text': f'▫️ {vir["name"]}'})
                     send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен вирусом {vir["name"]} с вероятностью {vir["skill"]["contagiousness"]}')
+
+def checkCure(logins, chat_id):
+    chat = f'chat_{chat_id}' 
+    medicskill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+    
+    # Удаляем информацию о всех предыдущих медиках
+    GLOBAL_VARS[chat]['medics'].clear()
+      
+    for user_login in logins:
+        user = getUserByLogin(user_login)
+        if user:
+            if user.getInventoryThingCount(medicskill)>0:
+                GLOBAL_VARS[chat]['medics'].append(user)
 
 def cure(logins, chat_id):
     chat = f'chat_{chat_id}' 
@@ -911,6 +883,33 @@ def dzen_rewards(user, num_dzen, message):
                 send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
             else:
                 send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
+
+def check_skills(text, chat, time_over, userIAm, elem):
+    count = 0
+    for s in text.split('\n'):
+        for skill_sign in elem['subjects_of_study']:
+            if (s.startswith('Получено:') or s.startswith('Бонус:')) and skill_sign in s: # x2
+                if ' x' in s:
+                    count = count + int(s.split(' x')[1])
+                else: count = count + 1
+    if count > 0:
+        if not time_over:
+            if not userIAm.isInventoryThing(elem):
+                elem.update({'storage': elem['storage'] + count})
+                userIAm.addInventoryThing(elem)
+                send_messages_big(chat, text=f'Ты начал изучение умения:\n▫️ {elem["name"]}') 
+            else:
+                elem = userIAm.getInventoryThing(elem)
+                count = elem['storage'] + count
+                if count >= elem['max']:
+                    count = elem['max']
+                elem.update({'storage': count})
+                percent = int(elem['max']/100*count)
+                userIAm.addInventoryThing(elem, replace=True)
+                send_messages_big(chat, text=f'▫️ {elem["name"]} {percent}%') 
+            updateUser(userIAm)
+        else:
+            send_messages_big(chat, text=getResponseDialogFlow(None, elem["dialog_old_text"]).fulfillment_text)
 
 # Handle new_chat_members
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
@@ -1290,7 +1289,7 @@ def main_message(message):
     #write_json(message.json)
     chat = message.chat.id
     privateChat = ('private' in message.chat.type)
-    logger.info(f'chat:{message.chat.id}:{privateChat}:{message.from_user.username} : {message.text}')
+    logger.info(f'chat:{message.chat.id}:{"private" if privateChat else "Group"}:{message.from_user.username}:{message.forward_date if message.forward_date else ""}:{message.text}')
     if message.from_user.username == None: return
     
     # Проверка на присутствие в черном списке
@@ -1353,7 +1352,6 @@ def main_message(message):
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
         filter_message = {  "username": message.from_user.username, "forward_from_username": message.forward_from.username, "forward_date": message.forward_date}
         new_Message = messager.new_message(message, filter_message)
-        logger.info(message.forward_date)
         time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
         
         if (message.text.startswith('📟Пип-бой 3000')):
@@ -2049,34 +2047,16 @@ def main_message(message):
                         userIAm.setMaxkm(km)
                         updateUser(userIAm)
 
-                # Учимся умению "Медик"
+                 # Учимся умению "Программист"
                 if new_Message:
-                    count = 0
-                    for s in message.text.split('\n'):
-                        if (s.startswith('Получено:') or s.startswith('Бонус:')) and 'Эфедрин' in s: # x2
-                            if ' x' in s:
-                                count = count + int(s.split(' x')[1])
-                            else: count = count + 1
-                    if count > 0:
-                        if not time_over:
-                            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
-                            if not userIAm.isInventoryThing(elem):
-                                elem.update({'storage': elem['storage'] + count})
-                                userIAm.addInventoryThing(elem)
-                                send_messages_big(message.chat.id, text=f'Ты начал изучение умения:\n▫️ {elem["name"]}') 
-                            else:
-                                elem = userIAm.getInventoryThing(elem)
-                                count = elem['storage'] + count
-                                if count >= elem['max']:
-                                    count = elem['max']
-                                elem.update({'storage': count})
-                                percent = int(elem['max']/100*count)
-                                userIAm.addInventoryThing(elem, replace=True)
-                                send_messages_big(message.chat.id, text=f'▫️ {elem["name"]} {percent}%') 
-                            updateUser(userIAm)
-                        else:
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'old_ephedrine').fulfillment_text)
-                
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None)
+                    check_skills(message.text, message.chat.id, time_over, userIAm, elem)
+
+                 # Учимся умению "Медик"
+                if new_Message:
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
+                    check_skills(message.text, message.chat.id, time_over, userIAm, elem)
+
                 if 'Во время вылазки на тебя напал' in message.text:
                     if userIAm == None:
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'no_user').fulfillment_text) 

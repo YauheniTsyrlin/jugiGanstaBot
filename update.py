@@ -999,10 +999,19 @@ newvalues = { "$set": { "value":
                                 },
                                 {
                                     'id': 'programmer',
-                                    'name': '🉐💮 Язык программирования',
+                                    'name': '🉐💮 Программист',
                                     'cost': 0,
                                     'type': 'skill',
-                                    'quantity': None
+                                    'quantity': None,
+                                    'min': 45,
+                                    'max': 50,
+                                    'storage': 0,
+                                    'subjects_of_study':
+                                    [
+                                        'Потенциометр',
+                                        'Абсент'
+                                    ],
+                                    'dialog_old_text': 'default_old_things'
                                 },
                                 {
                                     'id': 'perfectionist',
@@ -1040,7 +1049,12 @@ newvalues = { "$set": { "value":
                                     'quantity': None,
                                     'min': 150,
                                     'max': 200,
-                                    'storage': 0
+                                    'storage': 0,
+                                    'subjects_of_study':
+                                    [
+                                        'Эфедрин'
+                                    ],
+                                    'dialog_old_text': 'old_ephedrine'
                                 },
                                 {
                                     'id': 'operator',
