@@ -2047,10 +2047,10 @@ def main_message(message):
                         userIAm.setMaxkm(km)
                         updateUser(userIAm)
 
-                if not new_Message:
+                if  new_Message:
                     # Учимся умению "Программист"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None)
-                    check_skills(message.text, message.chat.id, False, userIAm, elem)
+                    check_skills(message.text, message.chat.id, time_over, userIAm, elem)
                      # Учимся умению "Медик"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
                     check_skills(message.text, message.chat.id, time_over, userIAm, elem)
