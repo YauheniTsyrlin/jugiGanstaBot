@@ -3017,7 +3017,7 @@ print("#==========================#")
 
 medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
 user = getUserByLogin('gavepta')
-medic.update({'storage': 28})
+medic.update({'storage': 32})
 user.removeInventoryThing(medic)
 user.addInventoryThing(medic)
 updateUser(user)
