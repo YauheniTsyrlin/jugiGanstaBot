@@ -554,10 +554,10 @@ def checkInfected(logins, chat_id):
     try: 
         for z in GLOBAL_VARS[chat]['inventory']:
             pass
-            print(z)
+            #print(z)
         for m in GLOBAL_VARS[chat]['medics']:
             pass
-            print(m)
+            #print(m)
     except: 
         GLOBAL_VARS.update({chat: {'inventory': [], 'medics': []} })
 
@@ -4335,16 +4335,201 @@ def rade():
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='8_MARCH'), 1)[0]['value']) 
     
     # День рождения
-    if now_date.hour == 12 and now_date.minute == 50 and now_date.second < 15:
-        updateUser(None)
-        for goat in getSetting(code='GOATS_BANDS'):
-            goat_bands = getGoatBands(goat['name'])
-            for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
-                if user.getBirthday():
-                    bday = datetime.fromtimestamp(user.getBirthday())
-                    if now_date.day == bday.day and now_date.month == bday.month: 
-                        send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
-    
+    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
+        try:
+            updateUser(None)
+            for goat in getSetting(code='GOATS_BANDS'):
+                goat_bands = getGoatBands(goat['name'])
+                for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
+                    if user.getBirthday():
+                        bday = datetime.fromtimestamp(user.getBirthday())
+                        if now_date.day == bday.day and now_date.month == bday.month: 
+                            send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
+        except:
+            send_message_to_admin(f'⚠️🤬 Сломались дни рождения!')
+
+    # Присвоение званий
+    if now_date.hour == 10 and now_date.minute == 1   and now_date.second < 15:
+        logger.info('Присвоение званий!')
+        try:
+            report = ''
+            updateUser(None)
+
+            for goat in getSetting(code='GOATS_BANDS'):
+                goat_bands = getGoatBands(goat['name'])
+                
+                for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
+                    if user.getRank() == None or user.getRank()['update'] == 'auto':
+                        newRank = None
+                        for rank in getSetting(code='RANK', id='MILITARY')['value']:
+                            newRank = rank
+                            if user.getBm() < rank['bm']:
+                                break 
+                        if not user.getRank() == None and newRank['id'] == user.getRank()['id']:
+                            pass
+                        else:
+                            report = report + f'{newRank["bm"]} бандит {user.getNameAndGerb()} теперь {newRank["name"]}\n'
+                            user.setRank(newRank)
+                            updateUser(user)
+                            time.sleep(1)
+                            send_messages_big(goat['chats']['secret'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {newRank["name"]}')
+                if report == '':
+                    pass
+                else:
+                    send_message_to_admin(f"{goat['name']}\n\n{report}")
+                report = ''
+        except:
+            send_message_to_admin(f'⚠️🤬 Сломалось Присвоение званий!')
+
+    # Пидор дня
+    if now_date.hour == 10 and now_date.minute == 2 and now_date.second < 15:
+        try:
+            logger.info('Pidor of the day!')
+            updateUser(None)
+            user_in_game = []
+            
+            for goat in getSetting(code='GOATS_BANDS'):
+                goat_bands = getGoatBands(goat['name'])
+                for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
+                    usersettings = getUserSetting(user.getLogin(), '👨‍❤️‍👨Участник "Пидор дня"')
+                    if usersettings:
+                        user_in_game.append(user)
+
+                chat = goat['chats']['info']
+                winners = random.sample(user_in_game, 1)
+                if len(winners)>0:
+                    userWin = winners[0]
+                    
+                    setting = getSetting(code='REPORTS',name='KILLERS')
+                    from_date = setting.get('from_date')
+                    to_date = setting.get('to_date')
+
+                    if (not from_date):
+                        from_date = (datetime(2019, 1, 1)).timestamp() 
+
+                    if (not to_date):
+                        to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
+                        
+                    dresult = man_of_day.aggregate([
+                    {   "$match": {
+                            "$and" : [
+                                { 
+                                    "date": {
+                                        '$gte': from_date,
+                                        '$lt': to_date
+                                            }       
+                                }
+                                ]
+                        } 
+                    }, 
+                    {   "$group": {
+                        "_id": "$login", 
+                        "count": {
+                            "$sum": 1}}},
+                        
+                    {   "$sort" : { "count" : -1 } }
+                    ])
+
+                    old_pidors = []
+                    for d in dresult:
+                        user_login = d.get("_id")
+                        if user_login == userWin.getLogin(): continue
+                        user = getUserByLogin(user_login)
+                        if user:
+                            old_pidors.append(user)
+
+                    pidor1 = None
+                    pidor2 = None
+                    if len(old_pidors)>1:
+                        pu = random.sample(old_pidors, 1)[0]
+                        pidor1 = pu.getNameAndGerb()
+                        old_pidors.remove(pu)
+                        pidor2 = random.sample(old_pidors, 1)[0].getNameAndGerb()
+                    else:
+                        pidor1 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
+                        pidor2 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
+
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
+                    # acc = '👑 "Пидор дня"'
+
+                    lastWinner = None
+                    for user in USERS_ARR:
+                        if user.isInventoryThing(elem):
+                            user.removeInventoryThing(elem)
+                            updateUser(user)
+                            lastWinner = user
+                            break
+                    
+                    if lastWinner:
+                        text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, вырвали из рук {lastWinner.getNameAndGerb()} 👑 золотую корону с гравировкой "Pidor of the day" и водрузили её на твой голову!\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
+                        if lastWinner.getLogin() == userWin.getLogin():
+                            text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, в шоке! Кому ты отдался, чтобы выигывать так часто?!! 👑 золотая корона с гравировкой "Pidor of the day" остаётся у тебя !\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
+                        send_messages_big(chat, text=text)
+                    else:
+                        send_messages_big(chat, text=userWin.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+
+                    userWin.addInventoryThing(elem, elem['quantity'])
+                    updateUser(userWin)
+                    row = {}
+                    row.update({'date':now_date.timestamp()})
+                    row.update({'login':userWin.getLogin()})
+                    row.update({'description':elem['name']})
+                    man_of_day.insert_one(row)
+                    send_messages_big(chat, text=report_man_of_day('')) 
+        except:
+            send_message_to_admin(f'⚠️🤬 Сломался Pidor of the day!')
+
+    # Предупреждение о рейде за час, полчаса, 10 минут
+    if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
+        try:
+            updateUser(None)
+            for goat in getSetting(code='GOATS_BANDS'):
+                if getPlanedRaidLocation(goat['name'], planRaid = True)['rade_location']:
+                    report = radeReport(goat, True)
+                    send_messages_big(goat['chats']['secret'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
+        except:
+            send_message_to_admin(f'⚠️🤬 Сломалось Предупреждение о рейде!')
+
+    # Предварительные Отчет по рейду
+    if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
+        try:
+            for goat in getSetting(code='GOATS_BANDS'):
+                if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
+                    report = radeReport(goat, True, False)
+                    send_messages_big(goat['chats']['secret'], text='<b>Предварительные</b> Результаты рейда\n' + report)
+                    report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть 30 минут с момента прожимания /voevat_suda, либо ты можешь присылать свою награду за рейд аж до 30 минут после рейда!!'
+                    send_messages_big(goat['chats']['secret'], text=report)
+        except:
+            send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
+
+    # Отчет по рейду
+    if now_date.hour in (1, 9, 17) and now_date.minute == 30 and now_date.second < 15:
+        logger.info('Rade time now!')
+        try:
+            updateUser(None)
+            for goat in getSetting(code='GOATS_BANDS'):
+                if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
+                    report = radeReport(goat, False, False)
+                    send_messages_big(goat['chats']['secret'], text='<b>Результаты рейда</b>\n' + report)
+                    saveRaidResult(goat)
+                    statistic(goat['name'])
+        except:
+            send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
+
+    # Раздача рейдовых болтов
+    if now_date.hour in (1, 9, 17) and now_date.minute == 35 and now_date.second < 15:
+        try:
+            logger.info('raid bolt info!')
+            updateUser(None)
+            for goat in getSetting(code='GOATS_BANDS'):
+                setGiftsForRaid(goat)
+                registered_users.update_many(
+                    {'band':{'$in':getGoatBands(goat.get('name'))}},
+                    { '$set': { 'raidlocation': 0} }
+                )
+        except:
+            send_message_to_admin(f'⚠️🤬 Сломалась Раздача рейдовых болтов!')
+
     # Проверка на дубликаты бандитов
     if now_date.hour in (9,10,11,12,13,14,15,16,17,18,19,20,21,22) and now_date.minute in (0,10,20,30,40,50) and now_date.second < 15:
         dresult = registered_wariors.aggregate([ 
@@ -4376,169 +4561,6 @@ def rade():
                     z = z + 1
         if i > 0:
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
-
-    # Присвоение званий
-    if now_date.hour == 12 and now_date.minute == 51   and now_date.second < 15:
-        logger.info('Присвоение званий!')
-        report = ''
-        updateUser(None)
-
-        for goat in getSetting(code='GOATS_BANDS'):
-            goat_bands = getGoatBands(goat['name'])
-            
-            for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
-                if user.getRank() == None or user.getRank()['update'] == 'auto':
-                    newRank = None
-                    for rank in getSetting(code='RANK', id='MILITARY')['value']:
-                        newRank = rank
-                        if user.getBm() < rank['bm']:
-                            break 
-                    if not user.getRank() == None and newRank['id'] == user.getRank()['id']:
-                        pass
-                    else:
-                        report = report + f'{newRank["bm"]} бандит {user.getNameAndGerb()} теперь {newRank["name"]}\n'
-                        user.setRank(newRank)
-                        updateUser(user)
-                        time.sleep(1)
-                        send_messages_big(goat['chats']['secret'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "set_new_rank").fulfillment_text}\n▫️  {newRank["name"]}')
-            if report == '':
-                pass
-            else:
-                send_message_to_admin(f"{goat['name']}\n\n{report}")
-            report = ''
-    
-    # Пидор дня
-    if now_date.hour == 12 and now_date.minute == 52 and now_date.second < 15:
-        logger.info('Pidor of the day!')
-        updateUser(None)
-        user_in_game = []
-        
-        for goat in getSetting(code='GOATS_BANDS'):
-            goat_bands = getGoatBands(goat['name'])
-            for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
-                usersettings = getUserSetting(user.getLogin(), '👨‍❤️‍👨Участник "Пидор дня"')
-                if usersettings:
-                    user_in_game.append(user)
-
-            chat = goat['chats']['info']
-            winners = random.sample(user_in_game, 1)
-            if len(winners)>0:
-                userWin = winners[0]
-                
-                setting = getSetting(code='REPORTS',name='KILLERS')
-                from_date = setting.get('from_date')
-                to_date = setting.get('to_date')
-
-                if (not from_date):
-                    from_date = (datetime(2019, 1, 1)).timestamp() 
-
-                if (not to_date):
-                    to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
-                    
-                dresult = man_of_day.aggregate([
-                {   "$match": {
-                        "$and" : [
-                            { 
-                                "date": {
-                                    '$gte': from_date,
-                                    '$lt': to_date
-                                        }       
-                            }
-                            ]
-                    } 
-                }, 
-                {   "$group": {
-                    "_id": "$login", 
-                    "count": {
-                        "$sum": 1}}},
-                    
-                {   "$sort" : { "count" : -1 } }
-                ])
-
-                old_pidors = []
-                for d in dresult:
-                    user_login = d.get("_id")
-                    if user_login == userWin.getLogin(): continue
-                    user = getUserByLogin(user_login)
-                    if user:
-                        old_pidors.append(user)
-
-                pidor1 = None
-                pidor2 = None
-                if len(old_pidors)>1:
-                    pu = random.sample(old_pidors, 1)[0]
-                    pidor1 = pu.getNameAndGerb()
-                    old_pidors.remove(pu)
-                    pidor2 = random.sample(old_pidors, 1)[0].getNameAndGerb()
-                else:
-                    pidor1 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
-                    pidor2 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
-
-                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
-                # acc = '👑 "Пидор дня"'
-
-                lastWinner = None
-                for user in USERS_ARR:
-                    if user.isInventoryThing(elem):
-                        user.removeInventoryThing(elem)
-                        updateUser(user)
-                        lastWinner = user
-                        break
-                
-                if lastWinner:
-                    text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, вырвали из рук {lastWinner.getNameAndGerb()} 👑 золотую корону с гравировкой "Pidor of the day" и водрузили её на твой голову!\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
-                    if lastWinner.getLogin() == userWin.getLogin():
-                        text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, в шоке! Кому ты отдался, чтобы выигывать так часто?!! 👑 золотая корона с гравировкой "Pidor of the day" остаётся у тебя !\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
-                    send_messages_big(chat, text=text)
-                else:
-                    send_messages_big(chat, text=userWin.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
-
-                userWin.addInventoryThing(elem, elem['quantity'])
-                updateUser(userWin)
-                row = {}
-                row.update({'date':now_date.timestamp()})
-                row.update({'login':userWin.getLogin()})
-                row.update({'description':elem['name']})
-                man_of_day.insert_one(row)
-                send_messages_big(chat, text=report_man_of_day('')) 
-
-    # Предупреждение о рейде за час, полчаса, 10 минут
-    if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
-        updateUser(None)
-        for goat in getSetting(code='GOATS_BANDS'):
-            if getPlanedRaidLocation(goat['name'], planRaid = True)['rade_location']:
-                report = radeReport(goat, True)
-                send_messages_big(goat['chats']['secret'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
-
-    # Рейд случился. Предупреждение
-    if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
-        for goat in getSetting(code='GOATS_BANDS'):
-            if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
-                report = radeReport(goat, True, False)
-                send_messages_big(goat['chats']['secret'], text='<b>Предварительные</b> Результаты рейда\n' + report)
-                report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть 30 минут с момента прожимания /voevat_suda, либо ты можешь присылать свою награду за рейд аж до 30 минут после рейда!!'
-                send_messages_big(goat['chats']['secret'], text=report)
-
-    if now_date.hour in (1, 9, 17) and now_date.minute == 30 and now_date.second < 15:
-        logger.info('Rade time now!')
-        updateUser(None)
-        for goat in getSetting(code='GOATS_BANDS'):
-            if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
-                report = radeReport(goat, False, False)
-                send_messages_big(goat['chats']['secret'], text='<b>Результаты рейда</b>\n' + report)
-                saveRaidResult(goat)
-                statistic(goat['name'])
-
-    # Раздача рейдовых болтов
-    if now_date.hour in (1, 9, 17) and now_date.minute == 35 and now_date.second < 15:
-        logger.info('raid bolt info!')
-        updateUser(None)
-        for goat in getSetting(code='GOATS_BANDS'):
-            setGiftsForRaid(goat)
-            registered_users.update_many(
-                {'band':{'$in':getGoatBands(goat.get('name'))}},
-                { '$set': { 'raidlocation': 0} }
-            )
 
 def getPlanedRaidLocation(goatName: str, planRaid = True):
     tz = config.SERVER_MSK_DIFF
