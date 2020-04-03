@@ -520,26 +520,11 @@ def setGiftsForRaid(goat):
         #send_message_to_admin(text=boltReport + '\n' + antyBoltReport)
         #send_messages_big(goat['chats']['secret'], text=boltReport + '\n' + antyBoltReport)
 
-user = getUserByLogin('GonzikBenzyavsky')
+#user = getUserByLogin('GonzikBenzyavsky')
 
-chat_id = 12345678
-chat = f'chat_{chat_id}' 
-viruses = getSetting(code='ACCESSORY_ALL', id='VIRUSES')["value"]
-GLOBAL_VARS = {}
-try: 
-    for z in GLOBAL_VARS[chat]['inventory']:
-        pass
-        print(z)
-    for m in GLOBAL_VARS[chat]['medics']:
-        pass
-        print(m)
-except: 
-    GLOBAL_VARS.update({chat: {'inventory': [], 'medics': []} })
-
-print(GLOBAL_VARS[chat])
-# Применяем коэффциент полураспада ко всем текущим вирусам
-for vir in  filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory']):
-    vir['skill'].update('contagiousness',  vir['skill']['contagiousness'] * vir['skill']['halflife'] )
+medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
+    print(user.getLogin() + "|"+ str(user.getInventoryThing(medic)['storage']))
 
 
 

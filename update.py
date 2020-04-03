@@ -3016,13 +3016,51 @@ print("#==========================#")
 
 
 medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
-user = getUserByLogin('misscalderona')
-# 52 == 31
-# 26 == 13
-medic.update({'storage': 22})
-user.removeInventoryThing(medic)
-user.addInventoryThing(medic)
-updateUser(user)
+
+userupd = {}
+userupd.update({'GonzikBenzyavsky': 23})
+userupd.update({'artiomse': 14})
+userupd.update({'Hermia_Nerbne': 12})
+userupd.update({'WestMoscow': 40})
+userupd.update({'dan4yk': 33})
+userupd.update({'pif_paf_zero': 25})
+userupd.update({'misscalderona': 28})
+userupd.update({'gavepta': 26})
+userupd.update({'Someboty': 43})
+userupd.update({'VirtusX': 34})
+userupd.update({'A_Baikonur': 16})
+userupd.update({'Digzzzy': 13})
+userupd.update({'rushkaa': 30})
+userupd.update({'MedvedZeleny': 32})
+userupd.update({'Java_dentist': 30})
+userupd.update({'Perat_blec': 17})
+userupd.update({'HaringtonVl': 29})
+userupd.update({'puhnastiyus': 13}) 
+userupd.update({'szvika': 23})
+userupd.update({'Mefabest': 25}) 
+userupd.update({'Lena_Lenochka_32': 17}) 
+userupd.update({'eX3emz': 29}) 
+userupd.update({'MagnetMion': 16}) 
+userupd.update({'thebrutaI': 18}) 
+userupd.update({'Under_w0rld':23}) 
+userupd.update({'chymych':21})
+userupd.update({'striletskyi':11}) 
+userupd.update({'StandUser':16})
+userupd.update({'EkoveS':15})
+userupd.update({'Artermii':12})
+userupd.update({'Willow_o_wisp':12})
+userupd.update({'zloiy_babayka':14})
+userupd.update({'Mikro_Chu':21})
+userupd.update({'Irakusa':14})
+userupd.update({'korshak':18}) 
+
+for key in userupd.keys():
+    user = getUserByLogin(key)
+    user.removeInventoryThing(medic)
+
+    medic.update({'storage': userupd[key]})
+    user.addInventoryThing(medic)
+    updateUser(user)
 
 # # 
 # updateUser(None)
