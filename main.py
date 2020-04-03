@@ -559,7 +559,7 @@ def checkInfected(logins, chat_id):
             pass
             #print(m)
     except: 
-        GLOBAL_VARS.update({chat: {'inventory': [], 'medics': []} })
+        GLOBAL_VARS.update({chat: {'inventory': [], 'medics': [], 'gangsters': []} })
 
     # Применяем коэффциент полураспада ко всем текущим вирусам
     for vir in list(filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
@@ -580,12 +580,6 @@ def checkCure(logins, chat_id):
     chat = f'chat_{chat_id}' 
     medicskill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
     
-    try: 
-        a = GLOBAL_VARS[chat]
-    except: 
-        GLOBAL_VARS.update({chat: {'inventory': []} })
-        GLOBAL_VARS.update({chat: {'medics': []} })
-
     # Удаляем информацию о всех предыдущих медиках
     GLOBAL_VARS[chat]['medics'].clear()
       
@@ -1359,6 +1353,7 @@ def main_message(message):
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
         filter_message = {  "username": message.from_user.username, "forward_from_username": message.forward_from.username, "forward_date": message.forward_date}
         new_Message = messager.new_message(message, filter_message)
+        logger.info(message.forward_date)
         time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
         
         if (message.text.startswith('📟Пип-бой 3000')):
