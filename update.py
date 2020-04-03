@@ -1733,7 +1733,7 @@ newvalues = { "$set": { "value":
                                     'name': '🧸 Мишка-обнимашка',
                                     'cost': 10,
                                     'type': 'things',
-                                    'quantity': 1
+                                    'quantity': 2
                                 },
                                 {
                                     'id': 'baby_tooth',
