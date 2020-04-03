@@ -4300,6 +4300,7 @@ def get_raid_plan(raid_date, goat):
     return plan_for_date
 
 def rade():
+    
     tz = config.SERVER_MSK_DIFF
     now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
 
@@ -4344,7 +4345,8 @@ def rade():
                     if user.getBirthday():
                         bday = datetime.fromtimestamp(user.getBirthday())
                         if now_date.day == bday.day and now_date.month == bday.month: 
-                            send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
+                            msg = send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(None, "happy_birthday").fulfillment_text}')
+                            bot.pin_chat_message(goat['chats']['info'], msg.message_id )
         except:
             send_message_to_admin(f'⚠️🤬 Сломались дни рождения!')
 
