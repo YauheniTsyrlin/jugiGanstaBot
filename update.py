@@ -1252,70 +1252,70 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'certificate_honorary_donor',
+                                    'id': 'certificate_donor',
                                     'name': '🩸 Почётный донор',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'certificate_honorary_donor_i',
+                                    'id': 'certificate_donor_i',
                                     'name': '🩸 Значёк "Почетный донор" I-степени',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'certificate_honorary_donor_ii',
+                                    'id': 'certificate_donor_ii',
                                     'name': '🩸 Значёк "Почетный донор" II-степени',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'certificate_honorary_donor_iii',
+                                    'id': 'certificate_donor_iii',
                                     'name': '🩸 Значёк "Почетный донор" III-степени',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'photo_8_bandits_in_scientific_complex',
+                                    'id': 'photo_8_bandits',
                                     'name': '🎞️Фото 8-ми бандитов на фоне Научного комплекса',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'sign_from_the_door_of_the_scientific_complex',
+                                    'id': 'sign_from_the_door',
                                     'name': '☢️Табличка с двери Научного комплекса с 8-ю подписями бойцов АртхǁȺǁус',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'test_tube_from_the_scientific_complex',
+                                    'id': 'test_tube',
                                     'name': '🍼 Пробирка из Научного комплекса с надписью - здэс был Артоха̶уз',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'trolley_bus_ticket_scientific_complex',
+                                    'id': 'trolley_bus_ticket',
                                     'name': '🎫 Билет на троллебус на групповую поездку до Научного комплекса',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'capture_medal_scientific_complex',
+                                    'id': 'capture_medal',
                                     'name': '🎖️ Медаль за захват 7-ми данже подряд 1-ой степени',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'newspaper_article_scientific_complex',
+                                    'id': 'newspaper_article',
                                     'name': '📰 Статья в газете о легендарном походе за семью данжами',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
