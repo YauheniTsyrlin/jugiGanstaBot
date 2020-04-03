@@ -1334,6 +1334,13 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
+                                },
+                                {
+                                    'id': 'dust_from_woolen',
+                                    'name': '🌪 Пыль с Шерстяного',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
                                 }
                             ]
                         },
@@ -1452,13 +1459,6 @@ newvalues = { "$set": { "value":
                                     'id': 'trident',
                                     'name': '🔱 Трезубец повелителя Пустоши',
                                     'cost': 30,
-                                    'type': 'decoration',
-                                    'quantity': 1
-                                },
-                                {
-                                    'id': 'dust_from_woolen',
-                                    'name': '🌪 Пыль с Шерстяного',
-                                    'cost': 50,
                                     'type': 'decoration',
                                     'quantity': 1
                                 },
