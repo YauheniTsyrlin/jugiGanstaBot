@@ -3016,10 +3016,10 @@ print("#==========================#")
 
 
 medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
-user = getUserByLogin('Someboty')
+user = getUserByLogin('Perat_blec')
 # 52 == 31
 # 26 == 13
-medic.update({'storage': 34})
+medic.update({'storage': 10})
 user.removeInventoryThing(medic)
 user.addInventoryThing(medic)
 updateUser(user)
