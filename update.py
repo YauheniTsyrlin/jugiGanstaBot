@@ -3013,21 +3013,28 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-# 
-updateUser(None)
-programmer = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None) 
-mirror_disease = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
 
-for user in USERS_ARR:
-    for inv in list(filter(lambda x : x['type'] == 'skill', user.getInventory())):
-        if inv['id'] == 'programmer':
-            user.removeInventoryThing(programmer)
-            user.addInventoryThing(programmer)
-        elif inv['id'] == 'medic':
-            user.removeInventoryThing(mirror_disease)
-            user.addInventoryThing(mirror_disease)
-    updateUser(user)
-    print(f'Update {user.getLogin()} SKILLS')
+
+medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+user = getUserByLogin('@gavepta')
+medic.update({'storage': 51})
+user.removeInventoryThing(medic)
+user.addInventoryThing(medic)
+updateUser(user)
+
+# # 
+# updateUser(None)
+# programmer = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None) 
+# mirror_disease = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+
+# for user in USERS_ARR:
+#     for inv in list(filter(lambda x : x['type'] == 'skill', user.getInventory())):
+#         if inv['id'] == 'programmer':
+#             user.removeInventoryThing(programmer)
+#             user.addInventoryThing(programmer)
+
+#     updateUser(user)
+#     print(f'Update {user.getLogin()} SKILLS')
 
 #elem = {k: v for k, v in getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'].items() if v['id'] <= 'crown_pidor_of_the_day'}
 # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
