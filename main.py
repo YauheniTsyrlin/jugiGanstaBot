@@ -3,7 +3,7 @@
 
 import config
 import wariors
-import messager
+
 import tools
 import speech
 import users 
@@ -69,7 +69,7 @@ telebot.logger.setLevel(logging.INFO)
 bot = telebot.TeleBot(config.TOKEN)
 
 import dialogflow
-
+import messager
 
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
@@ -2625,12 +2625,12 @@ def main_message(message):
                         step = 0
                         for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
                             skill = user.getInventoryThing(medic)
-                            if skill['storage'] >= skill['min']-15:
+                            if skill['storage'] >= skill['min']:
                                 buttons.append(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"need_doctor|get|{step}|{user.getLogin()}"))
                         
                         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"need_doctor|back|{step}|{userIAm.getLogin()}|")
                         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"need_doctor|exit|{step}|{userIAm.getLogin()}|")
-                        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"need_doctor|forward|{step+1}|{userIAm.getLogin()}|")
+                        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"need_doctor|forward|{step}|{userIAm.getLogin()}|")
 
                         for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
                             markupinline.row(*row)  
@@ -3640,7 +3640,7 @@ def callback_query(call):
     buttons = []
     for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
         skill = user.getInventoryThing(medic)
-        if skill['storage'] >= skill['min']-15:
+        if skill['storage'] >= skill['min']:
             buttons.append(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"need_doctor|get|{step}|{user.getLogin()}"))
 
     if call.data.split('|')[1] == 'exit':
