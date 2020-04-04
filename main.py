@@ -447,7 +447,7 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None, limit=
     if back_button and exit_button and forward_button: 
         if step==0:
             manage_buttons = [exit_button, forward_button]
-        elif (step+1)*limit > len(buttons):
+        elif (step+1)*limit >= len(buttons):
             manage_buttons = [back_button, exit_button]
         else:
             manage_buttons = [back_button, exit_button, forward_button]
