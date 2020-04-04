@@ -2600,6 +2600,15 @@ def main_message(message):
 
                         else: 
                             send_messages_big(message.chat.id, text='Я не знаю игру с названием {response.split(":")[2]}')
+                    elif 'need_doctor' == response.split(':')[1]:
+                        # jugi:need_doctor
+                        markupinline = InlineKeyboardMarkup()
+                        medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+                        for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
+                            skill = user.getInventoryThing(medic)
+                            if skill['storage'] >= skill['min']:
+                                markupinline.add(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"medic_{user.getLogin()}"))
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
                     elif 'setping' == response.split(':')[1]:
                         # jugi:setping:True:login
                         login = response.split(":")[3].replace('@','')
