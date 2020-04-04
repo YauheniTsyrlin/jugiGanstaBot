@@ -903,9 +903,22 @@ def check_skills(text, chat, time_over, userIAm, elem):
                 count = elem['storage'] + count
                 if count >= elem['max']:
                     count = elem['max']
+                
+                # проверяем, а не поздравляли ли мы его за достижение минимума?
+                if count >= elem['min'] and not elem['flags']['congratulation_min']:
+                    elem['flags'].update({'congratulation_min': True})
+                    send_messages_big(chat, text=f'Поздравляю! Твоё умение {elem["name"]} стало приносить пользу.')
+                    present = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id=elem['flags']['present_min']['type'])['value']) if x['id']==elem['flags']['present_min']['id']), None)
+                    if present:
+                        userIAm.addInventoryThing(present)
+                        send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
+
+
                 elem.update({'storage': count})
                 percent = int(elem['max']/100*count)
                 userIAm.addInventoryThing(elem, replace=True)
+
+
                 send_messages_big(chat, text=f'▫️ {elem["name"]} {percent}%') 
             updateUser(userIAm)
         else:
@@ -2047,7 +2060,7 @@ def main_message(message):
                         userIAm.setMaxkm(km)
                         updateUser(userIAm)
 
-                if  new_Message:
+                if new_Message:
                     # Учимся умению "Программист"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None)
                     check_skills(message.text, message.chat.id, time_over, userIAm, elem)

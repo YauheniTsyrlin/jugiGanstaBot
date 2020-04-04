@@ -1011,7 +1011,10 @@ newvalues = { "$set": { "value":
                                         'Потенциометр',
                                         'Абсент'
                                     ],
-                                    'dialog_old_text': 'default_old_things'
+                                    'dialog_old_text': 'default_old_things',
+                                    'flags': {
+                                        'congratulation_min': False
+                                        }
                                 },
                                 {
                                     'id': 'programmer',
@@ -1027,7 +1030,10 @@ newvalues = { "$set": { "value":
                                         'Потенциометр',
                                         'Абсент'
                                     ],
-                                    'dialog_old_text': 'default_old_things'
+                                    'dialog_old_text': 'default_old_things',
+                                    'flags': {
+                                        'congratulation_min': False
+                                        }
                                 },
                                 {
                                     'id': 'perfectionist',
@@ -1070,7 +1076,15 @@ newvalues = { "$set": { "value":
                                     [
                                         'Эфедрин'
                                     ],
-                                    'dialog_old_text': 'old_ephedrine'
+                                    'dialog_old_text': 'old_ephedrine',
+                                    'flags': {
+                                        'congratulation_min': False,
+                                        'present_min': 
+                                            {
+                                                'id': 'certificate_medic',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            }
+                                        }
                                 },
                                 {
                                     'id': 'operator',
@@ -1266,6 +1280,13 @@ newvalues = { "$set": { "value":
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                     
+                                },
+                                {
+                                    'id': 'certificate_medic',
+                                    'name': '💉 Удостоверение "Медработник"',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'certificate_mb',
@@ -3014,8 +3035,17 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-
-# medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+updateUser(None)
+medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
+    skill = user.getInventoryThing(medic)
+    print(f'before {user.getLogin()} {skill}')
+    medic.update({'storage': skill['storage']})
+    user.removeInventoryThing(skill)
+    user.addInventoryThing(medic)
+    updateUser(user)
+    print(f'after {user.getLogin()} {user.getInventoryThing(medic)}')
+    print(f'=======================================================')
 
 # userupd = {}
 # userupd.update({'GonzikBenzyavsky': 23})
