@@ -1008,12 +1008,16 @@ newvalues = { "$set": { "value":
                                     'storage': 0,
                                     'subjects_of_study':
                                     [
-                                        'Потенциометр',
-                                        'Абсент'
+                                        
                                     ],
                                     'dialog_old_text': 'default_old_things',
                                     'flags': {
-                                        'congratulation_min': False
+                                        'congratulation_min': False,
+                                        'present_min': 
+                                            {
+                                                'id': 'certificate_programmer',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            }
                                         }
                                 },
                                 {
@@ -1032,7 +1036,12 @@ newvalues = { "$set": { "value":
                                     ],
                                     'dialog_old_text': 'default_old_things',
                                     'flags': {
-                                        'congratulation_min': False
+                                        'congratulation_min': False,
+                                        'present_min': 
+                                            {
+                                                'id': 'certificate_programmer',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            }
                                         }
                                 },
                                 {
@@ -1282,8 +1291,15 @@ newvalues = { "$set": { "value":
                                     
                                 },
                                 {
+                                    'id': 'certificate_programmer',
+                                    'name': '💉 Корочка "Программер"',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
+                                },
+                                {
                                     'id': 'certificate_medic',
-                                    'name': '💉 Удостоверение "Медработник"',
+                                    'name': '💉 Корочка "Медработник"',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
@@ -3035,17 +3051,17 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-updateUser(None)
-medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
-for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
-    skill = user.getInventoryThing(medic)
-    print(f'before {user.getLogin()} {skill}')
-    medic.update({'storage': skill['storage']})
-    user.removeInventoryThing(skill)
-    user.addInventoryThing(medic)
-    updateUser(user)
-    print(f'after {user.getLogin()} {user.getInventoryThing(medic)}')
-    print(f'=======================================================')
+# updateUser(None)
+# medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+# for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
+#     skill = user.getInventoryThing(medic)
+#     print(f'before {user.getLogin()} {skill}')
+#     medic.update({'storage': skill['storage']})
+#     user.removeInventoryThing(skill)
+#     user.addInventoryThing(medic)
+#     updateUser(user)
+#     print(f'after {user.getLogin()} {user.getInventoryThing(medic)}')
+#     print(f'=======================================================')
 
 # userupd = {}
 # userupd.update({'GonzikBenzyavsky': 23})
