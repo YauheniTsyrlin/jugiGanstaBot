@@ -85,14 +85,7 @@ SETTINGS_ARR = [] # Зарегистрированные настройки
 for setting in settings.find():
     SETTINGS_ARR.append(setting)
 
-GLOBAL_VARS = {
-    'inventory': [], #getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']  + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'],
-    'chat_id':
-                {
-                    'inventory':[]
-                },
-    'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'] 
-}
+
 
 def getSetting(code: str, name=None, value=None, id=None):
     """ Получение настройки """
@@ -112,6 +105,15 @@ def getSetting(code: str, name=None, value=None, id=None):
                     return arr 
         else:
             return result.get('value')
+
+GLOBAL_VARS = {
+    'inventory': getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']  + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'],
+    'chat_id':
+                {
+                    'inventory':[]
+                },
+    'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'] 
+}
 
 def check_and_register_tg_user(tg_login: str):
     user = getUserByLogin(tg_login)
