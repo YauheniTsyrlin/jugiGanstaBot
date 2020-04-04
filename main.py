@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import config
-import users 
 import wariors
+import messager
 import tools
 import speech
-import dialogflow
+import users 
 import matplot
 import hashlib
-
 
 import logging
 import ssl
@@ -62,12 +61,15 @@ mob             = mydb["mob"]
 boss            = mydb["boss"]
 messages        = mydb["messages"]
 
-import messager
+
 
 flexFlag = False
 logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
 bot = telebot.TeleBot(config.TOKEN)
+
+import dialogflow
+
 
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
@@ -3510,14 +3512,17 @@ def report_koronavirus(goat):
 
 def report_medics(goat):
     counter = 0
+    counter_cerificate = 0
     medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
 
     goat_bands = getGoatBands(goat['name'])
     for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
         if user.getInventoryThingCount(medic) > 0 :
             counter = counter + 1
-
-    report = f'💉 Пытаются лечить: <b>{counter}</b>\n' 
+            skill = user.getInventoryThing(medic)
+            if skill['storage'] >= skill['min']:
+                counter_cerificate = counter_cerificate + 1
+    report = f'💉 Сертифицированных врачей: <b>{counter_cerificate}/{counter}</b>\n' 
     return report
 
 def report_man_of_day(message_user_name: str):
