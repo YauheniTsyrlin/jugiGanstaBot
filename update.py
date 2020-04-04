@@ -1983,6 +1983,21 @@ newvalues = { "$set": { "value":
                                     'quantity': 2,
                                 },
                                 {
+                                    'id': 'bag_of_coins_1000',
+                                    'name': '🔘 Сертификат на 1000 Crypto',
+                                    'cost': 100,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'bag_of_coins_100',
+                                            'counter': 10
+                                        }
+                                    ]
+                                }
+                                ,
+                                {
                                     'id': 'bag_of_coins_100',
                                     'name': '🔘 Флэшка с 100 Crypto',
                                     'cost': 100,
