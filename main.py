@@ -3491,11 +3491,13 @@ def report_koronavirus():
 
 def report_medics():
     counter = 0
+    medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+
     for user in USERS_ARR:
-        if isDoctor(user.getLogin()):
+        if user.getInventoryThingCount(medic) > 0 :
             counter = counter + 1
 
-    report = f'💉 Сертифицированных докторов: <b>{counter}</b>\n' 
+    report = f'💉 Пытаются лечить: <b>{counter}</b>\n' 
     return report
 
 def report_man_of_day(message_user_name: str):
