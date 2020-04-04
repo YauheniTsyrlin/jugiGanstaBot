@@ -276,7 +276,8 @@ class User(object):
 
     def getRaidWeight(self):
         dzen = int(self.dzen)
-        return int(self.getBm() + self.getBm() * dzen * 0.25)
+        # return int(self.getBm() + self.getBm() * dzen * 0.25)
+        return int(self.getBm())
 
     def getProfile(self):
         string = ''

@@ -3051,20 +3051,20 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-updateUser(None)
-medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
-for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
-    skill = user.getInventoryThing(medic)
-    print(f'before {user.getLogin()} {skill}')
-    medic.update({'storage': skill['storage']})
-    user.removeInventoryThing(skill)
-    user.addInventoryThing(medic)
-    updateUser(user)
-    print(f'after {user.getLogin()} {user.getInventoryThing(medic)}')
-    print(f'=======================================================')
+# updateUser(None)
+# medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+# for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
+#     skill = user.getInventoryThing(medic)
+#     print(f'before {user.getLogin()} {skill}')
+#     medic.update({'storage': skill['storage']})
+#     user.removeInventoryThing(skill)
+#     user.addInventoryThing(medic)
+#     updateUser(user)
+#     print(f'after {user.getLogin()} {user.getInventoryThing(medic)}')
+#     print(f'=======================================================')
 
 # userupd = {}
-# userupd.update({'GonzikBenzyavsky': 23})
+# userupd.update({'@gavepta': 23})
 # userupd.update({'artiomse': 14})
 # userupd.update({'Hermia_Nerbne': 12})
 # userupd.update({'WestMoscow': 40})
