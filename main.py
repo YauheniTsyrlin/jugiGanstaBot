@@ -2607,7 +2607,7 @@ def main_message(message):
                         buttons = []
                         for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
                             skill = user.getInventoryThing(medic)
-                            if skill['storage'] >= skill['min']:
+                            if skill['storage'] >= skill['min']-15:
                                 buttons.append(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"medic_{user.getLogin()}"))
 
                         for row in build_menu(buttons=buttons, n_cols=3):
