@@ -219,6 +219,7 @@ myquery = { "code": 'INVENTORY_CATEGORY' }
 newvalues = { "$set": 
                 { "value": 
                     [
+                        {'id':'position', 'name':'🧗 Должность'},
                         {'id':'skill', 'name':'💡 Умения'},
                         {'id':'disease', 'name':'🦠 Болезни'},
                         {'id':'tatu', 'name':'☮️ Татуировки'},
@@ -596,50 +597,8 @@ newvalues = { "$set": { "value":
                                     'update': 'auto'
                                 }
                             ] 
-                        },
-                        {
-                            'id': 'MEDICS',
-                            'name': 'MEDICS',
-                            'value':
-                            [
-                                
-                                {
-                                    'id': '1',
-                                    'name': '💉 Медсестра',
-                                    'cost': 1
-                                    
-                                },
-                                {
-                                    'id': '2',
-                                    'name': '💉 Медбрат',
-                                    'cost': 1
-                                },
-                                {
-                                    'id': '3',
-                                    'name': '💊 Главврач',
-                                    'cost': 1
-                                }
-                            ] 
-                        },
-                        {
-                            'id': 'POSITIONS',
-                            'name': '🧗 Должность',
-                            'value':
-                            [
-                                {
-                                    'id': 'pedal_director',
-                                    'name': '🚵 Директор педального завода',
-                                    'type': 'position',
-                                    'cost': 0
-                                },
-                                {
-                                    'id': 'Chinese',
-                                    'name': '😷 Китаец',
-                                    'type': 'position',
-                                    'cost': 0
-                                }
-                            ] 
                         }
+                        
                     ]
                 } 
             } 
@@ -698,6 +657,55 @@ u = settings.update_one(myquery, newvalues)
 myquery = { "code": 'ACCESSORY_ALL' }
 newvalues = { "$set": { "value": 
                     [
+                        {
+                            'id': 'POSITIONS',
+                            'name': '🧗 Должность',
+                            'value':
+                            [
+                                {
+                                    'id': 'pedal_director',
+                                    'name': '🚵 Директор педального завода',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'Chinese',
+                                    'name': '😷 Китаец',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'operator',
+                                    'name': '📽 Оператор',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'friend_of_the_groom',
+                                    'name': '👨‍✈️ Друг жениха',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'bridesmaid',
+                                    'name': '🦹‍♀️ Подруга невесты',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'toastmaster',
+                                    'name': '🪕 Тамада',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'registrar_in_the_office',
+                                    'name': '👨‍💼 Регистратор в ЗАГСе',
+                                    'type': 'position',
+                                    'cost': 0
+                                }
+                            ] 
+                        },
                         {
                             'id': 'CLOTHES',
                             'name': '🧥 Одежда',
@@ -846,6 +854,22 @@ newvalues = { "$set": { "value":
                             'name': '🦠 Болезни',
                             'value':
                             [
+                                
+                                {
+                                    'id': 'girlfriend_bouquet',
+                                    'name': '🦠 Букет подруги невесты',
+                                    'cost': 0,
+                                    'type': 'disease',
+                                    'quantity': None,
+                                    'skill':
+                                            {
+                                                'contagiousness': 0.01,
+                                                'halflife': 0.90,
+                                                'mortality': 0.01,
+                                                'immunity': 0.95,
+                                                'treatability': 0.10
+                                            }
+                                },
                                 {
                                     'id': 'covid-19',
                                     'name': '🦇 Коронавирус',
@@ -883,8 +907,13 @@ newvalues = { "$set": { "value":
                             'name': '☮️ Татуировки',
                             'value':
                             [
-
-                                
+                                {
+                                    'id': 'happy_together',
+                                    'name': '💞 Счастливы вместе',
+                                    'cost': 100,
+                                    'type': 'tatu',
+                                    'quantity': 1
+                                },
                                 {
                                     'id': 'corruptionist',
                                     'name': '💰 Коррупционер',
@@ -1094,18 +1123,7 @@ newvalues = { "$set": { "value":
                                                 'type': 'MARKS_OF_EXCELLENCE'
                                             }
                                         }
-                                },
-                                {
-                                    'id': 'operator',
-                                    'name': '📽 Оператор',
-                                    'cost': 0,
-                                    'type': 'skill',
-                                    'quantity': None,
-                                    'min': 0,
-                                    'max': 1,
-                                    'storage': 1
-                                }
-                                
+                                }                                
                             ]
                         },
                         {
@@ -1212,6 +1230,13 @@ newvalues = { "$set": { "value":
                             'value':
                             [
                                 
+                                {
+                                    'id': 'сertificate_of_marriage',
+                                    'name': '🧾 Свидетельство о бракосочетании',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
+                                },
                                 {
                                     'id': 'bolt_5_season',
                                     'name': '🔩 Рейдовый болт 5-го сезона',
@@ -1417,6 +1442,14 @@ newvalues = { "$set": { "value":
                             'value':
                             [
                                 
+                                {
+                                    'id': 'the_brides_bouquet',
+                                    'name': '💐 Букет невесты',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': 1
+
+                                },
                                 {
                                     'id': 'memory_of_the_wedding',
                                     'name': '📼 Память о свадьбе',
