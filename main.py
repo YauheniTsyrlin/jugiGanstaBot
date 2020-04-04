@@ -3457,8 +3457,8 @@ def main_message(message):
                         report = report + f'{report_man_of_day(message.from_user.username)}'
                         
                         report = report + f'\n' 
-                        report = report + f'{report_koronavirus()}'
-                        report = report + f'{report_medics()}'
+                        report = report + f'{report_koronavirus(getMyGoat(userIAm.getLogin()))}'
+                        report = report + f'{report_medics(getMyGoat(userIAm.getLogin()))}'
 
                         report = report + f'\n' 
                         report = report + '⏰ c ' + time.strftime("%d-%m-%Y", time.gmtime(from_date)) + ' по ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(to_date))
@@ -3480,20 +3480,22 @@ def main_message(message):
             if (random.random() <= float(getSetting(code='PROBABILITY', name='I_DONT_KNOW_YOU'))):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'you_dont_our_band_gangster').fulfillment_text)
 
-def report_koronavirus():
+def report_koronavirus(goat):
     counter = 0
-    for user in USERS_ARR:
+    goat_bands = getGoatBands(goat['name'])
+    for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
         if user.isAccessoryItem(acc_koronavirus):
             counter = counter + 1
 
     report = f'🦇 Статистика зараженных: <b>{counter}</b>\n' 
     return report
 
-def report_medics():
+def report_medics(goat):
     counter = 0
     medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
 
-    for user in USERS_ARR:
+    goat_bands = getGoatBands(goat['name'])
+    for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
         if user.getInventoryThingCount(medic) > 0 :
             counter = counter + 1
 
@@ -4372,102 +4374,102 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломалось Присвоение званий!')
 
     # Пидор дня
-    if now_date.hour == 10 and now_date.minute == 2 and now_date.second < 15:
-        try:
-            logger.info('Pidor of the day!')
-            updateUser(None)
-            user_in_game = []
-            
-            for goat in getSetting(code='GOATS_BANDS'):
-                goat_bands = getGoatBands(goat['name'])
-                for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
-                    usersettings = getUserSetting(user.getLogin(), '👨‍❤️‍👨Участник "Пидор дня"')
-                    if usersettings:
-                        user_in_game.append(user)
+    if now_date.hour == 10 and now_date.minute == 7 and now_date.second < 15:
+        #try:
+        logger.info('Pidor of the day!')
+        updateUser(None)
+        user_in_game = []
+        
+        for goat in getSetting(code='GOATS_BANDS'):
+            goat_bands = getGoatBands(goat['name'])
+            for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
+                usersettings = getUserSetting(user.getLogin(), '👨‍❤️‍👨Участник "Пидор дня"')
+                if usersettings:
+                    user_in_game.append(user)
 
-                chat = goat['chats']['info']
-                winners = random.sample(user_in_game, 1)
-                if len(winners)>0:
-                    userWin = winners[0]
+            chat = goat['chats']['info']
+            winners = random.sample(user_in_game, 1)
+            if len(winners)>0:
+                userWin = winners[0]
+                
+                setting = getSetting(code='REPORTS',name='KILLERS')
+                from_date = setting.get('from_date')
+                to_date = setting.get('to_date')
+
+                if (not from_date):
+                    from_date = (datetime(2019, 1, 1)).timestamp() 
+
+                if (not to_date):
+                    to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
                     
-                    setting = getSetting(code='REPORTS',name='KILLERS')
-                    from_date = setting.get('from_date')
-                    to_date = setting.get('to_date')
-
-                    if (not from_date):
-                        from_date = (datetime(2019, 1, 1)).timestamp() 
-
-                    if (not to_date):
-                        to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
-                        
-                    dresult = man_of_day.aggregate([
-                    {   "$match": {
-                            "$and" : [
-                                { 
-                                    "date": {
-                                        '$gte': from_date,
-                                        '$lt': to_date
-                                            }       
-                                }
-                                ]
-                        } 
-                    }, 
-                    {   "$group": {
-                        "_id": "$login", 
-                        "count": {
-                            "$sum": 1}}},
-                        
-                    {   "$sort" : { "count" : -1 } }
-                    ])
-
-                    old_pidors = []
-                    for d in dresult:
-                        user_login = d.get("_id")
-                        if user_login == userWin.getLogin(): continue
-                        user = getUserByLogin(user_login)
-                        if user:
-                            old_pidors.append(user)
-
-                    pidor1 = None
-                    pidor2 = None
-                    if len(old_pidors)>1:
-                        pu = random.sample(old_pidors, 1)[0]
-                        pidor1 = pu.getNameAndGerb()
-                        old_pidors.remove(pu)
-                        pidor2 = random.sample(old_pidors, 1)[0].getNameAndGerb()
-                    else:
-                        pidor1 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
-                        pidor2 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
-
-                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
-                    # acc = '👑 "Пидор дня"'
-
-                    lastWinner = None
-                    for user in USERS_ARR:
-                        if user.isInventoryThing(elem):
-                            user.removeInventoryThing(elem)
-                            updateUser(user)
-                            lastWinner = user
-                            break
+                dresult = man_of_day.aggregate([
+                {   "$match": {
+                        "$and" : [
+                            { 
+                                "date": {
+                                    '$gte': from_date,
+                                    '$lt': to_date
+                                        }       
+                            }
+                            ]
+                    } 
+                }, 
+                {   "$group": {
+                    "_id": "$login", 
+                    "count": {
+                        "$sum": 1}}},
                     
-                    if lastWinner:
-                        text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, вырвали из рук {lastWinner.getNameAndGerb()} 👑 золотую корону с гравировкой "Pidor of the day" и водрузили её на твой голову!\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
-                        if lastWinner.getLogin() == userWin.getLogin():
-                            text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, в шоке! Кому ты отдался, чтобы выигывать так часто?!! 👑 золотая корона с гравировкой "Pidor of the day" остаётся у тебя !\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
-                        send_messages_big(chat, text=text)
-                    else:
-                        send_messages_big(chat, text=userWin.getNameAndGerb() + '!\n' + getResponseDialogFlow(userWin.getLogin(), 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+                {   "$sort" : { "count" : -1 } }
+                ])
 
-                    userWin.addInventoryThing(elem, elem['quantity'])
-                    updateUser(userWin)
-                    row = {}
-                    row.update({'date':now_date.timestamp()})
-                    row.update({'login':userWin.getLogin()})
-                    row.update({'description':elem['name']})
-                    man_of_day.insert_one(row)
-                    send_messages_big(chat, text=report_man_of_day('')) 
-        except:
-            send_message_to_admin(f'⚠️🤬 Сломался Pidor of the day!')
+                old_pidors = []
+                for d in dresult:
+                    user_login = d.get("_id")
+                    if user_login == userWin.getLogin(): continue
+                    user = getUserByLogin(user_login)
+                    if user:
+                        old_pidors.append(user)
+
+                pidor1 = None
+                pidor2 = None
+                if len(old_pidors)>1:
+                    pu = random.sample(old_pidors, 1)[0]
+                    pidor1 = pu.getNameAndGerb()
+                    old_pidors.remove(pu)
+                    pidor2 = random.sample(old_pidors, 1)[0].getNameAndGerb()
+                else:
+                    pidor1 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
+                    pidor2 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
+
+                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
+                # acc = '👑 "Пидор дня"'
+
+                lastWinner = None
+                for user in USERS_ARR:
+                    if user.isInventoryThing(elem):
+                        user.removeInventoryThing(elem)
+                        updateUser(user)
+                        lastWinner = user
+                        break
+                
+                if lastWinner:
+                    text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, вырвали из рук {lastWinner.getNameAndGerb()} 👑 золотую корону с гравировкой "Pidor of the day" и водрузили её на твой голову!\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
+                    if lastWinner.getLogin() == userWin.getLogin():
+                        text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, в шоке! Кому ты отдался, чтобы выигывать так часто?!! 👑 золотая корона с гравировкой "Pidor of the day" остаётся у тебя !\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
+                    send_messages_big(chat, text=text)
+                else:
+                    send_messages_big(chat, text=userWin.getNameAndGerb() + '!\n' + getResponseDialogFlow(userWin.getLogin(), 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+
+                userWin.addInventoryThing(elem, elem['quantity'])
+                updateUser(userWin)
+                row = {}
+                row.update({'date':now_date.timestamp()})
+                row.update({'login':userWin.getLogin()})
+                row.update({'description':elem['name']})
+                man_of_day.insert_one(row)
+                send_messages_big(chat, text=report_man_of_day('')) 
+        # except:
+        #     send_message_to_admin(f'⚠️🤬 Сломался Pidor of the day!')
 
     # Предупреждение о рейде за час, полчаса, 10 минут
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
