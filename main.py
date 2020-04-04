@@ -2604,10 +2604,15 @@ def main_message(message):
                         # jugi:need_doctor
                         markupinline = InlineKeyboardMarkup()
                         medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+                        buttons = []
                         for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
                             skill = user.getInventoryThing(medic)
-                            if skill['storage'] >= skill['min']-10:
-                                markupinline.add(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"medic_{user.getLogin()}"))
+                            if skill['storage'] >= skill['min']:
+                                buttons.append(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"medic_{user.getLogin()}"))
+
+                        for row in build_menu(buttons=buttons, n_cols=3):
+                            markupinline.row(*row)  
+
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
                     elif 'setping' == response.split(':')[1]:
                         # jugi:setping:True:login
