@@ -460,7 +460,6 @@ def getResponseDialogFlow(login, text: str, event=None):
     user = getUserByLogin(login)
     return dialogflow.getResponseDialogFlow(login, text, event, user)
 
-
 def getResponseHuificator(text):
     morph = pymorphy2.MorphAnalyzer()
     report = ''
@@ -3481,14 +3480,23 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'you_dont_our_band_gangster').fulfillment_text)
 
 def report_koronavirus(goat):
+    viruses = getSetting(code='ACCESSORY_ALL', id='VIRUSES')["value"]
     counter = 0
     goat_bands = getGoatBands(goat['name'])
-    for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
-        if user.isAccessoryItem(acc_koronavirus):
-            counter = counter + 1
-
-    report = f'🦇 Статистика зараженных: <b>{counter}</b>\n' 
-    return report
+    report = ''
+    for vir in viruses:
+        vir_report = f'▫️ {vir["name"]}'
+        vir_count = 0
+        for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
+            if user.getInventoryThingCount(vir):
+                vir_count = vir_count + 1
+        if vir_count > 0:
+            report = report + vir_report + f': <b>{vir_count}</b>\n'
+    if report == '':
+        report = '🦠 У нас нет зараженных'
+    else:
+        report = f'🦠 Статистика зараженных: <b>{counter}</b>\n' + report
+    return report 
 
 def report_medics(goat):
     counter = 0
