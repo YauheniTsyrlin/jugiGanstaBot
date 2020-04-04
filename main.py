@@ -3583,7 +3583,7 @@ def report_man_of_day(message_user_name: str):
     if (i == 0): 
         report = report + f'В нашем козле нет пидоров!\n'
     else:
-        if (findInLoser > 5): report = report + f'\n💔 Твое пидорье место - {findInLoser}!\n'
+        if (findInLoser > 5): report = report + f'\n💔 Твое пидорье место: <b>{findInLoser}</b>!\n'
     
     if pidor_user_now:
         report = report + f'\nПидор дня <b>{pidor_user_now.getNameAndGerb()}</b> на {pidor_counter} месте\n'
