@@ -3672,7 +3672,7 @@ def callback_query(call):
     for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
         markupinline.row(*row)  
     
-    send_messages_big(call.message.chat.id, text=getResponseDialogFlow(call.message.from_user.username, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=getResponseDialogFlow(call.message.from_user.username, 'shot_message_zbs').fulfillment_text, parse_mode='HTML', reply_markup=markupinline)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("ping_user"))
 def callback_query(call):
