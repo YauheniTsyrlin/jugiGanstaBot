@@ -904,14 +904,13 @@ def check_skills(text, chat, time_over, userIAm, elem):
                         userIAm.addInventoryThing(present)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
 
-
                 elem.update({'storage': count})
-                percent = int(elem['max']/100*count)
-                
+                percent = int(count*100/elem['max'])
+
                 send_message_to_admin(f'⚠️😎 {userIAm.getLogin()} продолжил изучение умения:\n▫️ {elem}')
                 userIAm.addInventoryThing(elem, replace=True)
                 send_messages_big(chat, text=f'▫️ {elem["name"]} {percent}%')
-                 
+
             updateUser(userIAm)
         else:
             send_messages_big(chat, text=getResponseDialogFlow(None, elem["dialog_old_text"]).fulfillment_text)

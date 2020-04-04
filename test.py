@@ -523,7 +523,7 @@ def setGiftsForRaid(goat):
 #user = getUserByLogin('GonzikBenzyavsky')
 
 medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
-for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
+for user in sorted(list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)), key = lambda i: i.getInventoryThing(medic)['storage'], reverse=True):
     print(user.getLogin() + "|"+ str(user.getInventoryThing(medic)['storage']))
 
 

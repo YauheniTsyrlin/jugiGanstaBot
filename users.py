@@ -530,7 +530,7 @@ class User(object):
                     try:
                         storage = list(group)[0]['storage']
                         if storage > 0:
-                            percent = int(list(group)[0]['max']/100*storage)
+                            percent = int(storage*100/list(group)[0]['max'])
                     except: pass
 
 
