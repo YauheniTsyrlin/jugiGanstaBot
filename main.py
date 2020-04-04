@@ -2630,7 +2630,7 @@ def main_message(message):
                         
                         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"need_doctor|back|{step}|{userIAm.getLogin()}|")
                         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"need_doctor|exit|{step}|{userIAm.getLogin()}|")
-                        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"need_doctor|forward|{step}|{userIAm.getLogin()}|")
+                        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"need_doctor|forward|{step+1}|{userIAm.getLogin()}|")
 
                         for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
                             markupinline.row(*row)  
@@ -3638,7 +3638,6 @@ def callback_query(call):
     medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
     
     buttons = []
-    step = 0
     for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
         skill = user.getInventoryThing(medic)
         if skill['storage'] >= skill['min']-15:
@@ -3665,6 +3664,8 @@ def callback_query(call):
     else:
         pass
     
+    bot.answer_callback_query(call.id, f"Шаг {step}!")
+
     back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"need_doctor|back|{step}|{login}|")
     exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"need_doctor|exit|{step}|{login}|")
     forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"need_doctor|forward|{step}|{login}|")
