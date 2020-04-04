@@ -3493,9 +3493,9 @@ def report_koronavirus(goat):
         if vir_count > 0:
             report = report + vir_report + f': <b>{vir_count}</b>\n'
     if report == '':
-        report = '🦠 У нас нет зараженных'
+        report = '🦠 У нас нет зараженных\n'
     else:
-        report = f'🦠 Статистика зараженных: <b>{counter}</b>\n' + report
+        report = f'🦠 Статистика зараженных:\n{report}\n'
     return report 
 
 def report_medics(goat):
