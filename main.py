@@ -94,13 +94,6 @@ GLOBAL_VARS = {
     'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'] 
 }
 
-
-acc_koronavirus = '🦇 Коронавирус'
-acc_doctor_mask = '🥽 Медицинская маска'
-acc_doctor_main = '💉 Удостоверение "Главврач"'
-doctors = ['💉 Удостоверение "Медбрат"', '💉 Удостоверение "Медсестричка"', '💉 Удостоверение "Главврач"']
-
-
 def getSetting(code: str, name=None, value=None, id=None):
     """ Получение настройки """
     result = settings.find_one({'code': code})
@@ -895,6 +888,7 @@ def check_skills(text, chat, time_over, userIAm, elem):
                 elem.update({'storage': elem['storage'] + count})
                 userIAm.addInventoryThing(elem)
                 send_messages_big(chat, text=f'Ты начал изучение умения:\n▫️ {elem["name"]}') 
+                send_message_to_admin(f'⚠️🤓 {userIAm.getLogin()} начал изучение умения:\n▫️ {elem["name"]}')
             else:
                 elem = userIAm.getInventoryThing(elem)
                 count = elem['storage'] + count
@@ -913,10 +907,11 @@ def check_skills(text, chat, time_over, userIAm, elem):
 
                 elem.update({'storage': count})
                 percent = int(elem['max']/100*count)
+                
+                send_message_to_admin(f'⚠️😎 {userIAm.getLogin()} продолжил изучение умения:\n▫️ {elem}')
                 userIAm.addInventoryThing(elem, replace=True)
-
-
-                send_messages_big(chat, text=f'▫️ {elem["name"]} {percent}%') 
+                send_messages_big(chat, text=f'▫️ {elem["name"]} {percent}%')
+                 
             updateUser(userIAm)
         else:
             send_messages_big(chat, text=getResponseDialogFlow(None, elem["dialog_old_text"]).fulfillment_text)
@@ -4382,7 +4377,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломалось Присвоение званий!')
 
     # Пидор дня
-    if now_date.hour == 10 and now_date.minute == 7 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 2 and now_date.second < 15:
         try:
             logger.info('Pidor of the day!')
             updateUser(None)
