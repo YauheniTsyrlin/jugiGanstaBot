@@ -332,6 +332,7 @@ class User(object):
         string = string + self.getSettingsReport() + '\n'
 
         inventory_category = [
+                                {'id':'position', 'name':'🧗 Должность'},
                                 {'id':'skill', 'name':'💡 Умения'},
                                 {'id':'disease', 'name':'🦠 Болезни'},
                                 {'id':'tatu', 'name':'☮️ Татуировки'},
