@@ -438,8 +438,20 @@ def getButtonsMenu(list_buttons):
     markup.add(*groups_names)
     return markup
 
-def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
-    menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
+def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None, limit=None, step=None, back_button=None, exit_button=None, forward_button=None ):
+    if limit==None: 
+        limit=len(buttons)
+        step = 0 
+    menu = [ buttons [i:i + n_cols] for i in range(step*limit, (step+1)*limit if (step+1)*limit < len(buttons) else len(buttons), n_cols) ]
+    
+    if back_button and exit_button and forward_button: 
+        if step==0:
+            manage_buttons = [exit_button, forward_button]
+        elif (step+1)*limit > len(buttons):
+            manage_buttons = [back_button, exit_button]
+        else:
+            manage_buttons = [back_button, exit_button, forward_button]
+        menu = menu + [manage_buttons [i:i + n_cols] for i in range(0, len(manage_buttons), n_cols)]
     if header_buttons:
         menu.insert(0, header_buttons)
     if footer_buttons:
@@ -2608,13 +2620,19 @@ def main_message(message):
                         # jugi:need_doctor
                         markupinline = InlineKeyboardMarkup()
                         medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+                        
                         buttons = []
                         for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
                             skill = user.getInventoryThing(medic)
                             if skill['storage'] >= skill['min']-15:
-                                buttons.append(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"medic_{user.getLogin()}"))
+                                buttons.append(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"need_doctor|get|{user.getLogin()}"))
+                        
+                        step = 0
+                        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"need_doctor|back|{step}|{userIAm.getLogin()}|")
+                        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"need_doctor|exit|{step}|{userIAm.getLogin()}|")
+                        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"need_doctor|forward|{step}|{userIAm.getLogin()}|")
 
-                        for row in build_menu(buttons=buttons, n_cols=3):
+                        for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
                             markupinline.row(*row)  
 
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)

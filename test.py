@@ -520,11 +520,38 @@ def setGiftsForRaid(goat):
         #send_message_to_admin(text=boltReport + '\n' + antyBoltReport)
         #send_messages_big(goat['chats']['secret'], text=boltReport + '\n' + antyBoltReport)
 
+def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None, limit=None, step=None, back_button=None, exit_button=None, forward_button=None ):
+    if limit==None: 
+        limit=len(buttons)
+        step = 0 
+    menu = [
+                buttons [i:i + n_cols] for i in range(step*limit, (step+1)*limit if (step+1)*limit < len(buttons) else len(buttons), n_cols)
+            ]
+    
+    if back_button:
+        if step==0:
+            manage_buttons = [exit_button, forward_button]
+        elif (step+1)*limit > len(buttons):
+            manage_buttons = [back_button, exit_button]
+        else:
+            manage_buttons = [back_button, exit_button, forward_button]
+        menu = menu + [manage_buttons [i:i + n_cols] for i in range(0, len(manage_buttons), n_cols)]
+    if header_buttons:
+        menu.insert(0, header_buttons)
+    if footer_buttons:
+        menu.append(footer_buttons)
+    return menu
+
+buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16']
+print(build_menu(buttons, 3, limit=6, step=1, back_button='back', forward_button='forward', exit_button='exit'))
+
+
 #user = getUserByLogin('GonzikBenzyavsky')
 
-medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
-for user in sorted(list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)), key = lambda i: i.getInventoryThing(medic)['storage'], reverse=True):
-    print(user.getLogin() + "|"+ str(user.getInventoryThing(medic)['storage']))
+
+# medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+# for user in sorted(list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)), key = lambda i: i.getInventoryThing(medic)['storage'], reverse=True):
+#     print(user.getLogin() + "|"+ str(user.getInventoryThing(medic)['storage']))
 
 
 
