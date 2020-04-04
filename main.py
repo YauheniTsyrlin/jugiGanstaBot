@@ -2622,12 +2622,12 @@ def main_message(message):
                         medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
                         
                         buttons = []
+                        step = 0
                         for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
                             skill = user.getInventoryThing(medic)
                             if skill['storage'] >= skill['min']-15:
-                                buttons.append(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"need_doctor|get|{user.getLogin()}"))
+                                buttons.append(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"need_doctor|get|{step}|{user.getLogin()}"))
                         
-                        step = 0
                         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"need_doctor|back|{step}|{userIAm.getLogin()}|")
                         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"need_doctor|exit|{step}|{userIAm.getLogin()}|")
                         forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"need_doctor|forward|{step}|{userIAm.getLogin()}|")
@@ -3622,6 +3622,57 @@ def report_man_of_day(message_user_name: str):
         report = report + f'\nПидор дня <b>{pidor_user_now.getNameAndGerb()}</b> на {pidor_counter} месте\n'
     
     return report
+
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith("need_doctor"))
+def callback_query(call):
+    if isUserBan(call.from_user.username):
+        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
+        return
+    
+    login = call.data.split('|')[3]
+    step = int(call.data.split('|')[2])
+    user = getUserByLogin(call.from_user.username)
+
+    markupinline = InlineKeyboardMarkup()
+    medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+    
+    buttons = []
+    step = 0
+    for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
+        skill = user.getInventoryThing(medic)
+        if skill['storage'] >= skill['min']-15:
+            buttons.append(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"need_doctor|get|{step}|{user.getLogin()}"))
+
+    if call.data.split('|')[1] == 'exit':
+        if login == call.from_user.username:
+            bot.answer_callback_query(call.id, f"Вышел!")
+            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='На сегодня хватит!', parse_mode='HTML')
+            return
+        else:
+            bot.answer_callback_query(call.id, f"Куда ты лезешь?")
+
+    elif call.data.split('|')[1] == 'back':
+        if login == call.from_user.username:
+            step = step - 1 
+        else:
+            bot.answer_callback_query(call.id, f"Куда ты лезешь?")
+    elif call.data.split('|')[1] == 'forward':
+        if login == call.from_user.username:
+            step = step + 1
+        else:
+            bot.answer_callback_query(call.id, f"Куда ты лезешь?")
+    else:
+        pass
+    
+    back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"need_doctor|back|{step}|{login}|")
+    exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"need_doctor|exit|{step}|{login}|")
+    forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"need_doctor|forward|{step}|{login}|")
+
+    for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+        markupinline.row(*row)  
+    
+    send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("ping_user"))
 def callback_query(call):
