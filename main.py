@@ -2856,8 +2856,12 @@ def main_message(message):
                         markupinline = InlineKeyboardMarkup()
 
                         counter = 0
+                        elems = []
                         for elem in user.getInventory():
                             try:
+                                if elem in elems:
+                                    continue
+                                elems.append(elem)
                                 markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"pickup|{login}|{elem['id'][:100]}"))
                                 counter = counter + 1 
                             except: pass
