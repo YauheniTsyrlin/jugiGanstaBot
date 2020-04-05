@@ -640,6 +640,9 @@ def cure(logins, chat_id):
                         updateUser(infected)
                         sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_2')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_2'))))
                         pending_date = datetime.now() + timedelta(seconds=sec)
+                        text = f'Врач {medic.getNameAndGerb()} вылечил бандита {infected.getNameAndGerb()} от:\n▫️ {vir["name"]}'
+                        if medic.getLogin() == infected.getLogin():
+                            text = f'{medic.getNameAndGerb()} вылечился сам от:\n▫️ {vir["name"]}'
 
                         pending_messages.insert_one({ 
                             'chat_id': chat_id,
@@ -649,7 +652,7 @@ def cure(logins, chat_id):
                             'state': 'WAIT',
                             'pending_date': pending_date.timestamp(),
                             'dialog_flow_text': 'virus_minus_member',
-                            'text': f'{medic.getNameAndGerb()} вылечил {infected.getNameAndGerb()} от:\n▫️ {vir["name"]}'})
+                            'text': text})
 
 def getMobHash(mob_name: str, mob_class: str):
     stringforhash = mob_name + mob_class
