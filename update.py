@@ -605,55 +605,6 @@ newvalues = { "$set": { "value":
 u = settings.update_one(myquery, newvalues)
 
 
-myquery = { "code": 'ACCESSORY' }
-newvalues = { "$set": { "value": 
-                    [
-                        {
-                            'name': 'REWARDS',
-                            'value':
-                            [
-                                {
-                                    'name':'wafelnitsa',
-                                    'value':'🖨 Wafelница'
-                                }
-                                                                
-                            ] 
-                        },
-                        {
-                            'name': 'PIP_BOY',
-                            'value':
-                            [
-                                {
-                                    'name': 'pip_antenna',
-                                    'value': '📟 антена от Пип-боя'
-                                },
-                                {
-                                    'name': 'pip_battery',
-                                    'value': '📟 аккумулятор от Пип-боя'
-                                },
-                                {
-                                    'name': 'pip_packaging',
-                                    'value': '📟 упаковка от Пип-боя'
-                                },
-                                {
-                                    'name': 'pip_spare_part',
-                                    'value': '📟 запчасть от Пип-боя'
-                                },
-                                {
-                                    'name': 'pip_broken_part',
-                                    'value': '📟 сломанный Пип-бой'
-                                },
-                                {
-                                    'name': 'pip_bolt',
-                                    'value': '📟 болт от Пип-боя'
-                                }
-                            ] 
-                        }
-                    ]
-                } 
-            } 
-u = settings.update_one(myquery, newvalues)
-
 myquery = { "code": 'ACCESSORY_ALL' }
 newvalues = { "$set": { "value": 
                     [
@@ -1121,6 +1072,12 @@ newvalues = { "$set": { "value":
                                             {
                                                 'id': 'certificate_medic',
                                                 'type': 'MARKS_OF_EXCELLENCE'
+                                            },
+                                        'congratulation_max': False,
+                                        'present_max': 
+                                            {
+                                                'id': 'certificate_doctor',
+                                                'type': 'MARKS_OF_EXCELLENCE'
                                             }
                                         }
                                 }                                
@@ -1323,12 +1280,21 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
+                                    'id': 'certificate_proctologist',
+                                    'name': '💉 Корочка "Проктолог"',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
+                                }
+                                ,
+                                {
                                     'id': 'certificate_medic',
                                     'name': '💉 Корочка "Медработник"',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
-                                },
+                                }
+                                ,
                                 {
                                     'id': 'certificate_mb',
                                     'name': '💉 Удостоверение "Медбрат"',
@@ -3081,9 +3047,6 @@ newvalues = { "$set":
                 } 
             } 
 u = settings.update_one(myquery, newvalues)
-
-# for x in settings.find():
-#     print(x)
 
 print("#==========================#")              
 print("#         RAIDS            #")    

@@ -916,8 +916,17 @@ def check_skills(text, chat, time_over, userIAm, elem):
                 # проверяем, а не поздравляли ли мы его за достижение минимума?
                 if count >= elem['min'] and not elem['flags']['congratulation_min']:
                     elem['flags'].update({'congratulation_min': True})
-                    send_messages_big(chat, text=f'Поздравляю! Твоё умение {elem["name"]} стало приносить пользу.')
+                    send_messages_big(chat, text=f'Поздравляю 🥳! Твоё умение {elem["name"]} стало приносить пользу 😎.')
                     present = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id=elem['flags']['present_min']['type'])['value']) if x['id']==elem['flags']['present_min']['id']), None)
+                    if present:
+                        userIAm.addInventoryThing(present)
+                        send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
+                
+                # проверяем, а не поздравляли ли мы его за достижение максимума?
+                if count >= elem['max'] and not elem['flags']['congratulation_max']:
+                    elem['flags'].update({'congratulation_max': True})
+                    send_messages_big(chat, text=f'Поздравляю 🥳! Ты стал профессионалом 🤩 в умение {elem["name"]}!')
+                    present = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id=elem['flags']['present_max']['type'])['value']) if x['id']==elem['flags']['present_max']['id']), None)
                     if present:
                         userIAm.addInventoryThing(present)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
