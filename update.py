@@ -3144,7 +3144,7 @@ for user in list(filter(lambda x : x.getLogin() == '@Irakusa' and x.getInventory
     
     print(f'before {user.getLogin()} {skill}')
     #medic.update({'storage': skill['storage']})
-    medic.update({'storage': 20})
+    medic.update({'storage': 12})
     medic['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
 
     if skill['storage'] >= skill['min']:
