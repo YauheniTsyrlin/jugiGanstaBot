@@ -4178,7 +4178,8 @@ def callback_query(call):
     elemId = call.data.split('|')[2]
     elem = user.getInventoryThing({'id':f'{elemId}','type': None})
 
-    if elem['type'] in ('skill', 'disease', 'tatu'):
+    #if elem['type'] in ('skill', 'disease', 'tatu'):
+    if elem['type'] in ('disease', 'tatu'):
         bot.answer_callback_query(call.id, "Это нельзя забрать!")
         return    
 
