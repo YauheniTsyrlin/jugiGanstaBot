@@ -3122,7 +3122,7 @@ newvalues = { "$set":
                             'name': 'Бафомет',
                             'boss': [
                                         'kMitty',
-                                        'markettering',
+                                        'AutismusMaximus',
                                     ],
                             'bands': 
                                     [

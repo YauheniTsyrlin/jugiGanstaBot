@@ -976,7 +976,7 @@ def send_welcome_and_dismiss(message):
 def default_query(inline_query):
     if not hasAccessToWariors(inline_query.from_user.username):
         r = types.InlineQueryResultArticle(id=0, title = 'Хрена надо? Ты не из наших банд!', input_message_content=types.InputTextMessageContent(getResponseDialogFlow(inline_query.from_user.username, 'i_dont_know_you').fulfillment_text), description=getResponseDialogFlow(inline_query.from_user.username, 'i_dont_know_you').fulfillment_text)
-        bot.answer_inline_query(inline_query.id, [r], cache_time=3060)
+        bot.answer_inline_query(inline_query.id, [r], cache_time=300)
         return
 
     try:
