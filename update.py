@@ -854,7 +854,7 @@ newvalues = { "$set": { "value":
                                     'skill':
                                             {
                                                 'contagiousness': 0.05,
-                                                'halflife': 0.50,
+                                                'halflife': 0.75,
                                                 'mortality': 0.01,
                                                 'immunity': 0.95,
                                                 'treatability': 0.10
