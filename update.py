@@ -3136,26 +3136,32 @@ print("#==========================#")
 
 
 updateUser(None)
-medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
-position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']=='paramedic'), None)
+elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None) 
+position_min = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
+position_max = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']), None)
 
-for user in list(filter(lambda x : x.getLogin() == 'Irakusa' and x.getInventoryThingCount(medic) > 0, USERS_ARR)):
-    skill = user.getInventoryThing(medic)
+for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
+    skill = user.getInventoryThing(elem)
     
     print(f'before {user.getLogin()} {skill}')
-    #medic.update({'storage': skill['storage']})
-    medic.update({'storage': 18})
-    medic['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
+    elem.update({'storage': skill['storage']})
+    elem['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
 
     if skill['storage'] >= skill['min']:
-        user.removeInventoryThing(position)
-        user.addInventoryThing(position)
+        user.removeInventoryThing(position_min)
+        user.addInventoryThing(position_min)
+        print('++++++++++++++++++++ UPDATE position')
+    
+    if skill['storage'] >= skill['max']:
+        user.removeInventoryThing(position_min)
+        user.removeInventoryThing(position_max)
+        user.addInventoryThing(position_max)
         print('++++++++++++++++++++ UPDATE position')
 
     user.removeInventoryThing(skill)
-    user.addInventoryThing(medic)
+    user.addInventoryThing(elem)
     updateUser(user)
-    print(f'after {user.getLogin()} {user.getInventoryThing(medic)}')
+    print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
     print(f'=======================================================')
 
 # userupd = {}

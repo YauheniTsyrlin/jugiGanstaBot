@@ -4320,10 +4320,14 @@ def pending_message():
         if pending_message.get('dialog_flow_text'):
             text = getResponseDialogFlow(pending_message['user_id'], pending_message.get('dialog_flow_text')).fulfillment_text + '\n' + text
         
-        if pending_message.get('reply_message'):
-            reply_to_big(pending_message.get('reply_message'), text)
-        else:
-            send_messages_big(pending_message.get('chat_id'), text, None)
+        try:
+            if pending_message.get('reply_message'):
+                reply_to_big(pending_message.get('reply_message'), text)
+            else:
+                send_messages_big(pending_message.get('chat_id'), text, None)
+        except:
+            send_message_to_admin(f'⚠️ Ошибка оправки отложенного сообщения в чат {pending_message.get("chat_id")}\n\n{text}')
+                
         ids.append(pending_message.get('_id')) 
 
     for id_str in ids:
