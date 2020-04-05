@@ -3087,6 +3087,7 @@ for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_AR
     medic['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
 
     if skill['storage'] >= skill['min']:
+        user.removeInventoryThing(position)
         user.addInventoryThing(position)
         print('++++++++++++++++++++ UPDATE position')
 
