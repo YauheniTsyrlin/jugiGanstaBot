@@ -654,6 +654,18 @@ newvalues = { "$set": { "value":
                                     'name': '👨‍💼 Регистратор в ЗАГСе',
                                     'type': 'position',
                                     'cost': 0
+                                },
+                                {
+                                    'id': 'paramedic',
+                                    'name': '👨‍⚕️ Фельдшер-нарколог',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'doctor',
+                                    'name': '👨‍💼 Врач-токсиколог',
+                                    'type': 'position',
+                                    'cost': 0
                                 }
                             ] 
                         },
@@ -1068,15 +1080,17 @@ newvalues = { "$set": { "value":
                                     'dialog_old_text': 'old_ephedrine',
                                     'flags': {
                                         'congratulation_min': False,
-                                        'present_min': 
+                                        'position_min': 'paramedic',
+                                        'present_position': 
                                             {
                                                 'id': 'certificate_medic',
                                                 'type': 'MARKS_OF_EXCELLENCE'
                                             },
                                         'congratulation_max': False,
+                                        'position_max': 'doctor',
                                         'present_max': 
                                             {
-                                                'id': 'certificate_doctor',
+                                                'id': 'certificate_proctologist',
                                                 'type': 'MARKS_OF_EXCELLENCE'
                                             }
                                         }
@@ -3062,17 +3076,25 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-# updateUser(None)
-# medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
-# for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
-#     skill = user.getInventoryThing(medic)
-#     print(f'before {user.getLogin()} {skill}')
-#     medic.update({'storage': skill['storage']})
-#     user.removeInventoryThing(skill)
-#     user.addInventoryThing(medic)
-#     updateUser(user)
-#     print(f'after {user.getLogin()} {user.getInventoryThing(medic)}')
-#     print(f'=======================================================')
+updateUser(None)
+medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']=='paramedic'), None)
+
+for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
+    skill = user.getInventoryThing(medic)
+    print(f'before {user.getLogin()} {skill}')
+    medic.update({'storage': skill['storage']})
+    medic['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
+
+    if skill['storage'] >= skill['min']:
+        user.addInventoryThing(position)
+        print('++++++++++++++++++++ UPDATE position')
+
+    user.removeInventoryThing(skill)
+    user.addInventoryThing(medic)
+    updateUser(user)
+    print(f'after {user.getLogin()} {user.getInventoryThing(medic)}')
+    print(f'=======================================================')
 
 # userupd = {}
 # userupd.update({'@gavepta': 23})
