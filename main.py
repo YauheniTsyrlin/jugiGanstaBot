@@ -3544,11 +3544,13 @@ def report_koronavirus(goat):
     for vir in viruses:
         vir_report = f'▫️ {vir["name"]}'
         vir_count = 0
+        users_count = 0
         for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
+            users_count = users_count + 1
             if user.getInventoryThingCount(vir):
                 vir_count = vir_count + 1
         if vir_count > 0:
-            report = report + vir_report + f': <b>{vir_count}</b>\n'
+            report = report + vir_report + f': <b>{vir_count}/{users_count}</b>\n'
     if report == '':
         report = '🦠 У нас нет зараженных\n'
     else:
