@@ -666,6 +666,18 @@ newvalues = { "$set": { "value":
                                     'name': '👨‍💼 Врач-токсиколог',
                                     'type': 'position',
                                     'cost': 0
+                                },
+                                {
+                                    'id': 'electrician_1',
+                                    'name': '🧑‍🏭 Электромонтер',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'electrician_2',
+                                    'name': '👨‍🏭 Электромеханик',
+                                    'type': 'position',
+                                    'cost': 0
                                 }
                             ] 
                         },
@@ -1065,6 +1077,37 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
+                                    'id': 'electrician',
+                                    'name': '⚡ Электрик',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': None,
+                                    'min': 2,
+                                    'max': 4,
+                                    'storage': 0,
+                                    'subjects_of_study':
+                                    [
+                                        'Изолента'
+                                    ],
+                                    'dialog_old_text': 'old_insulating_tape',
+                                    'flags': {
+                                        'congratulation_min': False,
+                                        'position_min': 'electrician_1',
+                                        'present_position': 
+                                            {
+                                                'id': 'certificate_electric_1',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            },
+                                        'congratulation_max': False,
+                                        'position_max': 'electrician_2',
+                                        'present_max': 
+                                            {
+                                                'id': 'certificate_electric_2',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            }
+                                        }
+                                },     
+                                {
                                     'id': 'medic',
                                     'name': '💉 Медик',
                                     'cost': 0,
@@ -1293,6 +1336,22 @@ newvalues = { "$set": { "value":
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                 },
+                                {
+                                    'id': 'certificate_electric_1',
+                                    'name': '🔌 Корочка "Курс по электробезопасности"',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
+                                }
+                                ,
+                                {
+                                    'id': 'certificate_electric_1',
+                                    'name': '💡 Корочка "Курс по электроснабжению"',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
+                                }
+                                ,
                                 {
                                     'id': 'certificate_proctologist',
                                     'name': '💉 Корочка "Проктолог"',
