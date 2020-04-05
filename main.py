@@ -636,13 +636,13 @@ def cure(logins, chat_id):
                 if infected.getInventoryThingCount(vir) > 0:
                     if (random.random() <= (vir['skill']['treatability'] + power_skill)/2):
                         infected.removeInventoryThing(vir)
-                        send_message_to_admin(f'⚠️❤️ Внимание! \n {infected.getLogin()} вылечен {medic.getLogin()} от 🦇 {vir["name"]}!')
+                        send_message_to_admin(f'⚠️❤️ Внимание! \n {infected.getLogin()} вылечен {medic.getLogin()} от {vir["name"]}!')
     
                         sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_2')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_2'))))
                         pending_date = datetime.now() + timedelta(seconds=sec)
 
                         pending_messages.insert_one({ 
-                            'chat_id': chat,
+                            'chat_id': chat_id,
                             'reply_message': None,
                             'create_date': datetime.now().timestamp(),
                             'user_id': infected.getLogin(),  
