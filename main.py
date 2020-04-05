@@ -637,7 +637,7 @@ def cure(logins, chat_id):
                     if (random.random() <= (vir['skill']['treatability'] + power_skill)/2):
                         infected.removeInventoryThing(vir)
                         send_message_to_admin(f'⚠️❤️ Внимание! \n {infected.getLogin()} вылечен {medic.getLogin()} от {vir["name"]}!')
-    
+                        updateUser(infected)
                         sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_2')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_2'))))
                         pending_date = datetime.now() + timedelta(seconds=sec)
 
