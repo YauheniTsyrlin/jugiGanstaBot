@@ -3135,26 +3135,26 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-updateUser(None)
-medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
-position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']=='paramedic'), None)
+# updateUser(None)
+# medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+# position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']=='paramedic'), None)
 
-for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
-    skill = user.getInventoryThing(medic)
-    print(f'before {user.getLogin()} {skill}')
-    medic.update({'storage': skill['storage']})
-    medic['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
+# for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
+#     skill = user.getInventoryThing(medic)
+#     print(f'before {user.getLogin()} {skill}')
+#     medic.update({'storage': skill['storage']})
+#     medic['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
 
-    if skill['storage'] >= skill['min']:
-        user.removeInventoryThing(position)
-        user.addInventoryThing(position)
-        print('++++++++++++++++++++ UPDATE position')
+#     if skill['storage'] >= skill['min']:
+#         user.removeInventoryThing(position)
+#         user.addInventoryThing(position)
+#         print('++++++++++++++++++++ UPDATE position')
 
-    user.removeInventoryThing(skill)
-    user.addInventoryThing(medic)
-    updateUser(user)
-    print(f'after {user.getLogin()} {user.getInventoryThing(medic)}')
-    print(f'=======================================================')
+#     user.removeInventoryThing(skill)
+#     user.addInventoryThing(medic)
+#     updateUser(user)
+#     print(f'after {user.getLogin()} {user.getInventoryThing(medic)}')
+#     print(f'=======================================================')
 
 # userupd = {}
 # userupd.update({'@gavepta': 23})
