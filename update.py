@@ -3139,12 +3139,12 @@ updateUser(None)
 medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
 position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']=='paramedic'), None)
 
-for user in list(filter(lambda x : x.getLogin() == '@Irakusa' and x.getInventoryThingCount(medic) > 0, USERS_ARR)):
+for user in list(filter(lambda x : x.getLogin() == 'Irakusa' and x.getInventoryThingCount(medic) > 0, USERS_ARR)):
     skill = user.getInventoryThing(medic)
     
     print(f'before {user.getLogin()} {skill}')
     #medic.update({'storage': skill['storage']})
-    medic.update({'storage': 12})
+    medic.update({'storage': 18})
     medic['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
 
     if skill['storage'] >= skill['min']:
