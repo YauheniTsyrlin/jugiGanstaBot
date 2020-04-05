@@ -2958,16 +2958,6 @@ def main_message(message):
                                 msg = send_messages_big(message.chat.id, text=f'Всем бандитам будет выдан...' , reply_markup=markupinline)
 
                         else:
-                            # acc = response.split(':')[3]
-                            # if user:
-                            #     user.addAccessory(acc)
-                            #     updateUser(user)
-                            #     send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {acc}') 
-                            # else:
-                            #     for user in list(USERS_ARR):
-                            #         user.addAccessory(acc)
-                            #         updateUser(user)
-                            # send_messages_big(message.chat.id, text='Бандиты!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {acc}') 
                             send_messages_big(message.chat.id, text='Нет выдачи по одному Подарку') 
                         return
                     elif 'ban' == response.split(':')[1] or 'unban' == response.split(':')[1]:
