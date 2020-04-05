@@ -2614,7 +2614,8 @@ def main_message(message):
 
                             counter = 0
                             usersarr = []
-                            for user in list(USERS_ARR):
+                            goat_bands = getGoatBands(getMyGoatName(message.from_user.username))
+                            for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
                                 if user.isPing():
                                     if user.getSettingValue(id='partizan'):
                                         counter = counter + 1
