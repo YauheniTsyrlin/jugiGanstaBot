@@ -924,7 +924,8 @@ def check_skills(text, chat, time_over, userIAm, elem):
                         userIAm.addInventoryThing(present)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
                     # Должность
-                    position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']['id']), None)
+
+                    position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
                     if position:
                         userIAm.addInventoryThing(position)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_position_add').fulfillment_text + f'\n\n▫️ {position["name"]}') 
@@ -940,10 +941,10 @@ def check_skills(text, chat, time_over, userIAm, elem):
                         userIAm.addInventoryThing(present)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
                     # Должность
-                    position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']['id']), None)
+                    position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']), None)
                     if position:
                         userIAm.addInventoryThing(position)
-                        old_position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']['id']), None)
+                        old_position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
                         userIAm.removeInventoryThing(old_position)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_position_add').fulfillment_text + f'\n\n▫️ {position["name"]}') 
                 
@@ -2094,10 +2095,10 @@ def main_message(message):
                         userIAm.setMaxkm(km)
                         updateUser(userIAm)
 
-                if new_Message:
+                if True or new_Message:
                     # Учимся умению "Электрик"
-                    # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None)
-                    # check_skills(message.text, message.chat.id, time_over, userIAm, elem)
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None)
+                    check_skills(message.text, message.chat.id, False, userIAm, elem)
                     
                     # Учимся умению "Программист"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None)

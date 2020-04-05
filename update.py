@@ -1093,7 +1093,7 @@ newvalues = { "$set": { "value":
                                     'flags': {
                                         'congratulation_min': False,
                                         'position_min': 'electrician_1',
-                                        'present_position': 
+                                        'present_min': 
                                             {
                                                 'id': 'certificate_electric_1',
                                                 'type': 'MARKS_OF_EXCELLENCE'
@@ -1124,7 +1124,7 @@ newvalues = { "$set": { "value":
                                     'flags': {
                                         'congratulation_min': False,
                                         'position_min': 'paramedic',
-                                        'present_position': 
+                                        'present_min': 
                                             {
                                                 'id': 'certificate_medic',
                                                 'type': 'MARKS_OF_EXCELLENCE'
@@ -1345,7 +1345,7 @@ newvalues = { "$set": { "value":
                                 }
                                 ,
                                 {
-                                    'id': 'certificate_electric_1',
+                                    'id': 'certificate_electric_2',
                                     'name': '💡 Корочка "Курс по электроснабжению"',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
@@ -3135,26 +3135,26 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-# updateUser(None)
-# medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
-# position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']=='paramedic'), None)
+updateUser(None)
+medic = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']=='paramedic'), None)
 
-# for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
-#     skill = user.getInventoryThing(medic)
-#     print(f'before {user.getLogin()} {skill}')
-#     medic.update({'storage': skill['storage']})
-#     medic['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
+for user in list(filter(lambda x : x.getInventoryThingCount(medic) > 0, USERS_ARR)):
+    skill = user.getInventoryThing(medic)
+    print(f'before {user.getLogin()} {skill}')
+    medic.update({'storage': skill['storage']})
+    medic['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
 
-#     if skill['storage'] >= skill['min']:
-#         user.removeInventoryThing(position)
-#         user.addInventoryThing(position)
-#         print('++++++++++++++++++++ UPDATE position')
+    if skill['storage'] >= skill['min']:
+        user.removeInventoryThing(position)
+        user.addInventoryThing(position)
+        print('++++++++++++++++++++ UPDATE position')
 
-#     user.removeInventoryThing(skill)
-#     user.addInventoryThing(medic)
-#     updateUser(user)
-#     print(f'after {user.getLogin()} {user.getInventoryThing(medic)}')
-#     print(f'=======================================================')
+    user.removeInventoryThing(skill)
+    user.addInventoryThing(medic)
+    updateUser(user)
+    print(f'after {user.getLogin()} {user.getInventoryThing(medic)}')
+    print(f'=======================================================')
 
 # userupd = {}
 # userupd.update({'@gavepta': 23})
