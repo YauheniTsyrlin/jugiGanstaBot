@@ -1413,9 +1413,9 @@ def main_message(message):
                 '🏆ТОП МАГНАТОВ' in message.text):
                 return
 
-            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                return
+            # if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+            #     return
 
             if 'ТОП ИГРОКОВ:' in message.text:
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
