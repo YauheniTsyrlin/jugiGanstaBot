@@ -943,6 +943,8 @@ def check_skills(text, chat, time_over, userIAm, elem):
                     position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']['id']), None)
                     if position:
                         userIAm.addInventoryThing(position)
+                        old_position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']['id']), None)
+                        userIAm.removeInventoryThing(old_position)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_position_add').fulfillment_text + f'\n\n▫️ {position["name"]}') 
                 
                 elem.update({'storage': count})
@@ -3651,7 +3653,6 @@ def report_man_of_day(message_user_name: str):
         report = report + f'\nПидор дня <b>{pidor_user_now.getNameAndGerb()}</b> на {pidor_counter} месте\n'
     
     return report
-
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("need_doctor"))
 def callback_query(call):
