@@ -4187,7 +4187,11 @@ def callback_query(call):
     user.removeInventoryThing(elem)
     updateUser(user)
 
+    elems = []
     for elem in user.getInventory():
+        if elem in elems:
+            continue
+        elems.append(elem)
         markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"pickup|{login}|{elem['id']}"))
 
     text = 'У него больше нечего забрать!'
