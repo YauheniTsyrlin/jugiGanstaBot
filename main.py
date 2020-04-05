@@ -1223,6 +1223,7 @@ def send_welcome(message):
 # Handle document
 @bot.message_handler(content_types=['document'])
 def get_message_photo(message):
+    #write_json(message.json)
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то показать, но у него получилось лишь:\n' + getResponseDialogFlow(message.from_user.username, 'user_banned').fulfillment_text)
@@ -1232,7 +1233,6 @@ def get_message_photo(message):
 @bot.message_handler(content_types=["photo"])
 def get_message_photo(message):
     #write_json(message.json)
-    
     privateChat = ('private' in message.chat.type)
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)

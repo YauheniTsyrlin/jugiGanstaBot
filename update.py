@@ -3115,7 +3115,27 @@ newvalues = { "$set":
                                         'secret' : -1001240140243,
                                         'info' : -488189089
                                     }
+                        },
+                        { 
+                            'name': 'Бафомет',
+                            'boss': [
+                                        'kMitty',
+                                        'markettering',
+                                    ],
+                            'bands': 
+                                    [
+                                        {
+                                            'name': 'Тамплиеры',
+                                            'boss': 'kMitty'
+                                        }
+                                    ],
+                            'chats': 
+                                    {
+                                        'secret' : -491611374,
+                                        'info' : 0
+                                    }
                         }
+                        
                     ]   
                 } 
             } 
@@ -3135,34 +3155,34 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-updateUser(None)
-elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None) 
-position_min = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
-position_max = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']), None)
+# updateUser(None)
+# elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None) 
+# position_min = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
+# position_max = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']), None)
 
-for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
-    skill = user.getInventoryThing(elem)
+# for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
+#     skill = user.getInventoryThing(elem)
     
-    print(f'before {user.getLogin()} {skill}')
-    elem.update({'storage': skill['storage']})
-    elem['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
+#     print(f'before {user.getLogin()} {skill}')
+#     elem.update({'storage': skill['storage']})
+#     elem['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
 
-    if skill['storage'] >= skill['min']:
-        user.removeInventoryThing(position_min)
-        user.addInventoryThing(position_min)
-        print('++++++++++++++++++++ UPDATE position')
+#     if skill['storage'] >= skill['min']:
+#         user.removeInventoryThing(position_min)
+#         user.addInventoryThing(position_min)
+#         print('++++++++++++++++++++ UPDATE position')
     
-    if skill['storage'] >= skill['max']:
-        user.removeInventoryThing(position_min)
-        user.removeInventoryThing(position_max)
-        user.addInventoryThing(position_max)
-        print('++++++++++++++++++++ UPDATE position')
+#     if skill['storage'] >= skill['max']:
+#         user.removeInventoryThing(position_min)
+#         user.removeInventoryThing(position_max)
+#         user.addInventoryThing(position_max)
+#         print('++++++++++++++++++++ UPDATE position')
 
-    user.removeInventoryThing(skill)
-    user.addInventoryThing(elem)
-    updateUser(user)
-    print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
-    print(f'=======================================================')
+#     user.removeInventoryThing(skill)
+#     user.addInventoryThing(elem)
+#     updateUser(user)
+#     print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
+#     print(f'=======================================================')
 
 # userupd = {}
 # userupd.update({'@gavepta': 23})
