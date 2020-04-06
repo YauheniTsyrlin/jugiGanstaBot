@@ -1211,6 +1211,26 @@ def send_welcome(message):
         bot.send_photo(message.chat.id, random.sample(getSetting(code='STICKERS', name='DOOR'), 1)[0]['value'])
         return   
 
+# Handle '/test'
+@bot.message_handler(commands=['test'])
+def send_welcome(message):
+    try:
+        send_messages_big(message.chat.id, text='Поехали')
+        for goat in getSetting(code='GOATS_BANDS'):
+            send_messages_big(message.chat.id, text=goat['name'])
+
+            if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
+                send_messages_big(message.chat.id, text="Плановый рейд")
+                
+                report = radeReport(goat, True, False)
+                send_messages_big(message.chat.id, text='<b>Предварительные</b> Результаты рейда\n' + report)
+                report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть 30 минут с момента прожимания /voevat_suda, либо ты можешь присылать свою награду за рейд аж до 30 минут после рейда!!'
+                send_messages_big(message.chat.id, text=report)
+    except:
+        send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
+    
+
+
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -1424,9 +1444,9 @@ def main_message(message):
                 '🏆ТОП МАГНАТОВ' in message.text):
                 return
 
-            # if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-            #     return
+            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+                return
 
             if 'ТОП ИГРОКОВ:' in message.text:
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
@@ -4720,7 +4740,8 @@ def getPlanedRaidLocation(goatName: str, planRaid = True):
         hour = 1
         if not planRaid:
             hour = 17
-
+    
+    logger.info(f'==============={goatName}===============')
     raidNone = {}
     raidNone.update({'rade_date': (raid_date.replace(hour=hour, minute=0, second=0, microsecond=0)).timestamp()})
     raidNone.update({'rade_location': None})
@@ -4739,7 +4760,9 @@ def getPlanedRaidLocation(goatName: str, planRaid = True):
                                     }
                                 ]
                             }):
-        if datetime.fromtimestamp(raid.get('rade_date')).hour == hour:
+        logger.info(raid)
+        logger.info(f"{hour} {(datetime.fromtimestamp(raid.get('rade_date')) - timedelta(hours=3)).hour}" )
+        if (datetime.fromtimestamp(raid.get('rade_date'))  ).hour == hour:
             return raid
     return raidNone
 
@@ -4748,6 +4771,7 @@ def saveRaidResult(goat):
     raid = getPlanedRaidLocation(goat['name'], planRaid=False)
     location = raid.get('rade_location')
     raiddate = raid.get('rade_date')
+    logger.info(raid)
 
     for band in goat.get('bands'):
         for user in list(USERS_ARR):
