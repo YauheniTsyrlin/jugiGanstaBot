@@ -1536,7 +1536,7 @@ def main_message(message):
                                         if loser.getGoat() == 'Deus Ex Machina':
                                             elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
                                             k =3
-                                    if loser.getName() == '^_^': 
+                                    if loser.getName() == '{^_^}': 
                                         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_zak'), None) 
                                         k = 5
 
