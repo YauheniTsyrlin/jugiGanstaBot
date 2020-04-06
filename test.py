@@ -578,20 +578,36 @@ def getRaidTime(planRaid):
     print(raid_date.replace(hour=hour, minute=0, second=0, microsecond=0))
     return raid_date.replace(hour=hour, minute=0, second=0, microsecond=0).timestamp()
 
-def getRaidTimeText(text):
+def round_time(x):
+    hour_in_seconds = 60 * 60
+    half_hour_in_seconds = 60 * 30
+    if x % hour_in_seconds > half_hour_in_seconds:
+        return ((x // hour_in_seconds) + 1) * hour_in_seconds
+    else:
+        return (x // hour_in_seconds) * hour_in_seconds
+
+
+def getRaidTimeText(text, date):
     hour = 0
     minute = 0
     second = 0
     if 'ч.' in text:
-        hour = int(text.split('ч.')[0])   
-        minute = int(text.split(' ')[1].split('мин.')[0]) 
-    
-    print(f'{hour} {minute} {second}')
+        hour = int(text.split('ч.')[0].strip())   
+        minute = int(text.split(' ')[1].split('мин.')[0].strip()) 
+    elif 'мин.' in text:
+        minute = int(text.split('мин.')[0].strip())
+    elif 'сек.' in text:
+        second = int(text.split('сек.')[0].strip()) 
+    result =  datetime.fromtimestamp(date) + timedelta(seconds=second, minutes=minute, hours=hour)
+    hour = round((result.hour*60 + result.minute)/60) 
+    result = result.replace(hour=hour, minute=0, second=0, microsecond=0)
+    return result.timestamp()
 
-t = '7ч. 27мин.'
-t1 = '3ч. 0мин.'
-t2 = '1 мин.'
-getRaidTimeText(t1)
+tt = ['7ч. 27мин.', '3ч. 0мин.', '1 мин.', '10 сек.', '1ч. 15мин.']
+ttt = [ '1ч. 15мин.']
+for t in ttt:
+    getRaidTimeText(t, 1586177073)
+
 
 #getRaidTime(False)
 #print(viruses_in)

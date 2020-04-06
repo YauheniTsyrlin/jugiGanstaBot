@@ -1214,6 +1214,7 @@ def send_welcome(message):
 # Handle '/test'
 @bot.message_handler(commands=['test'])
 def send_welcome(message):
+    
     try:
         send_messages_big(message.chat.id, text='Поехали')
         for goat in getSetting(code='GOATS_BANDS'):
@@ -1723,10 +1724,10 @@ def main_message(message):
         elif ('Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
-                # if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
-                #     #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                #     send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
-                #     return
+                if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
+                    #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+                    send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
+                    return
 
                 if '7ч.' in message.text.split('Рейд начнётся через ⏱')[1]:
                     send_messages_big(message.chat.id, text='Это захват на следующий рейд. Сбрось мне его позже!')
@@ -1738,7 +1739,7 @@ def main_message(message):
                 #saveUserRaidResult(user, planRaid, 1)
                 updateUser(user)
 
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text + f'\n Запись на рейд {getRaidTimeText(message.forward_date, message.text.split("Рейд начнётся через ⏱")[1])}')
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_you_cant').fulfillment_text)
             return
@@ -4774,6 +4775,21 @@ def getPlanedRaidLocation(goatName: str, planRaid = True):
             return raid
     return raidNone
 
+def getRaidTimeText(text, date):
+    hour = 0
+    minute = 0
+    second = 0
+    if 'ч.' in text:
+        hour = int(text.split('ч.')[0].strip())   
+        minute = int(text.split(' ')[1].split('мин.')[0].strip()) 
+    elif 'мин.' in text:
+        minute = int(text.split('мин.')[0].strip())
+    elif 'сек.' in text:
+        second = int(text.split('сек.')[0].strip()) 
+    result =  datetime.fromtimestamp(date) + timedelta(seconds=second, minutes=minute, hours=hour)
+    hour = round((result.hour*60 + result.minute)/60) 
+    result = result.replace(hour=hour, minute=0, second=0, microsecond=0)
+    return result.timestamp()
 
 def getRaidTime(planRaid):
     tz = config.SERVER_MSK_DIFF
