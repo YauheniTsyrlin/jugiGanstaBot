@@ -3237,7 +3237,10 @@ for skill_name in skill_names:
         
         print(f'before {user.getLogin()} {skill}')
         elem.update({'storage': skill['storage']})
-        elem['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
+        try:
+            elem['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
+        except:
+            pass
 
         if skill['storage'] >= skill['min']:
             user.removeInventoryThing(position_min)
