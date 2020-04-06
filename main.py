@@ -1500,7 +1500,9 @@ def main_message(message):
             
             return
         elif ('FIGHT!' in message.text):
-            # if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+            # write_json(message.json)
+            # 
+            # # if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
             #     pass
             # else:
             #     censored(message)
@@ -1533,6 +1535,9 @@ def main_message(message):
                                         if loser.getGoat() == 'Deus Ex Machina':
                                             elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
                                             k =3
+                                    if loser.getName() == '^_^': 
+                                        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_zak'), None) 
+                                        k = 5
 
                                     elem.update({"cost": elem["cost"] * k})
 
@@ -1718,18 +1723,21 @@ def main_message(message):
         elif ('Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
-                if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
-                    #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                    send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
-                    return
+                # if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
+                #     #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+                #     send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
+                #     return
 
                 if '7ч.' in message.text.split('Рейд начнётся через ⏱')[1]:
                     send_messages_big(message.chat.id, text='Это захват на следующий рейд. Сбрось мне его позже!')
                     return
 
-                u = getUserByLogin(message.from_user.username)
-                u.setRaidLocation(1)
-                updateUser(u)
+                user = getUserByLogin(message.from_user.username)
+                user.setRaidLocation(1)
+
+                #saveUserRaidResult(user, planRaid, 1)
+                updateUser(user)
+
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_you_cant').fulfillment_text)
@@ -4765,6 +4773,52 @@ def getPlanedRaidLocation(goatName: str, planRaid = True):
         if (datetime.fromtimestamp(raid.get('rade_date'))  ).hour == hour:
             return raid
     return raidNone
+
+
+def getRaidTime(planRaid):
+    tz = config.SERVER_MSK_DIFF
+    raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+    hour = raid_date.hour
+    if not planRaid and raid_date.hour <= 1:
+        raid_date = raid_date - timedelta(days=1)
+
+    if planRaid and raid_date.hour >= 17:
+        raid_date = raid_date + timedelta(days=1)
+
+    if raid_date.hour >=1 and raid_date.hour <9:
+        hour = 9
+        if not planRaid:
+            hour = 1
+    elif raid_date.hour >=9 and raid_date.hour <17:
+        hour = 17
+        if not planRaid:
+            hour = 9
+    if raid_date.hour >=17 or raid_date.hour <1:
+        hour = 1
+        if not planRaid:
+            hour = 17
+    return raid_date.replace(hour=hour, minute=0, second=0, microsecond=0).timestamp()
+
+def saveUserRaidResult(user, planRaid, location):
+    raiddate = getRaidTime(planRaid)
+    row = {}
+    row.update({'date': raiddate })
+    row.update({'login': user.getLogin()})
+    row.update({'band': user.getBand()})
+    row.update({'goat': getMyGoatName(user.getLogin())})
+    row.update({'planed_location': False})
+    row.update({'planed_location_text': None})
+    row.update({'user_location': 0})
+    row.update({'on_raid': False})
+    row.update({'on_planed_location': False})
+
+    if location > 0:
+        row.update({'on_raid': True}) 
+        row.update({'user_location': location})   
+    newvalues = { "$set": row }
+    result = report_raids.update_one({"login": f"{user.getLogin()}", 'date': raiddate}, newvalues)
+    if result.matched_count < 1:
+        report_raids.insert_one(row)
 
 def saveRaidResult(goat):
     logger.info(f"saveRaidResult : {goat.get('name')}")

@@ -553,20 +553,47 @@ GLOBAL_VARS = {
     'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'] 
 }
 
-viruses_in = []
-# Применяем коэффциент полураспада ко всем текущим вирусам
-print(GLOBAL_VARS[chat]['inventory'])
-for vir in list(filter(lambda x : (not x == None) and x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
-    if vir['skill']['contagiousness'] < 0.005:
-        GLOBAL_VARS[chat]['inventory'].remove(vir)
-    else:
-        vir['skill'].update({'contagiousness':  vir['skill']['contagiousness'] * vir['skill']['halflife']})
-        #viruses_in.append(vir)
-        print('+++++++++++++++++++++++++++++')
-    #list(GLOBAL_VARS[chat]['inventory']).remove(vir)
-print('==========================================')
-print(list(GLOBAL_VARS[chat]['inventory']))
-print('==========================================')
+def getRaidTime(planRaid):
+    tz = config.SERVER_MSK_DIFF
+    raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+    hour = raid_date.hour
+    if not planRaid and raid_date.hour <= 1:
+        raid_date = raid_date - timedelta(days=1)
+
+    if planRaid and raid_date.hour >= 17:
+        raid_date = raid_date + timedelta(days=1)
+
+    if raid_date.hour >=1 and raid_date.hour <9:
+        hour = 9
+        if not planRaid:
+            hour = 1
+    elif raid_date.hour >=9 and raid_date.hour <17:
+        hour = 17
+        if not planRaid:
+            hour = 9
+    if raid_date.hour >=17 or raid_date.hour <1:
+        hour = 1
+        if not planRaid:
+            hour = 17
+    print(raid_date.replace(hour=hour, minute=0, second=0, microsecond=0))
+    return raid_date.replace(hour=hour, minute=0, second=0, microsecond=0).timestamp()
+
+def getRaidTimeText(text):
+    hour = 0
+    minute = 0
+    second = 0
+    if 'ч.' in text:
+        hour = int(text.split('ч.')[0])   
+        minute = int(text.split(' ')[1].split('мин.')[0]) 
+    
+    print(f'{hour} {minute} {second}')
+
+t = '7ч. 27мин.'
+t1 = '3ч. 0мин.'
+t2 = '1 мин.'
+getRaidTimeText(t1)
+
+#getRaidTime(False)
 #print(viruses_in)
 
 #GLOBAL_VARS[chat]['inventory'].append([x for x in viruses_in])
