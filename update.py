@@ -3223,41 +3223,41 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-# 'electrician'
+# 'electrician', 'medic'
 skill_names = ['robotics','programmer']
+if 1==2:
+    for skill_name in skill_names:
+        updateUser(None)
+        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==skill_name), None) 
+        position_min = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
+        position_max = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']), None)
 
-for skill_name in skill_names:
-    updateUser(None)
-    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==skill_name), None) 
-    position_min = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
-    position_max = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']), None)
+        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
+            skill = user.getInventoryThing(elem)
+            
+            print(f'before {user.getLogin()} {skill}')
+            elem.update({'storage': skill['storage']})
+            try:
+                elem['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
+            except:
+                pass
 
-    for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
-        skill = user.getInventoryThing(elem)
-        
-        print(f'before {user.getLogin()} {skill}')
-        elem.update({'storage': skill['storage']})
-        try:
-            elem['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
-        except:
-            pass
+            if skill['storage'] >= skill['min']:
+                user.removeInventoryThing(position_min)
+                user.addInventoryThing(position_min)
+                print('++++++++++++++++++++ UPDATE position')
+            
+            if skill['storage'] >= skill['max']:
+                user.removeInventoryThing(position_min)
+                user.removeInventoryThing(position_max)
+                user.addInventoryThing(position_max)
+                print('++++++++++++++++++++ UPDATE position')
 
-        if skill['storage'] >= skill['min']:
-            user.removeInventoryThing(position_min)
-            user.addInventoryThing(position_min)
-            print('++++++++++++++++++++ UPDATE position')
-        
-        if skill['storage'] >= skill['max']:
-            user.removeInventoryThing(position_min)
-            user.removeInventoryThing(position_max)
-            user.addInventoryThing(position_max)
-            print('++++++++++++++++++++ UPDATE position')
-
-        user.removeInventoryThing(skill)
-        user.addInventoryThing(elem)
-        updateUser(user)
-        print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
-        print(f'=======================================================')
+            user.removeInventoryThing(skill)
+            user.addInventoryThing(elem)
+            updateUser(user)
+            print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
+            print(f'=======================================================')
 
 # userupd = {}
 # userupd.update({'@gavepta': 23})

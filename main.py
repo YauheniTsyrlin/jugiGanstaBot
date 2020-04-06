@@ -542,7 +542,7 @@ def checkInfected(logins, chat_id):
         GLOBAL_VARS.update({chat: {'inventory': [], 'medics': []} })
 
     # Применяем коэффциент полураспада ко всем текущим вирусам
-    for vir in list(filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
+    for vir in list(filter(lambda x : (not x == None) and x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
         if vir['skill']['contagiousness'] >= 0.005:
             updated = vir['skill'].update({'contagiousness':  vir['skill']['contagiousness'] * vir['skill']['halflife']})
             GLOBAL_VARS[chat]['inventory'].append(updated)

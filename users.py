@@ -85,10 +85,6 @@ def updateUser(newUser, oldUser):
         if newUser.birthday:
             oldUser.birthday = newUser.birthday
 
-    if hasattr(newUser, 'accessory'):
-        if newUser.accessory:
-            oldUser.accessory = newUser.accessory
-
     if hasattr(newUser, 'inventory'):
         if newUser.inventory:
             oldUser.inventory = newUser.inventory
@@ -148,8 +144,6 @@ def importUser(registered_user):
         u.raid     = registered_user['raid']
     if (registered_user.get('chat')):    
         u.chat     = registered_user['chat']
-    if (registered_user.get('accessory')):    
-        u.accessory     = registered_user['accessory']
     if (registered_user.get('inventory')):    
         u.inventory     = registered_user['inventory']
     if (registered_user.get('settings')):    
@@ -182,7 +176,6 @@ class User(object):
         self.wastelandLocation = None
         self.ping = None
         self.chat = None
-        self.accessory = None
         self.inventory = None
         self.settings = None
         self.maxkm = None
@@ -345,14 +338,6 @@ class User(object):
                             ]
 
         string = string + self.getInventoryReport(inventory_category)
-
-        # string = string + f'🛒Аксессуары:\n'
-        # if self.accessory and len(self.accessory) > 0:
-        #     for acc in self.accessory:
-        #         string = string + f'▫️ {acc}\n'
-        #     string = string + f'\n'
-        # else:
-        #     string = string + f'▫️ У тебя ничего нет\n\n'
 
         string = string + f'⏰{tools.getTimeEmoji(self.timeUpdate)} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeUpdate))) +'\n'
         if self.timeBan:
@@ -596,49 +581,6 @@ class User(object):
         return True
 
 # =================== Inventory ========================== #
-
-    def setAccessory(self, accessory):
-        self.accessory = accessory  
-    def getAccessory(self):
-        if self.accessory == None:
-            self.accessory = []
-        return self.accessory
-
-    def getAccessoryReport(self):
-        accessory = ''
-        if self.accessory and len(self.accessory)>0:
-            for acc in self.accessory:
-                accessory = accessory + f'▫️ {acc}\n'
-        if not accessory == '':
-            return accessory
-        else:
-            return 'Ничего нет'
-    def isAccessoryItem(self, accessoryItem: str):
-        if self.accessory == None:
-            self.accessory = []
-
-        find = False
-        for acc in self.accessory:
-            if acc == accessoryItem:
-                find = True
-                break
-        return find
-    def addAccessory(self, accessoryItem: str):
-        if self.accessory == None:
-            self.accessory = []
-        find = False
-        for acc in self.accessory:
-            if acc == accessoryItem:
-                find = True
-                break
-        if not find:
-            self.accessory.append(accessoryItem)
-    def removeAccessory(self, accessoryItem: str):
-        if self.accessory == None:
-            self.accessory = []
-            
-        if self.isAccessoryItem(accessoryItem):
-            self.accessory.remove(accessoryItem)
 
     def setSettings(self, settings):
         self.settings = settings  
