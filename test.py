@@ -542,14 +542,37 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None, limit=
         menu.append(footer_buttons)
     return menu
 
-buttons = ['1', '1', '1', '2', '1', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16']
-for x in list(filter(lambda x: not x == '1', buttons)):
-    if x == 2:
-        buttons.remove(x)
+buttons = ['1', '1', '1', '2','2','2', '1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16']
+chat = 'chat_id'
+GLOBAL_VARS = {
+    'inventory': getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'],
+    'chat_id':
+                {
+                    'inventory':getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']
+                },
+    'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'] 
+}
+
+viruses_in = []
+# Применяем коэффциент полураспада ко всем текущим вирусам
+print(GLOBAL_VARS[chat]['inventory'])
+for vir in list(filter(lambda x : (not x == None) and x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
+    if vir['skill']['contagiousness'] < 0.005:
+        GLOBAL_VARS[chat]['inventory'].remove(vir)
     else:
-        x = 100
-        print('100')
-print(buttons)
+        vir['skill'].update({'contagiousness':  vir['skill']['contagiousness'] * vir['skill']['halflife']})
+        #viruses_in.append(vir)
+        print('+++++++++++++++++++++++++++++')
+    #list(GLOBAL_VARS[chat]['inventory']).remove(vir)
+print('==========================================')
+print(list(GLOBAL_VARS[chat]['inventory']))
+print('==========================================')
+#print(viruses_in)
+
+#GLOBAL_VARS[chat]['inventory'].append([x for x in viruses_in])
+
+#print('==========================================')
+#print(GLOBAL_VARS[chat]['inventory'])
 
 # print(build_menu(buttons, 3, limit=6, step=1, back_button='back', forward_button='forward', exit_button='exit'))
 

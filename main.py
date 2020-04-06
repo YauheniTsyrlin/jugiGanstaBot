@@ -541,13 +541,12 @@ def checkInfected(logins, chat_id):
     except: 
         GLOBAL_VARS.update({chat: {'inventory': [], 'medics': []} })
 
-    # Применяем коэффциент полураспада ко всем текущим вирусам
     for vir in list(filter(lambda x : (not x == None) and x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
-        if vir['skill']['contagiousness'] >= 0.005:
-            updated = vir['skill'].update({'contagiousness':  vir['skill']['contagiousness'] * vir['skill']['halflife']})
-            GLOBAL_VARS[chat]['inventory'].append(updated)
-        list(GLOBAL_VARS[chat]['inventory']).remove(vir)
-
+        if vir['skill']['contagiousness'] < 0.005:
+            GLOBAL_VARS[chat]['inventory'].remove(vir)
+        else:
+            vir['skill'].update({'contagiousness':  vir['skill']['contagiousness'] * vir['skill']['halflife']})
+ 
     # Добавляем новые вирусы, если есть у бандитов
     for user_login in logins:
         user = getUserByLogin(user_login)
