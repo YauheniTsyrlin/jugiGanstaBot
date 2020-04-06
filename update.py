@@ -1077,6 +1077,37 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
+                                    'id': 'robotics',
+                                    'name': '🛰 Робототехника',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': None,
+                                    'min': 12,
+                                    'max': 15,
+                                    'storage': 0,
+                                    'subjects_of_study':
+                                    [
+                                        'Барахло','Малыш','Дефолт','Шерлокдрон','Robot Rock','Рад-дрон','Протекдрон','AWESOM-O'
+                                    ],
+                                    'dialog_old_text': 'old_robotics',
+                                    'flags': {
+                                        'congratulation_min': False,
+                                        'position_min': 'robotics_1',
+                                        'present_min': 
+                                            {
+                                                'id': 'certificate_robotics_1',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            },
+                                        'congratulation_max': False,
+                                        'position_max': 'robotics_2',
+                                        'present_max': 
+                                            {
+                                                'id': 'certificate_robotics_2',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            }
+                                        }
+                                },  
+                                {
                                     'id': 'electrician',
                                     'name': '⚡ Электрик',
                                     'cost': 0,
@@ -1145,7 +1176,13 @@ newvalues = { "$set": { "value":
                             'name': '🍗 Еда',
                             'value':
                             [
-                                
+                                {
+                                    'id': 'coffee',
+                                    'name': '☕ Горячий кофе',
+                                    'cost': 3,
+                                    'type': 'food',
+                                    'quantity': None
+                                },
                                 {
                                     'id': 'sugar_seed',
                                     'name': '🦴 Сахарная косточка',
