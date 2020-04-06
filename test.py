@@ -542,11 +542,19 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None, limit=
         menu.append(footer_buttons)
     return menu
 
-buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16']
-print(build_menu(buttons, 3, limit=6, step=1, back_button='back', forward_button='forward', exit_button='exit'))
+buttons = ['1', '1', '1', '2', '1', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16']
+for x in list(filter(lambda x: not x == '1', buttons)):
+    if x == 2:
+        buttons.remove(x)
+    else:
+        x = 100
+        print('100')
+print(buttons)
 
-position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']=='electrician_1'), None)
-print(position)                
+# print(build_menu(buttons, 3, limit=6, step=1, back_button='back', forward_button='forward', exit_button='exit'))
+
+# position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']=='electrician_1'), None)
+# print(position)                
 #user = getUserByLogin('GonzikBenzyavsky')
 
 
