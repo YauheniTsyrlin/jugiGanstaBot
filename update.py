@@ -678,6 +678,30 @@ newvalues = { "$set": { "value":
                                     'name': '👨‍🏭 Электромеханик',
                                     'type': 'position',
                                     'cost': 0
+                                },
+                                {
+                                    'id': 'programmer_1',
+                                    'name': '👨‍💻 Программист',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'programmer_2',
+                                    'name': '🧟‍♂️ Системный администратор',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'robotics_1',
+                                    'name': '🤖 Техник',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'robotics_2',
+                                    'name': '🦾 Генеральный конструктор',
+                                    'type': 'position',
+                                    'cost': 0
                                 }
                             ] 
                         },
@@ -1002,29 +1026,6 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'architect',
-                                    'name': '🉐💮 Архитектор',
-                                    'cost': 0,
-                                    'type': 'skill',
-                                    'quantity': None,
-                                    'min': 45,
-                                    'max': 50,
-                                    'storage': 0,
-                                    'subjects_of_study':
-                                    [
-                                        
-                                    ],
-                                    'dialog_old_text': 'default_old_things',
-                                    'flags': {
-                                        'congratulation_min': False,
-                                        'present_min': 
-                                            {
-                                                'id': 'certificate_programmer',
-                                                'type': 'MARKS_OF_EXCELLENCE'
-                                            }
-                                        }
-                                },
-                                {
                                     'id': 'programmer',
                                     'name': '🉐 Программист',
                                     'cost': 0,
@@ -1041,12 +1042,20 @@ newvalues = { "$set": { "value":
                                     'dialog_old_text': 'default_old_things',
                                     'flags': {
                                         'congratulation_min': False,
+                                        'position_min': 'programmer_1',
                                         'present_min': 
                                             {
-                                                'id': 'certificate_programmer',
+                                                'id': 'certificate_programmer_1',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            },
+                                        'congratulation_max': False,
+                                        'position_max': 'programmer_2',
+                                        'present_max': 
+                                            {
+                                                'id': 'certificate_programmer_2',
                                                 'type': 'MARKS_OF_EXCELLENCE'
                                             }
-                                        }
+                                    }
                                 },
                                 {
                                     'id': 'perfectionist',
@@ -1367,8 +1376,29 @@ newvalues = { "$set": { "value":
                                     
                                 },
                                 {
-                                    'id': 'certificate_programmer',
-                                    'name': '💉 Корочка "Программер"',
+                                    'id': 'certificate_robotics_1',
+                                    'name': '🛰️ Пропуск на космодром «Восточный»"',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
+                                },
+                                {
+                                    'id': 'certificate_robotics_2',
+                                    'name': '🦿 Научная работа "Пустошь, Джу и др."',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
+                                },
+                                {
+                                    'id': 'certificate_programmer_1',
+                                    'name': '💾 Корочка "Python для чайников"',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
+                                },
+                                {
+                                    'id': 'certificate_programmer_2',
+                                    'name': '💽 Корочка "Инженер-программист"',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
@@ -3193,35 +3223,38 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
+# 'electrician'
+skill_names = ['robotics','programmer']
 
-# updateUser(None)
-# elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None) 
-# position_min = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
-# position_max = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']), None)
+for skill_name in skill_names:
+    updateUser(None)
+    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==skill_name), None) 
+    position_min = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
+    position_max = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']), None)
 
-# for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
-#     skill = user.getInventoryThing(elem)
-    
-#     print(f'before {user.getLogin()} {skill}')
-#     elem.update({'storage': skill['storage']})
-#     elem['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
+    for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
+        skill = user.getInventoryThing(elem)
+        
+        print(f'before {user.getLogin()} {skill}')
+        elem.update({'storage': skill['storage']})
+        elem['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
 
-#     if skill['storage'] >= skill['min']:
-#         user.removeInventoryThing(position_min)
-#         user.addInventoryThing(position_min)
-#         print('++++++++++++++++++++ UPDATE position')
-    
-#     if skill['storage'] >= skill['max']:
-#         user.removeInventoryThing(position_min)
-#         user.removeInventoryThing(position_max)
-#         user.addInventoryThing(position_max)
-#         print('++++++++++++++++++++ UPDATE position')
+        if skill['storage'] >= skill['min']:
+            user.removeInventoryThing(position_min)
+            user.addInventoryThing(position_min)
+            print('++++++++++++++++++++ UPDATE position')
+        
+        if skill['storage'] >= skill['max']:
+            user.removeInventoryThing(position_min)
+            user.removeInventoryThing(position_max)
+            user.addInventoryThing(position_max)
+            print('++++++++++++++++++++ UPDATE position')
 
-#     user.removeInventoryThing(skill)
-#     user.addInventoryThing(elem)
-#     updateUser(user)
-#     print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
-#     print(f'=======================================================')
+        user.removeInventoryThing(skill)
+        user.addInventoryThing(elem)
+        updateUser(user)
+        print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
+        print(f'=======================================================')
 
 # userupd = {}
 # userupd.update({'@gavepta': 23})
