@@ -3274,7 +3274,7 @@ if 1==2:
             print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
             print(f'=======================================================')
 
-if 1==1:
+if 1==2:
     u = ('Hermia_Nerbne', 'DaisyBellTrot', 'dan4yk', 'pif_paf_zero', 'misscalderona', 'VirtusX', 'A_Baikonur',
     'aohanesian', 'asaelko', 'szvika', 'WildFire112', 'Balbes_36', 'puhnastiyus', 'MrMrakZ', 'GonzikBenzyavsky',
     'Innok27', 'artiomse', 'wildcucumber', 'trimprim', 'triple6ixx', 'XyTop_2', 'DeadChild', 'Gromnsk', 'Serjanioo',
