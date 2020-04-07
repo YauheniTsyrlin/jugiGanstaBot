@@ -1746,9 +1746,10 @@ def main_message(message):
                 #saveUserRaidResult(user, planRaid, 1)
                 
                 try:
+                    tz = config.SERVER_MSK_DIFF
                     ticket = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='redeemed_raid_ticket'), None)             
                     date_stamp = getRaidTimeText(message.text.split("Рейд начнётся через ⏱")[1], message.forward_date)
-                    date_str = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp))
+                    date_str = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp + timedelta(hours=tz.hour)))
 
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text + 
                         f'\nТы взял талончик на рейд:\n▫️ 🎫 Талон на рейд {date_str}')
@@ -3281,7 +3282,7 @@ def main_message(message):
                             report_yes = '<b>Записались на захват:</b>\n'
                             i = 0
                             for dun in dungeons.find({
-                                'date': dt.timestamp(),
+                                'ё': dt.timestamp(),
                                 'band': band,
                                 'dungeon_km': dungeon_km,
                                 'signedup': True
