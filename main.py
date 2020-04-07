@@ -2154,6 +2154,9 @@ def main_message(message):
                         updateUser(userIAm)
 
                 if new_Message:
+                    # Учимся умению "Робототехник"
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='robotics'), None)
+                    check_skills(message.text, message.chat.id, time_over, userIAm, elem)
                     # Учимся умению "Электрик"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None)
                     check_skills(message.text, message.chat.id, time_over, userIAm, elem)
@@ -4742,53 +4745,6 @@ def rade():
                     z = z + 1
         if i > 0:
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
-
-    if now_date.hour in (99, 19) and now_date.minute in (99, 58) and now_date.second < 15:
-        u = ('Hermia_Nerbne', 'DaisyBellTrot', 'dan4yk', 'pif_paf_zero', 'misscalderona', 'VirtusX', 'A_Baikonur',
-        'aohanesian', 'asaelko', 'szvika', 'WildFire112', 'Balbes_36', 'puhnastiyus', 'MrMrakZ', 'GonzikBenzyavsky',
-        'Innok27', 'artiomse', 'wildcucumber', 'trimprim', 'triple6ixx', 'XyTop_2', 'DeadChild', 'Gromnsk', 'Serjanioo',
-        'darthmall', 'PelMen479', 'Mefabest', 'barondumdeedum', 'EastMinsk', 'GolodniyEnot', 'WORSA_crew NaRdiST', 'Tanelda','eX3emz')
-
-        antyBoltReport = ''
-        counter = 0
-        for login in u:
-            user = getUserByLogin(login)
-            if user:
-                counter = counter + 1
-                #acc = '🎫🍼 Билет на гигантскую бутылку'
-                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_5'), None)
-                if user.isInventoryThing(bolt):
-                    pass
-                else:
-                    #acc = '🔩🔩🔩🔩 Болт М1488, возложенный на рейд'
-                    bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_4'), None)
-                    if user.isInventoryThing(bolt):
-                        pass
-                    else:
-                        #acc = '🔩🔩🔩 Болт М404, возложенный на рейд'
-                        bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_3'), None)
-                        if user.isInventoryThing(bolt):
-                            pass
-                        else:
-                            #acc = '🔩🔩 Болт М228, возложенный на рейд'
-                            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_2'), None)
-                            if user.isInventoryThing(bolt):
-                                pass
-                            else:
-                                #acc = '🔩 Болт М69, возложенный на рейд'
-                                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_1'), None)
-                                if user.isInventoryThing(bolt):
-                                    pass
-                                else:
-                                    continue
-
-                if user.isInventoryThing(bolt):
-                    # send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {bolt["name"]}!')
-                    user.removeInventoryThing(bolt)
-                    # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {bolt["name"]}')    
-                    updateUser(user)
-                    antyBoltReport = antyBoltReport + f'{counter}. @{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
-        send_message_to_admin(antyBoltReport)
 
 
 
