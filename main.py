@@ -911,7 +911,7 @@ def check_skills(text, chat, time_over, userIAm, elem):
         for skill_sign in elem['subjects_of_study']:
             if (s.startswith('Получено:') or s.startswith('Бонус:') or (s.startswith('💰')) ) and skill_sign in s: # x2
                 if ' x' in s:
-                    count = count + int(s.replace('/buy_trash').split(' x')[1].strip())
+                    count = count + int(s.replace('/buy_trash','').split(' x')[1].strip())
                 else: count = count + 1
     if count > 0:
         if not time_over:
