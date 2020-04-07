@@ -715,6 +715,7 @@ newvalues = { "$set": { "value":
                                     'name': '🔬 Халат учёного',
                                     'cost': 5,
                                     'type': 'clothes',
+                                    'wear': 1,
                                     'quantity': 20,
                                     'weight': 0.3,
                                     'state': [
@@ -732,6 +733,7 @@ newvalues = { "$set": { "value":
                                     'name': '👒 Соломенная шляпка',
                                     'cost': 10,
                                     'type': 'clothes',
+                                    'wear': 1,
                                     'quantity': 10
                                 },
                                 {
@@ -739,6 +741,7 @@ newvalues = { "$set": { "value":
                                     'name': '🩲 Трусы охотника на Трогов',
                                     'cost': 10,
                                     'type': 'clothes',
+                                    'wear': 1,
                                     'quantity': 10
                                 },
                                 {
@@ -746,6 +749,7 @@ newvalues = { "$set": { "value":
                                     'name': '🧤 Дуэльная перчатка',
                                     'cost': 15,
                                     'type': 'clothes',
+                                    'wear': 1,
                                     'quantity': 10
                                 },
                                 {
@@ -753,6 +757,7 @@ newvalues = { "$set": { "value":
                                     'name': '👻 Носовой платок',
                                     'cost': 6,
                                     'type': 'clothes',
+                                    'wear': 1,
                                     'quantity': 10
                                 },
                                 {
@@ -760,20 +765,44 @@ newvalues = { "$set": { "value":
                                     'name': '💰 Кожаный мешок',
                                     'cost': 4,
                                     'type': 'clothes',
+                                    'wear':
+                                        {
+                                            'one_use': 0.1,
+                                            'value': 1
+                                        },
                                     'quantity': 10
                                 },
                                 {
                                     'id': 'medical_mask',
                                     'name': '😷 Медицинская маска',
-                                    'cost': 8,
+                                    'cost': 1,
                                     'type': 'clothes',
-                                    'quantity': 10
+                                    'protection':
+                                        [
+                                            {
+                                                'type':'disease',
+                                                'id': 'covid-19',
+                                                'value': 0.95
+                                            },
+                                            {
+                                                'type':'disease',
+                                                'id': 'mirror_disease',
+                                                'value': 0.70
+                                            }
+                                        ],
+                                    'wear': 
+                                        {
+                                            'one_use': 0.1,
+                                            'value': 1
+                                        },
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'dads_slippers',
                                     'name': '🥿 Батины тапки',
                                     'cost': 10,
                                     'type': 'clothes',
+                                    'wear': 1,
                                     'quantity': 10
                                 },
                                 {
@@ -781,6 +810,7 @@ newvalues = { "$set": { "value":
                                     'name': '👽 Латексная маска',
                                     'cost': 10,
                                     'type': 'clothes',
+                                    'wear': 1,
                                     'quantity': 10
                                 },
                                 {
@@ -788,6 +818,7 @@ newvalues = { "$set": { "value":
                                     'name': '🎩 шляпа Линкольна',
                                     'cost': 50,
                                     'type': 'clothes',
+                                    'wear': 1,
                                     'quantity': 1
                                 },
                                 {
@@ -795,6 +826,7 @@ newvalues = { "$set": { "value":
                                     'name': '🥋 Платье невесты',
                                     'cost': 200,
                                     'type': 'clothes',
+                                    'wear': 1,
                                     'quantity': 1
                                 },
                                 {
@@ -802,6 +834,7 @@ newvalues = { "$set": { "value":
                                     'name': '🕺 Костюм жениха',
                                     'cost': 6,
                                     'type': 'clothes',
+                                    'wear': 1,
                                     'quantity': 1
                                 }
                             ]
@@ -3237,6 +3270,30 @@ print("#==========================#")
 print("#==========================#")              
 print("#         BATTLE           #")              
 print("#==========================#")
+
+
+clothes = ['medical_mask']
+if 1==1:
+    for clothes_name in clothes:
+        updateUser(None)
+        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value']) if x['id']==clothes_name), None) 
+
+        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
+            clo = user.getInventoryThing(elem)
+            
+            print(f'before {user.getLogin()} {clo}')
+            try:
+                elem['wear'].update({'value': clo['wear']['value']})
+            except:
+                pass
+
+            user.removeInventoryThing(clo)
+            user.addInventoryThing(elem)
+            updateUser(user)
+            print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
+            print(f'=======================================================')
+
+
 
 # 'electrician', 'medic'
 skill_names = ['robotics','programmer']

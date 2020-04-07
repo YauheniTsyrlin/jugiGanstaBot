@@ -560,6 +560,8 @@ def infect(logins, chat_id):
     if len(logins) < 1:
         return
 
+    medical_mask = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value']) if x['id']=='medical_mask'), None) 
+    
     users_in_danger = []
     for user_login in logins:
         user = getUserByLogin(user_login)
@@ -584,6 +586,32 @@ def infect(logins, chat_id):
                 c = vir['skill']['contagiousness']
                 logger.info(f'{r<=c} {r} <= {c} {user.getLogin()} {vir["name"]}')
                 if (r <= c):
+                    
+                    if user.isInventoryThing(medical_mask):
+                        mask = user.getInventoryThingCount(medical_mask)
+                        safe_mask = False
+                        for protection in mask['protection']:
+                            if protection['id'] == vir['id'] and protection['type'] == vir['type']:
+                                p = random.random()
+                                if p > protection['value']:
+                                    if mask['wear']['value'] - mask['wear']['one_use'] > 0:
+                                        mask['wear'].update({'value':  mask['wear']['value'] - mask['wear']['one_use']})
+                                        user.addInventoryThing(mask, replace=True)
+                                        updateUser(user)
+                                        safe_mask = True
+                                        # Маска уберегла
+                                        break
+                                    else:
+                                        user.removeInventoryThing(mask)
+                                        send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} порвалась {mask["name"]}')
+                                        updateUser(user)
+                                        break
+
+                        if safe_mask:
+                            percent = int(mask['wear']['value']*100/medical_mask['wear']['value'])
+                            send_message_to_admin(f'⚠️🦇 Внимание! \n{mask["name"]} {percent}% уберегла {user.getLogin()} от вируса {vir["name"]}')
+                            continue            
+
                     user.addInventoryThing(elem)
                     updateUser(user)
 
@@ -620,6 +648,7 @@ def cure(logins, chat_id):
     users_in_danger = []
     viruses = getSetting(code='ACCESSORY_ALL', id='VIRUSES')["value"]
     medicskill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+    medical_mask = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value']) if x['id']=='medical_mask'), None) 
     
     for user_login in logins:
         user = getUserByLogin(user_login)
@@ -642,15 +671,22 @@ def cure(logins, chat_id):
 
             for vir in viruses:
                 if infected.getInventoryThingCount(vir) > 0:
-                    if (random.random() <= (vir['skill']['treatability'] + power_skill)/2):
+                    r = random.random()
+                    if (r <= (vir['skill']['treatability'] + power_skill)/2):
+                        
                         infected.removeInventoryThing(vir)
+                        mask_text = ''
+                        if not infected.isInventoryThing(medical_mask):
+                            infected.addInventoryThing(medical_mask)
+                            mask_text = f'\n▫️ +{medical_mask["name"]}'
+
                         send_message_to_admin(f'⚠️❤️ Внимание! \n {infected.getLogin()} вылечен {medic.getLogin()} от {vir["name"]}!')
                         updateUser(infected)
                         sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_2')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_2'))))
                         pending_date = datetime.now() + timedelta(seconds=sec)
-                        text = f'Врач {medic.getNameAndGerb()} вылечил бандита {infected.getNameAndGerb()} от:\n▫️ {vir["name"]}'
+                        text = f'Врач {medic.getNameAndGerb()} вылечил бандита {infected.getNameAndGerb()} от:\n▫️ {vir["name"]}{mask_text}'
                         if medic.getLogin() == infected.getLogin():
-                            text = f'{medic.getNameAndGerb()} вылечился сам от:\n▫️ {vir["name"]}'
+                            text = f'{medic.getNameAndGerb()} вылечил сам себя от:\n▫️ {vir["name"]}{mask_text}'
 
                         pending_messages.insert_one({ 
                             'chat_id': chat_id,
@@ -922,10 +958,14 @@ def check_skills(text, chat, time_over, userIAm, elem):
                 send_message_to_admin(f'⚠️🤓 {userIAm.getLogin()} начал изучение умения:\n▫️ {elem["name"]}')
             else:
                 elem = userIAm.getInventoryThing(elem)
+                text = ''
                 count = elem['storage'] + count
                 if count >= elem['max']:
                     count = elem['max']
-                
+                    if elem['flags']['congratulation_max']:
+                        send_messages_big(chat, text=f'Ты уже достиг всего в этом умении\n▫️ {elem["name"]} {100}%')
+                        return
+
                 # проверяем, а не поздравляли ли мы его за достижение минимума?
                 if count >= elem['min'] and not elem['flags']['congratulation_min']:
                     elem['flags'].update({'congratulation_min': True})
