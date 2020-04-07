@@ -600,6 +600,16 @@ for t in ttt:
     date = getRaidTimeText(t, 1586177073)
     print(datetime.fromtimestamp(date))
 
+tz = config.SERVER_MSK_DIFF
+#ticket = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='redeemed_raid_ticket'), None)             
+date_stamp = getRaidTimeText("1ч. 15мин.", 1586177073)
+date_str = time.strftime("%d.%m %H:%M", time.gmtime( (datetime.fromtimestamp(date_stamp) + timedelta(hours=tz.hour)).timestamp()))
+
+
+# send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text + 
+#     f'\nВ специальном паркомате на рейдовой точке ты взял талончик на рейд:\n▫️ 🎫 Талон на рейд {date_str}')
+
+
 #getRaidTime(False)
 #print(viruses_in)
 
