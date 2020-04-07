@@ -4743,7 +4743,7 @@ def rade():
         if i > 0:
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
 
-    if now_date.hour in (99, 19) and now_date.minute in (99, 50) :
+    if now_date.hour in (99, 19) and now_date.minute in (99, 57) :
         u = ('Hermia_Nerbne', 'DaisyBellTrot', 'dan4yk', 'pif_paf_zero', 'misscalderona', 'VirtusX', 'A_Baikonur',
         'aohanesian', 'asaelko', 'szvika', 'WildFire112', 'Balbes_36', 'puhnastiyus', 'MrMrakZ', 'GonzikBenzyavsky',
         'Innok27', 'artiomse', 'wildcucumber', 'trimprim', 'triple6ixx', 'XyTop_2', 'DeadChild', 'Gromnsk', 'Serjanioo',
