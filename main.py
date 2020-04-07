@@ -1749,8 +1749,8 @@ def main_message(message):
                     tz = config.SERVER_MSK_DIFF
                     ticket = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='redeemed_raid_ticket'), None)             
                     date_stamp = getRaidTimeText(message.text.split("Рейд начнётся через ⏱")[1], message.forward_date)
-                    date_str = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp + timedelta(hours=tz.hour)))
-                    
+                    date_str = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp) + timedelta(hours=tz.hour))
+
 
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text + 
                         f'\nВ специальном паркомате на рейдовой точке ты взял талончик на рейд:\n▫️ 🎫 Талон на рейд {date_str}')
