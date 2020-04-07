@@ -578,15 +578,6 @@ def getRaidTime(planRaid):
     print(raid_date.replace(hour=hour, minute=0, second=0, microsecond=0))
     return raid_date.replace(hour=hour, minute=0, second=0, microsecond=0).timestamp()
 
-def round_time(x):
-    hour_in_seconds = 60 * 60
-    half_hour_in_seconds = 60 * 30
-    if x % hour_in_seconds > half_hour_in_seconds:
-        return ((x // hour_in_seconds) + 1) * hour_in_seconds
-    else:
-        return (x // hour_in_seconds) * hour_in_seconds
-
-
 def getRaidTimeText(text, date):
     hour = 0
     minute = 0
@@ -606,8 +597,8 @@ def getRaidTimeText(text, date):
 tt = ['7ч. 27мин.', '3ч. 0мин.', '1 мин.', '10 сек.', '1ч. 15мин.']
 ttt = [ '1ч. 15мин.']
 for t in ttt:
-    getRaidTimeText(t, 1586177073)
-
+    date = getRaidTimeText(t, 1586177073)
+    print(datetime.fromtimestamp(date))
 
 #getRaidTime(False)
 #print(viruses_in)

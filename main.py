@@ -1739,12 +1739,15 @@ def main_message(message):
                 #saveUserRaidResult(user, planRaid, 1)
                 updateUser(user)
                 try:
-                    send_message_to_admin(f'⚠️🤬 Сломался Pidor of the day!')
+                    
+                    date_stamp = getRaidTimeText(message.text.split("Рейд начнётся через ⏱")[1], message.forward_date)
+                    date_str = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp))
+
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text + 
-                        f'\n Запись на рейд {getRaidTimeText(message.text.split("Рейд начнётся через ⏱")[1], message.forward_date)}')
+                        f'\nТы взял талончик на рейд:\n▫️ 🎫 Талон на рейд {date_str}')
                 except:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
-
+                    send_message_to_admin(f'⚠️🤬 Сломался "Ты занял позицию"!')
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_you_cant').fulfillment_text)
             return
