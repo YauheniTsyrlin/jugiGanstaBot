@@ -885,6 +885,8 @@ def getBossByHash(hashstr: str):
     return None
 
 def dzen_rewards(user, num_dzen, message):
+    goat = getMyGoat(user.getLogin())
+    chat = goat['chats']['secret']
     for i in range(1, num_dzen+1):
         elem =   {
                     'id': f'marks_of_dzen_{i}',
@@ -899,7 +901,7 @@ def dzen_rewards(user, num_dzen, message):
         else:
             if user.addInventoryThing(elem, elem['quantity']):
                 updateUser(user)
-                send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
+                send_messages_big(chat, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
             else:
                 send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
 
@@ -907,9 +909,9 @@ def check_skills(text, chat, time_over, userIAm, elem):
     count = 0
     for s in text.split('\n'):
         for skill_sign in elem['subjects_of_study']:
-            if (s.startswith('Получено:') or s.startswith('Бонус:')) and skill_sign in s: # x2
+            if (s.startswith('Получено:') or s.startswith('Бонус:') or (s.startswith('💰')) ) and skill_sign in s: # x2
                 if ' x' in s:
-                    count = count + int(s.split(' x')[1])
+                    count = count + int(s.replace('/buy_trash').split(' x')[1].strip())
                 else: count = count + 1
     if count > 0:
         if not time_over:
@@ -1214,7 +1216,10 @@ def send_welcome(message):
 # Handle '/test'
 @bot.message_handler(commands=['test'])
 def send_welcome(message):
-    
+    if not isAdmin(message.from_user.username):
+        send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_not_goat_boss').fulfillment_text)
+        return
+
     try:
         send_messages_big(message.chat.id, text='Поехали')
         for goat in getSetting(code='GOATS_BANDS'):
@@ -1228,9 +1233,7 @@ def send_welcome(message):
                 report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть 30 минут с момента прожимания /voevat_suda, либо ты можешь присылать свою награду за рейд аж до 30 минут после рейда!!'
                 send_messages_big(message.chat.id, text=report)
     except:
-        send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
-    
-
+        send_message_to_admin(f'⚠️🤬 Сломался тест!')
 
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['start'])
@@ -1724,6 +1727,10 @@ def main_message(message):
         elif ('Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
+                if not new_Message:
+                    send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
+                    return
+
                 if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
                     #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
                     send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
@@ -1737,9 +1744,9 @@ def main_message(message):
                 user.setRaidLocation(1)
 
                 #saveUserRaidResult(user, planRaid, 1)
-                updateUser(user)
+                
                 try:
-                    
+                    ticket = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='redeemed_raid_ticket'), None)             
                     date_stamp = getRaidTimeText(message.text.split("Рейд начнётся через ⏱")[1], message.forward_date)
                     date_str = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp))
 
@@ -1748,6 +1755,8 @@ def main_message(message):
                 except:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
                     send_message_to_admin(f'⚠️🤬 Сломался "Ты занял позицию"!')
+
+                updateUser(user)
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_you_cant').fulfillment_text)
             return
@@ -2147,7 +2156,6 @@ def main_message(message):
                     # Учимся умению "Электрик"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None)
                     check_skills(message.text, message.chat.id, time_over, userIAm, elem)
-                    
                     # Учимся умению "Программист"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None)
                     check_skills(message.text, message.chat.id, time_over, userIAm, elem)

@@ -1852,6 +1852,13 @@ newvalues = { "$set": { "value":
                             [
                                 
                                 {
+                                    'id': 'redeemed_raid_ticket',
+                                    'name': '🎟️ Билет на рейд',
+                                    'cost': 0,
+                                    'type': 'things',
+                                    'quantity': None
+                                },
+                                {
                                     'id': 'scalp_of_zak',
                                     'name': '🤯 Скальп зека',
                                     'cost': 50,
