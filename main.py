@@ -1767,18 +1767,18 @@ def main_message(message):
         elif ('Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
-                if not new_Message:
-                    send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
-                    return
+                # if not new_Message:
+                #     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
+                #     return
 
-                if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
-                    #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                    send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
-                    return
+                # if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
+                #     #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+                #     send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
+                #     return
 
-                if '7ч.' in message.text.split('Рейд начнётся через ⏱')[1]:
-                    send_messages_big(message.chat.id, text='Это захват на следующий рейд. Сбрось мне его позже!')
-                    return
+                # if '7ч.' in message.text.split('Рейд начнётся через ⏱')[1]:
+                #     send_messages_big(message.chat.id, text='Это захват на следующий рейд. Сбрось мне его позже!')
+                #     return
 
                 user = getUserByLogin(message.from_user.username)
                 user.setRaidLocation(1)
@@ -1790,9 +1790,9 @@ def main_message(message):
                     ticket = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='redeemed_raid_ticket'), None)             
                     date_stamp = getRaidTimeText(message.text.split("Рейд начнётся через ⏱")[1], message.forward_date)
                     date_str = time.strftime("%d.%m %H:%M", time.gmtime( (datetime.fromtimestamp(date_stamp) + timedelta(hours=tz.hour)).timestamp()))
-                    user.addInventoryThing(ticket)
+                    user.addInventoryThing(ticket, ticket['quantity'])
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text + 
-                        f'\nВ специальном паркомате на рейдовой точке ты взял талончик на рейд:\n▫️ 🎫 Талон на рейд {date_str}')
+                        f'\nВ специальном паркомате на рейдовой точке ты взял талончик на рейд:\n▫️  {ticket["name"]} {date_str}')
                 except:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
                     send_message_to_admin(f'⚠️🤬 Сломался "Ты занял позицию"!')

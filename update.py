@@ -1886,7 +1886,7 @@ newvalues = { "$set": { "value":
                                 
                                 {
                                     'id': 'redeemed_raid_ticket',
-                                    'name': '🎟️ Талон на рейд',
+                                    'name': '🎫 Талон на рейд',
                                     'cost': 0,
                                     'type': 'things',
                                     'quantity': None
