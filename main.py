@@ -1315,15 +1315,15 @@ def get_message_photo(message):
             update_warior(warior)
             wariorShow = getWariorByName(warior.getName(), warior.getFraction())
             markupinline = None
-            if not privateChat:
-                user = getUserByName(wariorShow.getName())
-                if user and (not user.getLogin() == message.from_user.username) and user.getBand() and user.getBand() in getGoatBands(getMyGoatName(message.from_user.username)):
-                    buttons = []
-                    buttons.append(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
-                    markupinline = InlineKeyboardMarkup(row_width=2)
-                    for row in build_menu(buttons=buttons, n_cols=2):
-                        markupinline.row(*row) 
-                send_messages_big(message.chat.id, text=wariorShow.getProfile(), reply_markup=markupinline)
+            
+            user = getUserByName(wariorShow.getName())
+            if not privateChat and user and (not user.getLogin() == message.from_user.username) and user.getBand() and user.getBand() in getGoatBands(getMyGoatName(message.from_user.username)):
+                buttons = []
+                buttons.append(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
+                markupinline = InlineKeyboardMarkup(row_width=2)
+                for row in build_menu(buttons=buttons, n_cols=2):
+                    markupinline.row(*row) 
+            send_messages_big(message.chat.id, text=wariorShow.getProfile(), reply_markup=markupinline)
     else:
         if privateChat:
             send_messages_big(message.chat.id, text=message.photo[len(message.photo)-1].file_id)
@@ -4776,8 +4776,6 @@ def rade():
                     z = z + 1
         if i > 0:
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
-
-
 
 def getPlanedRaidLocation(goatName: str, planRaid = True):
     tz = config.SERVER_MSK_DIFF
