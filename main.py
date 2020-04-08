@@ -569,11 +569,6 @@ def infect(logins, chat_id):
             # TODO Вставить проверку на иммунитет, иммунитет получаешь если переболел 'immunity'
             users_in_danger.append(user)
     
-    sum_vir = 0
-    sum_vir_count = 0
-    for vir in list(filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
-        sum_vir_count = sum_vir_count + 1
-        sum_vir = sum_vir + vir['skill']['contagiousness']
 
     for vir in list(filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']) if x['id']==vir['id']), None)
@@ -583,8 +578,8 @@ def infect(logins, chat_id):
             else:
                 r = random.random()
                 c = vir['skill']['contagiousness']
-                send_message_to_admin(f'{user.getLogin()} может заразиться вирусом {vir["name"]}...\n{r<=c} {r} <= {c} {user.getLogin()} {vir["name"]}')
-                logger.info(f'{r<=c} {r} <= {c} {user.getLogin()} {vir["name"]}')
+                send_message_to_admin(f'{user.getLogin()} может заразиться вирусом {vir["name"]}...\n{r<=c} {r} меньше или равно {c} {user.getLogin()} {vir["name"]}')
+                logger.info(f'{r<=c} {r} меньше или равно {c} {user.getLogin()} {vir["name"]}')
                 if (r <= c):
                     if user.isInventoryThing(medical_mask):
                         mask = user.getInventoryThingCount(medical_mask)
