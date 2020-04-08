@@ -792,7 +792,7 @@ newvalues = { "$set": { "value":
                                         ],
                                     'wear': 
                                         {
-                                            'one_use': 0.1,
+                                            'one_use': 0.2,
                                             'value': 1
                                         },
                                     'quantity': None

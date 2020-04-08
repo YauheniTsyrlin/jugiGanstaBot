@@ -581,12 +581,11 @@ def infect(logins, chat_id):
             if user.isInventoryThing(vir):
                 pass
             else:
-                # send_message_to_admin(f'{user.getLogin()} может заразиться вирусом {vir["name"]}...')
                 r = random.random()
                 c = vir['skill']['contagiousness']
+                send_message_to_admin(f'{user.getLogin()} может заразиться вирусом {vir["name"]}...\n{r<=c} {r} <= {c} {user.getLogin()} {vir["name"]}')
                 logger.info(f'{r<=c} {r} <= {c} {user.getLogin()} {vir["name"]}')
                 if (r <= c):
-                    
                     if user.isInventoryThing(medical_mask):
                         mask = user.getInventoryThingCount(medical_mask)
                         safe_mask = False
@@ -597,6 +596,7 @@ def infect(logins, chat_id):
                                     if mask['wear']['value'] - mask['wear']['one_use'] > 0:
                                         mask['wear'].update({'value':  mask['wear']['value'] - mask['wear']['one_use']})
                                         user.addInventoryThing(mask, replace=True)
+                                        send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} {mask["name"]} спасла от {vir["name"]}')
                                         updateUser(user)
                                         safe_mask = True
                                         # Маска уберегла
