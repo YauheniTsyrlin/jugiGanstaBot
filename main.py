@@ -584,8 +584,8 @@ def infect(logins, chat_id):
             else:
                 r = random.random()
                 c = vir['skill']['contagiousness']
-                send_message_to_admin(f'{user.getLogin()} может заразиться вирусом {vir["name"]}...\n{r<=c} {r} меньше или равно {c} {user.getLogin()} {vir["name"]}')
-                logger.info(f'{r<=c} {r} меньше или равно {c} {user.getLogin()} {vir["name"]}')
+                # send_message_to_admin(f'{user.getLogin()} может заразиться вирусом {vir["name"]}...\n{r<=c} {r} меньше или равно {c} {user.getLogin()} {vir["name"]}')
+                # logger.info(f'{r<=c} {r} меньше или равно {c} {user.getLogin()} {vir["name"]}')
                 if (r <= c):
                     if user.isInventoryThing(medical_mask):
                         mask = user.getInventoryThing(medical_mask)
@@ -593,32 +593,58 @@ def infect(logins, chat_id):
                         for protection in mask['protection']:
                             if protection['id'] == vir['id'] and protection['type'] == vir['type']:
                                 p = random.random()
-                                send_message_to_admin(f'⚠️🦇 Внимание! \n вероятность {p}, защита {protection["value"]}')
+                                # send_message_to_admin(f'⚠️🦇 Внимание! \n вероятность {p}, защита {protection["value"]}')
                                 if p < protection['value']:
-                                    send_message_to_admin(f'⚠️🦇 Внимание! \n value = {mask["wear"]["value"]}, one_use = {mask["wear"]["one_use"]}')
+                                    # send_message_to_admin(f'⚠️🦇 Внимание! \n value = {mask["wear"]["value"]}, one_use = {mask["wear"]["one_use"]}')
                                     if mask['wear']['value'] - mask['wear']['one_use'] > 0:
                                         mask['wear'].update({'value':  mask['wear']['value'] - mask['wear']['one_use']})
                                         user.addInventoryThing(mask, replace=True)
-                                        send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} {mask["name"]} спасла от {vir["name"]}')
                                         updateUser(user)
                                         safe_mask = True
                                         # Маска уберегла
+                                        text = f'Носи медицинскую маску, как {user.getNameAndGerb()}, и вирус {vir["name"]} не принесет тебе вреда!'
+                                        sec = 5
+                                        pending_date = datetime.now() + timedelta(seconds=sec)
+                                        pending_messages.insert_one({ 
+                                            'chat_id': chat_id,
+                                            'reply_message': None,
+                                            'create_date': datetime.now().timestamp(),
+                                            'user_id': user.getLogin(),  
+                                            'state': 'WAIT',
+                                            'pending_date': pending_date.timestamp(),
+                                            'dialog_flow_text': None,
+                                            'text': text})
+
+                                        send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} {mask["name"]} спасла от {vir["name"]}')
                                         break
                                     else:
                                         user.removeInventoryThing(mask)
-                                        send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} порвалась {mask["name"]}')
                                         updateUser(user)
+                                        text = f'{user.getNameAndGerb()}, у тебя порвалась медицинская маска'
+                                        sec = 5
+                                        pending_date = datetime.now() + timedelta(seconds=sec)
+                                        pending_messages.insert_one({ 
+                                            'chat_id': chat_id,
+                                            'reply_message': None,
+                                            'create_date': datetime.now().timestamp(),
+                                            'user_id': user.getLogin(),  
+                                            'state': 'WAIT',
+                                            'pending_date': pending_date.timestamp(),
+                                            'dialog_flow_text': None,
+                                            'text': text})
+                                        send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} порвалась {mask["name"]}')
                                         break
 
                         if safe_mask:
-                            percent = int(mask['wear']['value']*100/medical_mask['wear']['value'])
-                            send_message_to_admin(f'⚠️🦇 Внимание! \n{mask["name"]} {percent}% уберегла {user.getLogin()} от вируса {vir["name"]}')
+                            #percent = int(mask['wear']['value']*100/medical_mask['wear']['value'])
+                            #send_message_to_admin(f'⚠️🦇 Внимание! \n{mask["name"]} {percent}% уберегла {user.getLogin()} от вируса {vir["name"]}')
                             continue            
 
                     user.addInventoryThing(elem)
                     updateUser(user)
 
-                    sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
+                    #sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
+                    sec = 10
                     pending_date = datetime.now() + timedelta(seconds=sec)
                     pending_messages.insert_one({ 
                         'chat_id': chat_id,
