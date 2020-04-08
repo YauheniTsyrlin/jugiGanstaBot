@@ -547,11 +547,16 @@ def checkInfected(logins, chat_id):
         else:
             vir['skill'].update({'contagiousness':  vir['skill']['contagiousness'] * vir['skill']['halflife']})
  
+    
+    
     # Добавляем новые вирусы, если есть у бандитов
     for user_login in logins:
         user = getUserByLogin(user_login)
         if user:
             for vir in list(filter(lambda x : x['skill']['contagiousness'] > 0, viruses)):
+                # #################
+                # GLOBAL_VARS[chat]['inventory'].append(vir)
+                # #################
                 if user.getInventoryThingCount(vir) > 0:
                     GLOBAL_VARS[chat]['inventory'].append(vir)
 
@@ -572,6 +577,7 @@ def infect(logins, chat_id):
 
     for vir in list(filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']) if x['id']==vir['id']), None)
+
         for user in users_in_danger:
             if user.isInventoryThing(vir):
                 pass
@@ -582,12 +588,15 @@ def infect(logins, chat_id):
                 logger.info(f'{r<=c} {r} меньше или равно {c} {user.getLogin()} {vir["name"]}')
                 if (r <= c):
                     if user.isInventoryThing(medical_mask):
-                        mask = user.getInventoryThingCount(medical_mask)
+                        mask = user.getInventoryThing(medical_mask)
                         safe_mask = False
                         for protection in mask['protection']:
                             if protection['id'] == vir['id'] and protection['type'] == vir['type']:
                                 p = random.random()
-                                if p > protection['value']:
+                                send_message_to_admin(f'⚠️🦇 Внимание! \n вероятность {p}, защита {protection["value"]}')
+                                if p < protection['value']:
+                                    send_message_to_admin(f'⚠️🦇 Внимание! \n value = {mask["wear"]["value"]}, one_use = {mask["wear"]["one_use"]}')
+
                                     if mask['wear']['value'] - mask['wear']['one_use'] > 0:
                                         mask['wear'].update({'value':  mask['wear']['value'] - mask['wear']['one_use']})
                                         user.addInventoryThing(mask, replace=True)
@@ -2056,7 +2065,7 @@ def main_message(message):
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'no_user').fulfillment_text) 
                     return
 
-                if userIAm.getTimeUpdate() < (datetime.now() - timedelta(days=1)).timestamp():
+                if userIAm.getTimeUpdate() < (datetime.now() - timedelta(days=30)).timestamp():
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'update_pip').fulfillment_text) 
                     return
 
@@ -2261,7 +2270,7 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'no_user').fulfillment_text) 
                         return
 
-                    if userIAm.getTimeUpdate() < (datetime.now() - timedelta(days=1)).timestamp():
+                    if userIAm.getTimeUpdate() < (datetime.now() - timedelta(days=30)).timestamp():
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'update_pip').fulfillment_text) 
                         return
 

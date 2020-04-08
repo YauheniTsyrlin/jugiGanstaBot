@@ -3377,8 +3377,8 @@ if 1==2:
 #                     antyBoltReport = antyBoltReport + f'{counter}. @{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
 #         send_message_to_admin(antyBoltReport)
 
-# userupd = {}
-# userupd.update({'Irakusa': 40})
+userupd = {}
+userupd.update({'GonzikBenzyavsky': 60})
        
 # userupd.update({'artiomse': 14})
 # userupd.update({'Hermia_Nerbne': 12})
@@ -3416,16 +3416,19 @@ if 1==2:
 # userupd.update({'korshak':18}) 
 
 # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
+# covid = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']) if x['id']=='covid-19'), None)
+
 
 # for key in userupd.keys():
 #     user = getUserByLogin(key)
     
-#     skill = user.getInventoryThing(elem)
-#     print(skill)
-#     skill.update({'storage': 33})
-#     user.addInventoryThing(skill, replace=True)
-#     print(skill)
-   
+#     # skill = user.getInventoryThing(elem)
+#     # print(skill)
+#     elem.update({'storage': 60})
+#     user.addInventoryThing(elem, replace=True)
+#     # print(skill)
+    
+#     user.removeInventoryThing(covid)
 #     updateUser(user)
 
 # # 
