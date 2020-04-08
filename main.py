@@ -1325,7 +1325,7 @@ def get_message_photo(message):
             #if not privateChat:
             user = getUserByName(wariorShow.getName())
             logger.info('3')
-            if user and (not user.getLogin() == message.from_user.username) and user.getBand() and user.getBand() in getGoatBands(getMyGoatName(message.from_user.username)):
+            if user  and user.getBand() and user.getBand() in getGoatBands(getMyGoatName(message.from_user.username)):
                 logger.info('4')
                 buttons = []
                 buttons.append(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
