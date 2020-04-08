@@ -3273,7 +3273,7 @@ print("#==========================#")
 
 
 clothes = ['medical_mask']
-if 1==1:
+if 1==2:
     for clothes_name in clothes:
         updateUser(None)
         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value']) if x['id']==clothes_name), None) 

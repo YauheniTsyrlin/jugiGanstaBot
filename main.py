@@ -1316,18 +1316,24 @@ def get_message_photo(message):
 
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
+        logger.info('1')
         for warior in ww:
+            logger.info('2')
             update_warior(warior)
             wariorShow = getWariorByName(warior.getName(), warior.getFraction())
             markupinline = None
-            if not privateChat:
-                user = getUserByName(wariorShow.getName())
-                if user and (not user.getLogin() == message.from_user.username) and user.getBand() and user.getBand() in getGoatBands(getMyGoatName(message.from_user.username)):
-                    buttons = []
-                    buttons.append(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
-                    markupinline = InlineKeyboardMarkup(row_width=2)
-                    for row in build_menu(buttons=buttons, n_cols=2):
-                        markupinline.row(*row) 
+            #if not privateChat:
+            user = getUserByName(wariorShow.getName())
+            logger.info('3')
+            if user and (not user.getLogin() == message.from_user.username) and user.getBand() and user.getBand() in getGoatBands(getMyGoatName(message.from_user.username)):
+                logger.info('4')
+                buttons = []
+                buttons.append(InlineKeyboardButton(f'@{user.getLogin()}', callback_data=f"ping_user|{user.getLogin()}"))
+                markupinline = InlineKeyboardMarkup(row_width=2)
+                for row in build_menu(buttons=buttons, n_cols=2):
+                    logger.info('5')
+                    markupinline.row(*row) 
+            logger.info('6')
             send_messages_big(message.chat.id, text=wariorShow.getProfile(), reply_markup=markupinline)
     else:
         if privateChat:
