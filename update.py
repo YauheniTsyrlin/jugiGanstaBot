@@ -3293,8 +3293,6 @@ if 1==2:
             print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
             print(f'=======================================================')
 
-
-
 # 'electrician', 'medic'
 skill_names = ['robotics','programmer']
 if 1==2:
