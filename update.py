@@ -3422,7 +3422,7 @@ for key in userupd.keys():
     
     skill = user.getInventoryThing(elem)
     print(skill)
-    skill.update({'storage': skill['storage']+3})
+    skill.update({'storage': 33})
     user.addInventoryThing(elem, replace=True)
     print(skill)
    
