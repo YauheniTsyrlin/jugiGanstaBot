@@ -4710,7 +4710,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломалось Предупреждение о рейде!')
 
     # Предварительные Отчет по рейду
-    if now_date.hour in (1, 9, 17) and now_date.minute == 23 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
         try:
             for goat in getSetting(code='GOATS_BANDS'):
                 if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
@@ -4722,7 +4722,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
 
     # Отчет по рейду
-    if now_date.hour in (1, 9, 17) and now_date.minute == 30 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 40 and now_date.second < 15:
         logger.info('Rade time now!')
         try:
             updateUser(None)
@@ -4736,7 +4736,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
 
     # Раздача рейдовых болтов
-    if now_date.hour in (1, 9, 17) and now_date.minute == 35 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 45 and now_date.second < 15:
         try:
             logger.info('raid bolt info!')
             updateUser(None)
@@ -5001,8 +5001,7 @@ def setGiftsForRaid(goat):
     for raid in report_raids.find(
         {   "date": raidPlan['rade_date'],
             "band": {'$in': getGoatBands(goat['name'])},
-            "on_raid": False,
-            "planed_location": {'$ne':None}   
+            "on_raid": False 
         }):
         
         user = getUserByLogin(raid["login"])
@@ -5035,6 +5034,7 @@ def setGiftsForRaid(goat):
             # send_message_to_admin(f'⚠️ {user.getNameAndGerb()} @{user.getLogin()}\n▫️ {bolt["name"]}!')
             user.addInventoryThing(bolt, bolt['quantity'])
             #send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {bolt["name"]}')    
+            
             updateUser(user)
             boltReport = boltReport + f'{counter}. {"@" if user.isPing() else ""}{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
     if counter > 0:
@@ -5045,8 +5045,7 @@ def setGiftsForRaid(goat):
     for raid in report_raids.find(
             {   "date": raidPlan['rade_date'],
                 "band": {'$in': getGoatBands(goat['name'])},
-                "on_raid": True,
-                "planed_location": {'$ne':None}   
+                "on_raid": True 
             }):
             user = getUserByLogin(raid["login"])
 
