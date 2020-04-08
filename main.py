@@ -596,7 +596,6 @@ def infect(logins, chat_id):
                                 send_message_to_admin(f'⚠️🦇 Внимание! \n вероятность {p}, защита {protection["value"]}')
                                 if p < protection['value']:
                                     send_message_to_admin(f'⚠️🦇 Внимание! \n value = {mask["wear"]["value"]}, one_use = {mask["wear"]["one_use"]}')
-
                                     if mask['wear']['value'] - mask['wear']['one_use'] > 0:
                                         mask['wear'].update({'value':  mask['wear']['value'] - mask['wear']['one_use']})
                                         user.addInventoryThing(mask, replace=True)
@@ -1567,13 +1566,6 @@ def main_message(message):
             
             return
         elif ('FIGHT!' in message.text):
-            # write_json(message.json)
-            # 
-            # # if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-            #     pass
-            # else:
-            #     censored(message)
-
             ww = wariors.fromFightToWarioirs(message.forward_date, message, USERS_ARR, battle)
             if ww == None:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'dublicate').fulfillment_text)
