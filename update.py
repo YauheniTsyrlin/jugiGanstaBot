@@ -3377,8 +3377,9 @@ if 1==2:
 #                     antyBoltReport = antyBoltReport + f'{counter}. @{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
 #         send_message_to_admin(antyBoltReport)
 
-# userupd = {}
-# userupd.update({'@gavepta': 23})
+userupd = {}
+userupd.update({'Irakusa': 40})
+       
 # userupd.update({'artiomse': 14})
 # userupd.update({'Hermia_Nerbne': 12})
 # userupd.update({'WestMoscow': 40})
@@ -3414,13 +3415,18 @@ if 1==2:
 # userupd.update({'Irakusa':14})
 # userupd.update({'korshak':18}) 
 
-# for key in userupd.keys():
-#     user = getUserByLogin(key)
-#     user.removeInventoryThing(medic)
+elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
 
-#     medic.update({'storage': userupd[key]})
-#     user.addInventoryThing(medic)
-#     updateUser(user)
+for key in userupd.keys():
+    user = getUserByLogin(key)
+    
+    skill = user.getInventoryThing(elem)
+    print(skill)
+    skill.update({'storage': skill['storage']+3})
+    user.addInventoryThing(elem, replace=True)
+    print(skill)
+   
+    updateUser(user)
 
 # # 
 # updateUser(None)
