@@ -4722,7 +4722,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
 
     # Отчет по рейду
-    if now_date.hour in (1, 9, 17) and now_date.minute == 40 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 30 and now_date.second < 15:
         logger.info('Rade time now!')
         try:
             updateUser(None)
@@ -4736,7 +4736,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
 
     # Раздача рейдовых болтов
-    if now_date.hour in (1, 9, 17) and now_date.minute == 45 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 55 and now_date.second < 15:
         try:
             logger.info('raid bolt info!')
             updateUser(None)
