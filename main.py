@@ -4736,16 +4736,12 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
 
     # Раздача рейдовых болтов
-    if now_date.hour in (1, 9, 17) and now_date.minute == 55 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 40 and now_date.second < 15:
         try:
             logger.info('raid bolt info!')
             updateUser(None)
             for goat in getSetting(code='GOATS_BANDS'):
                 setGiftsForRaid(goat)
-                registered_users.update_many(
-                    {'band':{'$in':getGoatBands(goat.get('name'))}},
-                    { '$set': { 'raidlocation': 0} }
-                )
         except:
             send_message_to_admin(f'⚠️🤬 Сломалась Раздача рейдовых болтов!')
 
@@ -5003,9 +4999,9 @@ def setGiftsForRaid(goat):
             "band": {'$in': getGoatBands(goat['name'])},
             "on_raid": False 
         }):
-        
         user = getUserByLogin(raid["login"])
         if user:
+            user.setRaidLocation(0)
             counter = counter + 1
             #acc = '🔩 Болт М69, возложенный на рейд'
             bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_1'), None)
@@ -5048,7 +5044,7 @@ def setGiftsForRaid(goat):
                 "on_raid": True 
             }):
             user = getUserByLogin(raid["login"])
-
+            
             # Снимаем больы, если последние два рейда были зачетными
             counter_r = report_raids.find({'login': user.getLogin()}).count()
             N = 2
@@ -5063,6 +5059,7 @@ def setGiftsForRaid(goat):
                 continue
 
             if user:
+                user.setRaidLocation(0)
                 counter = counter + 1
                 #acc = '🎫🍼 Билет на гигантскую бутылку'
                 bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_5'), None)
@@ -5095,8 +5092,8 @@ def setGiftsForRaid(goat):
                     # send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {bolt["name"]}!')
                     user.removeInventoryThing(bolt)
                     # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {bolt["name"]}')    
-                    updateUser(user)
                     antyBoltReport = antyBoltReport + f'{counter}. {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
+                updateUser(user)
     if counter > 0:
         antyBoltReport = '<b>Сдали болты ❎</b>\n' + antyBoltReport
 
