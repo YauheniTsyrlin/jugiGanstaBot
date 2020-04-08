@@ -1420,6 +1420,25 @@ def main_message(message):
     check_and_register_tg_user(message.from_user.username)
     userIAm = getUserByLogin(message.from_user.username)
     
+    # =================== TEST ====================== # 
+    if privateChat and userIAm and userIAm.getLogin()=='GonzikBenzyavsky':
+        # Собрали группу бандитов
+        may_be_cured_or_infected = []
+        may_be_cured_or_infected.append(message.from_user.username)
+        if message.reply_to_message and not message.reply_to_message.from_user.is_bot:
+            may_be_cured_or_infected.append(message.reply_to_message.from_user.username)
+
+        # Определили заражение
+        checkInfected(may_be_cured_or_infected, message.chat.id)
+        # Заражаем бандитов
+        infect(may_be_cured_or_infected, message.chat.id)
+        # Определили способных лечить
+        checkCure(may_be_cured_or_infected, message.chat.id)
+        # лечим бандитов
+        cure(may_be_cured_or_infected, message.chat.id)
+
+    # =================== TEST ====================== #
+
     if not privateChat and userIAm and isGoatInfoChat(message.from_user.username, message.chat.id):
         # Собрали группу бандитов
         may_be_cured_or_infected = []
