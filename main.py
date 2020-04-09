@@ -978,6 +978,7 @@ def dzen_rewards(user, num_dzen, message):
                 send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
 
 def check_skills(text, chat, time_over, userIAm, elem):
+    logger.info(elem)
     count = 0
     for s in text.split('\n'):
         for skill_sign in elem['subjects_of_study']:
