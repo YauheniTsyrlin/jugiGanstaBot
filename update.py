@@ -3347,9 +3347,9 @@ if 1==2:
             print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
             print(f'=======================================================')
 
-# 'electrician', 'medic'
-skill_names = ['robotics','programmer']
-if 1==2:
+# 'electrician', 'medic', 'robotics','programmer',
+skill_names = ['fighter']
+if 1==1:
     for skill_name in skill_names:
         updateUser(None)
         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==skill_name), None) 
@@ -3360,7 +3360,16 @@ if 1==2:
             skill = user.getInventoryThing(elem)
             
             print(f'before {user.getLogin()} {skill}')
-            elem.update({'storage': skill['storage']})
+            try:
+                elem.update({'storage': skill['storage']})
+            except:
+                user.removeInventoryThing(elem)
+                user.addInventoryThing(elem)
+                updateUser(user)
+                print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
+                print(f'=======================================================')
+                continue
+
             try:
                 elem['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
             except:
