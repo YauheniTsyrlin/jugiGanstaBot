@@ -12,13 +12,11 @@ credentials = (service_account.Credentials.from_service_account_info(config.DIAL
 session_client = dialogflow_v2.SessionsClient(credentials=credentials)
 contexts_client = dialogflow_v2.ContextsClient(credentials = (service_account.Credentials.from_service_account_info(config.DIALOG_FLOW_JSON)))
 
-def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str, user: users.User):
-    # clear_message_context = False
-    # list_entities(config.DIALOG_FLOW_JSON['project_id'])
+def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str, user: users.User, context_param=None):
+    clear_message_context = False
 
     contexts = get_contexts(config.DIALOG_FLOW_JSON['project_id'], session_id, "user")
     if not contexts:
-        #logger.info(f'Create context user for {session_id}')
         parameters = struct_pb2.Struct()
         if user:
             parameters['login'] = user.getLogin()
@@ -27,13 +25,14 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
             parameters['login'] = session_id
         create_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "user", 1, parameters)
         
+    
+    if context_param:
+        parameters = struct_pb2.Struct()
+        for key in context_param.keys():
+            parameters[key] = context_param.get(key)
 
-    # if message and message.reply_to_message:
-    #     parameters = struct_pb2.Struct()
-    #     parameters['reply_to_message_id'] = message.reply_to_message.message_id
-    #     parameters['reply_to_message_username'] = message.reply_to_message.from_user.username
-    #     create_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message", 1, parameters)
-    #     clear_message_context = True
+        create_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message", 1, parameters)
+        clear_message_context = True
 
     session = session_client.session_path(config.DIALOG_FLOW_JSON['project_id'], session_id)
 
@@ -54,8 +53,8 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
     finally:
         pass
 
-    # if clear_message_context:
-    #     delete_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message")
+    if clear_message_context:
+        delete_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "message")
 
     return response.query_result
 

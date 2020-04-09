@@ -464,12 +464,12 @@ def write_json(data, filename = "./pips.json"):
     with open(filename, 'a', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
-def getResponseDialogFlow(login, text: str, event=None):
+def getResponseDialogFlow(login, text: str, event=None, context_param=None):
     if not text or '' == text.strip():
         text = 'голос!'
 
     user = getUserByLogin(login)
-    return dialogflow.getResponseDialogFlow(login, text, event, user)
+    return dialogflow.getResponseDialogFlow(login, text, event, user, context_param=context_param)
 
 def getResponseHuificator(text):
     morph = pymorphy2.MorphAnalyzer()
@@ -609,10 +609,11 @@ def infect(logins, chat_id):
                                             'chat_id': chat_id,
                                             'reply_message': None,
                                             'create_date': datetime.now().timestamp(),
-                                            'user_id': user.getLogin(),  
+                                            'user_id': user.getLogin(),
                                             'state': 'WAIT',
                                             'pending_date': pending_date.timestamp(),
                                             'dialog_flow_text': None,
+                                            'dialog_flow_context': None,
                                             'text': text})
 
                                         send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} {mask["name"]} спасла от {vir["name"]}')
@@ -631,6 +632,7 @@ def infect(logins, chat_id):
                                             'state': 'WAIT',
                                             'pending_date': pending_date.timestamp(),
                                             'dialog_flow_text': None,
+                                            'dialog_flow_context': None,
                                             'text': text})
                                         send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} порвалась {mask["name"]}')
                                         break
@@ -654,6 +656,7 @@ def infect(logins, chat_id):
                         'state': 'WAIT',
                         'pending_date': pending_date.timestamp(),
                         'dialog_flow_text': 'virus_new_member',
+                        'dialog_flow_context': None,
                         'text': f'▫️ {vir["name"]}'})
                     send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен вирусом {vir["name"]} с вероятностью {vir["skill"]["contagiousness"]}')
 
@@ -725,6 +728,7 @@ def cure(logins, chat_id):
                             'state': 'WAIT',
                             'pending_date': pending_date.timestamp(),
                             'dialog_flow_text': 'virus_minus_member',
+                            'dialog_flow_context': None,
                             'text': text})
 
 def getMobHash(mob_name: str, mob_class: str):
@@ -977,7 +981,7 @@ def check_skills(text, chat, time_over, userIAm, elem):
     count = 0
     for s in text.split('\n'):
         for skill_sign in elem['subjects_of_study']:
-            if (s.startswith('Получено:') or s.startswith('Бонус:') or (s.startswith('💰')) ) and skill_sign in s: # x2
+            if (s.startswith('Получено:') or s.startswith('Бонус:') or (s.startswith('💰')) ) and skill_sign in s or (s == 'FIGHT!' and skill_sign in s):
                 if ' x' in s:
                     count = count + int(s.replace('/buy_trash','').split(' x')[1].strip())
                 else: count = count + 1
@@ -1110,22 +1114,6 @@ def send_back_from_usset(message):
     matplot.getPlot(cursor, message.from_user.username)
     img = open(config.PATH_IMAGE + f'plot_{message.from_user.username}.png', 'rb')
     bot.send_photo(message.chat.id, img)
-
-
-# @bot.message_handler(func=lambda message: message.text and ('📜 Профиль' in message.text ))
-# def send_back_from_usset(message):
-#     privateChat = ('private' in message.chat.type)
-#     if not privateChat:
-#         bot.send_message(message.chat.id, text='Иди в личный чат!')
-#         return
-
-#     user = getUserByLogin(message.from_user.username)
-    
-
-#     markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-#     markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
-#     bot.send_message(message.chat.id, text=user.getInventoryReport(), reply_markup=markup)
-
 
 @bot.message_handler(func=lambda message: message.text and ('Участвую 👨‍❤️‍👨!' in message.text or 'Сам ты пидор 👨‍❤️‍👨!' in message.text))
 def send_back_from_usset(message):
@@ -1293,17 +1281,7 @@ def send_welcome(message):
         return
 
     try:
-        send_messages_big(message.chat.id, text='Поехали')
-        for goat in getSetting(code='GOATS_BANDS'):
-            send_messages_big(message.chat.id, text=goat['name'])
-
-            if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
-                send_messages_big(message.chat.id, text="Плановый рейд")
-                
-                report = radeReport(goat, True, False)
-                send_messages_big(message.chat.id, text='<b>Предварительные</b> Результаты рейда\n' + report)
-                report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть 30 минут с момента прожимания /voevat_suda, либо ты можешь присылать свою награду за рейд аж до 30 минут после рейда!!'
-                send_messages_big(message.chat.id, text=report)
+        send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'bolt_congratulation_bolt_1', context_param={'bolt':'🎫🍼 Билет на гигантскую бутылку'}).fulfillment_text)
     except:
         send_message_to_admin(f'⚠️🤬 Сломался тест!')
 
@@ -1456,25 +1434,6 @@ def main_message(message):
 
     check_and_register_tg_user(message.from_user.username)
     userIAm = getUserByLogin(message.from_user.username)
-    
-    # =================== TEST ====================== # 
-    if privateChat and userIAm and userIAm.getLogin()=='GonzikBenzyavsky':
-        # Собрали группу бандитов
-        may_be_cured_or_infected = []
-        may_be_cured_or_infected.append(message.from_user.username)
-        if message.reply_to_message and not message.reply_to_message.from_user.is_bot:
-            may_be_cured_or_infected.append(message.reply_to_message.from_user.username)
-
-        # Определили заражение
-        checkInfected(may_be_cured_or_infected, message.chat.id)
-        # Заражаем бандитов
-        infect(may_be_cured_or_infected, message.chat.id)
-        # Определили способных лечить
-        checkCure(may_be_cured_or_infected, message.chat.id)
-        # лечим бандитов
-        cure(may_be_cured_or_infected, message.chat.id)
-
-    # =================== TEST ====================== #
 
     if not privateChat and userIAm and isGoatInfoChat(message.from_user.username, message.chat.id):
         # Собрали группу бандитов
@@ -1595,52 +1554,58 @@ def main_message(message):
             
             return
         elif ('FIGHT!' in message.text):
-            ww = wariors.fromFightToWarioirs(message.forward_date, message, USERS_ARR, battle)
-            if ww == None:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'dublicate').fulfillment_text)
-                return
-            ourBandUser = None
-            for warior in ww:
-                if ourBandUser == None:
-                    ourBandUser = getUserByName(warior.getName())
-                update_warior(warior)
+            if new_Message:                     
+                # Учимся умению "Боец"
+                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='fighter'), None)
+                check_skills('FIGHT!', message.chat.id, False, userIAm, elem)
+                
+                ww = wariors.fromFightToWarioirs(message.forward_date, message, USERS_ARR, battle)
+
+                ourBandUser = None
+                for warior in ww:
+                    if ourBandUser == None:
+                        ourBandUser = getUserByName(warior.getName())
+                    update_warior(warior)
             
-            if ourBandUser:
-                for w in battle.find({
-                    # 'login': message.from_user.username, 
-                    'date': message.forward_date}):
-                    if w['winnerWarior'] == ourBandUser.getName():
-                        for war in ww:
-                            # Вручаем скальп за машинку
-                            if war.getName() == w['loseWarior']:
-                                loser = getWariorByName(war.getName(), war.getFraction())
+                if ourBandUser:
+                    for w in battle.find({
+                        # 'login': message.from_user.username, 
+                        'date': message.forward_date}):
+                        if w['winnerWarior'] == ourBandUser.getName():
+                            for war in ww:
+                                # Вручаем скальп за машинку
+                                if war.getName() == w['loseWarior']:
+                                    loser = getWariorByName(war.getName(), war.getFraction())
 
-                                if loser:
-                                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_banditos'), None) 
-                                    k = 1
-                                    if loser.getGoat():
-                                        k = 2
-                                        if loser.getGoat() == 'Deus Ex Machina':
-                                            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
-                                            k =3
-                                    if loser.getName() == '{^_^}': 
-                                        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_zak'), None) 
-                                        k = 5
+                                    if loser:
+                                        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_banditos'), None) 
+                                        k = 1
+                                        if loser.getGoat():
+                                            k = 2
+                                            if loser.getGoat() == 'Deus Ex Machina':
+                                                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
+                                                k =3
+                                        if loser.getName() == '{^_^}': 
+                                            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_zak'), None) 
+                                            k = 5
 
-                                    elem.update({"cost": elem["cost"] * k})
+                                        elem.update({"cost": elem["cost"] * k})
 
-                                    if ourBandUser.addInventoryThing(elem, elem['quantity']):
-                                        updateUser(ourBandUser)
-                                        send_messages_big(message.chat.id, text = f'Тебе выдали:\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
-                                    else:
-                                        send_messages_big(message.chat.id, text=ourBandUser.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
+                                        if ourBandUser.addInventoryThing(elem, elem['quantity']):
+                                            updateUser(ourBandUser)
+                                            send_messages_big(message.chat.id, text = f'Тебе выдали:\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
+                                        else:
+                                            send_messages_big(message.chat.id, text=ourBandUser.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
 
-                        if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
-                            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
-                    else:
-                        if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_LOSER'))):
-                            bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
+                            if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_WIN'))):
+                                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_SALUTE'), 1)[0]['value'])
+                        else:
+                            if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_LOSER'))):
+                                bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
+            else:
+                send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
+
             return
         elif ('Рядом с тобой другой выживший.' in message.text and 'Для ответа используй' in message.text):
             #write_json(message.json)
@@ -3480,6 +3445,7 @@ def main_message(message):
                             'state': 'WAIT',
                             'pending_date': dt.timestamp(),
                             'dialog_flow_text': 'remindme',
+                            'dialog_flow_context': None,
                             'text': None})
                         
                         msg = send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
@@ -4465,7 +4431,7 @@ def pending_message():
         if text == None:
             text = ''
         if pending_message.get('dialog_flow_text'):
-            text = getResponseDialogFlow(pending_message['user_id'], pending_message.get('dialog_flow_text')).fulfillment_text + '\n' + text
+            text = getResponseDialogFlow(pending_message['user_id'], pending_message.get('dialog_flow_text'), context_param=pending_message.get('dialog_flow_context')).fulfillment_text + '\n' + text
         
         try:
             if pending_message.get('reply_message'):
@@ -5049,7 +5015,6 @@ def setGiftsForRaid(goat):
         }):
         user = getUserByLogin(raid["login"])
         if user:
-            users_on_raid.append(user)
             user.setRaidLocation(0)
             counter = counter + 1
             #acc = '🔩 Болт М69, возложенный на рейд'
@@ -5079,7 +5044,12 @@ def setGiftsForRaid(goat):
             # send_message_to_admin(f'⚠️ {user.getNameAndGerb()} @{user.getLogin()}\n▫️ {bolt["name"]}!')
             user.addInventoryThing(bolt, bolt['quantity'])
             #send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {bolt["name"]}')    
-            
+            users_on_raid.append(
+                        {
+                            'login': user.getLogin(),
+                            'bolt': bolt
+                        }
+                    )
             updateUser(user)
             boltReport = boltReport + f'{counter}. {"@" if user.isPing() else ""}{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
     if counter > 0:
@@ -5091,10 +5061,11 @@ def setGiftsForRaid(goat):
                 'chat_id': goat['chats']['secret'],
                 'reply_message': None,
                 'create_date': datetime.now().timestamp(),
-                'user_id': userWin.getLogin(),  
+                'user_id': userWin['login'],  
                 'state': 'WAIT',
                 'pending_date': pending_date.timestamp(),
-                'dialog_flow_text': 'bolt_congratulation',
+                'dialog_flow_text': f'bolt_congratulation_{userWin["bolt"]["id"]}',
+                'dialog_flow_context': {'bolt': userWin['bolt']['name']},
                 'text': text})
         boltReport = '<b>Получили болты 🔩</b>\n' + boltReport
     
@@ -5107,7 +5078,6 @@ def setGiftsForRaid(goat):
                 "on_raid": True 
             }):
             user = getUserByLogin(raid["login"])
-            users_on_raid.append(user)
             # Снимаем больы, если последние два рейда были зачетными
             counter_r = report_raids.find({'login': user.getLogin()}).count()
             N = 2
@@ -5156,6 +5126,12 @@ def setGiftsForRaid(goat):
                     user.removeInventoryThing(bolt)
                     # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {bolt["name"]}')    
                     antyBoltReport = antyBoltReport + f'{counter}. {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
+                users_on_raid.append(
+                        {
+                            'login': user.getLogin(),
+                            'bolt': bolt
+                        }
+                    )
                 updateUser(user)
     if counter > 0:
         for userWin in random.sample(users_on_raid, 2):
@@ -5166,10 +5142,11 @@ def setGiftsForRaid(goat):
                 'chat_id': goat['chats']['secret'],
                 'reply_message': None,
                 'create_date': datetime.now().timestamp(),
-                'user_id': userWin.getLogin(),  
+                'user_id': userWin['login'],  
                 'state': 'WAIT',
                 'pending_date': pending_date.timestamp(),
-                'dialog_flow_text': 'bolt_remove',
+                'dialog_flow_text': f'bolt_remove_{userWin["bolt"]["id"]}',
+                'dialog_flow_context': {'bolt': userWin['bolt']['name']},
                 'text': text})
         antyBoltReport = '<b>Сдали болты ❎</b>\n' + antyBoltReport
 

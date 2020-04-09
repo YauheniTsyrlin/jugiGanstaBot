@@ -702,7 +702,21 @@ newvalues = { "$set": { "value":
                                     'name': '🦾 Генеральный конструктор',
                                     'type': 'position',
                                     'cost': 0
+                                },
+                                {
+                                    'id': 'fighter_1',
+                                    'name': '🥩 боец Клуба UFC',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'fighter_2',
+                                    'name': '⚜️ Судья Клуба UFC',
+                                    'type': 'position',
+                                    'cost': 0
                                 }
+
+                                
                             ] 
                         },
                         {
@@ -1119,6 +1133,37 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
+                                    'id': 'fighter',
+                                    'name': '🤼‍♂️ Боец',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': None,
+                                    'min': 100,
+                                    'max': 150,
+                                    'storage': 0,
+                                    'subjects_of_study':
+                                    [
+                                        'FIGHT!'
+                                    ],
+                                    'dialog_old_text': None,
+                                    'flags': {
+                                        'congratulation_min': False,
+                                        'position_min': 'fighter_1',
+                                        'present_min': 
+                                            {
+                                                'id': 'certificate_fighter_1',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            },
+                                        'congratulation_max': False,
+                                        'position_max': 'fighter_2',
+                                        'present_max': 
+                                            {
+                                                'id': 'certificate_fighter_2',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            }
+                                        }
+                                },
+                                {
                                     'id': 'robotics',
                                     'name': '🛰 Робототехника',
                                     'cost': 0,
@@ -1407,6 +1452,22 @@ newvalues = { "$set": { "value":
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                     
+                                }
+                                ,
+                                {
+                                    'id': 'certificate_fighter_1',
+                                    'name': '💪 Пропуск в Клуб UFC',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
+                                }
+                                ,
+                                {
+                                    'id': 'certificate_fighter_2',
+                                    'name': '🥇 Медаль Чемпиона клуба UFC',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'certificate_robotics_1',

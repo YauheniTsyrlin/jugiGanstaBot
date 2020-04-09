@@ -253,10 +253,10 @@ def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
             result[0].setEnemy_armor(user.getArmor())
             break
     
-    isReplay = False
-    for x in battle.find({'winnerWarior': winnerName, 'loseWarior': loserName, 'date': forward_date } ):
-        isReplay = True
-        return None
+    # isReplay = False
+    # for x in battle.find({'winnerWarior': winnerName, 'loseWarior': loserName, 'date': forward_date } ):
+    #     isReplay = True
+    #     return None
 
 
     user = getUserByLogin(message.from_user.username)
@@ -264,13 +264,13 @@ def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
     if user:
         band = user.getBand()
         
-    if not isReplay:
-        battle.insert_one({
-            'login': message.from_user.username, 
-            'date': forward_date, 
-            'winnerWarior': winnerName, 
-            'loseWarior': loserName,
-            'band': band})
+    #if not isReplay:
+    battle.insert_one({
+        'login': message.from_user.username, 
+        'date': forward_date, 
+        'winnerWarior': winnerName, 
+        'loseWarior': loserName,
+        'band': band})
 
     return result
 
