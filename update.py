@@ -1052,13 +1052,6 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'fighter',
-                                    'name': '🥋 Чёрный пояс по PvP',
-                                    'cost': 0,
-                                    'type': 'skill',
-                                    'quantity': None
-                                },
-                                {
                                     'id': 'boss',
                                     'name': '📿 четки босса банды',
                                     'cost': 0,
