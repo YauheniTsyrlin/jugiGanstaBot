@@ -14,7 +14,6 @@ contexts_client = dialogflow_v2.ContextsClient(credentials = (service_account.Cr
 
 def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str, user: users.User):
     # clear_message_context = False
-
     # list_entities(config.DIALOG_FLOW_JSON['project_id'])
 
     contexts = get_contexts(config.DIALOG_FLOW_JSON['project_id'], session_id, "user")
@@ -23,7 +22,7 @@ def getResponseDialogFlow(session_id: str, text_to_be_analyzed: str, event: str,
         parameters = struct_pb2.Struct()
         if user:
             parameters['login'] = user.getLogin()
-            parameters['name'] = user.getName()
+            parameters['name'] = user.getNameAndGerb()
         else:
             parameters['login'] = session_id
         create_context(config.DIALOG_FLOW_JSON['project_id'], session_id, "user", 1, parameters)

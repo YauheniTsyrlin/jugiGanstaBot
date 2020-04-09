@@ -1388,7 +1388,7 @@ newvalues = { "$set": { "value":
                                 },
                                 {
                                     'id': 'diploma_2',
-                                    'name': '📜 Грамота от вМ за групповой захват Научного комплекса',
+                                    'name': '📜 Грамота за групповой захват',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
@@ -1511,50 +1511,22 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'photo_8_bandits',
-                                    'name': '🎞️Фото 8-ми бандитов на фоне Научного комплекса',
-                                    'cost': 0,
-                                    'type': 'marks_of_excellence',
-                                    'quantity': None
-                                },
-                                {
-                                    'id': 'sign_from_the_door',
-                                    'name': '☢️Табличка с двери Научного комплекса с 8-ю подписями бойцов АртхǁȺǁус',
-                                    'cost': 0,
-                                    'type': 'marks_of_excellence',
-                                    'quantity': None
-                                },
-                                {
-                                    'id': 'test_tube',
-                                    'name': '🍼 Пробирка из Научного комплекса с надписью - здэс был Артоха̶уз',
-                                    'cost': 0,
-                                    'type': 'marks_of_excellence',
-                                    'quantity': None
-                                },
-                                {
-                                    'id': 'trolley_bus_ticket',
-                                    'name': '🎫 Билет на троллебус на групповую поездку до Научного комплекса',
-                                    'cost': 0,
-                                    'type': 'marks_of_excellence',
-                                    'quantity': None
-                                },
-                                {
                                     'id': 'capture_medal',
-                                    'name': '🎖️ Медаль за захват 7-ми данже подряд 1-ой степени',
+                                    'name': '🎖️ Медаль за захват',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                 },
                                 {
                                     'id': 'newspaper_article',
-                                    'name': '📰 Статья в газете о легендарном походе за семью данжами',
+                                    'name': '📰 Статья в газете',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                 },
                                 {
                                     'id': 'vacation_to_sanatorium',
-                                    'name': '📃 Путёвка в санаторий "SPA Пустошь" за захват 7-ми данжей',
+                                    'name': '📃 Путёвка в санаторий',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
@@ -1647,7 +1619,7 @@ newvalues = { "$set": { "value":
                                 },
                                 {
                                     'id': 'statuette_complex',
-                                    'name': '🤼 Статуэтка из говна и палок - "Групповой захват Научного комплекса"',
+                                    'name': '🤼 Статуэтка из говна и палок',
                                     'cost': 10,
                                     'type': 'decoration',
                                     'quantity': 1
@@ -2093,6 +2065,34 @@ newvalues = { "$set": { "value":
                                     'cost': 100,
                                     'type': 'things',
                                     'quantity': 20
+                                },
+                                {
+                                    'id': 'photo_8_bandits',
+                                    'name': '🎞️Фото 8-ми',
+                                    'cost': 1,
+                                    'type': 'things',
+                                    'quantity': None
+                                },
+                                {
+                                    'id': 'sign_from_the_door',
+                                    'name': '☢️Табличка на дверь',
+                                    'cost': 1,
+                                    'type': 'things',
+                                    'quantity': None
+                                },
+                                {
+                                    'id': 'test_tube',
+                                    'name': '🍼 Пробирка',
+                                    'cost': 1,
+                                    'type': 'things',
+                                    'quantity': None
+                                },
+                                {
+                                    'id': 'trolley_bus_ticket',
+                                    'name': '🎫 Билет на троллебус',
+                                    'cost': 1,
+                                    'type': 'things',
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'pip_boy_2000',
@@ -3377,10 +3377,10 @@ if 1==2:
 #                     antyBoltReport = antyBoltReport + f'{counter}. @{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
 #         send_message_to_admin(antyBoltReport)
 
-userupd = {}
-userupd.update({'GonzikBenzyavsky': 60})
+# userupd = {}
+# userupd.update({'GonzikBenzyavsky': 60})
        
-# userupd.update({'artiomse': 14})
+# # userupd.update({'artiomse': 14})
 # userupd.update({'Hermia_Nerbne': 12})
 # userupd.update({'WestMoscow': 40})
 # userupd.update({'dan4yk': 33})

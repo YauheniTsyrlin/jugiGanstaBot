@@ -950,8 +950,11 @@ def getBossByHash(hashstr: str):
     return None
 
 def dzen_rewards(user, num_dzen, message):
+    chat = message.chat.id
+
     goat = getMyGoat(user.getLogin())
-    chat = goat['chats']['secret']
+    if goat:
+        chat = goat['chats']['secret']
     for i in range(1, num_dzen+1):
         elem =   {
                     'id': f'marks_of_dzen_{i}',
@@ -5038,6 +5041,7 @@ def setGiftsForRaid(goat):
     
     boltReport = ''
     counter = 0
+    users_on_raid = [] 
     for raid in report_raids.find(
         {   "date": raidPlan['rade_date'],
             "band": {'$in': getGoatBands(goat['name'])},
@@ -5045,6 +5049,7 @@ def setGiftsForRaid(goat):
         }):
         user = getUserByLogin(raid["login"])
         if user:
+            users_on_raid.append(user)
             user.setRaidLocation(0)
             counter = counter + 1
             #acc = '🔩 Болт М69, возложенный на рейд'
@@ -5078,8 +5083,22 @@ def setGiftsForRaid(goat):
             updateUser(user)
             boltReport = boltReport + f'{counter}. {"@" if user.isPing() else ""}{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
     if counter > 0:
+        for userWin in random.sample(users_on_raid, 2):
+            sec = int(10)
+            pending_date = datetime.now() + timedelta(seconds=sec)
+            text = f''
+            pending_messages.insert_one({ 
+                'chat_id': goat['chats']['secret'],
+                'reply_message': None,
+                'create_date': datetime.now().timestamp(),
+                'user_id': userWin.getLogin(),  
+                'state': 'WAIT',
+                'pending_date': pending_date.timestamp(),
+                'dialog_flow_text': 'bolt_congratulation',
+                'text': text})
         boltReport = '<b>Получили болты 🔩</b>\n' + boltReport
     
+    users_on_raid = [] 
     antyBoltReport = ''
     counter = 0
     for raid in report_raids.find(
@@ -5088,7 +5107,7 @@ def setGiftsForRaid(goat):
                 "on_raid": True 
             }):
             user = getUserByLogin(raid["login"])
-            
+            users_on_raid.append(user)
             # Снимаем больы, если последние два рейда были зачетными
             counter_r = report_raids.find({'login': user.getLogin()}).count()
             N = 2
@@ -5139,6 +5158,19 @@ def setGiftsForRaid(goat):
                     antyBoltReport = antyBoltReport + f'{counter}. {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
                 updateUser(user)
     if counter > 0:
+        for userWin in random.sample(users_on_raid, 2):
+            sec = int(20)
+            pending_date = datetime.now() + timedelta(seconds=sec)
+            text = f''
+            pending_messages.insert_one({ 
+                'chat_id': goat['chats']['secret'],
+                'reply_message': None,
+                'create_date': datetime.now().timestamp(),
+                'user_id': userWin.getLogin(),  
+                'state': 'WAIT',
+                'pending_date': pending_date.timestamp(),
+                'dialog_flow_text': 'bolt_remove',
+                'text': text})
         antyBoltReport = '<b>Сдали болты ❎</b>\n' + antyBoltReport
 
     if (not boltReport == '') or (not antyBoltReport == ''):
