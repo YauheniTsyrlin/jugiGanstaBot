@@ -1500,7 +1500,7 @@ def main_message(message):
 
     # Форварды от WastelandWarsBot
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
-        filter_message = { 'id': message.message_id, "forward_from_username": message.forward_from.username, "forward_date": message.forward_date}
+        filter_message = { "forward_from_username": message.forward_from.username, "forward_date": message.forward_date}
         new_Message = messager.new_message(message, filter_message)
         time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
         
