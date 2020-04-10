@@ -1641,6 +1641,24 @@ def main_message(message):
                 send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
 
             return
+        elif ('жадно ест сухари.' in message.text):
+            #write_json(message.json)
+            if hasAccessToWariors(message.from_user.username):
+                fraction = getWariorFraction(message.text)
+                name = name.replace('⚙️', '#@#').replace('🔪', '#@#').replace('💣', '#@#').replace('⚛️', '#@#').replace('👙', '#@#').replace('🔰', '#@#')
+                name = name.split('#@#')[1].split('жадно ест сухари.')[0].strip()
+                name = tools.deEmojify(name)
+                warior = getWariorByName(name, fraction)
+
+                if warior == None:
+                    send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
+                elif (warior and warior.photo):
+                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                else:
+                    send_messages_big(message.chat.id, text=warior.getProfile())
+            else:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_you_cant').fulfillment_text)
+            return
         elif ('Рядом с тобой другой выживший.' in message.text and 'Для ответа используй' in message.text):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
