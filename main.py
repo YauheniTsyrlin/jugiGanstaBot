@@ -1645,6 +1645,7 @@ def main_message(message):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
                 fraction = getWariorFraction(message.text)
+                name = message.text
                 name = name.replace('⚙️', '#@#').replace('🔪', '#@#').replace('💣', '#@#').replace('⚛️', '#@#').replace('👙', '#@#').replace('🔰', '#@#')
                 name = name.split('#@#')[1].split('жадно ест сухари.')[0].strip()
                 name = tools.deEmojify(name)
