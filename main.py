@@ -114,7 +114,9 @@ GLOBAL_VARS = {
                 {
                     'inventory':[]
                 },
-    'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'] 
+    'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'],
+    'private_buttons': ['📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика', '🧺 Барахолка'],
+    'group_buttons': ['Джу, 📋 Отчет', f'Джу, ⏰ план рейда', '📈 Статистика']
 }
 
 def check_and_register_tg_user(tg_login: str):
@@ -1093,6 +1095,19 @@ def default_query(inline_query):
     except Exception as e:
         print(e)
 
+@bot.message_handler(func=lambda message: message.text and 'private' == message.chat.type and ('🧺 Барахолка' == message.text))
+def send_baraholka(message):
+    #write_json(message.json)
+    if isUserBan(message.from_user.username):
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то наговорить, но у него получилось лишь:\n' + getResponseDialogFlow(message.from_user.username, 'user_banned').fulfillment_text)
+        return
+
+    markup = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
+    markup.add('Купить ✅', 'Продать ❌', 'Назад 📋🔚')
+    bot.send_message(message.chat.id, text='Твой выбор...', reply_markup=markup)
+    bot.register_next_step_handler(message, process_partizan_step)   
+    
 @bot.message_handler(func=lambda message: message.text and ('📈 Статистика' == message.text))
 def send_back_from_usset(message):
     #write_json(message.json)
@@ -1137,7 +1152,7 @@ def send_back_from_usset(message):
     updateUser(user)
 
     markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
+    markup.add(GLOBAL_VARS['private_buttons'])
     bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
 
 @bot.message_handler(func=lambda message: message.content_type == 'text' and message.text in getUserSettingsName())
@@ -1174,7 +1189,7 @@ def process_partizan_step(message):
         updateUser(user)
 
         markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-        markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
+        markup.add(GLOBAL_VARS['private_buttons'])
         bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
     else:
         bot.send_message(message.chat.id, text='Похоже, что ты меня не понял...')
@@ -1197,7 +1212,7 @@ def process_gerb_step(message):
                 updateUser(user)
 
                 markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-                markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
+                markup.add(GLOBAL_VARS['private_buttons'])
                 bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
                 break
     else:
@@ -1210,7 +1225,7 @@ def send_back_from_usset(message):
         bot.send_message(message.chat.id, text='Иди в личный чат!')
         return
     markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
+    markup.add(GLOBAL_VARS['private_buttons'])
     bot.send_message(message.chat.id, text='Вернулся...', reply_markup=markup)
 
 # Handle /usset
@@ -1298,9 +1313,11 @@ def send_welcome(message):
     privateChat = ('private' in message.chat.type)
     markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     if not privateChat:
-        markup.add('Джу, 📋 Отчет', f'Джу, ⏰ план рейда', '📈 Статистика')
+        for row in build_menu(buttons=GLOBAL_VARS['group_buttons'], n_cols=3):
+            markup.row(*row)  
     else:
-        markup.add('📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика')
+        for row in build_menu(buttons=GLOBAL_VARS['private_buttons'], n_cols=3):
+            markup.row(*row)  
 
     if response:
         bot.send_message(message.chat.id, text=response, reply_markup=markup)
@@ -1589,6 +1606,10 @@ def main_message(message):
                                             elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_zak'), None) 
                                             k = 5
 
+                                        if loser.getName() == 'Очко гуся': 
+                                            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_goose_point'), None) 
+                                            k = 4
+                                        
                                         elem.update({"cost": elem["cost"] * k})
 
                                         if ourBandUser.addInventoryThing(elem, elem['quantity']):

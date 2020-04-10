@@ -1939,6 +1939,13 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
+                                    'id': 'scalp_of_goose_point',
+                                    'name': '🍩 Очко гуся',
+                                    'cost': 50,
+                                    'type': 'things',
+                                    'quantity': None
+                                },
+                                {
                                     'id': 'bouquet_of_flowers',
                                     'name': '💐 Букет цветов',
                                     'cost': 12,
@@ -3349,7 +3356,7 @@ if 1==2:
 
 # 'electrician', 'medic', 'robotics','programmer',
 skill_names = ['fighter']
-if 1==1:
+if 1==2:
     for skill_name in skill_names:
         updateUser(None)
         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==skill_name), None) 
