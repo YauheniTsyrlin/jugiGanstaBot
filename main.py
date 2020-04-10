@@ -5072,7 +5072,7 @@ def setGiftsForRaid(goat):
         }):
         user = getUserByLogin(raid["login"])
         if user:
-            user.setRaidLocation(0)
+            user.setRaidLocation(None)
             counter = counter + 1
             #acc = '🔩 Болт М69, возложенный на рейд'
             bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_1'), None)
@@ -5135,11 +5135,14 @@ def setGiftsForRaid(goat):
                 "on_raid": True 
             }):
             user = getUserByLogin(raid["login"])
+            if user:
+                user.setRaidLocation(None)
             # Снимаем больы, если последние два рейда были зачетными
             counter_r = report_raids.find({'login': user.getLogin()}).count()
             N = 2
             if counter_r < N:
-                continue
+                    updateUser(user)
+                    continue
             cursor = report_raids.find({'login': user.getLogin()}).skip(counter_r - N)
             alltrue = True
             for x in cursor:
@@ -5149,7 +5152,6 @@ def setGiftsForRaid(goat):
                 continue
 
             if user:
-                user.setRaidLocation(0)
                 counter = counter + 1
                 #acc = '🎫🍼 Билет на гигантскую бутылку'
                 bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_5'), None)
