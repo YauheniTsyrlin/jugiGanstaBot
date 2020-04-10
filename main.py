@@ -1572,12 +1572,9 @@ def main_message(message):
             return
         elif ('FIGHT!' in message.text):
             if new_Message:                     
-                # Учимся умению "Боец"
-                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='fighter'), None)
-                check_skills('FIGHT!', message.chat.id, False, userIAm, elem)
-                
                 ww = wariors.fromFightToWarioirs(message.forward_date, message, USERS_ARR, battle)
-
+                # Переделать так, чтобы учитывало, что может быть два бойца из нашего козла.
+                # Выдавать только за свои бои.
                 ourBandUser = None
                 for warior in ww:
                     if ourBandUser == None:
@@ -1585,6 +1582,12 @@ def main_message(message):
                     update_warior(warior)
             
                 if ourBandUser:
+                    
+                    if ourBandUser.getLogin() == message.from_user.username:
+                        # Учимся умению "Боец"
+                        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='fighter'), None)
+                        check_skills('FIGHT!', message.chat.id, False, userIAm, elem)
+
                     for w in battle.find({
                         # 'login': message.from_user.username, 
                         'date': message.forward_date}):
