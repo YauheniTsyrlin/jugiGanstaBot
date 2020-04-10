@@ -605,9 +605,10 @@ def getRaidTimeText(text, date):
 #date_stamp = getRaidTimeText("1ч. 15мин.", 1586177073)
 #date_str = time.strftime("%d.%m %H:%M", time.gmtime( (datetime.fromtimestamp(date_stamp) + timedelta(hours=tz.hour)).timestamp()))
 
-user = getUserByLogin('GonzikBenzyavsky')
-for inv in user.getInventory():
-    print(f'{inv}')
+searchfor = ['опустошил бокал бурбона.', 'жадно ест сухари.']
+searchstr = 'опустошил бокал бурбона. жадно'
+if len([ele for ele in searchfor if(ele in searchstr)])>0:
+    print('res')
 
 
 # send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text + 
