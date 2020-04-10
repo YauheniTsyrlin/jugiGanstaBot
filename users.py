@@ -347,6 +347,8 @@ class User(object):
 
     def getLogin(self):
         return self.login
+    def setLogin(self, login):
+        self.login = login
 
     def setName(self, name):
         self.name = tools.deEmojify(name)
