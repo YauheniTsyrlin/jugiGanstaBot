@@ -3332,14 +3332,12 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-user = getUserByLogin('EkoveS')
-user.setLogin('Brodskey')
-
-newvalues = { "$set": json.loads(user.toJSON()) }
-z = registered_users.update_one({"name": f"{user.getName()}"}, newvalues)
-
-
-print(f'OK {z.matched_count}')
+# Смена логина пользователя
+# user = getUserByLogin('EkoveS')
+# user.setLogin('Brodskey')
+# newvalues = { "$set": json.loads(user.toJSON()) }
+# z = registered_users.update_one({"name": f"{user.getName()}"}, newvalues)
+# print(f'OK {z.matched_count}')
 
 clothes = ['medical_mask']
 if 1==2:

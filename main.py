@@ -1436,7 +1436,7 @@ def get_message_stiker(message):
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
-    #write_json(message.json)
+    # write_json(message.json)
     chat = message.chat.id
     privateChat = ('private' in message.chat.type)
     logger.info(f'chat:{message.chat.id}:{"private" if privateChat else "Group"}:{message.from_user.username}:{datetime.fromtimestamp(message.forward_date) if message.forward_date else ""}:{message.text}')
@@ -1500,7 +1500,7 @@ def main_message(message):
 
     # Форварды от WastelandWarsBot
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
-        filter_message = { "forward_from_username": message.forward_from.username, "forward_date": message.forward_date}
+        filter_message = {"forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
         new_Message = messager.new_message(message, filter_message)
         time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
         
