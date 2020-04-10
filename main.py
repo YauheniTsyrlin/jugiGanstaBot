@@ -115,8 +115,11 @@ GLOBAL_VARS = {
                     'inventory':[]
                 },
     'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'],
-    'private_buttons': ['📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика', '🧺 Барахолка'],
-    'group_buttons': ['Джу, 📋 Отчет', f'Джу, ⏰ план рейда', '📈 Статистика']
+    'group_buttons': ['Джу, 📋 Отчет', f'Джу, ⏰ план рейда', '📈 Статистика'],
+    'private_buttons': ['📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика', '🧺 Комиссионка'],
+    '🧺 Комиссионка': ['На полках', 'Сдать', '♻️ Разменять', 'Назад'],
+    '♻️ Разменять': ['♻️ Назад'] 
+
 }
 
 def check_and_register_tg_user(tg_login: str):
@@ -1095,16 +1098,19 @@ def default_query(inline_query):
     except Exception as e:
         print(e)
 
-@bot.message_handler(func=lambda message: message.text and 'private' == message.chat.type and ('🧺 Барахолка' == message.text))
+@bot.message_handler(func=lambda message: message.text and 'private' == message.chat.type and ('🧺 Комиссионка' == message.text))
 def send_baraholka(message):
+    btn = '🧺 Комиссионка'
     #write_json(message.json)
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то наговорить, но у него получилось лишь:\n' + getResponseDialogFlow(message.from_user.username, 'user_banned').fulfillment_text)
         return
 
-    markup = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
-    markup.add('Купить ✅', 'Продать ❌', 'Назад 📋🔚')
+    markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    for row in build_menu(buttons=btn, n_cols=3):
+        markup.row(*row)  
+
     bot.send_message(message.chat.id, text='Твой выбор...', reply_markup=markup)
     bot.register_next_step_handler(message, process_partizan_step)   
     

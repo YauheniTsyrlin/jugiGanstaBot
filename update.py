@@ -3218,7 +3218,7 @@ newvalues = { "$set": { "value":
                 {'band': 'ЭнтрǁØǁпия'},
                 {'band': 'ЩекØтилы БанȺнов'},
 
-                {'band': 'Легенды Пустоши'},
+                {'band': 'New Vegas'},
                 {'band': 'Тамплиеры'}
                 
             ]
@@ -3276,22 +3276,21 @@ newvalues = { "$set":
 
                         },
                         { 
-                            'name': 'Легенды Пустоши',
+                            'name': 'New Vegas',
                             'boss': [
-                                        'EkoveS',
-                                        'PutayuPedali',
+                                        'SSG76reg'
                                     ],
                             'bands': 
                                     [
                                         {
-                                            'name': 'Легенды Пустоши',
-                                            'boss': 'EkoveS'
+                                            'name': 'New Vegas',
+                                            'boss': 'SSG76reg'
                                         }
                                     ],
                             'chats': 
                                     {
-                                        'secret' : -1001240140243,
-                                        'info' : -488189089
+                                        'secret' : -0,
+                                        'info' : -0
                                     }
                         },
                         { 
