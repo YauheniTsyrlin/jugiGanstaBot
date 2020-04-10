@@ -1152,7 +1152,8 @@ def send_back_from_usset(message):
     updateUser(user)
 
     markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    markup.add(GLOBAL_VARS['private_buttons'])
+    for row in build_menu(buttons=GLOBAL_VARS['private_buttons'], n_cols=3):
+        markup.row(*row)  
     bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
 
 @bot.message_handler(func=lambda message: message.content_type == 'text' and message.text in getUserSettingsName())
@@ -1189,7 +1190,8 @@ def process_partizan_step(message):
         updateUser(user)
 
         markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-        markup.add(GLOBAL_VARS['private_buttons'])
+        for row in build_menu(buttons=GLOBAL_VARS['private_buttons'], n_cols=3):
+            markup.row(*row)  
         bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
     else:
         bot.send_message(message.chat.id, text='Похоже, что ты меня не понял...')
@@ -1212,7 +1214,8 @@ def process_gerb_step(message):
                 updateUser(user)
 
                 markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-                markup.add(GLOBAL_VARS['private_buttons'])
+                for row in build_menu(buttons=GLOBAL_VARS['private_buttons'], n_cols=3):
+                    markup.row(*row)  
                 bot.send_message(message.chat.id, text=user.getSettingsReport(), reply_markup=markup)
                 break
     else:
@@ -1225,7 +1228,8 @@ def send_back_from_usset(message):
         bot.send_message(message.chat.id, text='Иди в личный чат!')
         return
     markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    markup.add(GLOBAL_VARS['private_buttons'])
+    for row in build_menu(buttons=GLOBAL_VARS['private_buttons'], n_cols=3):
+        markup.row(*row)  
     bot.send_message(message.chat.id, text='Вернулся...', reply_markup=markup)
 
 # Handle /usset
@@ -1436,7 +1440,7 @@ def get_message_stiker(message):
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
-    # write_json(message.json)
+    #  write_json(message.json)
     chat = message.chat.id
     privateChat = ('private' in message.chat.type)
     logger.info(f'chat:{message.chat.id}:{"private" if privateChat else "Group"}:{message.from_user.username}:{datetime.fromtimestamp(message.forward_date) if message.forward_date else ""}:{message.text}')
