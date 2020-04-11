@@ -1846,7 +1846,7 @@ def main_message(message):
                         if goat['name'] == wild_goat:
                             emoji = ''
                         kubik = '▫️' 
-                        if goat['name'] == getMyGoatName(message.from_user.username)
+                        if goat['name'] == getMyGoatName(message.from_user.username):
                             kubik = '▪️'
                         report_goat_info = report_goat_info + f'{kubik} {emoji}<b>{goat["name"]}</b>: <b>{goat["counter"]}</b> 📯{goat["bm"]}\n'
 
