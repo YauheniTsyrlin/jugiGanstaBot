@@ -1836,7 +1836,7 @@ def main_message(message):
                     report_goat_info = report_goat_info + '\n'
 
                     report_goat_info = report_goat_info + f'{"🚷" if dark_zone else ""}{km}'
-                    for goat in goats:
+                    for goat in list(filter(lambda x : len(x['wariors']) > 0, goats)):
                         emoji = '🐐 '
                         if goat['name'] == wild_goat:
                             emoji = ''
