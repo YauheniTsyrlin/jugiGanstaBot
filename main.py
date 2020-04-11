@@ -4837,14 +4837,20 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
 
     # Раздача рейдовых болтов
-    if now_date.hour in (1, 9, 17) and now_date.minute == 40 and now_date.second < 15:
-        try:
-            logger.info('raid bolt info!')
-            updateUser(None)
-            for goat in getSetting(code='GOATS_BANDS'):
+    if now_date.hour in (1, 9, 17) and now_date.minute == 31 and now_date.second < 15:
+        logger.info('raid bolt info!')
+        updateUser(None)
+        for goat in getSetting(code='GOATS_BANDS'):
+            try:
+                # выдаём болты
                 setGiftsForRaid(goat)
-        except:
-            send_message_to_admin(f'⚠️🤬 Сломалась Раздача рейдовых болтов!')
+                # зачищаем признак на рейде.
+                goat_bands = getGoatBands(goat['name'])
+                for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
+                    user.setRaidLocation(None)
+                    updateUser(user)
+            except:
+                send_message_to_admin(f'⚠️🤬 Сломалась Раздача рейдовых болтов по {goat["name"]}')
 
     # Проверка на дубликаты бандитов
     if now_date.hour in (9,10,11,12,13,14,15,16,17,18,19,20,21,22) and now_date.minute in (0,10,20,30,40,50) and now_date.second < 15:
@@ -5101,7 +5107,6 @@ def setGiftsForRaid(goat):
         }):
         user = getUserByLogin(raid["login"])
         if user:
-            user.setRaidLocation(None)
             counter = counter + 1
             #acc = '🔩 Болт М69, возложенный на рейд'
             bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_1'), None)
@@ -5164,13 +5169,10 @@ def setGiftsForRaid(goat):
                 "on_raid": True 
             }):
             user = getUserByLogin(raid["login"])
-            if user:
-                user.setRaidLocation(None)
             # Снимаем больы, если последние два рейда были зачетными
             counter_r = report_raids.find({'login': user.getLogin()}).count()
             N = 2
             if counter_r < N:
-                    updateUser(user)
                     continue
             cursor = report_raids.find({'login': user.getLogin()}).skip(counter_r - N)
             alltrue = True
