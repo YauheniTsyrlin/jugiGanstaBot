@@ -1389,6 +1389,8 @@ def get_message_photo(message):
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
         for warior in ww:
+            print(warior.getName())
+            print(warior.getGoat())
             update_warior(warior)
             wariorShow = getWariorByName(warior.getName(), warior.getFraction())
             markupinline = None
