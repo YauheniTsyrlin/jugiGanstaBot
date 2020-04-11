@@ -383,7 +383,6 @@ def getWariorFraction(string: str):
         if len(f)>0:
             return f[-1]                       
 
-
 def getWariorByName(name: str, fraction: str):
     name = tools.deEmojify(name).strip()
     for warior in list(WARIORS_ARR):
@@ -1106,7 +1105,7 @@ def default_query(inline_query):
     except Exception as e:
         print(e)
 
-@bot.message_handler(func=lambda message: message.text and 'private' == message.chat.type and ('🧺 Комиссионка' == message.text))
+@bot.message_handler(func=lambda message: message.text and ('🧺 Комиссионка' == message.text) and 'private' == message.chat.type)
 def send_baraholka(message):
     btn = '🧺 Комиссионка'
     #write_json(message.json)
@@ -1116,12 +1115,40 @@ def send_baraholka(message):
         return
 
     markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    for row in build_menu(buttons=btn, n_cols=3):
+    for row in build_menu(buttons=GLOBAL_VARS[btn], n_cols=3):
         markup.row(*row)  
 
-    bot.send_message(message.chat.id, text='Твой выбор...', reply_markup=markup)
-    bot.register_next_step_handler(message, process_partizan_step)   
-    
+    bot.send_message(message.chat.id, text='Ты зашел в комиссионку.\nТвой выбор...', reply_markup=markup)
+
+@bot.message_handler(func=lambda message: message.text and ('♻️ Разменять' == message.text) and 'private' == message.chat.type)
+def send_baraholka(message):
+    btn = '♻️ Разменять'
+    #write_json(message.json)
+    if isUserBan(message.from_user.username):
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то наговорить, но у него получилось лишь:\n' + getResponseDialogFlow(message.from_user.username, 'user_banned').fulfillment_text)
+        return
+
+    markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    buttons = []
+    step = 0
+    user = getUserByLogin(message.from_user.username)
+    for inv in user.getInventoryType({'type':'things'}):
+        buttons.append(f'{inv["name"]}')
+                
+    back_button = "Назад ♻️🔙"
+    exit_button = "Выйти ♻️❌"
+    forward_button = "Далее ♻️🔜"
+
+    for row in build_menu(buttons=buttons, n_cols=3, limit=9, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+        markup.row(*row)  
+
+    bot.send_message(message.chat.id, text='Твой инвентарь:', reply_markup=markup)
+    bot.register_next_step_handler(message, process_select_inventory)
+
+def process_select_inventory(message):
+    bot.send_message(message.chat.id, text=f'Выбрал {message.text}', reply_markup=None)
+
 @bot.message_handler(func=lambda message: message.text and ('📈 Статистика' == message.text))
 def send_back_from_usset(message):
     #write_json(message.json)

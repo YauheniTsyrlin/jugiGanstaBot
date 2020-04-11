@@ -561,6 +561,13 @@ class User(object):
                 return i
         return None
 
+    def getInventoryType(self, thing):
+        invs = []
+        for i in self.getInventory():
+            if ( thing['type'] == None or i['type'] == thing['type']):
+                invs.append(i)
+        return invs
+
     def getInventoryThingCount(self, thing):
         counter = 0
         for i in self.getInventory():

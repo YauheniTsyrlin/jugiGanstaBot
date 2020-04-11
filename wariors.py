@@ -346,6 +346,9 @@ class Warior(object):
                     self.setBand(strings[i].split('🤘')[1].strip())
                 if ('🐐' in strings[i]):
                     self.setGoat(strings[i].split('🤘')[0][1:].strip())
+                else:
+                    self.setGoat(None)
+
                 if (i==0):
                     if (strings[i].startswith('⚙️')):
                         self.setFraction('⚙️Убежище 4')
