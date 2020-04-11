@@ -364,6 +364,22 @@ class User(object):
         self.fraction = fraction
     def getFraction(self):
         return self.fraction
+    
+    def getFractionSmall(self):
+        if (self.getFraction().startswith('⚙️')):
+            return '⚙️'
+        elif (self.getFraction().startswith('🔪')):
+            return '🔪'
+        elif (self.getFraction().startswith('💣')):
+            return '💣'
+        elif (self.getFraction().startswith('⚛️')):
+            return '⚛️'
+        elif (self.getFraction().startswith('👙')):
+            return '👙'
+        elif (self.getFraction().startswith('🔰')):
+            return '🔰'
+
+        return self.fraction
 
     def setBand(self, band):
         self.band = band

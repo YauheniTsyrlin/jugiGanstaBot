@@ -1739,6 +1739,7 @@ def main_message(message):
                 average_bm =int(sum(bm)/len(bm))
 
                 # 🚷/👣52 км.
+                message.text = message.text + f'{userIAm.getFractionSmall()}{userIAm.getName()} | 👤\n'
                 strings = message.text.split('\n')
                 i = 0
                 find = False
@@ -2305,10 +2306,10 @@ def main_message(message):
                         result = boss.update_one({
                             'boss_name': name
                             }, newvalues)
-                        logger.info(f'UPDATE {newvalues}')
+                        #logger.info(f'UPDATE {newvalues}')
                         if result.matched_count < 1:
                             boss.insert_one(row)
-                            logger.info(f'insert_one {row}')
+                            #logger.info(f'insert_one {row}')
 
                     dresult = boss.aggregate([ 
                         {   "$group": {
