@@ -120,7 +120,7 @@ GLOBAL_VARS = {
     'eating_in_new_rino': ['опустошил бокал бурбона.', 'жадно ест сухари.'],
     'group_buttons': ['Джу, 📋 Отчет', f'Джу, ⏰ план рейда', '📈 Статистика'],
     'private_buttons': ['📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика', '🧺 Комиссионка'],
-    '🧺 Комиссионка': ['На полках', 'Сдать', '♻️ Разменять', 'Назад'],
+    '🧺 Комиссионка': ['На полках', 'Сдать', '♻️ Разменять', '🧺 Назад'],
     '♻️ Разменять': ['♻️ Назад'] 
 
 }
@@ -1119,34 +1119,99 @@ def send_baraholka(message):
         markup.row(*row)  
 
     bot.send_message(message.chat.id, text='Ты зашел в комиссионку.\nТвой выбор...', reply_markup=markup)
+    bot.register_next_step_handler(message, send_recycling)
 
-@bot.message_handler(func=lambda message: message.text and ('♻️ Разменять' == message.text) and 'private' == message.chat.type)
-def send_baraholka(message):
-    btn = '♻️ Разменять'
+#@bot.message_handler(func=lambda message: message.text and ('♻️ Разменять' == message.text) and 'private' == message.chat.type)
+def send_recycling(message):
+    recycling = '♻️ Разменять'
+    exit_up_button = '🧺 Назад'
     #write_json(message.json)
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то наговорить, но у него получилось лишь:\n' + getResponseDialogFlow(message.from_user.username, 'user_banned').fulfillment_text)
         return
 
-    markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    buttons = []
-    step = 0
+    if message.text == recycling:
+        markup = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
+        buttons = []
+        step = 0
+        user = getUserByLogin(message.from_user.username)
+        for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
+            buttons.append(f'{inv["name"]}')
+                    
+        back_button = "♻️ Назад 🔙({step-1})"
+        exit_button = "♻️ Выйти ❌"
+        forward_button = f"♻️ Далее 🔜({step+1})"
+
+        for row in build_menu(buttons=buttons, n_cols=3, limit=9, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+            markup.row(*row)  
+
+        bot.send_message(message.chat.id, text='Твой инвентарь:\nuser.getInventoryReport()', reply_markup=markup)
+        bot.register_next_step_handler(message, process_select_recycle)
+    elif message.text == exit_up_button:
+        markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+        for row in build_menu(buttons=GLOBAL_VARS['private_buttons'], n_cols=3):
+            markup.row(*row)  
+            
+        bot.send_message(message.chat.id, text='Вернулись...', reply_markup=markup)
+        bot.register_next_step_handler(message, send_baraholka)
+
+def process_select_recycle(message):
+    btn = '🧺 Комиссионка'
+    #write_json(message.json)
+    if isUserBan(message.from_user.username):
+        bot.delete_message(message.chat.id, message.message_id)
+        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то наговорить, но у него получилось лишь:\n' + getResponseDialogFlow(message.from_user.username, 'user_banned').fulfillment_text)
+        return
+
+    back_button = f"♻️ Назад 🔙"
+    exit_button = f"♻️ Выйти ❌"
+    forward_button = f"♻️ Далее 🔜"
+
     user = getUserByLogin(message.from_user.username)
-    for inv in user.getInventoryType({'type':'things'}):
-        buttons.append(f'{inv["name"]}')
-                
-    back_button = "Назад ♻️🔙"
-    exit_button = "Выйти ♻️❌"
-    forward_button = "Далее ♻️🔜"
+    markup = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
+    buttons = []
 
-    for row in build_menu(buttons=buttons, n_cols=3, limit=9, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
-        markup.row(*row)  
+    if message.text.startswith(back_button):
+        step = int(message.text.split('(')[1].split(')')[0].strip()) 
+        for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
+            buttons.append(f'{inv["name"]}')
+        
+        back_button = f"♻️ Назад 🔙({step-1})"
+        exit_button = "♻️ Выйти ❌"
+        forward_button = f"♻️ Далее 🔜({step+1})"
 
-    bot.send_message(message.chat.id, text='Твой инвентарь:', reply_markup=markup)
-    bot.register_next_step_handler(message, process_select_inventory)
+        for row in build_menu(buttons=buttons, n_cols=3, limit=9, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+            markup.row(*row)
 
-def process_select_inventory(message):
+        bot.send_message(message.chat.id, text=f'Назад...', reply_markup=markup)
+        bot.register_next_step_handler(message, process_select_recycle)
+        return
+    elif message.text.startswith(exit_button):
+        for row in build_menu(buttons=GLOBAL_VARS[btn], n_cols=3):
+            markup.row(*row)
+        bot.send_message(message.chat.id, text=f'Вернулись...', reply_markup=markup)
+        bot.register_next_step_handler(message, send_recycling)
+        return    
+    elif message.text.startswith(forward_button):
+        step = int(message.text.split('(')[1].split(')')[0].strip()) 
+        for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
+            buttons.append(f'{inv["name"]}')
+        
+        back_button = f"♻️ Назад 🔙({step-1})"
+        exit_button = "♻️ Выйти ❌"
+        forward_button = f"♻️ Далее 🔜({step})"
+
+        for row in build_menu(buttons=buttons, n_cols=3, limit=9, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+            markup.row(*row)
+
+        bot.send_message(message.chat.id, text=f'Далее...', reply_markup=markup)
+        bot.register_next_step_handler(message, process_select_recycle)
+        return    
+    else:
+        pass        
+        
+        
     bot.send_message(message.chat.id, text=f'Выбрал {message.text}', reply_markup=None)
 
 @bot.message_handler(func=lambda message: message.text and ('📈 Статистика' == message.text))
@@ -1389,10 +1454,10 @@ def get_message_photo(message):
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
         for warior in ww:
-            print(warior.getName())
-            print(warior.getGoat())
+            print(warior.getBand()) 
             update_warior(warior)
             wariorShow = getWariorByName(warior.getName(), warior.getFraction())
+            print(wariorShow.getBand()) 
             markupinline = None
             
             user = getUserByName(wariorShow.getName())
