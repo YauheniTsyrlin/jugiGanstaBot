@@ -1735,7 +1735,7 @@ def main_message(message):
                     if userBm and userBm > 0:
                         bm.append(user.getBm())                
                 average_k_bm =(sum(k_bm)/len(k_bm))
-                average_bm =(sum(bm)/len(bm))
+                average_bm =int(sum(bm)/len(bm))
 
                 # 🚷/👣52 км.
                 strings = message.text.split('\n')
