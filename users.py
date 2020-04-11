@@ -515,22 +515,22 @@ class User(object):
                 group = list(gr)
                 
                 percent = 0
-                if list(group)[0]["type"] == 'skill':
+                if list(group)[-1]["type"] == 'skill':
                     try:
-                        storage = list(group)[0]['storage']
+                        storage = list(group)[-1]['storage']
                         if storage > 0:
-                            percent = int(storage*100/list(group)[0]['max'])
+                            percent = int(storage*100/list(group)[-1]['max'])
                     except: pass
 
-                elif list(group)[0]["type"] == 'clothes':
+                elif list(group)[-1]["type"] == 'clothes':
                     try:
-                        wear = list(group)[0]['wear']['value']
+                        wear = list(group)[-1]['wear']['value']
                         if wear > 0:
                             percent = int(wear*100/1)
                     except: pass
 
 
-                report = report + f'▫️ {list(group)[0]["name"]} {str(percent)+"%" if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""}\n'
+                report = report + f'▫️ {list(group)[-1]["name"]} {str(percent)+"%" if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""}\n'
                 for elem in list(group):
                     cost = cost + elem["cost"]
 

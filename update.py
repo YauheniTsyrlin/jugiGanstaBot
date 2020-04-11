@@ -3337,7 +3337,7 @@ print("#==========================#")
 # newvalues = { "$set": json.loads(user.toJSON()) }
 # z = registered_users.update_one({"name": f"{user.getName()}"}, newvalues)
 # print(f'OK {z.matched_count}')
-registered_users.delete_many({'login': 'Brodskey', 'timeUpdate': 1586518457})
+# registered_users.delete_many({'login': 'Brodskey', 'timeUpdate': 1586518457})
 
 
 clothes = ['medical_mask']
