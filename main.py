@@ -114,6 +114,7 @@ GLOBAL_VARS = {
                 {
                     'inventory':[]
                 },
+    'fractions':  ['⚙️Убежище 4', '⚙️Убежище 11', '🔪Головорезы', '💣Мегатонна', '⚛️Республика', '👙Клуб бикини', '🔰Конкорд'],
     'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'],
     'fight_log_message' : ['отдал на съедение кротокрысам', 'одержал победу над', 'не оставил живого места от', 'гордо наступил на полудохлого', 'оставил бездыханное тело', 'сделал сиротами детишек', 'добил с пинка', 'добил лежачего', 'выписал пропуск в Вальхаллу', 'добил фаталити', 'стоит над поверженным', 'одержал победу над'],
     'eating_in_new_rino': ['опустошил бокал бурбона.', 'жадно ест сухари.'],
@@ -377,6 +378,11 @@ def getWariorFraction(string: str):
         return '👙Клуб бикини'
     elif (string.startswith('🔰')):
         return '🔰Конкорд'
+    else:
+        f = [ele for ele in GLOBAL_VARS['fractions'] if(ele in string)]
+        if len(f)>0:
+            return f[-1]                       
+
 
 def getWariorByName(name: str, fraction: str):
     name = tools.deEmojify(name).strip()
@@ -1654,6 +1660,29 @@ def main_message(message):
                         name = name.split('#@#')[1].split(fr)[0].strip()
                 name = tools.deEmojify(name)
                 warior = getWariorByName(name, fraction)
+
+                if warior == None:
+                    send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
+                elif (warior and warior.photo):
+                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                else:
+                    send_messages_big(message.chat.id, text=warior.getProfile())
+            else:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_you_cant').fulfillment_text)
+            return
+        elif ('Тренировки не прошли даром:' in message.text and 'Ты забрал часть его припасов' in message.text):
+            #write_json(message.json)
+            if hasAccessToWariors(message.from_user.username):
+
+                warior = None
+                fractions =                [ele for ele in GLOBAL_VARS['eating_in_new_rino'] if(ele in message.text)]                        
+                for s in message.text.split('\n'):
+                    if s.startswith('Ты забрал часть его припасов у 👤'):
+                        fraction = getWariorFraction(s)
+                        name = name.split('Ты забрал часть его припасов у 👤')[1].split(' из ' + fraction)[0].strip()
+                        name = tools.deEmojify(name)
+                        warior = getWariorByName(name, fraction)
+                        break
 
                 if warior == None:
                     send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
