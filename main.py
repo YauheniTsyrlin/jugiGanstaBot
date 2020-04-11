@@ -1728,9 +1728,14 @@ def main_message(message):
             if hasAccessToWariors(message.from_user.username):
                 goat_bands = getGoatBands(getMyGoatName(message.from_user.username))
                 k_bm = []
+                bm = []
                 for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
-                    k_bm.append(user.getHealth()/user.getBm())                     
+                    k_bm.append(user.getHealth()/user.getBm())
+                    userBm = user.getBm()
+                    if userBm and userBm > 0:
+                        bm.append(user.getBm())                
                 average_k_bm =(sum(k_bm)/len(k_bm))
+                average_bm =(sum(bm)/len(bm))
 
                 # 🚷/👣52 км.
                 strings = message.text.split('\n')
@@ -1781,7 +1786,7 @@ def main_message(message):
                                         wariors_arr = g['wariors']
                                         wariors_arr.append(warior)
                                         g.update({'wariors': wariors_arr})
-                                        bm = g['bm'] + warior.getBm(average_k_bm)
+                                        bm = g['bm'] + warior.getBm(average_k_bm, average_bm)
                                         g.update({'bm': bm})
                                         findGoat = True
                                 
@@ -1792,7 +1797,7 @@ def main_message(message):
                                     wariors_arr = []
                                     wariors_arr.append(warior)
                                     g.update({'wariors': wariors_arr})
-                                    bm = warior.getBm(average_k_bm)
+                                    bm = warior.getBm(average_k_bm, average_bm)
                                     g.update({'bm': bm})                                    
                                     goats.append(g)
                             else:
@@ -1802,7 +1807,7 @@ def main_message(message):
                                         wariors_arr = g['wariors']
                                         wariors_arr.append(warior)
                                         g.update({'wariors': wariors_arr})
-                                        bm = g['bm'] + warior.getBm(average_k_bm)
+                                        bm = g['bm'] + warior.getBm(average_k_bm, average_bm)
                                         g.update({'bm': bm})     
 
 
@@ -1831,12 +1836,12 @@ def main_message(message):
                         if goat['name'] == wild_goat:
                             emoji = ''
                         report_goat_info = report_goat_info + f'{emoji}<b>{goat["name"]}</b>: <b>{goat["counter"]}</b>\n\n'
-                        for w in goat['wariors']:
+                        for w in sorted(goat['wariors'], key = lambda i: i.getBm(average_k_bm, average_bm), reverse=True):
                             report_goat_info = report_goat_info + f'{w.getProfileVerySmall()}\n'
                     report_goat_info = report_goat_info + '\n'
 
                     report_goat_info = report_goat_info + f'{"🚷" if dark_zone else ""}{km}'
-                    for goat in list(filter(lambda x : len(x['wariors']) > 0, goats)):
+                    for goat in sorted(list(filter(lambda x : len(x['wariors']) > 0, goats)), key = lambda i: i['bm'], reverse=True):
                         emoji = '🐐 '
                         if goat['name'] == wild_goat:
                             emoji = ''
