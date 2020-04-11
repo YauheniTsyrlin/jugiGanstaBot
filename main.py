@@ -1726,6 +1726,12 @@ def main_message(message):
             #write_json(message.json)
 
             if hasAccessToWariors(message.from_user.username):
+                goat_bands = getGoatBands(getMyGoatName(message.from_user.username))
+                k_bm = []
+                for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
+                    k_bm.append(user.getHealth()/user.getBm())                     
+                average_k_bm =(sum(k_bm)/len(k_bm))
+
                 # 🚷/👣52 км.
                 strings = message.text.split('\n')
                 i = 0
@@ -1741,14 +1747,16 @@ def main_message(message):
                 goat_wild = {}
                 wild_goat = 'Дикие бандиты'
                 goat_wild.update({'counter': 0})
+                goat_wild.update({'bm': 0})
                 goat_wild.update({'name': wild_goat})
-                goat_wild.update({'wariors':[]})
+                wariors_arr = []
+                goat_wild.update({'wariors':wariors_arr})
                 goats.append(goat_wild)
-
+                km = ""
                 for s in strings:
                     if ('👣' in s or '🚷' in s) and ' км' in s:
-                        # km = int(s.split('👣')[1].split('км')[0])
-                        report_goat_info = report_goat_info + f'<b>{s}</b>\n'
+                        km = f'<b>{s}</b>\n'
+                        report_goat_info = report_goat_info + km
                     if s.startswith('🚷'):
                         dark_zone = True
                     if '|' in strings[i]:
@@ -1770,23 +1778,36 @@ def main_message(message):
                                 for g in goats:
                                     if g['name'] == warior.getGoat():
                                         g.update({'counter': g['counter']+1})
-                                        g.update({'wariors': g['wariors'].append(warior)})
+                                        wariors_arr = g['wariors']
+                                        wariors_arr.append(warior)
+                                        g.update({'wariors': wariors_arr})
+                                        bm = g['bm'] + warior.getBm(average_k_bm)
+                                        g.update({'bm': bm})
                                         findGoat = True
                                 
                                 if not findGoat:
-                                    goat = {}
-                                    goat.update({'counter': 1})
-                                    goat.update({'name': warior.getGoat()})
-                                    goat.update({'wariors':[].append(warior)})
-                                    goats.append(goat)
+                                    g = {}
+                                    g.update({'counter': 1})
+                                    g.update({'name': warior.getGoat()})
+                                    wariors_arr = []
+                                    wariors_arr.append(warior)
+                                    g.update({'wariors': wariors_arr})
+                                    bm = warior.getBm(average_k_bm)
+                                    g.update({'bm': bm})                                    
+                                    goats.append(g)
                             else:
                                 for g in goats:
                                     if g['name'] == wild_goat:
                                         g.update({'counter': g['counter']+1})
+                                        wariors_arr = g['wariors']
+                                        wariors_arr.append(warior)
+                                        g.update({'wariors': wariors_arr})
+                                        bm = g['bm'] + warior.getBm(average_k_bm)
+                                        g.update({'bm': bm})     
 
 
                             find = True
-                            report = report + f'{warior.getProfileSmall()}\n'
+                            # report = report + f'{warior.getProfileSmall()}\n'
                         else:
                             counter = counter + 1    
                     if '...И еще' in strings[i]:
@@ -1802,15 +1823,28 @@ def main_message(message):
                     for row in build_menu(buttons=buttons, n_cols=2):
                         markupinline.row(*row)   
 
-                logger.info(goats)
+                # logger.info(goats)
 
                 if len(goats) > 0:
-                    for goat in goats:
-                        report_goat_info = report_goat_info + f'🐐 {goat["name"]}: <b>{goat["counter"]}</b>\n'
+                    for goat in list(filter(lambda x : len(x['wariors']) > 0, goats)):
+                        emoji = '🐐 '
+                        if goat['name'] == wild_goat:
+                            emoji = ''
+                        report_goat_info = report_goat_info + f'{emoji}<b>{goat["name"]}</b>: <b>{goat["counter"]}</b>\n\n'
+                        for w in goat['wariors']:
+                            report_goat_info = report_goat_info + f'{w.getProfileVerySmall()}\n'
                     report_goat_info = report_goat_info + '\n'
-                
+
+                    report_goat_info = report_goat_info + f'{"🚷" if dark_zone else ""}{km}'
+                    for goat in goats:
+                        emoji = '🐐 '
+                        if goat['name'] == wild_goat:
+                            emoji = ''
+                        report_goat_info = report_goat_info + f'▫️ {emoji}<b>{goat["name"]}</b>: <b>{goat["counter"]}</b> 📯{goat["bm"]}\n'
+
+
                 if counter > 0:
-                    report_goat_info = report_goat_info + f'...И еще {str(counter)} выживших.'
+                    report_goat_info = report_goat_info + f'...И еще <b>{str(counter)}</b> выживших.'
 
                 if not find:
                     send_messages_big(message.chat.id, text='Не нашел никого!')

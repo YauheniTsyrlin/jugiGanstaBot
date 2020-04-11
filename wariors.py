@@ -418,6 +418,39 @@ class Warior(object):
             second_string = '└...'
         return string + '\n' + second_string
 
+    def getProfileVerySmall(self):
+        first_string = f'    ┌{tools.getTimeEmoji(self.timeUpdate)}{self.getFractionSmall()} {self.name}'
+        
+        string = '    ├'
+        if string == '    ├':
+            string = ''
+        else:
+            string = string + '\n'
+        second_string = '    └'
+
+        if self.health:
+            second_string = second_string + f'❤{self.health}'
+
+        if self.bm:
+            if not self.bm == 0:
+                second_string = second_string + f'📯{self.bm}' 
+
+        if self.enemy_armor:
+            if self.damage:
+                second_string = second_string + f'💥{self.damage} при 🛡{self.enemy_armor}'
+            else:
+                pass
+        else:
+            if self.damage:
+                second_string = second_string + f'💥{self.damage}' 
+        
+        if second_string == '    └':
+            second_string = '    └...'
+        else:
+            second_string = second_string + '\n'
+
+        return first_string + '\n' + string + second_string
+
     def getProfileSmall(self):
         first_string = f'┌{tools.getTimeEmoji(self.timeUpdate)}{self.getFractionSmall()} {self.name}'
         
@@ -560,9 +593,17 @@ class Warior(object):
         return self.regeneration
 
     def setBm(self, bm):
-        self.bm = bm
-    def getBm(self):
-        return self.bm
+        self.bm = int(bm)
+    def getBm(self, avr_k=None):
+        result = None
+        if avr_k==None:
+            result = int(self.bm)
+        else:
+            if self.bm:
+                result = int(self.bm)
+            else:
+                result = int(self.health/avr_k)
+        return result
 
     def setHithimself(self, hithimself):
         self.hithimself = hithimself

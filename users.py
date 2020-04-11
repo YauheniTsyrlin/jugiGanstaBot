@@ -374,7 +374,7 @@ class User(object):
     def setHealth(self, health):
         self.health = int(health)
     def getHealth(self):
-        return self.health
+        return int(self.health)
 
     def setHunger(self, hunger):
         self.hunger = hunger
