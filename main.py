@@ -1679,7 +1679,7 @@ def main_message(message):
                 for s in message.text.split('\n'):
                     if s.startswith('Ты забрал часть его припасов у 👤'):
                         fraction = getWariorFraction(s)
-                        name = name.split('Ты забрал часть его припасов у 👤')[1].split(' из ' + fraction)[0].strip()
+                        name = s.split('Ты забрал часть его припасов у 👤')[1].split(' из ' + fraction)[0].strip()
                         name = tools.deEmojify(name)
                         warior = getWariorByName(name, fraction)
                         break
