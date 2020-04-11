@@ -1737,6 +1737,14 @@ def main_message(message):
                 km = 0
                 dark_zone = False
                 user_in_dark_zone = []
+
+                goat_wild = {}
+                wild_goat = 'Дикие бандиты'
+                goat_wild.update({'counter': 0})
+                goat_wild.update({'name': wild_goat})
+                goat_wild.update({'wariors':[]})
+                goats.append(goat_wild)
+
                 for s in strings:
                     if ('👣' in s or '🚷' in s) and ' км' in s:
                         # km = int(s.split('👣')[1].split('км')[0])
@@ -1762,13 +1770,20 @@ def main_message(message):
                                 for g in goats:
                                     if g['name'] == warior.getGoat():
                                         g.update({'counter': g['counter']+1})
+                                        g.update({'wariors': g['wariors'].append(warior)})
                                         findGoat = True
                                 
                                 if not findGoat:
                                     goat = {}
                                     goat.update({'counter': 1})
                                     goat.update({'name': warior.getGoat()})
+                                    goat.update({'wariors':[].append(warior)})
                                     goats.append(goat)
+                            else:
+                                for g in goats:
+                                    if g['name'] == wild_goat:
+                                        g.update({'counter': g['counter']+1})
+
 
                             find = True
                             report = report + f'{warior.getProfileSmall()}\n'
@@ -1786,6 +1801,8 @@ def main_message(message):
                     markupinline = InlineKeyboardMarkup(row_width=2)
                     for row in build_menu(buttons=buttons, n_cols=2):
                         markupinline.row(*row)   
+
+                logger.info(goats)
 
                 if len(goats) > 0:
                     for goat in goats:
@@ -5026,7 +5043,7 @@ def saveRaidResult(goat):
                     report_raids.insert_one(row)
 
 def radeReport(goat, ping=False, planRaid=True):
-
+    updateUser(None)
     raidInfo = getPlanedRaidLocation(goat.get('name'), planRaid)
     logger.info(raidInfo)
 
