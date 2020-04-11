@@ -594,7 +594,7 @@ class Warior(object):
 
     def setBm(self, bm):
         self.bm = int(bm)
-    def getBm(self, avr_k=None):
+    def getBm(self, avr_k=None, avr_bm=None):
         result = None
         if avr_k==None:
             result = int(self.bm)
@@ -602,7 +602,10 @@ class Warior(object):
             if self.bm:
                 result = int(self.bm)
             else:
-                result = int(self.health/avr_k)
+                if self.health:
+                    result = int(self.health/avr_k)
+                else:
+                    result = avr_bm
         return result
 
     def setHithimself(self, hithimself):
