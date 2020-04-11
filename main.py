@@ -1772,10 +1772,14 @@ def main_message(message):
                         name = tools.deEmojify(name)
                         warior = getWariorByName(name, fraction)
                         
-                        if dark_zone:
-                            user = getUserByName(name)
-                            if user:
+                        user = getUserByName(name)
+                        
+                        if user:
+                            if dark_zone:
                                 user_in_dark_zone.append(user.getLogin())  
+                            if warior:
+                                warior.setBm(user.getBm())
+                                update_warior(warior)
 
                         if warior:
                             if warior.getGoat():
@@ -1840,7 +1844,7 @@ def main_message(message):
                             report_goat_info = report_goat_info + f'{w.getProfileVerySmall()}\n'
                     report_goat_info = report_goat_info + '\n'
 
-                    report_goat_info = report_goat_info + f'{"🚷" if dark_zone else ""}{km}'
+                    report_goat_info = report_goat_info + f'{km}'
                     for goat in sorted(list(filter(lambda x : len(x['wariors']) > 0, goats)), key = lambda i: i['bm'], reverse=True):
                         emoji = '🐐 '
                         if goat['name'] == wild_goat:
