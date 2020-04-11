@@ -1644,6 +1644,7 @@ def main_message(message):
                         else:
                             if (random.random() <= float(getSetting(code='PROBABILITY', name='YOU_LOSER'))):
                                 bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_CRY'), 1)[0]['value'])
+                        break
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
             else:
                 send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
@@ -2516,14 +2517,15 @@ def main_message(message):
             return
         elif (message.text.startswith('Рейд в 17:00') or message.text.startswith('Рейд в 9:00') or message.text.startswith('Рейд в 01:00')):
             
-            if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
-                #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                send_messages_big(message.chat.id, text='Поздняк! У тебя было 30 минут, чтобы прислать это. Статистика уже собрана и отправлена в библиотеку пустоши!')
-                return
+            # if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
+            #     #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+            #     send_messages_big(message.chat.id, text='Поздняк! У тебя было 30 минут, чтобы прислать это. Статистика уже собрана и отправлена в библиотеку пустоши!')
+            #     return
             
             tz = config.SERVER_MSK_DIFF
             date = (datetime.fromtimestamp(message.forward_date).replace(minute=0, second=0) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
             raid = getPlanedRaidLocation(getMyGoatName(message.from_user.username), planRaid = False)
+
             if raid['rade_location']:
                 if raid['rade_date'] == date:
                     u = getUserByLogin(message.from_user.username)

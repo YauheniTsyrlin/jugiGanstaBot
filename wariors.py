@@ -231,7 +231,7 @@ def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
         # if fillResult and '❤️' in s and '💥' in s
 
         if fillResult and (result[0].name in strings[i] and result[1].name in strings[i]):
-            if (tools.deEmojify(strings[i]).startswith(result[0].name)):
+            if (tools.deEmojify(strings[i]).strip().startswith(tools.deEmojify(result[0].name))):
                 result[0].kills = result[0].kills + 1
                 winnerName = result[0].name
                 loserName = result[1].name
