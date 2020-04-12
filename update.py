@@ -714,6 +714,18 @@ newvalues = { "$set": { "value":
                                     'name': '⚜️ Судья Клуба UFC',
                                     'type': 'position',
                                     'cost': 0
+                                },
+                                {
+                                    'id': 'economist_1',
+                                    'name': '🗃️ Товаровед',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'economist_2',
+                                    'name': '🗃📈 Главный бухгалтер',
+                                    'type': 'position',
+                                    'cost': 0
                                 }
                             ] 
                         },
@@ -1124,6 +1136,38 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
+                                    'id': 'economist',
+                                    'name': '📊 Экономист',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': None,
+                                    'min': 80,
+                                    'max': 100,
+                                    'storage': 0,
+                                    'subjects_of_study':
+                                    [
+                                        # Учимся на количестве обновленных бандитов из wwtop
+                                    ],
+                                    'dialog_old_text': 'old_report_wwtop',
+                                    'flags': {
+                                        'congratulation_min': False,
+                                        'position_min': 'economist_1',
+                                        'present_min': 
+                                            {
+                                                'id': 'certificate_economist_1',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            },
+                                        'congratulation_max': False,
+                                        'position_max': 'economist_2',
+                                        'present_max': 
+                                            {
+                                                'id': 'certificate_economist_2',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            }
+                                        }
+                                }
+                                ,
+                                {
                                     'id': 'fighter',
                                     'name': '🤼‍♂️ Боец',
                                     'cost': 0,
@@ -1443,16 +1487,28 @@ newvalues = { "$set": { "value":
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                     
-                                }
-                                ,
+                                },
+                                {
+                                    'id': 'certificate_economist_1',
+                                    'name': '📘 Диплом бакалавра',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
+                                },
+                                {
+                                    'id': 'certificate_economist_2',
+                                    'name': '📕 Диплом экономиста',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
+                                },
                                 {
                                     'id': 'certificate_fighter_1',
                                     'name': '💪 Пропуск в Клуб UFC',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
-                                }
-                                ,
+                                },
                                 {
                                     'id': 'certificate_fighter_2',
                                     'name': '🥇 Медаль Чемпиона клуба UFC',

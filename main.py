@@ -397,6 +397,10 @@ def isKnownWarior(name: str, fraction: str):
     return False
 
 def update_warior(warior: wariors.Warior):
+    result = {
+            'new': False,
+            'bm_update': False
+        }
     if warior == None:
         pass
     else:
@@ -410,14 +414,20 @@ def update_warior(warior: wariors.Warior):
         else:
             updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
 
+        if wariorToUpdate and updatedWarior:
+            if not wariorToUpdate.getBm() == updatedWarior.getBm():      
+                result.update({'bm_update': True})
+
         newvalues = { "$set": json.loads(updatedWarior.toJSON()) }
-        result = registered_wariors.update_one({
+        resultupdata = registered_wariors.update_one({
             "name": f"{updatedWarior.getName()}", 
             "fraction": f"{updatedWarior.getFraction()}"
             }, newvalues)
-        if result.matched_count < 1:
-            # else:
-            #     logger.info(f'======= НЕ нашли бандита')
+        if resultupdata.matched_count < 1:
+            # logger.info(f'======= НЕ нашли бандита')
+            result.update({'new': True})
+            result.update({'bm_update': True})
+
             registered_wariors.insert_one(json.loads(warior.toJSON()))
             send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}')
 
@@ -429,6 +439,8 @@ def update_warior(warior: wariors.Warior):
     global WARIORS_ARR
     WARIORS_ARR.clear() 
     WARIORS_ARR = WARIORS_ARR + arr 
+    
+    return result
 
 def setSetting(code: str, value: str):
 
@@ -989,14 +1001,15 @@ def dzen_rewards(user, num_dzen, message):
             else:
                 send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
 
-def check_skills(text, chat, time_over, userIAm, elem):
-    count = 0
-    for s in text.split('\n'):
-        for skill_sign in elem['subjects_of_study']:
-            if (s.startswith('Получено:') or s.startswith('Бонус:') or (s.startswith('💰')) ) and skill_sign in s or (s == 'FIGHT!' and skill_sign in s):
-                if ' x' in s:
-                    count = count + int(s.replace('/buy_trash','').split(' x')[1].strip())
-                else: count = count + 1
+def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
+    count = counterSkill
+    if text:
+        for s in text.split('\n'):
+            for skill_sign in elem['subjects_of_study']:
+                if (s.startswith('Получено:') or s.startswith('Бонус:') or (s.startswith('💰')) ) and skill_sign in s or (s == 'FIGHT!' and skill_sign in s):
+                    if ' x' in s:
+                        count = count + int(s.replace('/buy_trash','').split(' x')[1].strip())
+                    else: count = count + 1
     if count > 0:
         if not time_over:
             if not userIAm.isInventoryThing(elem):
@@ -1631,24 +1644,29 @@ def main_message(message):
                 '🏆ТОП МАГНАТОВ' in message.text):
                 return
 
-            if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+            if time_over:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
                 return
 
             if 'ТОП ИГРОКОВ:' in message.text:
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
+                countLearnSkill = 0
                 for warior in ww:
-                    update_warior(warior)
+                    res = update_warior(warior)
+                    print(f'{res} : {warior.getName()}')
+                    if res['bm_update']:
+                        countLearnSkill = countLearnSkill + 1
+                
+                # Учимся умению "Экономист"
+                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='economist'), None)
+                if countLearnSkill > 0:
+                    check_skills(None, message.chat.id, False, userIAm, elem, counterSkill=countLearnSkill)
+                else:
+                    send_messages_big(chat, text=getResponseDialogFlow(None, elem["dialog_old_text"]).fulfillment_text)
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
                 return
-
-            # if privateChat or (not isRegisteredUserLogin(message.from_user.username)) or isGoatSecretChat(message.from_user.username, message.chat.id):
-            #     pass
-            # else:
-            #     censored(message)
             
             user = users.User(message.from_user.username, message.forward_date, message.text)
-            
             if findUser==False:  
                 if 'Подробности /me' in message.text or (not privateChat): 
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'pip_me').fulfillment_text)
@@ -1677,9 +1695,7 @@ def main_message(message):
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
                 dzen_rewards(updatedUser, updatedUser.getDzen(), message)
                 updateUser(updatedUser)
-
             addToUserHistory(user)
-                
             if privateChat:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'setpip').fulfillment_text)
             else:
@@ -1702,7 +1718,7 @@ def main_message(message):
                     if ourBandUser.getLogin() == message.from_user.username:
                         # Учимся умению "Боец"
                         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='fighter'), None)
-                        check_skills('FIGHT!', message.chat.id, False, userIAm, elem)
+                        check_skills(None, message.chat.id, False, userIAm, elem, counterSkill=1)
 
                     for w in battle.find({
                         # 'login': message.from_user.username, 
