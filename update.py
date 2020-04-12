@@ -3339,6 +3339,22 @@ print("#==========================#")
 # print(f'OK {z.matched_count}')
 # registered_users.delete_many({'login': 'Brodskey', 'timeUpdate': 1586518457})
 
+# user = getUserByLogin('gavepta')
+# user.setRank(None)
+# newRank = None
+# for rank in getSetting(code='RANK', id='MILITARY')['value']:
+#     newRank = rank
+#     if user.getBm() < rank['bm']:
+#         break 
+# if not user.getRank() == None and newRank['id'] == user.getRank()['id']:
+#     pass
+# else:
+#     user.setRank(newRank)
+#     updateUser(user)
+#     time.sleep(1)
+#     print(f'{newRank["name"]}')
+
+registered_users.delete_many({'name': 'Господин Пес', 'location': None})
 
 clothes = ['medical_mask']
 if 1==2:
