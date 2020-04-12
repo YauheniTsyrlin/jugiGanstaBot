@@ -1154,7 +1154,7 @@ def send_recycling(message):
             markup.row(*row)  
             
         bot.send_message(message.chat.id, text='Вернулись...', reply_markup=markup)
-        bot.register_next_step_handler(message, send_baraholka)
+        #bot.register_next_step_handler(message, send_baraholka)
 
 def process_select_recycle(message):
     btn = '🧺 Комиссионка'
