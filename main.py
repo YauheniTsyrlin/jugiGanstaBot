@@ -1471,10 +1471,8 @@ def get_message_photo(message):
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
         for warior in ww:
-            print(warior.getBand()) 
             update_warior(warior)
             wariorShow = getWariorByName(warior.getName(), warior.getFraction())
-            print(wariorShow.getBand()) 
             markupinline = None
             
             user = getUserByName(wariorShow.getName())
@@ -1653,7 +1651,7 @@ def main_message(message):
                 countLearnSkill = 0
                 for warior in ww:
                     res = update_warior(warior)
-                    print(f'{res} : {warior.getName()}')
+                    logger.info(f'{res} : {warior.getName()}')
                     if res['bm_update']:
                         countLearnSkill = countLearnSkill + 1
                 
