@@ -1107,7 +1107,7 @@ def default_query(inline_query):
 
 @bot.message_handler(func=lambda message: message.text and ('🧺 Комиссионка' == message.text) and 'private' == message.chat.type)
 def send_baraholka(message):
-    if not isAdmin(message.from_user.username):
+    if isAdmin(message.from_user.username):
         send_welcome(message)
         return
 
