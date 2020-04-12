@@ -1136,8 +1136,41 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
+                                    'id': 'watchmaker',
+                                    'name': '⏰ Часовщик',
+                                    'description': 'Умение "⏰ Часовщик" дает больше времени на фарм',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': None,
+                                    'min': 50,
+                                    'max': 200,
+                                    'storage': 0,
+                                    'subjects_of_study':
+                                    [
+                                        'Кварц 🔹', 'Минизаряд'
+                                    ],
+                                    'dialog_old_text': 'old_watchmaker',
+                                    'flags': {
+                                        'congratulation_min': False,
+                                        'position_min': 'watchmaker_1',
+                                        'present_min': 
+                                            {
+                                                'id': 'certificate_watchmaker_1',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            },
+                                        'congratulation_max': False,
+                                        'position_max': 'watchmaker_2',
+                                        'present_max': 
+                                            {
+                                                'id': 'certificate_watchmaker_2',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            }
+                                        }
+                                },
+                                {
                                     'id': 'economist',
                                     'name': '📊 Экономист',
+                                    'description': 'Умение "📊 Экономист" дает...',
                                     'cost': 0,
                                     'type': 'skill',
                                     'quantity': None,
@@ -1165,8 +1198,7 @@ newvalues = { "$set": { "value":
                                                 'type': 'MARKS_OF_EXCELLENCE'
                                             }
                                         }
-                                }
-                                ,
+                                },
                                 {
                                     'id': 'fighter',
                                     'name': '🤼‍♂️ Боец',
@@ -2264,8 +2296,7 @@ newvalues = { "$set": { "value":
                                             'counter': 10
                                         }
                                     ]
-                                }
-                                ,
+                                },
                                 {
                                     'id': 'bag_of_coins_100',
                                     'name': '🔘 Флэшка с 100 Crypto',
@@ -2293,6 +2324,23 @@ newvalues = { "$set": { "value":
                                     'cost': 1,
                                     'type': 'things',
                                     'quantity': None,
+                                },
+                                {
+                                    'id': 'metal_cutter',
+                                    'name': '🪒 Металлоискатель',
+                                    'cost': 1,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'skill':
+                                        {   
+                                            'id':'watchmaker',
+                                            'value': 1000                                            
+                                        },
+                                    'wear': 
+                                        {
+                                            'one_use': 0.01,
+                                            'value': 1
+                                        }
                                 }
                                 
                             ]

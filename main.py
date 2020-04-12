@@ -1585,6 +1585,26 @@ def main_message(message):
     check_and_register_tg_user(message.from_user.username)
     userIAm = getUserByLogin(message.from_user.username)
 
+    # if userIAm:
+    #     for skill in user.getInventoryType({'type':'skill'}):
+    #         # Вычисляем умение отсрочки фарма
+    #         if skill['id'] == 'watchmaker':
+    #             storage = skill['storage']
+    #             if skill['storage'] >= skill['min']:
+    #                 power_skill = (skill['storage'] - skill['min'])/(skill['max'] - skill['min'])
+    #                 farm_k = farm_k + power_skill
+
+    #     for thing in user.getInventoryType({'type':'things'}):
+    #         if skill['id'] == 'watchmaker':
+    #             storage = skill['storage']
+    #             if skill['storage'] >= skill['min']:
+    #                 power_skill = (skill['storage'] - skill['min'])/(skill['max'] - skill['min'])
+    #                 farm_k = farm_k + power_skill
+
+                    
+
+
+
     if not privateChat and userIAm and isGoatInfoChat(message.from_user.username, message.chat.id):
         # Собрали группу бандитов
         may_be_cured_or_infected = []
@@ -1637,6 +1657,25 @@ def main_message(message):
         new_Message = messager.new_message(message, filter_message)
         time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
         
+        farm_k = 1
+        if userIAm:
+            for thing in userIAm.getInventoryType({'type':'things'}):
+                try:
+                    if thing['skill']['id'] == 'watchmaker':
+                        skill = userIAm.getInventoryThing({'id':'watchmaker','type':'skill'})
+                        if skill == None:
+                            skill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==thing['skill']['id']), None) 
+
+                        storage = skill['storage'] + thing['skill']['value'] 
+                        if storage >= skill['min']:
+                            power_skill = (storage - skill['min'])/(skill['max'] - skill['min'])
+                            farm_k = farm_k + power_skill
+                            logger.info(f'Коэффициент времени фарма: {farm_k}')
+                except:
+                    pass
+
+        time_farm_over = message.forward_date < (datetime.now() - timedelta(minutes=5*farm_k)).timestamp()
+
         if (message.text.startswith('📟Пип-бой 3000')):
             if ('/killdrone' in message.text or 
                 'ТОП ФРАКЦИЙ' in message.text or 
@@ -1648,12 +1687,14 @@ def main_message(message):
                 '🏆ТОП МАГНАТОВ' in message.text):
                 return
 
-            if time_over:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                return
+
 
             if 'ТОП ИГРОКОВ:' in message.text:
                 if new_Message:
+                    if time_farm_over:
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+                        return
+
                     ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
                     countLearnSkill = 0
                     for warior in ww:
@@ -1676,6 +1717,10 @@ def main_message(message):
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
                 else:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
+                return
+
+            if time_over:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
                 return
 
             user = users.User(message.from_user.username, message.forward_date, message.text)
@@ -2482,16 +2527,16 @@ def main_message(message):
                 if new_Message:
                     # Учимся умению "Робототехник"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='robotics'), None)
-                    check_skills(message.text, message.chat.id, time_over, userIAm, elem)
+                    check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
                     # Учимся умению "Электрик"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None)
-                    check_skills(message.text, message.chat.id, time_over, userIAm, elem)
+                    check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
                     # Учимся умению "Программист"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None)
-                    check_skills(message.text, message.chat.id, time_over, userIAm, elem)
+                    check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
                      # Учимся умению "Медик"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
-                    check_skills(message.text, message.chat.id, time_over, userIAm, elem)
+                    check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
                 else:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
 
