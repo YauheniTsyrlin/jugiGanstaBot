@@ -600,7 +600,8 @@ class Warior(object):
     def getBm(self, avr_k=None, avr_bm=None):
         result = None
         if avr_k==None:
-            result = int(self.bm)
+            if self.bm:
+                result = int(self.bm)
         else:
             if self.bm:
                 result = int(self.bm)
