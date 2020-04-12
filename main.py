@@ -413,10 +413,25 @@ def update_warior(warior: wariors.Warior):
             updatedWarior = warior 
         else:
             updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
+        
+        # updatedWarior Текущий пользователь
+        # warior Новый пользователь
+        # print('**********warior*********')
+        # print(warior.getName())
+        # print(warior.getBm())
+        # print(warior.getFraction())
+        # print('======updatedWarior======')
+        # print(updatedWarior.getName())
+        # print(updatedWarior.getBm())
+        # print(updatedWarior.getFraction())
+        # print('=========================')
 
-        if wariorToUpdate and updatedWarior:
-            if not wariorToUpdate.getBm() == updatedWarior.getBm():      
-                result.update({'bm_update': True})
+        if wariorToUpdate and warior:
+            try:
+                if (wariorToUpdate.getBm() < warior.getBm()):      
+                    result.update({'bm_update': True})
+            except:
+                pass
 
         newvalues = { "$set": json.loads(updatedWarior.toJSON()) }
         resultupdata = registered_wariors.update_one({
@@ -427,8 +442,7 @@ def update_warior(warior: wariors.Warior):
             # logger.info(f'======= НЕ нашли бандита')
             result.update({'new': True})
             result.update({'bm_update': True})
-
-            registered_wariors.insert_one(json.loads(warior.toJSON()))
+            res = registered_wariors.insert_one(json.loads(warior.toJSON()))
             send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}')
 
     
@@ -1642,9 +1656,9 @@ def main_message(message):
                 '🏆ТОП МАГНАТОВ' in message.text):
                 return
 
-            if time_over:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                return
+            # if time_over:
+            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+            #     return
 
             if 'ТОП ИГРОКОВ:' in message.text:
                 ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
@@ -1652,8 +1666,11 @@ def main_message(message):
                 for warior in ww:
                     res = update_warior(warior)
                     logger.info(f'{res} : {warior.getName()}')
-                    if res['bm_update']:
-                        countLearnSkill = countLearnSkill + 1
+                    if warior.getName() == userIAm.getName() and warior.getFraction() == userIAm.getFraction():
+                        pass
+                    else: 
+                        if res['bm_update']:
+                            countLearnSkill = countLearnSkill + 1
                 
                 # Учимся умению "Экономист"
                 elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='economist'), None)
