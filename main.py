@@ -1871,7 +1871,7 @@ def main_message(message):
                         user = getUserByName(name)
                         
                         if user:
-                            if dark_zone and (not time_over) and (not userIAm.getLogin()==user.getLogin()) :
+                            if dark_zone and (not time_over) and (not userIAm.getLogin()==user.getLogin()) and (not privateChat) :
                                 user_in_dark_zone.append(user.getLogin())  
                             if warior:
                                 warior.setBm(user.getBm())
