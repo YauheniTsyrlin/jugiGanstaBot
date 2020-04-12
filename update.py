@@ -3354,7 +3354,7 @@ print("#==========================#")
 #     time.sleep(1)
 #     print(f'{newRank["name"]}')
 
-registered_users.delete_many({'name': 'Господин Пес', 'location': None})
+# registered_users.delete_many({'name': 'Господин Пес', 'location': None})
 
 clothes = ['medical_mask']
 if 1==2:
