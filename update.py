@@ -2207,13 +2207,6 @@ newvalues = { "$set": { "value":
                                     'quantity': 20
                                 },
                                 {
-                                    'id': 'metal_detector',
-                                    'name': '🧑‍🦯 Металлоискатель',
-                                    'cost': 100,
-                                    'type': 'things',
-                                    'quantity': 20
-                                },
-                                {
                                     'id': 'photo_8_bandits',
                                     'name': '🎞️Фото 8-ми',
                                     'cost': 1,
@@ -2326,8 +2319,8 @@ newvalues = { "$set": { "value":
                                     'quantity': None,
                                 },
                                 {
-                                    'id': 'metal_cutter',
-                                    'name': '🪒 Металлоискатель',
+                                    'id': 'metal_detector',
+                                    'name': '🧑‍🦯 Металлоискатель',
                                     'cost': 1,
                                     'type': 'things',
                                     'quantity': None,
