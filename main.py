@@ -1143,7 +1143,7 @@ def send_recycling(message):
         exit_button = "♻️ Выйти ❌"
         forward_button = f"♻️ Далее 🔜({step+1})"
 
-        for row in build_menu(buttons=buttons, n_cols=3, limit=9, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markup.row(*row)  
 
         bot.send_message(message.chat.id, text='Твой инвентарь:\nuser.getInventoryReport()', reply_markup=markup)
@@ -1181,7 +1181,7 @@ def process_select_recycle(message):
         exit_button = "♻️ Выйти ❌"
         forward_button = f"♻️ Далее 🔜({step+1})"
 
-        for row in build_menu(buttons=buttons, n_cols=3, limit=9, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markup.row(*row)
 
         bot.send_message(message.chat.id, text=f'Назад...', reply_markup=markup)
@@ -1202,7 +1202,7 @@ def process_select_recycle(message):
         exit_button = "♻️ Выйти ❌"
         forward_button = f"♻️ Далее 🔜({step})"
 
-        for row in build_menu(buttons=buttons, n_cols=3, limit=9, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markup.row(*row)
 
         bot.send_message(message.chat.id, text=f'Далее...', reply_markup=markup)
