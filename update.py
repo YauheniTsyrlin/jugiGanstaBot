@@ -715,8 +715,6 @@ newvalues = { "$set": { "value":
                                     'type': 'position',
                                     'cost': 0
                                 }
-
-                                
                             ] 
                         },
                         {
@@ -2232,7 +2230,15 @@ newvalues = { "$set": { "value":
                                     'cost': 1,
                                     'type': 'things',
                                     'quantity': None,
+                                },
+                                {
+                                    'id': 'collapsar',
+                                    'name': '🔲 Collapsar',
+                                    'cost': 1,
+                                    'type': 'things',
+                                    'quantity': None,
                                 }
+                                
                             ]
                         },
                         {
