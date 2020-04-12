@@ -183,7 +183,6 @@ def fromTopToWariorsBM(forward_date, message, wariors):
     strings = message.text.split('\n')
     i = 0
     for s in strings:
-
         if ('Счет: ' in strings[i] ):
             name = strings[i-1].split('. ')[1].split(' [')[0].strip()
             fraction = getFractionFromString(strings[i-1].split(' [')[1].split(']')[0])

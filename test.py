@@ -399,11 +399,11 @@ from operator import itemgetter
 def getWariorByName(name: str, fraction: str):
     name = tools.deEmojify(name).strip()
     for warior in list(WARIORS_ARR):
-        if name == warior.getName().strip() and fraction == warior.getFraction(): 
+        if name == warior.getName().strip() and (fraction == None or fraction == warior.getFraction()): 
             return warior
     return None
 
-# print(getWariorByName('ЛеДонна ŇṼ','⚛️Республика').getName())
+#
 
 def setGiftsForRaid(goat):
     raidPlan = getPlanedRaidLocation(goatName=goat['name'], planRaid=False)
@@ -605,11 +605,13 @@ def getRaidTimeText(text, date):
 #date_stamp = getRaidTimeText("1ч. 15мин.", 1586177073)
 #date_str = time.strftime("%d.%m %H:%M", time.gmtime( (datetime.fromtimestamp(date_stamp) + timedelta(hours=tz.hour)).timestamp()))
 
-searchfor = ['опустошил бокал бурбона.', 'жадно ест сухари.']
-searchstr = 'опустошил бокал бурбона. жадно'
-if len([ele for ele in searchfor if(ele in searchstr)])>0:
-    print('res')
+# searchfor = ['опустошил бокал бурбона.', 'жадно ест сухари.']
+# searchstr = 'опустошил бокал бурбона. жадно'
+# if len([ele for ele in searchfor if(ele in searchstr)])>0:
+#     print('res')
 
+
+print(getWariorByName('КириλλǁȺǁ','⚙️Убежище 4').getBm())
 
 # send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text + 
 #     f'\nВ специальном паркомате на рейдовой точке ты взял талончик на рейд:\n▫️ 🎫 Талон на рейд {date_str}')

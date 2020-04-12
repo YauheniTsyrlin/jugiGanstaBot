@@ -408,6 +408,13 @@ def update_warior(warior: wariors.Warior):
         # if isKnownWarior(warior.getName(), warior.getFraction()):
         # logger.info(f'======= Это известный бандит')
         wariorToUpdate = getWariorByName(warior.getName(), warior.getFraction())
+        if wariorToUpdate and warior and warior.getBm():
+            try:
+                if (wariorToUpdate.getBm() == None or wariorToUpdate.getBm() < warior.getBm()):      
+                    result.update({'bm_update': True})
+            except:
+                pass
+
         updatedWarior = None
         if wariorToUpdate == None:
             updatedWarior = warior 
@@ -416,22 +423,6 @@ def update_warior(warior: wariors.Warior):
         
         # updatedWarior Текущий пользователь
         # warior Новый пользователь
-        # print('**********warior*********')
-        # print(warior.getName())
-        # print(warior.getBm())
-        # print(warior.getFraction())
-        # print('======updatedWarior======')
-        # print(updatedWarior.getName())
-        # print(updatedWarior.getBm())
-        # print(updatedWarior.getFraction())
-        # print('=========================')
-
-        if wariorToUpdate and warior:
-            try:
-                if (wariorToUpdate.getBm() < warior.getBm()):      
-                    result.update({'bm_update': True})
-            except:
-                pass
 
         newvalues = { "$set": json.loads(updatedWarior.toJSON()) }
         resultupdata = registered_wariors.update_one({
@@ -1029,8 +1020,9 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
             if not userIAm.isInventoryThing(elem):
                 elem.update({'storage': elem['storage'] + count})
                 userIAm.addInventoryThing(elem)
-                send_messages_big(chat, text=f'Ты начал изучение умения:\n▫️ {elem["name"]}') 
-                send_message_to_admin(f'⚠️🤓 {userIAm.getLogin()} начал изучение умения:\n▫️ {elem["name"]}')
+                percent = int((elem['storage'])*100/elem['max'])
+                send_messages_big(chat, text=f'Ты начал изучение умения:\n▫️ {elem["name"]} {percent}%') 
+                send_message_to_admin(f'⚠️🤓 {userIAm.getLogin()} начал изучение умения:\n▫️ {elem["name"]} {percent}%')
             else:
                 elem = userIAm.getInventoryThing(elem)
                 text = ''
@@ -1656,31 +1648,36 @@ def main_message(message):
                 '🏆ТОП МАГНАТОВ' in message.text):
                 return
 
-            # if time_over:
-            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-            #     return
+            if time_over:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+                return
 
             if 'ТОП ИГРОКОВ:' in message.text:
-                ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
-                countLearnSkill = 0
-                for warior in ww:
-                    res = update_warior(warior)
-                    logger.info(f'{res} : {warior.getName()}')
-                    if warior.getName() == userIAm.getName() and warior.getFraction() == userIAm.getFraction():
-                        pass
-                    else: 
-                        if res['bm_update']:
-                            countLearnSkill = countLearnSkill + 1
-                
-                # Учимся умению "Экономист"
-                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='economist'), None)
-                if countLearnSkill > 0:
-                    check_skills(None, message.chat.id, False, userIAm, elem, counterSkill=countLearnSkill)
+                if new_Message:
+                    ww = wariors.fromTopToWariorsBM(message.forward_date, message, registered_wariors)
+                    countLearnSkill = 0
+                    for warior in ww:
+                        res = update_warior(warior)
+                        # logger.info(f'{res} : {warior.getName()}')
+                        if warior.getName() == userIAm.getName() and warior.getFraction() == userIAm.getFraction():
+                            pass #logger.info(f'Это Я, пропускаем')
+                        else: 
+                            if res['bm_update']:
+                                logger.info(f'Обновился BM {res} : {warior.getName()}')
+                                countLearnSkill = countLearnSkill + 1
+                    
+                    # Учимся умению "Экономист"
+                    logger.info(f'Обновился BM у {countLearnSkill} бандитов')
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='economist'), None)
+                    if countLearnSkill > 0:
+                        check_skills(None, message.chat.id, False, userIAm, elem, counterSkill=countLearnSkill)
+                    else:
+                        send_messages_big(chat, text=getResponseDialogFlow(None, elem["dialog_old_text"]).fulfillment_text)
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
                 else:
-                    send_messages_big(chat, text=getResponseDialogFlow(None, elem["dialog_old_text"]).fulfillment_text)
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
+                    send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
                 return
-            
+
             user = users.User(message.from_user.username, message.forward_date, message.text)
             if findUser==False:  
                 if 'Подробности /me' in message.text or (not privateChat): 
