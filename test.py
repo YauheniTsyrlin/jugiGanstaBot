@@ -611,7 +611,7 @@ def getRaidTimeText(text, date):
 #     print('res')
 
 
-print(getWariorByName('КириλλǁȺǁ','⚙️Убежище 4').getBm())
+# print(getWariorByName('КириλλǁȺǁ','⚙️Убежище 4').getBm())
 
 # send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text + 
 #     f'\nВ специальном паркомате на рейдовой точке ты взял талончик на рейд:\n▫️ 🎫 Талон на рейд {date_str}')
@@ -661,7 +661,9 @@ print(getWariorByName('КириλλǁȺǁ','⚙️Убежище 4').getBm())
 #         report = f'▫️ {gr[0]["name"]} {str(len(gr)) if len(gr)>1 else str(len(gr))}\n'
 #         print(report)  
 
-
+elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value']) if x['id']=='condom'), None) 
+print(elem)
+print('protection' in elem )        
 sys.exit(0)
 
 # import pandas as pd

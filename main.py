@@ -563,10 +563,8 @@ def checkInfected(logins, chat_id):
     try: 
         for z in GLOBAL_VARS[chat]['inventory']:
             pass
-            #print(z)
         for m in GLOBAL_VARS[chat]['medics']:
             pass
-            #print(m)
     except: 
         GLOBAL_VARS.update({chat: {'inventory': [], 'medics': []} })
 
@@ -575,8 +573,6 @@ def checkInfected(logins, chat_id):
             GLOBAL_VARS[chat]['inventory'].remove(vir)
         else:
             vir['skill'].update({'contagiousness':  vir['skill']['contagiousness'] * vir['skill']['halflife']})
- 
-    
     
     # Добавляем новые вирусы, если есть у бандитов
     for user_login in logins:
@@ -584,6 +580,7 @@ def checkInfected(logins, chat_id):
         if user:
             for vir in list(filter(lambda x : x['skill']['contagiousness'] > 0, viruses)):
                 # #################
+                # vir.update({'login': user.getLogin()}) 
                 # GLOBAL_VARS[chat]['inventory'].append(vir)
                 # #################
                 if user.getInventoryThingCount(vir) > 0:
@@ -595,15 +592,12 @@ def infect(logins, chat_id):
     if len(logins) < 1:
         return
 
-    medical_mask = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value']) if x['id']=='medical_mask'), None) 
-    
     users_in_danger = []
     for user_login in logins:
         user = getUserByLogin(user_login)
         if user:
             # TODO Вставить проверку на иммунитет, иммунитет получаешь если переболел 'immunity'
             users_in_danger.append(user)
-    
 
     for vir in list(filter(lambda x : x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']) if x['id']==vir['id']), None)
@@ -617,22 +611,22 @@ def infect(logins, chat_id):
                 # send_message_to_admin(f'{user.getLogin()} может заразиться вирусом {vir["name"]}...\n{r<=c} {r} меньше или равно {c} {user.getLogin()} {vir["name"]}')
                 # logger.info(f'{r<=c} {r} меньше или равно {c} {user.getLogin()} {vir["name"]}')
                 if (r <= c):
-                    if user.isInventoryThing(medical_mask):
-                        mask = user.getInventoryThing(medical_mask)
-                        safe_mask = False
-                        for protection in mask['protection']:
+
+                    for protected_thing in list(filter(lambda x : 'protection' in x, user.getInventory())):
+                        safe_mask = False  
+                        for protection in list(filter(lambda x : x['type'] == 'disease', protected_thing['protection'])):
                             if protection['id'] == vir['id'] and protection['type'] == vir['type']:
                                 p = random.random()
                                 # send_message_to_admin(f'⚠️🦇 Внимание! \n вероятность {p}, защита {protection["value"]}')
                                 if p < protection['value']:
-                                    # send_message_to_admin(f'⚠️🦇 Внимание! \n value = {mask["wear"]["value"]}, one_use = {mask["wear"]["one_use"]}')
-                                    if mask['wear']['value'] - mask['wear']['one_use'] > 0:
-                                        mask['wear'].update({'value':  mask['wear']['value'] - mask['wear']['one_use']})
-                                        user.addInventoryThing(mask, replace=True)
+                                    # send_message_to_admin(f'⚠️🦇 Внимание! \n value = {protected_thing["wear"]["value"]}, one_use = {protected_thing["wear"]["one_use"]}')
+                                    if protected_thing['wear']['value'] - protected_thing['wear']['one_use'] > 0:
+                                        protected_thing['wear'].update({'value':  protected_thing['wear']['value'] - protected_thing['wear']['one_use']})
+                                        user.addInventoryThing(protected_thing, replace=True)
                                         updateUser(user)
                                         safe_mask = True
                                         # Маска уберегла
-                                        text = f'Применяй {mask["name"]}, как {user.getNameAndGerb()}, и вирус {vir["name"]} не принесет тебе вреда!'
+                                        text = f'{user.getNameAndGerb()} использовал {protected_thing["name"]}\nчтобы не заразиться {vir["name"]}!'
                                         sec = 5
                                         pending_date = datetime.now() + timedelta(seconds=sec)
                                         pending_messages.insert_one({ 
@@ -646,12 +640,12 @@ def infect(logins, chat_id):
                                             'dialog_flow_context': None,
                                             'text': text})
 
-                                        send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} {mask["name"]} спасла от {vir["name"]}')
+                                        send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} {protected_thing["name"]} спасла от {vir["name"]}')
                                         break
                                     else:
-                                        user.removeInventoryThing(mask)
+                                        user.removeInventoryThing(protected_thing)
                                         updateUser(user)
-                                        text = f'{user.getNameAndGerb()}, у тебя порвалась медицинская маска'
+                                        text = f'{user.getNameAndGerb()}, у тебя испотилась вещь из инвентаря:\n▫️ {protected_thing["name"]}'
                                         sec = 5
                                         pending_date = datetime.now() + timedelta(seconds=sec)
                                         pending_messages.insert_one({ 
@@ -664,17 +658,15 @@ def infect(logins, chat_id):
                                             'dialog_flow_text': None,
                                             'dialog_flow_context': None,
                                             'text': text})
-                                        send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} порвалась {mask["name"]}')
+                                        send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} порвалась {protected_thing["name"]}')
                                         break
 
                         if safe_mask:
-                            #percent = int(mask['wear']['value']*100/medical_mask['wear']['value'])
-                            #send_message_to_admin(f'⚠️🦇 Внимание! \n{mask["name"]} {percent}% уберегла {user.getLogin()} от вируса {vir["name"]}')
                             continue            
 
                     user.addInventoryThing(elem)
                     updateUser(user)
-                    infect_user = getUserByLogin(elem['login'])
+                    infect_user = getUserByLogin(vir['login'])
 
                     #sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
                     sec = 10
@@ -711,7 +703,7 @@ def cure(logins, chat_id):
     users_in_danger = []
     viruses = getSetting(code='ACCESSORY_ALL', id='VIRUSES')["value"]
     medicskill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
-    medical_mask = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value']) if x['id']=='medical_mask'), None) 
+    # medical_mask = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value']) if x['id']=='medical_mask'), None) 
     
     for user_login in logins:
         user = getUserByLogin(user_login)
@@ -736,12 +728,18 @@ def cure(logins, chat_id):
                 if infected.getInventoryThingCount(vir) > 0:
                     r = random.random()
                     if (r <= (vir['skill']['treatability'] + power_skill)/2):
-                        
                         infected.removeInventoryThing(vir)
                         mask_text = ''
-                        if not infected.isInventoryThing(medical_mask):
-                            infected.addInventoryThing(medical_mask)
-                            mask_text = f'\n▫️ +{medical_mask["name"]}'
+
+                        protected_clothes = None
+                        for protected_thing in list(filter(lambda x : 'protection' in x, getSetting(code='ACCESSORY_ALL', id='CLOTHES')["value"])):
+                            for protection in list(filter(lambda x : x['type'] == 'disease', protected_thing['protection'])):
+                                if protection['id'] == vir['id'] and protection['type'] == vir['type']:
+                                    protected_clothes = protected_thing
+                        
+                        if protected_clothes and not infected.isInventoryThing(protected_clothes):
+                            infected.addInventoryThing(protected_clothes)
+                            mask_text = f'\n▫️ +{protected_clothes["name"]}'
 
                         send_message_to_admin(f'⚠️❤️ Внимание! \n {infected.getLogin()} вылечен {medic.getLogin()} от {vir["name"]}!')
                         updateUser(infected)
@@ -1603,7 +1601,21 @@ def main_message(message):
     #                 power_skill = (skill['storage'] - skill['min'])/(skill['max'] - skill['min'])
     #                 farm_k = farm_k + power_skill
 
-                    
+    if privateChat and userIAm and userIAm.getLogin() == 'GonzikBenzyavsky':
+        # Собрали группу бандитов
+        may_be_cured_or_infected = []
+        may_be_cured_or_infected.append(message.from_user.username)
+        if message.reply_to_message and not message.reply_to_message.from_user.is_bot:
+            may_be_cured_or_infected.append(message.reply_to_message.from_user.username)
+
+        # Определили заражение
+        checkInfected(may_be_cured_or_infected, message.chat.id)
+        # Заражаем бандитов
+        infect(may_be_cured_or_infected, message.chat.id)
+        # Определили способных лечить
+        checkCure(may_be_cured_or_infected, message.chat.id)
+        # лечим бандитов
+        cure(may_be_cured_or_infected, message.chat.id)                
 
 
 
