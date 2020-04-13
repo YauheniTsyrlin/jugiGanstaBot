@@ -587,6 +587,7 @@ def checkInfected(logins, chat_id):
                 # GLOBAL_VARS[chat]['inventory'].append(vir)
                 # #################
                 if user.getInventoryThingCount(vir) > 0:
+                    vir.update({'login': user.getLogin()})  
                     GLOBAL_VARS[chat]['inventory'].append(vir)
 
 def infect(logins, chat_id):
@@ -673,6 +674,7 @@ def infect(logins, chat_id):
 
                     user.addInventoryThing(elem)
                     updateUser(user)
+                    infect_user = getUserByLogin(elem['login'])
 
                     #sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_1')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_1'))))
                     sec = 10
@@ -686,7 +688,7 @@ def infect(logins, chat_id):
                         'pending_date': pending_date.timestamp(),
                         'dialog_flow_text': 'virus_new_member',
                         'dialog_flow_context': None,
-                        'text': f'▫️ {vir["name"]}'})
+                        'text': f'▫️ {infect_user.getNameAndGerb()} заразил тебя {vir["name"]}'})
                     send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен вирусом {vir["name"]} с вероятностью {vir["skill"]["contagiousness"]}')
 
 def checkCure(logins, chat_id):
