@@ -168,28 +168,40 @@ def radeReport(goat):
 
 def getPlanedRaidLocation(goatName: str, planRaid = True):
     tz = config.SERVER_MSK_DIFF
-    raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+    raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour-23)
+    print(raid_date)
+    print(planRaid)
+    print(raid_date.hour)
     hour = raid_date.hour
 
-    if not planRaid and raid_date.hour <= 1:
+    if not planRaid and raid_date.hour < 1:
         raid_date = raid_date - timedelta(days=1)
+        print('<1')
 
     if planRaid and raid_date.hour >= 17:
         raid_date = raid_date + timedelta(days=1)
+        print('>17')
 
+    if raid_date.hour >=17 or raid_date.hour <1:
+        hour = 1
+        if not planRaid:
+            print('17-1')
+            hour = 17
     if raid_date.hour >=1 and raid_date.hour <9:
         hour = 9
         if not planRaid:
+            print('1-9')
             hour = 1
     elif raid_date.hour >=9 and raid_date.hour <17:
         hour = 17
         if not planRaid:
+            print('9-17')
             hour = 9
-    if raid_date.hour >=17 or raid_date.hour <1:
-        hour = 1
-        if not planRaid:
-            hour = 17
 
+
+    print(f'hour = {hour}')
+    print(raid_date.replace(hour=hour, minute=0, second=0, microsecond=0))
+    print(f'==========================')
     raidNone = {}
     raidNone.update({'rade_date': (raid_date.replace(hour=hour, minute=0, second=0, microsecond=0)).timestamp()})
     raidNone.update({'rade_location': None})
@@ -661,9 +673,8 @@ def getRaidTimeText(text, date):
 #         report = f'▫️ {gr[0]["name"]} {str(len(gr)) if len(gr)>1 else str(len(gr))}\n'
 #         print(report)  
 
-elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value']) if x['id']=='condom'), None) 
-print(elem)
-print('protection' in elem )        
+for goat in getSetting(code='GOATS_BANDS'):
+    getPlanedRaidLocation(goat['name'], planRaid = False)
 sys.exit(0)
 
 # import pandas as pd

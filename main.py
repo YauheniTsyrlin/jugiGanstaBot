@@ -5148,7 +5148,7 @@ def getPlanedRaidLocation(goatName: str, planRaid = True):
     raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
     hour = raid_date.hour
 
-    if not planRaid and raid_date.hour <= 1:
+    if not planRaid and raid_date.hour < 1:
         raid_date = raid_date - timedelta(days=1)
 
     if planRaid and raid_date.hour >= 17:
