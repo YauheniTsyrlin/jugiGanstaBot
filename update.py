@@ -797,6 +797,26 @@ newvalues = { "$set": { "value":
                                     'quantity': 10
                                 },
                                 {
+                                    'id': 'condom',
+                                    'name': '🥏 Презерватив',
+                                    'cost': 1,
+                                    'type': 'clothes',
+                                    'protection':
+                                        [
+                                            {
+                                                'type':'disease',
+                                                'id': 'girlfriend_bouquet',
+                                                'value': 0.99
+                                            }
+                                        ],
+                                    'wear': 
+                                        {
+                                            'one_use': 0.9,
+                                            'value': 1
+                                        },
+                                    'quantity': None
+                                },
+                                {
                                     'id': 'medical_mask',
                                     'name': '😷 Медицинская маска',
                                     'cost': 1,

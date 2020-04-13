@@ -632,7 +632,7 @@ def infect(logins, chat_id):
                                         updateUser(user)
                                         safe_mask = True
                                         # Маска уберегла
-                                        text = f'Носи медицинскую маску, как {user.getNameAndGerb()}, и вирус {vir["name"]} не принесет тебе вреда!'
+                                        text = f'Применяй {mask["name"]}, как {user.getNameAndGerb()}, и вирус {vir["name"]} не принесет тебе вреда!'
                                         sec = 5
                                         pending_date = datetime.now() + timedelta(seconds=sec)
                                         pending_messages.insert_one({ 
