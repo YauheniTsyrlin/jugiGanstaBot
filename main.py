@@ -1653,8 +1653,7 @@ def main_message(message):
 
     # Форварды от WastelandWarsBot
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
-        filter_message = {"forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
-        new_Message = messager.new_message(message, filter_message)
+
         time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
         
         farm_k = 1
@@ -1690,6 +1689,9 @@ def main_message(message):
 
 
             if 'ТОП ИГРОКОВ:' in message.text:
+                filter_message = {"forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
+                new_Message = messager.new_message(message, filter_message)
+
                 if new_Message:
                     if time_farm_over:
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
@@ -1760,6 +1762,8 @@ def main_message(message):
             
             return
         elif ('FIGHT!' in message.text):
+            filter_message = {"forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
+            new_Message = messager.new_message(message, filter_message)
             if new_Message:                     
                 ww = wariors.fromFightToWarioirs(message.forward_date, message, USERS_ARR, battle)
                 # Переделать так, чтобы учитывало, что может быть два бойца из нашего козла.
@@ -2098,6 +2102,8 @@ def main_message(message):
         elif ('Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
+                filter_message = {"username": message.from_user.username, "forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
+                new_Message = messager.new_message(message, filter_message)                
                 if not new_Message:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
                     return
