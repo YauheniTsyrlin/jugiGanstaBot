@@ -1601,21 +1601,21 @@ def main_message(message):
     #                 power_skill = (skill['storage'] - skill['min'])/(skill['max'] - skill['min'])
     #                 farm_k = farm_k + power_skill
 
-    if privateChat and userIAm and userIAm.getLogin() == 'GonzikBenzyavsky':
-        # Собрали группу бандитов
-        may_be_cured_or_infected = []
-        may_be_cured_or_infected.append(message.from_user.username)
-        if message.reply_to_message and not message.reply_to_message.from_user.is_bot:
-            may_be_cured_or_infected.append(message.reply_to_message.from_user.username)
+    # if privateChat and userIAm and userIAm.getLogin() == 'GonzikBenzyavsky':
+    #     # Собрали группу бандитов
+    #     may_be_cured_or_infected = []
+    #     may_be_cured_or_infected.append(message.from_user.username)
+    #     if message.reply_to_message and not message.reply_to_message.from_user.is_bot:
+    #         may_be_cured_or_infected.append(message.reply_to_message.from_user.username)
 
-        # Определили заражение
-        checkInfected(may_be_cured_or_infected, message.chat.id)
-        # Заражаем бандитов
-        infect(may_be_cured_or_infected, message.chat.id)
-        # Определили способных лечить
-        checkCure(may_be_cured_or_infected, message.chat.id)
-        # лечим бандитов
-        cure(may_be_cured_or_infected, message.chat.id)                
+    #     # Определили заражение
+    #     checkInfected(may_be_cured_or_infected, message.chat.id)
+    #     # Заражаем бандитов
+    #     infect(may_be_cured_or_infected, message.chat.id)
+    #     # Определили способных лечить
+    #     checkCure(may_be_cured_or_infected, message.chat.id)
+    #     # лечим бандитов
+    #     cure(may_be_cured_or_infected, message.chat.id)                
 
 
 
