@@ -2552,7 +2552,7 @@ def main_message(message):
                         updateUser(userIAm)
                 filter_message = {"forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message) 
-                if new_Message:
+                if True or new_Message:
                     # Учимся умению "Робототехник"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='robotics'), None)
                     check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
