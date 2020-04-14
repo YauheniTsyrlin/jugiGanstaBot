@@ -3499,7 +3499,7 @@ print("#==========================#")
 # registered_users.delete_many({'name': 'Господин Пес', 'location': None})
 
 viruses = ['girlfriend_bouquet', 'covid-19', 'mirror_disease']
-if 1==1:
+if 1==2:
     for virus in viruses:
         updateUser(None)
         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']) if x['id']==virus), None) 

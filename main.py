@@ -1018,7 +1018,12 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
     if count > 0:
         if not time_over:
             # Проверяем на увеличители или уменшители умения
-            for thing in list(filter(lambda x : 'skill' in x, user.getInventory())):
+            for thing in list(filter(lambda x : 'skill' in x, userIAm.getInventory())):
+                if elem['id']==thing['id'] and elem['type']==thing['type']:
+                    r = random.random()
+                    if r < thing['skill']['probability']:
+                        count = count + thing['skill']['value']
+            if count <= 0:
                 pass
 
             if not userIAm.isInventoryThing(elem):
@@ -1671,9 +1676,9 @@ def main_message(message):
 
     # Форварды от WastelandWarsBot
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
-
         time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
         
+        # Вычисление коэффициента времени фарма
         farm_k = 1
         if userIAm:
             for thing in userIAm.getInventoryType({'type':'things'}):
@@ -1703,8 +1708,6 @@ def main_message(message):
                 '🔧РЕСУРСЫ И ХЛАМ' in message.text or
                 '🏆ТОП МАГНАТОВ' in message.text):
                 return
-
-
 
             if 'ТОП ИГРОКОВ:' in message.text:
                 filter_message = {"forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
