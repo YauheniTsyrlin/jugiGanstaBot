@@ -937,7 +937,7 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'disease',
                                     'quantity': None,
-                                    'skill':
+                                    'property':
                                             {
                                                 'contagiousness': 0.01,
                                                 'halflife': 0.90,
@@ -952,7 +952,7 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'disease',
                                     'quantity': None,
-                                    'skill':
+                                    'property':
                                             {
                                                 'contagiousness': 0.05,
                                                 'halflife': 0.75,
@@ -967,7 +967,7 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'disease',
                                     'quantity': None,
-                                    'skill':
+                                    'property':
                                             {
                                                 'contagiousness': 0.00,
                                                 'halflife': 0.5,
@@ -2347,7 +2347,26 @@ newvalues = { "$set": { "value":
                                     'skill':
                                         {   
                                             'id':'watchmaker',
+                                            'probability': 1,
                                             'value': 1000                                            
+                                        },
+                                    'wear': 
+                                        {
+                                            'one_use': 0.01,
+                                            'value': 1
+                                        }
+                                },
+                                {
+                                    'id': 'playstation5',
+                                    'name': '🎮 PlayStation 5',
+                                    'cost': 1,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'skill':
+                                        {   
+                                            'id':'watchmaker',
+                                            'probability': 0.33,
+                                            'value': -1                                            
                                         },
                                     'wear': 
                                         {
@@ -3478,6 +3497,22 @@ print("#==========================#")
 #     print(f'{newRank["name"]}')
 
 # registered_users.delete_many({'name': 'Господин Пес', 'location': None})
+
+viruses = ['girlfriend_bouquet', 'covid-19', 'mirror_disease']
+if 1==1:
+    for virus in viruses:
+        updateUser(None)
+        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']) if x['id']==virus), None) 
+
+        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
+            vir = user.getInventoryThing(elem)
+            
+            print(f'before {user.getLogin()} {vir}')
+            user.removeInventoryThing(vir)
+            user.addInventoryThing(elem)
+            updateUser(user)
+            print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
+            print(f'=======================================================')
 
 clothes = ['medical_mask']
 if 1==2:

@@ -569,16 +569,16 @@ def checkInfected(logins, chat_id):
         GLOBAL_VARS.update({chat: {'inventory': [], 'medics': []} })
 
     for vir in list(filter(lambda x : (not x == None) and x['type'] == 'disease', GLOBAL_VARS[chat]['inventory'])):
-        if vir['skill']['contagiousness'] < 0.005:
+        if vir['property']['contagiousness'] < 0.005:
             GLOBAL_VARS[chat]['inventory'].remove(vir)
         else:
-            vir['skill'].update({'contagiousness':  vir['skill']['contagiousness'] * vir['skill']['halflife']})
+            vir['property'].update({'contagiousness':  vir['property']['contagiousness'] * vir['property']['halflife']})
     
     # Добавляем новые вирусы, если есть у бандитов
     for user_login in logins:
         user = getUserByLogin(user_login)
         if user:
-            for vir in list(filter(lambda x : x['skill']['contagiousness'] > 0, viruses)):
+            for vir in list(filter(lambda x : x['property']['contagiousness'] > 0, viruses)):
                 # #################
                 # vir.update({'login': user.getLogin()}) 
                 # GLOBAL_VARS[chat]['inventory'].append(vir)
@@ -607,7 +607,7 @@ def infect(logins, chat_id):
                 pass
             else:
                 r = random.random()
-                c = vir['skill']['contagiousness']
+                c = vir['property']['contagiousness']
                 # send_message_to_admin(f'{user.getLogin()} может заразиться вирусом {vir["name"]}...\n{r<=c} {r} меньше или равно {c} {user.getLogin()} {vir["name"]}')
                 # logger.info(f'{r<=c} {r} меньше или равно {c} {user.getLogin()} {vir["name"]}')
                 if (r <= c):
@@ -727,7 +727,7 @@ def cure(logins, chat_id):
             for vir in viruses:
                 if infected.getInventoryThingCount(vir) > 0:
                     r = random.random()
-                    if (r <= (vir['skill']['treatability'] + power_skill)/2):
+                    if (r <= (vir['property']['treatability'] + power_skill)/2):
                         infected.removeInventoryThing(vir)
                         mask_text = ''
 
@@ -1017,6 +1017,10 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                     else: count = count + 1
     if count > 0:
         if not time_over:
+            # Проверяем на увеличители или уменшители умения
+            for thing in list(filter(lambda x : 'skill' in x, user.getInventory())):
+                pass
+
             if not userIAm.isInventoryThing(elem):
                 elem.update({'storage': elem['storage'] + count})
                 userIAm.addInventoryThing(elem)
