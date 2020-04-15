@@ -3585,6 +3585,34 @@ if 1==2:
             print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
             print(f'=======================================================')
 
+thing_names = ['metal_detector']
+if 1==1:
+    for thing_name in thing_names:
+        updateUser(None)
+        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
+
+        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
+            thing = user.getInventoryThing(elem)
+            
+            print(f'before {user.getLogin()} {skill}')
+            try:
+                 elem['wear'].update({'value': thing['wear']['value']})
+            except:
+                user.removeInventoryThing(elem)
+                user.addInventoryThing(elem)
+                updateUser(user)
+                print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
+                print(f'=======================================================')
+                continue
+
+            
+            user.removeInventoryThing(thing)
+            user.addInventoryThing(elem)
+            updateUser(user)
+            print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
+            print(f'=======================================================')
+
+
 
 # if 1==2:
     # if now_date.hour in (99, 19) and now_date.minute in (99, 58) and now_date.second < 15:
