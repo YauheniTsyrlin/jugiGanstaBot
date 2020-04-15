@@ -2346,9 +2346,11 @@ newvalues = { "$set": { "value":
                                     'quantity': None,
                                     'skill':
                                         {   
-                                            'id':'watchmaker',
-                                            'probability': 1,
-                                            'value': 1000                                            
+                                            'storage': {
+                                                'id':'watchmaker',
+                                                'probability': 1,
+                                                'value': 1000                                            
+                                            }
                                         },
                                     'wear': 
                                         {
@@ -2364,9 +2366,12 @@ newvalues = { "$set": { "value":
                                     'quantity': None,
                                     'skill':
                                         {   
-                                            'id':'watchmaker',
-                                            'probability': 0.33,
-                                            'value': -1                                            
+                                            'training': {
+                                                'id':'watchmaker',
+                                                'probability': 0.33,
+                                                'value': -1,
+                                                'dialog_text': 'playstation5_no_training' 
+                                            }                                                                                     
                                         },
                                     'wear': 
                                         {

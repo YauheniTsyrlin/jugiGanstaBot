@@ -681,7 +681,7 @@ def infect(logins, chat_id):
                         'dialog_flow_text': 'virus_new_member',
                         'dialog_flow_context': None,
                         'text': f'▫️ {infect_user.getNameAndGerb()} заразил тебя {vir["name"]}'})
-                    send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен вирусом {vir["name"]} с вероятностью {vir["skill"]["contagiousness"]}')
+                    send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен вирусом {vir["name"]} с вероятностью {vir["property"]["contagiousness"]}')
 
 def checkCure(logins, chat_id):
     chat = f'chat_{chat_id}' 
@@ -1021,10 +1021,25 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
             for thing in list(filter(lambda x : 'skill' in x, userIAm.getInventory())):
                 if elem['id']==thing['id'] and elem['type']==thing['type']:
                     r = random.random()
-                    if r < thing['skill']['probability']:
-                        count = count + thing['skill']['value']
+                    if r < thing['skill']['training']['probability']:
+                        # Немножко ломаем предмет
+                        new_value = thing['wear']['value'] - thing['wear']['one_use']
+                        isBroken = new_value <= 0
+                        if isBroken:
+                            userIAm.removeInventoryThing(thing)
+                            text = f'{userIAm.getNameAndGerb()}, у тебя испотилась вещь из инвентаря:\n▫️ {thing["name"]}'
+                            send_messages_big(chat, text=text)
+                            send_message_to_admin(f'⚠️\n{text}')
+                        else
+                            thing['wear'].update({'value': new_value})
+                            text = f'{getResponseDialogFlow(None, thing["skill"]["training"]["dialog_text"]).fulfillment_text}\n▫️ {thing["name"]} {int(new_value*100)}%'
+                            send_messages_big(chat, text=text)
+                            send_message_to_admin(f'⚠️\n{text}')
+                            userIAm.addInventoryThing(thing, replace=True)
+                        
+                        count = count + thing['skill']['training']['value']
             if count <= 0:
-                pass
+                return
 
             if not userIAm.isInventoryThing(elem):
                 elem.update({'storage': elem['storage'] + count})
@@ -1683,12 +1698,12 @@ def main_message(message):
         if userIAm:
             for thing in userIAm.getInventoryType({'type':'things'}):
                 try:
-                    if thing['skill']['id'] == 'watchmaker':
+                    if thing['skill']['storage']['id'] == 'watchmaker':
                         skill = userIAm.getInventoryThing({'id':'watchmaker','type':'skill'})
                         if skill == None:
                             skill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==thing['skill']['id']), None) 
 
-                        storage = skill['storage'] + thing['skill']['value'] 
+                        storage = skill['storage'] + thing['skill']['storage']['value'] 
                         if storage >= skill['min']:
                             power_skill = (storage - skill['min'])/(skill['max'] - skill['min'])
                             farm_k = farm_k + power_skill
@@ -2125,9 +2140,9 @@ def main_message(message):
             if hasAccessToWariors(message.from_user.username):
                 filter_message = {"username": message.from_user.username, "forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message)                
-                # if not new_Message:
-                #     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
-                #     return
+                if not new_Message:
+                    send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
+                    return
 
                 if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
                     #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
