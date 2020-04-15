@@ -2368,7 +2368,7 @@ newvalues = { "$set": { "value":
                                         {   
                                             'training': {
                                                 'id':'watchmaker',
-                                                'probability': 0.33,
+                                                'probability': 0.66,
                                                 'value': -1,
                                                 'dialog_text': 'playstation5_no_training' 
                                             }                                                                                     
@@ -3586,7 +3586,7 @@ if 1==2:
             print(f'=======================================================')
 
 thing_names = ['metal_detector']
-if 1==1:
+if 1==2:
     for thing_name in thing_names:
         updateUser(None)
         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
