@@ -1030,7 +1030,7 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                             text = f'{userIAm.getNameAndGerb()}, у тебя испотилась вещь из инвентаря:\n▫️ {thing["name"]}'
                             send_messages_big(chat, text=text)
                             send_message_to_admin(f'⚠️\n{text}')
-                        else
+                        else:
                             thing['wear'].update({'value': new_value})
                             text = f'{getResponseDialogFlow(None, thing["skill"]["training"]["dialog_text"]).fulfillment_text}\n▫️ {thing["name"]} {int(new_value*100)}%'
                             send_messages_big(chat, text=text)
