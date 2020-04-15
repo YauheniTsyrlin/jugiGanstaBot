@@ -3594,7 +3594,7 @@ if 1==1:
         for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
             thing = user.getInventoryThing(elem)
             
-            print(f'before {user.getLogin()} {skill}')
+            print(f'before {user.getLogin()} {thing}')
             try:
                  elem['wear'].update({'value': thing['wear']['value']})
             except:
