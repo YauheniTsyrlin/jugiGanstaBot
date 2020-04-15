@@ -538,7 +538,7 @@ class User(object):
                             percent = int(storage*100/list(group)[-1]['max'])
                     except: pass
 
-                elif list(group)[-1]["type"] == 'clothes':
+                elif list(group)[-1]["type"] in ('clothes', 'things'):
                     try:
                         wear = list(group)[-1]['wear']['value']
                         if wear > 0:
@@ -546,7 +546,8 @@ class User(object):
                     except: pass
 
 
-                report = report + f'▫️ {list(group)[-1]["name"]} {str(percent)+"%" if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""}\n'
+
+                report = report + f'▫️ {list(group)[-1]["name"]} <b>{str(percent)+"%" if percent>0 else ""}</b>{"("+str(len(list(group)))+")" if len(list(group))>1 else ""}\n'
                 for elem in list(group):
                     cost = cost + elem["cost"]
 
