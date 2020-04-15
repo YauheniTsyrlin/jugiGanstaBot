@@ -2361,16 +2361,37 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'playstation5',
                                     'name': '🎮 PlayStation 5',
-                                    'cost': 1,
+                                    'cost': 300,
                                     'type': 'things',
                                     'quantity': None,
                                     'skill':
                                         {   
                                             'training': {
-                                                'id':'watchmaker',
+                                                'id':'economist',
                                                 'probability': 0.66,
                                                 'value': -1,
                                                 'dialog_text': 'playstation5_no_training' 
+                                            }                                                                                     
+                                        },
+                                    'wear': 
+                                        {
+                                            'one_use': 0.01,
+                                            'value': 1
+                                        }
+                                },
+                                {
+                                    'id': 'subscription_salon',
+                                    'name': '💅 Абонимент в салон красоты',
+                                    'cost': 150,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'skill':
+                                        {   
+                                            'training': {
+                                                'id':'economist',
+                                                'probability': 0.66,
+                                                'value': -1,
+                                                'dialog_text': 'subscription_salon_no_training' 
                                             }                                                                                     
                                         },
                                     'wear': 
@@ -3585,7 +3606,7 @@ if 1==2:
             print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
             print(f'=======================================================')
 
-thing_names = ['metal_detector']
+thing_names = ['metal_detector','playstation5']
 if 1==2:
     for thing_name in thing_names:
         updateUser(None)

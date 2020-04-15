@@ -1015,11 +1015,12 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                     if ' x' in s:
                         count = count + int(s.replace('/buy_trash','').split(' x')[1].strip())
                     else: count = count + 1
+
     if count > 0:
         if not time_over:
             # Проверяем на увеличители или уменшители умения
-            for thing in list(filter(lambda x : 'skill' in x, userIAm.getInventory())):
-                if elem['id']==thing['id'] and elem['type']==thing['type']:
+            for thing in list(filter(lambda x : 'skill' in x and 'training' in x['skill'], userIAm.getInventory())):
+                if elem['id']==thing['skill']['training']['id']:
                     r = random.random()
                     if r < thing['skill']['training']['probability']:
                         # Немножко ломаем предмет
@@ -1032,15 +1033,16 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                             send_message_to_admin(f'⚠️\n{text}')
                         else:
                             thing['wear'].update({'value': new_value})
-                            text = f'{getResponseDialogFlow(None, thing["skill"]["training"]["dialog_text"]).fulfillment_text}\n▫️ {thing["name"]} {int(new_value*100)}%'
+                            text = f'{getResponseDialogFlow(None, thing["skill"]["training"]["dialog_text"]).fulfillment_text}\n▫️ {thing["name"]} <b>{int(new_value*100)}%</b>'
                             send_messages_big(chat, text=text)
                             send_message_to_admin(f'⚠️\n{text}')
                             userIAm.addInventoryThing(thing, replace=True)
                         
                         count = count + thing['skill']['training']['value']
             if count <= 0:
+                updateUser(userIAm)
                 return
-
+            print('5')
             if not userIAm.isInventoryThing(elem):
                 elem.update({'storage': elem['storage'] + count})
                 userIAm.addInventoryThing(elem)
@@ -1744,7 +1746,7 @@ def main_message(message):
                             if res['bm_update']:
                                 logger.info(f'Обновился BM {res} : {warior.getName()}')
                                 countLearnSkill = countLearnSkill + 1
-                    
+
                     # Учимся умению "Экономист"
                     logger.info(f'Обновился BM у {countLearnSkill} бандитов')
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='economist'), None)
