@@ -1514,7 +1514,8 @@ def get_message_photo(message):
                 markupinline = InlineKeyboardMarkup(row_width=2)
                 for row in build_menu(buttons=buttons, n_cols=2):
                     markupinline.row(*row) 
-            send_messages_big(message.chat.id, text=wariorShow.getProfile(), reply_markup=markupinline)
+            userIAm = getUserByLogin(message.from_user.username)
+            send_messages_big(message.chat.id, text=wariorShow.getProfile(userIAm.getTimeZone()), reply_markup=markupinline)
     else:
         if privateChat:
             send_messages_big(message.chat.id, text=message.photo[len(message.photo)-1].file_id)
@@ -1878,9 +1879,9 @@ def main_message(message):
                 if warior == None:
                     send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
                 elif (warior and warior.photo):
-                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile(userIAm.getTimeZone()))
                 else:
-                    send_messages_big(message.chat.id, text=warior.getProfile())
+                    send_messages_big(message.chat.id, text=warior.getProfile(userIAm.getTimeZone()))
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_you_cant').fulfillment_text)
             return
@@ -1901,9 +1902,9 @@ def main_message(message):
                 if warior == None:
                     send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
                 elif (warior and warior.photo):
-                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile(userIAm.getTimeZone()))
                 else:
-                    send_messages_big(message.chat.id, text=warior.getProfile())
+                    send_messages_big(message.chat.id, text=warior.getProfile(userIAm.getTimeZone()))
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_you_cant').fulfillment_text)
             return
@@ -1915,9 +1916,9 @@ def main_message(message):
                 if warior == None:
                     send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
                 elif (warior and warior.photo):
-                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile(userIAm.getTimeZone()))
                 else:
-                    send_messages_big(message.chat.id, text=warior.getProfile())
+                    send_messages_big(message.chat.id, text=warior.getProfile(userIAm.getTimeZone()))
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_you_cant').fulfillment_text)
             return
@@ -1930,9 +1931,9 @@ def main_message(message):
                 if warior == None:
                     send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
                 elif (warior and warior.photo):
-                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile(userIAm.getTimeZone()))
                 else:
-                    send_messages_big(message.chat.id, text=warior.getProfile())
+                    send_messages_big(message.chat.id, text=warior.getProfile(userIAm.getTimeZone()))
             else:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_you_cant').fulfillment_text)
             return
@@ -2728,9 +2729,9 @@ def main_message(message):
                 if warior == None:
                     send_messages_big(message.chat.id, text='Ничего о нем не знаю!')
                 elif (warior and warior.photo):
-                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                    bot.send_photo(message.chat.id, warior.photo, warior.getProfile(userIAm.getTimeZone()))
                 else:
-                    send_messages_big(message.chat.id, text=warior.getProfile())
+                    send_messages_big(message.chat.id, text=warior.getProfile(userIAm.getTimeZone()))
             return
         elif (message.text.startswith('Рейд в 17:00') or message.text.startswith('Рейд в 9:00') or message.text.startswith('Рейд в 01:00')):
             
@@ -2965,11 +2966,11 @@ def main_message(message):
                 warior = wariors.importWarior(x)
                 if (warior and warior.photo):
                     try:
-                        bot.send_photo(message.chat.id, warior.photo, warior.getProfile())
+                        bot.send_photo(message.chat.id, warior.photo, warior.getProfile(userIAm.getTimeZone()))
                     except:
-                        send_messages_big(message.chat.id, text=warior.getProfile())
+                        send_messages_big(message.chat.id, text=warior.getProfile(userIAm.getTimeZone()))
                 else:
-                    send_messages_big(message.chat.id, text=warior.getProfile())
+                    send_messages_big(message.chat.id, text=warior.getProfile(userIAm.getTimeZone()))
         elif callJugi and ('уволить @' in message.text.lower() or 'удалить @' in message.text.lower()):
             if not isGoatBoss(message.from_user.username):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_not_goat_boss').fulfillment_text)

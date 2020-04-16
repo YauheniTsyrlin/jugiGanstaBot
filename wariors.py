@@ -200,7 +200,6 @@ def fromTopToWariorsBM(forward_date, message, wariors):
 
 
 def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
-    
     def getUserByLogin(login: str):
         for user in list(USERS_ARR):
             if login == user.getLogin(): return user
@@ -501,7 +500,7 @@ class Warior(object):
 
         return first_string + '\n' + string + second_string
 
-    def getProfile(self):
+    def getProfile(self, time_z='03:00:00'):
         string = ''
         string = string + f'┌{self.name}\n'  
         if self.fraction:
@@ -550,7 +549,12 @@ class Warior(object):
 
         string = string + '\n'
 
-        string = string + f'⏰{tools.getTimeEmoji(self.timeUpdate)} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.timeUpdate)) +'\n'
+        
+        dt = datetime.fromtimestamp(self.timeUpdate)
+        tz = datetime.strptime(time_z,"%H:%M:%S")
+        dt = dt + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+
+        string = string + f'⏰{tools.getTimeEmoji(self.timeUpdate)} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(dt.timestamp())) +'\n'
         return string
 
     def setName(self, name):

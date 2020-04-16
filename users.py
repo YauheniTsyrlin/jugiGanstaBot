@@ -6,7 +6,6 @@ from datetime import timedelta
 import tools
 from operator import itemgetter
 import itertools
-from operator import itemgetter
 
 def normalize(string):
     if not string:
@@ -263,6 +262,11 @@ class User(object):
             dt = dt + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
         return dt.timestamp()
 
+    def getTimeZoneDate(self):
+        if self.getTimeZone():
+            tz = datetime.strptime(self.getTimeZone(),"%H:%M:%S")
+        return dt.timestamp()
+
     def getBm(self):
         stat = normalize(self.force) + normalize(self.accuracy) + normalize(self.health) + normalize(self.charisma) + normalize(self.agility)
         return int(stat)
@@ -442,11 +446,15 @@ class User(object):
 
     def setTimeZone(self, timeZone):
         self.timeZone = timeZone  
+    
     def getTimeZone(self):
         try:
-            return self.timeZone
+            if not self.timeZone == None:
+                return self.timeZone
+            else:
+                return '03:00:00'    
         except:
-            return None
+            return '03:00:00'
 
     def setDzen(self, dzen):
         self.dzen = dzen  
