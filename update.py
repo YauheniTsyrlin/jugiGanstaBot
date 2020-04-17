@@ -3499,6 +3499,17 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
+
+registered_wariors.update_many(
+    { 'kills': {'$gte': 100}},
+    { '$set': { 'kills': 100} }
+)
+
+registered_wariors.update_many(
+    { 'hithimself': {'$gte': 100}},
+    { '$set': { 'hithimself': 100} }
+)
+
 # Смена логина пользователя
 # user = getUserByLogin('EkoveS')
 # user.setLogin('Brodskey')
