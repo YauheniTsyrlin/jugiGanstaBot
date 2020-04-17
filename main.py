@@ -3009,14 +3009,14 @@ def main_message(message):
             updateUser(None)
             user = users.getUser(message.from_user.username, registered_users)
             if user:
-                # warior = getWariorByName(user.getName(), user.getFraction())
-                # if (warior and warior.photo):
-                #     try:
-                #         bot.send_photo(message.chat.id, warior.photo, user.getProfile())
-                #     except:
-                #         send_messages_big(message.chat.id, text=user.getProfile())
-                # else:
-                send_messages_big(message.chat.id, text=user.getProfile())
+                warior = getWariorByName(user.getName(), user.getFraction())
+                if (warior and warior.photo):
+                    try:
+                        bot.send_photo(message.chat.id, warior.photo, user.getProfile(), parse_mode='HTML')
+                    except:
+                        send_messages_big(message.chat.id, text=user.getProfile())
+                else:
+                    send_messages_big(message.chat.id, text=user.getProfile())
             else:
                 send_messages_big(message.chat.id, text='С твоим профилем какая-то беда... Звони в поддержку пип-боев!')
         elif callJugi:
