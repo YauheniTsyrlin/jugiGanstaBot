@@ -555,7 +555,7 @@ class User(object):
 
 
 
-                report = report + f'▫️ {list(group)[-1]["name"]} <b>{str(percent)+"%" if percent>0 else ""}</b>{"("+str(len(list(group)))+")" if len(list(group))>1 else ""}\n'
+                report = report + f'▫️ {list(group)[-1]["name"]} {"<b>" + str(percent)+"%</b>" if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""}\n'
                 for elem in list(group):
                     cost = cost + elem["cost"]
 
