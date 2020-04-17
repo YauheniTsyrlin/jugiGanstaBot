@@ -61,7 +61,10 @@ def mergeWariors(warior, wariorToUpdate):
 
     if (warior.kills):
         if wariorToUpdate.kills:
-            wariorToUpdate.kills          = wariorToUpdate.kills + warior.kills
+            try:
+                wariorToUpdate.kills          = int(wariorToUpdate.kills) + int(warior.kills)
+            except:
+                wariorToUpdate.kills = int(warior.kills)
         else:
             wariorToUpdate.kills           = warior.kills
 
@@ -127,7 +130,10 @@ def importWarior(warior):
         war.missed              = 0
     
     if (warior.get('kills')):
-        war.kills               = warior.get('kills')
+        try:
+            war.kills               = int(warior.get('kills'))
+        except:
+            war.kills               = 0    
     else:
         war.kills               = 0
 
@@ -233,13 +239,13 @@ def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
 
         if fillResult and (result[0].name in strings[i] and result[1].name in strings[i]):
             if (tools.deEmojify(strings[i]).strip().startswith(tools.deEmojify(result[0].name))):
-                result[0].kills = result[0].kills + 1
+                result[0].kills = int(result[0].kills) + 1
                 winnerName = result[0].name
                 loserName = result[1].name
 
             else:
                 
-                result[1].kills = result[1].kills + 1
+                result[1].kills = int(result[1].kills) + 1
                 winnerName = result[1].name
                 loserName = result[0].name
         i=i+1
@@ -630,7 +636,7 @@ class Warior(object):
     def setKills(self, kills):
         self.kills = kills
     def getKills(self):
-        return self.kills
+        return int(self.kills)
 
     def setEnemy_armor(self, enemy_armor):
         self.enemy_armor = enemy_armor
