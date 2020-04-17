@@ -408,7 +408,6 @@ def update_warior(warior: wariors.Warior):
         # if isKnownWarior(warior.getName(), warior.getFraction()):
         # logger.info(f'======= Это известный бандит')
         wariorToUpdate = getWariorByName(warior.getName(), warior.getFraction())
-        print(f'{warior.getName()}====================== ')
         if wariorToUpdate and warior and warior.getBm():
             try:
                 if (wariorToUpdate.getBm() == None or wariorToUpdate.getBm() < warior.getBm()):      
@@ -421,8 +420,6 @@ def update_warior(warior: wariors.Warior):
             updatedWarior = warior 
         else:
             updatedWarior = wariors.mergeWariors(warior, wariorToUpdate)
-        print(updatedWarior.getKills())
-
         # updatedWarior Текущий пользователь
         # warior Новый пользователь
 
