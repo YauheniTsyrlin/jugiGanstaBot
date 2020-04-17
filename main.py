@@ -1595,6 +1595,7 @@ def get_message_stiker(message):
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
+    # message.from_user.username = "Brodskey"
     #  write_json(message.json)
     chat = message.chat.id
     privateChat = ('private' in message.chat.type)
@@ -1988,7 +1989,7 @@ def main_message(message):
                         warior = getWariorByName(name, fraction)
                         
                         user = getUserByName(name)
-                        if not user.getFraction() == fraction:
+                        if user and (not user.getFraction() == fraction):
                             user == None
 
                         if user:
@@ -2762,7 +2763,6 @@ def main_message(message):
         else:
             return 
             #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text) 
-
     if 'gratz' in message.text.lower() or 'грац' in message.text.lower() or 'грац!' in message.text.lower() or  'лол' in message.text.lower() or 'lol' in message.text.lower():
         if (random.random() <= float(getSetting(code='PROBABILITY', name='EMOTIONS'))):
             bot.send_sticker(message.chat.id, random.sample(getSetting(code='STICKERS', name='BOT_LOVE'), 1)[0]['value'])
@@ -3000,11 +3000,11 @@ def main_message(message):
             else:                 
                 send_messages_big(message.chat.id, text=f'{login} уволен нафиг!')
         elif (callJugi and 'профиль' in message.text.lower() ):
-            if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
-                pass
-            else:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_censorship').fulfillment_text)
-                return
+            # if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+            #     pass
+            # else:
+            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_censorship').fulfillment_text)
+            #     return
 
             updateUser(None)
             user = users.getUser(message.from_user.username, registered_users)
