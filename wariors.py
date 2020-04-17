@@ -47,19 +47,19 @@ def mergeWariors(warior, wariorToUpdate):
         wariorToUpdate.photo = warior.photo
         wariorToUpdate.goat = warior.goat
     
-    if (warior.hithimself):
+    if (warior.hithimself and warior.hithimself > 0):
         if wariorToUpdate.hithimself:
             wariorToUpdate.hithimself       = wariorToUpdate.hithimself + warior.hithimself
         else:
             wariorToUpdate.hithimself       = warior.hithimself
     
-    if (warior.missed):
+    if (warior.missed  and warior.missed > 0):
         if wariorToUpdate.missed:
             wariorToUpdate.missed           = wariorToUpdate.missed + warior.missed
         else:
             wariorToUpdate.missed           = warior.missed
 
-    if (warior.kills):
+    if (warior.kills and warior.kills > 0):
         if wariorToUpdate.kills:
             try:
                 wariorToUpdate.kills          = int(wariorToUpdate.kills) + int(warior.kills)
