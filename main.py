@@ -115,6 +115,16 @@ GLOBAL_VARS = {
                 {
                     'inventory':[]
                 },
+    'skill':
+                {
+                    'programmer': next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None),
+                    'watchmaker':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='watchmaker'), None),
+                    'economist':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='economist'), None),
+                    'fighter':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='fighter'), None),
+                    'robotics':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='robotics'), None),
+                    'electrician':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None),
+                    'medic':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
+                },
     'fractions':  ['⚙️Убежище 4', '⚙️Убежище 11', '🔪Головорезы', '💣Мегатонна', '⚛️Республика', '👙Клуб бикини', '🔰Конкорд'],
     'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'],
     'fight_log_message' : ['отдал на съедение кротокрысам', 'одержал победу над', 'не оставил живого места от', 'гордо наступил на полудохлого', 'оставил бездыханное тело', 'сделал сиротами детишек', 'добил с пинка', 'добил лежачего', 'выписал пропуск в Вальхаллу', 'добил фаталити', 'стоит над поверженным', 'одержал победу над'],
@@ -125,6 +135,19 @@ GLOBAL_VARS = {
     '♻️ Разменять': ['♻️ Назад'] 
 
 }
+
+def addInventure(user: users.User, inv):
+    eco_skill = user.getInventoryThing(GLOBAL_VARS['skill']['economist'])
+    if eco_skill:
+        power_skill = 0
+        if eco_skill['storage'] >= eco_skill['min']:
+            power_skill = (eco_skill['storage'] - eco_skill['min'])/(eco_skill['max'] - eco_skill['min'])
+            r = random.random()
+            if r <= eco_skill['probability']:
+                inv['cost'] = inv['cost'] + inv['cost'] * power_skill
+    user.addInventoryThing(inv)
+
+
 
 def check_and_register_tg_user(tg_login: str):
     user = getUserByLogin(tg_login)
@@ -622,7 +645,6 @@ def infect(logins, chat_id):
                                     # send_message_to_admin(f'⚠️🦇 Внимание! \n value = {protected_thing["wear"]["value"]}, one_use = {protected_thing["wear"]["one_use"]}')
                                     if protected_thing['wear']['value'] - protected_thing['wear']['one_use'] > 0:
                                         protected_thing['wear'].update({'value':  protected_thing['wear']['value'] - protected_thing['wear']['one_use']})
-                                        # user.addInventoryThing(protected_thing, replace=True)
                                         updateUser(user)
                                         safe_mask = True
                                         # Маска уберегла
@@ -663,6 +685,7 @@ def infect(logins, chat_id):
 
                         if safe_mask:
                             continue            
+                    user.getInventoryThing(GLOBAL_VARS['skill']['economist'])
 
                     user.addInventoryThing(elem)
                     updateUser(user)
@@ -1036,7 +1059,6 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                             text = f'{getResponseDialogFlow(None, thing["skill"]["training"]["dialog_text"]).fulfillment_text}\n▫️ {thing["name"]} <b>{int(new_value*100)}%</b>'
                             send_messages_big(chat, text=text)
                             send_message_to_admin(f'⚠️\n{text}')
-                            #userIAm.addInventoryThing(thing, replace=True)
                         
                         count = count + thing['skill']['training']['value']
             if count <= 0:
@@ -1097,7 +1119,6 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                 percent = int(count*100/elem['max'])
 
                 send_message_to_admin(f'⚠️😎 {userIAm.getLogin()} продолжил изучение умения:\n▫️ {elem["name"]} {elem["storage"]}/{elem["max"]}')
-                # userIAm.addInventoryThing(elem, replace=True)
                 send_messages_big(chat, text=f'▫️ {elem["name"]} {percent}%')
 
             updateUser(userIAm)
@@ -1700,7 +1721,7 @@ def main_message(message):
         if userIAm:
             for thing in userIAm.getInventoryType({'type':'things'}):
                 try:
-                    if 'skill' in thing and thing['skill']['storage']['id'] == 'watchmaker':
+                    if 'skill' in thing and 'storage' in thing['skill'] and thing['skill']['storage']['id'] == 'watchmaker':
                         skill = userIAm.getInventoryThing({'id':'watchmaker','type':'skill'})
                         if skill == None:
                             skill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==thing['skill']['storage']['id']), None) 
@@ -2820,6 +2841,26 @@ def main_message(message):
         if (random.random() <= float(getSetting(code='PROBABILITY', name='DOOR_STICKER'))):
             bot.send_photo(message.chat.id, random.sample(getSetting(code='STICKERS', name='DOOR'), 1)[0]['value'])
             return   
+    if '+' == message.text.lower() and message.reply_to_message:
+        if 'kirill_burthday' not in GLOBAL_VARS:
+             kirill_burthday = []
+             GLOBAL_VARS.update({'kirill_burthday':kirill_burthday})
+
+        if message.from_user.username not in GLOBAL_VARS['kirill_burthday']:
+            kirill_burthday = GLOBAL_VARS['kirill_burthday']
+            kirill_burthday.append(message.from_user.username)
+            elem = random.sample(GLOBAL_VARS['inventory'], 1)[0]
+            userIAm.addInventoryThing(elem, None)
+            updateUser(userIAm)
+            send_messages_big(message.chat.id, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+        else:
+            send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
+        
+        for login in GLOBAL_VARS['kirill_burthday']:
+            logger.info(f'{login} ===============')
+
+        return
+
     # Хуификация
     if message.reply_to_message and 'хуифицируй' in message.text.lower():
         if not isGoatSecretChat(message.from_user.username, message.chat.id):
