@@ -1729,7 +1729,6 @@ def main_message(message):
                         storage = skill['storage'] + thing['skill']['storage']['value'] 
                         if storage >= skill['min']:
                             power_skill = (storage - skill['min'])/(skill['max'] - skill['min'])
-                            print(f'6 {power_skill}')
                             farm_k = farm_k + power_skill
                             logger.info(f'Коэффициент времени фарма: {farm_k}')
                         newValue = thing['wear']['value'] - thing['wear']['one_use']
