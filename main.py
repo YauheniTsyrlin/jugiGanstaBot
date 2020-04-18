@@ -13,6 +13,7 @@ import hashlib
 import logging
 import ssl
 from mem_top import mem_top
+import traceback
 
 from aiohttp import web
 from yandex_geocoder import Client
@@ -621,7 +622,7 @@ def infect(logins, chat_id):
                                     # send_message_to_admin(f'⚠️🦇 Внимание! \n value = {protected_thing["wear"]["value"]}, one_use = {protected_thing["wear"]["one_use"]}')
                                     if protected_thing['wear']['value'] - protected_thing['wear']['one_use'] > 0:
                                         protected_thing['wear'].update({'value':  protected_thing['wear']['value'] - protected_thing['wear']['one_use']})
-                                        user.addInventoryThing(protected_thing, replace=True)
+                                        # user.addInventoryThing(protected_thing, replace=True)
                                         updateUser(user)
                                         safe_mask = True
                                         # Маска уберегла
@@ -1035,7 +1036,7 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                             text = f'{getResponseDialogFlow(None, thing["skill"]["training"]["dialog_text"]).fulfillment_text}\n▫️ {thing["name"]} <b>{int(new_value*100)}%</b>'
                             send_messages_big(chat, text=text)
                             send_message_to_admin(f'⚠️\n{text}')
-                            userIAm.addInventoryThing(thing, replace=True)
+                            #userIAm.addInventoryThing(thing, replace=True)
                         
                         count = count + thing['skill']['training']['value']
             if count <= 0:
@@ -1096,7 +1097,7 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                 percent = int(count*100/elem['max'])
 
                 send_message_to_admin(f'⚠️😎 {userIAm.getLogin()} продолжил изучение умения:\n▫️ {elem["name"]} {elem["storage"]}/{elem["max"]}')
-                userIAm.addInventoryThing(elem, replace=True)
+                # userIAm.addInventoryThing(elem, replace=True)
                 send_messages_big(chat, text=f'▫️ {elem["name"]} {percent}%')
 
             updateUser(userIAm)
@@ -1694,35 +1695,32 @@ def main_message(message):
     # Форварды от WastelandWarsBot
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
         time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
-        
         # Вычисление коэффициента времени фарма
         farm_k = 1
         if userIAm:
             for thing in userIAm.getInventoryType({'type':'things'}):
                 try:
-                    if thing['skill']['storage']['id'] == 'watchmaker':
+                    if 'skill' in thing and thing['skill']['storage']['id'] == 'watchmaker':
                         skill = userIAm.getInventoryThing({'id':'watchmaker','type':'skill'})
                         if skill == None:
-                            skill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==thing['skill']['id']), None) 
+                            skill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==thing['skill']['storage']['id']), None) 
 
                         storage = skill['storage'] + thing['skill']['storage']['value'] 
                         if storage >= skill['min']:
                             power_skill = (storage - skill['min'])/(skill['max'] - skill['min'])
+                            print(f'6 {power_skill}')
                             farm_k = farm_k + power_skill
                             logger.info(f'Коэффициент времени фарма: {farm_k}')
-                        
                         newValue = thing['wear']['value'] - thing['wear']['one_use']
                         if newValue < 0:
                             userIAm.removeInventoryThing(thing)
                             text = f'{user.getNameAndGerb()}, у тебя испортилась вещь из инвентаря:\n▫️ {thing["name"]}'
                         else:
                             thing['wear'].update({'value': newValue})
-                            userIAm.addInventoryThing(thing, replace=True)
                         updateUser(userIAm)
-
-
                 except:
-                    pass
+                    traceback.print_exc()
+
         time_farm_over = message.forward_date < (datetime.now() - timedelta(minutes=5*farm_k)).timestamp()
 
         if (message.text.startswith('📟Пип-бой 3000')):
