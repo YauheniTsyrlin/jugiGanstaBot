@@ -789,11 +789,6 @@ newvalues = { "$set": { "value":
                                     'name': '💰 Кожаный мешок',
                                     'cost': 4,
                                     'type': 'clothes',
-                                    'wear':
-                                        {
-                                            'one_use': 0.1,
-                                            'value': 1
-                                        },
                                     'quantity': 10
                                 },
                                 {
