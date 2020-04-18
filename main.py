@@ -644,7 +644,7 @@ def infect(logins, chat_id):
                                     else:
                                         user.removeInventoryThing(protected_thing)
                                         updateUser(user)
-                                        text = f'{user.getNameAndGerb()}, у тебя испотилась вещь из инвентаря:\n▫️ {protected_thing["name"]}'
+                                        text = f'{user.getNameAndGerb()}, у тебя испортилась вещь из инвентаря:\n▫️ {protected_thing["name"]}'
                                         sec = 5
                                         pending_date = datetime.now() + timedelta(seconds=sec)
                                         pending_messages.insert_one({ 
@@ -1041,7 +1041,6 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
             if count <= 0:
                 updateUser(userIAm)
                 return
-            print('5')
             if not userIAm.isInventoryThing(elem):
                 elem.update({'storage': elem['storage'] + count})
                 userIAm.addInventoryThing(elem)
@@ -1711,9 +1710,19 @@ def main_message(message):
                             power_skill = (storage - skill['min'])/(skill['max'] - skill['min'])
                             farm_k = farm_k + power_skill
                             logger.info(f'Коэффициент времени фарма: {farm_k}')
+                        
+                        newValue = thing['wear']['value'] - thing['wear']['one_use']
+                        if newValue < 0:
+                            userIAm.removeInventoryThing(thing)
+                            text = f'{user.getNameAndGerb()}, у тебя испортилась вещь из инвентаря:\n▫️ {thing["name"]}'
+                        else:
+                            thing['wear'].update({'value': newValue})
+                            userIAm.addInventoryThing(thing, replace=True)
+                        updateUser(userIAm)
+
+
                 except:
                     pass
-
         time_farm_over = message.forward_date < (datetime.now() - timedelta(minutes=5*farm_k)).timestamp()
 
         if (message.text.startswith('📟Пип-бой 3000')):
@@ -2577,6 +2586,11 @@ def main_message(message):
                 filter_message = {"forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message) 
                 if new_Message:
+
+                    
+                    # Учимся умению "⏰ Часовщик"
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='watchmaker'), None)
+                    check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
                     # Учимся умению "Робототехник"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='robotics'), None)
                     check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
@@ -3000,11 +3014,11 @@ def main_message(message):
             else:                 
                 send_messages_big(message.chat.id, text=f'{login} уволен нафиг!')
         elif (callJugi and 'профиль' in message.text.lower() ):
-            # if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
-            #     pass
-            # else:
-            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_censorship').fulfillment_text)
-            #     return
+            if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+                pass
+            else:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_censorship').fulfillment_text)
+                return
 
             updateUser(None)
             user = users.getUser(message.from_user.username, registered_users)
