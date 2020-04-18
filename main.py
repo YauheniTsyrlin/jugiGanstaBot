@@ -132,11 +132,12 @@ GLOBAL_VARS = {
     'group_buttons': ['Джу, 📋 Отчет', f'Джу, ⏰ план рейда', '📈 Статистика'],
     'private_buttons': ['📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика', '🧺 Комиссионка'],
     '🧺 Комиссионка': ['На полках', 'Сдать', '♻️ Разменять', '🧺 Назад'],
-    '♻️ Разменять': ['♻️ Назад'] 
+    '♻️ Разменять': ['♻️ Назад'],
+    'kirill_burthday': ['GonzikBenzyavsky', 'Lena_Lenochka_32', 'WestMoscow', 'Brodskey', 'VirtusX', 'edem_00', 'Irakusa', 'Under_w0rld']
 
 }
 
-def addInventure(user: users.User, inv):
+def addInventory(user: users.User, inv):
     eco_skill = user.getInventoryThing(GLOBAL_VARS['skill']['economist'])
     if eco_skill:
         power_skill = 0
@@ -144,10 +145,9 @@ def addInventure(user: users.User, inv):
             power_skill = (eco_skill['storage'] - eco_skill['min'])/(eco_skill['max'] - eco_skill['min'])
             r = random.random()
             if r <= eco_skill['probability']:
-                inv['cost'] = inv['cost'] + inv['cost'] * power_skill
-    user.addInventoryThing(inv)
-
-
+                # може
+                inv['cost'] = inv['cost'] + int(inv['cost'] * power_skill * inv['value'])
+    return user.addInventoryThing(inv, inv['quantity'])
 
 def check_and_register_tg_user(tg_login: str):
     user = getUserByLogin(tg_login)
@@ -685,9 +685,8 @@ def infect(logins, chat_id):
 
                         if safe_mask:
                             continue            
-                    user.getInventoryThing(GLOBAL_VARS['skill']['economist'])
 
-                    user.addInventoryThing(elem)
+                    addInventory(user, elem)
                     updateUser(user)
                     infect_user = getUserByLogin(vir['login'])
 
@@ -761,7 +760,7 @@ def cure(logins, chat_id):
                                     protected_clothes = protected_thing
                         
                         if protected_clothes and not infected.isInventoryThing(protected_clothes):
-                            infected.addInventoryThing(protected_clothes)
+                            addInventory(infected, protected_clothes)
                             mask_text = f'\n▫️ +{protected_clothes["name"]}'
 
                         send_message_to_admin(f'⚠️❤️ Внимание! \n {infected.getLogin()} вылечен {medic.getLogin()} от {vir["name"]}!')
@@ -1023,7 +1022,7 @@ def dzen_rewards(user, num_dzen, message):
         if user.isInventoryThing(elem):
             pass
         else:
-            if user.addInventoryThing(elem, elem['quantity']):
+            if addInventory(user, elem):
                 updateUser(user)
                 send_messages_big(chat, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
             else:
@@ -1066,7 +1065,7 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                 return
             if not userIAm.isInventoryThing(elem):
                 elem.update({'storage': elem['storage'] + count})
-                userIAm.addInventoryThing(elem)
+                addInventory(userIAm, elem)
                 percent = int((elem['storage'])*100/elem['max'])
                 send_messages_big(chat, text=f'Ты начал изучение умения:\n▫️ {elem["name"]} {percent}%') 
                 send_message_to_admin(f'⚠️🤓 {userIAm.getLogin()} начал изучение умения:\n▫️ {elem["name"]} {percent}%')
@@ -1088,13 +1087,13 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                     # Корочка
                     present = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id=elem['flags']['present_min']['type'])['value']) if x['id']==elem['flags']['present_min']['id']), None)
                     if present:
-                        userIAm.addInventoryThing(present)
+                        addInventory(userIAm, present)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
                     # Должность
 
                     position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
                     if position:
-                        userIAm.addInventoryThing(position)
+                        addInventory(userIAm, position)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_position_add').fulfillment_text + f'\n\n▫️ {position["name"]}') 
                 
                 # проверяем, а не поздравляли ли мы его за достижение максимума?
@@ -1105,12 +1104,12 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                     # Корочка
                     present = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id=elem['flags']['present_max']['type'])['value']) if x['id']==elem['flags']['present_max']['id']), None)
                     if present:
-                        userIAm.addInventoryThing(present)
+                        addInventory(userIAm, present)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
                     # Должность
                     position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']), None)
                     if position:
-                        userIAm.addInventoryThing(position)
+                        addInventory(userIAm, position)
                         old_position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
                         userIAm.removeInventoryThing(old_position)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_position_add').fulfillment_text + f'\n\n▫️ {position["name"]}') 
@@ -1801,7 +1800,7 @@ def main_message(message):
 
                     elem = random.sample(getSetting(code='ACCESSORY_ALL', id='PIP_BOY')["value"], 1)[0]
                     user.setChat(message.chat.id)
-                    user.addInventoryThing(elem, elem['quantity'])
+                    addInventory(user, elem)
                     user.setPing(True)
 
                     newRank = None
@@ -1874,7 +1873,7 @@ def main_message(message):
                                         
                                         elem.update({"cost": elem["cost"] * k})
 
-                                        if ourBandUser.addInventoryThing(elem, elem['quantity']):
+                                        if addInventory(ourBandUser, elem):
                                             updateUser(ourBandUser)
                                             send_messages_big(message.chat.id, text = f'Тебе выдали:\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
                                         else:
@@ -2199,7 +2198,7 @@ def main_message(message):
                     ticket = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='redeemed_raid_ticket'), None)             
                     date_stamp = getRaidTimeText(message.text.split("Рейд начнётся через ⏱")[1], message.forward_date)
                     date_str = time.strftime("%d.%m %H:%M", time.gmtime( (datetime.fromtimestamp(date_stamp) + timedelta(hours=tz.hour)).timestamp()))
-                    user.addInventoryThing(ticket, ticket['quantity'])
+                    addInventory(user, ticket)
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text + 
                         f'\nВ специальном паркомате на рейдовой точке ты взял талончик на рейд:\n▫️  {ticket["name"]} {date_str}')
                 except:
@@ -2849,7 +2848,7 @@ def main_message(message):
             kirill_burthday = GLOBAL_VARS['kirill_burthday']
             kirill_burthday.append(message.from_user.username)
             elem = random.sample(GLOBAL_VARS['inventory'], 1)[0]
-            userIAm.addInventoryThing(elem, None)
+            addInventory(userIAm, elem)
             updateUser(userIAm)
             send_messages_big(message.chat.id, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
         else:
@@ -4645,11 +4644,11 @@ def callback_query(call):
             bot.answer_callback_query(call.id, "Ты сделал свой выбор")
             if login.lower() == 'всем':
                 for useradd in list(USERS_ARR):
-                    useradd.addInventoryThing(elem, elem['quantity'])
+                    addInventory(useradd, elem)
                     updateUser(useradd)
                 send_messages_big(call.message.chat.id, text= 'Бандиты!\n' + getResponseDialogFlow(call.message.from_user.username, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
             else:
-                user.addInventoryThing(elem, None)
+                addInventory(user, elem)
                 updateUser(user)
                 send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
 
@@ -5128,7 +5127,7 @@ def rade():
                     #else:
                     #    send_messages_big(chat, text=userWin.getNameAndGerb() + '!\n' + getResponseDialogFlow(userWin.getLogin(), 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
 
-                    userWin.addInventoryThing(elem, elem['quantity'])
+                    addInventory(userWin, elem)
                     updateUser(userWin)
                     row = {}
                     row.update({'date':now_date.timestamp()})
@@ -5474,7 +5473,7 @@ def setGiftsForRaid(goat):
                                 continue
 
             # send_message_to_admin(f'⚠️ {user.getNameAndGerb()} @{user.getLogin()}\n▫️ {bolt["name"]}!')
-            user.addInventoryThing(bolt, bolt['quantity'])
+            addInventory(user, bolt)
             #send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {bolt["name"]}')    
             users_on_raid.append(
                         {
