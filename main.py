@@ -3762,7 +3762,7 @@ def main_message(message):
                             report_yes = '<b>Записались на захват:</b>\n'
                             i = 0
                             for dun in dungeons.find({
-                                'ё': dt.timestamp(),
+                                'date': dt.timestamp(),
                                 'band': band,
                                 'dungeon_km': dungeon_km,
                                 'signedup': True
@@ -4348,7 +4348,8 @@ def callback_query(call):
         return
 
     dt = datetime.fromtimestamp(float(call.data.split('|')[1]))
-    time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
+
+    time_str = str(dt.hour + 3).zfill(2)+':'+str(dt.minute).zfill(2)
     dungeon_km = call.data.split('|')[3]
     dungeon = getSetting(code='DUNGEONS', value=dungeon_km) 
 
