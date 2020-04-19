@@ -18,6 +18,9 @@ import tools
 	
 import hashlib
 
+from operator import itemgetter
+import itertools
+
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["jugidb"]
 registered_users = mydb["users"]
@@ -403,8 +406,8 @@ print('\n======== radeReport ==========\n')
 # raid = getPlanedRaidLocation('FǁȺǁggǁØǁAT', False)
 # print(raid)
 # print(datetime.fromtimestamp(raid["rade_date"]))
-import itertools
-from operator import itemgetter
+# import itertools
+# from operator import itemgetter
 
 # inventory_arr = getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value']  + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value']
 
@@ -673,8 +676,59 @@ def getRaidTimeText(text, date):
 #         report = f'▫️ {gr[0]["name"]} {str(len(gr)) if len(gr)>1 else str(len(gr))}\n'
 #         print(report)  
 
-for goat in getSetting(code='GOATS_BANDS'):
-    getPlanedRaidLocation(goat['name'], planRaid = False)
+# for goat in getSetting(code='GOATS_BANDS'):
+#     getPlanedRaidLocation(goat['name'], planRaid = False)
+
+def getInventoryReport(user, types):
+        full_report = ''
+        for type in types:
+            report = ''
+            cost = 0
+            filtered_arr = list(filter(lambda x : x['type'] == type['id'], user.getInventory())) 
+            sorted_arr = sorted(filtered_arr, key=itemgetter('id'))
+
+            for key, gr in itertools.groupby(sorted_arr, key=lambda x:x['id']):
+                group = list(gr)
+
+                print('==================')
+                print(list(group)[-1])
+
+
+                percent = 0
+                if list(group)[-1]["type"] == 'skill':
+                    try:
+                        storage = list(group)[-1]['storage']
+                        if storage > 0:
+                            percent = int(storage*100/list(group)[-1]['max'])
+                    except: pass
+
+                elif list(group)[-1]["type"] in ('clothes', 'things'):
+                    try:
+                        wear = list(group)[-1]['wear']['value']
+                        if wear > 0:
+                            percent = int(wear*100/1)
+                    except: pass
+
+                elem_cost = 0
+                for elem in list(group):
+                    if 'cost' in elem:
+                        elem_cost = elem_cost + elem["cost"]
+                        cost = cost + elem["cost"]
+
+
+                report = report + f'▫️ {list(group)[-1]["name"]} {"<b>" + str(percent)+"%</b>" if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""} {" 🔘"+str(elem_cost) if elem_cost > 0 else ""}\n'
+
+            if not report == '':
+                report = type['name'] + (f' (🔘 {cost}):\n' if cost>0 else ':\n') + report + '\n'
+            full_report = full_report + report
+        return full_report
+
+user = getUserByLogin('GonzikBenzyavsky')
+inventory_category = [
+                        {'id':'things', 'name':'📦 Вещи'}
+                    ]
+print(getInventoryReport(user, inventory_category))
+
 sys.exit(0)
 
 # import pandas as pd
