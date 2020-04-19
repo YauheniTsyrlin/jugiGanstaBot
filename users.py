@@ -556,7 +556,7 @@ class User(object):
                 elem_cost = 0
                 for elem in list(group):
                     if 'cost' in elem:
-                        elem_cost = elem_cost + elem["cost"]
+                        # elem_cost = elem_cost + elem["cost"]
                         cost = cost + elem["cost"]
                 report = report + f'▫️ {list(group)[-1]["name"]} {"<b>" + str(percent)+"%</b>" if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""} {" 🔘"+str(elem_cost) if elem_cost > 0 else ""}\n'
 
