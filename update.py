@@ -3594,8 +3594,6 @@ if 1==2:
             print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
             print(f'=======================================================')
 
-
-
 # if 1==2:
     # if now_date.hour in (99, 19) and now_date.minute in (99, 58) and now_date.second < 15:
         
@@ -3646,7 +3644,7 @@ if 1==2:
     #                 antyBoltReport = antyBoltReport + f'{counter}. @{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
     #     send_message_to_admin(antyBoltReport)
 
-if 1==1: # Изменение уровня обучения навыку
+if 1==2: # Изменение уровня обучения навыку
     userupd = {}
     userupd.update({'GonzikBenzyavsky': 90})
     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='economist'), None) 
