@@ -1716,7 +1716,7 @@ def main_message(message):
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
         time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
         # Вычисление коэффициента времени фарма
-        farm_k = 1
+        farm_k = 0
         if userIAm:
             for thing in userIAm.getInventoryType({'type':'things'}):
                 try:
@@ -1728,8 +1728,8 @@ def main_message(message):
                         storage = skill['storage'] + thing['skill']['storage']['value'] 
                         if storage >= skill['min']:
                             power_skill = (storage - skill['min'])/(skill['max'] - skill['min'])
-                            farm_k = farm_k + power_skill
-                            logger.info(f'Коэффициент времени фарма: {farm_k}')
+                            farm_k = int(power_skill * 10 / 1)
+                            logger.info(f'Коэффициент времени фарма: +{farm_k} мин.')
                         newValue = thing['wear']['value'] - thing['wear']['one_use']
                         if newValue < 0:
                             userIAm.removeInventoryThing(thing)
@@ -1740,7 +1740,7 @@ def main_message(message):
                 except:
                     traceback.print_exc()
 
-        time_farm_over = message.forward_date < (datetime.now() - timedelta(minutes=5*farm_k)).timestamp()
+        time_farm_over = message.forward_date < (datetime.now() - timedelta(minutes= 5+farm_k)).timestamp()
 
         if (message.text.startswith('📟Пип-бой 3000')):
             if ('/killdrone' in message.text or 
@@ -2839,25 +2839,24 @@ def main_message(message):
         if (random.random() <= float(getSetting(code='PROBABILITY', name='DOOR_STICKER'))):
             bot.send_photo(message.chat.id, random.sample(getSetting(code='STICKERS', name='DOOR'), 1)[0]['value'])
             return   
-    # if '+' == message.text.lower() and message.reply_to_message:
-    #     if 'kirill_burthday' not in GLOBAL_VARS:
-    #          kirill_burthday = []
-    #          GLOBAL_VARS.update({'kirill_burthday':kirill_burthday})
+    #if '+' == message.text.lower() and message.reply_to_message:
+        # if 'kirill_burthday' not in GLOBAL_VARS:
+        #      kirill_burthday = []
+        #      GLOBAL_VARS.update({'kirill_burthday':kirill_burthday})
 
-    #     if message.from_user.username not in GLOBAL_VARS['kirill_burthday']:
-    #         kirill_burthday = GLOBAL_VARS['kirill_burthday']
-    #         kirill_burthday.append(message.from_user.username)
-    #         elem = random.sample(GLOBAL_VARS['inventory'], 1)[0]
-    #         addInventory(userIAm, elem)
-    #         updateUser(userIAm)
-    #         send_messages_big(message.chat.id, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
-    #     else:
-    #         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
+        # if message.from_user.username not in GLOBAL_VARS['kirill_burthday']:
+        #     kirill_burthday = GLOBAL_VARS['kirill_burthday']
+        #     kirill_burthday.append(message.from_user.username)
+        #     elem = random.sample(GLOBAL_VARS['inventory'], 1)[0]
+        #     addInventory(userIAm, elem)
+        #     updateUser(userIAm)
+        #     send_messages_big(message.chat.id, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+        # else:
+        #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
         
-    #     for login in GLOBAL_VARS['kirill_burthday']:
-    #         logger.info(f'{login} ===============')
-
-    #     return
+        # for login in GLOBAL_VARS['kirill_burthday']:
+        #     logger.info(f'{login} ===============')
+        # return
 
     # Хуификация
     if message.reply_to_message and 'хуифицируй' in message.text.lower():

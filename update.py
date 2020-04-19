@@ -3549,7 +3549,7 @@ if 1==2:
 
 # 'electrician', 'medic', 'robotics','programmer', 'watchmaker', 'economist', 'fighter', 
 skill_names = ['electrician', 'medic', 'robotics','programmer', 'watchmaker', 'economist', 'fighter']
-if 1==1:
+if 1==2:
     for skill_name in skill_names:
         updateUser(None)
         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==skill_name), None) 
