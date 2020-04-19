@@ -146,7 +146,7 @@ def addInventory(user: users.User, inv):
             r = random.random()
             if r <= eco_skill['probability']:
                 # може
-                inv['cost'] = inv['cost'] + int(inv['cost'] * power_skill * inv['value'])
+                inv['cost'] = inv['cost'] + int(inv['cost'] * power_skill * eco_skill['value'])
     return user.addInventoryThing(inv, inv['quantity'])
 
 def check_and_register_tg_user(tg_login: str):
@@ -2839,25 +2839,25 @@ def main_message(message):
         if (random.random() <= float(getSetting(code='PROBABILITY', name='DOOR_STICKER'))):
             bot.send_photo(message.chat.id, random.sample(getSetting(code='STICKERS', name='DOOR'), 1)[0]['value'])
             return   
-    if '+' == message.text.lower() and message.reply_to_message:
-        if 'kirill_burthday' not in GLOBAL_VARS:
-             kirill_burthday = []
-             GLOBAL_VARS.update({'kirill_burthday':kirill_burthday})
+    # if '+' == message.text.lower() and message.reply_to_message:
+    #     if 'kirill_burthday' not in GLOBAL_VARS:
+    #          kirill_burthday = []
+    #          GLOBAL_VARS.update({'kirill_burthday':kirill_burthday})
 
-        if message.from_user.username not in GLOBAL_VARS['kirill_burthday']:
-            kirill_burthday = GLOBAL_VARS['kirill_burthday']
-            kirill_burthday.append(message.from_user.username)
-            elem = random.sample(GLOBAL_VARS['inventory'], 1)[0]
-            addInventory(userIAm, elem)
-            updateUser(userIAm)
-            send_messages_big(message.chat.id, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
-        else:
-            send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
+    #     if message.from_user.username not in GLOBAL_VARS['kirill_burthday']:
+    #         kirill_burthday = GLOBAL_VARS['kirill_burthday']
+    #         kirill_burthday.append(message.from_user.username)
+    #         elem = random.sample(GLOBAL_VARS['inventory'], 1)[0]
+    #         addInventory(userIAm, elem)
+    #         updateUser(userIAm)
+    #         send_messages_big(message.chat.id, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+    #     else:
+    #         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
         
-        for login in GLOBAL_VARS['kirill_burthday']:
-            logger.info(f'{login} ===============')
+    #     for login in GLOBAL_VARS['kirill_burthday']:
+    #         logger.info(f'{login} ===============')
 
-        return
+    #     return
 
     # Хуификация
     if message.reply_to_message and 'хуифицируй' in message.text.lower():

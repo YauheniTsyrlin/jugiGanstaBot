@@ -1096,7 +1096,8 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'skill',
                                     'quantity': None,
-                                    'probability': 1,
+                                    'probability': 1, # Вероятность срабатывания
+                                    'value': 1,       # Рамки изменений 
                                     'min': 45,
                                     'max': 50,
                                     'storage': 0,
@@ -1158,7 +1159,8 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'skill',
                                     'quantity': None,
-                                    'probability': 1,
+                                    'probability': 1, # Вероятность срабатывания
+                                    'value': 1,       # Рамки изменений 
                                     'min': 50,
                                     'max': 200,
                                     'storage': 0,
@@ -1191,8 +1193,8 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'skill',
                                     'quantity': None,
-                                    'probability': 0.3, # Вероятность срабатывания
-                                    'value': 0.2,       # Рамки изменений 20%
+                                    'probability': 0.80, # Вероятность срабатывания
+                                    'value': 0.33,       # Рамки изменений 33%
                                     'min': 80,
                                     'max': 100,
                                     'storage': 0,       # уровень познания навыка относительно min\max
@@ -1224,7 +1226,8 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'skill',
                                     'quantity': None,
-                                    'probability': 1,
+                                    'probability': 1, # Вероятность срабатывания
+                                    'value': 1,       # Рамки изменений 
                                     'min': 100,
                                     'max': 150,
                                     'storage': 0,
@@ -1256,7 +1259,8 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'skill',
                                     'quantity': None,
-                                    'probability': 1,
+                                    'probability': 1, # Вероятность срабатывания
+                                    'value': 1,       # Рамки изменений 
                                     'min': 12,
                                     'max': 15,
                                     'storage': 0,
@@ -1288,7 +1292,8 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'skill',
                                     'quantity': None,
-                                    'probability': 1,
+                                    'probability': 1, # Вероятность срабатывания
+                                    'value': 1,       # Рамки изменений 
                                     'min': 160,
                                     'max': 200,
                                     'storage': 0,
@@ -1320,7 +1325,8 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'skill',
                                     'quantity': None,
-                                    'probability': 1,
+                                    'probability': 1, # Вероятность срабатывания
+                                    'value': 1,       # Рамки изменений 
                                     'min': 48,
                                     'max': 60,
                                     'storage': 0,
@@ -3503,40 +3509,6 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-# registered_wariors.update_many(
-#     { 'kills': {'$gte': 100}},
-#     { '$set': { 'kills': 100} }
-# )
-
-# registered_wariors.update_many(
-#     { 'hithimself': {'$gte': 100}},
-#     { '$set': { 'hithimself': 100} }
-# )
-
-# Смена логина пользователя
-# user = getUserByLogin('EkoveS')
-# user.setLogin('Brodskey')
-# newvalues = { "$set": json.loads(user.toJSON()) }
-# z = registered_users.update_one({"name": f"{user.getName()}"}, newvalues)
-# print(f'OK {z.matched_count}')
-# registered_users.delete_many({'login': 'Brodskey', 'timeUpdate': 1586518457})
-
-# user = getUserByLogin('gavepta')
-# user.setRank(None)
-# newRank = None
-# for rank in getSetting(code='RANK', id='MILITARY')['value']:
-#     newRank = rank
-#     if user.getBm() < rank['bm']:
-#         break 
-# if not user.getRank() == None and newRank['id'] == user.getRank()['id']:
-#     pass
-# else:
-#     user.setRank(newRank)
-#     updateUser(user)
-#     time.sleep(1)
-#     print(f'{newRank["name"]}')
-
-# registered_users.delete_many({'name': 'Господин Пес', 'location': None})
 
 viruses = ['girlfriend_bouquet', 'covid-19', 'mirror_disease']
 if 1==2:
@@ -3575,44 +3547,19 @@ if 1==2:
             print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
             print(f'=======================================================')
 
-# 'electrician', 'medic', 'robotics','programmer',
-skill_names = ['fighter']
-if 1==2:
+# 'electrician', 'medic', 'robotics','programmer', 'watchmaker', 'economist', 'fighter', 
+skill_names = ['electrician', 'medic', 'robotics','programmer', 'watchmaker', 'economist', 'fighter']
+if 1==1:
     for skill_name in skill_names:
         updateUser(None)
         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==skill_name), None) 
-        position_min = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
-        position_max = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']), None)
 
         for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
             skill = user.getInventoryThing(elem)
             
             print(f'before {user.getLogin()} {skill}')
-            try:
-                elem.update({'storage': skill['storage']})
-            except:
-                user.removeInventoryThing(elem)
-                user.addInventoryThing(elem)
-                updateUser(user)
-                print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
-                print(f'=======================================================')
-                continue
-
-            try:
-                elem['flags'].update({'congratulation_min': skill['flags']['congratulation_min']})
-            except:
-                pass
-
-            if skill['storage'] >= skill['min']:
-                user.removeInventoryThing(position_min)
-                user.addInventoryThing(position_min)
-                print('++++++++++++++++++++ UPDATE position')
-            
-            if skill['storage'] >= skill['max']:
-                user.removeInventoryThing(position_min)
-                user.removeInventoryThing(position_max)
-                user.addInventoryThing(position_max)
-                print('++++++++++++++++++++ UPDATE position')
+            elem.update({'storage': skill['storage']})
+            elem.update({'flags': skill['flags']})
 
             user.removeInventoryThing(skill)
             user.addInventoryThing(elem)
@@ -3699,59 +3646,22 @@ if 1==2:
     #                 antyBoltReport = antyBoltReport + f'{counter}. @{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
     #     send_message_to_admin(antyBoltReport)
 
-# userupd = {}
-# userupd.update({'GonzikBenzyavsky': 60})
-       
-# # userupd.update({'artiomse': 14})
-# userupd.update({'Hermia_Nerbne': 12})
-# userupd.update({'WestMoscow': 40})
-# userupd.update({'dan4yk': 33})
-# userupd.update({'pif_paf_zero': 25})
-# userupd.update({'misscalderona': 28})
-# userupd.update({'gavepta': 26})
-# userupd.update({'Someboty': 43})
-# userupd.update({'VirtusX': 34})
-# userupd.update({'A_Baikonur': 16})
-# userupd.update({'Digzzzy': 13})
-# userupd.update({'rushkaa': 30})
-# userupd.update({'MedvedZeleny': 32})
-# userupd.update({'Java_dentist': 30})
-# userupd.update({'Perat_blec': 17})
-# userupd.update({'HaringtonVl': 29})
-# userupd.update({'puhnastiyus': 13}) 
-# userupd.update({'szvika': 23})
-# userupd.update({'Mefabest': 25}) 
-# userupd.update({'Lena_Lenochka_32': 17}) 
-# userupd.update({'eX3emz': 29}) 
-# userupd.update({'MagnetMion': 16}) 
-# userupd.update({'thebrutaI': 18}) 
-# userupd.update({'Under_w0rld':23}) 
-# userupd.update({'chymych':21})
-# userupd.update({'striletskyi':11}) 
-# userupd.update({'StandUser':16})
-# userupd.update({'EkoveS':15})
-# userupd.update({'Artermii':12})
-# userupd.update({'Willow_o_wisp':12})
-# userupd.update({'zloiy_babayka':14})
-# userupd.update({'Mikro_Chu':21})
-# userupd.update({'Irakusa':14})
-# userupd.update({'korshak':18}) 
+if 1==1: # Изменение уровня обучения навыку
+    userupd = {}
+    userupd.update({'GonzikBenzyavsky': 90})
+    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='economist'), None) 
 
-# elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None) 
-# covid = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']) if x['id']=='covid-19'), None)
-
-
-# for key in userupd.keys():
-#     user = getUserByLogin(key)
+    for key in userupd.keys():
+        user = getUserByLogin(key)
     
-#     # skill = user.getInventoryThing(elem)
-#     # print(skill)
-#     elem.update({'storage': 60})
-#     user.addInventoryThing(elem, replace=True)
-#     # print(skill)
-    
-#     user.removeInventoryThing(covid)
-#     updateUser(user)
+        skill = user.getInventoryThing(elem)
+        if skill == None:
+            skill = elem
+        print(skill)
+        elem.update({'storage': userupd[key] })
+        user.addInventoryThing(elem, replace=True)
+        print(skill)
+        updateUser(user)
 
 # # 
 # updateUser(None)
