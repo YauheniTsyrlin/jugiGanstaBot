@@ -147,7 +147,12 @@ def addInventory(user: users.User, inv):
             if r <= eco_skill['probability']:
                 # може
                 inv['cost'] = inv['cost'] + int(inv['cost'] * power_skill * eco_skill['value'])
-    return user.addInventoryThing(inv, inv['quantity'])
+    
+    quantity = None
+    if 'quantity' in inv:
+        quantity = inv['quantity']
+        
+    return user.addInventoryThing(inv, quantity)
 
 def check_and_register_tg_user(tg_login: str):
     user = getUserByLogin(tg_login)
