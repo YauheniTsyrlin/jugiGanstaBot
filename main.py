@@ -134,7 +134,6 @@ GLOBAL_VARS = {
     '🧺 Комиссионка': ['На полках', 'Сдать', '♻️ Разменять', '🧺 Назад'],
     '♻️ Разменять': ['♻️ Назад'],
     'kirill_burthday': ['GonzikBenzyavsky', 'Lena_Lenochka_32', 'WestMoscow', 'Brodskey', 'VirtusX', 'edem_00', 'Irakusa', 'Under_w0rld']
-
 }
 
 def addInventory(user: users.User, inv):
@@ -151,7 +150,7 @@ def addInventory(user: users.User, inv):
     quantity = None
     if 'quantity' in inv:
         quantity = inv['quantity']
-        
+
     return user.addInventoryThing(inv, quantity)
 
 def check_and_register_tg_user(tg_login: str):
@@ -1060,7 +1059,7 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                             send_message_to_admin(f'⚠️\n{text}')
                         else:
                             thing['wear'].update({'value': new_value})
-                            text = f'{getResponseDialogFlow(None, thing["skill"]["training"]["dialog_text"]).fulfillment_text}\n▫️ {thing["name"]} <b>{int(new_value*100)}%</b>'
+                            text = f'{userIAm.getNameAndGerb()}\n{getResponseDialogFlow(None, thing["skill"]["training"]["dialog_text"]).fulfillment_text}\n▫️ {thing["name"]} <b>{int(new_value*100)}%</b>'
                             send_messages_big(chat, text=text)
                             send_message_to_admin(f'⚠️\n{text}')
                         
