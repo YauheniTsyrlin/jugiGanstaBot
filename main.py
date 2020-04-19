@@ -1636,40 +1636,6 @@ def main_message(message):
     check_and_register_tg_user(message.from_user.username)
     userIAm = getUserByLogin(message.from_user.username)
 
-    # if userIAm:
-    #     for skill in user.getInventoryType({'type':'skill'}):
-    #         # Вычисляем умение отсрочки фарма
-    #         if skill['id'] == 'watchmaker':
-    #             storage = skill['storage']
-    #             if skill['storage'] >= skill['min']:
-    #                 power_skill = (skill['storage'] - skill['min'])/(skill['max'] - skill['min'])
-    #                 farm_k = farm_k + power_skill
-
-    #     for thing in user.getInventoryType({'type':'things'}):
-    #         if skill['id'] == 'watchmaker':
-    #             storage = skill['storage']
-    #             if skill['storage'] >= skill['min']:
-    #                 power_skill = (skill['storage'] - skill['min'])/(skill['max'] - skill['min'])
-    #                 farm_k = farm_k + power_skill
-
-    # if privateChat and userIAm and userIAm.getLogin() == 'GonzikBenzyavsky':
-    #     # Собрали группу бандитов
-    #     may_be_cured_or_infected = []
-    #     may_be_cured_or_infected.append(message.from_user.username)
-    #     if message.reply_to_message and not message.reply_to_message.from_user.is_bot:
-    #         may_be_cured_or_infected.append(message.reply_to_message.from_user.username)
-
-    #     # Определили заражение
-    #     checkInfected(may_be_cured_or_infected, message.chat.id)
-    #     # Заражаем бандитов
-    #     infect(may_be_cured_or_infected, message.chat.id)
-    #     # Определили способных лечить
-    #     checkCure(may_be_cured_or_infected, message.chat.id)
-    #     # лечим бандитов
-    #     cure(may_be_cured_or_infected, message.chat.id)                
-
-
-
     if not privateChat and userIAm and isGoatInfoChat(message.from_user.username, message.chat.id):
         # Собрали группу бандитов
         may_be_cured_or_infected = []
@@ -1743,7 +1709,6 @@ def main_message(message):
                         updateUser(userIAm)
                 except:
                     traceback.print_exc()
-
         time_farm_over = message.forward_date < (datetime.now() - timedelta(minutes= 5+farm_k)).timestamp()
 
         if (message.text.startswith('📟Пип-бой 3000')):
@@ -3230,8 +3195,8 @@ def main_message(message):
                         userIAm.setBirthday(parse(response.split(':birthday:')[1]).timestamp())
                         updateUser(userIAm)
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)        
-                    elif 'flex' == response.split(':')[1]:
-                        pass
+                    # elif 'flex' == response.split(':')[1]:
+                        # pass
                         # jugi:flex:$bool
                         # if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
                         #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_censorship').fulfillment_text)
@@ -4349,7 +4314,7 @@ def callback_query(call):
 
     dt = datetime.fromtimestamp(float(call.data.split('|')[1]))
 
-    time_str = str(dt.hour + 3).zfill(2)+':'+str(dt.minute).zfill(2)
+    time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
     dungeon_km = call.data.split('|')[3]
     dungeon = getSetting(code='DUNGEONS', value=dungeon_km) 
 
