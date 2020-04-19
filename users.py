@@ -552,8 +552,7 @@ class User(object):
                         if wear > 0:
                             percent = int(wear*100/1)
                     except: pass
-
-
+                    
                 elem_cost = 0
                 report = report + f'▫️ {list(group)[-1]["name"]} {"<b>" + str(percent)+"%</b>" if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""} {" 🔘"+str(elem_cost) if elem_cost > 0 else ""}\n'
                 for elem in list(group):
