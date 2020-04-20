@@ -1540,7 +1540,12 @@ def get_message_photo(message):
                 for row in build_menu(buttons=buttons, n_cols=2):
                     markupinline.row(*row) 
             userIAm = getUserByLogin(message.from_user.username)
-            send_messages_big(message.chat.id, text=wariorShow.getProfile(userIAm.getTimeZone()), reply_markup=markupinline)
+            
+            if hasAccessToWariors(message.from_user.username):
+                send_messages_big(message.chat.id, text=wariorShow.getProfile(userIAm.getTimeZone()), reply_markup=markupinline)
+            else:
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
+
     else:
         if privateChat:
             send_messages_big(message.chat.id, text=message.photo[len(message.photo)-1].file_id)
