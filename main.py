@@ -1518,6 +1518,8 @@ def get_message_photo(message):
 def get_message_photo(message):
     #write_json(message.json)
     privateChat = ('private' in message.chat.type)
+    logger.info(f'chat:{message.chat.id}:{"private" if privateChat else "Group"}:{message.from_user.username}:{datetime.fromtimestamp(message.forward_date) if message.forward_date else ""}:{message.text}')
+    
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то показать, но у него получилось лишь:\n' + getResponseDialogFlow(message.from_user.username, 'user_banned').fulfillment_text)
@@ -1620,7 +1622,7 @@ def get_message_stiker(message):
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
     # message.from_user.username = "Brodskey"
-    #  write_json(message.json)
+    # write_json(message.json)
     chat = message.chat.id
     privateChat = ('private' in message.chat.type)
     logger.info(f'chat:{message.chat.id}:{"private" if privateChat else "Group"}:{message.from_user.username}:{datetime.fromtimestamp(message.forward_date) if message.forward_date else ""}:{message.text}')
@@ -2148,20 +2150,18 @@ def main_message(message):
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
                     return
 
-                if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
-                    #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                    send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
-                    return
+                # if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
+                #     #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+                #     send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
+                #     return
 
-                if '7ч.' in message.text.split('Рейд начнётся через ⏱')[1]:
-                    send_messages_big(message.chat.id, text='Это захват на следующий рейд. Сбрось мне его позже!')
-                    return
+                # if '7ч.' in message.text.split('Рейд начнётся через ⏱')[1]:
+                #     send_messages_big(message.chat.id, text='Это захват на следующий рейд. Сбрось мне его позже!')
+                #     return
 
                 user = getUserByLogin(message.from_user.username)
                 user.setRaidLocation(1)
 
-                #saveUserRaidResult(user, planRaid, 1)
-                
                 try:
                     tz = config.SERVER_MSK_DIFF
                     ticket = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='redeemed_raid_ticket'), None)             
@@ -2170,6 +2170,8 @@ def main_message(message):
                     addInventory(user, ticket)
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text + 
                         f'\nВ специальном паркомате на рейдовой точке ты взял талончик на рейд:\n▫️  {ticket["name"]} {date_str}')
+                    saveUserRaidResult(user, date_stamp, 1)
+
                 except:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
                     send_message_to_admin(f'⚠️🤬 Сломался "Ты занял позицию"!')
@@ -2181,9 +2183,9 @@ def main_message(message):
         elif ('Панель банды.' in message.text):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
-                if message.forward_date < (datetime.now() - timedelta(minutes=1)).timestamp():
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                    return 
+                # if message.forward_date < (datetime.now() - timedelta(minutes=1)).timestamp():
+                #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+                #     return 
                 strings = message.text.split('\n')
                 i = 0
                 band = ''
@@ -2245,10 +2247,13 @@ def main_message(message):
                                 onraidrw = onraidrw + u.getRaidWeight()
                                 u.setRaidLocation(km)
                                 onraidusers.append(u)
+                                saveUserRaidResult(u, getRaidTimeText('', message.forward_date), km)
+
                             else:
                                 fuckupraidrw = fuckupraidrw + u.getRaidWeight()
                                 fuckupusers.append(u)
                                 u.setRaidLocation(0)
+                                saveUserRaidResult(u, getRaidTimeText('', message.forward_date), 0)
                             updateUser(u)
                         else:
                             aliancounter  = aliancounter + 1
@@ -5102,7 +5107,7 @@ def rade():
                     row.update({'date':now_date.timestamp()})
                     row.update({'login':userWin.getLogin()})
                     row.update({'description':elem['name']})
-                    man_of_day.insert_one(row)
+                    man_of_day.insert_ one(row)
                     send_messages_big(chat, text=report_man_of_day('')) 
         except:
             send_message_to_admin(f'⚠️🤬 Сломался Pidor of the day!')
@@ -5151,7 +5156,7 @@ def rade():
         for goat in getSetting(code='GOATS_BANDS'):
             try:
                 # выдаём болты
-                setGiftsForRaid(goat)
+                # setGiftsForRaid(goat)
                 # зачищаем признак на рейде.
                 goat_bands = getGoatBands(goat['name'])
                 for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
@@ -5246,15 +5251,30 @@ def getRaidTimeText(text, date):
     hour = 0
     minute = 0
     second = 0
-    if 'ч.' in text:
-        hour = int(text.split('ч.')[0].strip())   
-        minute = int(text.split(' ')[1].split('мин.')[0].strip()) 
-    elif 'мин.' in text:
-        minute = int(text.split('мин.')[0].strip())
-    elif 'сек.' in text:
-        second = int(text.split('сек.')[0].strip()) 
-    result =  datetime.fromtimestamp(date) + timedelta(seconds=second, minutes=minute, hours=hour)
-    hour = round((result.hour*60 + result.minute)/60) 
+    result = None
+    if len(text)>0:
+        if 'ч.' in text:
+            hour = int(text.split('ч.')[0].strip())   
+            minute = int(text.split(' ')[1].split('мин.')[0].strip()) 
+        elif 'мин.' in text:
+            minute = int(text.split('мин.')[0].strip())
+        elif 'сек.' in text:
+            second = int(text.split('сек.')[0].strip())
+        result =  datetime.fromtimestamp(date) + timedelta(seconds=second, minutes=minute, hours=hour)
+        hour = round((result.hour*60 + result.minute)/60)       
+    else:
+        d = datetime.fromtimestamp(date)
+        if d.hour >= 17:
+            d = d + timedelta(days=1)
+            hour = 1
+        elif d.hour < 1:
+            hour = 1
+        elif d.hour >=1 and d.hour < 9:
+            hour = 9
+        elif d.hour >=9 and d.hour < 17:
+            hour = 17
+        result =  d
+    
     result = result.replace(hour=hour, minute=0, second=0, microsecond=0)
     return result.timestamp()
 
@@ -5282,24 +5302,24 @@ def getRaidTime(planRaid):
             hour = 17
     return raid_date.replace(hour=hour, minute=0, second=0, microsecond=0).timestamp()
 
-def saveUserRaidResult(user, planRaid, location):
-    raiddate = getRaidTime(planRaid)
+def saveUserRaidResult(user, date, location):
+    if location <= 0:
+        result = report_raids.delete_one({"login": f"{user.getLogin()}", 'date': date})
+        return
+
     row = {}
-    row.update({'date': raiddate })
+    row.update({'date': date })
     row.update({'login': user.getLogin()})
     row.update({'band': user.getBand()})
     row.update({'goat': getMyGoatName(user.getLogin())})
-    row.update({'planed_location': False})
-    row.update({'planed_location_text': None})
     row.update({'user_location': 0})
     row.update({'on_raid': False})
-    row.update({'on_planed_location': False})
 
     if location > 0:
         row.update({'on_raid': True}) 
         row.update({'user_location': location})   
     newvalues = { "$set": row }
-    result = report_raids.update_one({"login": f"{user.getLogin()}", 'date': raiddate}, newvalues)
+    result = report_raids.update_one({"login": f"{user.getLogin()}", 'date': date}, newvalues)
     if result.matched_count < 1:
         report_raids.insert_one(row)
 

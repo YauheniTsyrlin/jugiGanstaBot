@@ -597,23 +597,41 @@ def getRaidTimeText(text, date):
     hour = 0
     minute = 0
     second = 0
-    if 'ч.' in text:
-        hour = int(text.split('ч.')[0].strip())   
-        minute = int(text.split(' ')[1].split('мин.')[0].strip()) 
-    elif 'мин.' in text:
-        minute = int(text.split('мин.')[0].strip())
-    elif 'сек.' in text:
-        second = int(text.split('сек.')[0].strip()) 
-    result =  datetime.fromtimestamp(date) + timedelta(seconds=second, minutes=minute, hours=hour)
-    hour = round((result.hour*60 + result.minute)/60) 
+    result = None
+    if len(text)>0:
+        if 'ч.' in text:
+            hour = int(text.split('ч.')[0].strip())   
+            minute = int(text.split(' ')[1].split('мин.')[0].strip()) 
+        elif 'мин.' in text:
+            minute = int(text.split('мин.')[0].strip())
+        elif 'сек.' in text:
+            second = int(text.split('сек.')[0].strip())
+        result =  datetime.fromtimestamp(date) + timedelta(seconds=second, minutes=minute, hours=hour)
+        hour = round((result.hour*60 + result.minute)/60)       
+    else:
+        d = datetime.fromtimestamp(date)
+        if d.hour >= 17:
+            d = d + timedelta(days=1)
+            hour = 1
+        elif d.hour < 1:
+            hour = 1
+        elif d.hour >=1 and d.hour < 9:
+            hour = 9
+        elif d.hour >=9 and d.hour < 17:
+            hour = 17
+        result =  d
+    
     result = result.replace(hour=hour, minute=0, second=0, microsecond=0)
     return result.timestamp()
 
 # tt = ['7ч. 27мин.', '3ч. 0мин.', '1 мин.', '10 сек.', '1ч. 15мин.']
 # ttt = [ '1ч. 15мин.']
 # for t in ttt:
-#     date = getRaidTimeText(t, 1586177073)
-#     print(datetime.fromtimestamp(date))
+
+for i in range(0,24):
+    dateT = datetime.now().replace(hour=i, minute=0, second=0, microsecond=0).timestamp()
+    date = getRaidTimeText('', dateT)
+    print(f'{i} {datetime.fromtimestamp(dateT)} {datetime.fromtimestamp(date)}')
 
 #tz = config.SERVER_MSK_DIFF
 #ticket = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='redeemed_raid_ticket'), None)             
@@ -723,11 +741,11 @@ def getInventoryReport(user, types):
             full_report = full_report + report
         return full_report
 
-user = getUserByLogin('GonzikBenzyavsky')
-inventory_category = [
-                        {'id':'things', 'name':'📦 Вещи'}
-                    ]
-print(getInventoryReport(user, inventory_category))
+# user = getUserByLogin('GonzikBenzyavsky')
+# inventory_category = [
+#                         {'id':'things', 'name':'📦 Вещи'}
+#                     ]
+# print(getInventoryReport(user, inventory_category))
 
 sys.exit(0)
 
