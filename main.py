@@ -5107,7 +5107,7 @@ def rade():
                     row.update({'date':now_date.timestamp()})
                     row.update({'login':userWin.getLogin()})
                     row.update({'description':elem['name']})
-                    man_of_day.insert_ one(row)
+                    man_of_day.insert_one(row)
                     send_messages_big(chat, text=report_man_of_day('')) 
         except:
             send_message_to_admin(f'⚠️🤬 Сломался Pidor of the day!')
