@@ -2226,6 +2226,8 @@ def main_message(message):
                         u = getUserByName(name)
 
                         logger.info(f'New band: {band}')
+                        logger.info(f'No banditos: {u==None}')
+                        logger.info(f'{u.getLogin()}: {u.getBand()}')
                         if u and (not u.getBand() == band):
                             u.setBand(band)
                             logger.info(f'change band: {band}')
