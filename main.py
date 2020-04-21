@@ -2227,6 +2227,7 @@ def main_message(message):
                         
                         if u and (not u.getBand() == band):
                             u.setBand(band)
+                            logger.info(f'New band: {band}')
 
                         spliter = ''
                         km = ''
