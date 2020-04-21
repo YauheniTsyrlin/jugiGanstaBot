@@ -3021,8 +3021,9 @@ def main_message(message):
                 return
 
             if not isUsersBand(message.from_user.username, user.getBand()):
-                send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
-                return
+                if not isAdmin(message.from_user.username):
+                    send_messages_big(message.chat.id, text=f'Бандит {login} не из банд твоего козла!')
+                    return
 
             myquery = { "login": f"{user.getLogin()}" }
             doc = registered_users.delete_one(myquery)
@@ -5165,7 +5166,7 @@ def rade():
         for goat in getSetting(code='GOATS_BANDS'):
             try:
                 # выдаём болты
-                # setGiftsForRaid(goat)
+                setGiftsForRaid(goat)
                 # зачищаем признак на рейде.
                 goat_bands = getGoatBands(goat['name'])
                 for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
