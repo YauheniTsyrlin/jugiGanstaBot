@@ -2224,10 +2224,11 @@ def main_message(message):
                         name = name.replace('⚙️', '#@#').replace('🔪', '#@#').replace('💣', '#@#').replace('⚛️', '#@#').replace('👙', '#@#').replace('🔰', '#@#')
                         name = name.split('#@#')[1].split('👂')[0].strip()
                         u = getUserByName(name)
-                        
+
+                        logger.info(f'New band: {band}')
                         if u and (not u.getBand() == band):
                             u.setBand(band)
-                            logger.info(f'New band: {band}')
+                            logger.info(f'change band: {band}')
 
                         spliter = ''
                         km = ''
