@@ -3393,8 +3393,8 @@ newvalues = { "$set": { "value":
                 {'band': 'без банды'},
                 {'band': 'Crewname'},
                 {'band': 'ЭнтрǁØǁпия'},
-                {'band': 'ЩекØтилы БанȺнов'},
-
+                # {'band': 'ЩекØтилы БанȺнов'},
+                {'band': 'ǁGØodfeelȺssǁ'},
                 {'band': 'New Vegas'},
                 {'band': 'Тамплиеры'}
                 
@@ -3432,7 +3432,7 @@ newvalues = { "$set":
                                             'boss': 'Innok27'
                                         },
                                         {
-                                            'name': 'ЩекØтилы БанȺнов',
+                                            'name': 'ǁGØodfeelȺssǁ',
                                             'boss': 'nik_stopka'
                                         },
                                         {
