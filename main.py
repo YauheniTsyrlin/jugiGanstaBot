@@ -129,7 +129,7 @@ GLOBAL_VARS = {
     'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'],
     'fight_log_message' : ['отдал на съедение кротокрысам', 'одержал победу над', 'не оставил живого места от', 'гордо наступил на полудохлого', 'оставил бездыханное тело', 'сделал сиротами детишек', 'добил с пинка', 'добил лежачего', 'выписал пропуск в Вальхаллу', 'добил фаталити', 'стоит над поверженным', 'одержал победу над'],
     'eating_in_new_rino': ['опустошил бокал бурбона.', 'жадно ест сухари.'],
-    'group_buttons': ['Джу, 📋 Отчет', f'Джу, ⏰ план рейда', '📈 Статистика'],
+    'group_buttons': ['Джу, 📋 Отчет', f'Джу, ⏰ План рейда', '📈 Статистика'],
     'private_buttons': ['📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика', '🧺 Комиссионка'],
     '🧺 Комиссионка': ['На полках', 'Сдать', '♻️ Разменять', '🧺 Назад'],
     '♻️ Разменять': ['♻️ Назад'],
@@ -500,14 +500,18 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None, limit=
         step = 0 
     menu = [ buttons [i:i + n_cols] for i in range(step*limit, (step+1)*limit if (step+1)*limit <= len(buttons) else len(buttons), n_cols) ]
     
-    if back_button and exit_button and forward_button: 
+    if back_button or exit_button or forward_button: 
         if step==0 and len(buttons) <= limit:
             manage_buttons = [exit_button]
+            print('0000000000')
         elif step==0:
             manage_buttons = [exit_button, forward_button]
+            print('1111111111')
         elif (step+1)*limit >= len(buttons):
             manage_buttons = [back_button, exit_button]
+            print('222222222222222')
         else:
+            print('33333333333')
             manage_buttons = [back_button, exit_button, forward_button]
         menu = menu + [manage_buttons [i:i + n_cols] for i in range(0, len(manage_buttons), n_cols)]
     if header_buttons:
@@ -3009,7 +3013,7 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=warior.getProfile(userIAm.getTimeZone()))
                 else:
                     send_messages_big(message.chat.id, text=warior.getProfile(userIAm.getTimeZone()))
-        elif callJugi and ('уволить @' in message.text.lower() or 'удалить @' in message.text.lower()):
+        elif callJugi and ('уволить @' in message.text.lower() or 'удалить @' in message.text.lower()): 
             if not isGoatBoss(message.from_user.username):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_not_goat_boss').fulfillment_text)
                 return
@@ -3287,6 +3291,9 @@ def main_message(message):
                             markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date}_{goat}"))
               
                         text = get_raid_plan(raid_date, goat)
+
+                        if privateChat and isGoatBoss(message.from_user.username):
+                            markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{raid_date}_{goat}"))
 
                         msg = send_messages_big(message.chat.id, text=text, reply_markup=markupinline)
                     elif 'onrade' == response.split(':')[1]:
@@ -3707,7 +3714,10 @@ def main_message(message):
                             
                             # if not find:
                             markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
-                                                    
+
+                        if privateChat and isGoatBoss(message.from_user.username):
+                            markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}"))
+
                         msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=markupinline)
                     elif 'getchat' == response.split(':')[1]:
                         send_messages_big(message.chat.id, text=f'Id чата {message.chat.id}')
@@ -4715,6 +4725,50 @@ def callback_query(call):
     markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickup_exit|{login}"))
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
+@bot.callback_query_handler(func=lambda call: call.data.startswith("pinonraid_"))
+def callback_query(call):
+    # pinonraid_{goat}_{band}_{raid_date.timestamp()}
+    if isUserBan(call.from_user.username):
+        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
+        return
+    
+    goat = call.data.split('_')[1]
+    if not goat == getMyGoatName(call.from_user.username):
+        bot.answer_callback_query(call.id, "Это план не твоего козла!")
+        return
+
+    band = call.data.split('_')[2]
+
+    markupinline = InlineKeyboardMarkup()
+    raid_date = datetime.fromtimestamp(float(call.data.split('_')[3]))
+
+    bot.answer_callback_query(call.id, f"Банда {band}")
+
+    buttons = []
+    for user in list(filter(lambda x : x.getBand() == band, USERS_ARR)):
+        buttons.append(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"pinonraid_{user.getLogin()}_{raid_date.timestamp()}"))
+    
+    all_banditos=InlineKeyboardButton(f"👨‍👨‍👦‍👦Все бандиты", callback_data=f"pinonraid_all_banditos_{raid_date.timestamp()}")
+    buttons.append(all_banditos)
+
+    # markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    #markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f""))
+
+    exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}")
+    for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
+        print(row)
+        markupinline.row(*row)  
+
+
+    # for user in list(filter(lambda x : x.getBand() == band, USERS_ARR)):
+    #     markupinline.add(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"pinonraid_{user.getLogin()}_{raid_date.timestamp()}"))                        
+    
+    text = get_raid_plan(raid_date.timestamp(), goat)
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'Пины нарейд банды <b>{band}</b>\n{text}', parse_mode='HTML', reply_markup=markupinline)
+
+    return
+
+
 @bot.callback_query_handler(func=lambda call: call.data.startswith("capture_"))
 def callback_query(call):
     if isUserBan(call.from_user.username):
@@ -4726,7 +4780,20 @@ def callback_query(call):
         bot.answer_callback_query(call.id, "Это план не твоего козла!")
         return
 
+    markupinline = InlineKeyboardMarkup()
     raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
+
+    if call.data.startswith("capture_pin"):
+        bot.answer_callback_query(call.id, "Раздача личных пинов!")
+        
+        for band in getGoatBands(goat):
+            markupinline.add(InlineKeyboardButton(f"{band}", callback_data=f"pinonraid_{goat}_{band}_{raid_date.timestamp()}"))                        
+        
+        text = get_raid_plan(raid_date.timestamp(), goat)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'Пины нарейд\n{text}', parse_mode='HTML', reply_markup=markupinline)
+
+        return
+
     logger.info(f'raid_date: {raid_date}')
     raid_location = int(call.data.split('_')[1])
     logger.info(f'raid_location: {raid_location}')
@@ -4735,14 +4802,11 @@ def callback_query(call):
                 'rade_date': raid_date.timestamp(),
                 'goat': goat
             }
-            
-    markupinline = InlineKeyboardMarkup()
 
     if call.data.startswith("capture_0"):
         bot.answer_callback_query(call.id, "Сыкло!")
     else:
         bot.answer_callback_query(call.id, "Ты записался в добровольцы!")
-
 
     users_onraid = []
     for row in plan_raids.find(myquery):
@@ -5208,7 +5272,7 @@ def rade():
         if i > 0:
             send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
 
-def getPlanedRaidLocation(goatName: str, planRaid = True):
+def getPlanedRaidLocation(goatName: str, planRaid = True): 
     tz = config.SERVER_MSK_DIFF
     raid_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
     hour = raid_date.hour
