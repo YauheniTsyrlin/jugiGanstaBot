@@ -2195,8 +2195,8 @@ def main_message(message):
                 # if message.forward_date < (datetime.now() - timedelta(minutes=1)).timestamp():
                 #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
                 #     return 
-
-                logger.info(f'Время рейда: {getRaidTimeText("", message.forward_date)}')
+                raidDate = getRaidTimeText("", message.forward_date)
+                logger.info(f'Панель банды. Время следующего рейда: {datetime.fromtimestamp(raidDate)}')
 
                 strings = message.text.split('\n')
                 i = 0
@@ -2260,20 +2260,20 @@ def main_message(message):
                                 onraidrw = onraidrw + u.getRaidWeight()
                                 u.setRaidLocation(km)
                                 onraidusers.append(u)
-                                saveUserRaidResult(u, getRaidTimeText('', message.forward_date), km)
+                                saveUserRaidResult(u, raidDate, km)
 
                             else:
                                 fuckupraidrw = fuckupraidrw + u.getRaidWeight()
                                 fuckupusers.append(u)
                                 u.setRaidLocation(0)
-                                saveUserRaidResult(u, getRaidTimeText('', message.forward_date), 0)
+                                saveUserRaidResult(u, raidDate, 0)
                             updateUser(u)
                         else:
                             aliancounter  = aliancounter + 1
                             alianusersReport = alianusersReport + f'{aliancounter}. {name} {spliter}{km}км\n'
-                        
                     i = i + 1
-                
+
+                send_message_to_admin(f'⚠️ {getUserByLogin(message.from_user.username).getNameAndGerb()}\🤘 Панель банды <b>{band}</b>\n⏰ Время рейда: {datetime.fromtimestamp(raidDate)}')
                 report = report + f'🤘 <b>{band}</b>\n\n' 
                 if onraidcounter > 0:
                     report = report + f'🧘‍♂️ <b>на рейде</b>: <b>{onraidcounter}/{allcounter}</b>\n'
