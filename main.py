@@ -2136,23 +2136,24 @@ def main_message(message):
                     report = '<b>⚡️Купола Грома.</b>\n\n' + report
                     send_messages_big(message.chat.id, text=report)
             return
-        elif ('Ты уже записался.' in message.text):
-            #write_json(message.json)
-            if hasAccessToWariors(message.from_user.username):
-                if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                    return
+        # elif ('Ты уже записался.' in message.text):
+            # #write_json(message.json)
+            # if hasAccessToWariors(message.from_user.username):
+            #     if message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp():
+            #         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+            #         return
 
-                u = getUserByLogin(message.from_user.username)
-                u.setRaidLocation(1)
-                updateUser(u)
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
-            else:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_you_cant').fulfillment_text)
-            return
+            #     u = getUserByLogin(message.from_user.username)
+            #     u.setRaidLocation(1)
+            #     updateUser(u)
+            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
+            # else:
+            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_you_cant').fulfillment_text)
+            # return
         elif ('Ты занял позицию для ' in message.text and 'Рейд начнётся через' in message.text):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
+                
                 filter_message = {"username": message.from_user.username, "forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message)                
                 if not new_Message:
@@ -2183,7 +2184,7 @@ def main_message(message):
 
                 except:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
-                    send_message_to_admin(f'⚠️🤬 Сломался "Ты занял позицию"!')
+                    send_message_to_admin(f'⚠️🤬 {message.from_user.username}\nСломался "Ты занял позицию"!')
 
                 updateUser(user)
             else:
@@ -2192,9 +2193,10 @@ def main_message(message):
         elif ('Панель банды.' in message.text):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
-                # if message.forward_date < (datetime.now() - timedelta(minutes=1)).timestamp():
-                #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                #     return 
+                if message.forward_date < (datetime.now() - timedelta(minutes=1)).timestamp():
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+                    return 
+
                 raidDate = getRaidTimeText("", message.forward_date)
                 logger.info(f'Панель банды. Время следующего рейда: {datetime.fromtimestamp(raidDate)}')
 
@@ -5218,24 +5220,24 @@ def rade():
                 if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
                     report = radeReport(goat, False, False)
                     send_messages_big(goat['chats']['secret'], text='<b>Результаты рейда</b>\n' + report)
-                    saveRaidResult(goat)
-                    statistic(goat['name'])
+                    # saveRaidResult(goat)
+                    # statistic(goat['name'])
         except:
             send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
 
     # Раздача рейдовых болтов
-    if now_date.hour in (1, 9, 17) and now_date.minute == 31 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 99) and now_date.minute in (31, 99) and now_date.second < 15:
         logger.info('raid bolt info!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
             try:
                 # выдаём болты
-                # setGiftsForRaid(goat)
+                setGiftsForRaid(goat)
                 # зачищаем признак на рейде.
-                goat_bands = getGoatBands(goat['name'])
-                for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
-                    user.setRaidLocation(0)
-                    updateUser(user)
+                # goat_bands = getGoatBands(goat['name'])
+                # for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
+                #     user.setRaidLocation(0)
+                #     updateUser(user)
             except:
                 send_message_to_admin(f'⚠️🤬 Сломалась Раздача рейдовых болтов по {goat["name"]}')
 
@@ -5456,6 +5458,12 @@ def radeReport(goat, ping=False, planRaid=True):
             if user.getBand() and user.getBand() == band.get('name'):
                 band_arr.update({'weight_all': band_arr.get('weight_all') + user.getRaidWeight()})
                 band_arr.update({'counter_all': band_arr.get('counter_all') + 1}) 
+
+                user.setRaidLocation(0)
+                for uonr in report_raids.find({'login': user.getLogin(), 'date': raidInfo['rade_date']}):
+                    user.setRaidLocation(uonr['user_location'])
+
+
                 if user.getRaidLocation() and user.getRaidLocation()>0:
                     band_arr.update({'weight_on_rade': band_arr.get('weight_on_rade') + user.getRaidWeight()})
                     band_arr.update({'counter_on_rade': band_arr.get('counter_on_rade') + 1}) 
@@ -5498,17 +5506,28 @@ def radeReport(goat, ping=False, planRaid=True):
 def setGiftsForRaid(goat):
     raidPlan = getPlanedRaidLocation(goatName=goat['name'], planRaid=False)
     # raidPlan.update({'rade_date':(datetime(2020, 3, 14, 17, 0)).timestamp() })
-    send_message_to_admin(f'⚠️Рейд {datetime.fromtimestamp(raidPlan["rade_date"])}⚠️')
+    send_message_to_admin(f'⚠️🔩 Раздача болтов {goat["name"]}!\nРейд {datetime.fromtimestamp(raidPlan["rade_date"])}⚠️')
+    
     
     boltReport = ''
     counter = 0
     users_on_raid = [] 
-    for raid in report_raids.find(
-        {   "date": raidPlan['rade_date'],
-            "band": {'$in': getGoatBands(goat['name'])},
-            "on_raid": False 
-        }):
-        user = getUserByLogin(raid["login"])
+
+    users_true = []
+    users_false = []
+    goat_bands = getGoatBands(goat['name'])
+    for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
+        find = False
+        for uonr in report_raids.find({'login': user.getLogin(), 'date': raidPlan['rade_date']}):
+            user.setRaidLocation(uonr['user_location'])
+            find = True
+        if find:
+            users_true.append(user.getLogin())
+        else:
+            users_false.append(user.getLogin())
+
+    for raid_user in users_false:
+        user = getUserByLogin(raid_user)
         if user:
             counter = counter + 1
             #acc = '🔩 Болт М69, возложенный на рейд'
@@ -5566,66 +5585,62 @@ def setGiftsForRaid(goat):
     users_on_raid = [] 
     antyBoltReport = ''
     counter = 0
-    for raid in report_raids.find(
-            {   "date": raidPlan['rade_date'],
-                "band": {'$in': getGoatBands(goat['name'])},
-                "on_raid": True 
-            }):
-            user = getUserByLogin(raid["login"])
-            # Снимаем больы, если последние два рейда были зачетными
-            counter_r = report_raids.find({'login': user.getLogin()}).count()
-            N = 2
-            if counter_r < N:
-                    continue
-            cursor = report_raids.find({'login': user.getLogin()}).skip(counter_r - N)
-            alltrue = True
-            for x in cursor:
-                if not x["on_raid"]:
-                    alltrue = False 
-            if not alltrue: 
+    for raid_user in users_true:
+        user = getUserByLogin(raid_user)
+        # Снимаем больы, если последние два рейда были зачетными
+        counter_r = report_raids.find({'login': user.getLogin()}).count()
+        N = 2
+        if counter_r < N:
                 continue
+        cursor = report_raids.find({'login': user.getLogin()}).skip(counter_r - N)
+        alltrue = True
+        for x in cursor:
+            if not x["on_raid"]:
+                alltrue = False 
+        if not alltrue: 
+            continue
 
-            if user:
-                counter = counter + 1
-                #acc = '🎫🍼 Билет на гигантскую бутылку'
-                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_5'), None)
+        if user:
+            counter = counter + 1
+            #acc = '🎫🍼 Билет на гигантскую бутылку'
+            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_5'), None)
+            if user.isInventoryThing(bolt):
+                pass
+            else:
+                #acc = '🔩🔩🔩🔩 Болт М1488, возложенный на рейд'
+                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_4'), None)
                 if user.isInventoryThing(bolt):
                     pass
                 else:
-                    #acc = '🔩🔩🔩🔩 Болт М1488, возложенный на рейд'
-                    bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_4'), None)
+                    #acc = '🔩🔩🔩 Болт М404, возложенный на рейд'
+                    bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_3'), None)
                     if user.isInventoryThing(bolt):
                         pass
                     else:
-                        #acc = '🔩🔩🔩 Болт М404, возложенный на рейд'
-                        bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_3'), None)
+                        #acc = '🔩🔩 Болт М228, возложенный на рейд'
+                        bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_2'), None)
                         if user.isInventoryThing(bolt):
                             pass
                         else:
-                            #acc = '🔩🔩 Болт М228, возложенный на рейд'
-                            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_2'), None)
+                            #acc = '🔩 Болт М69, возложенный на рейд'
+                            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_1'), None)
                             if user.isInventoryThing(bolt):
                                 pass
                             else:
-                                #acc = '🔩 Болт М69, возложенный на рейд'
-                                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_1'), None)
-                                if user.isInventoryThing(bolt):
-                                    pass
-                                else:
-                                    continue
+                                continue
 
-                if user.isInventoryThing(bolt):
-                    # send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {bolt["name"]}!')
-                    user.removeInventoryThing(bolt)
-                    # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {bolt["name"]}')    
-                    antyBoltReport = antyBoltReport + f'{counter}. {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
-                users_on_raid.append(
-                        {
-                            'login': user.getLogin(),
-                            'bolt': bolt
-                        }
-                    )
-                updateUser(user)
+            if user.isInventoryThing(bolt):
+                # send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {bolt["name"]}!')
+                user.removeInventoryThing(bolt)
+                # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {bolt["name"]}')    
+                antyBoltReport = antyBoltReport + f'{counter}. {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
+            users_on_raid.append(
+                    {
+                        'login': user.getLogin(),
+                        'bolt': bolt
+                    }
+                )
+            updateUser(user)
     if counter > 0:
         for userWin in random.sample(users_on_raid, 2):
             sec = int(20)
