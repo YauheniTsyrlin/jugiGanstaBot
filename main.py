@@ -5230,11 +5230,11 @@ def rade():
         for goat in getSetting(code='GOATS_BANDS'):
             try:
                 # выдаём болты
-                setGiftsForRaid(goat)
+                # setGiftsForRaid(goat)
                 # зачищаем признак на рейде.
                 goat_bands = getGoatBands(goat['name'])
                 for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
-                    user.setRaidLocation(None)
+                    user.setRaidLocation(0)
                     updateUser(user)
             except:
                 send_message_to_admin(f'⚠️🤬 Сломалась Раздача рейдовых болтов по {goat["name"]}')
