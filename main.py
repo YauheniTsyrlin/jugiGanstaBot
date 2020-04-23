@@ -2195,6 +2195,9 @@ def main_message(message):
                 # if message.forward_date < (datetime.now() - timedelta(minutes=1)).timestamp():
                 #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
                 #     return 
+
+                logger.info(f'Время рейда: {getRaidTimeText("", message.forward_date)}')
+
                 strings = message.text.split('\n')
                 i = 0
                 band = ''
@@ -2229,9 +2232,6 @@ def main_message(message):
                         name = name.split('#@#')[1].split('👂')[0].strip()
                         u = getUserByName(name)
 
-                        logger.info(f'New band: {band}')
-                        logger.info(f'No banditos: {u==None}')
-                        logger.info(f'{u.getLogin()}: {u.getBand()}')
                         if u and (not u.getBand() == band):
                             u.setBand(band)
                             logger.info(f'change band: {band}')
