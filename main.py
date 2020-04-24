@@ -5241,58 +5241,6 @@ def rade():
             except:
                 send_message_to_admin(f'⚠️🤬 Сломалась Раздача рейдовых болтов по {goat["name"]}')
 
-
-    if now_date.hour in (99, 8) and now_date.minute in (99, 19) and now_date.second < 15:
-        # u = ('Hermia_Nerbne', 'DaisyBellTrot', 'dan4yk', 'pif_paf_zero', 'misscalderona', 'VirtusX', 'A_Baikonur',
-        # 'aohanesian', 'asaelko', 'szvika', 'WildFire112', 'Balbes_36', 'puhnastiyus', 'MrMrakZ', 'GonzikBenzyavsky',
-        # 'Innok27', 'artiomse', 'wildcucumber', 'trimprim', 'triple6ixx', 'XyTop_2', 'DeadChild', 'Gromnsk', 'Serjanioo',
-        # 'darthmall', 'PelMen479', 'Mefabest', 'barondumdeedum', 'EastMinsk', 'GolodniyEnot', 'WORSA_crew NaRdiST', 'Tanelda','eX3emz')
-        # u = ('GonzikBenzyavsky', 'Innok27', 'artiomse' ,'wildcucumber','Art_Zank','NorthDragoN','triple6ixx','XyTop_2','DeadChild','Gromnsk','Serjanioo','darthmall','PelMen479', 'Mefabest')
-        u = []
-        for user in list(filter(lambda x : 1 > 0, USERS_ARR)):
-            u.append(user.getLogin())
-        antyBoltReport = ''
-        counter = 0
-        for login in u:
-            user = getUserByLogin(login)
-            if user:
-                counter = counter + 1
-                #acc = '🎫🍼 Билет на гигантскую бутылку'
-                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_5'), None)
-                if user.isInventoryThing(bolt):
-                    pass
-                else:
-                    #acc = '🔩🔩🔩🔩 Болт М1488, возложенный на рейд'
-                    bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_4'), None)
-                    if user.isInventoryThing(bolt):
-                        pass
-                    else:
-                        #acc = '🔩🔩🔩 Болт М404, возложенный на рейд'
-                        bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_3'), None)
-                        if user.isInventoryThing(bolt):
-                            pass
-                        else:
-                            #acc = '🔩🔩 Болт М228, возложенный на рейд'
-                            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_2'), None)
-                            if user.isInventoryThing(bolt):
-                                pass
-                            else:
-                                #acc = '🔩 Болт М69, возложенный на рейд'
-                                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_1'), None)
-                                if user.isInventoryThing(bolt):
-                                    pass
-                                else:
-                                    continue
-
-                if user.isInventoryThing(bolt):
-                    # send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {bolt["name"]}!')
-                    user.removeInventoryThing(bolt)
-                    # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {bolt["name"]}')    
-                    updateUser(user)
-                    antyBoltReport = antyBoltReport + f'{counter}. @{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
-        send_message_to_admin(antyBoltReport)
-
-
     # Проверка на дубликаты бандитов
     # Неправильно работает - не проверяет дубли по Фракции
     if False and now_date.hour in (9,10,11,12,13,14,15,16,17,18,19,20,21,22) and now_date.minute in (0,10,20,30,40,50) and now_date.second < 15:
