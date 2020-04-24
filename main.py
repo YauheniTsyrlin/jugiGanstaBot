@@ -5505,6 +5505,9 @@ def radeReport(goat, ping=False, planRaid=True):
 
 def setGiftsForRaid(goat):
     raidPlan = getPlanedRaidLocation(goatName=goat['name'], planRaid=False)
+    if not raidPlan['rade_location']:
+        return
+
     # raidPlan.update({'rade_date':(datetime(2020, 3, 14, 17, 0)).timestamp() })
     send_message_to_admin(f'⚠️🔩 Раздача болтов {goat["name"]}!\nРейд {datetime.fromtimestamp(raidPlan["rade_date"])}⚠️')
     
