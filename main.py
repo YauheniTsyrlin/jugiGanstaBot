@@ -5193,6 +5193,7 @@ def rade():
         try:
             updateUser(None)
             for goat in getSetting(code='GOATS_BANDS'):
+                send_message_to_admin(f'⚠️ Предупреждение {goat["name"]}!')
                 if getPlanedRaidLocation(goat['name'], planRaid = True)['rade_location']:
                     report = radeReport(goat, True)
                     send_messages_big(goat['chats']['secret'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
@@ -5484,7 +5485,9 @@ def saveRaidResult(goat):
 
 def radeReport(goat, ping=False, planRaid=True):
     updateUser(None)
+    
     raidInfo = getPlanedRaidLocation(goat.get('name'), planRaid)
+    send_message_to_admin(f'⚠️ radeReport ⚠️\n{raidInfo}')
     logger.info(raidInfo)
 
     planed_raid_location = raidInfo['rade_location']
@@ -5557,11 +5560,12 @@ def radeReport(goat, ping=False, planRaid=True):
 
 def setGiftsForRaid(goat):
     raidPlan = getPlanedRaidLocation(goatName=goat['name'], planRaid=False)
+    send_message_to_admin(f'⚠️ setGiftsForRaid ⚠️\n{raidPlan}')
     if not raidPlan['rade_location']:
         return
 
     # raidPlan.update({'rade_date':(datetime(2020, 3, 14, 17, 0)).timestamp() })
-    send_message_to_admin(f'⚠️🔩 Раздача болтов {goat["name"]}!\nРейд {datetime.fromtimestamp(raidPlan["rade_date"])}⚠️')
+    send_message_to_admin(f'⚠️🔩 Раздача болтов {goat["name"]}!\nРейд {raidPlan["rade_date"]}: {datetime.fromtimestamp(raidPlan["rade_date"])}⚠️')
     
     
     boltReport = ''
@@ -5581,7 +5585,14 @@ def setGiftsForRaid(goat):
         else:
             users_false.append(user.getLogin())
 
+    try:
+        send_message_to_admin(f'⚠️🔩 Раздача болтов {goat["name"]}!\nusers = {users_false}⚠️')
+    except:
+        pass
+
     for raid_user in users_false:
+        if 1==1: return
+
         user = getUserByLogin(raid_user)
         if user:
             counter = counter + 1

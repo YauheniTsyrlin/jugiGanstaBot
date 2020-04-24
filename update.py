@@ -3509,7 +3509,7 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-messages.remove()
+# messages.remove()
 
 viruses = ['girlfriend_bouquet', 'covid-19', 'mirror_disease']
 if 1==2:
