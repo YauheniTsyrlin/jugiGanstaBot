@@ -5242,7 +5242,7 @@ def rade():
                 send_message_to_admin(f'⚠️🤬 Сломалась Раздача рейдовых болтов по {goat["name"]}')
 
 
-if now_date.hour in (99, 8) and now_date.minute in (99, 17) and now_date.second < 15:
+    if now_date.hour in (99, 8) and now_date.minute in (99, 19) and now_date.second < 15:
         # u = ('Hermia_Nerbne', 'DaisyBellTrot', 'dan4yk', 'pif_paf_zero', 'misscalderona', 'VirtusX', 'A_Baikonur',
         # 'aohanesian', 'asaelko', 'szvika', 'WildFire112', 'Balbes_36', 'puhnastiyus', 'MrMrakZ', 'GonzikBenzyavsky',
         # 'Innok27', 'artiomse', 'wildcucumber', 'trimprim', 'triple6ixx', 'XyTop_2', 'DeadChild', 'Gromnsk', 'Serjanioo',
