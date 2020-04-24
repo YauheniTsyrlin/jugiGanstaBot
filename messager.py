@@ -10,7 +10,7 @@ def new_message(message: Message, filter):
     row.update({'forward_date': message.forward_date if message.forward_date else None})
     row.update({'forward_from_username': message.forward_from.username if message.forward_from else None})
     row.update({'text': message.text})
-    row.update({'json': message.json})
+    # row.update({'json': message.json})
 
     newvalues = { "$set":  row}
     result = messages.update_one(filter, newvalues)
