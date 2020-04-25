@@ -5189,7 +5189,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Pidor of the day!')
 
     # Предупреждение о рейде за час, полчаса, 10 минут
-    if now_date.hour in (0, 8, 16, 13) and now_date.minute in (0, 30, 50, 59) and now_date.second < 15:
+    if now_date.hour in (0, 8, 16, 14) and now_date.minute in (0, 30, 50, 2) and now_date.second < 15:
         try:
             updateUser(None)
             for goat in getSetting(code='GOATS_BANDS'):
@@ -5557,7 +5557,8 @@ def radeReport(goat, ping=False, planRaid=True):
             report = report + f'\n'
         if ping:
             if planed_raid_location:
-                ping_on_raid(bands.get("usersoffrade"), goat['chats']['secret'], raidInfo, goat['name'])
+                # goat['chats']['secret']
+                ping_on_raid(bands.get("usersoffrade"), 497065022, raidInfo, goat['name'])
     return report
 
 def setGiftsForRaid(goat):
