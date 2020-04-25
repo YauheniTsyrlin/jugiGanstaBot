@@ -5233,8 +5233,9 @@ def rade():
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
             try:
+                pass
                 # выдаём болты
-                setGiftsForRaid(goat)
+                # setGiftsForRaid(goat)
                 # зачищаем признак на рейде.
                 # goat_bands = getGoatBands(goat['name'])
                 # for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
