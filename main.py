@@ -5215,7 +5215,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
 
     # Отчет по рейду
-    if now_date.hour in (1, 9, 17) and now_date.minute == 33 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 56 and now_date.second < 15:
         logger.info('Rade time now!')
         try:
             updateUser(None)
