@@ -5196,9 +5196,8 @@ def rade():
                 send_message_to_admin(f'⚠️ Предупреждение {goat["name"]}!')
                 if getPlanedRaidLocation(goat['name'], planRaid = True)['rade_location']:
                     report = radeReport(goat, True)
-                    send_messages_big(497065022, text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
-
-                    # send_messages_big(goat['chats']['secret'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
+                    # send_messages_big(497065022, text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
+                    send_messages_big(goat['chats']['secret'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
         except:
             send_message_to_admin(f'⚠️🤬 Сломалось Предупреждение о рейде!')
 
@@ -5557,8 +5556,8 @@ def radeReport(goat, ping=False, planRaid=True):
             report = report + f'\n'
         if ping:
             if planed_raid_location:
-                # goat['chats']['secret']
-                ping_on_raid(bands.get("usersoffrade"), 497065022, raidInfo, goat['name'])
+                # 497065022
+                ping_on_raid(bands.get("usersoffrade"), goat['chats']['secret'], raidInfo, goat['name'])
     return report
 
 def setGiftsForRaid(goat):
@@ -5583,6 +5582,7 @@ def setGiftsForRaid(goat):
         for uonr in report_raids.find({'login': user.getLogin(), 'date': raidPlan['rade_date']}):
             user.setRaidLocation(uonr['user_location'])
             find = True
+
         if find:
             users_true.append(user.getLogin())
         else:
@@ -5594,8 +5594,6 @@ def setGiftsForRaid(goat):
         pass
 
     for raid_user in users_false:
-        if 1==1: return
-
         user = getUserByLogin(raid_user)
         if user:
             counter = counter + 1
@@ -5624,7 +5622,7 @@ def setGiftsForRaid(goat):
                                 continue
 
             # send_message_to_admin(f'⚠️ {user.getNameAndGerb()} @{user.getLogin()}\n▫️ {bolt["name"]}!')
-            addInventory(user, bolt)
+#            addInventory(user, bolt)
             #send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {bolt["name"]}')    
             users_on_raid.append(
                         {
@@ -5632,7 +5630,7 @@ def setGiftsForRaid(goat):
                             'bolt': bolt
                         }
                     )
-            updateUser(user)
+#            updateUser(user)
             boltReport = boltReport + f'{counter}. {"@" if user.isPing() else ""}{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
     if counter > 0:
         for userWin in random.sample(users_on_raid, 2):
@@ -5700,7 +5698,7 @@ def setGiftsForRaid(goat):
 
             if user.isInventoryThing(bolt):
                 # send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {bolt["name"]}!')
-                user.removeInventoryThing(bolt)
+#                user.removeInventoryThing(bolt)
                 # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {bolt["name"]}')    
                 antyBoltReport = antyBoltReport + f'{counter}. {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
             users_on_raid.append(
@@ -5709,7 +5707,7 @@ def setGiftsForRaid(goat):
                         'bolt': bolt
                     }
                 )
-            updateUser(user)
+#            updateUser(user)
     if counter > 0:
         for userWin in random.sample(users_on_raid, 2):
             sec = int(20)
@@ -5729,7 +5727,7 @@ def setGiftsForRaid(goat):
 
     if (not boltReport == '') or (not antyBoltReport == ''):
         send_message_to_admin(text=boltReport + '\n' + antyBoltReport)
-        send_messages_big(goat['chats']['secret'], text=boltReport + '\n' + antyBoltReport)
+#        send_messages_big(goat['chats']['secret'], text=boltReport + '\n' + antyBoltReport)
 
 def statistic(goatName: str):
     report = f'🐐<b>{goatName}</b>\n\n'
