@@ -5202,11 +5202,11 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломалось Предупреждение о рейде!')
 
     # Предварительные Отчет по рейду
-    if now_date.hour in (1, 9, 17) and now_date.minute == 7 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 9 and now_date.second < 15:
         try:
             for goat in getSetting(code='GOATS_BANDS'):
                 if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
-                    report = radeReport(goat, True)
+                    report = radeReport(goat, planRaid=False)
                     send_messages_big(goat['chats']['secret'], text='<b>Предварительные</b> Результаты рейда\n' + report)
                     report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть 30 минут с момента прожимания /voevat_suda, либо ты можешь присылать свою награду за рейд аж до 30 минут после рейда!!'
                     send_messages_big(goat['chats']['secret'], text=report)
