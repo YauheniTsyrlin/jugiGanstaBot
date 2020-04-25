@@ -3511,10 +3511,10 @@ print("#==========================#")
 
 # messages.delete_many({})
 
-report_raids.update_many(
-    { 'date': 1587823200 },
-    { '$set': { 'date': 1587834000} }
-)
+# report_raids.update_many(
+#     { 'date': 1587823200 },
+#     { '$set': { 'date': 1587834000} }
+# )
 
 viruses = ['girlfriend_bouquet', 'covid-19', 'mirror_disease']
 if 1==2:
