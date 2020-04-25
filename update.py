@@ -4,7 +4,6 @@ import datetime
 import time
 import users
 import tools
-from main import messages
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 
@@ -23,6 +22,7 @@ man_of_day      = mydb["man_of_day"]
 pip_history     = mydb["pip_history"]
 mob             = mydb["mob"]
 boss            = mydb["boss"]
+messages        = mydb["messages"]
 
 # battle.delete_many({'login':'szpavel'})
 # competition.delete_many({'login':'szpavel'})
@@ -3509,7 +3509,7 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-# messages.remove()
+messages.remove()
 
 viruses = ['girlfriend_bouquet', 'covid-19', 'mirror_disease']
 if 1==2:
