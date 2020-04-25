@@ -5652,6 +5652,7 @@ def setGiftsForRaid(goat):
     users_on_raid = [] 
     antyBoltReport = ''
     counter = 0
+
     for raid_user in users_true:
         user = getUserByLogin(raid_user)
         # Снимаем больы, если последние два рейда были зачетными
@@ -5668,7 +5669,7 @@ def setGiftsForRaid(goat):
             continue
 
         if user:
-            counter = counter + 1
+            
             #acc = '🎫🍼 Билет на гигантскую бутылку'
             bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_5'), None)
             if user.isInventoryThing(bolt):
@@ -5697,6 +5698,7 @@ def setGiftsForRaid(goat):
                                 continue
 
             if user.isInventoryThing(bolt):
+                counter = counter + 1
                 # send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {bolt["name"]}!')
 #                user.removeInventoryThing(bolt)
                 # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {bolt["name"]}')    
