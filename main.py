@@ -5202,7 +5202,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломалось Предупреждение о рейде!')
 
     # Предварительные Отчет по рейду
-    if now_date.hour in (1, 9, 17) and now_date.minute == 5 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute == 7 and now_date.second < 15:
         try:
             for goat in getSetting(code='GOATS_BANDS'):
                 if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
