@@ -5487,7 +5487,7 @@ def radeReport(goat, ping=False, planRaid=True):
     updateUser(None)
     
     raidInfo = getPlanedRaidLocation(goat.get('name'), planRaid)
-    send_message_to_admin(f'⚠️ radeReport ⚠️\n{raidInfo}')
+    send_message_to_admin(f'⚠️ radeReport ⚠️\n{datetime.fromtimestamp(raidInfo["rade_date"])}\n{raidInfo}')
     logger.info(raidInfo)
 
     planed_raid_location = raidInfo['rade_location']
