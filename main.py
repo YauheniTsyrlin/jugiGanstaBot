@@ -5189,14 +5189,14 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Pidor of the day!')
 
     # Предупреждение о рейде за час, полчаса, 10 минут
-    if now_date.hour in (0, 8, 16, 13) and now_date.minute in (0, 30, 50, 52) and now_date.second < 15:
+    if now_date.hour in (0, 8, 16, 13) and now_date.minute in (0, 30, 50, 58) and now_date.second < 15:
         try:
             updateUser(None)
             for goat in getSetting(code='GOATS_BANDS'):
                 send_message_to_admin(f'⚠️ Предупреждение {goat["name"]}!')
                 if getPlanedRaidLocation(goat['name'], planRaid = True)['rade_location']:
                     report = radeReport(goat, True)
-                    send_message_to_admin(goat['chats']['secret'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
+                    send_messages_big(497065022, text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
 
                     # send_messages_big(goat['chats']['secret'], text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
         except:
