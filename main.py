@@ -5384,6 +5384,7 @@ def getPlanedRaidLocation(goatName: str, planRaid = True):
     return raidNone
 
 def getRaidTimeText(text, date):
+    tz = config.SERVER_MSK_DIFF
     hour = 0
     minute = 0
     second = 0
@@ -5399,7 +5400,7 @@ def getRaidTimeText(text, date):
         result =  datetime.fromtimestamp(date) + timedelta(seconds=second, minutes=minute, hours=hour)
         hour = round((result.hour*60 + result.minute)/60)       
     else:
-        d = datetime.fromtimestamp(date)
+        d = datetime.fromtimestamp(date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
         if d.hour >= 17:
             d = d + timedelta(days=1)
             hour = 1

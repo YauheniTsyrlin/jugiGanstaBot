@@ -594,6 +594,7 @@ def getRaidTime(planRaid):
     return raid_date.replace(hour=hour, minute=0, second=0, microsecond=0).timestamp()
 
 def getRaidTimeText(text, date):
+    tz = config.SERVER_MSK_DIFF
     hour = 0
     minute = 0
     second = 0
@@ -609,7 +610,7 @@ def getRaidTimeText(text, date):
         result =  datetime.fromtimestamp(date) + timedelta(seconds=second, minutes=minute, hours=hour)
         hour = round((result.hour*60 + result.minute)/60)       
     else:
-        d = datetime.fromtimestamp(date)
+        d = datetime.fromtimestamp(date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
         if d.hour >= 17:
             d = d + timedelta(days=1)
             hour = 1
@@ -628,10 +629,15 @@ def getRaidTimeText(text, date):
 # ttt = [ '1ч. 15мин.']
 # for t in ttt:
 
-for i in range(0,24):
-    dateT = datetime.now().replace(hour=i, minute=0, second=0, microsecond=0).timestamp()
-    date = getRaidTimeText('', dateT)
-    print(f'{i} {datetime.fromtimestamp(dateT)} {datetime.fromtimestamp(date)}')
+
+dateT = 1587911050
+date = getRaidTimeText('', dateT)
+print(f'{datetime.fromtimestamp(dateT)} {datetime.fromtimestamp(date)}')
+
+# for i in range(0,24):
+#     dateT = datetime.now().replace(hour=i, minute=0, second=0, microsecond=0).timestamp()
+#     date = getRaidTimeText('', dateT)
+#     print(f'{i} {datetime.fromtimestamp(dateT)} {datetime.fromtimestamp(date)}')
 
 #tz = config.SERVER_MSK_DIFF
 #ticket = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='redeemed_raid_ticket'), None)             
