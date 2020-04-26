@@ -4345,7 +4345,7 @@ def callback_query(call):
 
     dt = datetime.fromtimestamp(float(call.data.split('|')[1]))
 
-    time_str = str(dt.hour+3).zfill(2)+':'+str(dt.minute).zfill(2)
+    time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
     dungeon_km = call.data.split('|')[3]
     dungeon = getSetting(code='DUNGEONS', value=dungeon_km) 
 
