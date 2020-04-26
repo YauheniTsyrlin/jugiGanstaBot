@@ -2202,7 +2202,7 @@ def main_message(message):
                     return 
 
                 raidDate = getRaidTimeText("", message.forward_date)
-                logger.info(f'Панель банды. Время следующего рейда: {datetime.fromtimestamp(raidDate)}')
+                logger.info(f'Панель банды от {datetime.fromtimestamp(message.forward_date)}. Время следующего рейда: {datetime.fromtimestamp(raidDate)}')
 
                 strings = message.text.split('\n')
                 i = 0
@@ -5233,7 +5233,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
 
     # Раздача рейдовых болтов
-    if now_date.hour in (1, 9, 17, 18) and now_date.minute in (31, 40) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute in (31) and now_date.second < 15:
         logger.info('raid bolt info!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
