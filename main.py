@@ -2176,10 +2176,10 @@ def main_message(message):
                 user.setRaidLocation(1)
 
                 try:
-                    tz = config.SERVER_MSK_DIFF
+                    # tz = config.SERVER_MSK_DIFF
                     ticket = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='redeemed_raid_ticket'), None)             
                     date_stamp = getRaidTimeText(message.text.split("Рейд начнётся через ⏱")[1], message.forward_date)
-                    date_stamp = (datetime.fromtimestamp(date_stamp) + timedelta(hours=tz.hour)).timestamp()
+                    # date_stamp = (datetime.fromtimestamp(date_stamp) + timedelta(hours=tz.hour)).timestamp()
                     date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
                     addInventory(user, ticket)
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text + 
@@ -2197,9 +2197,9 @@ def main_message(message):
         elif ('Панель банды.' in message.text):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
-                # if message.forward_date < (datetime.now() - timedelta(minutes=1)).timestamp():
-                #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                #     return 
+                if message.forward_date < (datetime.now() - timedelta(minutes=1)).timestamp():
+                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+                    return 
 
                 raidDate = getRaidTimeText("", message.forward_date)
                 logger.info(f'Панель банды от {message.forward_date}: {datetime.fromtimestamp(message.forward_date)}.\nВремя следующего рейда: {datetime.fromtimestamp(raidDate)}')
@@ -5385,6 +5385,7 @@ def getPlanedRaidLocation(goatName: str, planRaid = True):
 
 def getRaidTimeText(text, date):
     tz = config.SERVER_MSK_DIFF
+    date = (datetime.fromtimestamp(date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
     hour = 0
     minute = 0
     second = 0
@@ -5400,7 +5401,7 @@ def getRaidTimeText(text, date):
         result =  datetime.fromtimestamp(date) + timedelta(seconds=second, minutes=minute, hours=hour)
         hour = round((result.hour*60 + result.minute)/60)       
     else:
-        d = datetime.fromtimestamp(date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+        d = datetime.fromtimestamp(date)
         if d.hour >= 17:
             d = d + timedelta(days=1)
             hour = 1

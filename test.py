@@ -595,6 +595,7 @@ def getRaidTime(planRaid):
 
 def getRaidTimeText(text, date):
     tz = config.SERVER_MSK_DIFF
+    date = (datetime.fromtimestamp(date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
     hour = 0
     minute = 0
     second = 0
@@ -610,7 +611,7 @@ def getRaidTimeText(text, date):
         result =  datetime.fromtimestamp(date) + timedelta(seconds=second, minutes=minute, hours=hour)
         hour = round((result.hour*60 + result.minute)/60)       
     else:
-        d = datetime.fromtimestamp(date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+        d = datetime.fromtimestamp(date)
         if d.hour >= 17:
             d = d + timedelta(days=1)
             hour = 1
