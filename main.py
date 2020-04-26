@@ -2197,9 +2197,9 @@ def main_message(message):
         elif ('Панель банды.' in message.text):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
-                if message.forward_date < (datetime.now() - timedelta(minutes=1)).timestamp():
-                    send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                    return 
+                # if message.forward_date < (datetime.now() - timedelta(minutes=1)).timestamp():
+                #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+                #     return 
 
                 raidDate = getRaidTimeText("", message.forward_date)
                 logger.info(f'Панель банды от {message.forward_date}: {datetime.fromtimestamp(message.forward_date)}.\nВремя следующего рейда: {datetime.fromtimestamp(raidDate)}')
