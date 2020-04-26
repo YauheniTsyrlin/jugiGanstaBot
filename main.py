@@ -503,17 +503,15 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None, limit=
     if back_button or exit_button or forward_button: 
         if step==0 and len(buttons) <= limit:
             manage_buttons = [exit_button]
-            print('0000000000')
         elif step==0:
             manage_buttons = [exit_button, forward_button]
-            print('1111111111')
         elif (step+1)*limit >= len(buttons):
             manage_buttons = [back_button, exit_button]
-            print('222222222222222')
         else:
-            print('33333333333')
+            stepNext = step + 1
+            menuBtnNext = [ buttons [i:i + n_cols] for i in range(stepNext*limit, (stepNext+1)*limit if (stepNext+1)*limit <= len(buttons) else len(buttons), n_cols) ]
             manage_buttons = [back_button, exit_button, forward_button]
-        menu = menu + [manage_buttons [i:i + n_cols] for i in range(0, len(manage_buttons), n_cols)]
+        menu = menu + [manage_buttons [i:i + 3] for i in range(0, len(manage_buttons), 3)]
     if header_buttons:
         menu.insert(0, header_buttons)
     if footer_buttons:
@@ -1222,7 +1220,12 @@ def send_recycling(message):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markup.row(*row)  
 
-        bot.send_message(message.chat.id, text='Твой инвентарь:\nuser.getInventoryReport()', reply_markup=markup)
+        inventory_category = [
+                                {'id':'clothes', 'name':'🧥 Одежда'},
+                                {'id':'things', 'name':'📦 Вещи'}
+                            ]
+
+        bot.send_message(message.chat.id, text=f"Твой инвентарь:\n{user.getInventoryReport(inventory_category)}", reply_markup=markup)
         bot.register_next_step_handler(message, process_select_recycle)
     elif message.text == exit_up_button:
         markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
@@ -1276,9 +1279,9 @@ def process_select_recycle(message):
         
         back_button = f"♻️ Назад 🔙({step-1})"
         exit_button = "♻️ Выйти ❌"
-        forward_button = f"♻️ Далее 🔜({step})"
+        forward_button = f"♻️ Далее 🔜({step+1})"
 
-        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step+1, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markup.row(*row)
 
         bot.send_message(message.chat.id, text=f'Далее...', reply_markup=markup)
@@ -4342,7 +4345,7 @@ def callback_query(call):
 
     dt = datetime.fromtimestamp(float(call.data.split('|')[1]))
 
-    time_str = str(dt.hour).zfill(2)+':'+str(dt.minute).zfill(2)
+    time_str = str(dt.hour+3).zfill(2)+':'+str(dt.minute).zfill(2)
     dungeon_km = call.data.split('|')[3]
     dungeon = getSetting(code='DUNGEONS', value=dungeon_km) 
 
