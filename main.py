@@ -4812,7 +4812,9 @@ def callback_query(call):
         for user in list(filter(lambda x : x.getBand() == band, USERS_ARR)):
             planed_location = None
             for report in report_raids.find({'login': user.getLogin(), 'date': raid_date.timestamp()}):
-                planed_location = report['planed_location']
+                try:
+                    planed_location = report['planed_location']
+                except: pass
             planed_location_str = ''
             if planed_location:
                 planed_location_str = f'📍{planed_location} ' if planed_location > 0 else ''
