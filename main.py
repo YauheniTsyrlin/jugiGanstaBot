@@ -5462,7 +5462,9 @@ def getPlanedRaidLocation(goatName: str, planRaid = True):
     
     logger.info(f'==============={goatName}===============')
     raidNone = {}
-    raidNone.update({'rade_date': (raid_date.replace(hour=hour - tz.hour, minute=0, second=0, microsecond=0)).timestamp()})
+    raid_date = raid_date.replace(hour=hour, minute=0, second=0, microsecond=0)
+    raid_date = raid_date - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+    raidNone.update({'rade_date': (raid_date).timestamp()})
     raidNone.update({'rade_location': None})
     raidNone.update({'rade_text': None})
 
