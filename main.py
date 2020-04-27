@@ -4753,7 +4753,9 @@ def callback_query(call):
         for user in list(filter(lambda x : x.getBand() == band, USERS_ARR)):
             planed_location = None
             for report in report_raids.find({'login': user.getLogin(), 'date': raid_date.timestamp()}):
-                planed_location = report['planed_location']
+                try:
+                    planed_location = report['planed_location']
+                except: pass
             planed_location_str = ''
             if planed_location:
                 planed_location_str = f'📍{planed_location} ' if planed_location > 0 else ''
@@ -5309,7 +5311,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
 
     # Отчет по рейду
-    if now_date.hour in (1, 9, 17, 18) and now_date.minute in (30, 42) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17) and now_date.minute in (30) and now_date.second < 15:
         logger.info('Rade time now!')
         try:
             updateUser(None)
