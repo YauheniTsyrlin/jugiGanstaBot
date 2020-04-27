@@ -5301,7 +5301,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Pidor of the day!')
 
     # Предупреждение о рейде за час, полчаса, 10 минут
-    if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
+    if False and now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
         try:
             updateUser(None)
             for goat in getSetting(code='GOATS_BANDS'):
@@ -5314,7 +5314,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломалось Предупреждение о рейде!')
 
     # Предварительные Отчет по рейду
-    if now_date.hour in (1, 9, 17) and now_date.minute == 9 and now_date.second < 15:
+    if False and now_date.hour in (1, 9, 17) and now_date.minute == 9 and now_date.second < 15:
         try:
             for goat in getSetting(code='GOATS_BANDS'):
                 if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
@@ -5326,7 +5326,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
 
     # Отчет по рейду
-    if now_date.hour in (1, 9, 17) and now_date.minute in (30) and now_date.second < 15:
+    if False and now_date.hour in (1, 9, 17) and now_date.minute in (30) and now_date.second < 15:
         logger.info('Rade time now!')
         try:
             updateUser(None)
@@ -5341,7 +5341,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
 
     # Раздача рейдовых болтов
-    if now_date.hour in (1, 9, 17) and now_date.minute in (31) and now_date.second < 15:
+    if False and now_date.hour in (1, 9, 17) and now_date.minute in (31) and now_date.second < 15:
         logger.info('raid bolt info!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
