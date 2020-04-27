@@ -3689,7 +3689,7 @@ def main_message(message):
                         if eval(response.split(":")[3]):
                             for radeloc in radeloc_arr:                                
                                 myquery = { 
-                                            'rade_date': raid_date.timestamp(),
+                                            'rade_date': dt.timestamp(),
                                             'rade_location': radeloc['rade_location'],
                                             'goat': goat
                                         }
@@ -3702,7 +3702,7 @@ def main_message(message):
                                 if u.matched_count == 0:
                                     plan_raids.insert_one({ 
                                         'create_date': datetime.now().timestamp(), 
-                                        'rade_date': raid_date.timestamp(),
+                                        'rade_date': dt.timestamp(),
                                         'rade_text': radeloc['rade_text'],
                                         'rade_location': radeloc['rade_location'],
                                         'state': 'WAIT',
@@ -3712,15 +3712,15 @@ def main_message(message):
                                         'users': users_onraid})
                         else:
                             plan_raids.delete_many({
-                                            'rade_date': raid_date.timestamp(),
+                                            'rade_date': dt.timestamp(),
                                             'goat': goat
                                             })
 
-                        plan_str = get_raid_plan(raid_date.timestamp(), goat)
+                        plan_str = get_raid_plan(dt.timestamp(), goat)
 
                         #markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
                         for radeloc in plan_raids.find({
-                                    'rade_date': raid_date.timestamp(),
+                                    'rade_date': dt.timestamp(),
                                     'goat': goat}): 
                             users_onraid = radeloc['users']
                             find = False
@@ -3729,10 +3729,10 @@ def main_message(message):
                                     find = True
                             
                             # if not find:
-                            markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
+                            markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{dt.timestamp()}_{goat}"))
 
                         if privateChat and isGoatBoss(message.from_user.username):
-                            markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}"))
+                            markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{dt.timestamp()}_{goat}"))
 
                         msg = send_messages_big(message.chat.id, text=plan_str, reply_markup=markupinline)
                     elif 'getchat' == response.split(':')[1]:
