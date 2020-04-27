@@ -5084,10 +5084,7 @@ def get_raid_plan(raid_date, goat):
                                 '$and' : 
                                 [
                                     {
-                                        'rade_date': {
-                                        '$gte': (datetime.now()).timestamp(),
-                                        '$lt': ( datetime.fromtimestamp(raid_date).replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
-                                        }
+                                        'rade_date': raid_date
                                     },
                                     {
                                         'goat': goat
