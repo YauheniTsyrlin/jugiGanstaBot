@@ -5077,7 +5077,7 @@ def ping_on_raid(fuckupusers, chat_id, raidInfo, goatName):
 
 def get_raid_plan(raid_date, goat):
     tz = config.SERVER_MSK_DIFF
-    plan_for_date = f'План рейда на {time.strftime("%d.%m.%Y %H:%M", time.gmtime( (datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp() ))}\n🐐<b>{goat}</b>\n\n'
+    plan_for_date = f'Ближайший рейд {time.strftime("%d.%m.%Y %H:%M", time.gmtime( (datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp() ))}\n🐐<b>{goat}</b>\n\n'
     find = False
     time_str = None
     for raid in plan_raids.find({
