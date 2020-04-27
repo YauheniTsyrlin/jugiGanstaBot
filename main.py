@@ -3286,12 +3286,18 @@ def main_message(message):
                         goat = getMyGoatName(message.from_user.username)
 
                         tz = config.SERVER_MSK_DIFF
-                        raid_date = (datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
+                        raid_date = None# (datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
 
                         if response.split(response.split(":")[1])[1][1:].strip() == '*':
+                            logger.info('=========1 ============')
                             raid_date = getPlanedRaidLocation(goat, planRaid = True)['rade_date']
                         else:
+                            logger.info('=========2 ============')
                             raid_date = parse(response.split(response.split(":")[1])[1][1:]).timestamp()
+                            raid_date = (datetime.fromtimestamp(raid_date) - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
+
+                        
+                        logger.info(datetime.fromtimestamp(raid_date))
                         
                         markupinline = InlineKeyboardMarkup()
 
