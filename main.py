@@ -4841,7 +4841,8 @@ def callback_query(call):
                 date_str = time.strftime("%H:%M %d.%m", time.gmtime(raid_date.timestamp())) 
                 planed_location_str = f'📍<b>{planed_location}км</b> в ⏱ {date_str}' if planed_location > 0 else ''
                 try:
-                    send_messages_big(user.getChat(), text=planed_location_str)
+                    logger.info(f'Отправляем пин {user.getLogin()}')
+                    # send_messages_big(user.getChat(), text=planed_location_str)
                 except:
                     logger.info(f'ERROR: Не смогли отправить пин {user.getLogin()}')
         bot.answer_callback_query(call.id, "Пины отправлены бандитам!")
