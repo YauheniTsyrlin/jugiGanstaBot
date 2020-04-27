@@ -3667,7 +3667,7 @@ def main_message(message):
                             msg = send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'timeisout').fulfillment_text)
                             return
 
-                        logger.info(f'Дата нового рейда {dt}')
+                        logger.info(f'Дата нового рейда {dt} {dt.timestamp()}')
                         markupinline = InlineKeyboardMarkup()
 
                         if eval(response.split(":")[3]):
