@@ -5075,7 +5075,8 @@ def ping_on_raid(fuckupusers, chat_id, raidInfo, goatName):
         send_messages_big(chat_id, text=fuckupusersReport)
 
 def get_raid_plan(raid_date, goat):
-    plan_for_date = f'План рейдов на {time.strftime("%d.%m.%Y", time.gmtime( raid_date ))}\n🐐<b>{goat}</b>\n\n'
+    tz = config.SERVER_MSK_DIFF
+    plan_for_date = f'План рейдов на {time.strftime("%d.%m.%Y", time.gmtime( (datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp() ))}\n🐐<b>{goat}</b>\n\n'
     find = False
     time_str = None
     for raid in plan_raids.find({
@@ -5083,7 +5084,7 @@ def get_raid_plan(raid_date, goat):
                                 [
                                     {
                                         'rade_date': {
-                                        '$gte': (datetime.now() + timedelta(minutes=180)).timestamp(),
+                                        '$gte': (datetime.now()).timestamp(),
                                         '$lt': ( datetime.fromtimestamp(raid_date).replace(hour=23, minute=59, second=59, microsecond=0)).timestamp(),
                                         }
                                     },
@@ -5093,7 +5094,7 @@ def get_raid_plan(raid_date, goat):
                                 ]
                             }):
 
-        t = datetime.fromtimestamp(raid.get('rade_date') ) 
+        t = datetime.fromtimestamp(raid.get('rade_date') ) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
         if not (time_str == t):
             plan_for_date = plan_for_date + f'<b>Рейд в {str(t.hour).zfill(2)}:{str(t.minute).zfill(2)}</b>\n'
             time_str = t
