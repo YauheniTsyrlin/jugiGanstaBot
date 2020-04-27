@@ -2203,6 +2203,8 @@ def main_message(message):
 
                 raidDate = getRaidTimeText("", message.forward_date)
                 logger.info(f'Панель банды от {message.forward_date}: {datetime.fromtimestamp(message.forward_date)}.\nВремя следующего рейда: {datetime.fromtimestamp(raidDate)}')
+                tz = config.SERVER_MSK_DIFF
+                
 
                 strings = message.text.split('\n')
                 i = 0
@@ -2262,28 +2264,26 @@ def main_message(message):
                             u.setWastelandLocation(km)
                             u.setMaxkm(km)
                             
-                            tz = config.SERVER_MSK_DIFF
-                            raidDate = (datetime.fromtimestamp(raidDate) - timedelta(hours=tz.hour)).timestamp()
-                            logger.info(datetime.fromtimestamp(raidDate))
+
                             if '👊' in strings[i]:
                                 onraidcounter = onraidcounter + 1
                                 onraidrw = onraidrw + u.getRaidWeight()
                                 u.setRaidLocation(km)
                                 onraidusers.append(u)
-                                saveUserRaidResult(u, raidDate, km)
+                                saveUserRaidResult(u, (datetime.fromtimestamp(raidDate) - timedelta(hours=tz.hour)).timestamp(), km)
 
                             else:
                                 fuckupraidrw = fuckupraidrw + u.getRaidWeight()
                                 fuckupusers.append(u)
                                 u.setRaidLocation(0)
-                                saveUserRaidResult(u, raidDate, 0)
+                                saveUserRaidResult(u, (datetime.fromtimestamp(raidDate) - timedelta(hours=tz.hour)).timestamp(), 0)
                             updateUser(u)
                         else:
                             aliancounter  = aliancounter + 1
                             alianusersReport = alianusersReport + f'{aliancounter}. {name} {spliter}{km}км\n'
                     i = i + 1
 
-                send_message_to_admin(f'⚠️ {getUserByLogin(message.from_user.username).getNameAndGerb()}\n🤘 Панель банды <b>{band}</b>\n{message.forward_date}: {datetime.fromtimestamp(message.forward_date)}\n⏰ Время рейда: {datetime.fromtimestamp((datetime.fromtimestamp(raidDate) + timedelta(hours=tz.hour)).timestamp())}')
+                send_message_to_admin(f'⚠️ {getUserByLogin(message.from_user.username).getNameAndGerb()}\n🤘 Панель банды <b>{band}</b>\n{message.forward_date}: {datetime.fromtimestamp(message.forward_date)}\n⏰ Время рейда: {datetime.fromtimestamp(raidDate)}')
                 report = report + f'🤘 <b>{band}</b>\n\n' 
                 if onraidcounter > 0:
                     report = report + f'🧘‍♂️ <b>на рейде</b>: <b>{onraidcounter}/{allcounter}</b>\n'
