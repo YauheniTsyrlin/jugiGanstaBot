@@ -4739,49 +4739,115 @@ def callback_query(call):
     goat = ''
     band = ''
     raid_date = None
-
+    exit_button = None
+    selected_name = ''
+    liga = ''
+    
     if call.data.startswith('pinraid_band'):
         goat = call.data.split('_')[2]
         band = call.data.split('_')[3]
         raid_date = datetime.fromtimestamp(float(call.data.split('_')[4]))
 
-        bot.answer_callback_query(call.id, f"Банда {band}")
+        # bot.answer_callback_query(call.id, f"Банда {band}")
 
         for user in list(filter(lambda x : x.getBand() == band, USERS_ARR)):
-            buttons.append(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"pinraid_user_{raid_date.timestamp()}_{user.getLogin()}"))
+            planed_location = None
+            for report in report_raids.find({'login': user.getLogin(), 'date': raid_date.timestamp()}):
+                planed_location = report['planed_location']
+            planed_location_str = ''
+            if planed_location:
+                planed_location_str = f'📍{planed_location} ' if planed_location > 0 else ''
+            buttons.append(InlineKeyboardButton(f"{planed_location_str}{user.getNameAndGerb()}", callback_data=f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
         
-        all_banditos=InlineKeyboardButton(f"👨‍👨‍👦‍👦Все бандиты", callback_data=f"pinraid_user_{raid_date.timestamp()}_allbanditos_{band}")
+        all_banditos=InlineKeyboardButton(f"👥 Все бандиты", callback_data=f"pinraid_user_{raid_date.timestamp()}_{band}_allbanditos")
         buttons.append(all_banditos)
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}")
     
     if call.data.startswith('pinraid_user'):
+        #   0      1               2             3       4
+        # pinraid_user_{raid_date.timestamp()}_{band}_allbanditos
         raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
-        user_login = call.data.split("_"+call.data.split('_')[2]+"_")[1]
-        # pinraid_user_1588024800.0_allbanditos_без банды
-        if 'allbanditos' == user_login:
-            pass
-
-        user = getUserByLogin(user_login)
-        band = user.getBand()
-
-        goatRow = getMyGoat(user_login)
-        goat = goatRow['name']
-        liga = goatRow['liga']
+        user_login = call.data.split("_"+call.data.split('_')[3]+"_")[1]
+        if user_login == 'allbanditos':
+            for user in list(filter(lambda x : x.getBand() == call.data.split('_')[3], USERS_ARR)):
+                selected_name = '👥 Все бандиты'
+                goatRow = getMyGoat(user.getLogin())
+                band = user.getBand()
+                goat = goatRow['name']
+                liga = goatRow['liga']
+                break
+        else:
+            user = getUserByLogin(user_login)
+            selected_name = f'{user.getNameAndGerb()} @{user.getLogin()}' 
+            
+            band = user.getBand()
+            goatRow = getMyGoat(user_login)
+            goat = goatRow['name']
+            liga = goatRow['liga']
         
-
         for loc in getSetting(code='RAIDLOCATIONS'):
             if loc['liga'] == liga:
-                buttons.append(InlineKeyboardButton(f"{loc['name']}", callback_data=f"pinraid_loc_{raid_date.timestamp()}_{user.getLogin()}_{loc['id']}"))
+                buttons.append(InlineKeyboardButton(f"{loc['name']}", callback_data=f"pinraid_loc_{raid_date.timestamp()}_{loc['id']}_{band}_{user_login}"))
         
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}")
-        bot.answer_callback_query(call.id, f"Бандит {user.getNameAndGerb()}")
+
+    if call.data.startswith('pinraid_loc'):
+        #   0      1            2                   3       4       5
+        # pinraid_loc_{raid_date.timestamp()}_{loc['id']}_{band}_{user_login}
+        raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
+        loc_id = int(call.data.split('_')[3]) 
+        band = call.data.split('_')[4]
+        user_login = call.data.split('_'+call.data.split('_')[4]+'_')[1]
         
-    
+        if user_login == 'allbanditos':
+            for user in list(filter(lambda x : x.getBand() == band, USERS_ARR)):
+                saveUserRaidResult(user, raid_date.timestamp(), location=None, planed_location=loc_id)
+        else:
+            user = getUserByLogin(user_login)
+            saveUserRaidResult(user, raid_date.timestamp(), location=None, planed_location=loc_id)
+
+
+        for user in list(filter(lambda x : x.getBand() == band, USERS_ARR)):
+            planed_location = None
+            for report in report_raids.find({'login': user.getLogin(), 'date': raid_date.timestamp()}):
+                planed_location = report['planed_location']
+            planed_location_str = ''
+            if planed_location:
+                planed_location_str = f'📍{planed_location} ' if planed_location > 0 else ''
+
+            buttons.append(InlineKeyboardButton(f"{planed_location_str}{user.getNameAndGerb()}", callback_data=f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
+            if goat == '':
+                goat = getMyGoatName(user.getLogin())
+
+        all_banditos=InlineKeyboardButton(f"👥 Все бандиты", callback_data=f"pinraid_user_{raid_date.timestamp()}_{band}_allbanditos")
+        buttons.append(all_banditos)
+        exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}")
+
+    if call.data.startswith('pinraid_pin'):
+        #    0     1          2                  3
+        # pinraid_pin_{raid_date.timestamp()}_{goat}
+        raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
+        bands = getGoatBands(call.data.split('_')[3])
+        for user in list(filter(lambda x : x.getBand() in bands, USERS_ARR)):
+            planed_location = None
+            for report in report_raids.find({'login': user.getLogin(), 'date': raid_date.timestamp()}):
+                planed_location = report['planed_location']
+            planed_location_str = ''
+            if planed_location:
+                date_str = time.strftime("%H:%M %d.%m", time.gmtime(raid_date.timestamp())) 
+                planed_location_str = f'📍<b>{planed_location}км</b> в ⏱ {date_str}' if planed_location > 0 else ''
+                try:
+                    send_messages_big(user.getChat(), text=planed_location_str)
+                except:
+                    logger.info(f'ERROR: Не смогли отправить пин {user.getLogin()}')
+        bot.answer_callback_query(call.id, "Пины отправлены бандитам!")
+        return
+
     for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
         markupinline.row(*row)  
 
     text = get_raid_plan(raid_date.timestamp(), goat)
-    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘 <b>{band}</b>\n{text}', parse_mode='HTML', reply_markup=markupinline)
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘 <b>{band}</b> <b>{selected_name}</b>\n{text}', parse_mode='HTML', reply_markup=markupinline)
     return
 
 
@@ -4813,8 +4879,10 @@ def callback_query(call):
         buttons = []
         for band in getGoatBands(goat):
             buttons.append(InlineKeyboardButton(f"{band}", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}"))                        
-         
+        buttons.append(InlineKeyboardButton(f"Отправить 📩", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
+
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
+        
         for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
             markupinline.row(*row)  
             
@@ -5457,22 +5525,27 @@ def getRaidTime(planRaid):
             hour = 17
     return raid_date.replace(hour=hour, minute=0, second=0, microsecond=0).timestamp()
 
-def saveUserRaidResult(user, date, location):
-    if location <= 0:
-        result = report_raids.delete_one({"login": f"{user.getLogin()}", 'date': date})
-        return
+def saveUserRaidResult(user, date, location, planed_location=None):
+    # if location <= 0:
+    #     result = report_raids.delete_one({"login": f"{user.getLogin()}", 'date': date})
+    #     return
 
     row = {}
     row.update({'date': date })
     row.update({'login': user.getLogin()})
     row.update({'band': user.getBand()})
     row.update({'goat': getMyGoatName(user.getLogin())})
-    row.update({'user_location': 0})
-    row.update({'on_raid': False})
+    
+    if location:
+        row.update({'user_location': location})
+        if location > 0:        
+            row.update({'on_raid': True})
+        else:
+            row.update({'on_raid': False})
 
-    if location > 0:
-        row.update({'on_raid': True}) 
-        row.update({'user_location': location})   
+    if planed_location:
+        row.update({'planed_location': planed_location})
+
     newvalues = { "$set": row }
     result = report_raids.update_one({"login": f"{user.getLogin()}", 'date': date}, newvalues)
     if result.matched_count < 1:
