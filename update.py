@@ -3602,7 +3602,10 @@ print("#==========================#")
 
 # messages.delete_many({})
 plan_raids.delete_many({
-                                            'rade_date': 1588035600
+                                            'rade_date': 1588122000
+                                            })
+plan_raids.delete_many({
+                                            'rade_date': 1588168800
                                             })
 
 # report_raids.update_many(
