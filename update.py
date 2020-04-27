@@ -3601,6 +3601,9 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 # messages.delete_many({})
+plan_raids.delete_many({
+                                            'rade_date': 1588035600
+                                            })
 
 # report_raids.update_many(
 #     { 'date': 1587823200 },
