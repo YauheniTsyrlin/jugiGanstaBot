@@ -2283,7 +2283,7 @@ def main_message(message):
                             alianusersReport = alianusersReport + f'{aliancounter}. {name} {spliter}{km}км\n'
                     i = i + 1
 
-                send_message_to_admin(f'⚠️ {getUserByLogin(message.from_user.username).getNameAndGerb()}\n🤘 Панель банды <b>{band}</b>\n{message.forward_date}: {datetime.fromtimestamp(message.forward_date)}\n⏰ Время рейда: {datetime.fromtimestamp(raidDate)}')
+                send_message_to_admin(f'⚠️ {getUserByLogin(message.from_user.username).getNameAndGerb()}\n🤘 Панель банды <b>{band}</b>\n{message.forward_date}: {datetime.fromtimestamp(message.forward_date)}\n⏰ Время рейда: {datetime.fromtimestamp((datetime.fromtimestamp(raidDate) + timedelta(hours=tz.hour)).timestamp())}')
                 report = report + f'🤘 <b>{band}</b>\n\n' 
                 if onraidcounter > 0:
                     report = report + f'🧘‍♂️ <b>на рейде</b>: <b>{onraidcounter}/{allcounter}</b>\n'
