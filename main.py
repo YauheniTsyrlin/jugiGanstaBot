@@ -5497,17 +5497,23 @@ def getRaidTimeText(text, date):
         result =  datetime.fromtimestamp(date) + timedelta(seconds=second, minutes=minute, hours=hour)
         hour = round((result.hour*60 + result.minute)/60)       
     else:
-        d = datetime.fromtimestamp(date)
+        d = datetime.fromtimestamp(date) 
+        logger.info(f'1: {d} {hour}')
         if d.hour >= 17:
             d = d + timedelta(days=1)
             hour = 1
+            logger.info(f'2: {d} {hour}')
         elif d.hour < 1:
             hour = 1
+            logger.info(f'3: {d} {hour}')
         elif d.hour >=1 and d.hour < 9:
             hour = 9
+            logger.info(f'4: {d} {hour}')
         elif d.hour >=9 and d.hour < 17:
             hour = 17
+            logger.info(f'5: {d} {hour}')
         result =  d
+
     
     result = result.replace(hour=hour, minute=0, second=0, microsecond=0)
     return result.timestamp()
