@@ -3835,11 +3835,6 @@ def main_message(message):
 
                             text = text + report_yes + '\n' + report_no
                             send_messages_big(message.chat.id, text=text, reply_markup=markupinline)
-
-                            # if not privateChat:
-                            #     if len(pingusers) > 0:
-                            #         msg = send_messages_big(message.chat.id, text=first_string + report)
-                            #         bot.pin_chat_message(message.chat.id, msg.message_id)
                     elif 'remind' == response.split(':')[1]:
                         # jugi:remind:2019-11-04T17:12:00+02:00
                         if not userIAm.getLocation():
@@ -4731,47 +4726,62 @@ def callback_query(call):
     markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickup_exit|{login}"))
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
-@bot.callback_query_handler(func=lambda call: call.data.startswith("pinonraid_"))
+@bot.callback_query_handler(func=lambda call: call.data.startswith("pinraid_"))
 def callback_query(call):
-    # pinonraid_{goat}_{band}_{raid_date.timestamp()}
+    print(call.data)
+    # pinonraid_actions_{goat}_{band}_{raid_date.timestamp()}
     if isUserBan(call.from_user.username):
         bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
         return
-    
-    goat = call.data.split('_')[1]
-    if not goat == getMyGoatName(call.from_user.username):
-        bot.answer_callback_query(call.id, "Это план не твоего козла!")
-        return
-
-    band = call.data.split('_')[2]
 
     markupinline = InlineKeyboardMarkup()
-    raid_date = datetime.fromtimestamp(float(call.data.split('_')[3]))
-
-    bot.answer_callback_query(call.id, f"Банда {band}")
-
     buttons = []
-    for user in list(filter(lambda x : x.getBand() == band, USERS_ARR)):
-        buttons.append(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"pinonraid_{user.getLogin()}_{raid_date.timestamp()}"))
+    goat = ''
+    band = ''
+    raid_date = None
+
+    if call.data.startswith('pinraid_band'):
+        goat = call.data.split('_')[2]
+        band = call.data.split('_')[3]
+        raid_date = datetime.fromtimestamp(float(call.data.split('_')[4]))
+
+        bot.answer_callback_query(call.id, f"Банда {band}")
+
+        for user in list(filter(lambda x : x.getBand() == band, USERS_ARR)):
+            buttons.append(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"pinraid_user_{raid_date.timestamp()}_{user.getLogin()}"))
+        
+        all_banditos=InlineKeyboardButton(f"👨‍👨‍👦‍👦Все бандиты", callback_data=f"pinraid_user_{raid_date.timestamp()}_allbanditos_{band}")
+        buttons.append(all_banditos)
+        exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}")
     
-    all_banditos=InlineKeyboardButton(f"👨‍👨‍👦‍👦Все бандиты", callback_data=f"pinonraid_all_banditos_{raid_date.timestamp()}")
-    buttons.append(all_banditos)
+    if call.data.startswith('pinraid_user'):
+        raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
+        user_login = call.data.split("_"+call.data.split('_')[2]+"_")[1]
+        # pinraid_user_1588024800.0_allbanditos_без банды
+        if 'allbanditos' == user_login:
+            pass
 
-    # markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    #markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f""))
+        user = getUserByLogin(user_login)
+        band = user.getBand()
 
-    exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}")
+        goatRow = getMyGoat(user_login)
+        goat = goatRow['name']
+        liga = goatRow['liga']
+        
+
+        for loc in getSetting(code='RAIDLOCATIONS'):
+            if loc['liga'] == liga:
+                buttons.append(InlineKeyboardButton(f"{loc['name']}", callback_data=f"pinraid_loc_{raid_date.timestamp()}_{user.getLogin()}_{loc['id']}"))
+        
+        exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}")
+        bot.answer_callback_query(call.id, f"Бандит {user.getNameAndGerb()}")
+        
+    
     for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
-        print(row)
         markupinline.row(*row)  
 
-
-    # for user in list(filter(lambda x : x.getBand() == band, USERS_ARR)):
-    #     markupinline.add(InlineKeyboardButton(f"{user.getNameAndGerb()}", callback_data=f"pinonraid_{user.getLogin()}_{raid_date.timestamp()}"))                        
-    
     text = get_raid_plan(raid_date.timestamp(), goat)
-    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'Пины нарейд банды <b>{band}</b>\n{text}', parse_mode='HTML', reply_markup=markupinline)
-
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘 <b>{band}</b>\n{text}', parse_mode='HTML', reply_markup=markupinline)
     return
 
 
@@ -4789,14 +4799,27 @@ def callback_query(call):
     markupinline = InlineKeyboardMarkup()
     raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
 
+    if call.data.startswith("capture_plan"):
+        bot.answer_callback_query(call.id, "План рейда!")
+        plan_str = get_raid_plan(raid_date.timestamp(), goat)
+        markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}"))
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=plan_str, parse_mode='HTML', reply_markup=markupinline)
+
+        return
+
     if call.data.startswith("capture_pin"):
         bot.answer_callback_query(call.id, "Раздача личных пинов!")
         
+        buttons = []
         for band in getGoatBands(goat):
-            markupinline.add(InlineKeyboardButton(f"{band}", callback_data=f"pinonraid_{goat}_{band}_{raid_date.timestamp()}"))                        
-        
+            buttons.append(InlineKeyboardButton(f"{band}", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}"))                        
+         
+        exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
+        for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
+            markupinline.row(*row)  
+            
         text = get_raid_plan(raid_date.timestamp(), goat)
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'Пины нарейд\n{text}', parse_mode='HTML', reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘Выбери банду\n{text}', parse_mode='HTML', reply_markup=markupinline)
 
         return
 
@@ -5218,7 +5241,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
 
     # Отчет по рейду
-    if now_date.hour in (1, 9, 17) and now_date.minute == 30 and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 18) and now_date.minute in (30, 42) and now_date.second < 15:
         logger.info('Rade time now!')
         try:
             updateUser(None)
