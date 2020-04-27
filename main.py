@@ -4885,7 +4885,7 @@ def callback_query(call):
         
         buttons = []
         for band in getGoatBands(goat):
-            buttons.append(InlineKeyboardButton(f"{band}", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}"))                        
+            buttons.append(InlineKeyboardButton(f"🤘{band}", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}"))                        
         buttons.append(InlineKeyboardButton(f"Отправить 📩", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
 
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
