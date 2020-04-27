@@ -2264,7 +2264,7 @@ def main_message(message):
                             
                             tz = config.SERVER_MSK_DIFF
                             raidDate = (datetime.fromtimestamp(raidDate) - timedelta(hours=tz.hour)).timestamp()
-
+                            logger.info(datetime.fromtimestamp(raidDate))
                             if '👊' in strings[i]:
                                 onraidcounter = onraidcounter + 1
                                 onraidrw = onraidrw + u.getRaidWeight()
