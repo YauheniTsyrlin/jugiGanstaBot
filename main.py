@@ -3662,6 +3662,11 @@ def main_message(message):
                         # Проверка на будущую дату
                         tz = config.SERVER_MSK_DIFF
                         dt = raid_date - timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+
+                        logger.info(f'raid_date: {raid_date}')
+                        logger.info(f'dt: {dt}')
+                        logger.info(f'now: {datetime.now()}')
+                        
                         if (raid_date.timestamp() < datetime.now().timestamp()):
                             msg = send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'timeisout').fulfillment_text)
                             return
