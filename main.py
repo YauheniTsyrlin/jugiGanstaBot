@@ -4835,7 +4835,9 @@ def callback_query(call):
         for user in list(filter(lambda x : x.getBand() in bands, USERS_ARR)):
             planed_location = None
             for report in report_raids.find({'login': user.getLogin(), 'date': raid_date.timestamp()}):
-                planed_location = report['planed_location']
+                try:
+                    planed_location = report['planed_location']
+                except: pass
             planed_location_str = ''
             if planed_location:
                 date_str = time.strftime("%H:%M %d.%m", time.gmtime(raid_date.timestamp())) 
