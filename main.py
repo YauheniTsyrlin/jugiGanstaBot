@@ -4844,6 +4844,7 @@ def callback_query(call):
         tz = config.SERVER_MSK_DIFF
         raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
         bands = getGoatBands(call.data.split('_')[3])
+        counter = 0
         for user in list(filter(lambda x : x.getBand() in bands, USERS_ARR)):
             planed_location = None
             for report in report_raids.find({'login': user.getLogin(), 'date': raid_date.timestamp(), 'notified': False}):
@@ -4858,12 +4859,16 @@ def callback_query(call):
                     if planed_location > 0:
                         logger.info(f'Отправляем пин {user.getLogin()}')
                         send_messages_big(user.getChat(), text=planed_location_str)
+                        counter = counter + 1
                     newvalues = { "$set": { 'notified': True} }
                     result = report_raids.update_one({'login': user.getLogin(), 'date': raid_date.timestamp()}, newvalues)
                         
                 except:
                     logger.info(f'ERROR: Не смогли отправить пин {user.getLogin()}')
-        bot.answer_callback_query(call.id, "Пины отправлены бандитам!")
+        if counter > 0:
+            bot.answer_callback_query(call.id, f"Пины отправлены {counter} бандитам!")
+        else:
+            bot.answer_callback_query(call.id, f"Некому отправлять пины!")
         return
 
     for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
