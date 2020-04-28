@@ -5140,7 +5140,7 @@ def get_raid_plan(raid_date, goat, login):
     if find == False:
         plan_for_date = plan_for_date + '<b>Нет запланированных рейдов</b>'
 
-    return plan_for_date
+    return plan_for_date + f'\n\n{planed_location_str}'
 
 def rade():
     
