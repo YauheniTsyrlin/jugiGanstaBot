@@ -5352,8 +5352,9 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
 
     # Отчет по рейду
-    if now_date.hour in (1, 9, 17, 22) and now_date.minute in (37, 99) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 22) and now_date.minute in (39, 99) and now_date.second < 15:
         logger.info('Rade time now!')
+        tz = config.SERVER_MSK_DIFF
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
             try:
