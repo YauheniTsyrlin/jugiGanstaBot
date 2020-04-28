@@ -4966,9 +4966,7 @@ def callback_query(call):
         markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
     
     privateChat = ('private' in call.message.chat.type)
-    logger.info(f'{privateChat}')
-    if privateChat and isGoatBoss(call.message.from_user.username):
-        logger.info(f'Add btn capture_pin')
+    if privateChat and isGoatBoss(call.from_user.username):
         markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}"))
        
     text = get_raid_plan(raid_date.timestamp(), goat)
