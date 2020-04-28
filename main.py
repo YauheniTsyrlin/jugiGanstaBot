@@ -4841,6 +4841,7 @@ def callback_query(call):
     if call.data.startswith('pinraid_pin'):
         #    0     1          2                  3
         # pinraid_pin_{raid_date.timestamp()}_{goat}
+        tz = config.SERVER_MSK_DIFF
         raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
         bands = getGoatBands(call.data.split('_')[3])
         for user in list(filter(lambda x : x.getBand() in bands, USERS_ARR)):
@@ -4851,7 +4852,7 @@ def callback_query(call):
                 except: pass
             planed_location_str = ''
             if planed_location:
-                date_str = time.strftime("%H:%M %d.%m", time.gmtime(raid_date.timestamp())) 
+                date_str = time.strftime("%H:%M %d.%m", time.gmtime((raid_date + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp())) 
                 planed_location_str = f'📍<b>{planed_location}км</b> в ⏱ {date_str}' if planed_location > 0 else ''
                 try:
                     if planed_location > 0:
