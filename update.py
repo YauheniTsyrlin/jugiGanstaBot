@@ -3506,6 +3506,11 @@ newvalues = { "$set":
                             'liga': 'Детская лига',
                             'boss': [
                                         'WestMoscow',
+                                        'GonzikBenzyavsky'
+                                    ],
+                            'poweruser': 
+                                    [
+                                        'WestMoscow',
                                         'Viktoriya_Sizko',
                                         'EastMinsk',
                                         'nik_stopka',
@@ -3552,6 +3557,10 @@ newvalues = { "$set":
                             'boss': [
                                         'SSG76reg'
                                     ],
+                            'poweruser': 
+                                    [
+                                        'SSG76reg'
+                                    ],        
                             'bands': 
                                     [
                                         {
@@ -3572,6 +3581,11 @@ newvalues = { "$set":
                                         'kMitty',
                                         'AutismusMaximus',
                                     ],
+                            'poweruser': 
+                                    [
+                                        'kMitty',
+                                        'AutismusMaximus',
+                                    ],  
                             'bands': 
                                     [
                                         {

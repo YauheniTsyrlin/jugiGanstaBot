@@ -209,6 +209,13 @@ def isGoatBoss(login: str):
                 return True
     return False
 
+def isPowerUser(login: str):
+    for goat in getSetting(code='GOATS_BANDS'):
+        for boss in goat['poweruser']:
+            if boss == login:
+                return True
+    return False
+
 def isBandBoss(login: str):
     for goat in getSetting(code='GOATS_BANDS'):
         for band in goat['bands']:
@@ -2229,7 +2236,7 @@ def main_message(message):
                     if '🏅' in strings[i] and '🤘' in strings[i]:
                         band = strings[i].split('🤘')[1].split('🏅')[0].strip()
                         
-                        if not isGoatBoss(message.from_user.username):
+                        if not isPowerUser(message.from_user.username):
                             if not isUsersBand(message.from_user.username, band):
                                 send_messages_big(message.chat.id, text=f'Ты принес панель банды {band}\n' + getResponseDialogFlow(message.from_user.username, 'not_right_band').fulfillment_text)
                                 return
@@ -2976,7 +2983,7 @@ def main_message(message):
             
             updateUser(None)  
         elif (callJugi and 'статистика @' in message.text.lower()):
-            if not isGoatBoss(message.from_user.username):
+            if not isPowerUser(message.from_user.username):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_not_goat_boss').fulfillment_text)
                 return
 
@@ -3513,12 +3520,12 @@ def main_message(message):
                             login = login.split('@')[1].split(' ')[0].strip()
 
                         if ban:
-                            if not isGoatBoss(message.from_user.username):
+                            if not isPowerUser(message.from_user.username):
                                 bot.reply_to(message, text=getResponseDialogFlow(message.from_user.username, 'shot_message_not_goat_boss').fulfillment_text)
                                 return
                         else:
                             if allUser:
-                                if not isGoatBoss(message.from_user.username):
+                                if not isPowerUser(message.from_user.username):
                                     bot.reply_to(message, text=getResponseDialogFlow(message.from_user.username, 'shot_message_not_goat_boss').fulfillment_text)
                                     return
                         
@@ -5954,10 +5961,6 @@ def statistic(goatName: str):
         name = d.get("_id")
         user = getUserByLogin(name)
         count = d.get("count")
-
-        # if isGoatBoss(name):
-        #     report_boss = f'😎 наш босс <b>{user.getNameAndGerb()}</b> посетил рейды {count} раз. Скажите за это ему "Спасибо!" при встрече.\n'
-        #     continue
         
         if user:
             name = user.getNameAndGerb().strip()
