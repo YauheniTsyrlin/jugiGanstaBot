@@ -4361,6 +4361,12 @@ def callback_query(call):
         InlineKeyboardButton(f"Я в деле! ✅", callback_data=f"dungeon_yes|{dt.timestamp()}|{band}|{dungeon_km}")
         )
 
+    privateChat = ('private' in call.message.chat.type)
+    logger.info(f'{privateChat}')
+    if privateChat and isGoatBoss(call.message.from_user.username):
+        markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{dt.timestamp()}_{getMyGoatName(user.getLogin())}"))
+        
+
     text = f'✊️Захват <b>{dungeon_km}км {dungeon}\n🤟{band}\nв {time_str}</b>\n\n'
 
     signedup = False
@@ -4965,11 +4971,7 @@ def callback_query(call):
         # if not find:
         markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
     
-    privateChat = ('private' in call.message.chat.type)
-    logger.info(f'{privateChat}')
-    if privateChat and isGoatBoss(call.message.from_user.username):
-        markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{raid_date}_{goat}"))
-        
+
     text = get_raid_plan(raid_date.timestamp(), goat)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
