@@ -5166,7 +5166,7 @@ def rade():
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='8_MARCH'), 1)[0]['value']) 
     
     # День рождения
-    if now_date.hour == 10 and now_date.minute == 30 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
         
             updateUser(None)
             for goat in getSetting(code='GOATS_BANDS'):
@@ -5176,7 +5176,7 @@ def rade():
                         if user.getBirthday():
                             bday = datetime.fromtimestamp(user.getBirthday())
                             if now_date.day == bday.day and now_date.month == bday.month: 
-                                msg = send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()}!\n{getResponseDialogFlow(user.getLogin(), "happy_birthday").fulfillment_text}')
+                                msg = send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()} (@{user.getLogin()})!\n{getResponseDialogFlow(user.getLogin(), "happy_birthday").fulfillment_text}')
                                 bot.pin_chat_message(goat['chats']['info'], msg.message_id )
                     except:
                         send_message_to_admin(f'⚠️🤬 Сломались при расчете дня рождения {user.getLogin()}!')
