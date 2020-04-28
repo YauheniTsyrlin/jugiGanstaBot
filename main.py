@@ -4916,13 +4916,9 @@ def callback_query(call):
             
         text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘Выбери банду\n{text}', parse_mode='HTML', reply_markup=markupinline)
-
         return
 
-    logger.info(f'raid_date: {raid_date}')
     raid_location = int(call.data.split('_')[1])
-    logger.info(f'raid_location: {raid_location}')
-
     myquery = { 
                 'rade_date': raid_date.timestamp(),
                 'goat': goat
@@ -5090,10 +5086,21 @@ def ping_on_raid(fuckupusers, chat_id, raidInfo, goatName):
         send_messages_big(chat_id, text=fuckupusersReport)
 
 def get_raid_plan(raid_date, goat, login):
-
-
     tz = config.SERVER_MSK_DIFF
-    plan_for_date = f'Ближайший рейд <b>{time.strftime("%H:%M %d.%m", time.gmtime( (datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp() ))}</b>\n🐐<b>{goat}</b>\n\n'
+
+    # Вставляем информацию о пине на рейд
+    user = getUserByLogin(login)
+    planed_location = None
+    for report in report_raids.find({'login': user.getLogin(), 'date': raid_date.timestamp()}):
+        try:
+            planed_location = report['planed_location']
+        except: pass
+    planed_location_str = ''
+    if planed_location and planed_location > 0:
+        date_str = time.strftime("%H:%M %d.%m", time.gmtime((raid_date + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp())) 
+        planed_location_str = f'Твой пин 📍<b>{planed_location}км</b>' if planed_location > 0 else ''     
+    
+    plan_for_date = f'Ближайший рейд ⏱ <b>{time.strftime("%H:%M %d.%m", time.gmtime( (datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp() ))}</b>\n🐐<b>{goat}</b>\n\n'
     find = False
     time_str = None
     for raid in plan_raids.find({
