@@ -630,10 +630,10 @@ def getRaidTimeText(text, date):
 # ttt = [ '1ч. 15мин.']
 # for t in ttt:
 
-
-dateT = 1587911050
-date = getRaidTimeText('', dateT)
-print(f'{datetime.fromtimestamp(dateT)} {datetime.fromtimestamp(date)}')
+print(f"{int('0')}")
+# dateT = 1587911050
+# date = getRaidTimeText('', dateT)
+# print(f'{datetime.fromtimestamp(dateT)} {datetime.fromtimestamp(date)}')
 
 # for i in range(0,24):
 #     dateT = datetime.now().replace(hour=i, minute=0, second=0, microsecond=0).timestamp()
