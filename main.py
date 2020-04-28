@@ -5563,7 +5563,7 @@ def saveUserRaidResult(user, date, location, planed_location=None):
     row.update({'band': user.getBand()})
     row.update({'goat': getMyGoatName(user.getLogin())})
     
-    if location:
+    if location or location == 0:
         row.update({'user_location': location})
         if location > 0:        
             row.update({'on_raid': True})
