@@ -5087,7 +5087,7 @@ def ping_on_raid(fuckupusers, chat_id, raidInfo, goatName):
 
 def get_raid_plan(raid_date, goat, login):
     tz = config.SERVER_MSK_DIFF
-
+    login = '11'
     # Вставляем информацию о пине на рейд
     user = getUserByLogin(login)
     planed_location_str = ''
