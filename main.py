@@ -4910,7 +4910,7 @@ def callback_query(call):
             counter_100 = report_raids.find({'band': band, 'date': raid_date.timestamp()}).count()
             counter_now = report_raids.find({'band': band, 'date': raid_date.timestamp(), 'planed_location': {'$ne': None} }).count()
 
-            buttons.append(InlineKeyboardButton(f"🤘{band} {counter_now/counter_100*100}%", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}"))                        
+            buttons.append(InlineKeyboardButton(f"🤘{band} {int(counter_now/counter_100*100)}%", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}"))                        
         buttons.append(InlineKeyboardButton(f"Отправить 📩", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
 
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
