@@ -4845,7 +4845,7 @@ def callback_query(call):
         bands = getGoatBands(call.data.split('_')[3])
         for user in list(filter(lambda x : x.getBand() in bands, USERS_ARR)):
             planed_location = None
-            for report in report_raids.find({'login': user.getLogin(), 'date': raid_date.timestamp()}):
+            for report in report_raids.find({'login': user.getLogin(), 'date': raid_date.timestamp(), 'notified': False}):
                 try:
                     planed_location = report['planed_location']
                 except: pass
@@ -4856,6 +4856,9 @@ def callback_query(call):
                 try:
                     logger.info(f'Отправляем пин {user.getLogin()}')
                     # send_messages_big(user.getChat(), text=planed_location_str)
+                    newvalues = { "$set": { 'notified': True} }
+                    result = report_raids.update_one({'login': user.getLogin(), 'date': raid_date.timestamp()}, newvalues)
+                        
                 except:
                     logger.info(f'ERROR: Не смогли отправить пин {user.getLogin()}')
         bot.answer_callback_query(call.id, "Пины отправлены бандитам!")
@@ -5568,6 +5571,7 @@ def saveUserRaidResult(user, date, location, planed_location=None):
 
     if planed_location:
         row.update({'planed_location': planed_location})
+        row.update({'notified': False})
 
     newvalues = { "$set": row }
     result = report_raids.update_one({"login": f"{user.getLogin()}", 'date': date}, newvalues)
