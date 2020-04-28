@@ -5099,7 +5099,7 @@ def get_raid_plan(raid_date, goat, login):
                 except: pass
             if planed_location and planed_location > 0:
                 date_str = time.strftime("%H:%M %d.%m", time.gmtime(( datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp())) 
-                planed_location_str = f'Твой пин <b>{date_str}</b> -> 📍<b>{planed_location}км</b>\n' if planed_location > 0 else ''     
+                planed_location_str = f'Твой пин <b>{date_str}</b>  -> 📍<b>{planed_location}км</b>\n' if planed_location > 0 else ''     
     
     plan_for_date = f'Ближайший рейд ⏱ <b>{time.strftime("%H:%M %d.%m", time.gmtime( (datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp() ))}</b>\n🐐<b>{goat}</b>\n\n'
     find = False
@@ -5140,7 +5140,7 @@ def get_raid_plan(raid_date, goat, login):
     if find == False:
         plan_for_date = plan_for_date + '<b>Нет запланированных рейдов</b>'
 
-    return plan_for_date + f'\n\n{planed_location_str}'
+    return plan_for_date + f'{planed_location_str}'
 
 def rade():
     
