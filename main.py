@@ -5340,21 +5340,22 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломалось Предупреждение о рейде!')
 
     # Предварительные Отчет по рейду
-    if False and now_date.hour in (1, 9, 17) and now_date.minute == 9 and now_date.second < 15:
-        try:
-            for goat in getSetting(code='GOATS_BANDS'):
-                if getPlanedRaidLocation(goat['name'], planRaid = False)['rade_location']:
+    if now_date.hour in (1, 9, 17, 22) and now_date.minute == 53 and now_date.second < 15:
+        for goat in getSetting(code='GOATS_BANDS'):
+            try:
+                raidInfo = getPlanedRaidLocation(goat['name'], planRaid = False)
+                if raidInfo['rade_location']:
                     report = radeReport(goat, planRaid=False)
-                    send_messages_big(goat['chats']['secret'], text='<b>Предварительные</b> Результаты рейда\n' + report)
+                    date_str = time.strftime("%H:%M %d.%m", time.gmtime(( datetime.fromtimestamp(raidInfo["rade_date"]) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()))
+                    send_messages_big(goat['chats']['secret'], text='<b>Предварительные</b>\n<b>Результаты рейда {date_str}</b>\n' + report)
                     report = '⚠️ Если ты забыл сбросить форвард захвата, у тебя есть 30 минут с момента прожимания /voevat_suda, либо ты можешь присылать свою награду за рейд аж до 30 минут после рейда!!'
                     send_messages_big(goat['chats']['secret'], text=report)
-        except:
-            send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
+            except:
+                send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
 
     # Отчет по рейду
-    if now_date.hour in (1, 9, 17, 22) and now_date.minute in (41, 99) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 99) and now_date.minute in (30, 99) and now_date.second < 15:
         logger.info('Rade time now!')
-        tz = config.SERVER_MSK_DIFF
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
             try:
