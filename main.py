@@ -5166,7 +5166,7 @@ def rade():
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='8_MARCH'), 1)[0]['value']) 
     
     # День рождения
-    if now_date.hour == 10 and now_date.minute == 8 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 10 and now_date.second < 15:
         
             updateUser(None)
             for goat in getSetting(code='GOATS_BANDS'):
