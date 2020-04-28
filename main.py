@@ -690,7 +690,7 @@ def infect(logins, chat_id):
                                         break
 
                         if safe_mask:
-                            continue            
+                            break            
 
                     addInventory(user, elem)
                     updateUser(user)
