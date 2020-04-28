@@ -5573,7 +5573,7 @@ def saveUserRaidResult(user, date, location, planed_location=None):
     if planed_location:
         row.update({'planed_location': planed_location})
         row.update({'notified': False})
-
+    logger.info(row)
     newvalues = { "$set": row }
     result = report_raids.update_one({"login": f"{user.getLogin()}", 'date': date}, newvalues)
     if result.matched_count < 1:
