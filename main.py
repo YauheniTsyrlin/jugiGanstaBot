@@ -5352,7 +5352,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
 
     # Отчет по рейду
-    if now_date.hour in (1, 9, 17, 22) and now_date.minute in (39, 99) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 22) and now_date.minute in (41, 99) and now_date.second < 15:
         logger.info('Rade time now!')
         tz = config.SERVER_MSK_DIFF
         updateUser(None)
@@ -5362,7 +5362,7 @@ def rade():
                 if raidInfo['rade_location']:
                     report = radeReport(goat, ping=False, planRaid=False)
                     date_str = time.strftime("%H:%M %d.%m", time.gmtime(( datetime.fromtimestamp(raidInfo["rade_date"]) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp())) 
-                    send_messages_big(goat['chats']['secret'], text=f'<b>Результаты рейда</b> {datetime.fromtimestamp(raidInfo["rade_date"])}\n' + report)
+                    send_messages_big(goat['chats']['secret'], text=f'<b>Результаты рейда</b> {date_str}\n' + report)
                     # send_message_to_admin(f'<b>Результаты рейда {date_str}</b>\n' + report)
             except:
                 send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
