@@ -3506,7 +3506,6 @@ newvalues = { "$set":
                             'liga': 'Детская лига',
                             'boss': [
                                         'WestMoscow',
-                                        'Innok27',
                                         'Viktoriya_Sizko',
                                         'EastMinsk',
                                         'nik_stopka',
