@@ -4855,7 +4855,7 @@ def callback_query(call):
                 planed_location_str = f'📍<b>{planed_location}км</b> в ⏱ {date_str}' if planed_location > 0 else ''
                 try:
                     logger.info(f'Отправляем пин {user.getLogin()}')
-                    # send_messages_big(user.getChat(), text=planed_location_str)
+                    send_messages_big(user.getChat(), text=planed_location_str)
                     newvalues = { "$set": { 'notified': True} }
                     result = report_raids.update_one({'login': user.getLogin(), 'date': raid_date.timestamp()}, newvalues)
                         
