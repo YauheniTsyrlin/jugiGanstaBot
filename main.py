@@ -3305,7 +3305,7 @@ def main_message(message):
                                     'goat': goat}): 
                             markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date}_{goat}"))
               
-                        text = get_raid_plan(raid_date, goat)
+                        text = get_raid_plan(raid_date, goat, message.from_user.username)
 
                         if privateChat and isGoatBoss(message.from_user.username):
                             markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{raid_date}_{goat}"))
@@ -3717,7 +3717,7 @@ def main_message(message):
                                             'goat': goat
                                             })
 
-                        plan_str = get_raid_plan(dt.timestamp(), goat)
+                        plan_str = get_raid_plan(dt.timestamp(), goat, message.from_user.username)
 
                         #markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
                         for radeloc in plan_raids.find({
@@ -4874,7 +4874,7 @@ def callback_query(call):
     for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
         markupinline.row(*row)  
 
-    text = get_raid_plan(raid_date.timestamp(), goat)
+    text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘 <b>{band}</b> <b>{selected_name}</b>\n{text}', parse_mode='HTML', reply_markup=markupinline)
     return
 
@@ -4895,7 +4895,7 @@ def callback_query(call):
 
     if call.data.startswith("capture_plan"):
         bot.answer_callback_query(call.id, "План рейда!")
-        plan_str = get_raid_plan(raid_date.timestamp(), goat)
+        plan_str = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username)
         markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}"))
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=plan_str, parse_mode='HTML', reply_markup=markupinline)
 
@@ -4914,7 +4914,7 @@ def callback_query(call):
         for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
             markupinline.row(*row)  
             
-        text = get_raid_plan(raid_date.timestamp(), goat)
+        text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘Выбери банду\n{text}', parse_mode='HTML', reply_markup=markupinline)
 
         return
@@ -4974,7 +4974,7 @@ def callback_query(call):
     if privateChat and isGoatBoss(call.from_user.username):
         markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}"))
        
-    text = get_raid_plan(raid_date.timestamp(), goat)
+    text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
 def send_messages_big(chat_id: str, text: str, reply_markup=None):
@@ -5089,9 +5089,11 @@ def ping_on_raid(fuckupusers, chat_id, raidInfo, goatName):
     if len(fusers) > 0:
         send_messages_big(chat_id, text=fuckupusersReport)
 
-def get_raid_plan(raid_date, goat):
+def get_raid_plan(raid_date, goat, login):
+
+
     tz = config.SERVER_MSK_DIFF
-    plan_for_date = f'Ближайший рейд {time.strftime("%d.%m.%Y %H:%M", time.gmtime( (datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp() ))}\n🐐<b>{goat}</b>\n\n'
+    plan_for_date = f'Ближайший рейд <b>{time.strftime("%H:%M %d.%m", time.gmtime( (datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp() ))}</b>\n🐐<b>{goat}</b>\n\n'
     find = False
     time_str = None
     for raid in plan_raids.find({
@@ -5120,7 +5122,10 @@ def get_raid_plan(raid_date, goat):
             for u in users_onraid:
                 i = i + 1
                 reg_usr = getUserByLogin(u)
-                plan_for_date = plan_for_date + f'    {i}. {reg_usr.getNameAndGerb()}\n'
+                if reg_usr.getLogin() == login:
+                    plan_for_date = plan_for_date + f'    {i}. <b>{reg_usr.getNameAndGerb()}</b>\n'
+                else:
+                    plan_for_date = plan_for_date + f'    {i}. {reg_usr.getNameAndGerb()}\n'
         
         find = True
 
