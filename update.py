@@ -3136,6 +3136,11 @@ myquery = { "code": 'RAIDLOCATIONS' }
 newvalues = { "$set": { "value": 
                     [
                         {
+                            'id': '0',
+                            'name': 'Не пинговать 🔕',
+                            'liga': 'Детская лига'
+                        },
+                        {
                             'id': '5',
                             'name': 'Старая фабрика 📍5км',
                             'liga': 'Детская лига'
@@ -3601,12 +3606,12 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 # messages.delete_many({})
-plan_raids.delete_many({
-                                            'rade_date': 1588122000
-                                            })
-plan_raids.delete_many({
-                                            'rade_date': 1588168800
-                                            })
+# plan_raids.delete_many({
+#                                             'rade_date': 1588122000
+#                                             })
+# plan_raids.delete_many({
+#                                             'rade_date': 1588168800
+#                                             })
 
 # report_raids.update_many(
 #     { 'date': 1587823200 },
