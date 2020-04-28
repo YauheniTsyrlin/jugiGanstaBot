@@ -4854,7 +4854,7 @@ def callback_query(call):
             planed_location_str = ''
             if planed_location:
                 date_str = time.strftime("%H:%M %d.%m", time.gmtime((raid_date + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp())) 
-                planed_location_str = f'📍<b>{planed_location}км</b> в ⏱ {date_str}' if planed_location > 0 else ''
+                planed_location_str = f'Твой пин ⏱ <b>{date_str}</b> -> 📍<b>{planed_location}км</b>' if planed_location > 0 else ''
                 try:
                     if planed_location > 0:
                         logger.info(f'Отправляем пин {user.getLogin()}')
@@ -5166,7 +5166,7 @@ def rade():
             bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='8_MARCH'), 1)[0]['value']) 
     
     # День рождения
-    if now_date.hour == 11 and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour == 10 and now_date.minute == 30 and now_date.second < 15:
         
             updateUser(None)
             for goat in getSetting(code='GOATS_BANDS'):
