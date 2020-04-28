@@ -3514,7 +3514,9 @@ newvalues = { "$set":
                                         'Viktoriya_Sizko',
                                         'EastMinsk',
                                         'nik_stopka',
-                                        'GonzikBenzyavsky'
+                                        'GonzikBenzyavsky',
+                                        'VirtusX',
+                                        'HaringtonVl'
                                     ],
                             'bands': 
                                     [
