@@ -5367,7 +5367,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
 
     # Раздача рейдовых болтов
-    if now_date.hour in (1, 9, 17, 21) and now_date.minute in (31, 55) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 21) and now_date.minute in (31, 58) and now_date.second < 15:
         logger.info('raid bolt info!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
@@ -5729,11 +5729,10 @@ def setGiftsForRaid(goat):
     for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
         find = False
         for uonr in report_raids.find({'login': user.getLogin(), 'date': raidPlan['rade_date']}):
-            user.setRaidLocation(uonr['user_location'])
-            try:
+            if 'on_raid' in uonr:
+                user.setRaidLocation(uonr['user_location'])
                 if uonr['on_raid'] == True:
                     find = True
-            except: pass
         if find:
             users_true.append(user.getLogin())
         else:
