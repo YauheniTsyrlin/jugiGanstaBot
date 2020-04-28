@@ -5352,7 +5352,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
 
     # Отчет по рейду
-    if now_date.hour in (1, 9, 17, 22) and now_date.minute in (21, 30) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 22) and now_date.minute in (23, 30) and now_date.second < 15:
         logger.info('Rade time now!')
         # try:
         updateUser(None)
@@ -5661,7 +5661,8 @@ def radeReport(goat, ping=False, planRaid=True):
 
                 user.setRaidLocation(0)
                 for uonr in report_raids.find({'login': user.getLogin(), 'date': raidInfo['rade_date']}):
-                    user.setRaidLocation(uonr['user_location'])
+                    if 'user_location' in uonr:
+                        user.setRaidLocation(uonr['user_location'])
 
 
                 if user.getRaidLocation() and user.getRaidLocation()>0:
