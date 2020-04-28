@@ -5091,13 +5091,13 @@ def get_raid_plan(raid_date, goat, login):
     # Вставляем информацию о пине на рейд
     user = getUserByLogin(login)
     planed_location = None
-    for report in report_raids.find({'login': user.getLogin(), 'date': raid_date.timestamp()}):
+    for report in report_raids.find({'login': user.getLogin(), 'date': raid_date}):
         try:
             planed_location = report['planed_location']
         except: pass
     planed_location_str = ''
     if planed_location and planed_location > 0:
-        date_str = time.strftime("%H:%M %d.%m", time.gmtime((raid_date + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp())) 
+        date_str = time.strftime("%H:%M %d.%m", time.gmtime(( datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp())) 
         planed_location_str = f'Твой пин 📍<b>{planed_location}км</b>' if planed_location > 0 else ''     
     
     plan_for_date = f'Ближайший рейд ⏱ <b>{time.strftime("%H:%M %d.%m", time.gmtime( (datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp() ))}</b>\n🐐<b>{goat}</b>\n\n'
