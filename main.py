@@ -5352,20 +5352,20 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
 
     # Отчет по рейду
-    if now_date.hour in (1, 9, 17, 22) and now_date.minute in (19, 30) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 22) and now_date.minute in (21, 30) and now_date.second < 15:
         logger.info('Rade time now!')
-        try:
-            updateUser(None)
-            for goat in getSetting(code='GOATS_BANDS'):
-                raidInfo = getPlanedRaidLocation(goat['name'], planRaid = False)
-                if raidInfo['rade_location']:
-                    report = radeReport(goat, ping=False, planRaid=False)
-                    # send_messages_big(goat['chats']['secret'], text=f'<b>Результаты рейда</b> {datetime.fromtimestamp(raidInfo["rade_date"])}\n' + report)
-                    send_message_to_admin(f'<b>Результаты рейда</b> {datetime.fromtimestamp(raidInfo["rade_date"])}\n' + report)
-                    # saveRaidResult(goat)
-                    # statistic(goat['name'])
-        except:
-            send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
+        # try:
+        updateUser(None)
+        for goat in getSetting(code='GOATS_BANDS'):
+            raidInfo = getPlanedRaidLocation(goat['name'], planRaid = False)
+            if raidInfo['rade_location']:
+                report = radeReport(goat, ping=False, planRaid=False)
+                # send_messages_big(goat['chats']['secret'], text=f'<b>Результаты рейда</b> {datetime.fromtimestamp(raidInfo["rade_date"])}\n' + report)
+                send_message_to_admin(f'<b>Результаты рейда</b> {datetime.fromtimestamp(raidInfo["rade_date"])}\n' + report)
+                # saveRaidResult(goat)
+                # statistic(goat['name'])
+        # except:
+        #     send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
 
     # Раздача рейдовых болтов
     if now_date.hour in (1, 9, 17) and now_date.minute in (31) and now_date.second < 15:
