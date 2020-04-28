@@ -3305,7 +3305,7 @@ def main_message(message):
                                     'goat': goat}): 
                             markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date}_{goat}"))
               
-                        text = get_raid_plan(raid_date, goat, message.from_user.username)
+                        text = get_raid_plan(raid_date, goat, message.from_user.username if privateChat else None)
 
                         if privateChat and isGoatBoss(message.from_user.username):
                             markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{raid_date}_{goat}"))
@@ -3717,7 +3717,7 @@ def main_message(message):
                                             'goat': goat
                                             })
 
-                        plan_str = get_raid_plan(dt.timestamp(), goat, message.from_user.username)
+                        plan_str = get_raid_plan(dt.timestamp(), goat, message.from_user.username if privateChat else None)
 
                         #markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
                         for radeloc in plan_raids.find({
@@ -4739,7 +4739,7 @@ def callback_query(call):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("pinraid_"))
 def callback_query(call):
-    print(call.data)
+    privateChat = ('private' in call.message.chat.type)
     # pinonraid_actions_{goat}_{band}_{raid_date.timestamp()}
     if isUserBan(call.from_user.username):
         bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
@@ -4874,13 +4874,14 @@ def callback_query(call):
     for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
         markupinline.row(*row)  
 
-    text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username)
+    text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username if privateChat else None)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘 <b>{band}</b> <b>{selected_name}</b>\n{text}', parse_mode='HTML', reply_markup=markupinline)
     return
 
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("capture_"))
 def callback_query(call):
+    privateChat = ('private' in call.message.chat.type)
     if isUserBan(call.from_user.username):
         bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
         return
@@ -4895,7 +4896,7 @@ def callback_query(call):
 
     if call.data.startswith("capture_plan"):
         bot.answer_callback_query(call.id, "План рейда!")
-        plan_str = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username)
+        plan_str = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username if privateChat else None)
         markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}"))
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=plan_str, parse_mode='HTML', reply_markup=markupinline)
 
@@ -4914,7 +4915,7 @@ def callback_query(call):
         for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
             markupinline.row(*row)  
             
-        text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username)
+        text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username if privateChat else None)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘Выбери банду\n{text}', parse_mode='HTML', reply_markup=markupinline)
         return
 
@@ -4966,11 +4967,10 @@ def callback_query(call):
         # if not find:
         markupinline.add(InlineKeyboardButton(f"{radeloc['rade_text']}", callback_data=f"capture_{radeloc['rade_location']}_{raid_date.timestamp()}_{goat}"))
     
-    privateChat = ('private' in call.message.chat.type)
     if privateChat and isGoatBoss(call.from_user.username):
         markupinline.add(InlineKeyboardButton(f"Раздача пинов", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}"))
        
-    text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username)
+    text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username if privateChat else None)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
 def send_messages_big(chat_id: str, text: str, reply_markup=None):
@@ -5087,19 +5087,19 @@ def ping_on_raid(fuckupusers, chat_id, raidInfo, goatName):
 
 def get_raid_plan(raid_date, goat, login):
     tz = config.SERVER_MSK_DIFF
-    login = '11'
-    # Вставляем информацию о пине на рейд
-    user = getUserByLogin(login)
     planed_location_str = ''
-    if user:
-        planed_location = None
-        for report in report_raids.find({'login': user.getLogin(), 'date': raid_date}):
-            try:
-                planed_location = report['planed_location']
-            except: pass
-        if planed_location and planed_location > 0:
-            date_str = time.strftime("%H:%M %d.%m", time.gmtime(( datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp())) 
-            planed_location_str = f'Твой пин 📍<b>{planed_location}км</b>\n' if planed_location > 0 else ''     
+    # Вставляем информацию о пине на рейд
+    if login:
+        user = getUserByLogin(login)
+        if user:
+            planed_location = None
+            for report in report_raids.find({'login': user.getLogin(), 'date': raid_date}):
+                try:
+                    planed_location = report['planed_location']
+                except: pass
+            if planed_location and planed_location > 0:
+                date_str = time.strftime("%H:%M %d.%m", time.gmtime(( datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp())) 
+                planed_location_str = f'Твой пин 📍<b>{planed_location}км</b>\n' if planed_location > 0 else ''     
     
     plan_for_date = f'{planed_location_str}Ближайший рейд ⏱ <b>{time.strftime("%H:%M %d.%m", time.gmtime( (datetime.fromtimestamp(raid_date) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp() ))}</b>\n🐐<b>{goat}</b>\n\n'
     find = False
