@@ -4922,7 +4922,7 @@ def callback_query(call):
             buttons.append(InlineKeyboardButton(f"🤘{band} {int(percent)}%", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}"))                        
         
         counter_100 = registered_users.find({'band': {'$in': getGoatBands(goat)}  }).count()
-        counter_now = report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'notified': {'$ne': True} }).count()
+        counter_now = report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'notified': True }).count()
         percent = 0
         if counter_100 > 0:
             percent = counter_now/counter_100*100
