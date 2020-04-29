@@ -4874,6 +4874,28 @@ def callback_query(call):
                     logger.info(f'ERROR: Не смогли отправить пин {user.getLogin()}')
         if counter > 0:
             bot.answer_callback_query(call.id, f"Пины отправлены {counter} бандитам!")
+
+            buttons = []
+            for band in getGoatBands(goat):
+                counter_100 = registered_users.find({'band': band}).count()
+                counter_now = report_raids.find({'band': band, 'date': raid_date.timestamp(), 'planed_location': {'$ne': None} }).count()
+                percent = 0
+                if counter_100 > 0:
+                    percent = counter_now/counter_100*100
+                buttons.append(InlineKeyboardButton(f"🤘{band} {int(percent)}%", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}"))                        
+            
+            counter_not_notified = report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'notified': False }).count()
+
+            if counter_not_notified > 0:
+                buttons.append(InlineKeyboardButton(f"Отправить 📩", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
+            exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
+            
+            for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
+                markupinline.row(*row)  
+                
+            text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username if privateChat else None)
+            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘Выбери банду\n{text}', parse_mode='HTML', reply_markup=markupinline)
+
         else:
             bot.answer_callback_query(call.id, f"Некому отправлять пины!")
         return
