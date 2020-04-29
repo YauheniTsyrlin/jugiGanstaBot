@@ -4927,7 +4927,7 @@ def callback_query(call):
         if counter_100 > 0:
             percent = counter_now/counter_100*100
 
-        buttons.append(InlineKeyboardButton(f"Отправить 📩 {percent}%", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
+        buttons.append(InlineKeyboardButton(f"Отправить 📩 {int(percent)}%", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
         
         for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
