@@ -4926,6 +4926,8 @@ def callback_query(call):
         percent = 0
         if counter_100 > 0:
             percent = counter_now/counter_100*100
+        
+        logger.info(f'percent = {counter_now}/{counter_100}')
 
         buttons.append(InlineKeyboardButton(f"Отправить 📩 {int(percent)}%", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
