@@ -4914,7 +4914,7 @@ def callback_query(call):
         
         buttons = []
         for band in getGoatBands(goat):
-            counter_100 = report_raids.find({'band': band, 'date': raid_date.timestamp()}).count()
+            counter_100 = registered_users.find({'band': band}).count()
             counter_now = report_raids.find({'band': band, 'date': raid_date.timestamp(), 'planed_location': {'$ne': None} }).count()
             percent = 0
             if counter_100 > 0:
