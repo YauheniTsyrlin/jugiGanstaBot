@@ -4885,7 +4885,7 @@ def callback_query(call):
                     percent = counter_now/counter_100*100
                 buttons.append(InlineKeyboardButton(f"🤘{band} {int(percent)}%", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}"))                        
             
-            counter_not_notified = report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'notified': False, 'planed_location': {'$gt': 0} }).count()
+            counter_not_notified = report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'notified': False, 'planed_location': {'$gtl': 0} }).count()
 
             if counter_not_notified > 0:
                 buttons.append(InlineKeyboardButton(f"Отправить 📩", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
@@ -4907,7 +4907,6 @@ def callback_query(call):
     text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username if privateChat else None)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘 <b>{band}</b> <b>{selected_name}</b>\n{text}', parse_mode='HTML', reply_markup=markupinline)
     return
-
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("capture_"))
 def callback_query(call):
@@ -5407,7 +5406,7 @@ def rade():
                 send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
 
     # Раздача рейдовых болтов
-    if now_date.hour in (1, 9, 17) and now_date.minute in (31) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 99) and now_date.minute in (55, 99) and now_date.second < 15:
         logger.info('raid bolt info!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
