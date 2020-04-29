@@ -4851,6 +4851,7 @@ def callback_query(call):
         tz = config.SERVER_MSK_DIFF
         raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
         bands = getGoatBands(call.data.split('_')[3])
+        goat = call.data.split('_')[3]
         counter = 0
         for user in list(filter(lambda x : x.getBand() in bands, USERS_ARR)):
             planed_location = None
