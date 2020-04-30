@@ -131,7 +131,34 @@ GLOBAL_VARS = {
     'eating_in_new_rino': ['опустошил бокал бурбона.', 'жадно ест сухари.'],
     'group_buttons': ['Джу, 📋 Отчет', f'Джу, ⏰ План рейда', '📈 Статистика'],
     'private_buttons': ['📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика', '🧺 Комиссионка'],
-    '🧺 Комиссионка': ['На полках', 'Сдать', '♻️ Разменять', '🧺 Назад'],
+    
+    'commission':
+    {
+        'id': 'commission',
+        'name': '🧺 Комиссионка',
+        'buttons': [
+            {
+                'id': 'ontheshelf',
+                'name': 'На полках',
+                'buttons': []
+            },
+            {
+                'id': 'tohandover',
+                'name': 'Сдать',
+                'buttons': []
+            },
+            {
+                'id': 'exchange',
+                'name': '♻️ Разменять',
+                'buttons': []
+            },
+            {
+                'id': 'back',
+                'name': '🧺 Назад',
+                'buttons': []
+            }
+        ]
+    },
     '♻️ Разменять': ['♻️ Назад'],
     'kirill_burthday': ['GonzikBenzyavsky', 'Lena_Lenochka_32', 'WestMoscow', 'Brodskey', 'VirtusX', 'edem_00', 'Irakusa', 'Under_w0rld']
 }
@@ -1188,21 +1215,23 @@ def send_baraholka(message):
         send_welcome(message)
         return
 
-    btn = '🧺 Комиссионка'
-    #write_json(message.json)
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
         send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то наговорить, но у него получилось лишь:\n' + getResponseDialogFlow(message.from_user.username, 'user_banned').fulfillment_text)
         return
 
-    markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    for row in build_menu(buttons=GLOBAL_VARS[btn], n_cols=3):
+    buttons = []
+    for d in GLOBAL_VARS['commission']['buttons']:
+        buttons.append(InlineKeyboardButton(f'{d["name"]}', callback_data=f"ping_user|{d['id']}"))
+
+    markup = InlineKeyboardMarkup(row_width=2)
+    for row in build_menu(buttons=buttons, n_cols=3):
         markup.row(*row)  
 
     bot.send_message(message.chat.id, text='Ты зашел в комиссионку.\nТвой выбор...', reply_markup=markup)
-    bot.register_next_step_handler(message, send_recycling)
 
-#@bot.message_handler(func=lambda message: message.text and ('♻️ Разменять' == message.text) and 'private' == message.chat.type)
+
+@bot.message_handler(func=lambda message: message.text and ('♻️ Разменять' == message.text) and 'private' == message.chat.type)
 def send_recycling(message):
     recycling = '♻️ Разменять'
     exit_up_button = '🧺 Назад'
@@ -5377,7 +5406,7 @@ def rade():
                 send_message_to_admin(f'⚠️🤬 Сломалось Предупреждение о рейде!')
 
     # Предварительные Отчет по рейду
-    if now_date.hour in (1, 9, 17, 99) and now_date.minute in (5, 99) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 18) and now_date.minute in (5, 40) and now_date.second < 15:
         for goat in getSetting(code='GOATS_BANDS'):
             try:
                 raidInfo = getPlanedRaidLocation(goat['name'], planRaid = False)
@@ -5391,7 +5420,7 @@ def rade():
                 send_message_to_admin(f'⚠️🤬 Сломался Предварительные Отчет по рейду!')
 
     # Отчет по рейду
-    if now_date.hour in (1, 9, 17, 99) and now_date.minute in (30, 99) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 18) and now_date.minute in (30, 40) and now_date.second < 15:
         logger.info('Rade time now!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
@@ -5406,7 +5435,7 @@ def rade():
                 send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
 
     # Раздача рейдовых болтов
-    if now_date.hour in (1, 9, 17, 99) and now_date.minute in (31, 99) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 18) and now_date.minute in (31 , 40) and now_date.second < 15:
         logger.info('raid bolt info!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
