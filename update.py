@@ -2316,7 +2316,7 @@ newvalues = { "$set": { "value":
                                     'quantity': 2,
                                 },
                                 {
-                                    'id': 'bag_of_coins_1000',
+                                    'id': 'bag_of_crypto_1000',
                                     'name': '🔘 Сертификат на 1000 Crypto',
                                     'cost': 100,
                                     'type': 'things',
@@ -2324,13 +2324,13 @@ newvalues = { "$set": { "value":
                                     'composition':
                                     [
                                         {
-                                            'id': 'bag_of_coins_100',
+                                            'id': 'bag_of_crypto_100',
                                             'counter': 10
                                         }
                                     ]
                                 },
                                 {
-                                    'id': 'bag_of_coins_100',
+                                    'id': 'bag_of_crypto_100',
                                     'name': '🔘 Флэшка с 100 Crypto',
                                     'cost': 100,
                                     'type': 'things',
@@ -2338,13 +2338,13 @@ newvalues = { "$set": { "value":
                                     'composition':
                                     [
                                         {
-                                            'id': 'coin',
+                                            'id': 'crypto',
                                             'counter': 100
                                         }
                                     ]
                                 },
                                 {
-                                    'id': 'coin',
+                                    'id': 'crypto',
                                     'name': '🔘 Crypto',
                                     'cost': 1,
                                     'type': 'things',

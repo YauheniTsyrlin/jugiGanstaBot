@@ -567,9 +567,16 @@ class User(object):
 
     def getInventoryThing(self, thing):
         for i in self.getInventory():
-            if i['id'] == thing['id'] and ( thing['type'] == None or i['type'] == thing['type']):
+            if i['id'] == thing['id'] and ('type' not in thing or i['type'] == thing['type']):
                 return i
         return None
+
+    def getInventoryThings(self, thing):
+        things = []
+        for i in self.getInventory():
+            if i['id'] == thing['id'] and ('type' not in thing or i['type'] == thing['type']):
+                things.append(i)
+        return things
 
     def getInventoryType(self, thing):
         invs = []
