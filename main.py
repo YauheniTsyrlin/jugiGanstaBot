@@ -1377,16 +1377,16 @@ def select_select(call):
         inventories = user.getInventoryThings({'id': inv_id})
         inventory = user.getInventoryThing({'id': inv_id})
         
-        inventors = []
+        inventories_arr = []
         for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
             inventories = user.getInventoryThings({'id': inv['id']})
-            
-            btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button_parent['id']}|select|{stepinventory}|{inv['id']}")
-            if len(inventories) == 1:
-                btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|select|{step}|{inv['id']}")
 
-            if inv['id'] not in inventors:
-                inventors.append(inv['id'])
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|select|{stepinventory}|{inv['id']}")
+            if len(inventories) > 1:
+                btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button_parent['id']}|selectgroup|{step}|{inv['id']}")
+
+            if inv['id'] not in inventories_arr:
+                inventories_arr.append(inv['id'])
                 buttons.append(btn)
         
         back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|selectback|{stepinventory-1}") 
@@ -2189,6 +2189,9 @@ def main_message(message):
                 goat_wild.update({'wariors':wariors_arr})
                 goats.append(goat_wild)
                 km = ""
+
+                findwariors = {}
+
                 for s in strings:
                     if ('👣' in s or '🚷' in s) and ' км' in s:
                         km = f'<b>{s}</b>\n'
@@ -2202,12 +2205,14 @@ def main_message(message):
                         name = name.split('#@#')[1].split('|')[0].strip()
                         name = tools.deEmojify(name)
                         warior = getWariorByName(name, fraction)
+                        atac_ref = strings[i].split('| 👤')[1].split(';')[0].strip().replace('u_', 'p_')
                         
                         user = getUserByName(name)
                         if user and (not user.getFraction() == fraction):
                             user == None
 
                         if user:
+                            
                             if dark_zone and (not time_over) and (not userIAm.getLogin()==user.getLogin()) and (not privateChat) :
                                 user_in_dark_zone.append(user.getLogin())  
                             # Обновляем Bm у нашего бойца                            
@@ -2219,6 +2224,7 @@ def main_message(message):
                                 update_warior(warior)
 
                         if warior:
+                            findwariors.update({warior.getName(): atac_ref})
                             if warior.getGoat():
                                 findGoat = False
                                 for g in goats:
@@ -2278,7 +2284,9 @@ def main_message(message):
                             emoji = ''
                         report_goat_info = report_goat_info + f'{emoji}<b>{goat["name"]}</b>: <b>{goat["counter"]}</b>\n\n'
                         for w in sorted(goat['wariors'], key = lambda i: i.getBm(average_k_bm, average_bm), reverse=True):
-                            report_goat_info = report_goat_info + f'{w.getProfileVerySmall()}\n'
+                            report_goat_info = report_goat_info + f'{w.getProfileVerySmall()}'
+                            if len(findwariors[w.getName()])>0:
+                                report_goat_info = report_goat_info + f'    <a href="http://t.me/share/url?url={findwariors[w.getName()]}">🔪Напасть</a>\n\n'
                     report_goat_info = report_goat_info + '\n'
 
                     report_goat_info = report_goat_info + f'{km}'
@@ -5616,7 +5624,7 @@ def rade():
                 send_message_to_admin(f'⚠️🤬 Сломалась Раздача рейдовых болтов по {goat["name"]}')
     
     # Отъем болтов
-    if now_date.hour in (99, 17) and now_date.minute in (99, 55) and now_date.second < 15:
+    if now_date.hour in (99, 99) and now_date.minute in (99, 99) and now_date.second < 15:
         u = ['GonzikBenzyavsky', 'Hermia_Nerbne', 'StiffD', 'rocknrolla_777', 'DeadChild', 'WildFire112', 'aohanesian', 'UmnikOff_Vodkin', 'RVM362', 'Java_dentist', 'VTZVTZ', 'MrMrakZ', 'eX3emz', 'chymych', 'striletskyi', 'Lixetini', 'rock_n_rolla01', 'sosopiple']
         antyBoltReport = ''
         counter = 0
