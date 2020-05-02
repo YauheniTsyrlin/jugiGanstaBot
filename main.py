@@ -61,6 +61,7 @@ pip_history     = mydb["pip_history"]
 mob             = mydb["mob"]
 boss            = mydb["boss"]
 messages        = mydb["messages"]
+shelf           = mydb["shelf"]
 
 
 
@@ -145,7 +146,7 @@ GLOBAL_VARS = {
             {
                 'id': 'onshelf',
                 'name': '🛠️🛍️ На полках',
-                'description':'',
+                'description':'♻️ Здесь можно посмотреть товара, которые бандиты выставили на 🛍️ полку для продажи.',
                 'buttons': []
             },
             {
@@ -1244,24 +1245,34 @@ def select_baraholka(call):
     button_id = call.data.split('|')[1]
     button = list(filter(lambda x : x['id'] == button_id, GLOBAL_VARS['commission']['buttons']))[0]
 
+    buttons = []
+    step = 0
+    user = getUserByLogin(call.from_user.username)
+    
     if button_id == 'back':
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
         return
 
     if button_id in ('onshelf'):
-        bot.answer_callback_query(call.id, 'Закрыто на реконструкцию')
+        for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
+            inv = invonshelf['inventory']
+            btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
+            buttons.append(btn)
+
+        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button['id']}|back|{step-1}") 
+        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button['id']}|exit|{step}")
+        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button['id']}|forward|{step+1}")
+
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+            markupinline.row(*row)  
+
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
+        
+
+        bot.answer_callback_query(call.id, 'Все еще на реконструкции')
         return
 
     if button_id == 'exchange':
-        buttons = []
-        step = 0
-        user = getUserByLogin(call.from_user.username)
-        
-        inventory_category = [
-                        {'id':'clothes', 'name':'🧥 Одежда'},
-                        {'id':'things', 'name':'📦 Вещи'}
-                    ]
-
         inventors = []
         for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
             inventories = user.getInventoryThings({'id': inv['id']})
@@ -1281,6 +1292,50 @@ def select_baraholka(call):
             markupinline.row(*row)  
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
+        return
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith('onshelf'))
+def select_shelf(call):
+    bot.answer_callback_query(call.id, call.data)
+
+    if isUserBan(call.from_user.username):
+        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
+        return
+
+    markupinline = InlineKeyboardMarkup(row_width=2)
+    button_parent_id = call.data.split('|')[0]
+    button_parent = list(filter(lambda x : x['id'] == button_parent_id, GLOBAL_VARS['commission']['buttons']))[0]
+    button_id = call.data.split('|')[1]
+    buttons = []
+
+    if button_id == 'exit':
+        button = GLOBAL_VARS['commission']
+        for d in button['buttons']:
+            buttons.append(InlineKeyboardButton(f"{d['name']}", callback_data=f"{button['id']}|{d['id']}"))
+
+        markup = InlineKeyboardMarkup(row_width=2)
+        for row in build_menu(buttons=buttons, n_cols=3):
+            markup.row(*row)  
+
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'{button["description"]}', reply_markup=markup)
+        return
+
+    if button_id in ('forward', 'back'):
+        step = int(call.data.split('|')[2])
+        user = getUserByLogin(call.from_user.username)
+        for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
+            inv = invonshelf['inventory']
+            btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
+            buttons.append(btn)
+
+        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
+        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
+        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
+
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+            markupinline.row(*row)  
+
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
         return
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('exchange'))
@@ -1503,10 +1558,30 @@ def select_exchange(call):
                 user.updateInventoryThing(crypto)
             user.removeInventoryThing(inventory)
             updateUser(user)
-            send_message_to_admin(text=f'♻️ Сдал за 30% 💴!\n{user.getNameAndGerb()} (@{user.getLogin()}) сдал {inventory["name"]} за 🔘{cost}')
+            send_message_to_admin(text=f'♻️ Сдал за {int(button_parent["discont"]*100)}% 💴!\n{user.getNameAndGerb()} (@{user.getLogin()}) сдал {inventory["name"]} за 🔘{cost}')
             bot.answer_callback_query(call.id, f'Сдано за 🔘 {cost}')
 
-        if button_id in ('toshelf'):
+        elif button_id in ('toshelf'):
+            row = {
+                    'date': (datetime.now()).timestamp(),
+                    'login': user.getLogin(),
+                    'band' : user.getBand(),
+                    'goat' : getMyGoatName(user.getLogin()),
+                    'state': 'NEW',
+                    'inventory'  : inventory,
+                    'request' : []
+            }
+            newvalues = { "$set": row }
+            result = shelf.update_one(
+                {
+                    'inventory': {'uid' : inventory['uid']}
+                }, newvalues)
+            if result.matched_count < 1:
+                shelf.insert_one(row)
+            
+            user.removeInventoryThing(inventory)
+            updateUser(user)
+            send_message_to_admin(text=f'🛍️ Положили на полку!\n{user.getNameAndGerb()} (@{user.getLogin()}) положил на полку {inventory["name"]} за 🔘{inventory["cost"]}')
             bot.answer_callback_query(call.id, f'Положено на полку')
 
         # Возвращаемся как selectexit
