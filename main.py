@@ -2381,6 +2381,9 @@ def main_message(message):
                             report_goat_info = report_goat_info + f'{w.getProfileVerySmall()}'
                             if w.getName() in findwariors: 
                                 report_goat_info = report_goat_info + f'    <a href="http://t.me/share/url?url={findwariors[w.getName()]}">🔪Напасть</a>\n\n'
+                            else:
+                                report_goat_info = report_goat_info + '\n'
+
                     report_goat_info = report_goat_info + '\n'
 
                     report_goat_info = report_goat_info + f'{km}'
