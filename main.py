@@ -1506,6 +1506,9 @@ def select_exchange(call):
         user.removeInventoryThing(inventory)
         updateUser(user)
 
+        send_message_to_admin(text=f'Сделка 💴!\n{user.getNameAndGerb()} сдал {inventory["name"]} за 🔘{cost}')
+
+
         # Возвращаемся как selectexit
         step = int(call.data.split('|')[2])
         user = getUserByLogin(call.from_user.username)
