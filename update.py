@@ -2320,7 +2320,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'bag_of_crypto_1000',
                                     'name': '🔘 Сертификат на 1000 Crypto',
-                                    'cost': 100,
+                                    'cost': 1000,
                                     'type': 'things',
                                     'quantity': None,
                                     'composition':

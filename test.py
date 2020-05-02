@@ -630,10 +630,10 @@ def getRaidTimeText(text, date):
 # ttt = [ '1ч. 15мин.']
 # for t in ttt:
 
-print(f"{int('0')}")
+# print(f"{int('0')}")
 
-import uuid
-print(uuid.uuid4())
+# import uuid
+# print(uuid.uuid4())
 
 # dateT = 1587911050
 # date = getRaidTimeText('', dateT)

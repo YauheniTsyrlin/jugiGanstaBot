@@ -557,9 +557,10 @@ class User(object):
                 elem_cost = 0
                 for elem in list(group):
                     if 'cost' in elem:
-                        # elem_cost = elem_cost + elem["cost"]
+                        if elem["id"] == 'crypto':
+                            elem_cost = elem_cost + elem["cost"]
                         cost = cost + elem["cost"]
-                report = report + f'▫️ {list(group)[-1]["name"]} {"<b>" + str(percent)+"%</b>" if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""} {" 🔘"+str(elem_cost) if elem_cost > 0 else ""}\n'
+                report = report + f'▫️ {list(group)[-1]["name"]} {"<b>" + str(percent)+"%</b>" if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""} {"("+str(elem_cost)+")" if elem_cost > 0 else ""}\n'
 
             if not report == '':
                 report = type['name'] + (f' (🔘 {cost}):\n' if cost>0 else ':\n') + report + '\n'
@@ -567,16 +568,24 @@ class User(object):
         return full_report
 
     def getInventoryThing(self, thing):
-        for i in self.getInventory():
-            if ('uid' in thing and thing['uid'] == i['uid']) or ('id' in thing and i['id'] == thing['id'] and ('type' not in thing or i['type'] == thing['type'])):
-                return i
+        for inv in self.getInventory():
+            if ('uid' in thing and thing['uid'] == inv['uid']) or ('uid' not in thing and 'id' in thing and inv['id'] == thing['id'] and ('type' not in thing or inv['type'] == thing['type'])):
+                return inv
+        return None
+
+    def updateInventoryThing(self, thing):
+        for inv in self.getInventory():
+            if ('uid' in thing and thing['uid'] == inv['uid']) or ('uid' not in thing and 'id' in thing and inv['id'] == thing['id'] and ('type' not in thing or inv['type'] == thing['type'])):
+                for key in thing.keys():
+                    inv.update({key: thing[key]})
+                return inv
         return None
 
     def getInventoryThings(self, thing):
         things = []
-        for i in self.getInventory():
-            if i['id'] == thing['id'] and ('type' not in thing or i['type'] == thing['type']):
-                things.append(i)
+        for inv in self.getInventory():
+            if ('uid' in thing and thing['uid'] == inv['uid']) or ('uid' not in thing and 'id' in thing and inv['id'] == thing['id'] and ('type' not in thing or inv['type'] == thing['type'])):
+                things.append(inv)
         return things
 
     def getInventoryType(self, thing):
@@ -612,13 +621,14 @@ class User(object):
 
     def removeInventoryThing(self, thing, count=1):
         counter = 0
-        for i in self.getInventory():
-            if i['id'] == thing['id'] and i['type'] == thing['type']:
-                self.getInventory().remove(i)
+        for inv in self.getInventory():
+            if ('uid' in thing and thing['uid'] == inv['uid']) or ('uid' not in thing and 'id' in thing and inv['id'] == thing['id'] and ('type' not in thing or inv['type'] == thing['type'])):
+                self.getInventory().remove(inv)
                 counter = counter + 1
                 if counter == count: return
 
     def addInventoryThing(self, thing, count=1, replace=False):
+        # По хорошему должен возвращать добавленный объект
         if replace:
             self.removeInventoryThing(thing)
 
@@ -632,21 +642,38 @@ class User(object):
         elif self.getInventoryThingCount(thing) < count:
             self.getInventory().append(thing)
         else:
-            return False
-        return True
+            return None
+        return thing
 
     def getInventoryThingInfo(self, thing):
         info = ''
         for inv in self.getInventory():
-            if ('uid' in thing and thing['uid'] == inv['uid']) or ('id' in thing and inv['id'] == thing['id'] and ('type' not in thing or inv['type'] == thing['type'])):
+            if ('uid' in thing and thing['uid'] == inv['uid']) or ('uid' not in thing and 'id' in thing and inv['id'] == thing['id'] and ('type' not in thing or inv['type'] == thing['type'])):
                 info = info + f'┌{inv["name"]}\n'
-                
+                # info = info + f'├🏷️ {inv["uid"]}\n'
+                # info = info + f'├🧮 {inv["uid"]}\n'
+                #  
                 wear = 1
                 if 'wear' in inv:
                     wear = inv['wear']['value']
                 info = info + f'├⏳ Состояние: {int(wear*100)}%\n'
                 
                 info = info + f'└🔘 {inv["cost"]}\n'
+                if 'composition' in inv:
+                    ps = '└'
+                    len_ps = len(inv['composition'])
+                    counter = 0
+                    for composit in inv['composition']:
+                        counter = counter + 1
+                        if len_ps == 1:
+                            ps = '└'
+                        else:
+                            if counter == 1:
+                                ps = '├'
+                            if counter == len_ps:
+                                ps = '└'
+                        info = info + f'   {ps}▫️{composit["id"]}\n'
+
                 break
         return info
 # =================== Inventory ========================== #
