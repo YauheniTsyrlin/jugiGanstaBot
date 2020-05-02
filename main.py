@@ -2379,7 +2379,7 @@ def main_message(message):
                         report_goat_info = report_goat_info + f'{emoji}<b>{goat["name"]}</b>: <b>{goat["counter"]}</b>\n\n'
                         for w in sorted(goat['wariors'], key = lambda i: i.getBm(average_k_bm, average_bm), reverse=True):
                             report_goat_info = report_goat_info + f'{w.getProfileVerySmall()}'
-                            if len(findwariors[w.getName()])>0:
+                            if w.getName() in findwariors: 
                                 report_goat_info = report_goat_info + f'    <a href="http://t.me/share/url?url={findwariors[w.getName()]}">🔪Напасть</a>\n\n'
                     report_goat_info = report_goat_info + '\n'
 
