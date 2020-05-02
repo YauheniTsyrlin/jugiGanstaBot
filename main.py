@@ -1264,13 +1264,12 @@ def select_baraholka(call):
                         {'id':'things', 'name':'📦 Вещи'}
                     ]
 
-
         inventors = []
         for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
             inventories = user.getInventoryThings({'id': inv['id']})
-            btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button['id']}|select|{step}|{inv['id']}")
-            if len(inventories) == 1:
-                btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button['id']}|select|{step}|{inv['id']}")
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['id']}")
+            if len(inventories) > 1:
+                btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button['id']}|selectgroup|{step}|{inv['id']}")
 
             if inv['id'] not in inventors:
                 inventors.append(inv['id'])
@@ -1287,7 +1286,7 @@ def select_baraholka(call):
         return
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('exchange'))
-def select_select(call):
+def select_exchange(call):
     # bot.answer_callback_query(call.id, call.data)
     if isUserBan(call.from_user.username):
         bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
@@ -1300,6 +1299,7 @@ def select_select(call):
     buttons = []
 
     if button_id == 'exit':
+        print(call.data)
         button = GLOBAL_VARS['commission']
         for d in button['buttons']:
             buttons.append(InlineKeyboardButton(f"{d['name']}", callback_data=f"{button['id']}|{d['id']}"))
@@ -1312,6 +1312,7 @@ def select_select(call):
         return
 
     if button_id in ('forward', 'back'):
+        print(call.data)
         step = int(call.data.split('|')[2])
         user = getUserByLogin(call.from_user.username)
         inventory_category = [
@@ -1321,9 +1322,9 @@ def select_select(call):
         inventors = []
         for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
             inventories = user.getInventoryThings({'id': inv['id']})
-            btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button_parent['id']}|select|{step}|{inv['id']}")
-            if len(inventories) == 1:
-                btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|select|{step}|{inv['id']}")
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['id']}")
+            if len(inventories) > 1:
+                btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button_parent['id']}|selectgroup|{step}|{inv['id']}")
 
             if inv['id'] not in inventors:
                 inventors.append(inv['id'])
@@ -1340,6 +1341,7 @@ def select_select(call):
         return
 
     if button_id in ('selectexit', ''):
+        print(call.data)
         step = int(call.data.split('|')[2])
         user = getUserByLogin(call.from_user.username)
         inventory_category = [
@@ -1350,9 +1352,9 @@ def select_select(call):
         inventors = []
         for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
             inventories = user.getInventoryThings({'id': inv['id']})
-            btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button_parent['id']}|select|{step}|{inv['id']}")
-            if len(inventories) == 1:
-                btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|select|{step}|{inv['id']}")
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['id']}")
+            if len(inventories) > 1:
+                btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button_parent['id']}|selectgroup|{step}|{inv['id']}")
 
             if inv['id'] not in inventors:
                 inventors.append(inv['id'])
@@ -1368,7 +1370,98 @@ def select_select(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text = button_parent['description'], reply_markup=markupinline)
         return
 
+    if button_id in ('selectgroupexit', ''):
+        print(call.data)
+        step = int(call.data.split('|')[2])
+        user = getUserByLogin(call.from_user.username)
+        inventory_category = [
+                        {'id':'clothes', 'name':'🧥 Одежда'},
+                        {'id':'things', 'name':'📦 Вещи'}
+                    ]
+                    
+        inventories_arr = []
+        for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
+            
+            inventories = user.getInventoryThings({'id': inv['id']})
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['id']}")
+            if len(inventories) > 1:
+                btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button_parent['id']}|selectgroup|{step}|{inv['id']}")
+
+            if inv['id'] not in inventories_arr:
+                inventories_arr.append(inv['id'])
+                buttons.append(btn)
+
+        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
+        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
+        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
+
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+            markupinline.row(*row)  
+
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text = button_parent['description'], reply_markup=markupinline)
+        return
+
+    if button_id in ('selectgroupforward', 'selectgroupback'):
+        print(call.data)
+        bot.answer_callback_query(call.id, f'{call.data}')
+        
+        step = int(call.data.split('|')[2])
+        inv_id = call.data.split('|')[3]
+        user = getUserByLogin(call.from_user.username)
+        stepinventory = 0
+        inventory = user.getInventoryThing({'id': inv_id})
+
+        inventories = user.getInventoryThings({'id': inv_id})
+        for inv in inventories: 
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['id']}")
+            buttons.append(btn)
+
+        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|inventory['id']") 
+        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|selectgroupexit|{step}")
+        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|selectgroupforward|{stepinventory+1}|inventory['id']")
+
+    
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+            markupinline.row(*row) 
+
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n{inventory['name']}", reply_markup=markupinline)
+        
+        return
+
+    if button_id in ('selectgroup', ''):
+        print(call.data)
+        bot.answer_callback_query(call.id, f'{call.data}')
+        
+        step = int(call.data.split('|')[2])
+        inv_id = call.data.split('|')[3]
+        user = getUserByLogin(call.from_user.username)
+        stepinventory = 0
+        inventory = user.getInventoryThing({'id': inv_id})
+
+        inventories = user.getInventoryThings({'id': inv_id})
+        for inv in inventories: 
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['id']}")
+            buttons.append(btn)
+
+        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|inventory['id']") 
+        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|selectgroupexit|{step}")
+        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|selectgroupforward|{stepinventory+1}|inventory['id']")
+
+    
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+            markupinline.row(*row) 
+
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n{inventory['name']}", reply_markup=markupinline)
+        
+        return
+
+    if button_id in ('selectinvent', ''):
+        print(call.data)
+        bot.answer_callback_query(call.id, 'selectinvent')
+        return
+
     if button_id in ('select',''):
+        print(call.data)
         bot.answer_callback_query(call.id, call.data)
         step = int(call.data.split('|')[2])
         stepinventory = 0
@@ -1381,7 +1474,7 @@ def select_select(call):
         for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
             inventories = user.getInventoryThings({'id': inv['id']})
 
-            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|select|{stepinventory}|{inv['id']}")
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['id']}")
             if len(inventories) > 1:
                 btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button_parent['id']}|selectgroup|{step}|{inv['id']}")
 
@@ -1397,7 +1490,7 @@ def select_select(call):
             markupinline.row(*row) 
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n{inventory['name']}", reply_markup=markupinline)
-        bot.answer_callback_query(call.id, call.data)
+        
         return    
 # ============================================================================
 
@@ -2224,7 +2317,8 @@ def main_message(message):
                                 update_warior(warior)
 
                         if warior:
-                            findwariors.update({warior.getName(): atac_ref})
+                            if not user or (not getMyGoatName(user.getLogin()) == getMyGoatName(userIAm.getLogin())): 
+                                findwariors.update({warior.getName(): atac_ref})
                             if warior.getGoat():
                                 findGoat = False
                                 for g in goats:
