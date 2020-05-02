@@ -1307,6 +1307,7 @@ def select_shelf(call):
     button_parent = list(filter(lambda x : x['id'] == button_parent_id, GLOBAL_VARS['commission']['buttons']))[0]
     button_id = call.data.split('|')[1]
     buttons = []
+    user = getUserByLogin(call.from_user.username)
 
     if button_id == 'exit':
         button = GLOBAL_VARS['commission']
@@ -1322,7 +1323,7 @@ def select_shelf(call):
 
     if button_id in ('forward', 'back'):
         step = int(call.data.split('|')[2])
-        user = getUserByLogin(call.from_user.username)
+        
         for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
             inv = invonshelf['inventory']
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
@@ -1562,6 +1563,11 @@ def select_exchange(call):
             bot.answer_callback_query(call.id, f'Сдано за 🔘 {cost}')
 
         elif button_id in ('toshelf'):
+            counter_inv = shelf.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'} }).count()
+            if counter_inv > 1:
+                bot.answer_callback_query(call.id, f'Тебе можно держать на полке только {counter_inv} шт.')
+                return
+
             row = {
                     'date': (datetime.now()).timestamp(),
                     'login': user.getLogin(),
