@@ -1405,10 +1405,10 @@ def select_exchange(call):
         print(call.data)
         bot.answer_callback_query(call.id, f'{call.data}')
         
-        step = int(call.data.split('|')[2])
+        stepinventory = int(call.data.split('|')[2])
         inv_id = call.data.split('|')[3]
         user = getUserByLogin(call.from_user.username)
-        stepinventory = 0
+        step = 0
         inventory = user.getInventoryThing({'id': inv_id})
 
         inventories = user.getInventoryThings({'id': inv_id})
@@ -1416,9 +1416,9 @@ def select_exchange(call):
             btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['id']}")
             buttons.append(btn)
 
-        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|inventory['id']") 
+        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|{inventory['id']}") 
         exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|selectgroupexit|{step}")
-        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|selectgroupforward|{stepinventory+1}|inventory['id']")
+        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|selectgroupforward|{stepinventory+1}|{inventory['id']}")
 
     
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
@@ -1443,9 +1443,9 @@ def select_exchange(call):
             btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['id']}")
             buttons.append(btn)
 
-        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|inventory['id']") 
+        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|{inventory['id']}") 
         exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|selectgroupexit|{step}")
-        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|selectgroupforward|{stepinventory+1}|inventory['id']")
+        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|selectgroupforward|{stepinventory+1}|{inventory['id']}")
 
     
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
@@ -2381,6 +2381,7 @@ def main_message(message):
                             report_goat_info = report_goat_info + f'{w.getProfileVerySmall()}'
                             if w.getName() in findwariors: 
                                 report_goat_info = report_goat_info + f'    <a href="http://t.me/share/url?url={findwariors[w.getName()]}">🔪Напасть</a>\n\n'
+                                # report_goat_info = report_goat_info + f'    <a href="https://t.me/FriendsBrotherBot/url={findwariors[w.getName()]}">🔪Напасть</a>\n\n'
                             else:
                                 report_goat_info = report_goat_info + '\n'
 
