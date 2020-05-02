@@ -1506,7 +1506,7 @@ def select_exchange(call):
         user.removeInventoryThing(inventory)
         updateUser(user)
 
-        send_message_to_admin(text=f'Сделка 💴!\n{user.getNameAndGerb()} сдал {inventory["name"]} за 🔘{cost}')
+        send_message_to_admin(text=f'Сделка 💴!\n{user.getNameAndGerb()} (@{{user.getLogin()}}) сдал {inventory["name"]} за 🔘{cost}')
 
 
         # Возвращаемся как selectexit
