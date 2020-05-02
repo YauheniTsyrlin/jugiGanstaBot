@@ -5103,7 +5103,7 @@ def callback_query(call):
         return
 
     elemId = call.data.split('|')[2]
-    elem = user.getInventoryThing({'id':f'{elemId}','type': None})
+    elem = user.getInventoryThing({'id':f'{elemId}'})
 
     #if elem['type'] in ('skill', 'disease', 'tatu'):
     if elem['type'] in ('disease', 'tatu'):

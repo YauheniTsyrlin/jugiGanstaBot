@@ -3084,6 +3084,20 @@ newvalues = { "$set": { "value":
                             ] 
                         },
                         {
+                            'name': 'GOTORAID',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAACAgIAAxkBAAECXj5ercl5kyy8XAzzKH2dfZpjNSuokwACGAADkaI7BudYKDBs40YmGQQ'
+                                },
+                                {
+                                    'name': '1',
+                                    'value': 'CAACAgIAAxkBAAECXkRercmoA48Y-oDA6h4Gj3uBiOTC1wACIgAD8gQgFhbcd1mXrcBaGQQ'
+                                }
+                            ] 
+                        },
+                        {
                             'name': 'DOOR',
                             'value':
                             [
