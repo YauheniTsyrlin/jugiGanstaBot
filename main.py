@@ -1267,7 +1267,7 @@ def select_baraholka(call):
         inventors = []
         for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
             inventories = user.getInventoryThings({'id': inv['id']})
-            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['id']}|{inv['uid']}")
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
             if len(inventories) > 1:
                 btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button['id']}|selectgroup|{step}|{inv['id']}")
 
@@ -1322,7 +1322,7 @@ def select_exchange(call):
         inventors = []
         for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
             inventories = user.getInventoryThings({'id': inv['id']})
-            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['id']}|{inv['uid']}")
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}")
             if len(inventories) > 1:
                 btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button_parent['id']}|selectgroup|{step}|{inv['id']}")
 
@@ -1352,7 +1352,7 @@ def select_exchange(call):
         inventors = []
         for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
             inventories = user.getInventoryThings({'id': inv['id']})
-            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['id']}|{inv['uid']}")
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}")
             if len(inventories) > 1:
                 btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button_parent['id']}|selectgroup|{step}|{inv['id']}")
 
@@ -1383,7 +1383,7 @@ def select_exchange(call):
         for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
             
             inventories = user.getInventoryThings({'id': inv['id']})
-            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['id']}|{inv['uid']}")
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}")
             if len(inventories) > 1:
                 btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button_parent['id']}|selectgroup|{step}|{inv['id']}")
 
@@ -1413,7 +1413,7 @@ def select_exchange(call):
 
         inventories = user.getInventoryThings({'id': inv_id})
         for inv in inventories: 
-            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['id']}|{inv['uid']}")
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}")
             buttons.append(btn)
 
         back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|{inventory['id']}") 
@@ -1440,7 +1440,7 @@ def select_exchange(call):
 
         inventories = user.getInventoryThings({'id': inv_id})
         for inv in inventories: 
-            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['id']}|{inv['uid']}")
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}")
             buttons.append(btn)
 
         back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|{inventory['id']}") 
@@ -1457,6 +1457,15 @@ def select_exchange(call):
 
     if button_id in ('selectinvent', ''):
         print(call.data)
+        # {button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}
+        inv_uid = call.data.split('|')[3]
+        stepinventory = int(call.data.split('|')[2])
+        user = getUserByLogin(call.from_user.username)
+        inventory = user.getInventoryThing({'uid': inv_uid})
+
+
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{user.getInventoryThingInfo({'uid': inv_uid})}", reply_markup=markupinline)
+    
         bot.answer_callback_query(call.id, f'selectinvent: {call.data}')
         return
 
@@ -1474,7 +1483,7 @@ def select_exchange(call):
         for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
             inventories = user.getInventoryThings({'id': inv['id']})
 
-            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['id']}|{inv['uid']}")
+            btn = InlineKeyboardButton(f"{inv['name']} 🔘{inv['cost']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}")
             if len(inventories) > 1:
                 btn = InlineKeyboardButton(f"{inv['name']} 💰", callback_data=f"{button_parent['id']}|selectgroup|{step}|{inv['id']}")
 
@@ -1978,7 +1987,7 @@ def main_message(message):
     findUser = not (userIAm == None)
 
     # Форварды от Рупора Пустоши
-    if message.forward_from_chat and (message.forward_from_chat.username == 'wwkeeperhorn' or message.forward_from_chat.username == 'tolylya') and ' постиг ' in message.text:
+    if message.forward_from_chat and (message.forward_from_chat.username == 'wwkeeperhorn' or message.forward_from_chat.username == 'tolyIya') and ' постиг ' in message.text:
         # ⚙️Машенька постиг 8-й 🏵Дзен !
         name = message.text.split(' постиг ')[0]
         name = name.replace('⚙️', '#@#').replace('🔪', '#@#').replace('💣', '#@#').replace('⚛️', '#@#').replace('👙', '#@#').replace('🔰', '#@#')

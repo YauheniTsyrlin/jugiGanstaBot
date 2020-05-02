@@ -568,7 +568,7 @@ class User(object):
 
     def getInventoryThing(self, thing):
         for i in self.getInventory():
-            if i['id'] == thing['id'] and ('type' not in thing or i['type'] == thing['type']):
+            if ('uid' in thing and thing['uid'] == i['uid']) or ('id' in thing and i['id'] == thing['id'] and ('type' not in thing or i['type'] == thing['type'])):
                 return i
         return None
 
@@ -635,6 +635,20 @@ class User(object):
             return False
         return True
 
+    def getInventoryThingInfo(self, thing):
+        info = ''
+        for inv in self.getInventory():
+            if ('uid' in thing and thing['uid'] == inv['uid']) or ('id' in thing and inv['id'] == thing['id'] and ('type' not in thing or inv['type'] == thing['type'])):
+                info = info + f'┌{inv["name"]}\n'
+                
+                wear = 1
+                if 'wear' in inv:
+                    wear = inv['wear']['value']
+                info = info + f'├⏳ Состояние: {int(wear*100)}%\n'
+                
+                info = info + f'└🔘 {inv["cost"]}\n'
+                break
+        return info
 # =================== Inventory ========================== #
 
     def setSettings(self, settings):
