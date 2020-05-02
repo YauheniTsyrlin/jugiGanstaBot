@@ -1216,9 +1216,9 @@ def default_query(inline_query):
 # ================================== Комиссионка ====================================
 @bot.message_handler(func=lambda message: message.text and ('🧺 Комиссионка' == message.text) and 'private' == message.chat.type)
 def send_baraholka(message):
-    if not isAdmin(message.from_user.username):
-        send_welcome(message)
-        return
+    # if not isAdmin(message.from_user.username):
+    #     send_welcome(message)
+    #     return
 
     if isUserBan(message.from_user.username):
         bot.delete_message(message.chat.id, message.message_id)
