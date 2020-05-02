@@ -3798,9 +3798,9 @@ def main_message(message):
                         elems = []
                         for elem in user.getInventory():
                             try:
-                                if elem in elems:
+                                if elem['id'] in elems:
                                     continue
-                                elems.append(elem)
+                                elems.append(elem['id'])
                                 markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"pickup|{login}|{elem['id'][:100]}"))
                                 counter = counter + 1 
                             except: pass
@@ -5116,9 +5116,9 @@ def callback_query(call):
 
     elems = []
     for elem in user.getInventory():
-        if elem in elems:
+        if elem['id'] in elems:
             continue
-        elems.append(elem)
+        elems.append(elem['id'])
         markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"pickup|{login}|{elem['id']}"))
 
     text = 'У него больше нечего забрать!'
