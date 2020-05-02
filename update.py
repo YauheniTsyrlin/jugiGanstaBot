@@ -240,7 +240,8 @@ newvalues = { "$set":
                         {'id':'marks_of_excellence', 'name':'🏵 Награды'},
                         {'id':'decoration', 'name':'🎁 Подарки'},
                         {'id':'things', 'name':'📦 Вещи'},
-                        {'id':'bolt', 'name':'🔩 Рейдовые болты'}
+                        {'id':'bolt', 'name':'🔩 Рейдовые болты'},
+                        {'id':'currency', 'name':'💴 Валюта'}
                     ]
                 } 
             } 
@@ -2346,13 +2347,6 @@ newvalues = { "$set": { "value":
                                     ]
                                 },
                                 {
-                                    'id': 'crypto',
-                                    'name': '🔘 Crypto',
-                                    'cost': 1,
-                                    'type': 'things',
-                                    'quantity': None,
-                                },
-                                {
                                     'id': 'collapsar',
                                     'name': '🔲 Collapsar',
                                     'cost': 1,
@@ -2422,6 +2416,20 @@ newvalues = { "$set": { "value":
                                         }
                                 }
                                 
+                            ]
+                        },
+                        {
+                            'id': 'CURRENCY',
+                            'name': '💴 Валюта',
+                            'value':
+                            [
+                                {
+                                    'id': 'crypto',
+                                    'name': '🔘 Crypto',
+                                    'cost': 1,
+                                    'type': 'currency',
+                                    'quantity': None,
+                                }
                             ]
                         },
                         {
@@ -3621,15 +3629,15 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-for user in USERS_ARR:
-    for inv in user.getInventory():
-        if 'uid' in inv:
-            pass
-            print(f'get uid: {inv["uid"]}')
-        else:
-            inv.update({'uid': f'{uuid.uuid4()}'})
-            print(f'generate uid: {inv["uid"]}')
-    updateUser(user)
+# for user in USERS_ARR:
+#     for inv in user.getInventory():
+#         if 'uid' in inv:
+#             pass
+#             print(f'get uid: {inv["uid"]}')
+#         else:
+#             inv.update({'uid': f'{uuid.uuid4()}'})
+#             print(f'generate uid: {inv["uid"]}')
+#     updateUser(user)
 
 
 

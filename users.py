@@ -339,7 +339,8 @@ class User(object):
                                 {'id':'marks_of_excellence', 'name':'🏵 Награды'},
                                 {'id':'decoration', 'name':'🎁 Подарки'},
                                 {'id':'things', 'name':'📦 Вещи'},
-                                {'id':'bolt', 'name':'🔩 Рейдовые болты'}
+                                {'id':'bolt', 'name':'🔩 Рейдовые болты'},
+                                {'id':'currency', 'name':'💴 Валюта'}
                             ]
 
         string = string + self.getInventoryReport(inventory_category)

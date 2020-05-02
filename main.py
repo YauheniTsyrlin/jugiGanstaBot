@@ -138,13 +138,13 @@ GLOBAL_VARS = {
         'buttons': [
             {
                 'id': 'onshelf',
-                'name': '🛍️ На полках',
+                'name': '🛠️🛍️ На полках',
                 'description':'',
                 'buttons': []
             },
             {
                 'id': 'tohandover',
-                'name': '📥 Сдать',
+                'name': '🛠️📥 Сдать',
                 'description':'',
                 'buttons': []
             },
@@ -1252,6 +1252,10 @@ def select_baraholka(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
         return
 
+    if button_id in ('tohandover', 'onshelf'):
+        bot.answer_callback_query(call.id, 'Закрыто на реконструкцию')
+        return
+
     if button_id == 'exchange':
         buttons = []
         step = 0
@@ -1492,7 +1496,7 @@ def select_exchange(call):
 
         crypto = user.getInventoryThing({'id': 'crypto'})
         if crypto == None:
-            crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='crypto'), None) 
+            crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None) 
             crypto.update({'cost': cost})
             addInventory(user, crypto)
         else:
