@@ -1230,7 +1230,7 @@ def send_baraholka(message):
     for row in build_menu(buttons=buttons, n_cols=3):
         markup.row(*row)  
 
-    bot.send_message(message.chat.id, text=f'{button["name"]}\n{button["description"]}', reply_markup=markup)
+    bot.send_message(message.chat.id, text=f'{button["description"]}', reply_markup=markup)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith(GLOBAL_VARS['commission']['id']))
 def select_baraholka(call):
@@ -1306,7 +1306,7 @@ def select_exchange(call):
         for row in build_menu(buttons=buttons, n_cols=3):
             markup.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'{button["name"]}\n{button["description"]}', reply_markup=markup)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'{button["description"]}', reply_markup=markup)
         return
 
     if button_id in ('forward', 'back'):
@@ -1462,8 +1462,10 @@ def select_exchange(call):
         inventory = user.getInventoryThing({'uid': inv_uid})
 
         exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
+        toshelf = InlineKeyboardButton(f"🛍️ На полку", callback_data=f"{button_parent['id']}|toshelf|{stepinventory}|{inventory['uid']}")
         sell = InlineKeyboardButton(f"Получить 🔘 {int(inventory['cost']*button_parent['discont'])}", callback_data=f"{button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}")
         buttons.append(exit_button)
+        buttons.append(toshelf)
         buttons.append(sell)
         if 'composition' in inventory:
             splitup = InlineKeyboardButton(f"Разобрать 🛠️ {len(inventory['composition'])} ", callback_data=f"{button_parent['id']}|splitup|{stepinventory}|{inventory['uid']}")
@@ -1481,30 +1483,31 @@ def select_exchange(call):
         bot.answer_callback_query(call.id, f'Очень крепко собрано. Не разбирается... пока')
         return
 
-    if button_id in ('getcrypto',''):
+    if button_id in ('getcrypto','toshelf'):
         # {button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}
         inv_uid = call.data.split('|')[3]
         stepinventory = int(call.data.split('|')[2])
         step = 0
         user = getUserByLogin(call.from_user.username)
         inventory = user.getInventoryThing({'uid': inv_uid})
-        cost = int(inventory["cost"]*button_parent['discont'])
 
-        crypto = user.getInventoryThing({'id': 'crypto'})
-        
-        if crypto == None:
-            crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None) 
-            crypto.update({'cost': cost})
-            addInventory(user, crypto)
-        else:
-            crypto.update({'cost': crypto['cost']+cost})
-            user.updateInventoryThing(crypto)
-        
-        user.removeInventoryThing(inventory)
-        updateUser(user)
+        if button_id in ('getcrypto'):
+            cost = int(inventory["cost"]*button_parent['discont'])
+            crypto = user.getInventoryThing({'id': 'crypto'})
+            if crypto == None:
+                crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None) 
+                crypto.update({'cost': cost})
+                addInventory(user, crypto)
+            else:
+                crypto.update({'cost': crypto['cost']+cost})
+                user.updateInventoryThing(crypto)
+            user.removeInventoryThing(inventory)
+            updateUser(user)
+            send_message_to_admin(text=f'♻️ Сдал за 30% 💴!\n{user.getNameAndGerb()} (@{user.getLogin()}) сдал {inventory["name"]} за 🔘{cost}')
+            bot.answer_callback_query(call.id, f'Сдано за 🔘 {cost}')
 
-        send_message_to_admin(text=f'♻️ Сделка 💴!\n{user.getNameAndGerb()} (@{user.getLogin()}) сдал {inventory["name"]} за 🔘{cost}')
-
+        if button_id in ('toshelf'):
+            bot.answer_callback_query(call.id, f'Положено на полку')
 
         # Возвращаемся как selectexit
         step = int(call.data.split('|')[2])
@@ -1533,7 +1536,7 @@ def select_exchange(call):
             markupinline.row(*row)  
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text = button_parent['description'], reply_markup=markupinline)
-        bot.answer_callback_query(call.id, f'Сдано за 🔘 {cost}')
+        
         return
 
 
