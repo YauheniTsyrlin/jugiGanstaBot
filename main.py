@@ -1238,7 +1238,7 @@ def send_baraholka(message):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith(GLOBAL_VARS['commission']['id']))
 def select_baraholka(call):
-    bot.answer_callback_query(call.id, call.data)
+    # bot.answer_callback_query(call.id, call.data)
     if isUserBan(call.from_user.username):
         bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
         return
@@ -1400,8 +1400,8 @@ def select_exchange(call):
         return
 
     if button_id in ('selectgroupforward', 'selectgroupback'):
-        print(call.data)
-        bot.answer_callback_query(call.id, f'{call.data}')
+        # print(call.data)
+        # bot.answer_callback_query(call.id, f'{call.data}')
         
         stepinventory = int(call.data.split('|')[2])
         inv_id = call.data.split('|')[3]
@@ -1427,8 +1427,8 @@ def select_exchange(call):
         return
 
     if button_id in ('selectgroup', ''):
-        print(call.data)
-        bot.answer_callback_query(call.id, f'{call.data}')
+        # print(call.data)
+        # bot.answer_callback_query(call.id, f'{call.data}')
         
         step = int(call.data.split('|')[2])
         inv_id = call.data.split('|')[3]
@@ -1474,7 +1474,7 @@ def select_exchange(call):
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{user.getInventoryThingInfo({'uid': inv_uid})}", reply_markup=markupinline)
     
-        bot.answer_callback_query(call.id, f'selectinvent: {call.data}')
+        # bot.answer_callback_query(call.id, f'selectinvent: {call.data}')
         return
 
     if button_id in ('splitup',''):
@@ -1530,7 +1530,6 @@ def select_exchange(call):
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text = button_parent['description'], reply_markup=markupinline)
         bot.answer_callback_query(call.id, f'Сдано за 🔘 {cost}')
-
         return
 
 
