@@ -143,16 +143,11 @@ GLOBAL_VARS = {
                 'buttons': []
             },
             {
-                'id': 'tohandover',
-                'name': '🛠️📥 Сдать',
-                'description':'',
-                'buttons': []
-            },
-            {
                 'id': 'exchange',
-                'name': '♻️ Разменять',
-                'description':'♻️ Здесь можно поменять товар на 🔘 Crypto или разобрать на 📦 запчасти.',
-                'buttons': []
+                'name': '♻️ Мои вещи',
+                'description':'♻️ Здесь можно выставить свои товар на 🛍️ полку для продажи, тупо сдать за 30% 🔘Crypto или разобрать на 📦 запчасти.',
+                'buttons': [],
+                'discont': 0.3
             },
             {
                 'id': 'back',
@@ -1252,7 +1247,7 @@ def select_baraholka(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
         return
 
-    if button_id in ('tohandover', 'onshelf'):
+    if button_id in ('onshelf'):
         bot.answer_callback_query(call.id, 'Закрыто на реконструкцию')
         return
 
@@ -1466,7 +1461,7 @@ def select_exchange(call):
         inventory = user.getInventoryThing({'uid': inv_uid})
 
         exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
-        sell = InlineKeyboardButton(f"Получить 🔘 {inventory['cost']}", callback_data=f"{button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}")
+        sell = InlineKeyboardButton(f"Получить 🔘 {int(inventory['cost']*button_parent['discont'])}", callback_data=f"{button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}")
         buttons.append(exit_button)
         buttons.append(sell)
         if 'composition' in inventory:
@@ -1492,9 +1487,10 @@ def select_exchange(call):
         step = 0
         user = getUserByLogin(call.from_user.username)
         inventory = user.getInventoryThing({'uid': inv_uid})
-        cost = inventory["cost"]
+        cost = int(inventory["cost"]*button_parent['discont'])
 
         crypto = user.getInventoryThing({'id': 'crypto'})
+        
         if crypto == None:
             crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None) 
             crypto.update({'cost': cost})
