@@ -4,6 +4,8 @@ import datetime
 import time
 import users
 import tools
+import uuid
+import random
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 
@@ -3131,7 +3133,6 @@ newvalues = { "$set": { "value":
             } 
 u = settings.update_one(myquery, newvalues)
 
-
 myquery = { "code": 'RAIDLOCATIONS' }
 newvalues = { "$set": { "value": 
                     [
@@ -3620,18 +3621,18 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-# messages.delete_many({})
-# plan_raids.delete_many({
-#                                             'rade_date': 1588122000
-#                                             })
-# plan_raids.delete_many({
-#                                             'rade_date': 1588168800
-#                                             })
+for user in USERS_ARR:
+    for inv in user.getInventory():
+        if 'uid' in inv:
+            pass
+            print(f'get uid: {inv["uid"]}')
+        else:
+            inv.update({'uid': f'{uuid.uuid4()}'})
+            print(f'generate uid: {inv["uid"]}')
+    updateUser(user)
 
-# report_raids.update_many(
-#     { 'date': 1587823200 },
-#     { '$set': { 'date': 1587834000} }
-# )
+
+
 
 viruses = ['girlfriend_bouquet', 'covid-19', 'mirror_disease']
 if 1==2:

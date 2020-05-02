@@ -6,6 +6,7 @@ from datetime import timedelta
 import tools
 from operator import itemgetter
 import itertools
+import uuid
 
 def normalize(string):
     if not string:
@@ -620,6 +621,11 @@ class User(object):
     def addInventoryThing(self, thing, count=1, replace=False):
         if replace:
             self.removeInventoryThing(thing)
+
+        if 'uid' in thing:
+            pass
+        else:
+            thing.update({'uid': f'{uuid.uuid4()}'})
 
         if count == None:
             self.getInventory().append(thing)

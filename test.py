@@ -631,6 +631,10 @@ def getRaidTimeText(text, date):
 # for t in ttt:
 
 print(f"{int('0')}")
+
+import uuid
+print(uuid.uuid4())
+
 # dateT = 1587911050
 # date = getRaidTimeText('', dateT)
 # print(f'{datetime.fromtimestamp(dateT)} {datetime.fromtimestamp(date)}')
