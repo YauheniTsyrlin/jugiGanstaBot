@@ -1510,9 +1510,9 @@ def select_exchange(call):
                 inventors.append(inv['id'])
                 buttons.append(btn)
 
-        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
-        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
-        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
@@ -1541,9 +1541,9 @@ def select_exchange(call):
                 inventories_arr.append(inv['id'])
                 buttons.append(btn)
 
-        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
-        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
-        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
@@ -1566,9 +1566,9 @@ def select_exchange(call):
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}")
             buttons.append(btn)
 
-        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|{inventory['id']}") 
-        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|selectgroupexit|{step}")
-        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|selectgroupforward|{stepinventory+1}|{inventory['id']}")
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|{inventory['id']}") 
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectgroupexit|{step}")
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|selectgroupforward|{stepinventory+1}|{inventory['id']}")
 
     
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
@@ -1593,9 +1593,9 @@ def select_exchange(call):
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}")
             buttons.append(btn)
 
-        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|{inventory['id']}") 
-        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|selectgroupexit|{step}")
-        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|selectgroupforward|{stepinventory+1}|{inventory['id']}")
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|{inventory['id']}") 
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectgroupexit|{step}")
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|selectgroupforward|{stepinventory+1}|{inventory['id']}")
 
     
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
@@ -1613,7 +1613,7 @@ def select_exchange(call):
         user = getUserByLogin(call.from_user.username)
         inventory = user.getInventoryThing({'uid': inv_uid})
 
-        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
         toshelf = InlineKeyboardButton(f"🛍️ На полку", callback_data=f"{button_parent['id']}|toshelf|{stepinventory}|{inventory['uid']}")
         sell = InlineKeyboardButton(f"Получить 🔘 {int(inventory['cost']*button_parent['discont'])}", callback_data=f"{button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}")
         buttons.append(exit_button)
@@ -1705,9 +1705,9 @@ def select_exchange(call):
                 inventors.append(inv['id'])
                 buttons.append(btn)
 
-        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
-        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
-        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
@@ -1739,9 +1739,9 @@ def select_exchange(call):
                 inventories_arr.append(inv['id'])
                 buttons.append(btn)
         
-        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|selectback|{stepinventory-1}") 
-        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{step}")
-        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|selectforward|{stepinventory+1}")
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|selectback|{stepinventory-1}") 
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{step}")
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|selectforward|{stepinventory+1}")
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row) 
