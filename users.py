@@ -277,73 +277,88 @@ class User(object):
         # return int(self.getBm() + self.getBm() * dzen * 0.25)
         return int(self.getBm())
 
-    def getProfile(self):
-        string = ''
+    def getProfile(self, typeP=None):
+        if typeP == None:
+            typeP = 'common'
+
+        string = '\n'
         string = string + f'┌{self.name}\n'  
-        string = string + f'├🏷 {self.login}\n'
-        string = string + f'├{self.fraction}\n'
+        string = string + f'└🏷 {self.login}\n\n'
+
+        if typeP == 'common':
+            string = string + f'┌{self.fraction}\n'
+            if self.band:
+                string = string + f'├🤟Банда: {self.band}\n'
+            if self.rank:
+                string = string + f'├🥋Звание: {self.getRankName()}\n'
         
-        if self.band:
-            string = string + f'├🤟Банда: {self.band}\n'
-        if self.rank:
-            string = string + f'├🥋Звание: {self.getRankName()}\n'
-     
-        if self.location:
-            timeZone = '+00:00'
-            if self.timeZone:
-                tz = datetime.strptime(self.timeZone,"%H:%M:%S")
-                timeZone = f'+{str(tz.hour).zfill(2)}:{str(tz.minute).zfill(2)}'
-            string = string + f'├📍{self.location}|⏰{timeZone}\n'
-        else:
-            string = string + f'├📍Скажи Джу: Я живу в ...\n'
+            if self.location:
+                timeZone = '+00:00'
+                if self.timeZone:
+                    tz = datetime.strptime(self.timeZone,"%H:%M:%S")
+                    timeZone = f'+{str(tz.hour).zfill(2)}:{str(tz.minute).zfill(2)}'
+                string = string + f'├📍{self.location}|⏰{timeZone}\n'
+            else:
+                string = string + f'├📍Скажи Джу: Я живу в ...\n'
+            if self.raid:
+                string = string + f'├👊{self.raid}\n'
+            elif self.getMaxkm():
+                string = string + f'├👣Был замечен на {self.getMaxkm()}км\n'
+            if self.raidlocation:
+                tmpkm = f'{self.raidlocation}'
+                if self.raidlocation == 1:
+                    tmpkm = f'?'
+                string = string + f'├👊На рейде на {tmpkm}км\n'
 
-        if self.ping == True:
-            string = string + f'├🔔Пингуйте меня семеро!\n'
-        else:
-            string = string + f'├🔕Нихт!\n'
-        if self.birthday:
-            string = string + f'├🥳День рождения: {time.strftime("%d %b", time.gmtime(self.birthday))}\n'
-        if self.status:
-            string = string + f'└😏Статус: {self.status}\n'
-        else:
-            string = string + f'└😏Статус: Пустынник\n'  
+            if self.ping == True:
+                string = string + f'├🔔Пингуйте меня семеро!\n'
+            else:
+                string = string + f'├🔕Нихт!\n'
+            if self.birthday:
+                string = string + f'├🥳День рождения: {time.strftime("%d %b", time.gmtime(self.birthday))}\n'
+            if self.status:
+                string = string + f'└😏Статус: {self.status}\n'
+            else:
+                string = string + f'└😏Статус: Пустынник\n'  
+            string = string + '\n'
 
+        elif typeP == 'сombat':
 
-        string = string + f'\n'  
-        string = string + f'┌📯Боевая мощь: '+ str(self.getBm()) +'\n'  
-        string = string + f'├⚔{self.damage}|🛡{self.armor}|🏵{self.dzen}|\n'  
-        string = string + f'├💪{self.force}|🔫{self.accuracy}|❤{self.health}|\n'
-        string = string + f'├🗣{self.charisma}|🤸🏽‍{self.agility}|🔋{self.stamina}|\n'
-        if self.raid:
-            string = string + f'├👊{self.raid}\n'
-        elif self.getMaxkm():
-            string = string + f'├👣Был замечен на {self.getMaxkm()}км\n'
-        if self.raidlocation:
-            tmpkm = f'{self.raidlocation}'
-            if self.raidlocation == 1:
-                tmpkm = f'?'
-            string = string + f'├👊На рейде на {tmpkm}км\n'
+            string = string + f'┌📯Боевая мощь: '+ str(self.getBm()) +'\n'  
+            string = string + f'├⚔{self.damage}|🛡{self.armor}|🏵{self.dzen}|\n'  
+            string = string + f'├💪{self.force}|🔫{self.accuracy}|❤{self.health}|\n'
+            string = string + f'├🗣{self.charisma}|🤸🏽‍{self.agility}|🔋{self.stamina}|\n'
+            string = string + f'└🏋️‍♂️Вес на рейде: {self.getRaidWeight()}\n'
+            string = string + '\n'
 
-        string = string + f'└🏋️‍♂️Вес на рейде: {self.getRaidWeight()}\n'
-        string = string + f'\n'
+        elif typeP == 'setting':  
+
+            string = string + self.getSettingsReport() + '\n'
         
-        string = string + self.getSettingsReport() + '\n'
-
-        inventory_category = [
-                                {'id':'position', 'name':'🧗 Должность'},
-                                {'id':'skill', 'name':'💡 Умения'},
-                                {'id':'disease', 'name':'🦠 Болезни'},
-                                {'id':'tatu', 'name':'☮️ Татуировки'},
-                                {'id':'clothes', 'name':'🧥 Одежда'},
-                                {'id':'food', 'name':'🍗 Еда'},
-                                {'id':'marks_of_excellence', 'name':'🏵 Награды'},
-                                {'id':'decoration', 'name':'🎁 Подарки'},
-                                {'id':'things', 'name':'📦 Вещи'},
-                                {'id':'bolt', 'name':'🔩 Рейдовые болты'},
-                                {'id':'currency', 'name':'💴 Валюта'}
-                            ]
-
-        string = string + self.getInventoryReport(inventory_category)
+        else: 
+            if typeP == 'abilities':
+                inventory_category = [
+                                        {'id':'position', 'name':'🧗 Должность'},
+                                        {'id':'skill', 'name':'💡 Умения'},
+                                        {'id':'disease', 'name':'🦠 Болезни'},
+                                        {'id':'tatu', 'name':'☮️ Татуировки'}
+                                    ]
+                string = string + self.getInventoryReport(inventory_category)
+            elif typeP == 'things':
+                inventory_category = [
+                                        {'id':'clothes', 'name':'🧥 Одежда'},
+                                        {'id':'food', 'name':'🍗 Еда'},
+                                        {'id':'things', 'name':'📦 Вещи'},
+                                        {'id':'currency', 'name':'💴 Валюта'}                                        
+                                    ]
+                string = string + self.getInventoryReport(inventory_category)
+            elif typeP == 'awards':
+                inventory_category = [
+                                        {'id':'marks_of_excellence', 'name':'🏵 Награды'},
+                                        {'id':'decoration', 'name':'🎁 Подарки'},
+                                        {'id':'bolt', 'name':'🔩 Рейдовые болты'}
+                                    ]
+                string = string + self.getInventoryReport(inventory_category)
 
         string = string + f'⏰{tools.getTimeEmoji(self.timeUpdate)} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeUpdate))) +'\n'
         if self.timeBan:

@@ -131,6 +131,50 @@ GLOBAL_VARS = {
     'group_buttons': ['Джу, 📋 Отчет', f'Джу, ⏰ План рейда', '📈 Статистика'],
     'private_buttons': ['📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика', '🧺 Комиссионка'],
     
+    'profile':
+    {
+        'id': 'profile',
+        'name': '📜 Профиль',
+        'description': '📜 Здесь ты можешь посмотреть все свои атрибуты, навыки, вещи и подарки.',
+        'buttons': [
+            {
+                'id': 'common',
+                'name': '🏷 Общие',
+                'description': '📜 Здесь ты можешь посмотреть общие атрибуты',
+                'buttons': []              
+            },
+            {
+                'id': 'сombat',
+                'name': '📯 Боевая мощь',
+                'description': '📯 Здесь ты можешь посмотреть свои боевые параметры',
+                'buttons': []              
+            },
+            {
+                'id': 'setting',
+                'name': '📋 Настройки',
+                'description': '📋  Здесь ты можешь посмотреть свои настройки',
+                'buttons': []              
+            },
+            {
+                'id': 'abilities',
+                'name': '💡 Навыки',
+                'description': '💡 Здесь ты можешь посмотреть свои навыки и должности',
+                'buttons': []              
+            },
+            {
+                'id': 'things',
+                'name': '📦 Вещи',
+                'description': '📦 Здесь ты можешь посмотреть все свои вещи',
+                'buttons': []              
+            },
+            {
+                'id': 'awards',
+                'name': '🏵 Награды 🔩',
+                'description': '🏵 Здесь ты можешь посмотреть свои 🏵 Награды, 🎁 Подарки и 🔩 Рейдовые болты',
+                'buttons': []              
+            }
+       ]
+    },
     'commission':
     {
         'id': 'trade',
@@ -156,11 +200,8 @@ GLOBAL_VARS = {
                 'buttons': [],
                 'discont': 0.3
             }
-            
         ]
-    },
-    '♻️ Разменять': ['♻️ Назад'],
-    'kirill_burthday': ['GonzikBenzyavsky', 'Lena_Lenochka_32', 'WestMoscow', 'Brodskey', 'VirtusX', 'edem_00', 'Irakusa', 'Under_w0rld']
+    }
 }
 
 def addInventory(user: users.User, inv):
@@ -1209,6 +1250,67 @@ def default_query(inline_query):
     except Exception as e:
         print(e)
 
+
+# ================================== Профиль ====================================
+@bot.message_handler(func=lambda message: message.text and '📜 Профиль' == message.text)
+def send_profile(message):
+    privateChat = ('private' in message.chat.type)
+    if (privateChat):
+        pass
+    else:
+        send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_censorship').fulfillment_text)
+        return
+    user = users.getUser(message.from_user.username, registered_users)
+    
+    buttons = []
+    button_parent = GLOBAL_VARS['profile']
+    description = ''
+    for d in button_parent['buttons']:
+        name = f"{d['name']}"
+        if d['id'] == 'common':
+            name = '✳️ ' + name
+            description = d['description']
+        buttons.append(InlineKeyboardButton(f"{name}", callback_data=f"{button_parent['id']}|{d['id']}"))
+
+    markup = InlineKeyboardMarkup(row_width=2)
+    for row in build_menu(buttons=buttons, n_cols=3):
+        markup.row(*row)  
+
+    bot.send_message(message.chat.id, text=f'{description}\n{user.getProfile("common")}', parse_mode='HTML', reply_markup=markup)
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith(GLOBAL_VARS['profile']['id']))
+def select_baraholka(call):
+    # bot.answer_callback_query(call.id, call.data)
+    privateChat = ('private' in call.message.chat.type)
+    if (privateChat):
+        pass
+    else:
+        send_messages_big(call.message.chat.id, text=getResponseDialogFlow(call.from_user.username, 'shot_censorship').fulfillment_text)
+        return
+    
+    if isUserBan(call.from_user.username):
+        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
+        return
+    
+    user = users.getUser(call.from_user.username, registered_users)
+    button_parent_id = call.data.split('|')[0]
+    button_id = call.data.split('|')[1]
+
+    buttons = []
+    button_parent = GLOBAL_VARS['profile']
+    description = ''
+    for d in button_parent['buttons']:
+        name = f"{d['name']}"
+        if d['id'] == button_id:
+            name = '✳️ ' + name
+            description = d['description']
+        buttons.append(InlineKeyboardButton(f"{name}", callback_data=f"{button_parent_id}|{d['id']}"))
+
+    markup = InlineKeyboardMarkup(row_width=2)
+    for row in build_menu(buttons=buttons, n_cols=3):
+        markup.row(*row)  
+
+    bot.send_message(call.message.chat.id, text=f'{description}\n{user.getProfile(button_id)}', parse_mode='HTML', reply_markup=markup)
 
 # ================================== Комиссионка ====================================
 @bot.message_handler(func=lambda message: message.text and ('🧺 Комиссионка' == message.text) and 'private' == message.chat.type)
@@ -3520,26 +3622,26 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=f'{login} не найден в бандитах!')
             else:                 
                 send_messages_big(message.chat.id, text=f'{login} уволен нафиг!')
-        elif (callJugi and 'профиль' in message.text.lower() ):
-            if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
-                pass
-            else:
-                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_censorship').fulfillment_text)
-                return
+        # elif (callJugi and 'профиль' in message.text.lower() ):
+        #     if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+        #         pass
+        #     else:
+        #         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_censorship').fulfillment_text)
+        #         return
 
-            updateUser(None)
-            user = users.getUser(message.from_user.username, registered_users)
-            if user:
-                warior = getWariorByName(user.getName(), user.getFraction())
-                if (warior and warior.photo):
-                    try:
-                        bot.send_photo(message.chat.id, warior.photo, user.getProfile(), parse_mode='HTML')
-                    except:
-                        send_messages_big(message.chat.id, text=user.getProfile())
-                else:
-                    send_messages_big(message.chat.id, text=user.getProfile())
-            else:
-                send_messages_big(message.chat.id, text='С твоим профилем какая-то беда... Звони в поддержку пип-боев!')
+        #     updateUser(None)
+        #     user = users.getUser(message.from_user.username, registered_users)
+        #     if user:
+        #         warior = getWariorByName(user.getName(), user.getFraction())
+        #         if (warior and warior.photo):
+        #             try:
+        #                 bot.send_photo(message.chat.id, warior.photo, user.getProfile(), parse_mode='HTML')
+        #             except:
+        #                 send_messages_big(message.chat.id, text=user.getProfile())
+        #         else:
+        #             send_messages_big(message.chat.id, text=user.getProfile())
+        #     else:
+        #         send_messages_big(message.chat.id, text='С твоим профилем какая-то беда... Звони в поддержку пип-боев!')
         elif callJugi:
 
             text = message.text 
