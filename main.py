@@ -1310,7 +1310,7 @@ def select_baraholka(call):
     for row in build_menu(buttons=buttons, n_cols=3):
         markup.row(*row)  
 
-    bot.send_message(call.message.chat.id, text=f'{description}\n{user.getProfile(button_id)}', parse_mode='HTML', reply_markup=markup)
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'{description}\n{user.getProfile(button_id)}', parse_mode='HTML', reply_markup=markup)
 
 # ================================== Комиссионка ====================================
 @bot.message_handler(func=lambda message: message.text and ('🧺 Комиссионка' == message.text) and 'private' == message.chat.type)
