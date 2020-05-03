@@ -285,7 +285,7 @@ class User(object):
         string = string + f'┌{self.name}\n'  
         string = string + f'└🏷 {self.login}\n\n'
 
-        if typeP == 'common':
+        if typeP in ('common', 'All'):
             string = string + f'┌{self.fraction}\n'
             if self.band:
                 string = string + f'├🤟Банда: {self.band}\n'
@@ -322,7 +322,7 @@ class User(object):
                 string = string + f'└😏Статус: Пустынник\n'  
             string = string + '\n'
 
-        elif typeP == 'сombat':
+        if typeP in ('сombat', 'All'):
 
             string = string + f'┌📯Боевая мощь: '+ str(self.getBm()) +'\n'  
             string = string + f'├⚔{self.damage}|🛡{self.armor}|🏵{self.dzen}|\n'  
@@ -331,34 +331,36 @@ class User(object):
             string = string + f'└🏋️‍♂️Вес на рейде: {self.getRaidWeight()}\n'
             string = string + '\n'
 
-        elif typeP == 'setting':  
+        if typeP in ('setting', 'All'):  
 
             string = string + self.getSettingsReport() + '\n'
         
-        else: 
-            if typeP == 'abilities':
-                inventory_category = [
-                                        {'id':'position', 'name':'🧗 Должность'},
-                                        {'id':'skill', 'name':'💡 Умения'},
-                                        {'id':'disease', 'name':'🦠 Болезни'},
-                                        {'id':'tatu', 'name':'☮️ Татуировки'}
-                                    ]
-                string = string + self.getInventoryReport(inventory_category)
-            elif typeP == 'things':
-                inventory_category = [
-                                        {'id':'clothes', 'name':'🧥 Одежда'},
-                                        {'id':'food', 'name':'🍗 Еда'},
-                                        {'id':'things', 'name':'📦 Вещи'},
-                                        {'id':'currency', 'name':'💴 Валюта'}                                        
-                                    ]
-                string = string + self.getInventoryReport(inventory_category)
-            elif typeP == 'awards':
-                inventory_category = [
-                                        {'id':'marks_of_excellence', 'name':'🏵 Награды'},
-                                        {'id':'decoration', 'name':'🎁 Подарки'},
-                                        {'id':'bolt', 'name':'🔩 Рейдовые болты'}
-                                    ]
-                string = string + self.getInventoryReport(inventory_category)
+
+        if typeP in ('abilities', 'All'):
+            inventory_category = [
+                                    {'id':'position', 'name':'🧗 Должность'},
+                                    {'id':'skill', 'name':'💡 Умения'},
+                                    {'id':'disease', 'name':'🦠 Болезни'},
+                                    {'id':'tatu', 'name':'☮️ Татуировки'}
+                                ]
+            string = string + self.getInventoryReport(inventory_category)
+        
+        if typeP in ('things', 'All'):
+            inventory_category = [
+                                    {'id':'clothes', 'name':'🧥 Одежда'},
+                                    {'id':'food', 'name':'🍗 Еда'},
+                                    {'id':'things', 'name':'📦 Вещи'},
+                                    {'id':'currency', 'name':'💴 Валюта'}                                        
+                                ]
+            string = string + self.getInventoryReport(inventory_category)
+        
+        if typeP in ('awards', 'All'):
+            inventory_category = [
+                                    {'id':'marks_of_excellence', 'name':'🏵 Награды'},
+                                    {'id':'decoration', 'name':'🎁 Подарки'},
+                                    {'id':'bolt', 'name':'🔩 Рейдовые болты'}
+                                ]
+            string = string + self.getInventoryReport(inventory_category)
 
         string = string + f'⏰{tools.getTimeEmoji(self.timeUpdate)} ' + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime(self.getTimeByUserTimeZone(self.timeUpdate))) +'\n'
         if self.timeBan:

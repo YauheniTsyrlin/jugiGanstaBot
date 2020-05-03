@@ -3579,7 +3579,7 @@ def main_message(message):
                         user = getUserByName(name)
 
                     if user:
-                        send_messages_big(message.chat.id, text=user.getProfile())
+                        send_messages_big(message.chat.id, text=user.getProfile('All'))
                 else:
                     send_messages_big(message.chat.id, text=f'В базе зарегистрированнных бандитов {login} не найден')
 
