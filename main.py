@@ -5332,7 +5332,7 @@ def callback_query(call):
                 try:
                     if planed_location > 0:
                         logger.info(f'Отправляем пин {user.getLogin()}')
-                        bot.send_photo(user.getChat(), random.sample(getSetting(code='STICKERS', name='GOTORAID'), 1)[0]['value'])
+                        # bot.send_photo(user.getChat(), random.sample(getSetting(code='STICKERS', name='GOTORAID'), 1)[0]['value'])
                         send_messages_big(user.getChat(), text=planed_location_str)
                         counter = counter + 1
                     newvalues = { "$set": { 'notified': True} }
