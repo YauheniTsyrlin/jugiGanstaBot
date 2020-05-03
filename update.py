@@ -3654,7 +3654,7 @@ print("#==========================#")
 #     updateUser(user)
 
 
-if 1==1:
+if 1==2:
 
     old_login = 'Mefabest'
     new_login = 'Y0ur_sugar'
@@ -3733,7 +3733,7 @@ if 1==2:
 
 # , 'metal_detector','playstation5'
 thing_names = ['redeemed_raid_ticket']
-if 1==1:
+if 1==2:
     updateUser(None)
     for thing_name in thing_names:
         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
