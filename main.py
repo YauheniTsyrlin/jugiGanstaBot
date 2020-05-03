@@ -5730,7 +5730,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломалось Присвоение званий!')
 
     # Пидор дня
-    if now_date.hour == 11 and now_date.minute == 10 and now_date.second < 15:
+    if now_date.hour == 11 and now_date.minute == 11 and now_date.second < 15:
         # try:
         logger.info('Pidor of the day!')
         updateUser(None)
