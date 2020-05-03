@@ -1252,14 +1252,8 @@ def default_query(inline_query):
 
 
 # ================================== Профиль ====================================
-@bot.message_handler(func=lambda message: message.text and '📜 Профиль' == message.text)
+@bot.message_handler(func=lambda message: message.text and 'профиль' in message.text.lower() and 'private' in message.chat.type)
 def send_profile(message):
-    privateChat = ('private' in message.chat.type)
-    if (privateChat):
-        pass
-    else:
-        send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_censorship').fulfillment_text)
-        return
     user = users.getUser(message.from_user.username, registered_users)
     
     buttons = []
