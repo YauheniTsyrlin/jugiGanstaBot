@@ -5730,7 +5730,7 @@ def rade():
             send_message_to_admin(f'⚠️🤬 Сломалось Присвоение званий!')
 
     # Пидор дня
-    if now_date.hour == 10 and now_date.minute == 2 and now_date.second < 15:
+    if now_date.hour == 11 and now_date.minute == 10 and now_date.second < 15:
         # try:
         logger.info('Pidor of the day!')
         updateUser(None)
@@ -5802,21 +5802,19 @@ def rade():
                 # acc = '👑 "Пидор дня"'
 
                 lastWinner = None
-                for user in user_in_game:
+                for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
                     if user.isInventoryThing(elem):
                         user.removeInventoryThing(elem)
                         updateUser(user)
                         lastWinner = user
                         break
                 
-                #if lastWinner:
-                text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, вырвали из рук {lastWinner.getNameAndGerb()} 👑 золотую корону с гравировкой "Pidor of the day" и водрузили её на твой голову!\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
-                #    if lastWinner.getLogin() == userWin.getLogin():
-                #        text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, в шоке! Кому ты отдался, чтобы выигывать так часто?!! 👑 золотая корона с гравировкой "Pidor of the day" остаётся у тебя !\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
-                send_message_to_admin(f'⚠️🤬 Pidor of the day!\n\n {text}')
-                send_messages_big(chat, text=text)
-                #else:
-                #    send_messages_big(chat, text=userWin.getNameAndGerb() + '!\n' + getResponseDialogFlow(userWin.getLogin(), 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+                if lastWinner:
+                    text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, вырвали из рук {lastWinner.getNameAndGerb()} 👑 золотую корону с гравировкой "Pidor of the day" и водрузили её на твой голову!\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
+                    if lastWinner.getLogin() == userWin.getLogin():
+                        text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, в шоке! Кому ты отдался, чтобы выигрывать так часто?!! 👑 золотая корона с гравировкой "Pidor of the day" остаётся у тебя !\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
+                else:
+                    text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, получили от 🤖 Джу 👑 золотую корону с гравировкой "Pidor of the day" и водрузили её на твой голову!\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
 
                 addInventory(userWin, elem)
                 updateUser(userWin)
@@ -5825,6 +5823,11 @@ def rade():
                 row.update({'login':userWin.getLogin()})
                 row.update({'description':elem['name']})
                 man_of_day.insert_one(row)
+
+                send_message_to_admin(f'⚠️🤬 Pidor of the day!\n\n {text}')
+                send_messages_big(chat, text=text)
+                send_messages_big(chat, text=userWin.getNameAndGerb() + '!\n' + getResponseDialogFlow(userWin.getLogin(), 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+
                 send_messages_big(chat, text=report_man_of_day('')) 
         # except:
         #     send_message_to_admin(f'⚠️🤬 Сломался Pidor of the day!')
