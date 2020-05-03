@@ -2041,7 +2041,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'redeemed_raid_ticket',
                                     'name': '🎫 Талон на рейд',
-                                    'cost': 0,
+                                    'cost': 20,
                                     'type': 'things',
                                     'quantity': None
                                 },
@@ -3654,6 +3654,24 @@ print("#==========================#")
 #     updateUser(user)
 
 
+if 1==1:
+
+    old_login = 'Mefabest'
+    new_login = 'Y0ur_sugar'
+
+    # Убиваем пользователя с новым логином
+    myquery = {'login': new_login}
+    registered_users.delete_one(myquery)
+
+    # Находим старого и меняем ему логин на новый
+    registered_users.update_one(
+        { 'login': old_login},
+        { '$set': 
+            { 'login': new_login } 
+        }
+    )
+    print(f'Бандиту {old_login} заменена логин на {new_login}')
+
 
 
 viruses = ['girlfriend_bouquet', 'covid-19', 'mirror_disease']
@@ -3713,32 +3731,23 @@ if 1==2:
             print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
             print(f'=======================================================')
 
-thing_names = ['metal_detector','playstation5']
-if 1==2:
+# , 'metal_detector','playstation5'
+thing_names = ['redeemed_raid_ticket']
+if 1==1:
+    updateUser(None)
     for thing_name in thing_names:
-        updateUser(None)
         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
 
         for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
-            thing = user.getInventoryThing(elem)
+            things = user.getInventoryThings(elem)
             
-            print(f'before {user.getLogin()} {thing}')
-            try:
-                 elem['wear'].update({'value': thing['wear']['value']})
-            except:
-                user.removeInventoryThing(elem)
-                user.addInventoryThing(elem)
-                updateUser(user)
-                print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
-                print(f'=======================================================')
-                continue
+            for inv in things:
+                # Заменяем цену у всех вещей этого типа
+                if 'cost' in inv:
+                    inv.update({'cost': elem['cost']})
 
-            
-            user.removeInventoryThing(thing)
-            user.addInventoryThing(elem)
             updateUser(user)
-            print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
-            print(f'=======================================================')
+        print(f'Обновили {thing_name}')
 
 # if 1==2:
     # if now_date.hour in (99, 19) and now_date.minute in (99, 58) and now_date.second < 15:
