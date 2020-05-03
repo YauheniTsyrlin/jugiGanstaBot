@@ -1252,7 +1252,7 @@ def default_query(inline_query):
 
 
 # ================================== Профиль ====================================
-@bot.message_handler(func=lambda message: message.text and 'профиль' in message.text.lower() and 'private' in message.chat.type)
+@bot.message_handler(func=lambda message: message.text and '📜 Профиль' == message.text and 'private' in message.chat.type)
 def send_profile(message):
     user = users.getUser(message.from_user.username, registered_users)
     
