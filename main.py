@@ -1355,9 +1355,9 @@ def select_baraholka(call):
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
             buttons.append(btn)
 
-        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button['id']}|back|{step-1}") 
-        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button['id']}|exit|{step}")
-        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button['id']}|forward|{step+1}")
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button['id']}|back|{step-1}") 
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button['id']}|exit|{step}")
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button['id']}|forward|{step+1}")
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
@@ -1380,9 +1380,9 @@ def select_baraholka(call):
                 inventors.append(inv['id'])
                 buttons.append(btn)
 
-        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button['id']}|back|{step-1}") 
-        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button['id']}|exit|{step}")
-        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button['id']}|forward|{step+1}")
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button['id']}|back|{step-1}") 
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button['id']}|exit|{step}")
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button['id']}|forward|{step+1}")
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
@@ -1425,9 +1425,9 @@ def select_shelf(call):
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
             buttons.append(btn)
 
-        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
-        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
-        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
@@ -1480,9 +1480,9 @@ def select_exchange(call):
                 inventors.append(inv['id'])
                 buttons.append(btn)
 
-        back_button = InlineKeyboardButton(f"♻️ Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
-        exit_button = InlineKeyboardButton(f"♻️ Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
-        forward_button = InlineKeyboardButton(f"♻️ Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
