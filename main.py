@@ -172,6 +172,12 @@ GLOBAL_VARS = {
                 'name': '🏵 Награды 🔩',
                 'description': '🏵 Здесь ты можешь посмотреть свои 🏵 Награды, 🎁 Подарки и 🔩 Рейдовые болты',
                 'buttons': []              
+            },
+            {
+                'id': 'graphs',
+                'name': '📈 Прогресс',
+                'description': '📈 Здесь ты можешь посмотреть свой прогресс.',
+                'buttons': []              
             }
        ]
     },
@@ -1270,10 +1276,14 @@ def send_profile(message):
     for row in build_menu(buttons=buttons, n_cols=3):
         markup.row(*row)  
 
-    bot.send_message(message.chat.id, text=f'{description}\n{user.getProfile("common")}', parse_mode='HTML', reply_markup=markup)
+    text=f'{description}\n{user.getProfile("common")}'
+    # bot.send_photo(message.chat.id, warior.photo, warior.getProfile(userIAm.getTimeZone()))
+    # bot.send_photo(message.chat.id, 'AgACAgIAAxkBAAI0nV6vzZEm2z3EHL4n_sEt2g3rHNnDAAI5rTEbRKKASdcXJDj7bh-oNmtMkS4AAwEAAwIAA20AA-wNAwABGQQ', caption=text, parse_mode='HTML', reply_markup=markup)
+    # bot.send_photo(message.chat.id, 'CAACAgIAAxkBAAECbHRer8Y-iIWhSbwOsyDVXM6C0HjBBwACRgADswIBAAFr0mTVWxNP3BkE', caption=text, parse_mode='HTML', reply_markup=markup)
+    bot.send_message(message.chat.id, text=text, parse_mode='HTML', reply_markup=markup)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith(GLOBAL_VARS['profile']['id']))
-def select_baraholka(call):
+def select_profile(call):
     # bot.answer_callback_query(call.id, call.data)
     privateChat = ('private' in call.message.chat.type)
     if (privateChat):
@@ -1750,104 +1760,6 @@ def select_exchange(call):
         
         return    
 # ============================================================================
-
-@bot.message_handler(func=lambda message: message.text and ('♻️ Разменять' == message.text) and 'private' == message.chat.type)
-def send_recycling(message):
-    recycling = '♻️ Разменять'
-    exit_up_button = '🧺 Назад'
-    #write_json(message.json)
-    if isUserBan(message.from_user.username):
-        bot.delete_message(message.chat.id, message.message_id)
-        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то наговорить, но у него получилось лишь:\n' + getResponseDialogFlow(message.from_user.username, 'user_banned').fulfillment_text)
-        return
-
-    if message.text == recycling:
-        markup = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
-        buttons = []
-        step = 0
-        user = getUserByLogin(message.from_user.username)
-        for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
-            buttons.append(f'{inv["name"]}')
-                    
-        back_button = "♻️ Назад 🔙({step-1})"
-        exit_button = "♻️ Выйти ❌"
-        forward_button = f"♻️ Далее 🔜({step+1})"
-
-        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
-            markup.row(*row)  
-
-        inventory_category = [
-                                {'id':'clothes', 'name':'🧥 Одежда'},
-                                {'id':'things', 'name':'📦 Вещи'}
-                            ]
-
-        bot.send_message(message.chat.id, text=f"Твой инвентарь:\n{user.getInventoryReport(inventory_category)}", reply_markup=markup)
-        bot.register_next_step_handler(message, process_select_recycle)
-    elif message.text == exit_up_button:
-        markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-        for row in build_menu(buttons=GLOBAL_VARS['private_buttons'], n_cols=3):
-            markup.row(*row)  
-            
-        bot.send_message(message.chat.id, text='Вернулись...', reply_markup=markup)
-        #bot.register_next_step_handler(message, send_baraholka)
-
-def process_select_recycle(message):
-    btn = '🧺 Комиссионка'
-    #write_json(message.json)
-    if isUserBan(message.from_user.username):
-        bot.delete_message(message.chat.id, message.message_id)
-        send_messages_big(message.chat.id, text=f'{message.from_user.username} хотел что-то наговорить, но у него получилось лишь:\n' + getResponseDialogFlow(message.from_user.username, 'user_banned').fulfillment_text)
-        return
-
-    back_button = f"♻️ Назад 🔙"
-    exit_button = f"♻️ Выйти ❌"
-    forward_button = f"♻️ Далее 🔜"
-
-    user = getUserByLogin(message.from_user.username)
-    markup = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
-    buttons = []
-
-    if message.text.startswith(back_button):
-        step = int(message.text.split('(')[1].split(')')[0].strip()) 
-        for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
-            buttons.append(f'{inv["name"]}')
-        
-        back_button = f"♻️ Назад 🔙({step-1})"
-        exit_button = "♻️ Выйти ❌"
-        forward_button = f"♻️ Далее 🔜({step+1})"
-
-        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
-            markup.row(*row)
-
-        bot.send_message(message.chat.id, text=f'Назад...', reply_markup=markup)
-        bot.register_next_step_handler(message, process_select_recycle)
-        return
-    elif message.text.startswith(exit_button):
-        for row in build_menu(buttons=GLOBAL_VARS[btn], n_cols=3):
-            markup.row(*row)
-        bot.send_message(message.chat.id, text=f'Вернулись...', reply_markup=markup)
-        bot.register_next_step_handler(message, send_recycling)
-        return    
-    elif message.text.startswith(forward_button):
-        step = int(message.text.split('(')[1].split(')')[0].strip()) 
-        for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
-            buttons.append(f'{inv["name"]}')
-        
-        back_button = f"♻️ Назад 🔙({step-1})"
-        exit_button = "♻️ Выйти ❌"
-        forward_button = f"♻️ Далее 🔜({step+1})"
-
-        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step+1, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
-            markup.row(*row)
-
-        bot.send_message(message.chat.id, text=f'Далее...', reply_markup=markup)
-        bot.register_next_step_handler(message, process_select_recycle)
-        return    
-    else:
-        pass        
-        
-        
-    bot.send_message(message.chat.id, text=f'Выбрал {message.text}', reply_markup=None)
 
 @bot.message_handler(func=lambda message: message.text and ('📈 Статистика' == message.text))
 def send_back_from_usset(message):
@@ -4686,6 +4598,8 @@ def report_man_of_day(message_user_name: str):
     from_date = setting.get('from_date')
     to_date = setting.get('to_date')
 
+    goatName = getMyGoatName(message_user_name)
+
     if (not from_date):
         from_date = (datetime(2019, 1, 1)).timestamp() 
 
@@ -4701,7 +4615,7 @@ def report_man_of_day(message_user_name: str):
                         "date": {
                             '$gte': from_date,
                             '$lt': to_date
-                                }       
+                                }      
                     }
                     ]
             } 
@@ -4714,6 +4628,13 @@ def report_man_of_day(message_user_name: str):
         {   "$sort" : { "count" : -1 } }
         ])
     
+    goat_users = []
+    for d in dresult:
+        user = getUserByLogin(d.get("_id"))
+        if user:
+            if goatName == getMyGoatName(user.getLogin()):
+                goat_users.append({'user': user, 'count': d.get("count")})
+
 
     # acc = '👑 "Пидор дня"'
     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
@@ -4723,9 +4644,7 @@ def report_man_of_day(message_user_name: str):
     pidor_counter = 0
     pidor_user_now = None
 
-    for d in dresult:
-        user_login = d.get("_id")  
-        user = getUserByLogin(user_login)
+    for user_dict in goat_users:
         i = i + 1
         if i == 1:
             emoji = '💝 - '
@@ -4735,21 +4654,19 @@ def report_man_of_day(message_user_name: str):
             emoji = '❤️ - '
         else:
             emoji = ''
-        
-        user_name = user_login
-        if user:
-            user_name = f'{user.getNameAndGerb()}'
-            if user.isInventoryThing(elem):
-                pidor_counter = i
-                pidor_user_now = user
-        else:
-            user_name = user_login
+        user = user_dict['user']
 
-        if message_user_name  == user_login:
+        user_name = f'{user.getNameAndGerb()}'
+        if user.isInventoryThing(elem):
+            pidor_counter = i
+            pidor_user_now = user
+
+
+        if message_user_name  == user.getLogin():
             user_name = f'<b>{user_name}</b>'
             findInLoser = i
 
-        if i <= 5: report = report + f'{i}. {emoji}{user_name}: <b>{d.get("count")}</b>\n' 
+        if i <= 5: report = report + f'{i}. {emoji}{user_name}: <b>{user_dict["count"]}</b>\n' 
 
     if (i == 0): 
         report = report + f'В нашем козле нет пидоров!\n'
