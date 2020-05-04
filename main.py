@@ -4020,10 +4020,10 @@ def main_message(message):
                     elif 'toreward' == response.split(':')[1]:
                         #jugi:toreward:$any:$accessory
                         
-                        # if not isGoatBoss(message.from_user.username):
-                        if not isAdmin(message.from_user.username):
-                            bot.reply_to(message, text=getResponseDialogFlow(message.from_user.username, 'shot_message_not_admin').fulfillment_text)
-                            return
+                        # if not isAdmin(message.from_user.username):
+                            # bot.reply_to(message, text=getResponseDialogFlow(message.from_user.username, 'shot_message_not_admin').fulfillment_text)
+                            # return
+
 
                         login = response.split(':')[2].replace('@','').strip()
                         user = getUserByLogin(login)
@@ -4038,7 +4038,11 @@ def main_message(message):
                             markupinline = InlineKeyboardMarkup()
                             counter = 10
                             i = 1
-                            for elem in list(GLOBAL_VARS['inventory']):
+                            listInv = list(GLOBAL_VARS['inventory'])
+                            if isAdmin(message.from_user.username):
+                                listInv = userIAm.getInventoryType({'type': 'decoration'})
+
+                            for elem in listInv:
                                 if user and user.isMaxInventoryThing(elem, USERS_ARR):
                                     continue
                                 # if user and user.isInventoryThing(elem):
@@ -4050,6 +4054,10 @@ def main_message(message):
                                     markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
                                     break
                                 i = i + 1
+                            
+                            if len(listInv)<10:
+                                markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+
                             if user:
                                 inventory_category = [{'id':'food', 'name':'🍗 Еда'},
                                                     {'id':'decoration', 'name':'🎁 Подарки'},
@@ -5120,14 +5128,15 @@ def callback_query(call):
         bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
         return
 
-    if not isGoatBoss(call.from_user.username):
-        if not isAdmin(call.from_user.username):
-            bot.answer_callback_query(call.id, "Тебе не положено!")
-            return
+    # if not isGoatBoss(call.from_user.username):
+    #     if not isAdmin(call.from_user.username):
+    #         bot.answer_callback_query(call.id, "Тебе не положено!")
+    #         return
 
     if 'toreward_exit' in call.data:
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='Раздача подарков завершена!', parse_mode='HTML')
         return
+
 
     if call.data.startswith("toreward_next"):
         #        0         1     2
@@ -5135,10 +5144,17 @@ def callback_query(call):
         counter  = int(call.data.split('|')[2])
         login = call.data.split('|')[1]
         user = getUserByLogin(login)
+        userIAm = getUserByLogin(call.from_user.username)
+
         markupinline = InlineKeyboardMarkup()
         i = 1
         addExit = False
-        for elem in list(GLOBAL_VARS['inventory']):
+
+        listInv = list(GLOBAL_VARS['inventory'])
+        if isAdmin(call.from_user.username):
+            listInv = userIAm.getInventoryType({'type': 'decoration'})
+
+        for elem in listInv:
             if user and user.isMaxInventoryThing(elem, USERS_ARR):
                 continue
             # if user and user.isInventoryThing(elem):
@@ -5174,10 +5190,16 @@ def callback_query(call):
         counter  = int(call.data.split('|')[2])
         login = call.data.split('|')[1]
         user = getUserByLogin(login)
+        userIAm = getUserByLogin(call.from_user.username)
         markupinline = InlineKeyboardMarkup()
         i = 1
+
+        listInv = list(GLOBAL_VARS['inventory'])
+        if isAdmin(call.from_user.username):
+            listInv = userIAm.getInventoryType({'type': 'decoration'})
+
         addExit = False
-        for elem in list(GLOBAL_VARS['inventory']):
+        for elem in listInv:
             if user and user.isMaxInventoryThing(elem, USERS_ARR):
                 continue
             # if user and user.isInventoryThing(elem):
@@ -5212,17 +5234,31 @@ def callback_query(call):
 
     login = call.data.split('|')[1]
     user = getUserByLogin(login)
-    
-    for elem in list(GLOBAL_VARS['inventory']):
+    userIAm = getUserByLogin(call.from_user.username)
+
+    listInv = list(GLOBAL_VARS['inventory'])
+    if isAdmin(call.from_user.username):
+        listInv = userIAm.getInventoryType({'type': 'decoration'})
+
+    for elem in listInv:
         if elem['id'] == call.data.split('|')[2]:
             bot.answer_callback_query(call.id, "Ты сделал свой выбор")
             if login.lower() == 'всем':
-                for useradd in list(USERS_ARR):
-                    addInventory(useradd, elem)
-                    updateUser(useradd)
-                send_messages_big(call.message.chat.id, text= 'Бандиты!\n' + getResponseDialogFlow(call.message.from_user.username, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+                if isAdmin(call.from_user.username):
+                    for useradd in list(USERS_ARR):
+                        addInventory(useradd, elem)
+                        updateUser(useradd)
+                    send_messages_big(call.message.chat.id, text= 'Бандиты!\n' + getResponseDialogFlow(call.message.from_user.username, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+                else:
+                    send_messages_big(call.message.chat.id, text= getResponseDialogFlow(call.message.from_user.username, 'shot_message_not_admin').fulfillment_text) 
             else:
-                addInventory(user, elem)
+                if isAdmin(call.from_user.username): 
+                    addInventory(user, elem)
+                else:
+                    userIAm.removeInventoryThing(elem)
+                    addInventory(user, elem)
+                    updateUser(userIAm)
+                    
                 updateUser(user)
                 send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
 
@@ -5231,7 +5267,7 @@ def callback_query(call):
     markupinline = InlineKeyboardMarkup()
     counter = 10
     i = 1
-    for elem in list(GLOBAL_VARS['inventory']):
+    for elem in listInv:
         if user and user.isMaxInventoryThing(elem, USERS_ARR):
             continue
         # if user and user.isInventoryThing(elem):
@@ -5243,6 +5279,10 @@ def callback_query(call):
             markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
             break
         i = i + 1
+    
+    if len(listInv)<10:
+        markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+
     if user:
         inventory_category = [{'id':'food', 'name':'🍗 Еда'},
                         {'id':'decoration', 'name':'🎁 Подарки'},

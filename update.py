@@ -3529,7 +3529,7 @@ newvalues = { "$set":
                             'liga': 'Детская лига',
                             'boss': [
                                         'WestMoscow',
-                                        'GonzikBenzyavsky'
+                                        '1GonzikBenzyavsky'
                                     ],
                             'poweruser': 
                                     [
@@ -3671,8 +3671,6 @@ if 1==2:
         }
     )
     print(f'Бандиту {old_login} заменена логин на {new_login}')
-
-
 
 viruses = ['girlfriend_bouquet', 'covid-19', 'mirror_disease']
 if 1==2:
