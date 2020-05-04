@@ -634,10 +634,10 @@ class User(object):
                 things.append(inv)
         return things
 
-    def getInventoryType(self, thing):
+    def getInventoryType(self, types):
         invs = []
         for i in self.getInventory():
-            if ( thing['type'] == None or i['type'] == thing['type']):
+            if i['type'] in types:
                 invs.append(i)
         return invs
 

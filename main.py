@@ -130,7 +130,8 @@ GLOBAL_VARS = {
     'eating_in_new_rino': ['опустошил бокал бурбона.', 'жадно ест сухари.'],
     'group_buttons': ['Джу, 📋 Отчет', f'Джу, ⏰ План рейда', '📈 Статистика'],
     'private_buttons': ['📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика', '🧺 Комиссионка'],
-    
+    'typeforexcenge': [ 'clothes', 'food', 'decoration', 'things'],
+    'typeforcomission': [ 'clothes', 'food', 'decoration', 'things'],
     'profile':
     {
         'id': 'profile',
@@ -1374,7 +1375,7 @@ def select_baraholka(call):
 
     if button_id == 'exchange':
         inventors = []
-        for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
+        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission']):
             inventories = user.getInventoryThings({'id': inv['id']})
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
             if len(inventories) > 1:
@@ -1565,7 +1566,7 @@ def select_exchange(call):
                         {'id':'things', 'name':'📦 Вещи'}
                     ]
         inventors = []
-        for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
+        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission']):
             inventories = user.getInventoryThings({'id': inv['id']})
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}")
             if len(inventories) > 1:
@@ -1594,7 +1595,7 @@ def select_exchange(call):
                     ]
                     
         inventors = []
-        for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
+        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission']):
             inventories = user.getInventoryThings({'id': inv['id']})
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}")
             if len(inventories) > 1:
@@ -1623,7 +1624,7 @@ def select_exchange(call):
                     ]
                     
         inventories_arr = []
-        for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
+        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission']):
             
             inventories = user.getInventoryThings({'id': inv['id']})
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}")
@@ -1788,7 +1789,7 @@ def select_exchange(call):
                     ]
                     
         inventors = []
-        for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
+        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission']):
             inventories = user.getInventoryThings({'id': inv['id']})
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}")
             if len(inventories) > 1:
@@ -1820,7 +1821,7 @@ def select_exchange(call):
         inventory = user.getInventoryThing({'id': inv_id})
         
         inventories_arr = []
-        for inv in user.getInventoryType({'type':'things'}) + user.getInventoryType({'type':'clothes'}):
+        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission']):
             inventories = user.getInventoryThings({'id': inv['id']})
 
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}")
@@ -2252,7 +2253,7 @@ def main_message(message):
         # Вычисление коэффициента времени фарма
         farm_k = 0
         if userIAm:
-            for thing in userIAm.getInventoryType({'type':'things'}):
+            for thing in userIAm.getInventoryType(['things']):
                 try:
                     if 'skill' in thing and 'storage' in thing['skill'] and thing['skill']['storage']['id'] == 'watchmaker':
                         skill = userIAm.getInventoryThing({'id':'watchmaker','type':'skill'})
@@ -4040,7 +4041,7 @@ def main_message(message):
                             i = 1
                             listInv = list(GLOBAL_VARS['inventory'])
                             if not isAdmin(message.from_user.username):
-                                listInv = userIAm.getInventoryType({'type': 'decoration'})
+                                listInv = userIAm.getInventoryType(GLOBAL_VARS['typeforexcenge'])
 
                             for elem in listInv:
                                 if user and user.isMaxInventoryThing(elem, USERS_ARR):
@@ -5157,7 +5158,7 @@ def callback_query(call):
 
         listInv = list(GLOBAL_VARS['inventory'])
         if not isAdmin(call.from_user.username):
-            listInv = userIAm.getInventoryType({'type': 'decoration'})
+            listInv = userIAm.getInventoryType(GLOBAL_VARS['typeforexcenge'])
 
         for elem in listInv:
             if user and user.isMaxInventoryThing(elem, USERS_ARR):
@@ -5201,7 +5202,7 @@ def callback_query(call):
 
         listInv = list(GLOBAL_VARS['inventory'])
         if not isAdmin(call.from_user.username):
-            listInv = userIAm.getInventoryType({'type': 'decoration'})
+            listInv = userIAm.getInventoryType(GLOBAL_VARS['typeforexcenge'])
 
         addExit = False
         for elem in listInv:
@@ -5243,7 +5244,7 @@ def callback_query(call):
 
     listInv = list(GLOBAL_VARS['inventory'])
     if not isAdmin(call.from_user.username):
-        listInv = userIAm.getInventoryType({'type': 'decoration'})
+        listInv = userIAm.getInventoryType(GLOBAL_VARS['typeforexcenge'])
 
     for elem in listInv:
         
@@ -5272,7 +5273,7 @@ def callback_query(call):
 
     listInv = list(GLOBAL_VARS['inventory'])
     if not isAdmin(call.from_user.username):
-        listInv = userIAm.getInventoryType({'type': 'decoration'})
+        listInv = userIAm.getInventoryType(GLOBAL_VARS['typeforexcenge'])
 
     markupinline = InlineKeyboardMarkup()
     counter = 10
