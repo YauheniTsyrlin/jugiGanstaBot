@@ -4043,7 +4043,11 @@ def main_message(message):
                             if not isAdmin(message.from_user.username):
                                 listInv = userIAm.getInventoryType(GLOBAL_VARS['typeforexcenge'])
 
+                            checker = []
                             for elem in listInv:
+                                if elem['id'] in checker:
+                                    continue
+                                checker.append(elem['id'])
                                 if user and user.isMaxInventoryThing(elem, USERS_ARR):
                                     continue
                                 # if user and user.isInventoryThing(elem):
@@ -5160,7 +5164,11 @@ def callback_query(call):
         if not isAdmin(call.from_user.username):
             listInv = userIAm.getInventoryType(GLOBAL_VARS['typeforexcenge'])
 
+        checker = []
         for elem in listInv:
+            if elem['id'] in checker:
+                continue
+            checker.append(elem['id'])
             if user and user.isMaxInventoryThing(elem, USERS_ARR):
                 continue
             # if user and user.isInventoryThing(elem):
@@ -5205,7 +5213,11 @@ def callback_query(call):
             listInv = userIAm.getInventoryType(GLOBAL_VARS['typeforexcenge'])
 
         addExit = False
+        checker = []
         for elem in listInv:
+            if elem['id'] in checker:
+                continue
+            checker.append(elem['id'])
             if user and user.isMaxInventoryThing(elem, USERS_ARR):
                 continue
             # if user and user.isInventoryThing(elem):
@@ -5278,7 +5290,11 @@ def callback_query(call):
     markupinline = InlineKeyboardMarkup()
     counter = 10
     i = 1
+    checker = []
     for elem in listInv:
+        if elem['id'] in checker:
+            continue
+        checker.append(elem['id'])
         if user and user.isMaxInventoryThing(elem, USERS_ARR):
             continue
         # if user and user.isInventoryThing(elem):
