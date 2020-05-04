@@ -8,6 +8,34 @@ from operator import itemgetter
 import itertools
 import uuid
 
+def getThingInfo(inv):
+
+    info = f'┌{inv["name"]}\n'
+    # info = info + f'├🏷️ {inv["uid"]}\n'
+    # info = info + f'├🧮 {inv["uid"]}\n'
+    #  
+    wear = 1
+    if 'wear' in inv:
+        wear = inv['wear']['value']
+    info = info + f'├⏳ Состояние: {int(wear*100)}%\n'
+
+    info = info + f'└🔘 {inv["cost"]}\n'
+    if 'composition' in inv:
+        ps = '└'
+        len_ps = len(inv['composition'])
+        counter = 0
+        for composit in inv['composition']:
+            counter = counter + 1
+            if len_ps == 1:
+                ps = '└'
+            else:
+                if counter == 1:
+                    ps = '├'
+                if counter == len_ps:
+                    ps = '└'
+            info = info + f'   {ps}▫️{composit["id"]}\n'
+    return info
+    
 def normalize(string):
     if not string:
         return int(0)
@@ -667,31 +695,7 @@ class User(object):
         info = ''
         for inv in self.getInventory():
             if ('uid' in thing and thing['uid'] == inv['uid']) or ('uid' not in thing and 'id' in thing and inv['id'] == thing['id'] and ('type' not in thing or inv['type'] == thing['type'])):
-                info = info + f'┌{inv["name"]}\n'
-                # info = info + f'├🏷️ {inv["uid"]}\n'
-                # info = info + f'├🧮 {inv["uid"]}\n'
-                #  
-                wear = 1
-                if 'wear' in inv:
-                    wear = inv['wear']['value']
-                info = info + f'├⏳ Состояние: {int(wear*100)}%\n'
-                
-                info = info + f'└🔘 {inv["cost"]}\n'
-                if 'composition' in inv:
-                    ps = '└'
-                    len_ps = len(inv['composition'])
-                    counter = 0
-                    for composit in inv['composition']:
-                        counter = counter + 1
-                        if len_ps == 1:
-                            ps = '└'
-                        else:
-                            if counter == 1:
-                                ps = '├'
-                            if counter == len_ps:
-                                ps = '└'
-                        info = info + f'   {ps}▫️{composit["id"]}\n'
-
+                info = getThingInfo(inv)
                 break
         return info
 # =================== Inventory ========================== #
