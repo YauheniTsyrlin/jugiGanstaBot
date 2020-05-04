@@ -4048,15 +4048,15 @@ def main_message(message):
                                 # if user and user.isInventoryThing(elem):
                                 #     continue    
 
-                                markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}"))
+                                markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}|{userIAm.getLogin()}"))
                                 if i == counter :
-                                    markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter}"))
-                                    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+                                    markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter}|{userIAm.getLogin()}"))
+                                    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit|||{userIAm.getLogin()}"))
                                     break
                                 i = i + 1
                             
                             if len(listInv)<10:
-                                markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+                                markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit|||{userIAm.getLogin()}"))
 
                             if user:
                                 inventory_category = [{'id':'food', 'name':'🍗 Еда'},
@@ -5128,6 +5128,11 @@ def callback_query(call):
         bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
         return
 
+    if not call.from_user.username == call.data.split('|')[3]:
+        bot.answer_callback_query(call.id, f"Это может сделать только {call.data.split('|')[3]}!")
+        return
+
+
     # if not isGoatBoss(call.from_user.username):
     #     if not isAdmin(call.from_user.username):
     #         bot.answer_callback_query(call.id, "Тебе не положено!")
@@ -5163,16 +5168,16 @@ def callback_query(call):
             if i <= counter:
                 pass
             else:
-                markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}"))
+                markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}|{userIAm.getLogin()}"))
                 if i == counter + 10:
-                    markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back|{login}|{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter + 10}"))
-                    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+                    markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back|{login}|{counter - 10}|{userIAm.getLogin()}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter + 10}|{userIAm.getLogin()}"))
+                    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit|||{userIAm.getLogin()}"))
                     addExit = True
                     break
             i = i + 1
         if not addExit:
-            markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back|{login}|{counter - 10}"))
-            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+            markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back|{login}|{counter - 10}|{userIAm.getLogin()}"))
+            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit|||{userIAm.getLogin()}"))
         
         text=f'Всем бандитам будет что-то выдано! Просмотрено {counter} аксессуаров'
         if user:
@@ -5208,20 +5213,20 @@ def callback_query(call):
             if i <= counter:
                 pass
             else:
-                markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}"))
+                markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}|{userIAm.getLogin()}"))
                 if i == counter + 10:
                     if counter == 0:
-                        markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter + 10}"))
+                        markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter + 10}|{userIAm.getLogin()}"))
                     else:
-                        markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back|{login}|{counter - 10}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter + 10}"))
+                        markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back|{login}|{counter - 10}|{userIAm.getLogin()}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter + 10}|{userIAm.getLogin()}"))
                     
-                    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+                    markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit|||{userIAm.getLogin()}"))
                     addExit = True
                     break
             i = i + 1
         if not addExit:
-            markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_next|{login}|{i+10}"))
-            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+            markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_next|{login}|{i+10}|{userIAm.getLogin()}"))
+            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit|||{userIAm.getLogin()}"))
 
         inventory_category = [{'id':'food', 'name':'🍗 Еда'},
                                 {'id':'decoration', 'name':'🎁 Подарки'},
@@ -5268,7 +5273,7 @@ def callback_query(call):
     listInv = list(GLOBAL_VARS['inventory'])
     if not isAdmin(call.from_user.username):
         listInv = userIAm.getInventoryType({'type': 'decoration'})
-        
+
     markupinline = InlineKeyboardMarkup()
     counter = 10
     i = 1
