@@ -3490,11 +3490,11 @@ myquery = { "code": 'ADMINISTRATOR' }
 newvalues = { "$set": { "value": 
                     [
                         {
-                            'login': 'GonzikBenzyavsky',
+                            'login': '1GonzikBenzyavsky',
                             'chat' : 497065022
                         },
                         {
-                            'login': 'WestMoscow',
+                            'login': '1WestMoscow',
                             'chat' : 0 #214221494
                         }
                     ]
@@ -3528,8 +3528,8 @@ newvalues = { "$set":
                             'name': 'FǁȺǁggǁØǁAT',
                             'liga': 'Детская лига',
                             'boss': [
-                                        '1WestMoscow',
-                                        '1GonzikBenzyavsky'
+                                        'WestMoscow',
+                                        'GonzikBenzyavsky'
                                     ],
                             'poweruser': 
                                     [

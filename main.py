@@ -4039,7 +4039,7 @@ def main_message(message):
                             counter = 10
                             i = 1
                             listInv = list(GLOBAL_VARS['inventory'])
-                            if isAdmin(message.from_user.username):
+                            if not isAdmin(message.from_user.username):
                                 listInv = userIAm.getInventoryType({'type': 'decoration'})
 
                             for elem in listInv:
@@ -5151,7 +5151,7 @@ def callback_query(call):
         addExit = False
 
         listInv = list(GLOBAL_VARS['inventory'])
-        if isAdmin(call.from_user.username):
+        if not isAdmin(call.from_user.username):
             listInv = userIAm.getInventoryType({'type': 'decoration'})
 
         for elem in listInv:
@@ -5195,7 +5195,7 @@ def callback_query(call):
         i = 1
 
         listInv = list(GLOBAL_VARS['inventory'])
-        if isAdmin(call.from_user.username):
+        if not isAdmin(call.from_user.username):
             listInv = userIAm.getInventoryType({'type': 'decoration'})
 
         addExit = False
@@ -5237,10 +5237,11 @@ def callback_query(call):
     userIAm = getUserByLogin(call.from_user.username)
 
     listInv = list(GLOBAL_VARS['inventory'])
-    if isAdmin(call.from_user.username):
+    if not isAdmin(call.from_user.username):
         listInv = userIAm.getInventoryType({'type': 'decoration'})
 
     for elem in listInv:
+        
         if elem['id'] == call.data.split('|')[2]:
             bot.answer_callback_query(call.id, "Ты сделал свой выбор")
             if login.lower() == 'всем':
@@ -5258,12 +5259,16 @@ def callback_query(call):
                     userIAm.removeInventoryThing(elem)
                     addInventory(user, elem)
                     updateUser(userIAm)
-                    
+
                 updateUser(user)
                 send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
 
             break
 
+    listInv = list(GLOBAL_VARS['inventory'])
+    if not isAdmin(call.from_user.username):
+        listInv = userIAm.getInventoryType({'type': 'decoration'})
+        
     markupinline = InlineKeyboardMarkup()
     counter = 10
     i = 1
