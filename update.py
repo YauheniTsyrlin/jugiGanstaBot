@@ -3528,7 +3528,7 @@ newvalues = { "$set":
                             'name': 'FǁȺǁggǁØǁAT',
                             'liga': 'Детская лига',
                             'boss': [
-                                        'WestMoscow',
+                                        '1WestMoscow',
                                         '1GonzikBenzyavsky'
                                     ],
                             'poweruser': 
