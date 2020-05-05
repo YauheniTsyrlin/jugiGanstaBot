@@ -1545,7 +1545,6 @@ def select_exchange(call):
     buttons = []
 
     if button_id == 'exit':
-        print(call.data)
         button = GLOBAL_VARS['commission']
         for d in button['buttons']:
             buttons.append(InlineKeyboardButton(f"{d['name']}", callback_data=f"{button['id']}|{d['id']}"))
@@ -1558,7 +1557,6 @@ def select_exchange(call):
         return
 
     if button_id in ('forward', 'back'):
-        print(call.data)
         step = int(call.data.split('|')[2])
         user = getUserByLogin(call.from_user.username)
         inventory_category = [
@@ -1811,7 +1809,6 @@ def select_exchange(call):
         return
 
     if button_id in ('select',''):
-        print(call.data)
         bot.answer_callback_query(call.id, call.data)
         step = int(call.data.split('|')[2])
         stepinventory = 0
@@ -2367,6 +2364,7 @@ def main_message(message):
                 ww = wariors.fromFightToWarioirs(message.forward_date, message, USERS_ARR, battle)
                 # Переделать так, чтобы учитывало, что может быть два бойца из нашего козла.
                 # Выдавать только за свои бои.
+
                 ourBandUser = None
                 for warior in ww:
                     if ourBandUser == None:

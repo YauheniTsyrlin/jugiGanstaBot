@@ -221,7 +221,6 @@ def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
     loserName = ''
     for s in strings:
         if (strings[i].startswith('VS.')):
-            print(strings[i])
             name1 = strings[i-1]
             name2 = strings[i+1]
             for fstr in fractions:
@@ -230,7 +229,7 @@ def fromFightToWarioirs(forward_date, message, USERS_ARR: list, battle):
 
             w1 = Warior(name1, forward_date, message.text, None)
             w2 = Warior(name2, forward_date, message.text, None)
-            
+
             result.append(w1)
             result.append(w2)
             fillResult = True
@@ -314,11 +313,11 @@ class Warior(object):
             self.missed = 0
             self.kills = 0
             for s in strings:
-                if (strings[i].startswith('VS.')):
-                    if (strings[i-1].startswith(name)):
-                        self.setFraction(strings[i-1].split('из')[1].strip())
-                    elif (strings[i+1].startswith(name)):
-                        self.setFraction(strings[i+1].split('из')[1].strip())
+                if (strings[i].strip().startswith('VS.')):
+                    if (strings[i-1].strip().startswith(name)):
+                        self.setFraction(strings[i-1].strip().split('из')[1].strip())
+                    elif (strings[i+1].strip().startswith(name)):
+                        self.setFraction(strings[i+1].strip().split('из')[1].strip())
                 if (strings[i].startswith('❤️') and name in strings[i]):
                     # '❤️1130 BACDAFUCUP ŇṼ наступил на мизинец (💥529)'
                     health_tmp = int(strings[i].split(name)[0].split('❤️')[1].strip())
