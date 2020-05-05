@@ -5471,6 +5471,59 @@ def callback_query(call):
         buttons.append(all_banditos)
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}")
 
+    if call.data.startswith('pinraid_repeat'):
+        tz = config.SERVER_MSK_DIFF
+        raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
+        bands = getGoatBands(call.data.split('_')[3])
+        goat = call.data.split('_')[3]
+        counter = 0
+        for user in list(filter(lambda x : x.getBand() in bands, USERS_ARR)):        
+            counter_r = report_raids.find({'login': user.getLogin()}).count()
+            cursor = report_raids.find({'login': user.getLogin()}).skip(counter_r - 1)
+            
+            for rep in cursor:
+                row = {}
+                row.update({'planed_location': rep['planed_location']})
+                row.update({'notified': False})
+                newvalues = { "$set": row }
+                result = report_raids.update_one({"login": f"{user.getLogin()}", 'date': raid_date.timestamp()}, newvalues)
+                if result.matched_count < 1:
+                    row.update({'date': raid_date.timestamp() })
+                    row.update({'login': user.getLogin()})
+                    row.update({'band': user.getBand()})
+                    row.update({'goat': getMyGoatName(user.getLogin())})
+                    row.update({'user_location': 0})
+                    row.update({'on_raid': False})
+                    row.update({'planed_location': rep['planed_location']})
+                    row.update({'notified': False})
+                    report_raids.insert_one(row)
+        
+        buttons = []
+        for band in getGoatBands(goat):
+            counter_100 = registered_users.find({'band': band}).count()
+            counter_now = report_raids.find({'band': band, 'date': raid_date.timestamp(), 'planed_location': {'$ne': None} }).count()
+            percent = 0
+            if counter_100 > 0:
+                percent = counter_now/counter_100*100
+            buttons.append(InlineKeyboardButton(f"🤘{band} {int(percent)}%", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}"))                        
+        
+        counter_not_notified = report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'notified': False, 'planed_location': {'$gt': 0} }).count()
+
+        if counter_not_notified > 0:
+            buttons.append(InlineKeyboardButton(f"Отправить 📩", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
+        
+        if report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp()}).count() == 0:
+            buttons.append(InlineKeyboardButton(f"Повторить 🔄", callback_data=f"pinraid_repeat_{raid_date.timestamp()}_{goat}"))
+    
+        exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
+        
+        for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
+            markupinline.row(*row)  
+            
+        text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username if privateChat else None)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘Выбери банду\n{text}', parse_mode='HTML', reply_markup=markupinline)
+        return
+
     if call.data.startswith('pinraid_pin'):
         #    0     1          2                  3
         # pinraid_pin_{raid_date.timestamp()}_{goat}
@@ -5516,6 +5569,10 @@ def callback_query(call):
 
             if counter_not_notified > 0:
                 buttons.append(InlineKeyboardButton(f"Отправить 📩", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
+            
+            if report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp()}).count() == 0:
+                buttons.append(InlineKeyboardButton(f"Повторить 🔄", callback_data=f"pinraid_repeat_{raid_date.timestamp()}_{goat}"))
+        
             exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
             
             for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
@@ -5574,6 +5631,10 @@ def callback_query(call):
 
         if counter_not_notified > 0:
             buttons.append(InlineKeyboardButton(f"Отправить 📩", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
+
+        if report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp()}).count() == 0:
+            buttons.append(InlineKeyboardButton(f"Повторить 🔄", callback_data=f"pinraid_repeat_{raid_date.timestamp()}_{goat}"))
+        
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
         
         for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):

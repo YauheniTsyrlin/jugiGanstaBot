@@ -782,8 +782,9 @@ print(report_man_of_day('GonzikBenzyavsky'))
 #     print(user.getLogin() + "|"+ str(user.getInventoryThing(medic)['storage']))
 
 
-
+# report_raids.delete_many({'date': 1588716000})
 # counter = report_raids.find({'login': user.getLogin()}).count()
+
 # cursor = report_raids.find({'login': user.getLogin()}).skip(counter - 2)
 # alltrue = True
 # for x in cursor:
