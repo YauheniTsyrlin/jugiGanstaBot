@@ -35,6 +35,7 @@ plan_raids      = mydb["rades"]
 dungeons        = mydb["dungeons"]
 mob             = mydb["mob"]
 pip_history     = mydb["pip_history"]
+man_of_day      = mydb["man_of_day"]
 
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
@@ -626,6 +627,106 @@ def getRaidTimeText(text, date):
     result = result.replace(hour=hour, minute=0, second=0, microsecond=0)
     return result.timestamp()
 
+def getMyGoatName(login: str):
+    user = getUserByLogin(login)
+    if not user:
+        return None
+
+    for goat in getSetting(code='GOATS_BANDS'):
+        for band in goat['bands']:
+            if user.getBand() and user.getBand().lower() == band.get('name').lower():
+                return goat['name']
+
+    return None 
+
+def report_man_of_day(message_user_name: str):
+    setting = getSetting(code='REPORTS',name='KILLERS')
+    from_date = setting.get('from_date')
+    to_date = setting.get('to_date')
+
+    goatName = getMyGoatName(message_user_name)
+
+    if (not from_date):
+        from_date = (datetime(2019, 1, 1)).timestamp() 
+
+    if (not to_date):
+        to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
+
+    report = f'👨‍❤️‍👨ТОП 5 "Пидор дня"\n' 
+    report = report + '\n'
+    dresult = man_of_day.aggregate([
+        {   "$match": {
+                "$and" : [
+                    { 
+                        "date": {
+                            '$gte': from_date,
+                            '$lt': to_date
+                                }      
+                    }
+                    ]
+            } 
+        }, 
+        {   "$group": {
+            "_id": "$login", 
+            "count": {
+                "$sum": 1}}},
+            
+        {   "$sort" : { "count" : -1 } }
+        ])
+    
+    goat_users = []
+    for d in dresult:
+        
+        user = getUserByLogin(d.get("_id"))
+        if user:
+            print(f'{user.getLogin()} {goatName} {getMyGoatName(user.getLogin())}')
+            if goatName == getMyGoatName(user.getLogin()):
+                goat_users.append({'user': user, 'count': d.get("count")})
+
+
+    # acc = '👑 "Пидор дня"'
+    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
+
+    findInLoser = 0
+    i = 0
+    pidor_counter = 0
+    pidor_user_now = None
+
+    for user_dict in goat_users:
+        i = i + 1
+        if i == 1:
+            emoji = '💝 - '
+        elif i == 2:
+            emoji = '💖 - '    
+        elif i == 3:
+            emoji = '❤️ - '
+        else:
+            emoji = ''
+        user = user_dict['user']
+
+        user_name = f'{user.getNameAndGerb()}'
+        if user.isInventoryThing(elem):
+            pidor_counter = i
+            pidor_user_now = user
+
+
+        if message_user_name  == user.getLogin():
+            user_name = f'<b>{user_name}</b>'
+            findInLoser = i
+
+        if i <= 5: report = report + f'{i}. {emoji}{user_name}: <b>{user_dict["count"]}</b>\n' 
+
+    if (i == 0): 
+        report = report + f'В нашем козле нет пидоров!\n'
+    else:
+        if (findInLoser > 5): report = report + f'\n💔 Твое пидорье место: <b>{findInLoser}</b>!\n'
+    
+    if pidor_user_now:
+        report = report + f'\nПидор дня <b>{pidor_user_now.getNameAndGerb()}</b> на {pidor_counter} месте\n'
+    
+    return report
+
+print(report_man_of_day('GonzikBenzyavsky'))
 # tt = ['7ч. 27мин.', '3ч. 0мин.', '1 мин.', '10 сек.', '1ч. 15мин.']
 # ttt = [ '1ч. 15мин.']
 # for t in ttt:

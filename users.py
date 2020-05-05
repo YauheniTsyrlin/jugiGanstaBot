@@ -668,7 +668,6 @@ class User(object):
     def removeInventoryThing(self, thing, count=1):
         counter = 0
         for inv in self.getInventory():
-            print(inv)
             if ('uid' in thing and thing['uid'] == inv['uid']) or ('uid' not in thing and 'id' in thing and inv['id'] == thing['id'] and ('type' not in thing or inv['type'] == thing['type'])):
                 self.getInventory().remove(inv)
                 counter = counter + 1
