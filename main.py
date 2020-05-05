@@ -6001,7 +6001,7 @@ def rade():
 
     # Проверка на дубликаты бандитов
     # Неправильно работает - не проверяет дубли по Фракции
-    if now_date.hour in (9,10,11,12,13,14,15,16,17,18,19,20,21,22) and now_date.minute in (0, 3, 10,20,30,40,50) and now_date.second < 15:
+    if False and now_date.hour in (9,10,11,12,13,14,15,16,17,18,19,20,21,22) and now_date.minute in (0, 3, 10,20,30,40,50) and now_date.second < 15:
         dresult = registered_wariors.aggregate([ 
                                                 {   "$group": {
                                                     "_id": "$name", 
