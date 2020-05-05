@@ -1042,13 +1042,13 @@ def getBossReport(boss_name: str):
         report = report + f'💀 Убил: <b>{len(bo["killed"])}</b>\n'
         if len(bo["beaten"]) > 0:
             report = report + f'💔 <b>Урон бандитам</b>:\n'
-            report = report + f'      Min <b>{min(bo["beaten"])}</b>\n'
-            report = report + f'      В среднем <b>{int(sum(bo["beaten"]) / len(bo["beaten"]))}</b>\n'
+            report = report + f'      Min <b>{min(bo["beaten"])}</b> '
+            report = report + f'      Avr <b>{int(sum(bo["beaten"]) / len(bo["beaten"]))}</b> '
             report = report + f'      Max <b>{max(bo["beaten"])}</b>\n'
         if len(bo["damage"]) > 0:
             report = report + f'💥 <b>Получил от бандитов</b>:\n'
-            report = report + f'      Min <b>{min(bo["damage"])}</b>\n'
-            report = report + f'      В среднем <b>{int(sum(bo["damage"]) / len(bo["damage"]))}</b>\n'
+            report = report + f'      Min <b>{min(bo["damage"])}</b> '
+            report = report + f'      Avr <b>{int(sum(bo["damage"]) / len(bo["damage"]))}</b> '
             report = report + f'      Max <b>{max(bo["damage"])}</b>\n'
         if len(bo["kr"]) > 0:
             report = report + f'💰 <b>В среднем добыто</b>:\n'
