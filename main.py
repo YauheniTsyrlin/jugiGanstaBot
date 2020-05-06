@@ -2240,10 +2240,6 @@ def main_message(message):
             dzen_rewards(user, num_dzen, message)
             return
 
-        # filter = {  "forward_from_username": message.from_user.username, 
-        #             "forward_date": message.forward_date}    
-        # newMess = messager.new_message(message, filter)
-
     # Форварды от WastelandWarsBot
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
         time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
@@ -3610,25 +3606,25 @@ def main_message(message):
             else:                 
                 send_messages_big(message.chat.id, text=f'{login} уволен нафиг!')
         # elif (callJugi and 'профиль' in message.text.lower() ):
-        #     if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
-        #         pass
-        #     else:
-        #         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_censorship').fulfillment_text)
-        #         return
+            # if (privateChat or isGoatSecretChat(message.from_user.username, message.chat.id)):
+            #     pass
+            # else:
+            #     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_censorship').fulfillment_text)
+            #     return
 
-        #     updateUser(None)
-        #     user = users.getUser(message.from_user.username, registered_users)
-        #     if user:
-        #         warior = getWariorByName(user.getName(), user.getFraction())
-        #         if (warior and warior.photo):
-        #             try:
-        #                 bot.send_photo(message.chat.id, warior.photo, user.getProfile(), parse_mode='HTML')
-        #             except:
-        #                 send_messages_big(message.chat.id, text=user.getProfile())
-        #         else:
-        #             send_messages_big(message.chat.id, text=user.getProfile())
-        #     else:
-        #         send_messages_big(message.chat.id, text='С твоим профилем какая-то беда... Звони в поддержку пип-боев!')
+            # updateUser(None)
+            # user = users.getUser(message.from_user.username, registered_users)
+            # if user:
+            #     warior = getWariorByName(user.getName(), user.getFraction())
+            #     if (warior and warior.photo):
+            #         try:
+            #             bot.send_photo(message.chat.id, warior.photo, user.getProfile(), parse_mode='HTML')
+            #         except:
+            #             send_messages_big(message.chat.id, text=user.getProfile())
+            #     else:
+            #         send_messages_big(message.chat.id, text=user.getProfile())
+            # else:
+            #     send_messages_big(message.chat.id, text='С твоим профилем какая-то беда... Звони в поддержку пип-боев!')
         elif callJugi:
 
             text = message.text 
@@ -6148,14 +6144,14 @@ def getPidorOfTheDay(goat, now_date):
 
         pidor1 = None
         pidor2 = None
+
+        twoPidors = '🤖 Джу и его подруга 👾 Бозя'
         if len(old_pidors)>1:
             pu = random.sample(old_pidors, 1)[0]
             pidor1 = pu.getNameAndGerb()
             old_pidors.remove(pu)
             pidor2 = random.sample(old_pidors, 1)[0].getNameAndGerb()
-        else:
-            pidor1 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
-            pidor2 = random.sample(list(USERS_ARR), 1)[0].getNameAndGerb()
+            twoPidors = f'👬 Два бывалых пидора, {pidor1} и {pidor2},'
 
         elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
         # acc = '👑 "Пидор дня"'
@@ -6169,11 +6165,11 @@ def getPidorOfTheDay(goat, now_date):
                 break
         
         if lastWinner:
-            text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, вырвали из рук {lastWinner.getNameAndGerb()} 👑 золотую корону с гравировкой "Pidor of the day" и передали её главе козла!\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
+            text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n {userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n {twoPidors} вырвали из рук {lastWinner.getNameAndGerb()} 👑 золотую корону с гравировкой "Pidor of the day" и передали её главе козла!\n 🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
             if lastWinner.getLogin() == userWin.getLogin():
-                text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, в шоке! Кому ты отдался, чтобы выигрывать так часто?!! 👑 золотая корона с гравировкой "Pidor of the day" остаётся у тебя !\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
+                text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n {userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n {twoPidors} в шоке! Кому ты отдался, чтобы выигрывать так часто?!! 👑 золотая корона с гравировкой "Pidor of the day" остаётся у тебя !\n 🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
         else:
-            text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n👬 Два бывалых пидора, {pidor1} и {pidor2}, получили от 🤖 Джу 👑 золотую корону с гравировкой "Pidor of the day" и передали её главе козла!\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
+            text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n {userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n {twoPidors} взяли со склада 👑 золотую корону с гравировкой "Pidor of the day" и передали её главе козла!\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
 
         addInventory(userWin, elem)
         updateUser(userWin)

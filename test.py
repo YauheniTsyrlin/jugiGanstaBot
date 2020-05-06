@@ -639,6 +639,13 @@ def getMyGoatName(login: str):
 
     return None 
 
+def getUserSetting(login: str, name: str):
+    user = getUserByLogin(login)
+    for sett in user.getSettings():
+        if sett["name"] == name:
+            return sett
+    return None
+
 def report_man_of_day(message_user_name: str):
     setting = getSetting(code='REPORTS',name='KILLERS')
     from_date = setting.get('from_date')
@@ -726,7 +733,111 @@ def report_man_of_day(message_user_name: str):
     
     return report
 
-print(report_man_of_day('GonzikBenzyavsky'))
+def getPidorOfTheDay(goat, now_date):
+    user_in_game = []
+    goat_bands = getGoatBands(goat)
+
+    print(goat_bands)
+
+    for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
+        usersettings = getUserSetting(user.getLogin(), '👨‍❤️‍👨Участник "Пидор дня"')
+        if usersettings:
+            user_in_game.append(user)
+
+    # chat = goat['chats']['info']
+    winners = random.sample(user_in_game, 1)
+    if len(winners)>0:
+        userWin = winners[0]
+        
+        setting = getSetting(code='REPORTS',name='KILLERS')
+        from_date = setting.get('from_date')
+        to_date = setting.get('to_date')
+
+        if (not from_date):
+            from_date = (datetime(2019, 1, 1)).timestamp() 
+
+        if (not to_date):
+            to_date = (datetime.now() + timedelta(minutes=180)).timestamp()
+            
+        dresult = man_of_day.aggregate([
+        {   "$match": {
+                "$and" : [
+                    { 
+                        "date": {
+                            '$gte': from_date,
+                            '$lt': to_date
+                                }       
+                    }
+                    ]
+            } 
+        }, 
+        {   "$group": {
+            "_id": "$login", 
+            "count": {
+                "$sum": 1}}},
+            
+        {   "$sort" : { "count" : -1 } }
+        ])
+
+        print(goat_bands)
+        old_pidors = []
+        for d in dresult:
+            user_login = d.get("_id")
+            print(f'{user_login}' )
+            if user_login == userWin.getLogin(): 
+                print(f'!!!! pass' )
+                continue
+            user = getUserByLogin(user_login)
+            if user:
+                
+                if user.getBand() and user.getBand() in goat_bands:
+                    print(f'FIND! {user.getLogin()}')
+                    old_pidors.append(user)
+        print(len(old_pidors))
+        pidor1 = None
+        pidor2 = None
+        twoPidors = '🤖 Джу и его подруга 👾 Бозя'
+        if len(old_pidors)>1:
+            pu = random.sample(old_pidors, 1)[0]
+            pidor1 = pu.getNameAndGerb()
+            old_pidors.remove(pu)
+            pidor2 = random.sample(old_pidors, 1)[0].getNameAndGerb()
+            twoPidors = f'👬 Два бывалых пидора, {pidor1} и {pidor2},'
+
+        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
+        # acc = '👑 "Пидор дня"'
+
+        lastWinner = None
+        for user in list(filter(lambda x : x.getBand() and x.getBand() in goat_bands, USERS_ARR)):
+            if user.isInventoryThing(elem):
+                user.removeInventoryThing(elem)
+                updateUser(user)
+                lastWinner = user
+                break
+        
+        if lastWinner:
+            text = f'Поздравляю!\nВ конкурсе "Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n{twoPidors} вырвали из рук {lastWinner.getNameAndGerb()} золотую корону с гравировкой "Pidor of the day" и передали её главе козла!\n Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
+            if lastWinner.getLogin() == userWin.getLogin():
+                text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n {twoPidors} в шоке! Кому ты отдался, чтобы выигрывать так часто?!! 👑 золотая корона с гравировкой "Pidor of the day" остаётся у тебя !\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
+        else:
+            text = f'🎊🎉🍾 Поздравляю!\nВ конкурсе "👨‍❤️‍💋‍👨 Пидор дня" сегодня побеждает...\n{userWin.getNameAndGerb()} (@{userWin.getLogin()})!\n\n{twoPidors} достали со склада 👑 золотую корону с гравировкой "Pidor of the day" и передали её главе козла!\n🎁 Самое время поздравить сегодняшнего победителя!\n\n▫️ {elem["name"]}'
+
+        # addInventory(userWin, elem)
+        # updateUser(userWin)
+        row = {}
+        row.update({'date':now_date.timestamp()})
+        row.update({'login':userWin.getLogin()})
+        row.update({'description':elem['name']})
+        man_of_day.insert_one(row)
+
+        return f'⚠️🤬 Pidor of the day!\n\n {text}'
+
+
+# print(report_man_of_day('GonzikBenzyavsky'))
+tz = config.SERVER_MSK_DIFF
+now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+print(getPidorOfTheDay('New Vegas', now_date))
+
 # tt = ['7ч. 27мин.', '3ч. 0мин.', '1 мин.', '10 сек.', '1ч. 15мин.']
 # ttt = [ '1ч. 15мин.']
 # for t in ttt:
