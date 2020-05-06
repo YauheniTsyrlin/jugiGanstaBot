@@ -5561,12 +5561,12 @@ def callback_query(call):
                     percent = counter_now/counter_100*100
                 buttons.append(InlineKeyboardButton(f"🤘{band} {int(percent)}%", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}"))                        
             
-            counter_not_notified = report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'notified': False, 'planed_location': {'$gt': 0} }).count()
+            counter_not_notified = report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'notified': False, 'planed_location': {'$gt': 0} }).count() 
 
             if counter_not_notified > 0:
                 buttons.append(InlineKeyboardButton(f"Отправить 📩", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
             
-        if report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'planed_location': {'&gt': 0} }).count
+            if report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'planed_location': {'&gt': 0} }).count()  == 0:
                 buttons.append(InlineKeyboardButton(f"Повторить 🔄", callback_data=f"pinraid_repeat_{raid_date.timestamp()}_{goat}"))
         
             exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
