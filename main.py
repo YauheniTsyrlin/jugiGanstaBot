@@ -6016,7 +6016,7 @@ def rade():
                 send_message_to_admin(f'⚠️🤬 Сломалась Раздача рейдовых болтов по {goat["name"]}')
     
     # Забывание навыков
-    if now_date.hour in (14, 1) and now_date.minute in (28 , 5) and now_date.second < 15:
+    if now_date.hour in (14, 99) and now_date.minute in (28 , 99) and now_date.second < 15:
         logger.info('skill forgetting!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):

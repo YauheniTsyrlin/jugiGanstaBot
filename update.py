@@ -3651,7 +3651,7 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-if 1==1: # Обновляем атрибуты навыков
+if 1==2: # Обновляем атрибуты навыков
     updateUser(None)
     
     for user in list(filter(lambda x : len(x.getInventoryType(['skill'])) > 0, USERS_ARR)):
