@@ -3643,16 +3643,17 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-# for user in USERS_ARR:
-#     for inv in user.getInventory():
-#         if 'uid' in inv:
-#             pass
-#             print(f'get uid: {inv["uid"]}')
-#         else:
-#             inv.update({'uid': f'{uuid.uuid4()}'})
-#             print(f'generate uid: {inv["uid"]}')
-#     updateUser(user)
+mob.delete_many({'kr': 0, 'mat': 0})
 
+for m in mob.find({ 'win': True }):
+    health = sum(m['damage'])
+    
+    mob.update_one(
+        { '_id': m['_id']},
+        { '$set': 
+            { 'health': health } 
+        }
+    )
 
 if 1==2:
     # Запускать один раз! Иначе затрет
@@ -3731,7 +3732,7 @@ if 1==2:
 
 # , 'metal_detector','playstation5'
 thing_names = ['key_to_halo']
-if 1==1:
+if 1==2:
     updateUser(None)
     for thing_name in thing_names:
         # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 

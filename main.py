@@ -925,13 +925,13 @@ def getMobReport(mob_name: str, mob_class: str, dark_zone=False):
     average_kr = 0
     counter_mat = 0
     average_mat = 0
-    health = 0
+    health = None
 
     habitat = {}
     for one_mob in mob.find({'mob_name':mob_name, 'mob_class': mob_class, 'dark_zone':dark_zone}):
         #send_messages_big(497065022, text=f'{one_mob}')
         try:
-            if one_mob['health'] and one_mob['health'] > health:
+            if one_mob['health'] and (health == None or one_mob['health'] < health):
                 health = one_mob['health']
         except: pass
 
@@ -3212,6 +3212,9 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
                     return
                 if 'Сражение с' in message.text:
+                    if message.text.startswith('📯'):
+                        return # Пропускаем мобов из данжей
+
                     if userIAm == None:
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'no_user').fulfillment_text) 
                         return
@@ -3273,7 +3276,7 @@ def main_message(message):
                         row.update({'damage': damage})
                         row.update({'beaten': beaten})
                         row.update({'win': you_win})
-                        row.update({'health': None})
+                        row.update({'health': sum(damage) if you_win else None})
                         
 
                         newvalues = { "$set": row }
