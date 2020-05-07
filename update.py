@@ -2158,7 +2158,7 @@ newvalues = { "$set": { "value":
                                     'quantity': 1
                                 },
                                 {
-                                    'id': 'key_to_the_apartment_in_halo',
+                                    'id': 'key_to_halo',
                                     'name': '🔑 от квартиры в Ореоле',
                                     'cost': 1,
                                     'type': 'things',
@@ -3730,22 +3730,26 @@ if 1==2:
             print(f'=======================================================')
 
 # , 'metal_detector','playstation5'
-thing_names = ['redeemed_raid_ticket']
-if 1==2:
+thing_names = ['key_to_halo']
+if 1==1:
     updateUser(None)
     for thing_name in thing_names:
-        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
+        # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
+        elem = {'id': 'key_to_the_apartment_in_halo', 'type': 'things'}
 
         for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
             things = user.getInventoryThings(elem)
             
             for inv in things:
                 # Заменяем цену у всех вещей этого типа
-                if 'cost' in inv:
-                    inv.update({'cost': elem['cost']})
+                # if 'cost' in inv:
+                #    inv.update({'cost': elem['cost']})
+                # Заменяем id
+                inv.update({'id': 'key_to_halo'})
+
 
             updateUser(user)
-        print(f'Обновили {thing_name}')
+            print(f'Обновили {thing_name}')
 
 # if 1==2:
     # if now_date.hour in (99, 19) and now_date.minute in (99, 58) and now_date.second < 15:
