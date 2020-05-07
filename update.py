@@ -3490,11 +3490,11 @@ myquery = { "code": 'ADMINISTRATOR' }
 newvalues = { "$set": { "value": 
                     [
                         {
-                            'login': '1GonzikBenzyavsky',
+                            'login': 'GonzikBenzyavsky',
                             'chat' : 497065022
                         },
                         {
-                            'login': '1WestMoscow',
+                            'login': 'WestMoscow',
                             'chat' : 0 #214221494
                         }
                     ]
