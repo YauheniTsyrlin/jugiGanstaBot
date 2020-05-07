@@ -5297,12 +5297,12 @@ def callback_query(call):
         markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}"))
         if i == counter :
             markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter}"))
-            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+            markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit|||{userIAm.getLogin()}"))
             break
         i = i + 1
     
     if len(listInv)<10:
-        markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit"))
+        markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit|||{userIAm.getLogin()}"))
 
     if user:
         inventory_category = [{'id':'food', 'name':'🍗 Еда'},
