@@ -1114,6 +1114,7 @@ newvalues = { "$set": { "value":
                                     'min': 45,
                                     'max': 50,
                                     'storage': 0,
+                                    'forgetting': 0.001, # за 10 дней -1%
                                     'subjects_of_study':
                                     [
                                         'Потенциометр',
@@ -1177,6 +1178,7 @@ newvalues = { "$set": { "value":
                                     'min': 50,
                                     'max': 200,
                                     'storage': 0,
+                                    'forgetting': 0.001, # за 10 дней -1%,
                                     'subjects_of_study':
                                     [
                                         'Кварц 🔹', 'Минизаряд'
@@ -1210,7 +1212,8 @@ newvalues = { "$set": { "value":
                                     'value': 0.33,       # Рамки изменений 33%
                                     'min': 80,
                                     'max': 100,
-                                    'storage': 0,       # уровень познания навыка относительно min\max
+                                    'storage': 0,       # уровень познания навыка относительно min\max,
+                                    'forgetting': 0.001, # за 10 дней -1%
                                     'subjects_of_study':
                                     [
                                         # Учимся на количестве обновленных бандитов из wwtop
@@ -1244,6 +1247,7 @@ newvalues = { "$set": { "value":
                                     'min': 100,
                                     'max': 150,
                                     'storage': 0,
+                                    'forgetting': 0.001, # за 10 дней -1%,
                                     'subjects_of_study':
                                     [
                                         'FIGHT!'
@@ -1277,6 +1281,7 @@ newvalues = { "$set": { "value":
                                     'min': 12,
                                     'max': 15,
                                     'storage': 0,
+                                    'forgetting': 0.001, # за 10 дней -1%,
                                     'subjects_of_study':
                                     [
                                         'Барахло','Малыш','Дефолт','Шерлокдрон','Robot Rock','Рад-дрон','Протекдрон','AWESOM-O'
@@ -1310,6 +1315,7 @@ newvalues = { "$set": { "value":
                                     'min': 160,
                                     'max': 200,
                                     'storage': 0,
+                                    'forgetting': 0.001, # за 10 дней -1%,
                                     'subjects_of_study':
                                     [
                                         'Изолента','Провода'
@@ -1343,6 +1349,7 @@ newvalues = { "$set": { "value":
                                     'min': 48,
                                     'max': 60,
                                     'storage': 0,
+                                    'forgetting': 0.01, # за 1 дней -1%,
                                     'subjects_of_study':
                                     [
                                         'Эфедрин'
@@ -3643,17 +3650,19 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-# mob.delete_many({'kr': 0, 'mat': 0})
 
-# for m in mob.find({ 'win': True }):
-#     health = sum(m['damage'])
+if 1==1: # Обновляем атрибуты навыков
+    updateUser(None)
     
-#     mob.update_one(
-#         { '_id': m['_id']},
-#         { '$set': 
-#             { 'health': health } 
-#         }
-#     )
+    for user in list(filter(lambda x : len(x.getInventoryType(['skill'])) > 0, USERS_ARR)):
+        for skill in user.getInventoryType(['skill']):
+            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==skill['id']), None) 
+            if 'forgetting' in elem:
+                skill.update({'forgetting': elem['forgetting']})
+                print(f'    {skill["name"]}')
+        updateUser(user)
+        print(f'Update {user.getLogin()}')
+
 
 if 1==2:
     # Запускать один раз! Иначе затрет

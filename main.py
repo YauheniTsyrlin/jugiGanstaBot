@@ -1168,13 +1168,13 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                     
                     # Корочка
                     present = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id=elem['flags']['present_min']['type'])['value']) if x['id']==elem['flags']['present_min']['id']), None)
-                    if present:
+                    if present and not userIAm.isInventoryThing(present):
                         addInventory(userIAm, present)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
                     # Должность
 
                     position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
-                    if position:
+                    if position and not userIAm.isInventoryThing(position):
                         addInventory(userIAm, position)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_position_add').fulfillment_text + f'\n\n▫️ {position["name"]}') 
                 
@@ -1185,12 +1185,12 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
 
                     # Корочка
                     present = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id=elem['flags']['present_max']['type'])['value']) if x['id']==elem['flags']['present_max']['id']), None)
-                    if present:
+                    if present and not userIAm.isInventoryThing(present):
                         addInventory(userIAm, present)
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
                     # Должность
                     position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']), None)
-                    if position:
+                    if position and not userIAm.isInventoryThing(position):
                         addInventory(userIAm, position)
                         old_position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
                         userIAm.removeInventoryThing(old_position)
@@ -6015,6 +6015,33 @@ def rade():
             except:
                 send_message_to_admin(f'⚠️🤬 Сломалась Раздача рейдовых болтов по {goat["name"]}')
     
+    # Забывание навыков
+    if now_date.hour in (14, 1) and now_date.minute in (28 , 5) and now_date.second < 15:
+        logger.info('skill forgetting!')
+        updateUser(None)
+        for goat in getSetting(code='GOATS_BANDS'):
+            
+                goat_bands = getGoatBands(goat['name'])
+                for user in list(filter(lambda x : x.getBand() in goat_bands and len(x.getInventoryType(['skill'])) > 0, USERS_ARR)):
+                    for skill in user.getInventoryType(['skill']):
+                        try:            
+                            if 'forgetting' in skill:
+                                newStorage = skill['storage'] -  skill['storage'] * skill['forgetting']
+                                if newStorage > 0:
+                                    skill.update({'storage': newStorage})
+
+                                    if skill['flags']['congratulation_max'] == True and newStorage < skill['max']:
+                                        skill['flags'].update({'congratulation_max': False})
+
+                                    if skill['flags']['congratulation_min'] == True and newStorage < skill['min']:
+                                        skill['flags'].update({'congratulation_min': False})
+                                else:
+                                    user.removeInventoryThing(skill)
+                                    send_messages_big(goat['chats']['info'], text=f'{user.getNameAndGerb()} (@{user.getLogin()}) совсем разучился в умении:\n▫️ {skill["name"]}') 
+                        except:
+                            send_message_to_admin(f'⚠️🤬 Для бандита {user.getNameAndGerb()} (@{user.getLogin()}) сломалось забывание скила {skill["name"]} по {goat["name"]}')
+                    updateUser(user)
+
     # Отъем болтов
     if now_date.hour in (99, 99) and now_date.minute in (99, 99) and now_date.second < 15:
         u = ['GonzikBenzyavsky', 'Hermia_Nerbne', 'StiffD', 'rocknrolla_777', 'DeadChild', 'WildFire112', 'aohanesian', 'UmnikOff_Vodkin', 'RVM362', 'Java_dentist', 'VTZVTZ', 'MrMrakZ', 'eX3emz', 'chymych', 'striletskyi', 'Lixetini', 'rock_n_rolla01', 'sosopiple']
