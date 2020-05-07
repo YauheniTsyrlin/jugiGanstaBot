@@ -3643,17 +3643,17 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-mob.delete_many({'kr': 0, 'mat': 0})
+# mob.delete_many({'kr': 0, 'mat': 0})
 
-for m in mob.find({ 'win': True }):
-    health = sum(m['damage'])
+# for m in mob.find({ 'win': True }):
+#     health = sum(m['damage'])
     
-    mob.update_one(
-        { '_id': m['_id']},
-        { '$set': 
-            { 'health': health } 
-        }
-    )
+#     mob.update_one(
+#         { '_id': m['_id']},
+#         { '$set': 
+#             { 'health': health } 
+#         }
+#     )
 
 if 1==2:
     # Запускать один раз! Иначе затрет
