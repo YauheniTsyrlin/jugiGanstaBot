@@ -17,8 +17,16 @@ telebot.logger.setLevel(logging.INFO)
 # Проверяем утилизацию памяти и делаем рестарт сервера, если > 80%
 def job():
     logger.info(f'start CheckMem')
-    result = check_output("grep MemFree /proc/meminfo", shell=True) 
-    logger.info(f'result = {result}')
+    try:
+        result = check_output("grep MemFree /proc/meminfo", shell=True)
+        total_mem = int(result.split('MemTotal:')[1].split(' kB\n')[0].strip())
+        free_mem = int(result.split('MemFree:')[1].split(' kB\n')[0].strip())
+        logger.info(f'Mem free: {int(free_mem/total_mem*100)}%')
+
+        if free_mem/total_mem < 0.1: # Если свободной памяти осталось меньше 10%,
+            call('sudo shutdown -r now', shell=True)
+    except:
+        logger.error(f'error CheckMem')
 
 # 30 secund
 def job_loop():
