@@ -7,7 +7,7 @@ import requests
 import telebot
 from aiohttp import web
 import config
-from subprocess import call
+from subprocess import call, check_output
 import threading
 from multiprocessing import Process
 
@@ -17,7 +17,7 @@ telebot.logger.setLevel(logging.INFO)
 # Проверяем утилизацию памяти и делаем рестарт сервера, если > 80%
 def job():
     logger.info(f'start CheckMem')
-    result = call("grep MemFree /proc/meminfo", shell=True) 
+    result = check_output("grep MemFree /proc/meminfo", shell=True) 
     logger.info(f'result = {result}')
 
 # 30 secund
