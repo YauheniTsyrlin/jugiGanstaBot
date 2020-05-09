@@ -1,16 +1,30 @@
 import logging
 import ssl
 import sys
-import apiai, json
+import time
+import json
 import requests
 import telebot
 from aiohttp import web
 import config
 from subprocess import call
+import threading
+from multiprocessing import Process
 
 logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
 
+# Проверяем утилизацию памяти и делаем рестарт сервера, если > 80%
+def job():
+    logger.info(f'start CheckMem')
+    result = call('grep MemFree /proc/meminfo | awk "{print $2 / 1024}"', shell=True) 
+    logger.info(f'result = {result}')
+
+# 60 secund
+def job_loop():
+    while True:
+        job()
+        time.sleep(30)
 
 def main_loop():
     app = web.Application()
@@ -51,6 +65,10 @@ def main_loop():
 
 if __name__ == '__main__': 
     try:
+
+        proccessJob = Process(target=job_loop, args=())
+        proccessJob.start() # Start new thread 
+
         main_loop()
         
     except KeyboardInterrupt:
