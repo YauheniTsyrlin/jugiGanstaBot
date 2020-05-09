@@ -836,7 +836,7 @@ def getPidorOfTheDay(goat, now_date):
 # print(report_man_of_day('GonzikBenzyavsky'))
 tz = config.SERVER_MSK_DIFF
 now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
-print(getPidorOfTheDay('New Vegas', now_date))
+# print(getPidorOfTheDay('New Vegas', now_date))
 
 # tt = ['7ч. 27мин.', '3ч. 0мин.', '1 мин.', '10 сек.', '1ч. 15мин.']
 # ttt = [ '1ч. 15мин.']
@@ -970,6 +970,9 @@ def getInventoryReport(user, types):
 #                         {'id':'things', 'name':'📦 Вещи'}
 #                     ]
 # print(getInventoryReport(user, inventory_category))
+
+# print(f"{report_raids.count_documents({'band': {'$in': getGoatBands('FǁȺǁggǁØǁAT')}, 'date': 1589032800, 'planed_location': {'&gt': 0} })}")
+print(f"{report_raids.count_documents({'band': {'$in': getGoatBands('FǁȺǁggǁØǁAT')}, 'date': 1589032800, 'planed_location': {'$gt': 0} })}")
 
 sys.exit(0)
 

@@ -5511,7 +5511,7 @@ def callback_query(call):
         if counter_not_notified > 0:
             buttons.append(InlineKeyboardButton(f"Отправить 📩", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
         
-        if report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'planed_location': {'&gt': 0} }).count() == 0:
+        if report_raids.count_documents({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'planed_location': {'$gt': 0} })  == 0:
             buttons.append(InlineKeyboardButton(f"Повторить 🔄", callback_data=f"pinraid_repeat_{raid_date.timestamp()}_{goat}"))
     
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
@@ -5564,12 +5564,12 @@ def callback_query(call):
                     percent = counter_now/counter_100*100
                 buttons.append(InlineKeyboardButton(f"🤘{band} {int(percent)}%", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}"))                        
             
-            counter_not_notified = report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'notified': False, 'planed_location': {'$gt': 0} }).count() 
+            counter_not_notified = report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'notified': False, 'planed_location': {'$gt': 0} }).count_documents() 
 
             if counter_not_notified > 0:
                 buttons.append(InlineKeyboardButton(f"Отправить 📩", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
             
-            if report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'planed_location': {'&gt': 0} }).count()  == 0:
+            if report_raids.count_documents({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'planed_location': {'$gt': 0} }) == 0:
                 buttons.append(InlineKeyboardButton(f"Повторить 🔄", callback_data=f"pinraid_repeat_{raid_date.timestamp()}_{goat}"))
         
             exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
@@ -5619,19 +5619,19 @@ def callback_query(call):
         
         buttons = []
         for band in getGoatBands(goat):
-            counter_100 = registered_users.find({'band': band}).count()
-            counter_now = report_raids.find({'band': band, 'date': raid_date.timestamp(), 'planed_location': {'$ne': None} }).count()
+            counter_100 = registered_users.count_documents({'band': band})
+            counter_now = report_raids.count_documents({'band': band, 'date': raid_date.timestamp(), 'planed_location': {'$ne': None} })
             percent = 0
             if counter_100 > 0:
                 percent = counter_now/counter_100*100
             buttons.append(InlineKeyboardButton(f"🤘{band} {int(percent)}%", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}"))                        
         
-        counter_not_notified = report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'notified': False, 'planed_location': {'$gt': 0}  }).count()
+        counter_not_notified = report_raids.count_documents({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'notified': False, 'planed_location': {'$gt': 0}  })
 
         if counter_not_notified > 0:
             buttons.append(InlineKeyboardButton(f"Отправить 📩", callback_data=f"pinraid_pin_{raid_date.timestamp()}_{goat}"))
 
-        if report_raids.find({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp()}).count() == 0:
+        if report_raids.count_documents({'band': {'$in': getGoatBands(goat)}, 'date': raid_date.timestamp(), 'planed_location': {'$gt': 0} })  == 0:
             buttons.append(InlineKeyboardButton(f"Повторить 🔄", callback_data=f"pinraid_repeat_{raid_date.timestamp()}_{goat}"))
         
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_plan_{raid_date.timestamp()}_{goat}")
