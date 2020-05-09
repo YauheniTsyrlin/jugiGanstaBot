@@ -19,9 +19,11 @@ def job():
     logger.info(f'start CheckMem')
     try:
         result = check_output("grep MemTotal /proc/meminfo", shell=True)
+        logger.info(f'result {result}')
         total_mem = int(result.split('MemTotal:')[1].split(' kB\n')[0].strip())
 
         result = check_output("grep MemFree /proc/meminfo", shell=True)
+        logger.info(f'result {result}')
         free_mem = int(result.split('MemFree:')[1].split(' kB\n')[0].strip())
 
         logger.info(f'Mem free: {int(free_mem/total_mem*100)}%')
