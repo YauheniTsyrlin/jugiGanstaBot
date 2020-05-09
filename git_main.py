@@ -16,7 +16,6 @@ telebot.logger.setLevel(logging.INFO)
 
 # Проверяем утилизацию памяти и делаем рестарт сервера, если > 85%
 def job():
-    logger.info(f'start CheckMem')
     try:
         result = check_output("grep MemAvailable /proc/meminfo", shell=True)
         available_mem = int(result.split(b'MemAvailable:')[1].split(b' kB')[0].strip())
