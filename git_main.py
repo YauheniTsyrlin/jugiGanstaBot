@@ -20,13 +20,12 @@ def job():
     try:
         result = check_output("grep MemFree /proc/meminfo", shell=True)
         logger.info(f'result {result}')
-        free_mem = int(result.split('MemFree:')[1].split(' kB')[0].strip())
+        free_mem = int(result.split(b'MemFree:')[1].split(b' kB')[0].strip())
         logger.info(f'Mem free: {free_mem}')
 
         result = check_output("grep MemTotal /proc/meminfo", shell=True)
         logger.info(f'result {result}')
-        logger.info(f"{result.split('MemTotal:        ')[1].split(' kB')[0].strip()}")
-        total_mem = int(result.split('MemTotal:')[1].split(' kB')[0].strip())
+        total_mem = int(result.split(b'MemTotal:')[1].split(b' kB')[0].strip())
         logger.info(f'Mem total: {total_mem}')
 
         logger.info(f'Mem free: {int(free_mem/total_mem*100)}%')
