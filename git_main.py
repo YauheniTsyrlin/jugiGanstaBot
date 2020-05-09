@@ -18,7 +18,7 @@ telebot.logger.setLevel(logging.INFO)
 def job():
     logger.info(f'start CheckMem')
     try:
-        result = check_output("grep MemFree /proc/meminfo", shell=True)
+        result = check_output("grep MemAvailable /proc/meminfo", shell=True)
         logger.info(f'result {result}')
         available_mem = int(result.split(b'MemAvailable:')[1].split(b' kB')[0].strip())
         logger.info(f'Mem Available: {available_mem}')
