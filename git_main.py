@@ -20,7 +20,7 @@ def job():
     try:
         result = check_output("grep MemTotal /proc/meminfo", shell=True)
         logger.info(f'result {result}')
-        logger.info(f"{result.split('MemTotal:')[1].split(' kB')[0].strip()}")
+        logger.info(f"{result.split('MemTotal:        ')[1].split(' kB')[0].strip()}")
 
         total_mem = int(result.split('MemTotal:')[1].split(' kB')[0].strip())
 
