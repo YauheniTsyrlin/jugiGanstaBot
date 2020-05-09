@@ -14,23 +14,23 @@ from multiprocessing import Process
 logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
 
-# Проверяем утилизацию памяти и делаем рестарт сервера, если > 90%
+# Проверяем утилизацию памяти и делаем рестарт сервера, если > 85%
 def job():
     logger.info(f'start CheckMem')
     try:
         result = check_output("grep MemFree /proc/meminfo", shell=True)
         logger.info(f'result {result}')
-        free_mem = int(result.split(b'MemFree:')[1].split(b' kB')[0].strip())
-        logger.info(f'Mem free: {free_mem}')
+        available_mem = int(result.split(b'MemAvailable:')[1].split(b' kB')[0].strip())
+        logger.info(f'Mem free: {available_mem}')
 
         result = check_output("grep MemTotal /proc/meminfo", shell=True)
         logger.info(f'result {result}')
         total_mem = int(result.split(b'MemTotal:')[1].split(b' kB')[0].strip())
         logger.info(f'Mem total: {total_mem}')
 
-        logger.info(f'Mem free: {int(free_mem/total_mem*100)}%')
+        logger.info(f'Mem free: {int(available_mem/total_mem*100)}%')
 
-        if free_mem/total_mem < 0.1: # Если свободной памяти осталось меньше 10%,
+        if available_mem/total_mem < 0.15: # Если свободной памяти осталось меньше 15%,
             call('sudo shutdown -r now', shell=True)
     except:
         logger.error(f'error CheckMem')
