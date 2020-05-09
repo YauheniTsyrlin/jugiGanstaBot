@@ -19,14 +19,12 @@ def job():
     logger.info(f'start CheckMem')
     try:
         result = check_output("grep MemAvailable /proc/meminfo", shell=True)
-        logger.info(f'result {result}')
         available_mem = int(result.split(b'MemAvailable:')[1].split(b' kB')[0].strip())
-        logger.info(f'Mem Available: {available_mem}')
+        # logger.info(f'Mem Available: {available_mem}')
 
         result = check_output("grep MemTotal /proc/meminfo", shell=True)
-        logger.info(f'result {result}')
         total_mem = int(result.split(b'MemTotal:')[1].split(b' kB')[0].strip())
-        logger.info(f'Mem total: {total_mem}')
+        # logger.info(f'Mem total: {total_mem}')
 
         logger.info(f'Mem used: {int(available_mem/total_mem*100)}%')
 
@@ -39,7 +37,7 @@ def job():
 def job_loop():
     while True:
         job()
-        time.sleep(30)
+        time.sleep(60)
 
 def main_loop():
     app = web.Application()
