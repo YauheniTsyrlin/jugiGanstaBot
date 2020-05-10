@@ -3756,17 +3756,17 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-if 1==2: # обновляем composition 
+if 1==1: # обновляем composition 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     # for z in listInv:
     #     print(z)
     for user in list(filter(lambda x : len(x.getInventory()) > 0, USERS_ARR)):
+        print(f'Update {user.getLogin()}')
         for inv in user.getInventory():
             elem = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None)
             if elem == None:
                 continue
-
             if 'composition' in elem:
                 print(f'    {inv}')
                 composition_arr = []
@@ -3779,10 +3779,9 @@ if 1==2: # обновляем composition
                         composition_arr.append(composit)
                         print(f'         {composit["name"]}')
                 if len(composition_arr)>0:
-                    inv.update({'composition': composition_arr})
-                
+                    inv.update({'composition': composition_arr})    
         updateUser(user)
-        print(f'Update {user.getLogin()}')
+        
 
 if 1==2: # Обновляем атрибуты навыков
     updateUser(None)
