@@ -2415,20 +2415,40 @@ newvalues = { "$set": { "value":
                                         {
                                             'id': 'pip_bolt',
                                             'counter': 3
-                                        },
-                                        {
-                                            'id': 'pip_repair_kit',
-                                            'counter': 1
                                         }
                                     ]
                                     
                                 },
                                 {
-                                    'id': 'pip_repair_kit',
-                                    'name': '🛠️ Ремкомплект для Пип-боя',
-                                    'cost': 100,
+                                    'id': 'cast_iron',
+                                    'name': '⛓️ Что-то чугунное',
+                                    'cost': 30,
                                     'type': 'things',
-                                    'quantity': 2,
+                                    'quantity': None,
+                                    'subjects_to_find':
+                                    [
+                                        'Что-то чугунное'
+                                    ],
+                                    'dialog_old_text': 'old_cast_iron'
+                                },
+                                {
+                                    'id': 'pip_repair_kit',
+                                    'name': '🛠️ Ремкомплект',
+                                    'cost': 300,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'cast_iron',
+                                            'counter': 10
+                                        }
+                                    ],
+                                    'wear': 
+                                        {
+                                            'one_use': 0.1,
+                                            'value': 1
+                                        }
                                 },
                                 {
                                     'id': 'bag_of_crypto_1000',
@@ -3756,7 +3776,7 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-if 1==2: # обновляем composition 
+if 1==1: # обновляем composition 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     # for z in listInv:
@@ -3765,13 +3785,15 @@ if 1==2: # обновляем composition
         print(f'Update {user.getLogin()}')
         for inv in user.getInventory():
             elem = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None)
+            
             if elem == None:
                 continue
+            elem = elem.copy()
             if 'composition' in elem:
                 print(f'    {inv}')
                 composition_arr = []
                 for com in elem['composition']:
-                    composit = next((x for i, x in enumerate(listInv) if x['id']==com['id']), None)
+                    composit = next((x for i, x in enumerate(listInv) if x['id']==com['id']), None).copy()
                     if composit == None:
                         continue
                     for i in range(0, com["counter"]):

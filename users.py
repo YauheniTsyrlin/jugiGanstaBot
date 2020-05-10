@@ -22,18 +22,19 @@ def getThingInfo(inv):
     info = info + f'└🔘 {inv["cost"]}\n'
     if 'composition' in inv:
         ps = '└'
-        len_ps = len(inv['composition'])
+        len_ps = len([] if inv['composition'] == None else inv['composition'])
         counter = 0
-        for composit in inv['composition']:
-            counter = counter + 1
-            if len_ps == 1:
-                ps = '└'
-            else:
-                if counter == 1:
-                    ps = '├'
-                if counter == len_ps:
+        if inv['composition']:
+            for composit in inv['composition']:
+                counter = counter + 1
+                if len_ps == 1:
                     ps = '└'
-            info = info + f'   {ps}▫️{composit["id"]}\n'
+                else:
+                    if counter == 1:
+                        ps = '├'
+                    if counter == len_ps:
+                        ps = '└'
+                info = info + f'   {ps}▫️{composit["name"]}\n'
     return info
 
 def normalize(string):

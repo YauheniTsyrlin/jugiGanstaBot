@@ -231,21 +231,18 @@ def addInventory(user: users.User, inv):
 
     # Добавляем составные объекты
     listInv = GLOBAL_VARS['inventory']    
-    elem = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None)
-    if elem == None:
-        pass
-    else:
-        if 'composition' in elem:
-            composition_arr = []
-            for com in elem['composition']:
-                composit = next((x for i, x in enumerate(listInv) if x['id']==com['id']), None)
-                if composit == None:
-                    continue
-                for i in range(0, com["counter"]):
-                    composit.update(({'uid': f'{uuid.uuid4()}'}))
-                    composition_arr.append(composit)
-            if len(composition_arr)>0:
-                inv.update({'composition': composition_arr})    
+    if 'composition' in inv:
+        arr = []
+        for com in inv['composition']:
+           arr.append(com)
+
+        comp_arr = []  
+        inv.update({'composition': comp_arr})
+        for com in arr:
+            for i in range(0, com["counter"]):
+                composit = list(filter(lambda x : x['id']==com['id'], GLOBAL_VARS['inventory']))[0].copy()
+                composit.update({'uid':f'{uuid.uuid4()}'})
+                comp_arr.append(composit)
 
     return user.addInventoryThing(inv, quantity)
 
@@ -1137,6 +1134,24 @@ def dzen_rewards(user, num_dzen, message):
             else:
                 send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
 
+def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
+    count = counterSkill
+    if text:
+        for s in text.split('\n'):
+            for thing in elem['subjects_to_find']:
+                if (s.startswith('Получено:') or s.startswith('Бонус:') or (s.startswith('💰')) ) and thing in s:
+                    if ' x' in s:
+                        count = count + int(s.replace('/buy_trash','').split(' x')[1].strip())
+                    else: count = count + 1
+    if count > 0:
+        if not time_over:
+            addInventory(userIAm, elem)
+            updateUser(userIAm)
+            text = f'{userIAm.getNameAndGerb()}, ты нашел:\n▫️ {elem["name"]}'
+            send_messages_big(chat, text=text)
+        else:
+            send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
+
 def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
     count = counterSkill
     if text:
@@ -1197,13 +1212,13 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                     present = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id=elem['flags']['present_min']['type'])['value']) if x['id']==elem['flags']['present_min']['id']), None)
                     if present and not userIAm.isInventoryThing(present):
                         addInventory(userIAm, present)
-                        send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
+                        send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(userIAm.getLogin(), 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
                     # Должность
 
                     position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
                     if position and not userIAm.isInventoryThing(position):
                         addInventory(userIAm, position)
-                        send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_position_add').fulfillment_text + f'\n\n▫️ {position["name"]}') 
+                        send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(userIAm.getLogin(), 'new_position_add').fulfillment_text + f'\n\n▫️ {position["name"]}') 
                 
                 # проверяем, а не поздравляли ли мы его за достижение максимума?
                 if count >= elem['max'] and not elem['flags']['congratulation_max']:
@@ -1214,14 +1229,14 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                     present = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id=elem['flags']['present_max']['type'])['value']) if x['id']==elem['flags']['present_max']['id']), None)
                     if present and not userIAm.isInventoryThing(present):
                         addInventory(userIAm, present)
-                        send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
+                        send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(userIAm.getLogin(), 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
                     # Должность
                     position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']), None)
                     if position and not userIAm.isInventoryThing(position):
                         addInventory(userIAm, position)
                         old_position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_min']), None)
                         userIAm.removeInventoryThing(old_position)
-                        send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_position_add').fulfillment_text + f'\n\n▫️ {position["name"]}') 
+                        send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(userIAm.getLogin(), 'new_position_add').fulfillment_text + f'\n\n▫️ {position["name"]}') 
                 
                 elem.update({'storage': count})
                 percent = int(count*100/elem['max'])
@@ -1231,7 +1246,7 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
 
             updateUser(userIAm)
         else:
-            send_messages_big(chat, text=getResponseDialogFlow(None, elem["dialog_old_text"]).fulfillment_text)
+            send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
 
 # Handle new_chat_members
 @bot.message_handler(content_types=['new_chat_members', 'left_chat_members'])
@@ -1541,6 +1556,7 @@ def select_shelf(call):
         newvalues = { "$set": {'state': 'CANCEL'} }
         result = shelf.update_one(
             {
+                'state': 'NEW',
                 'inventory.uid' : inventory['uid']
             }, newvalues)
         
@@ -1647,7 +1663,7 @@ def select_shelf(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
         return
 
-    if button_id in ('pickup'):
+    if button_id in ('pickup', 'splitup'):
         # {button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}
         inv_uid = call.data.split('|')[3]
         stepinventory = int(call.data.split('|')[2])
@@ -1668,6 +1684,7 @@ def select_shelf(call):
         newvalues = { "$set": {'state': 'CANCEL'} }
         result = workbench.update_one(
             {
+                'state': 'NEW',
                 'inventory.uid' : inventory['uid']
             }, newvalues)
         
@@ -1675,9 +1692,34 @@ def select_shelf(call):
             bot.answer_callback_query(call.id, f'Что пошло не так.')
             return
 
-        userseller.addInventoryThing(inventory)
-        updateUser(userseller)
+        if button_id in ('pickup'):
+            userseller.addInventoryThing(inventory)
+            updateUser(userseller)
+
+        elif button_id in ('splitup'):
+            for comp in inventory['composition']:
+                row = {
+                        'date': (datetime.now()).timestamp(),
+                        'login': userseller.getLogin(),
+                        'band' : userseller.getBand(),
+                        'goat' : getMyGoatName(userseller.getLogin()),
+                        'state': 'NEW',
+                        'inventory'  : comp
+                }
+                newvalues = { "$set": row }
+
+                result = workbench.update_one(
+                    {
+                        'state': 'NEW',
+                        'inventory.uid' : comp['uid']
+                    }, newvalues)
+                if result.matched_count < 1:
+                    workbench.insert_one(row)
+                print(f'add {comp["name"]} {comp["uid"]}')
+            bot.answer_callback_query(call.id, f'Разобрали')
+
         
+
         # selectexit
         step = int(call.data.split('|')[2])
         for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
@@ -1694,6 +1736,8 @@ def select_shelf(call):
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
         return
+
+
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('exchange'))
 def select_exchange(call):
@@ -1887,10 +1931,6 @@ def select_exchange(call):
         # bot.answer_callback_query(call.id, f'selectinvent: {call.data}')
         return
 
-    if button_id in ('splitup',''):
-        bot.answer_callback_query(call.id, f'Очень крепко собрано. Не разбирается... пока')
-        return
-
     if button_id in ('getcrypto', 'toshelf', 'toworkbench'):
         # {button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}
         inv_uid = call.data.split('|')[3]
@@ -1932,6 +1972,7 @@ def select_exchange(call):
             newvalues = { "$set": row }
             result = shelf.update_one(
                 {
+                    'state': 'NEW',
                     'inventory.uid' : inventory['uid']
                 }, newvalues)
             if result.matched_count < 1:
@@ -1960,6 +2001,7 @@ def select_exchange(call):
 
             result = workbench.update_one(
                 {
+                    'state': 'NEW',
                     'inventory.uid' : inventory['uid']
                 }, newvalues)
             if result.matched_count < 1:
@@ -3360,22 +3402,27 @@ def main_message(message):
                 new_Message = messager.new_message(message, filter_message) 
                 if new_Message:
 
-                    
                     # Учимся умению "⏰ Часовщик"
-                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='watchmaker'), None)
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='watchmaker'), None).copy()
                     check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
                     # Учимся умению "Робототехник"
-                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='robotics'), None)
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='robotics'), None).copy()
                     check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
                     # Учимся умению "Электрик"
-                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None)
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None).copy()
                     check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
                     # Учимся умению "Программист"
-                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None)
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None).copy()
                     check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
                      # Учимся умению "Медик"
-                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None).copy()
                     check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
+
+                    for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
+                        check_things(message.text, message.chat.id, time_farm_over, userIAm, inv.copy())
+
+
+                
                 else:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
 
@@ -5340,6 +5387,7 @@ def callback_query(call):
         bot.answer_callback_query(call.id, f"Это может сделать только {call.data.split('|')[3]}!")
         return
 
+    userIAm = getUserByLogin(call.from_user.username)
 
     # if not isGoatBoss(call.from_user.username):
     #     if not isAdmin(call.from_user.username):
@@ -5357,7 +5405,7 @@ def callback_query(call):
         counter  = int(call.data.split('|')[2])
         login = call.data.split('|')[1]
         user = getUserByLogin(login)
-        userIAm = getUserByLogin(call.from_user.username)
+        
 
         markupinline = InlineKeyboardMarkup()
         i = 1
@@ -5411,7 +5459,6 @@ def callback_query(call):
         counter  = int(call.data.split('|')[2])
         login = call.data.split('|')[1]
         user = getUserByLogin(login)
-        userIAm = getUserByLogin(call.from_user.username)
         markupinline = InlineKeyboardMarkup()
         i = 1
 
@@ -5511,9 +5558,9 @@ def callback_query(call):
         # if user and user.isInventoryThing(elem):
         #     continue    
 
-        markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}"))
+        markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}|{userIAm.getLogin()}"))
         if i == counter :
-            markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter}"))
+            markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter}|{userIAm.getLogin()}"))
             markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit|||{userIAm.getLogin()}"))
             break
         i = i + 1
