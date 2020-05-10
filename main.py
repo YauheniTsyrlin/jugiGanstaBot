@@ -1433,7 +1433,7 @@ def select_baraholka(call):
                     collect = False
                     break
             if collect:
-                collect_btn = InlineKeyboardButton(f"Собрать 🔧", callback_data=f"{button_parent['id']}|collect|{step}")
+                collect_btn = InlineKeyboardButton(f"Собрать 🔧", callback_data=f"{button['id']}|collect|{step}")
                 buttons.append(collect_btn)
                 break
 
