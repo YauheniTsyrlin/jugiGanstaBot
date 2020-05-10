@@ -1415,10 +1415,27 @@ def select_baraholka(call):
         return
 
     if button_id in ('workbench'):
+        inventories_on = []
         for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
             inv = invonworkbench['inventory']
+            inventories_on.append(inv)
             btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
             buttons.append(btn)
+
+        # Добавление кнопки Собрать 🔧
+        for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
+            collect = False
+            for composit in inv['composition']:
+                counter = len(list(filter(lambda x : x['id'] == composit['id'], inventories_on)))
+                if counter >= composit['counter']:
+                    collect = True
+                else:
+                    collect = False
+                    break
+            if collect:
+                collect_btn = InlineKeyboardButton(f"Собрать 🔧", callback_data=f"{button_parent['id']}|collect|{step}")
+                buttons.append(collect_btn)
+                break
 
         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button['id']}|back|{step-1}") 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button['id']}|exit|{step}")
@@ -1619,6 +1636,7 @@ def select_shelf(call):
             btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button_parent_id}|selectinvent|{step}|{inv['uid']}")
             buttons.append(btn)
 
+        # Добавление кнопки Собрать 🔧
         for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
             collect = False
             for composit in inv['composition']:
@@ -1628,14 +1646,10 @@ def select_shelf(call):
                 else:
                     collect = False
                     break
-
             if collect:
                 collect_btn = InlineKeyboardButton(f"Собрать 🔧", callback_data=f"{button_parent['id']}|collect|{step}")
                 buttons.append(collect_btn)
                 break
-
-
-
 
         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
