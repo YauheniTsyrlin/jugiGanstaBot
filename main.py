@@ -1670,7 +1670,7 @@ def select_shelf(call):
         return
 
     if button_id in ('selectcollect'):
-        
+        bot.answer_callback_query(call.id, call.data)
         step = int(call.data.split('|')[2])
         ivn_id = int(call.data.split('|')[3])
         inventory = list(filter(lambda x : x['id'] == ivn_id, GLOBAL_VARS['inventory']))[0]
