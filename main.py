@@ -186,22 +186,22 @@ GLOBAL_VARS = {
             
             {
                 'id': 'onshelf',
-                'name': '🛠️🛍️ На полках',
-                'description':'♻️ Здесь можно посмотреть товара, которые бандиты выставили на 🛍️ полку для продажи.',
+                'name': '🛠️🛍️ Магазин',
+                'description':'♻️ Здесь можно посмотреть товара, которые бандиты выставили на продажу 🛍️.',
+                'buttons': []
+            },
+            {
+                'id': 'workbench',
+                'name': '🛠️⚙️ Верстак',
+                'description':'⚙️ Здесь можно собрать новые вещи или разобрать на 📦 запчасти.',
                 'buttons': []
             },
             {
                 'id': 'exchange',
                 'name': '♻️ Мои вещи',
-                'description':'♻️ Здесь можно выставить свои товар на 🛍️ полку для продажи, тупо сдать за 30% 🔘Crypto или положить на ⚙️ Верстак.',
+                'description':'♻️ Здесь можно выставить свои товар на 🛍️ продажу, тупо сдать за 30% 🔘Crypto или положить на ⚙️ Верстак.',
                 'buttons': [],
                 'discont': 0.3
-            },
-            {
-                'id': 'workbench',
-                'name': '⚙️ Верстак',
-                'description':'⚙️ Здесь можно собрать новые вещи или разобрать на 📦 запчасти.',
-                'buttons': []
             },
             {
                 'id': 'back',
@@ -1481,7 +1481,7 @@ def select_shelf(call):
                 break
 
         if inventory == None:
-            bot.answer_callback_query(call.id, f'Этой вещи уже нет на полке.')
+            bot.answer_callback_query(call.id, f'Этой вещи уже нет в магазине.')
             return
         
         userseller = getUserByLogin(invonshelf['login'])
@@ -1513,7 +1513,7 @@ def select_shelf(call):
                 break
 
         if inventory == None:
-            bot.answer_callback_query(call.id, f'Этой вещи уже нет на полке.')
+            bot.answer_callback_query(call.id, f'Этой вещи уже нет в магазине.')
             return
         
         userseller = getUserByLogin(invonshelf['login'])
@@ -1851,7 +1851,7 @@ def select_exchange(call):
         inventory = user.getInventoryThing({'uid': inv_uid})
 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
-        toshelf = InlineKeyboardButton(f"🛍️ На полку", callback_data=f"{button_parent['id']}|toshelf|{stepinventory}|{inventory['uid']}")
+        toshelf = InlineKeyboardButton(f"🛍️ На продажу", callback_data=f"{button_parent['id']}|toshelf|{stepinventory}|{inventory['uid']}")
         sell = InlineKeyboardButton(f"Получить 🔘 {int(inventory['cost']*button_parent['discont'])}", callback_data=f"{button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}")
         toworkbench = InlineKeyboardButton(f"⚙️ На верстак", callback_data=f"{button_parent['id']}|toworkbench|{stepinventory}|{inventory['uid']}")
         
@@ -1898,7 +1898,7 @@ def select_exchange(call):
         elif button_id in ('toshelf'):
             counter_inv = shelf.count_documents({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'} })
             if counter_inv >= 2:
-                bot.answer_callback_query(call.id, f'Тебе можно держать на полке только {counter_inv} шт.')
+                bot.answer_callback_query(call.id, f'Тебе можно держать в магазине только {counter_inv} шт.')
                 return
 
             row = {
@@ -1920,13 +1920,13 @@ def select_exchange(call):
             
             user.removeInventoryThing(inventory)
             updateUser(user)
-            send_message_to_admin(text=f'🛍️ Положили на полку!\n{user.getNameAndGerb()} (@{user.getLogin()}) положил на полку {inventory["name"]} за 🔘{inventory["cost"]}')
-            bot.answer_callback_query(call.id, f'Положено на полку')
+            send_message_to_admin(text=f'🛍️ Выставили на продажу!\n{user.getNameAndGerb()} (@{user.getLogin()}) выставил на продажу {inventory["name"]} за 🔘{inventory["cost"]}')
+            bot.answer_callback_query(call.id, f'Выставлено на продажу')
 
         elif button_id in ('toworkbench'):
             counter_inv = workbench.count_documents({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'} })
             if counter_inv >= 20:
-                bot.answer_callback_query(call.id, f'Тебе можно держать на полке только {counter_inv} шт.')
+                bot.answer_callback_query(call.id, f'Тебе можно держать в магазине только {counter_inv} шт.')
                 return
 
             row = {
