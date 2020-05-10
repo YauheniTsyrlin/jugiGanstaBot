@@ -1848,7 +1848,7 @@ newvalues = { "$set": { "value":
                             [
                                 
                                 {
-                                    'id': 'the_brides_bouquet',
+                                    'id': 'brides_bouquet',
                                     'name': '💐 Букет невесты',
                                     'cost': 10,
                                     'type': 'decoration',
@@ -1856,7 +1856,7 @@ newvalues = { "$set": { "value":
 
                                 },
                                 {
-                                    'id': 'memory_of_the_wedding',
+                                    'id': 'memory_wedding',
                                     'name': '📼 Память о свадьбе',
                                     'cost': 2,
                                     'type': 'decoration',
@@ -1904,7 +1904,7 @@ newvalues = { "$set": { "value":
 
                                 },
                                 {
-                                    'id': 'statuette_shark',
+                                    'id': 'shark',
                                     'name': '🦈 Статуэтка "Акула"',
                                     'cost': 5,
                                     'type': 'decoration',
@@ -1926,21 +1926,21 @@ newvalues = { "$set": { "value":
                                     'quantity': 1
                                 },
                                 {
-                                    'id': 'statuette_smart_boy',
+                                    'id': 'smart_boy',
                                     'name': '🕺 Статуэтка "Умник, бля"',
                                     'cost': 10,
                                     'type': 'decoration',
                                     'quantity': 1
                                 },
                                 {
-                                    'id': 'statuette_barman_2019',
+                                    'id': 'barman_2019',
                                     'name': '🍾 Бармен 2019 года',
                                     'cost': 10,
                                     'type': 'decoration',
                                     'quantity': 1
                                 },
                                 {
-                                    'id': 'statuette_the_eiffel_tower',
+                                    'id': 'eiffel_tower',
                                     'name': '♟ Эйфелева Башня',
                                     'cost': 10,
                                     'type': 'decoration',
@@ -3870,13 +3870,13 @@ if 1==2:
             print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
             print(f'=======================================================')
 
-# , 'metal_detector','playstation5'
-thing_names = ['key_to_halo']
-if 1==2:
+
+thing_names = ['statuette_the_eiffel_tower', 'statuette_barman_2019']
+if 1==1:
     updateUser(None)
     for thing_name in thing_names:
         # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
-        elem = {'id': 'key_to_the_apartment_in_halo', 'type': 'things'}
+        elem = {'id': thing_name, 'type': 'decoration'}
 
         for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
             things = user.getInventoryThings(elem)
@@ -3886,11 +3886,117 @@ if 1==2:
                 # if 'cost' in inv:
                 #    inv.update({'cost': elem['cost']})
                 # Заменяем id
-                inv.update({'id': 'key_to_halo'})
+                inv.update({'id': 'eiffel_tower'})
 
 
             updateUser(user)
             print(f'Обновили {thing_name}')
+
+thing_names = ['statuette_barman_2019']
+if 1==1:
+    updateUser(None)
+    for thing_name in thing_names:
+        # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
+        elem = {'id': thing_name, 'type': 'decoration'}
+
+        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
+            things = user.getInventoryThings(elem)
+            
+            for inv in things:
+                # Заменяем цену у всех вещей этого типа
+                # if 'cost' in inv:
+                #    inv.update({'cost': elem['cost']})
+                # Заменяем id
+                inv.update({'id': 'barman_2019'})
+
+
+            updateUser(user)
+            print(f'Обновили {thing_name}')
+
+thing_names = ['memory_of_the_wedding']
+if 1==1:
+    updateUser(None)
+    for thing_name in thing_names:
+        # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
+        elem = {'id': thing_name, 'type': 'decoration'}
+
+        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
+            things = user.getInventoryThings(elem)
+            
+            for inv in things:
+                # Заменяем цену у всех вещей этого типа
+                # if 'cost' in inv:
+                #    inv.update({'cost': elem['cost']})
+                # Заменяем id
+                inv.update({'id': 'memory_wedding'})
+
+
+            updateUser(user)
+            print(f'Обновили {thing_name}')
+
+thing_names = ['statuette_smart_boy']
+if 1==1:
+    updateUser(None)
+    for thing_name in thing_names:
+        # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
+        elem = {'id': thing_name, 'type': 'decoration'}
+
+        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
+            things = user.getInventoryThings(elem)
+            
+            for inv in things:
+                # Заменяем цену у всех вещей этого типа
+                # if 'cost' in inv:
+                #    inv.update({'cost': elem['cost']})
+                # Заменяем id
+                inv.update({'id': 'smart_boy'})
+
+
+            updateUser(user)
+            print(f'Обновили {thing_name}')
+
+thing_names = ['the_brides_bouquet']
+if 1==1:
+    updateUser(None)
+    for thing_name in thing_names:
+        # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
+        elem = {'id': thing_name, 'type': 'decoration'}
+
+        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
+            things = user.getInventoryThings(elem)
+            
+            for inv in things:
+                # Заменяем цену у всех вещей этого типа
+                # if 'cost' in inv:
+                #    inv.update({'cost': elem['cost']})
+                # Заменяем id
+                inv.update({'id': 'brides_bouquet'})
+
+
+            updateUser(user)
+            print(f'Обновили {thing_name}')          
+
+thing_names = ['statuette_shark']
+if 1==1:
+    updateUser(None)
+    for thing_name in thing_names:
+        # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
+        elem = {'id': thing_name, 'type': 'decoration'}
+
+        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
+            things = user.getInventoryThings(elem)
+            
+            for inv in things:
+                # Заменяем цену у всех вещей этого типа
+                # if 'cost' in inv:
+                #    inv.update({'cost': elem['cost']})
+                # Заменяем id
+                inv.update({'id': 'shark'})
+
+
+            updateUser(user)
+            print(f'Обновили {thing_name}') 
+
 
 # if 1==2:
     # if now_date.hour in (99, 19) and now_date.minute in (99, 58) and now_date.second < 15:

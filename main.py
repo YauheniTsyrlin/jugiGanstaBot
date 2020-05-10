@@ -9,6 +9,7 @@ import speech
 import users 
 import matplot
 import hashlib
+import uuid
 
 import logging
 import ssl
@@ -110,7 +111,7 @@ def getSetting(code: str, name=None, value=None, id=None):
             return result.get('value')
 
 GLOBAL_VARS = {
-    'inventory': getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'] + getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']  ,
+    'inventory': getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'] + getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value'] + getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] ,
     'chat_id':
                 {
                     'inventory':[]
@@ -227,6 +228,26 @@ def addInventory(user: users.User, inv):
     quantity = None
     if 'quantity' in inv:
         quantity = inv['quantity']
+
+    # Добавляем составные объекты
+    listInv = GLOBAL_VARS['inventory']    
+    elem = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None)
+    if elem == None:
+        pass
+    else:
+        if 'composition' in elem:
+            print(f'    {inv}')
+            composition_arr = []
+            for com in elem['composition']:
+                composit = next((x for i, x in enumerate(listInv) if x['id']==com['id']), None)
+                if composit == None:
+                    continue
+                for i in range(0, com["counter"]):
+                    composit.update(({'uid': f'{uuid.uuid4()}'}))
+                    composition_arr.append(composit)
+                    print(f'         {composit["name"]}')
+            if len(composition_arr)>0:
+                inv.update({'composition': composition_arr})    
 
     return user.addInventoryThing(inv, quantity)
 
@@ -4231,8 +4252,13 @@ def main_message(message):
                                     continue
                                 # if user and user.isInventoryThing(elem):
                                 #     continue    
-
+                                s = f"toreward|{login}|{elem['id']}|{userIAm.getLogin()}"
+                                if len(s)>64:
+                                    logger.info(f"ERROR: callback_data more 64b: {elem['id']}")
+                                    continue
+                                
                                 markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}|{userIAm.getLogin()}"))
+
                                 if i == counter :
                                     markupinline.add(InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter}|{userIAm.getLogin()}"))
                                     markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit|||{userIAm.getLogin()}"))
@@ -5356,6 +5382,10 @@ def callback_query(call):
             if i <= counter:
                 pass
             else:
+                s = f"toreward|{login}|{elem['id']}|{userIAm.getLogin()}"
+                if len(s)>64:
+                    logger.info(f"ERROR: callback_data more 64b: {elem['id']}")
+                    continue
                 markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}|{userIAm.getLogin()}"))
                 if i == counter + 10:
                     markupinline.add(InlineKeyboardButton(f"Назад 🔙", callback_data=f"toreward_back|{login}|{counter - 10}|{userIAm.getLogin()}"), InlineKeyboardButton(f"Далее 🔜", callback_data=f"toreward_next|{login}|{counter + 10}|{userIAm.getLogin()}"))
