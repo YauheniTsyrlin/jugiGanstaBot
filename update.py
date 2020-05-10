@@ -3756,7 +3756,7 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-if 1==1: # обновляем composition 
+if 1==2: # обновляем composition 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     # for z in listInv:
@@ -3871,8 +3871,8 @@ if 1==2:
             print(f'=======================================================')
 
 
-thing_names = ['statuette_the_eiffel_tower', 'statuette_barman_2019']
-if 1==1:
+thing_names = ['statuette_the_eiffel_tower']
+if 1==2:
     updateUser(None)
     for thing_name in thing_names:
         # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
@@ -3891,112 +3891,6 @@ if 1==1:
 
             updateUser(user)
             print(f'Обновили {thing_name}')
-
-thing_names = ['statuette_barman_2019']
-if 1==1:
-    updateUser(None)
-    for thing_name in thing_names:
-        # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
-        elem = {'id': thing_name, 'type': 'decoration'}
-
-        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
-            things = user.getInventoryThings(elem)
-            
-            for inv in things:
-                # Заменяем цену у всех вещей этого типа
-                # if 'cost' in inv:
-                #    inv.update({'cost': elem['cost']})
-                # Заменяем id
-                inv.update({'id': 'barman_2019'})
-
-
-            updateUser(user)
-            print(f'Обновили {thing_name}')
-
-thing_names = ['memory_of_the_wedding']
-if 1==1:
-    updateUser(None)
-    for thing_name in thing_names:
-        # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
-        elem = {'id': thing_name, 'type': 'decoration'}
-
-        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
-            things = user.getInventoryThings(elem)
-            
-            for inv in things:
-                # Заменяем цену у всех вещей этого типа
-                # if 'cost' in inv:
-                #    inv.update({'cost': elem['cost']})
-                # Заменяем id
-                inv.update({'id': 'memory_wedding'})
-
-
-            updateUser(user)
-            print(f'Обновили {thing_name}')
-
-thing_names = ['statuette_smart_boy']
-if 1==1:
-    updateUser(None)
-    for thing_name in thing_names:
-        # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
-        elem = {'id': thing_name, 'type': 'decoration'}
-
-        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
-            things = user.getInventoryThings(elem)
-            
-            for inv in things:
-                # Заменяем цену у всех вещей этого типа
-                # if 'cost' in inv:
-                #    inv.update({'cost': elem['cost']})
-                # Заменяем id
-                inv.update({'id': 'smart_boy'})
-
-
-            updateUser(user)
-            print(f'Обновили {thing_name}')
-
-thing_names = ['the_brides_bouquet']
-if 1==1:
-    updateUser(None)
-    for thing_name in thing_names:
-        # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
-        elem = {'id': thing_name, 'type': 'decoration'}
-
-        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
-            things = user.getInventoryThings(elem)
-            
-            for inv in things:
-                # Заменяем цену у всех вещей этого типа
-                # if 'cost' in inv:
-                #    inv.update({'cost': elem['cost']})
-                # Заменяем id
-                inv.update({'id': 'brides_bouquet'})
-
-
-            updateUser(user)
-            print(f'Обновили {thing_name}')          
-
-thing_names = ['statuette_shark']
-if 1==1:
-    updateUser(None)
-    for thing_name in thing_names:
-        # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
-        elem = {'id': thing_name, 'type': 'decoration'}
-
-        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
-            things = user.getInventoryThings(elem)
-            
-            for inv in things:
-                # Заменяем цену у всех вещей этого типа
-                # if 'cost' in inv:
-                #    inv.update({'cost': elem['cost']})
-                # Заменяем id
-                inv.update({'id': 'shark'})
-
-
-            updateUser(user)
-            print(f'Обновили {thing_name}') 
-
 
 # if 1==2:
     # if now_date.hour in (99, 19) and now_date.minute in (99, 58) and now_date.second < 15:

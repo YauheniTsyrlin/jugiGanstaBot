@@ -236,7 +236,6 @@ def addInventory(user: users.User, inv):
         pass
     else:
         if 'composition' in elem:
-            print(f'    {inv}')
             composition_arr = []
             for com in elem['composition']:
                 composit = next((x for i, x in enumerate(listInv) if x['id']==com['id']), None)
@@ -245,7 +244,6 @@ def addInventory(user: users.User, inv):
                 for i in range(0, com["counter"]):
                     composit.update(({'uid': f'{uuid.uuid4()}'}))
                     composition_arr.append(composit)
-                    print(f'         {composit["name"]}')
             if len(composition_arr)>0:
                 inv.update({'composition': composition_arr})    
 
@@ -4256,7 +4254,7 @@ def main_message(message):
                                 if len(s)>64:
                                     logger.info(f"ERROR: callback_data more 64b: {elem['id']}")
                                     continue
-                                
+
                                 markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}|{userIAm.getLogin()}"))
 
                                 if i == counter :
@@ -5435,6 +5433,10 @@ def callback_query(call):
             if i <= counter:
                 pass
             else:
+                s = f"toreward|{login}|{elem['id']}|{userIAm.getLogin()}"
+                if len(s)>64:
+                    logger.info(f"ERROR: callback_data more 64b: {elem['id']}")
+                    continue
                 markupinline.add(InlineKeyboardButton(f"{elem['name']}", callback_data=f"toreward|{login}|{elem['id']}|{userIAm.getLogin()}"))
                 if i == counter + 10:
                     if counter == 0:
