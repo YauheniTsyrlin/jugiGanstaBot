@@ -27,7 +27,8 @@ def job():
 
         logger.info(f'Mem used: {int(available_mem/total_mem*100)}%')
 
-        if available_mem/total_mem < 0.15: # Если свободной памяти осталось меньше 15%,
+        if int(available_mem/total_mem*100) <= 15: # Если свободной памяти осталось меньше 15%,
+            logger.info(f'============= Вызываем рестарт сервера =============')
             call('sudo shutdown -r now', shell=True)
     except:
         logger.error(f'error CheckMem')
