@@ -1423,6 +1423,7 @@ def select_baraholka(call):
             buttons.append(btn)
 
         # Добавление кнопки Собрать 🔧
+        collect = False
         for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
             collect = False
             for composit in inv['composition']:
@@ -1433,9 +1434,8 @@ def select_baraholka(call):
                     collect = False
                     break
             if collect:
-                collect_btn = InlineKeyboardButton(f"Собрать 🔧", callback_data=f"{button['id']}|collect|{step}")
-                buttons.append(collect_btn)
                 break
+
 
         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button['id']}|back|{step-1}") 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button['id']}|exit|{step}")
@@ -1443,6 +1443,10 @@ def select_baraholka(call):
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
+
+        if collect:
+            collect_btn = InlineKeyboardButton(f"Собрать 🔧", callback_data=f"{button['id']}|collect|{step}")
+            markupinline.add(collect_btn)
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
         
@@ -1604,6 +1608,7 @@ def select_shelf(call):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('workbench'))
 def select_shelf(call):
+    
     if isUserBan(call.from_user.username):
         bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
         return
@@ -1637,6 +1642,7 @@ def select_shelf(call):
             buttons.append(btn)
 
         # Добавление кнопки Собрать 🔧
+        collect = False
         for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
             collect = False
             for composit in inv['composition']:
@@ -1647,20 +1653,40 @@ def select_shelf(call):
                     collect = False
                     break
             if collect:
-                collect_btn = InlineKeyboardButton(f"Собрать 🔧", callback_data=f"{button_parent['id']}|collect|{step}")
-                buttons.append(collect_btn)
                 break
 
         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
         forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
 
-
-
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
+        if collect:
+            collect_btn = InlineKeyboardButton(f"Собрать 🔧", callback_data=f"{button_parent['id']}|collect|{0}")
+            markupinline.add(collect_btn)
+
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
+        return
+
+    if button_id in ('selectcollect'):
+        
+        step = int(call.data.split('|')[2])
+        ivn_id = int(call.data.split('|')[3])
+        inventory = list(filter(lambda x : x['id'] == ivn_id, GLOBAL_VARS['inventory']))[0]
+
+        inventories_on = []
+        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
+            inv = invonworkbench['inventory']
+            inventories_on.append(inv)
+
+        for composit in inventory['composition']:
+            for inv in (list(filter(lambda x : x['id'] == composit['id'], inventories_on))):
+                for i in range(0, composit['counter']):
+                    # Удалить
+                    pass
+        bot.answer_callback_query(call.id, 'Еще не собирается, но скоро')
+        #bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
         return
 
     if button_id in ('selectinvent'):
@@ -1697,6 +1723,37 @@ def select_shelf(call):
             markupinline.row(*row) 
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
+        return
+
+    if button_id in ('collect', 'collectback', 'collectforward'):
+        # {button_parent['id']}|collect|{step}}
+        step = int(call.data.split('|')[2])
+        inventories_on = []
+        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
+            inv = invonworkbench['inventory']
+            inventories_on.append(inv)
+
+        for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
+            collect = False
+            for composit in inv['composition']:
+                counter = len(list(filter(lambda x : x['id'] == composit['id'], inventories_on)))
+                if counter >= composit['counter']:
+                    collect = True
+                else:
+                    collect = False
+                    break
+            if collect:
+                btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button_parent_id}|selectcollect|{0}|{inv['id']}")
+                buttons.append(btn)
+
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|collectback|{step-1}") 
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{step}")
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|collectforward|{step+1}")
+
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+            markupinline.row(*row)  
+
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\nЭти вещи ты можешь собрать.", reply_markup=markupinline)
         return
 
     if button_id in ('pickup', 'splitup'):

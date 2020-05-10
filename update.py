@@ -3776,7 +3776,7 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-if 1==1: # обновляем composition 
+if 1==2: # обновляем composition 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     # for z in listInv:
@@ -3802,8 +3802,7 @@ if 1==1: # обновляем composition
                         print(f'         {composit["name"]}')
                 if len(composition_arr)>0:
                     inv.update({'composition': composition_arr})    
-        updateUser(user)
-        
+        updateUser(user)     
 
 if 1==2: # Обновляем атрибуты навыков
     updateUser(None)
