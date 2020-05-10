@@ -1852,7 +1852,7 @@ def select_exchange(call):
 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
         toshelf = InlineKeyboardButton(f"🛍️ На продажу", callback_data=f"{button_parent['id']}|toshelf|{stepinventory}|{inventory['uid']}")
-        sell = InlineKeyboardButton(f"Получить 🔘 {int(inventory['cost']*button_parent['discont'])}", callback_data=f"{button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}")
+        sell = InlineKeyboardButton(f"🔘 {int(inventory['cost']*button_parent['discont'])} Получить", callback_data=f"{button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}")
         toworkbench = InlineKeyboardButton(f"⚙️ На верстак", callback_data=f"{button_parent['id']}|toworkbench|{stepinventory}|{inventory['uid']}")
         
         buttons.append(toshelf)
