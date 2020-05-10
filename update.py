@@ -67,6 +67,111 @@ def setSetting(login: str, code: str, value: str):
     newvalues = { "$set": { "value": value } }
     u = settings.update_one(myquery, newvalues)
 
+
+GLOBAL_VARS = {
+    'inventory':  getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] + getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'] + getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']  ,
+    'chat_id':
+                {
+                    'inventory':[]
+                },
+    'skill':
+                {
+                    'programmer': next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None),
+                    'watchmaker':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='watchmaker'), None),
+                    'economist':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='economist'), None),
+                    'fighter':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='fighter'), None),
+                    'robotics':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='robotics'), None),
+                    'electrician':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None),
+                    'medic':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
+                },
+    'fractions':  ['⚙️Убежище 4', '⚙️Убежище 11', '🔪Головорезы', '💣Мегатонна', '⚛️Республика', '👙Клуб бикини', '🔰Конкорд'],
+    'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти'],
+    'fight_log_message' : ['отдал на съедение кротокрысам', 'одержал победу над', 'не оставил живого места от', 'гордо наступил на полудохлого', 'оставил бездыханное тело', 'сделал сиротами детишек', 'добил с пинка', 'добил лежачего', 'выписал пропуск в Вальхаллу', 'добил фаталити', 'стоит над поверженным', 'одержал победу над'],
+    'eating_in_new_rino': ['опустошил бокал бурбона.', 'жадно ест сухари.'],
+    'group_buttons': ['Джу, 📋 Отчет'],
+    'private_buttons': ['📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика', '🧺 Комиссионка'],
+    'typeforexcenge': [ 'clothes', 'food', 'decoration', 'things'],
+    'typeforcomission': [ 'clothes', 'food', 'decoration', 'things'],
+    'profile':
+    {
+        'id': 'profile',
+        'name': '📜 Профиль',
+        'description': '📜 Здесь ты можешь посмотреть все свои атрибуты, навыки, вещи и подарки.',
+        'buttons': [
+            {
+                'id': 'common',
+                'name': '🏷 Общие',
+                'description': '📜 Здесь ты можешь посмотреть общие атрибуты',
+                'buttons': []              
+            },
+            {
+                'id': 'сombat',
+                'name': '📯 Боевая мощь',
+                'description': '📯 Здесь ты можешь посмотреть свои боевые параметры',
+                'buttons': []              
+            },
+            {
+                'id': 'setting',
+                'name': '📋 Настройки',
+                'description': '📋  Здесь ты можешь посмотреть свои настройки',
+                'buttons': []              
+            },
+            {
+                'id': 'abilities',
+                'name': '💡 Навыки',
+                'description': '💡 Здесь ты можешь посмотреть свои навыки и должности',
+                'buttons': []              
+            },
+            {
+                'id': 'things',
+                'name': '📦 Вещи',
+                'description': '📦 Здесь ты можешь посмотреть все свои вещи',
+                'buttons': []              
+            },
+            {
+                'id': 'awards',
+                'name': '🏵 Награды 🔩',
+                'description': '🏵 Здесь ты можешь посмотреть свои 🏵 Награды, 🎁 Подарки и 🔩 Рейдовые болты',
+                'buttons': []              
+            }
+       ]
+    },
+    'commission':
+    {
+        'id': 'trade',
+        'name': '🧺 Комиссионка',
+        'description': '🧺 Здесь ты можешь попытаться продать, обменять, сдать вещи из своего инвентаря или посмотреть, что продают другие бандиты.',
+        'buttons': [
+            
+            {
+                'id': 'onshelf',
+                'name': '🛠️🛍️ Магазин',
+                'description':'🛍️ Здесь можно посмотреть товара, которые бандиты выставили на продажу.',
+                'buttons': []
+            },
+            {
+                'id': 'workbench',
+                'name': '🛠️⚙️ Верстак',
+                'description':'⚙️ Здесь можно собрать новые вещи или разобрать на 📦 запчасти.',
+                'buttons': []
+            },
+            {
+                'id': 'exchange',
+                'name': '📦 Мои вещи',
+                'description':'📦 Здесь можно выставить свои товар на 🛍️ продажу, тупо сдать за 30% 🔘Crypto или положить на ⚙️ Верстак.',
+                'buttons': [],
+                'discont': 0.3
+            },
+            {
+                'id': 'back',
+                'name': 'Выйти ❌',
+                'description':'🧺 Удачи, до новых встреч!',
+                'buttons': []
+            }
+        ]
+    }
+}
+
 def getUserByLogin(login: str):
     for user in list(USERS_ARR):
         try:
@@ -3651,6 +3756,34 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
+if 1==1: # обновляем composition 
+    updateUser(None)
+    listInv = GLOBAL_VARS['inventory']
+    # for z in listInv:
+    #     print(z)
+    for user in list(filter(lambda x : len(x.getInventory()) > 0, USERS_ARR)):
+        for inv in user.getInventory():
+            elem = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None)
+            if elem == None:
+                continue
+
+            if 'composition' in elem:
+                print(f'    {inv}')
+                composition_arr = []
+                for com in elem['composition']:
+                    composit = next((x for i, x in enumerate(listInv) if x['id']==com['id']), None)
+                    if composit == None:
+                        continue
+                    for i in range(0, com["counter"]):
+                        composit.update(({'uid': f'{uuid.uuid4()}'}))
+                        composition_arr.append(composit)
+                        print(f'         {composit["name"]}')
+                if len(composition_arr)>0:
+                    inv.update({'composition': composition_arr})
+                
+        updateUser(user)
+        print(f'Update {user.getLogin()}')
+
 if 1==2: # Обновляем атрибуты навыков
     updateUser(None)
     
@@ -3662,7 +3795,6 @@ if 1==2: # Обновляем атрибуты навыков
                 print(f'    {skill["name"]}')
         updateUser(user)
         print(f'Update {user.getLogin()}')
-
 
 if 1==2:
     # Запускать один раз! Иначе затрет

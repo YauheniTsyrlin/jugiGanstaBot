@@ -1644,7 +1644,7 @@ def select_shelf(call):
             bot.answer_callback_query(call.id, f'Этой вещи уже нет на верстаке.')
             return
         
-        userseller = getUserByLogin(inventory['login'])
+        userseller = getUserByLogin(invonworkbench['login'])
 
         newvalues = { "$set": {'state': 'CANCEL'} }
         result = workbench.update_one(
