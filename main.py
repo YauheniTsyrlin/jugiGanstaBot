@@ -2257,6 +2257,15 @@ def get_message_photo(message):
         ww = wariors.fromPhotoToWarioirs(message.forward_date, message.caption, message.photo[0].file_id)
         for warior in ww:
             update_warior(warior)
+            # Отедельно обновляем Банду
+            if warior.getBand() == None:
+                newvalues = { "$set": {'band': None} }
+                resultupdata = registered_wariors.update_one({
+                    "name": f"{warior.getName()}", 
+                    "fraction": f"{warior.getFraction()}"
+                    }, newvalues)
+                update_warior(None)
+                    
             wariorShow = getWariorByName(warior.getName(), warior.getFraction())
             markupinline = None
             
