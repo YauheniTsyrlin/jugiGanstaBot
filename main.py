@@ -1612,14 +1612,36 @@ def select_shelf(call):
 
     if button_id in ('forward', 'back', 'selectexit'):
         step = int(call.data.split('|')[2])
+        inventories_on = []
         for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
             inv = invonworkbench['inventory']
+            inventories_on.append(inv)
             btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button_parent_id}|selectinvent|{step}|{inv['uid']}")
             buttons.append(btn)
+
+        for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
+            collect = False
+            for composit in inv['composition']:
+                counter = len(list(filter(lambda x : x['id'] == composit['id'], inventories_on)))
+                if counter >= composit['counter']:
+                    collect = True
+                else:
+                    collect = False
+                    break
+
+            if collect:
+                collect_btn = InlineKeyboardButton(f"Собрать 🔧", callback_data=f"{button_parent['id']}|collect|{step}")
+                buttons.append(collect_btn)
+                break
+
+
+
 
         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
         forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
+
+
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
