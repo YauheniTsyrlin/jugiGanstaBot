@@ -2121,7 +2121,11 @@ def select_exchange(call):
         user = getUserByLogin(call.from_user.username)
         inventory = user.getInventoryThing({'uid': inv_uid})
 
-        if inventory['id'] == 
+        if inventory['id'] == 'crown_pidor':
+            goat = getMyGoat(call.from_user.username)
+            send_messages_big(goat['chats']['info'], text=f'Внимание! Вы представляете!? {user.getNameAndGerb()} (@{user.getLogin()}) хотел сдать 👑 золотую корону с гравировкой "Pidor of the day". Ну настоящий пидорский поступок!\nА ну-ка, наваляйте ему хорошенько!')
+            bot.answer_callback_query(call.id, f'Ну ты и пидор! Попытаться сдать корону - это запредельно!')
+            return
 
         if button_id in ('getcrypto'):
             cost = int(inventory["cost"]*button_parent['discont'])
@@ -5174,7 +5178,7 @@ def report_man_of_day(message_user_name: str):
 
 
     # acc = '👑 "Пидор дня"'
-    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
+    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor'), None).copy()
 
     findInLoser = 0
     i = 0
@@ -6634,7 +6638,7 @@ def getPidorOfTheDay(goat, now_date):
             pidor2 = random.sample(old_pidors, 1)[0].getNameAndGerb()
             twoPidors = f'👬 Два бывалых пидора, {pidor1} и {pidor2},'
 
-        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor_of_the_day'), None)
+        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='REWARDS')['value']) if x['id']=='crown_pidor'), None).copy()
         # acc = '👑 "Пидор дня"'
 
         lastWinner = None
