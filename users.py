@@ -685,12 +685,7 @@ class User(object):
         else:
             thing.update({'uid': f'{uuid.uuid4()}'})
 
-        if count == None:
-            self.getInventory().append(thing)
-        elif self.getInventoryThingCount(thing) < count:
-            self.getInventory().append(thing)
-        else:
-            return None
+        self.getInventory().append(thing)
         return thing
 
     def getInventoryThingInfo(self, thing):
