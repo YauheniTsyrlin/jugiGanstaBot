@@ -35,7 +35,7 @@ def getThingInfo(inv):
                         ps = '├'
                     if counter == len_ps:
                         ps = '└'
-                info = info + f'   {ps}▫️{composit["name"]} {composit["uid"]}\n'
+                info = info + f'   {ps}▫️{composit["name"]}\n'
     return info
 
 def normalize(string):
