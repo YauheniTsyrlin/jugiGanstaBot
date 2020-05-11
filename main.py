@@ -1774,7 +1774,7 @@ def select_workbench(call):
         
         if 'uid' not in inventory:
             inventory.update({'uid': f'{uuid.uuid4()}'})
-            
+
         row = {
                 'date': (datetime.now()).timestamp(),
                 'login': user.getLogin(),
@@ -1881,17 +1881,34 @@ def select_workbench(call):
                     }, newvalues)
                 if result.matched_count < 1:
                     workbench.insert_one(row)
-                print(f'add {comp["name"]} {comp["uid"]}')
+
             bot.answer_callback_query(call.id, f'Разобрали')
 
-        
 
+                break
+
+        
         # selectexit
         step = int(call.data.split('|')[2])
+        inventories_on = []
         for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
             inv = invonworkbench['inventory']
+            inventories_on.append(inv)
             btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button_parent_id}|selectinvent|{step}|{inv['uid']}")
             buttons.append(btn)
+
+        # Добавление кнопки Собрать 🔧
+        collect = False
+        for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
+            collect = False
+            for composit in inv['composition']:
+                counter = len(list(filter(lambda x : x['id'] == composit['id'], inventories_on)))
+                if counter >= composit['counter']:
+                    collect = True
+                else:
+                    collect = False
+                    break
+            if collect:
 
         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
@@ -1900,6 +1917,10 @@ def select_workbench(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
+        if collect:
+            collect_btn = InlineKeyboardButton(f"Собрать 🔧", callback_data=f"{button_parent['id']}|collect|{0}")
+            markupinline.add(collect_btn)
+            
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
         return
 
