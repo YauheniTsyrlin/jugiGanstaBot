@@ -4027,7 +4027,7 @@ def main_message(message):
                 text = message.text[3:]
 
             result = getResponseDialogFlow(message.from_user.username, text)
-            logger.info(f'getResponseDialogFlow: {result}')
+            # logger.info(f'getResponseDialogFlow: {result}')
             response = result.fulfillment_text
             parameters = result.parameters
             if response:
