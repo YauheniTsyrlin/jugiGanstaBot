@@ -2174,7 +2174,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'crown_pidor',
                                     'name': '👑 "Пидор дня"',
-                                    'cost': 100,
+                                    'cost': 1000,
                                     'type': 'decoration',
                                     'quantity': None
                                 }
@@ -2208,14 +2208,14 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'scalp_of_deus_ex_machina',
+                                    'id': 'scalp_deus',
                                     'name': '🤯 Скальп Deus Ex Machina',
                                     'cost': 50,
                                     'type': 'things',
                                     'quantity': None
                                 },
                                 {
-                                    'id': 'scalp_of_goose_point',
+                                    'id': 'scalp_goose',
                                     'name': '🍩 Очко гуся',
                                     'cost': 50,
                                     'type': 'things',
@@ -3928,12 +3928,12 @@ if 1==2:
             print(f'=======================================================')
 
 
-thing_names = ['crown_pidor_of_the_day']
-if 1==2:
+thing_names = ['scalp_of_deus_ex_machina']
+if 1==1:
     updateUser(None)
     for thing_name in thing_names:
         # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
-        elem = {'id': thing_name, 'type': 'decoration'}
+        elem = {'id': thing_name, 'type': 'things'}
 
         for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
             things = user.getInventoryThings(elem)
@@ -3943,7 +3943,28 @@ if 1==2:
                 # if 'cost' in inv:
                 #    inv.update({'cost': elem['cost']})
                 # Заменяем id
-                inv.update({'id': 'crown_pidor'})
+                inv.update({'id': 'scalp_deus'})
+
+
+            updateUser(user)
+            print(f'Обновили {thing_name}')
+
+thing_names = ['scalp_of_goose_point']
+if 1==1:
+    updateUser(None)
+    for thing_name in thing_names:
+        # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
+        elem = {'id': thing_name, 'type': 'things'}
+
+        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
+            things = user.getInventoryThings(elem)
+            
+            for inv in things:
+                # Заменяем цену у всех вещей этого типа
+                # if 'cost' in inv:
+                #    inv.update({'cost': elem['cost']})
+                # Заменяем id
+                inv.update({'id': 'scalp_goose'})
 
 
             updateUser(user)
