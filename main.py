@@ -194,7 +194,7 @@ GLOBAL_VARS = {
             {
                 'id': 'workbench',
                 'name': '🛠️⚙️ Верстак',
-                'description':'⚙️ Здесь можно собрать новые вещи или разобрать на 📦 запчасти.',
+                'description':'⚙️ Здесь можно собрать новые вещи или разобрать на 📦 запчасти. Для этого надо положить на верстак какую-либо вещь из меню "📦 Мои вещи"',
                 'buttons': []
             },
             {
@@ -1410,7 +1410,6 @@ def select_baraholka(call):
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
         
-
         bot.answer_callback_query(call.id, 'Все еще на реконструкции')
         return
 
@@ -1449,9 +1448,6 @@ def select_baraholka(call):
             markupinline.add(collect_btn)
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
-        
-
-        bot.answer_callback_query(call.id, 'Все еще на реконструкции')
         return
 
     if button_id == 'exchange':
