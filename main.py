@@ -1803,7 +1803,7 @@ def select_workbench(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n<b>Ты собрал:</b>\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n<b>Ты собрал:</b>\n{users.getThingInfo(inventory)}", reply_markup=markupinline, parse_mode='HTML')
 
         return
 
