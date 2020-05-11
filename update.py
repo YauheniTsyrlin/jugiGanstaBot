@@ -3812,7 +3812,7 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-if 1==2: # обновляем composition 
+if 1==1: # обновляем composition 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     # for z in listInv:
@@ -3820,24 +3820,27 @@ if 1==2: # обновляем composition
     for user in list(filter(lambda x : len(x.getInventory()) > 0, USERS_ARR)):
         print(f'Update {user.getLogin()}')
         for inv in user.getInventory():
-            elem = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None)
+            inv = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None)
             
-            if elem == None:
+            if inv == None:
                 continue
-            elem = elem.copy()
-            if 'composition' in elem:
-                print(f'    {inv}')
-                composition_arr = []
-                for com in elem['composition']:
-                    composit = next((x for i, x in enumerate(listInv) if x['id']==com['id']), None).copy()
-                    if composit == None:
-                        continue
+            inv = inv.copy()
+            if 'composition' in inv:
+                arr = []
+                for com in inv['composition']:
+                    arr.append(com)
+
+                comp_arr = []  
+                inv.update({'composition': comp_arr})
+
+                for com in arr:
                     for i in range(0, com["counter"]):
-                        composit.update(({'uid': f'{uuid.uuid4()}'}))
-                        composition_arr.append(composit)
+                        composit = list(filter(lambda x : x['id']==com['id'], GLOBAL_VARS['inventory']))[0].copy()
+                        composit.update({'uid':f'{uuid.uuid4()}'})
+                        comp_arr.append(composit)
                         print(f'         {composit["name"]}')
-                if len(composition_arr)>0:
-                    inv.update({'composition': composition_arr})    
+                print(f'    {inv}')
+                   
         updateUser(user)     
 
 if 1==2: # Обновляем атрибуты навыков
