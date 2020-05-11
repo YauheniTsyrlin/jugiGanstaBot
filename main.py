@@ -1772,9 +1772,28 @@ def select_workbench(call):
                             return
                         break
 
-        user.addInventoryThing(inventory) 
-        updateUser(user)               
-        #  bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
+        row = {
+                'date': (datetime.now()).timestamp(),
+                'login': user.getLogin(),
+                'band' : user.getBand(),
+                'goat' : getMyGoatName(user.getLogin()),
+                'state': 'NEW',
+                'inventory'  : inventory
+        }
+        newvalues = { "$set": row }
+
+        result = workbench.update_one(
+            {
+                'state': 'NEW',
+                'inventory.uid' : inventory['uid']
+            }, newvalues)
+        if result.matched_count < 1:
+            workbench.insert_one(row)
+
+
+        # user.addInventoryThing(inventory) 
+        # updateUser(user)               
+        # bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
         
         # Рисуекм кнопки назад и т.д.
         step = int(call.data.split('|')[2])
