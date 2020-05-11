@@ -4027,6 +4027,7 @@ def main_message(message):
                 text = message.text[3:]
 
             result = getResponseDialogFlow(message.from_user.username, text)
+            logger.info(f'getResponseDialogFlow: {result}')
             response = result.fulfillment_text
             parameters = result.parameters
             if response:
@@ -4874,6 +4875,7 @@ def main_message(message):
                         addInventory(userIAm, coffee)                  
                         updateUser(userIAm)
                         send_messages_big(message.chat.id, text=f'Ты получил:▫️ {coffee["name"]}\n')
+                        
                     elif 'setlocation' == response.split(':')[1]:
                         #jugi:setlocation:Москва
                         Client.PARAMS = {"format": "json", "apikey": config.YANDEX_GEOCODING_API_KEY}
