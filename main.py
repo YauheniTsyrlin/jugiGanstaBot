@@ -1859,7 +1859,9 @@ def select_workbench(call):
             updateUser(userseller)
             bot.answer_callback_query(call.id, f'Забрали')
         elif button_id in ('splitup'):
+            
             for comp in inventory['composition']:
+                logger.info(f'split up {comp["name"]} {comp["uid"]}')
                 row = {
                         'date': (datetime.now()).timestamp(),
                         'login': userseller.getLogin(),
@@ -1869,7 +1871,6 @@ def select_workbench(call):
                         'inventory'  : comp
                 }
                 newvalues = { "$set": row }
-
                 result = workbench.update_one(
                     {
                         'state': 'NEW',
