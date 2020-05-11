@@ -1771,7 +1771,10 @@ def select_workbench(call):
                             bot.answer_callback_query(call.id, f'Что пошло не так.')
                             return
                         break
-
+        
+        if 'uid' not in inventory:
+            inventory.update({'uid': f'{uuid.uuid4()}'})
+            
         row = {
                 'date': (datetime.now()).timestamp(),
                 'login': user.getLogin(),
