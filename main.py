@@ -1861,7 +1861,7 @@ def select_workbench(call):
         if button_id in ('pickup'):
             userseller.addInventoryThing(inventory)
             updateUser(userseller)
-
+            bot.answer_callback_query(call.id, f'Забрали')
         elif button_id in ('splitup'):
             for comp in inventory['composition']:
                 row = {
@@ -1883,10 +1883,6 @@ def select_workbench(call):
                     workbench.insert_one(row)
 
             bot.answer_callback_query(call.id, f'Разобрали')
-
-
-                break
-
         
         # selectexit
         step = int(call.data.split('|')[2])
