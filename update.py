@@ -2172,7 +2172,7 @@ newvalues = { "$set": { "value":
                                     'quantity': 5
                                 },
                                 {
-                                    'id': 'crown_pidor_of_the_day',
+                                    'id': 'crown_pidor',
                                     'name': '👑 "Пидор дня"',
                                     'cost': 100,
                                     'type': 'decoration',
@@ -3928,8 +3928,8 @@ if 1==2:
             print(f'=======================================================')
 
 
-thing_names = ['statuette_the_eiffel_tower']
-if 1==2:
+thing_names = ['crown_pidor_of_the_day']
+if 1==1:
     updateUser(None)
     for thing_name in thing_names:
         # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
@@ -3943,7 +3943,7 @@ if 1==2:
                 # if 'cost' in inv:
                 #    inv.update({'cost': elem['cost']})
                 # Заменяем id
-                inv.update({'id': 'eiffel_tower'})
+                inv.update({'id': 'crown_pidor'})
 
 
             updateUser(user)

@@ -1921,8 +1921,6 @@ def select_workbench(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
         return
 
-
-
 @bot.callback_query_handler(func=lambda call: call.data.startswith('exchange'))
 def select_exchange(call):
     # bot.answer_callback_query(call.id, call.data)
@@ -2122,6 +2120,8 @@ def select_exchange(call):
         step = 0
         user = getUserByLogin(call.from_user.username)
         inventory = user.getInventoryThing({'uid': inv_uid})
+
+        if inventory['id'] == 
 
         if button_id in ('getcrypto'):
             cost = int(inventory["cost"]*button_parent['discont'])
