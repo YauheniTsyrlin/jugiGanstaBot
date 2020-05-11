@@ -4021,9 +4021,9 @@ if 1==2: # Изменение уровня обучения навыку
 # x = plan_raids.delete_many({'rade_date':1580162400.0})
 # print(x.deleted_count)
 
-registered_users.update_many( {'band': 'Deus Ex Machina'},
-    { '$set': { 'band': 'Δeus Σx Machina'} }
-)
+# registered_users.update_many( {'band': 'Deus Ex Machina'},
+#     { '$set': { 'band': 'Δeus Σx Machina'} }
+# )
     
 # for x in registered_users.find({'rank': None}):
 #     registered_users.update(
