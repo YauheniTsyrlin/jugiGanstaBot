@@ -1909,6 +1909,7 @@ def select_workbench(call):
                     collect = False
                     break
             if collect:
+                break
 
         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
