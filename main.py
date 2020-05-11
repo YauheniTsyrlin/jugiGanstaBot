@@ -1352,8 +1352,8 @@ def select_profile(call):
 
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'{description}\n{user.getProfile(button_id)}', parse_mode='HTML', reply_markup=markup)
 
-# ================================== Комиссионка ====================================
-@bot.message_handler(func=lambda message: message.text and ('🧺 Комиссионка' == message.text) and 'private' == message.chat.type)
+# ================================== Комиссионка ==================================== and 'private' == message.chat.type
+@bot.message_handler(func=lambda message: message.text and ('🧺 Комиссионка' == message.text) )
 def send_baraholka(message):
     # if not isAdmin(message.from_user.username):
     #     send_welcome(message)
