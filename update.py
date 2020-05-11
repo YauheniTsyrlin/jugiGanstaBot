@@ -3929,7 +3929,7 @@ if 1==2:
 
 
 thing_names = ['scalp_of_deus_ex_machina']
-if 1==1:
+if 1==2:
     updateUser(None)
     for thing_name in thing_names:
         # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
@@ -3949,26 +3949,6 @@ if 1==1:
             updateUser(user)
             print(f'Обновили {thing_name}')
 
-thing_names = ['scalp_of_goose_point']
-if 1==1:
-    updateUser(None)
-    for thing_name in thing_names:
-        # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
-        elem = {'id': thing_name, 'type': 'things'}
-
-        for user in list(filter(lambda x : x.getInventoryThingCount(elem) > 0, USERS_ARR)):
-            things = user.getInventoryThings(elem)
-            
-            for inv in things:
-                # Заменяем цену у всех вещей этого типа
-                # if 'cost' in inv:
-                #    inv.update({'cost': elem['cost']})
-                # Заменяем id
-                inv.update({'id': 'scalp_goose'})
-
-
-            updateUser(user)
-            print(f'Обновили {thing_name}')
 
 # if 1==2:
     # if now_date.hour in (99, 19) and now_date.minute in (99, 58) and now_date.second < 15:

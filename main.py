@@ -2815,19 +2815,19 @@ def main_message(message):
                                     loser = getWariorByName(war.getName(), war.getFraction())
 
                                     if loser:
-                                        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_banditos'), None) 
+                                        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_banditos'), None).copy() 
                                         k = 1
                                         if loser.getGoat():
                                             k = 2
                                             if loser.getGoat() == 'Δeus Σx Machina':
-                                                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
+                                                elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_deus'), None).copy() 
                                                 k =3
                                         if loser.getName() == '{^_^}': 
-                                            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_zak'), None) 
+                                            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_zak'), None).copy() 
                                             k = 5
 
                                         if loser.getName() == 'Очко гуся': 
-                                            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_goose_point'), None) 
+                                            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_goose'), None).copy() 
                                             k = 4
                                         
                                         elem.update({"cost": elem["cost"] * k})
