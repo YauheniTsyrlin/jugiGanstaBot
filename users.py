@@ -26,6 +26,7 @@ def getThingInfo(inv):
         counter = 0
         if inv['composition']:
             for composit in inv['composition']:
+                if 'name' not in composit: continue 
                 counter = counter + 1
                 if len_ps == 1:
                     ps = '└'

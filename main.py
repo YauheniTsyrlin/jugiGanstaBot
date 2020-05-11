@@ -1607,7 +1607,7 @@ def select_shelf(call):
         return
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('workbench'))
-def select_shelf(call):
+def select_workbench(call):
     
     if isUserBan(call.from_user.username):
         bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
@@ -1667,26 +1667,6 @@ def select_shelf(call):
             markupinline.add(collect_btn)
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
-        return
-
-    if button_id in ('selectcollect'):
-        bot.answer_callback_query(call.id, call.data)
-        step = int(call.data.split('|')[2])
-        ivn_id = int(call.data.split('|')[3])
-        inventory = list(filter(lambda x : x['id'] == ivn_id, GLOBAL_VARS['inventory']))[0]
-
-        inventories_on = []
-        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
-            inv = invonworkbench['inventory']
-            inventories_on.append(inv)
-
-        for composit in inventory['composition']:
-            for inv in (list(filter(lambda x : x['id'] == composit['id'], inventories_on))):
-                for i in range(0, composit['counter']):
-                    # Удалить
-                    pass
-        bot.answer_callback_query(call.id, 'Еще не собирается, но скоро')
-        #bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
         return
 
     if button_id in ('selectinvent'):
@@ -1754,6 +1734,77 @@ def select_shelf(call):
             markupinline.row(*row)  
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\nЭти вещи ты можешь собрать.", reply_markup=markupinline)
+        return
+
+    if button_id in ('selectcollect'):
+        step = int(call.data.split('|')[2])
+        ivn_id = call.data.split('|')[3]
+        inventory = list(filter(lambda x : x['id'] == ivn_id, GLOBAL_VARS['inventory']))[0].copy()
+
+        inventories_on = []
+        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
+            inv = invonworkbench['inventory']
+            inventories_on.append(inv)
+
+        arr = []
+        for com in inventory['composition']:
+            arr.append(com)
+        
+        comp_arr = []  
+        inventory.update({'composition': comp_arr})
+
+        for composit in arr:
+            for i in range(0, composit['counter']):
+                for inv in inventories_on:
+                    if inv['id'] == composit['id']:
+                        comp_arr.append(inv)
+                        inventories_on.remove(inv)
+
+                        newvalues = { "$set": {'state': 'CANCEL'} }
+                        result = workbench.update_one(
+                            {
+                                'state': 'NEW',
+                                'inventory.uid' : inv['uid']
+                            }, newvalues)
+                        
+                        if result.matched_count < 1:
+                            bot.answer_callback_query(call.id, f'Что пошло не так.')
+                            return
+                        break
+
+        user.addInventoryThing(inventory) 
+        updateUser(user)               
+        #  bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
+        
+        # Рисуекм кнопки назад и т.д.
+        step = int(call.data.split('|')[2])
+        inventories_on = []
+        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
+            inv = invonworkbench['inventory']
+            inventories_on.append(inv)
+
+        for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
+            collect = False
+            for composit in inv['composition']:
+                counter = len(list(filter(lambda x : x['id'] == composit['id'], inventories_on)))
+                if counter >= composit['counter']:
+                    collect = True
+                else:
+                    collect = False
+                    break
+            if collect:
+                btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button_parent_id}|selectcollect|{0}|{inv['id']}")
+                buttons.append(btn)
+
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|collectback|{step-1}") 
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{step}")
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|collectforward|{step+1}")
+
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+            markupinline.row(*row)  
+
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n<b>Ты собрал:</b>\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
+
         return
 
     if button_id in ('pickup', 'splitup'):
@@ -2724,7 +2775,7 @@ def main_message(message):
                                         k = 1
                                         if loser.getGoat():
                                             k = 2
-                                            if loser.getGoat() == 'Deus Ex Machina':
+                                            if loser.getGoat() == 'Δeus Σx Machina':
                                                 elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_deus_ex_machina'), None) 
                                                 k =3
                                         if loser.getName() == '{^_^}': 
@@ -4817,6 +4868,12 @@ def main_message(message):
                             bot.send_message(message.chat.id, text='Быть, епта!')
                         else:
                             bot.send_message(message.chat.id, text='ХЗ, я бы не рискнул...')
+                    elif 'coffee' == response.split(':')[1]:
+                        #jugi:setlocation:Москва
+                        coffee = next((x for i, x in enumerate(listInv) if x['id']=='coffee'), None).copy()
+                        addInventory(userIAm, coffee)                  
+                        updateUser(userIAm)
+                        send_messages_big(message.chat.id, text=f'Ты получил:▫️ {coffee["name"]}\n')
                     elif 'setlocation' == response.split(':')[1]:
                         #jugi:setlocation:Москва
                         Client.PARAMS = {"format": "json", "apikey": config.YANDEX_GEOCODING_API_KEY}
@@ -5373,7 +5430,6 @@ def callback_query(call):
 
     if call.data.startswith("setrank_next"):
         #        0         1     2
-        # toreward_next|{login}|10
         counter  = int(call.data.split('|')[2])
         login = call.data.split('|')[1]
         user = getUserByLogin(login)
@@ -5405,7 +5461,6 @@ def callback_query(call):
         return
 
     if call.data.startswith("setrank_back"):
-        # toreward_back|{login}|10"
         counter  = int(call.data.split('|')[2])
         login = call.data.split('|')[1]
         user = getUserByLogin(login)
@@ -5610,27 +5665,27 @@ def callback_query(call):
         listInv = userIAm.getInventoryType(GLOBAL_VARS['typeforexcenge'])
 
     for elem in listInv:
-        
-        if elem['id'] == call.data.split('|')[2]:
+        inv = elem.copy()
+        if inv['id'] == call.data.split('|')[2]:
             bot.answer_callback_query(call.id, "Ты сделал свой выбор")
             if login.lower() == 'всем':
                 if isAdmin(call.from_user.username):
                     for useradd in list(USERS_ARR):
-                        addInventory(useradd, elem)
+                        addInventory(useradd, inv)
                         updateUser(useradd)
-                    send_messages_big(call.message.chat.id, text= 'Бандиты!\n' + getResponseDialogFlow(call.message.from_user.username, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+                    send_messages_big(call.message.chat.id, text= 'Бандиты!\n' + getResponseDialogFlow(call.message.from_user.username, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {inv["name"]}') 
                 else:
                     send_messages_big(call.message.chat.id, text= getResponseDialogFlow(call.message.from_user.username, 'shot_message_not_admin').fulfillment_text) 
             else:
                 if isAdmin(call.from_user.username): 
-                    addInventory(user, elem)
+                    addInventory(user, inv)
                 else:
-                    userIAm.removeInventoryThing(elem)
-                    addInventory(user, elem)
+                    userIAm.removeInventoryThing(inv)
+                    addInventory(user, inv)
                     updateUser(userIAm)
 
                 updateUser(user)
-                send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {elem["name"]}') 
+                send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message.from_user.username, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {inv["name"]}') 
 
             break
 

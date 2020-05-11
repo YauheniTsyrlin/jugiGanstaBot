@@ -1487,9 +1487,44 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'coffee',
                                     'name': '☕ Горячий кофе',
+                                    'cost': 10,
+                                    'type': 'food',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'milk',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'coffee_grains',
+                                            'counter': 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'milk',
+                                    'name': '🥛 Молоко',
+                                    'cost': 2,
+                                    'type': 'food',
+                                    'quantity': None,
+                                    'subjects_to_find':
+                                    [
+                                        'Молоко брамина'
+                                    ],
+                                    'dialog_old_text': 'old_milk'
+                                },
+                                {
+                                    'id': 'coffee_grains',
+                                    'name': '🍂 Зёрна кофе',
                                     'cost': 3,
                                     'type': 'food',
-                                    'quantity': None
+                                    'quantity': None,
+                                    'subjects_to_find':
+                                    [
+                                        'Абрик*с'
+                                    ],
+                                    'dialog_old_text': 'old_grains'
                                 },
                                 {
                                     'id': 'sugar_seed',
@@ -1497,7 +1532,8 @@ newvalues = { "$set": { "value":
                                     'cost': 2,
                                     'type': 'food',
                                     'quantity': 1
-                                },{
+                                },
+                                {
                                     'id': 'salt',
                                     'name': '🧂 Соль на рану',
                                     'cost': 1,
@@ -3776,7 +3812,7 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-if 1==2: # обновляем composition 
+if 1==1: # обновляем composition 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     # for z in listInv:
