@@ -2826,7 +2826,11 @@ def main_message(message):
                                         if loser.getName() == 'Очко гуся': 
                                             elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_goose'), None).copy() 
                                             k = 4
-                                        
+
+                                        if loser.getName() == 'Fateev': 
+                                            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_ass'), None).copy() 
+                                            k = 4
+
                                         elem.update({"cost": elem["cost"] * k})
 
                                         if addInventory(ourBandUser, elem):

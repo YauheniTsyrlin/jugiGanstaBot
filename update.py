@@ -2222,6 +2222,13 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
+                                    'id': 'scalp_ass',
+                                    'name': '💩 Скальп гавнюка',
+                                    'cost': 50,
+                                    'type': 'things',
+                                    'quantity': None
+                                },
+                                {
                                     'id': 'bouquet_of_flowers',
                                     'name': '💐 Букет цветов',
                                     'cost': 12,
