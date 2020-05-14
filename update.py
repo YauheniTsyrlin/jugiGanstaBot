@@ -2523,7 +2523,7 @@ newvalues = { "$set": { "value":
                                 },
                                 {
                                     'id': 'collapsar',
-                                    'name': '   ',
+                                    'name': '🔲 Collapsar',
                                     'cost': 1,
                                     'type': 'things',
                                     'quantity': None,
