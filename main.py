@@ -229,7 +229,7 @@ def addInventory(user: users.User, inv):
     if 'quantity' in inv:
         quantity = inv['quantity']
 
-    # Добавляем составные объекты
+    # Добавляем составные   объекты
     listInv = GLOBAL_VARS['inventory']    
     if 'composition' in inv:
         arr = []
