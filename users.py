@@ -9,7 +9,6 @@ import itertools
 import uuid
 
 def getThingInfo(inv):
-
     info = f'┌{inv["name"]}\n'
     # info = info + f'├🏷️ {inv["uid"]}\n'
     # info = info + f'├🧮 {inv["uid"]}\n'
@@ -28,6 +27,7 @@ def getThingInfo(inv):
             for composit in inv['composition']:
                 if 'name' not in composit: continue 
                 counter = counter + 1
+                
                 if len_ps == 1:
                     ps = '└'
                 else:
@@ -35,7 +35,10 @@ def getThingInfo(inv):
                         ps = '├'
                     if counter == len_ps:
                         ps = '└'
-                info = info + f'   {ps}▫️{composit["name"]}\n'
+                cost = ''
+                if composit['id'] == 'crypto':
+                    cost = f"🔘{composit['cost']}"
+                info = info + f'   {ps}▫️{composit["name"]} {cost}\n'
     return info
 
 def normalize(string):

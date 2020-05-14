@@ -69,7 +69,7 @@ def setSetting(login: str, code: str, value: str):
 
 
 GLOBAL_VARS = {
-    'inventory':  getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] + getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'] + getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']  ,
+    'inventory':  getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] + getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'] + getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']  ,
     'chat_id':
                 {
                     'inventory':[]
@@ -2229,6 +2229,20 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
+                                    'id': 'star_goose',
+                                    'name': '⭐ ЗвёздОчка гуся',
+                                    'cost': 1500,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'scalp_goose',
+                                            'counter': 5
+                                        }
+                                    ]
+                                },
+                                {
                                     'id': 'bouquet_of_flowers',
                                     'name': '💐 Букет цветов',
                                     'cost': 12,
@@ -2652,7 +2666,18 @@ newvalues = { "$set": { "value":
                                     'name': '📟 болт от Пип-боя',
                                     'cost': 20,
                                     'type': 'things',
-                                    'quantity': None
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'bolt_1',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'crypto',
+                                            'counter': 1000
+                                        }
+                                    ]
                                 }
                             ] 
                         }
@@ -3819,22 +3844,26 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-if 1==2: # обновляем composition 
+if 1==1: # обновляем composition 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     # for z in listInv:
     #     print(z)
     for user in list(filter(lambda x : len(x.getInventory()) > 0, USERS_ARR)):
-        print(f'Update {user.getLogin()}')
+        if not user.getLogin() == 'GonzikBenzyavsky':
+            continue
+        #print(f'Update {user.getLogin()}')
         for inv in user.getInventory():
-            inv = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None)
+            elem = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None)
             
-            if inv == None:
+            if elem == None:
                 continue
-            inv = inv.copy()
-            if 'composition' in inv:
+            elem = elem.copy()
+            #print(f'inv composition {inv["id"]}')
+            # inv = inv.copy()
+            if 'composition' in elem:
                 arr = []
-                for com in inv['composition']:
+                for com in elem['composition']:
                     arr.append(com)
 
                 comp_arr = []  
@@ -3844,10 +3873,15 @@ if 1==2: # обновляем composition
                     for i in range(0, com["counter"]):
                         composit = list(filter(lambda x : x['id']==com['id'], GLOBAL_VARS['inventory']))[0].copy()
                         composit.update({'uid':f'{uuid.uuid4()}'})
+                        if com["id"] == 'crypto':
+                            composit["cost"] = com["counter"]
+                            comp_arr.append(composit)
+                            print(f'         {user.getLogin()} {inv["id"]} {com["id"]} {com["counter"]}')
+                            break
                         comp_arr.append(composit)
-                        print(f'         {composit["name"]}')
-                print(f'    {inv}')
-                   
+                        # print(f'         {composit["name"]}')
+                #print(f'    {inv}')
+        # print(f'    {user.getInventory()}')           
         updateUser(user)     
 
 if 1==2: # Обновляем атрибуты навыков
