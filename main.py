@@ -244,7 +244,7 @@ def addInventory(user: users.User, inv):
                 composit.update({'uid':f'{uuid.uuid4()}'})
                 comp_arr.append(composit)
 
-    return user.addInventoryThing(inv, quantity)
+    return user.addInventoryThing(inv)
 
 def check_and_register_tg_user(tg_login: str):
     user = getUserByLogin(tg_login)
@@ -1447,6 +1447,10 @@ def select_baraholka(call):
             collect_btn = InlineKeyboardButton(f"Собрать 🔧", callback_data=f"{button['id']}|collect|{step}")
             markupinline.add(collect_btn)
 
+        if len(buttons)>0:
+            selectall = InlineKeyboardButton(f"Забрать всё 💰", callback_data=f"{button['id']}|pickupall|{step}") 
+            markupinline.row(*[selectall]) 
+
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
         return
 
@@ -1658,6 +1662,10 @@ def select_workbench(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
+        if len(buttons)>0:
+            selectall = InlineKeyboardButton(f"Забрать всё 💰", callback_data=f"{button_parent['id']}|pickupall|{step}") 
+            markupinline.row(*[selectall]) 
+
         if collect:
             collect_btn = InlineKeyboardButton(f"Собрать 🔧", callback_data=f"{button_parent['id']}|collect|{0}")
             markupinline.add(collect_btn)
@@ -1825,61 +1833,76 @@ def select_workbench(call):
 
         return
 
-    if button_id in ('pickup', 'splitup'):
+
+    if button_id in ('pickup', 'pickupall', 'splitup'):
         # {button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}
-        inv_uid = call.data.split('|')[3]
+
         stepinventory = int(call.data.split('|')[2])
         user = getUserByLogin(call.from_user.username)
         inventory = None # user.getInventoryThing({'uid': inv_uid})
 
-        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
-            if invonworkbench['inventory']['uid'] == inv_uid:
-                inventory = invonworkbench['inventory']
-                break
+        if button_id in ('pickupall'):
+            for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
+                user.addInventoryThing(invonworkbench['inventory'])
+            updateUser(user)
 
-        if inventory == None:
-            bot.answer_callback_query(call.id, f'Этой вещи уже нет на верстаке.')
-            return
-        
-        userseller = getUserByLogin(invonworkbench['login'])
+            newvalues = { "$set": {'state': 'CANCEL'} }
+            result = workbench.update_many(
+                {
+                    'state': 'NEW',
+                    'login' : user.getLogin()
+                }, newvalues)
+        else:
+            inv_uid = call.data.split('|')[3]
+            for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
+                if invonworkbench['inventory']['uid'] == inv_uid:
+                    inventory = invonworkbench['inventory']
+                    break
 
-        newvalues = { "$set": {'state': 'CANCEL'} }
-        result = workbench.update_one(
-            {
-                'state': 'NEW',
-                'inventory.uid' : inventory['uid']
-            }, newvalues)
-        
-        if result.matched_count < 1:
-            bot.answer_callback_query(call.id, f'Что пошло не так.')
-            return
-
-        if button_id in ('pickup'):
-            userseller.addInventoryThing(inventory)
-            updateUser(userseller)
-            bot.answer_callback_query(call.id, f'Забрали')
-        elif button_id in ('splitup'):
+            if inventory == None:
+                bot.answer_callback_query(call.id, f'Этой вещи уже нет на верстаке.')
+                return
             
-            for comp in inventory['composition']:
-                logger.info(f'split up {comp["name"]} {comp["uid"]}')
-                row = {
-                        'date': (datetime.now()).timestamp(),
-                        'login': userseller.getLogin(),
-                        'band' : userseller.getBand(),
-                        'goat' : getMyGoatName(userseller.getLogin()),
-                        'state': 'NEW',
-                        'inventory'  : comp
-                }
-                newvalues = { "$set": row }
-                result = workbench.update_one(
-                    {
-                        'state': 'NEW',
-                        'inventory.uid' : comp['uid']
-                    }, newvalues)
-                if result.matched_count < 1:
-                    workbench.insert_one(row)
+            userseller = getUserByLogin(invonworkbench['login'])
 
-            bot.answer_callback_query(call.id, f'Разобрали')
+            newvalues = { "$set": {'state': 'CANCEL'} }
+            result = workbench.update_one(
+                {
+                    'state': 'NEW',
+                    'inventory.uid' : inventory['uid']
+                }, newvalues)
+            
+            if result.matched_count < 1:
+                bot.answer_callback_query(call.id, f'Что пошло не так.')
+                return
+
+            if button_id in ('pickup'):
+                userseller.addInventoryThing(inventory)
+                updateUser(userseller)
+                bot.answer_callback_query(call.id, f'Забрали')
+
+            elif button_id in ('splitup'):
+                
+                for comp in inventory['composition']:
+                    logger.info(f'split up {comp["name"]} {comp["uid"]}')
+                    row = {
+                            'date': (datetime.now()).timestamp(),
+                            'login': userseller.getLogin(),
+                            'band' : userseller.getBand(),
+                            'goat' : getMyGoatName(userseller.getLogin()),
+                            'state': 'NEW',
+                            'inventory'  : comp
+                    }
+                    newvalues = { "$set": row }
+                    result = workbench.update_one(
+                        {
+                            'state': 'NEW',
+                            'inventory.uid' : comp['uid']
+                        }, newvalues)
+                    if result.matched_count < 1:
+                        workbench.insert_one(row)
+
+                bot.answer_callback_query(call.id, f'Разобрали')
         
         # selectexit
         step = int(call.data.split('|')[2])
@@ -2030,16 +2053,21 @@ def select_exchange(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text = button_parent['description'], reply_markup=markupinline)
         return
 
-    if button_id in ('selectgroupforward', 'selectgroupback'):
+    if button_id in ('selectgroupforward', 'selectgroupback', 'selectgroup'):
         # print(call.data)
         # bot.answer_callback_query(call.id, f'{call.data}')
-        
         stepinventory = int(call.data.split('|')[2])
+        
         inv_id = call.data.split('|')[3]
         user = getUserByLogin(call.from_user.username)
         step = 0
         inventory = user.getInventoryThing({'id': inv_id})
 
+        if button_id in('selectgroup'):
+            stepinventory = 0
+        
+        selectall = InlineKeyboardButton(f"Выбрать все 💰", callback_data=f"{button_parent['id']}|selectall|{stepinventory}|{inventory['id']}") 
+        
         inventories = user.getInventoryThings({'id': inv_id})
         for inv in inventories: 
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}")
@@ -2052,54 +2080,64 @@ def select_exchange(call):
     
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row) 
+
+        markupinline.row(*[selectall]) 
+        
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n{inventory['name']}", reply_markup=markupinline)
         
         return
 
-    if button_id in ('selectgroup', ''):
-        # print(call.data)
-        # bot.answer_callback_query(call.id, f'{call.data}')
+    # if button_id in ('selectgroup', ''):
+    #     # print(call.data)
+    #     # bot.answer_callback_query(call.id, f'{call.data}')
         
-        step = int(call.data.split('|')[2])
-        inv_id = call.data.split('|')[3]
-        user = getUserByLogin(call.from_user.username)
-        stepinventory = 0
-        inventory = user.getInventoryThing({'id': inv_id})
+    #     step = int(call.data.split('|')[2])
+    #     inv_id = call.data.split('|')[3]
+    #     user = getUserByLogin(call.from_user.username)
+    #     stepinventory = 0
+    #     inventory = user.getInventoryThing({'id': inv_id})
 
-        inventories = user.getInventoryThings({'id': inv_id})
-        for inv in inventories: 
-            btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}")
-            buttons.append(btn)
+    #     inventories = user.getInventoryThings({'id': inv_id})
+    #     for inv in inventories: 
+    #         btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}")
+    #         buttons.append(btn)
 
-        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|{inventory['id']}") 
-        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectgroupexit|{step}")
-        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|selectgroupforward|{stepinventory+1}|{inventory['id']}")
+    #     back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|{inventory['id']}") 
+    #     exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectgroupexit|{step}")
+    #     forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|selectgroupforward|{stepinventory+1}|{inventory['id']}")
 
     
-        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
-            markupinline.row(*row) 
+    #     for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+    #         markupinline.row(*row) 
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n{inventory['name']} {len(inventories)} шт.", reply_markup=markupinline)
+    #     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n{inventory['name']} {len(inventories)} шт.", reply_markup=markupinline)
         
-        return
+    #     return
 
-    if button_id in ('selectinvent', ''):
+    if button_id in ('selectinvent', 'selectall'):
         # {button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}
         inv_uid = call.data.split('|')[3]
         stepinventory = int(call.data.split('|')[2])
         step = 0
         user = getUserByLogin(call.from_user.username)
-        inventory = user.getInventoryThing({'uid': inv_uid})
+        filterInv = {'uid': inv_uid}
+        if button_id in ('selectall'):
+            filterInv = {'id': inv_uid}
+        inventory = user.getInventoryThing(filterInv)
 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
-        toshelf = InlineKeyboardButton(f"🛍️ На продажу", callback_data=f"{button_parent['id']}|toshelf|{stepinventory}|{inventory['uid']}")
-        sell = InlineKeyboardButton(f"🔘 {int(inventory['cost']*button_parent['discont'])} Получить", callback_data=f"{button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}")
+        if button_id in ('selectinvent'):
+            toshelf = InlineKeyboardButton(f"🛍️ На продажу", callback_data=f"{button_parent['id']}|toshelf|{stepinventory}|{inventory['uid']}")
+            sell = InlineKeyboardButton(f"🔘 {int(inventory['cost']*button_parent['discont'])} Получить", callback_data=f"{button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}")
+            buttons.append(toshelf)
+            buttons.append(sell)
+
         toworkbench = InlineKeyboardButton(f"⚙️ На верстак", callback_data=f"{button_parent['id']}|toworkbench|{stepinventory}|{inventory['uid']}")
+        if button_id in ('selectall'):
+            toworkbench = InlineKeyboardButton(f"⚙️ На верстак", callback_data=f"{button_parent['id']}|toworkbenchall|{stepinventory}|{inventory['id']}")
         
-        buttons.append(toshelf)
         buttons.append(toworkbench)
-        buttons.append(sell)
         buttons.append(exit_button)
 
         for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, back_button=None, exit_button=None, forward_button=None):
@@ -2110,13 +2148,17 @@ def select_exchange(call):
         # bot.answer_callback_query(call.id, f'selectinvent: {call.data}')
         return
 
-    if button_id in ('getcrypto', 'toshelf', 'toworkbench'):
+    if button_id in ('getcrypto', 'toshelf', 'toworkbench', 'toworkbenchall'):
         # {button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}
         inv_uid = call.data.split('|')[3]
         stepinventory = int(call.data.split('|')[2])
         step = 0
         user = getUserByLogin(call.from_user.username)
-        inventory = user.getInventoryThing({'uid': inv_uid})
+
+        filterInv = {'uid': inv_uid}
+        if button_id in ('toworkbenchall'):
+            filterInv = {'id': inv_uid}
+        inventory = user.getInventoryThing(filterInv)
 
         if inventory['id'] == 'crown_pidor':
             goat = getMyGoat(call.from_user.username)
@@ -2168,31 +2210,29 @@ def select_exchange(call):
             send_message_to_admin(text=f'🛍️ Выставили на продажу!\n{user.getNameAndGerb()} (@{user.getLogin()}) выставил на продажу {inventory["name"]} за 🔘{inventory["cost"]}')
             bot.answer_callback_query(call.id, f'Выставлено на продажу')
 
-        elif button_id in ('toworkbench'):
+        elif button_id in ('toworkbench', 'toworkbenchall'):
             counter_inv = workbench.count_documents({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'} })
-            if counter_inv >= 20:
-                bot.answer_callback_query(call.id, f'Тебе можно держать в магазине только {counter_inv} шт.')
-                return
+            for inventory in user.getInventoryThings(filterInv):
+                row = {
+                        'date': (datetime.now()).timestamp(),
+                        'login': user.getLogin(),
+                        'band' : user.getBand(),
+                        'goat' : getMyGoatName(user.getLogin()),
+                        'state': 'NEW',
+                        'inventory'  : inventory
+                }
+                newvalues = { "$set": row }
 
-            row = {
-                    'date': (datetime.now()).timestamp(),
-                    'login': user.getLogin(),
-                    'band' : user.getBand(),
-                    'goat' : getMyGoatName(user.getLogin()),
-                    'state': 'NEW',
-                    'inventory'  : inventory
-            }
-            newvalues = { "$set": row }
-
-            result = workbench.update_one(
-                {
-                    'state': 'NEW',
-                    'inventory.uid' : inventory['uid']
-                }, newvalues)
-            if result.matched_count < 1:
-                workbench.insert_one(row)
+                result = workbench.update_one(
+                    {
+                        'state': 'NEW',
+                        'inventory.uid' : inventory['uid']
+                    }, newvalues)
+                if result.matched_count < 1:
+                    workbench.insert_one(row)
             
-            user.removeInventoryThing(inventory)
+                user.removeInventoryThing(inventory)
+
             updateUser(user)
             send_message_to_admin(text=f'⚙️ Положили на верстак!\n{user.getNameAndGerb()} (@{user.getLogin()}) положил на ⚙️ верстак {inventory["name"]}')
             bot.answer_callback_query(call.id, f'Положено на верстак')

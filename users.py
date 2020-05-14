@@ -675,7 +675,7 @@ class User(object):
                 counter = counter + 1
                 if counter == count: return
 
-    def addInventoryThing(self, thing, count=1, replace=False):
+    def addInventoryThing(self, thing, replace=False):
         # По хорошему должен возвращать добавленный объект
         if replace:
             self.removeInventoryThing(thing)
