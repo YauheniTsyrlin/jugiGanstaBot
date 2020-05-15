@@ -3631,14 +3631,15 @@ def main_message(message):
                 if name == '':
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
             return
-        elif '❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text:
+        elif ('❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text) or ('Экзекутос предатель, Рагнароса разбудили слишком рано, насекомое победило, правосудие свершилось. Хорошо, что никто не руинил и ты успел победить до того, как Рагна упал сам.' in message.text):
             if hasAccessToWariors(message.from_user.username):
                 if not time_over:
                     # сохраняем км, если он больше максимального
-                    km = int(message.text.split('👣')[1].split('км')[0])
-                    if userIAm.getMaxkm() < km:
-                        userIAm.setMaxkm(km)
-                        updateUser(userIAm)
+                    if '👣' in message.text: 
+                        km = int(message.text.split('👣')[1].split('км')[0])
+                        if userIAm.getMaxkm() < km:
+                            userIAm.setMaxkm(km)
+                            updateUser(userIAm)
                 filter_message = {"forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message) 
                 if new_Message:
