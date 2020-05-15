@@ -2187,6 +2187,20 @@ newvalues = { "$set": { "value":
                             [
                                 
                                 {
+                                    'id': 'pack_raid_ticket',
+                                    'name': '💴 Пачка рейдовых талонов',
+                                    'cost': 1000,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'redeemed_raid_ticket',
+                                            'counter': 50
+                                        }
+                                    ]
+                                },
+                                {
                                     'id': 'redeemed_raid_ticket',
                                     'name': '🎫 Талон на рейд',
                                     'cost': 20,
@@ -3844,7 +3858,7 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-if 1==1: # обновляем composition 
+if 1==2: # обновляем composition 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     # for z in listInv:
