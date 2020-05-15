@@ -1144,13 +1144,15 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
         for s in text.split('\n'):
             for thing in elem['subjects_to_find']:
                 if (s.startswith('Получено:') or s.startswith('Бонус:') or (s.startswith('💰')) ) and thing in s:
-                    if ' x' in s:
-                        count = count + int(s.replace('/buy_trash','').split(' x')[1].strip())
+                    if ' x' in s or ' ×' in s:
+                        for x in [' x', ' ×']:
+                            if x in s:
+                                count = count + int(s.replace('/buy_trash','').split(x)[1].strip())
                     else: count = count + 1
     minimum = 1
     if 'subjects_quantum' in elem:
         minimum = elem['subjects_quantum']
-
+    
     if count >= minimum:
         if not time_over:
             addInventory(userIAm, elem)
@@ -1166,8 +1168,10 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
         for s in text.split('\n'):
             for skill_sign in elem['subjects_of_study']:
                 if (s.startswith('Получено:') or s.startswith('Бонус:') or (s.startswith('💰')) ) and skill_sign in s or (s == 'FIGHT!' and skill_sign in s):
-                    if ' x' in s:
-                        count = count + int(s.replace('/buy_trash','').split(' x')[1].strip())
+                    if ' x' in s or ' ×' in s:
+                        for x in [' x', ' ×']:
+                            if x in s:
+                                count = count + int(s.replace('/buy_trash','').split(x)[1].strip())
                     else: count = count + 1
 
     if count > 0:
