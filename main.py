@@ -1147,7 +1147,11 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
                     if ' x' in s:
                         count = count + int(s.replace('/buy_trash','').split(' x')[1].strip())
                     else: count = count + 1
-    if count > 0:
+    minimum = 1
+    if 'subjects_quantum' in elem:
+        minimum = elem['subjects_quantum']
+
+    if count >= minimum:
         if not time_over:
             addInventory(userIAm, elem)
             updateUser(userIAm)

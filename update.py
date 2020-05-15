@@ -1508,6 +1508,7 @@ newvalues = { "$set": { "value":
                                     'cost': 2,
                                     'type': 'food',
                                     'quantity': None,
+                                    'subjects_quantum': 1,
                                     'subjects_to_find':
                                     [
                                         'Молоко брамина'
@@ -2186,6 +2187,45 @@ newvalues = { "$set": { "value":
                             'value':
                             [
                                 
+                                {
+                                    'id': 'gold',
+                                    'name': '🥇 Золото',
+                                    'cost': 400,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 279,
+                                    'subjects_to_find':
+                                    [
+                                        '🔗β-Ti3Au'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'silver',
+                                    'name': '🥈 Серебро',
+                                    'cost': 40,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 228,
+                                    'subjects_to_find':
+                                    [
+                                        '🔗Осмий'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'bronze',
+                                    'name': '🥉 Бронза',
+                                    'cost': 4,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 228,
+                                    'subjects_to_find':
+                                    [
+                                        '🔗Кубонит'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
                                 {
                                     'id': 'pack_raid_ticket',
                                     'name': '💴 Пачка рейдовых талонов',
