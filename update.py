@@ -1903,17 +1903,62 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'grooms_ring',
                                     'name': '🕳 Кольцо жениха',
-                                    'cost': 7,
+                                    'cost': 7000,
                                     'type': 'decoration',
-                                    'quantity': 1
-
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'gold_bar',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'silver_bar',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'bronze_bar',
+                                            'counter': 5
+                                        },
+                                        {
+                                            'id': 'star_goose',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'heart_flame',
+                                            'counter': 1
+                                        }
+                                    ]
                                 },
                                 {
                                     'id': 'brides_ring',
                                     'name': '💍 Кольцо невесты',
                                     'cost': 100,
                                     'type': 'decoration',
-                                    'quantity': 1
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'gold_bar',
+                                            'counter': 3
+                                        },
+                                        {
+                                            'id': 'silver_bar',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'bronze_bar',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'star_goose',
+                                            'counter': 3
+                                        },
+                                        {
+                                            'id': 'hellfire',
+                                            'counter': 1
+                                        }
+                                    ]
 
                                 },
                                 {
@@ -2216,7 +2261,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'bronze',
                                     'name': '🥉 Бронза',
-                                    'cost': 4,
+                                    'cost': 10,
                                     'type': 'things',
                                     'quantity': None,
                                     'subjects_quantum': 111,
@@ -2246,6 +2291,86 @@ newvalues = { "$set": { "value":
                                     'cost': 20,
                                     'type': 'things',
                                     'quantity': None
+                                },
+                                {
+                                    'id': 'gold_bar',
+                                    'name': '💛 Золотой слиток',
+                                    'cost': 2000,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'gold',
+                                            'counter': 5
+                                        },
+                                        {
+                                            'id': 'heart_flame',
+                                            'counter': 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'silver_bar',
+                                    'name': '🤍 Серебрянный слиток',
+                                    'cost': 200,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'silver',
+                                            'counter': 5
+                                        },
+                                        {
+                                            'id': 'heart_flame',
+                                            'counter': 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'bronze_bar',
+                                    'name': '🧡 Бронзовый слиток',
+                                    'cost': 50,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'bronze',
+                                            'counter': 5
+                                        },
+                                        {
+                                            'id': 'heart_flame',
+                                            'counter': 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'hellfire',
+                                    'name': '🌋 Адское пламя',
+                                    'cost': 7000,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'heart_flame',
+                                            'counter': 7
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'heart_flame',
+                                    'name': '🔥 Cердце пламени',
+                                    'cost': 1000,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_to_find':
+                                    [
+                                        '🔥Сердце пламени'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
                                 },
                                 {
                                     'id': 'scalp_of_zak',
