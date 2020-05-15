@@ -5779,17 +5779,15 @@ def callback_query(call):
                 else:
                     send_messages_big(call.message.chat.id, text= getResponseDialogFlow(call.message.from_user.username, 'shot_message_not_admin').fulfillment_text) 
             else:
-                dialog_code = 'new_accessory_add'
                 if isAdmin(call.from_user.username): 
                     addInventory(user, inv)
                 else:
-                    dialog_code = 'accessory_transfer'
                     userIAm.removeInventoryThing(inv)
                     addInventory(user, inv)
                     updateUser(userIAm)
 
                 updateUser(user)
-                send_messages_big(call.message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(call.message.from_user.username, dialog_code).fulfillment_text + f'\n\n▫️ {inv["name"]}') 
+                send_messages_big(call.message.chat.id, text=f'{userIAm.getNameAndGerb()} передал {user.getNameAndGerb()}\n\n▫️ {inv["name"]}') 
 
             break
 
