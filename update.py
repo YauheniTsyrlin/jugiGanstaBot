@@ -2219,7 +2219,7 @@ newvalues = { "$set": { "value":
                                     'cost': 4,
                                     'type': 'things',
                                     'quantity': None,
-                                    'subjects_quantum': 228,
+                                    'subjects_quantum': 111,
                                     'subjects_to_find':
                                     [
                                         '🔗Кубонит'
