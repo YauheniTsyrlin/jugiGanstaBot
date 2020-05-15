@@ -4044,7 +4044,8 @@ def main_message(message):
         elif (callJugi and 'профиль @' in message.text.lower()):
             updateUser(None)
             name = tools.deEmojify(message.text.split('@')[1].strip())
-            if isAdmin(message.from_user.username):
+            
+            if isGoatBoss(message.from_user.username):
                 login = message.text.split('@')[1].strip()
                 if isRegisteredUserName(name) or isRegisteredUserLogin(login):
                     user = getUserByLogin(login)
@@ -4052,7 +4053,8 @@ def main_message(message):
                         user = getUserByName(name)
 
                     if user:
-                        send_messages_big(message.chat.id, text=user.getProfile('All'))
+                        if getMyGoatName(message.from_user.username) == getMyGoatName(user.getLogin()):
+                            send_messages_big(message.chat.id, text=user.getProfile('All'))
                 else:
                     send_messages_big(message.chat.id, text=f'В базе зарегистрированнных бандитов {login} не найден')
 
