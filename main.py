@@ -5909,7 +5909,9 @@ def callback_query(call):
                 if isAdmin(call.from_user.username): 
                     addInventory(user, inv)
                 else:
+                    logger.info(inv)
                     userIAm.removeInventoryThing(inv)
+                    
                     addInventory(user, inv)
                     updateUser(userIAm)
 
