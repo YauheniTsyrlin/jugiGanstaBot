@@ -993,7 +993,16 @@ newvalues = { "$set": { "value":
                                     'type': 'clothes',
                                     'wear': 1,
                                     'quantity': 1
+                                },
+                                {
+                                    'id': 'sneakers',
+                                    'name': '👟 Сраные кеды',
+                                    'cost': 16,
+                                    'type': 'clothes',
+                                    'wear': 1,
+                                    'quantity': None
                                 }
+                                
                             ]
                         },
                         {
@@ -2377,7 +2386,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'heart_flame',
                                     'name': '🔥 Cердце пламени',
-                                    'cost': 1000,
+                                    'cost': 500,
                                     'type': 'things',
                                     'quantity': None,
                                     'subjects_to_find':
@@ -2424,7 +2433,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'star_goose',
                                     'name': '⭐ ЗвёздОчка гуся',
-                                    'cost': 1500,
+                                    'cost': 1250,
                                     'type': 'things',
                                     'quantity': None,
                                     'composition':
