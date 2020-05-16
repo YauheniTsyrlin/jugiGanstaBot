@@ -275,7 +275,11 @@ class User(object):
                 
             if ('🏵' in strings[i]):
                 if '/me' in text:
-                    self.setDzen(int(strings[i].count('🏵')))
+                    counter_dzen = int(strings[i].count('🏵')) 
+                    if len(strings[i].replace('🏵','').strip()) > 0:
+                        counter_dzen = int(strings[i].replace('🏵','').strip())
+                    self.setDzen(counter_dzen)
+
                 else:
                     dzen_tmp = strings[i][1:].split(' ')[0].strip()
                     if dzen_tmp == '':

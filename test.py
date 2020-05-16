@@ -972,8 +972,10 @@ def getInventoryReport(user, types):
 # print(getInventoryReport(user, inventory_category))
 
 # print(f"{report_raids.count_documents({'band': {'$in': getGoatBands('FǁȺǁggǁØǁAT')}, 'date': 1589032800, 'planed_location': {'&gt': 0} })}")
-print(f"{report_raids.count_documents({'band': {'$in': getGoatBands('FǁȺǁggǁØǁAT')}, 'date': 1589032800, 'planed_location': {'$gt': 0} })}")
+# print(f"{report_raids.count_documents({'band': {'$in': getGoatBands('FǁȺǁggǁØǁAT')}, 'date': 1589032800, 'planed_location': {'$gt': 0} })}")
 
+s = '🏵🏵🏵'
+print('='+s.replace('🏵',''))
 sys.exit(0)
 
 # import pandas as pd
