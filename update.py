@@ -1903,7 +1903,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'grooms_ring',
                                     'name': '🕳 Кольцо жениха',
-                                    'cost': 7000,
+                                    'cost': 7500,
                                     'type': 'decoration',
                                     'quantity': None,
                                     'composition':
@@ -1933,7 +1933,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'brides_ring',
                                     'name': '💍 Кольцо невесты',
-                                    'cost': 100,
+                                    'cost': 15000,
                                     'type': 'decoration',
                                     'quantity': None,
                                     'composition':
@@ -2235,7 +2235,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'gold',
                                     'name': '🥇 Золото',
-                                    'cost': 400,
+                                    'cost': 150,
                                     'type': 'things',
                                     'quantity': None,
                                     'subjects_quantum': 279,
@@ -2248,7 +2248,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'silver',
                                     'name': '🥈 Серебро',
-                                    'cost': 40,
+                                    'cost': 100,
                                     'type': 'things',
                                     'quantity': None,
                                     'subjects_quantum': 228,
@@ -2261,7 +2261,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'bronze',
                                     'name': '🥉 Бронза',
-                                    'cost': 10,
+                                    'cost': 25,
                                     'type': 'things',
                                     'quantity': None,
                                     'subjects_quantum': 111,
@@ -2295,7 +2295,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'gold_bar',
                                     'name': '💛 Золотой слиток',
-                                    'cost': 2000,
+                                    'cost': 1200,
                                     'type': 'things',
                                     'quantity': None,
                                     'composition':
@@ -2313,7 +2313,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'silver_bar',
                                     'name': '🤍 Серебрянный слиток',
-                                    'cost': 200,
+                                    'cost': 900,
                                     'type': 'things',
                                     'quantity': None,
                                     'composition':
@@ -2331,7 +2331,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'bronze_bar',
                                     'name': '🧡 Бронзовый слиток',
-                                    'cost': 50,
+                                    'cost': 500,
                                     'type': 'things',
                                     'quantity': None,
                                     'composition':
@@ -2349,7 +2349,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'hellfire',
                                     'name': '🌋 Адское пламя',
-                                    'cost': 7000,
+                                    'cost': 2500,
                                     'type': 'things',
                                     'quantity': None,
                                     'composition':
