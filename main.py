@@ -193,7 +193,7 @@ GLOBAL_VARS = {
             },
             {
                 'id': 'workbench',
-                'name': '🛠️⚙️ Верстак',
+                'name': '⚙️ Верстак',
                 'description':'⚙️ Здесь можно собрать новые вещи или разобрать на 📦 запчасти. Для этого надо положить на верстак какую-либо вещь из меню "📦 Мои вещи"',
                 'buttons': []
             },
@@ -1642,6 +1642,8 @@ def select_shelf(call):
                 bot.answer_callback_query(call.id, f'Что пошло не так.')
                 return
             your_request = f'\n▫️ Твое предложение: 🔘{cost}'
+            
+            send_messages_big(userseller.getChat(), text=f'🛍️ Магазин!\n{user.getNameAndGerb()} (@{user.getLogin()}) сделал предложение в магазине!\n▫️ 🔘{cost} {inventory["name"]}')
             bot.answer_callback_query(call.id, f'Заявка подана!')
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{your_request}", reply_markup=markupinline)
