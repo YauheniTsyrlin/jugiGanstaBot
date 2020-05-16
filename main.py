@@ -5907,12 +5907,10 @@ def callback_query(call):
                     send_messages_big(call.message.chat.id, text= getResponseDialogFlow(call.message.from_user.username, 'shot_message_not_admin').fulfillment_text) 
             else:
                 if isAdmin(call.from_user.username): 
-                    addInventory(user, inv)
+                    user.addInventoryThing(inv)
                 else:
-                    logger.info(inv)
                     userIAm.removeInventoryThing(inv)
-                    
-                    addInventory(user, inv)
+                    user.addInventoryThing(inv)
                     updateUser(userIAm)
 
                 updateUser(user)
