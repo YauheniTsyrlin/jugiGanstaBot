@@ -1472,7 +1472,7 @@ def select_baraholka(call):
             inventories = user.getInventoryThings({'id': inv['id']})
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
             if len(inventories) > 1:
-                btn = InlineKeyboardButton(f"💰 {inv['name']}", callback_data=f"{button['id']}|selectgroup|{step}|{inv['id']}")
+                btn = InlineKeyboardButton(f"💰{len(inventories)} {inv['name']}", callback_data=f"{button['id']}|selectgroup|{step}|{inv['id']}")
 
             if inv['id'] not in inventors:
                 inventors.append(inv['id'])
