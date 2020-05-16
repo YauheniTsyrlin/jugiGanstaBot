@@ -1648,7 +1648,7 @@ def select_shelf(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{your_request}", reply_markup=markupinline)
         return
 
-    if button_id in ['pickup', 'request']:
+    if button_id in ['pickup']:
         # {button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}
         # {button_parent['id']}|request|{stepinventory}|{inventory['uid']}|{userRequester.getLogin()}
         inv_uid = call.data.split('|')[3]
