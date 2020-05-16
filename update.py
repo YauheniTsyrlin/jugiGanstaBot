@@ -1972,7 +1972,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'rubber_swimmer',
                                     'name': '🐏 Резиновая электроовца',
-                                    'cost': 75,
+                                    'cost': 100,
                                     'type': 'decoration',
                                     'quantity': None,
                                     'composition':
