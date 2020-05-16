@@ -1672,36 +1672,49 @@ def select_shelf(call):
         userseller = getUserByLogin(invonshelf['login'])
         itsMy = call.from_user.username == invonshelf['login']
 
-        newvalues = { "$set": {'state': 'CANCEL'} }
-        result = shelf.update_one(
-            {
-                'state': 'NEW',
-                'inventory.uid' : inventory['uid']
-            }, newvalues)
-        
-        if result.matched_count < 1:
-            bot.answer_callback_query(call.id, f'Что пошло не так.')
-            return
-
         if button_id == 'pickup':
+            newvalues = { "$set": {'state': 'CANCEL'} }
+            result = shelf.update_one(
+                {
+                    'state': 'NEW',
+                    'inventory.uid' : inventory['uid']
+                }, newvalues)
+            
+            if result.matched_count < 1:
+                bot.answer_callback_query(call.id, f'Что пошло не так.')
+                return
+
             userseller.addInventoryThing(inventory)
             updateUser(userseller)
-
             for req in invonshelf['request']:
                 requester = user.getUserByLogin(req['login'])
                 if requester:
                     send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) забрал из магазина\n▫️ 🔘{cost} {inventory["name"]}!\nТвоя заявка аннулирована!')
+
         elif button_id == 'request':
             buyer = getUserByLogin(call.data.split('|')[4])
             if buyer:
+                deal = False
                 for req in invonshelf['request']:
                     requester = getUserByLogin(req['login'])
                     if requester:
                         if requester.getLogin() == buyer.getLogin():
                             inventory['cost'] = req['cost']
                             buyer.addInventoryThing(inventory)
-                            updateUser(buyer)
-                            
+                            crypto = buyer.getInventoryThing({'id': 'crypto'})
+                            if crypto == None or crypto['cost'] - req['cost'] < 0:
+                                newvalues = { "$set": {'state': invonshelf['request'].remove(req)} }
+                                result = shelf.update_one(
+                                    {
+                                        'state': 'NEW',
+                                        'inventory.uid' : inventory['uid']
+                                    }, newvalues)
+                                
+                                break
+                            else:
+                                crypto.update({'cost': crypto['cost']-req['cost']})
+                                buyer.updateInventoryThing(crypto)
+
                             crypto = userseller.getInventoryThing({'id': 'crypto'})
                             if crypto == None:
                                 crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
@@ -1709,13 +1722,34 @@ def select_shelf(call):
                                 userseller.addInventoryThing(crypto)
                             else:
                                 crypto.update({'cost': crypto['cost']+req['cost']})
-                                user.updateInventoryThing(crypto)
+                                userseller.updateInventoryThing(crypto)
+
+                            newvalues = { "$set": {'state': 'CANCEL'} }
+                            result = shelf.update_one(
+                                {
+                                    'state': 'NEW',
+                                    'inventory.uid' : inventory['uid']
+                                }, newvalues)
+                            
+                            if result.matched_count < 1:
+                                bot.answer_callback_query(call.id, f'Что пошло не так.')
+                                return
+
+                            deal = True
+                            updateUser(buyer)
                             updateUser(userseller)
                             send_messages_big(userseller.getChat(), text=f'🛍️✔️ Магазин!\nТы продал:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
                             send_messages_big(buyer.getChat(), text=f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал тебе:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
-                        else:
-                            send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]}!\nТвоя заявка аннулирована!')
-        
+
+                        # else:
+                        #     send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]}!\nТвоя заявка аннулирована!')
+                if deal:
+                    for req in invonshelf['request']:
+                        requester = getUserByLogin(req['login'])
+                        if requester:
+                            if not requester.getLogin() == buyer.getLogin():
+                                send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]}!\nТвоя заявка аннулирована!')
+
         # selectexit
         step = int(call.data.split('|')[2])
         for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
