@@ -1709,7 +1709,7 @@ def select_shelf(call):
                                         'state': 'NEW',
                                         'inventory.uid' : inventory['uid']
                                     }, newvalues)
-                                
+                                bot.answer_callback_query(call.id, f'У него нет столько бабла!')
                                 break
                             else:
                                 crypto.update({'cost': crypto['cost']-req['cost']})
