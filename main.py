@@ -1149,7 +1149,7 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
                     if ' x' in s or ' ×' in s:
                         for x in [' x', ' ×']:
                             if x in s:
-                                count = count + int(s.replace('/buy_trash','').split(x)[1].strip())
+                                count = count + int(s.replace('/buy_trash','').split(x)[1].split(',')[0].strip())
                     else: count = count + 1
     minimum = 1
     if 'subjects_quantum' in elem:
