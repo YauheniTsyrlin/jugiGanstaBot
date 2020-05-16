@@ -1703,12 +1703,13 @@ def select_shelf(call):
                             buyer.addInventoryThing(inventory)
                             crypto = buyer.getInventoryThing({'id': 'crypto'})
                             if crypto == None or crypto['cost'] - req['cost'] < 0:
-                                newvalues = { "$set": {'state': invonshelf['request'].remove(req)} }
+                                newvalues = { "$set": {'request': invonshelf['request'].remove(req)} }
                                 result = shelf.update_one(
                                     {
                                         'state': 'NEW',
                                         'inventory.uid' : inventory['uid']
                                     }, newvalues)
+                                send_messages_big(buyer.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотель тебе продать, но у тебя нет нужного количества 🔘 Crypto. Твоя заявка аннулирована:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
                                 bot.answer_callback_query(call.id, f'У него нет столько бабла!')
                                 break
                             else:
