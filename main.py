@@ -1140,7 +1140,8 @@ def dzen_rewards(user, num_dzen, message):
 
 def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
     count = counterSkill
-    text = text.split('Найдено:')[0]+'\nНайдено:' + text.split('Найдено:')[1].replace('\n', '')
+    if 'Найдено:' in text:
+        text = text.split('Найдено:')[0]+'\nНайдено:' + text.replace('\n', '').split('Найдено:')[1]
     if text:
         for s in text.split('\n'):
             for thing in elem['subjects_to_find']:
