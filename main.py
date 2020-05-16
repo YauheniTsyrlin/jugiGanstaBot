@@ -1153,7 +1153,7 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
     if 'subjects_quantum' in elem:
         minimum = elem['subjects_quantum']
     
-    logger.info(f'{count} {minimum}')
+    logger.info(f'{count} {minimum} {elem["name"]}')
     if count >= minimum:
         if True or not time_over:
             logger.info(f'ADD')
