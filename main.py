@@ -1709,7 +1709,7 @@ def select_shelf(call):
                                         'state': 'NEW',
                                         'inventory.uid' : inventory['uid']
                                     }, newvalues)
-                                send_messages_big(buyer.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотель тебе продать, но у тебя нет нужного количества 🔘 Crypto. Твоя заявка аннулирована:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+                                send_messages_big(buyer.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотель тебе продать, но у тебя нет нужного количества 🔘 Crypto. Твоя заявка аннулирована :\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
                                 bot.answer_callback_query(call.id, f'У него нет столько бабла!')
                                 break
                             else:
