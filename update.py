@@ -1894,6 +1894,14 @@ newvalues = { "$set": { "value":
                             [
                                 
                                 {
+                                    'id': 'love_u_innk',
+                                    'name': '💖 Иннк любит тебя',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': None
+
+                                },
+                                {
                                     'id': 'walk_bb',
                                     'name': '🐕 Выгул бб',
                                     'cost': 10,
