@@ -1584,9 +1584,9 @@ def select_shelf(call):
                 userRequester = getUserByLogin(req["login"])
                 cost = req['cost']
                 if userRequester:
-                    s = f"{button_parent['id']}|request|{stepinventory}|{inventory['uid']}|{userRequester.getLogin()}"
-                    logger.info(str(len(s)) + '|' + s )
-                    btn = InlineKeyboardButton(f"🔘{cost} {userRequester.getNameAndGerb()}", callback_data=f"{button_parent['id']}|request|{stepinventory}|{inventory['uid']}|{userRequester.getLogin()}")
+                    #s = f"{button_parent['id']}|request|{stepinventory}|{inventory['uid']}|{userRequester.getLogin()}"
+                    #logger.info(str(len(s)) + '|' + s )
+                    btn = InlineKeyboardButton(f"🔘{cost} {userRequester.getNameAndGerb()}", callback_data=f"{button_parent['id']}|request|{stepinventory}|{inventory['uid'][:16]}|{userRequester.getLogin()}")
                     buttons.append(btn)
 
 
@@ -1661,7 +1661,7 @@ def select_shelf(call):
 
         for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
             itsMy = False
-            if invonshelf['inventory']['uid'] == inv_uid:
+            if inv_uid in invonshelf['inventory']['uid']:
                 inventory = invonshelf['inventory']
                 break
 
