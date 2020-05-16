@@ -3932,8 +3932,8 @@ newvalues = { "$set": { "value":
                 {'band': 'ǁGØodfeelȺssǁ'},
                 {'band': 'New Vegas'},
                 {'band': 'New Vegas Eas'},
-                {'band': 'Тамплиеры'}
-                
+                {'band': 'Тамплиеры'},
+                {'band': 'КiберХоxли'}
             ]
         } 
     } 
