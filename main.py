@@ -1154,10 +1154,9 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
     minimum = 1
     if 'subjects_quantum' in elem:
         minimum = elem['subjects_quantum']
-    
-    logger.info(f'{count} {minimum} {elem["name"]}')
+
     if count >= minimum:
-        if True or not time_over:
+        if not time_over:
             logger.info(f'ADD')
             addInventory(userIAm, elem)
             updateUser(userIAm)
@@ -3770,7 +3769,7 @@ def main_message(message):
                             updateUser(userIAm)
                 filter_message = {"forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message) 
-                if True or new_Message:
+                if new_Message:
 
                     # Учимся умению "⏰ Часовщик"
                     elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='watchmaker'), None).copy()
