@@ -1894,6 +1894,14 @@ newvalues = { "$set": { "value":
                             [
                                 
                                 {
+                                    'id': 'walk_bb',
+                                    'name': '🐕 Выгул бб',
+                                    'cost': 10,
+                                    'type': 'decoration',
+                                    'quantity': None
+
+                                },
+                                {
                                     'id': 'brides_bouquet',
                                     'name': '💐 Букет невесты',
                                     'cost': 10,
@@ -3896,7 +3904,7 @@ newvalues = { "$set": { "value":
                             'chat' : 497065022
                         },
                         {
-                            'login': '1WestMoscow',
+                            'login': 'WestMoscow',
                             'chat' : 0 #214221494
                         }
                     ]
