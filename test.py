@@ -1,3 +1,12 @@
+            crypto = user.getInventoryThing({'id': 'crypto'})
+            if crypto == None:
+                crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
+                crypto.update({'cost': cost})
+                addInventory(user, crypto)
+            else:
+                crypto.update({'cost': crypto['cost']+cost})
+                user.updateInventoryThing(crypto)
+                
 #!/usr/bin/env python
  
 from datetime import datetime
