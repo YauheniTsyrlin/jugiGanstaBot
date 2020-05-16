@@ -1581,10 +1581,10 @@ def select_shelf(call):
 
         if itsMy:
             for req in request:
-                userReuester = getUserByLogin(req["login"])
+                userRequester = getUserByLogin(req["login"])
                 cost = req['cost']
-                if userReuester:
-                    btn = InlineKeyboardButton(f"🔘{cost} {userReuester.getNameAndGerb()}", callback_data=f"{button_parent['id']}|request|{stepinventory}|{inventory['uid']}")
+                if userRequester:
+                    btn = InlineKeyboardButton(f"🔘{cost} {userRequester.getNameAndGerb()}", callback_data=f"{button_parent['id']}|request|{stepinventory}|{inventory['uid']}|{userRequester.getLogin()}")
                     buttons.append(btn)
 
 
@@ -1613,8 +1613,7 @@ def select_shelf(call):
             buttons.append(add)
 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
-        #buttons.append(exit_button)
-        
+
         step = 0
         for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, back_button=None, exit_button=exit_button, forward_button=None):
             markupinline.row(*row) 
@@ -1643,21 +1642,20 @@ def select_shelf(call):
                 return
             your_request = f'\n▫️ Твое предложение: 🔘{cost}'
             
-            send_messages_big(userseller.getChat(), text=f'🛍️ Магазин!\n{user.getNameAndGerb()} (@{user.getLogin()}) сделал предложение в магазине!\n▫️ 🔘{cost} {inventory["name"]}')
+            send_messages_big(userseller.getChat(), text=f'🛍️👋 Магазин!\n{user.getNameAndGerb()} (@{user.getLogin()}) сделал предложение в магазине!\n▫️ 🔘{cost} {inventory["name"]}')
             bot.answer_callback_query(call.id, f'Заявка подана!')
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{your_request}", reply_markup=markupinline)
         return
 
-    # if button_id in ['decrease', 'order', 'add']:
-    #     bot.answer_callback_query(call.id, call.data)
-
-    if button_id in ['pickup']:
+    if button_id in ['pickup', 'request']:
         # {button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}
+        # {button_parent['id']}|request|{stepinventory}|{inventory['uid']}|{userRequester.getLogin()}
         inv_uid = call.data.split('|')[3]
         stepinventory = int(call.data.split('|')[2])
         user = getUserByLogin(call.from_user.username)
         inventory = None # user.getInventoryThing({'uid': inv_uid})
+        invonshelf = None
 
         for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
             itsMy = False
@@ -1683,8 +1681,21 @@ def select_shelf(call):
             bot.answer_callback_query(call.id, f'Что пошло не так.')
             return
 
-        userseller.addInventoryThing(inventory)
-        updateUser(userseller)
+        if button_id == 'pickup':
+            userseller.addInventoryThing(inventory)
+            updateUser(userseller)
+
+            for req in invonshelf['request']:
+                requester = user.getUserByLogin(req['login'])
+                if requester:
+                    send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) забрал из магазина\n▫️ 🔘{cost} {inventory["name"]}!\nТвоя заявка анулирована!')
+        elif button_id == 'request':
+            buyer = getUserByLogin(call.data.split('|')[4])
+            if buyer:
+                for req in invonshelf['request']:
+                    requester = user.getUserByLogin(req['login'])
+                    if requester:
+                        send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) забрал из магазина\n▫️ 🔘{cost} {inventory["name"]}!\nТвоя заявка анулирована!')
         
         # selectexit
         step = int(call.data.split('|')[2])
