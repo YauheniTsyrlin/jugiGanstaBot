@@ -1695,7 +1695,7 @@ def select_shelf(call):
             buyer = getUserByLogin(call.data.split('|')[4])
             if buyer:
                 for req in invonshelf['request']:
-                    requester = user.getUserByLogin(req['login'])
+                    requester = getUserByLogin(req['login'])
                     if requester:
                         if requester.getLogin() == buyer.getLogin():
                             inventory['cost'] = req['cost']
