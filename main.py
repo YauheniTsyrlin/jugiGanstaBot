@@ -1143,7 +1143,7 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
     if text:
         for s in text.split('\n'):
             for thing in elem['subjects_to_find']:
-                if (s.startswith('Получено:') or s.startswith('Бонус:') or (s.startswith('💰')) ) and thing in s:
+                if (s.startswith('Получено:') or s.startswith('Найдено:') or s.startswith('Бонус:') or (s.startswith('💰')) ) and thing in s:
                     if ' x' in s or ' ×' in s:
                         for x in [' x', ' ×']:
                             if x in s:
