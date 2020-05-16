@@ -1974,8 +1974,22 @@ newvalues = { "$set": { "value":
                                     'name': '🐏 Резиновая электроовца',
                                     'cost': 75,
                                     'type': 'decoration',
-                                    'quantity': 1
-
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'butt_plug',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'nipple_clamp',
+                                            'counter': 2
+                                        },
+                                        {
+                                            'id': 'pip_battery',
+                                            'counter': 1
+                                        }
+                                    ]
                                 },
                                 {
                                     'id': 'jugi_model',
@@ -3869,7 +3883,7 @@ myquery = { "code": 'ADMINISTRATOR' }
 newvalues = { "$set": { "value": 
                     [
                         {
-                            'login': '1GonzikBenzyavsky',
+                            'login': 'GonzikBenzyavsky',
                             'chat' : 497065022
                         },
                         {
