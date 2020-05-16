@@ -1584,6 +1584,8 @@ def select_shelf(call):
                 userRequester = getUserByLogin(req["login"])
                 cost = req['cost']
                 if userRequester:
+                    s = f"{button_parent['id']}|request|{stepinventory}|{inventory['uid']}|{userRequester.getLogin()}"
+                    logger.info(str(len(s)) + '|' + s )
                     btn = InlineKeyboardButton(f"🔘{cost} {userRequester.getNameAndGerb()}", callback_data=f"{button_parent['id']}|request|{stepinventory}|{inventory['uid']}|{userRequester.getLogin()}")
                     buttons.append(btn)
 
@@ -1648,7 +1650,7 @@ def select_shelf(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{your_request}", reply_markup=markupinline)
         return
 
-    if button_id in ['pickup']:
+    if button_id in ['pickup', 'request']:
         # {button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}
         # {button_parent['id']}|request|{stepinventory}|{inventory['uid']}|{userRequester.getLogin()}
         inv_uid = call.data.split('|')[3]
@@ -1688,14 +1690,31 @@ def select_shelf(call):
             for req in invonshelf['request']:
                 requester = user.getUserByLogin(req['login'])
                 if requester:
-                    send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) забрал из магазина\n▫️ 🔘{cost} {inventory["name"]}!\nТвоя заявка анулирована!')
+                    send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) забрал из магазина\n▫️ 🔘{cost} {inventory["name"]}!\nТвоя заявка аннулирована!')
         elif button_id == 'request':
             buyer = getUserByLogin(call.data.split('|')[4])
             if buyer:
                 for req in invonshelf['request']:
                     requester = user.getUserByLogin(req['login'])
                     if requester:
-                        send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) забрал из магазина\n▫️ 🔘{cost} {inventory["name"]}!\nТвоя заявка анулирована!')
+                        if requester.getLogin() == buyer.getLogin():
+                            inventory['cost'] = req['cost']
+                            buyer.addInventoryThing(inventory)
+                            updateUser(buyer)
+                            
+                            crypto = userseller.getInventoryThing({'id': 'crypto'})
+                            if crypto == None:
+                                crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
+                                crypto.update({'cost': req['cost']})
+                                userseller.addInventoryThing(crypto)
+                            else:
+                                crypto.update({'cost': crypto['cost']+req['cost']})
+                                user.updateInventoryThing(crypto)
+                            updateUser(userseller)
+                            send_messages_big(userseller.getChat(), text=f'🛍️✔️ Магазин!\nТы продал:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+                            send_messages_big(buyer.getChat(), text=f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал тебе:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+                        else:
+                            send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]}!\nТвоя заявка аннулирована!')
         
         # selectexit
         step = int(call.data.split('|')[2])
@@ -2252,7 +2271,7 @@ def select_exchange(call):
             cost = int(inventory["cost"]*button_parent['discont'])
             crypto = user.getInventoryThing({'id': 'crypto'})
             if crypto == None:
-                crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None) 
+                crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
                 crypto.update({'cost': cost})
                 addInventory(user, crypto)
             else:
