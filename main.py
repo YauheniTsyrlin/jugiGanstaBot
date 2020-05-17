@@ -1568,6 +1568,12 @@ def select_shelf(call):
         invonshelf  = None
         your_request = ''
 
+        # Валюта у продавца
+        crypto = user.getInventoryThing({'id': 'crypto'})
+        if crypto == None:
+            crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
+        
+        
         for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
             itsMy = False
             if invonshelf['inventory']['uid'] == inv_uid:
@@ -1656,7 +1662,7 @@ def select_shelf(call):
             send_messages_big(userseller.getChat(), text=f'🛍️👋 Магазин!\n{user.getNameAndGerb()} (@{user.getLogin()}) сделал предложение в магазине!\n▫️ 🔘{cost} {inventory["name"]}')
             bot.answer_callback_query(call.id, f'Заявка подана!')
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{your_request}", reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{your_request}\n▫️ Твой кошелек: 🔘{crypto['cost']}", reply_markup=markupinline)
         return
 
     if button_id in ['pickup', 'request']:
@@ -1766,6 +1772,7 @@ def select_shelf(call):
                 bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
                 return
 
+            # Валюта у продавца
             cryptoSeller = userseller.getInventoryThing({'id': 'crypto'})
             if cryptoSeller == None:
                 cryptoSeller = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
