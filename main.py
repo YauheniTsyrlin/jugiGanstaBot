@@ -608,7 +608,14 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None, limit=
         if step==0 and len(buttons) <= limit:
             manage_buttons = [exit_button]
         elif step==0:
-            manage_buttons = [exit_button, forward_button]
+            if exit_button and forward_button:
+                manage_buttons = [exit_button, forward_button]
+            elif exit_button and not forward_button:
+                manage_buttons = [exit_button]
+            if not exit_button and forward_button:
+                manage_buttons = [forward_button]
+            if not exit_button and not forward_button:
+                manage_buttons = []
         elif (step+1)*limit >= len(buttons):
             manage_buttons = [back_button, exit_button]
         else:
@@ -1593,7 +1600,7 @@ def select_shelf(call):
         userseller = getUserByLogin(invonshelf['login'])
         itsMy = call.from_user.username == invonshelf['login']
 
-        if itsMy:
+        if True or itsMy:
             for req in request:
                 userRequester = getUserByLogin(req["login"])
                 cost = req['cost']
@@ -1601,6 +1608,7 @@ def select_shelf(call):
                     #s = f"{button_parent['id']}|request|{stepinventory}|{inventory['uid']}|{userRequester.getLogin()}"
                     #logger.info(str(len(s)) + '|' + s )
                     btn = InlineKeyboardButton(f"🔘{cost} {userRequester.getNameAndGerb()}", callback_data=f"{button_parent['id']}|request|{stepinventory}|{inventory['uid'][:16]}|{userRequester.getLogin()}")
+                    
                     buttons.append(btn)
 
 
@@ -1629,10 +1637,14 @@ def select_shelf(call):
             buttons.append(add)
 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
-
         step = 0
-        for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, back_button=None, exit_button=exit_button, forward_button=None):
-            markupinline.row(*row) 
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|selectback|{step-1}") 
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|selectforward|{step+1}")
+
+        # TODO limit=16! Нужно сделать обработку вперед / назад
+        for row in build_menu(buttons=buttons, n_cols=3, limit=16, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+            markupinline.row(*row)  
+
 
         if button_id == 'order':
             findMyReq = False
