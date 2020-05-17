@@ -1413,6 +1413,8 @@ def select_baraholka(call):
         for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
             inv = invonshelf['inventory']
             request = invonshelf['request']
+            if request == None:
+                request = []
             cost = inv['cost']
             findMyRequest = False
             for req in request:
@@ -2325,7 +2327,7 @@ def select_exchange(call):
             if counter_inv >= 2:
                 bot.answer_callback_query(call.id, f'Тебе можно держать в магазине только {counter_inv} шт.')
                 return
-
+            request = []
             row = {
                     'date': (datetime.now()).timestamp(),
                     'login': user.getLogin(),
@@ -2333,7 +2335,7 @@ def select_exchange(call):
                     'goat' : getMyGoatName(user.getLogin()),
                     'state': 'NEW',
                     'inventory'  : inventory,
-                    'request' : []
+                    'request' : request
             }
             newvalues = { "$set": row }
             result = shelf.update_one(
