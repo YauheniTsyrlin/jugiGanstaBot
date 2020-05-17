@@ -3912,7 +3912,7 @@ newvalues = { "$set": { "value":
                             'chat' : -420173637
                         },
                         {
-                            'login': '1WestMoscow',
+                            'login': 'WestMoscow',
                             'chat' : 0 #214221494
                         }
                     ]
