@@ -1256,7 +1256,7 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                 elem.update({'storage': count})
                 percent = int(count*100/elem['max'])
 
-                send_message_to_admin(f'⚠️😎 {userIAm.getLogin()} продолжил изучение умения:\n▫️ {elem["name"]} {int(elem["storage"]}/{elem["max"])}')
+                send_message_to_admin(f'⚠️😎 {userIAm.getLogin()} продолжил изучение умения:\n▫️ {elem["name"]} {percent}% {int(elem["storage"])}/{elem["max"]}')
                 send_messages_big(chat, text=f'▫️ {elem["name"]} {percent}%')
 
             updateUser(userIAm)
