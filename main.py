@@ -1650,7 +1650,11 @@ def select_shelf(call):
             newvalues = { "$set": {'request': request} }
             result = shelf.update_one(
                 {
-                    'state': 'NEW',
+                    '$or': 
+                        [
+                            {'state': 'NEW'},
+                            {'state': None}
+                        ],
                     'inventory.uid' : inventory['uid']
                 }, newvalues)
             
