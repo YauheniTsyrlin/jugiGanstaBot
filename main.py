@@ -1600,7 +1600,7 @@ def select_shelf(call):
         userseller = getUserByLogin(invonshelf['login'])
         itsMy = call.from_user.username == invonshelf['login']
 
-        if True or itsMy:
+        if itsMy:
             for req in request:
                 userRequester = getUserByLogin(req["login"])
                 cost = req['cost']
