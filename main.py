@@ -1670,7 +1670,7 @@ def select_shelf(call):
             if result.matched_count < 1:
                 bot.answer_callback_query(call.id, f'Что пошло не так.')
                 return
-            your_request = f'\n▫️ Твое предложение: 🔘{cost}'
+            your_request = f'\n▫️ {user.getGerb()} Твое предложение: 🔘{cost}'
             
             send_messages_big(userseller.getChat(), text=f'🛍️👋 Магазин!\n{user.getNameAndGerb()} (@{user.getLogin()}) сделал предложение в магазине!\n▫️ 🔘{cost} {inventory["name"]}')
             bot.answer_callback_query(call.id, f'Заявка подана!')
