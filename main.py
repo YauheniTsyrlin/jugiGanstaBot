@@ -1814,7 +1814,7 @@ def select_shelf(call):
                 if requester:
                     if not (requester.getLogin() == buyer.getLogin()):
                         # print(f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ 🔘{inventory["cost"]} {inventory["name"]}!\nТвоя заявка аннулирована!')
-                        send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]}!\nТвоя заявка аннулирована!')
+                        send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]} за 🔘{inventory["cost"]}!\nТвоя заявка аннулирована!')
 
             # Обновляем покупателя и продавца
             updateUser(buyer)
