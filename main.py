@@ -1578,7 +1578,7 @@ def select_shelf(call):
         crypto = user.getInventoryThing({'id': 'crypto'})
         if crypto == None:
             crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
-        
+            user.addInventoryThing(crypto)
         
         for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
             itsMy = False
@@ -1742,6 +1742,12 @@ def select_shelf(call):
             # Есть ли деньги у покупателя
             cryptoBuyer = buyer.getInventoryThing({'id': 'crypto'})
             if cryptoBuyer == None or cryptoBuyer['cost'] - request['cost'] < 0:
+                
+                if cryptoBuyer == None:
+                    cryptoBuyer = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
+                    buyer.addInventoryThing(cryptoBuyer)
+                    updateUser(buyer)
+
                 newRequests = invonshelf['request']
                 newRequests.remove(request)
                 invonshelf.update({'request': newRequests}) 
@@ -1791,10 +1797,11 @@ def select_shelf(call):
             cryptoSeller = userseller.getInventoryThing({'id': 'crypto'})
             if cryptoSeller == None:
                 cryptoSeller = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
-            
+                userseller.addInventoryThing(cryptoSeller)
+
             # Добавили валюту продавцу
             cryptoSeller.update({'cost': cryptoSeller['cost'] + request['cost']})
-            userseller.addInventoryThing(cryptoSeller)
+            userseller.updateInventoryThing(cryptoSeller)
 
             # Забрали валюту у покупателя
             cryptoBuyer.update({'cost': cryptoBuyer['cost'] - request['cost']})

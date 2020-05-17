@@ -1,12 +1,3 @@
-            crypto = user.getInventoryThing({'id': 'crypto'})
-            if crypto == None:
-                crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
-                crypto.update({'cost': cost})
-                addInventory(user, crypto)
-            else:
-                crypto.update({'cost': crypto['cost']+cost})
-                user.updateInventoryThing(crypto)
-                
 #!/usr/bin/env python
  
 from datetime import datetime
@@ -983,8 +974,10 @@ def getInventoryReport(user, types):
 # print(f"{report_raids.count_documents({'band': {'$in': getGoatBands('FǁȺǁggǁØǁAT')}, 'date': 1589032800, 'planed_location': {'&gt': 0} })}")
 # print(f"{report_raids.count_documents({'band': {'$in': getGoatBands('FǁȺǁggǁØǁAT')}, 'date': 1589032800, 'planed_location': {'$gt': 0} })}")
 
-s = '🏵🏵🏵'
-print('='+s.replace('🏵',''))
+user = getUserByLogin('GonzikBenzyavsky')
+
+for inv in user.getInventoryThings({'id':'crypto'}):
+    print(inv)
 sys.exit(0)
 
 # import pandas as pd
