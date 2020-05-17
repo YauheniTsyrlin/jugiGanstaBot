@@ -1721,35 +1721,34 @@ def select_shelf(call):
                                         'state': 'NEW',
                                         'inventory.uid' : inventory['uid']
                                     }, newvalues)
+                                # print(f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотель тебе продать, но у тебя нет нужного количества 🔘 Crypto. Твоя заявка аннулирована :\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
                                 send_messages_big(buyer.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотель тебе продать, но у тебя нет нужного количества 🔘 Crypto. Твоя заявка аннулирована :\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
                                 bot.answer_callback_query(call.id, f'У него нет столько бабла!')
                                 break
                             else:
-                                print('деньги есть у покупателя')
+                                # print('деньги есть у покупателя')
                                 crypto.update({'cost': crypto['cost']-req['cost']})
                                 buyer.updateInventoryThing(crypto)
 
                             crypto = userseller.getInventoryThing({'id': 'crypto'})
                             if crypto == None:
-                                print('денег нет у продавца')
+                                # print('денег нет у продавца')
                                 crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
                                 crypto.update({'cost': req['cost']})
                                 userseller.addInventoryThing(crypto)
                             else:
-                                print('деньги есть у продавца')
+                                # print('деньги есть у продавца')
                                 crypto.update({'cost': crypto['cost']+req['cost']})
                                 userseller.updateInventoryThing(crypto)
-                            print(inventory['uid'])
+                            # print(inventory['uid'])
                             newvalues = { "$set": {'state': 'CANCEL'} }
                             result = shelf.update_one(
                                 {
-                
                                     '$or': 
                                         [
                                             {'state': 'NEW'},
                                             {'state': None}
                                         ],
-                                        
                                     'inventory.uid' : inventory['uid']
                                 }, newvalues)
                             
@@ -1761,15 +1760,16 @@ def select_shelf(call):
                             updateUser(buyer)
                             updateUser(userseller)
                             send_messages_big(userseller.getChat(), text=f'🛍️✔️ Магазин!\nТы продал:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+                            # print(f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал тебе:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+
                             send_messages_big(buyer.getChat(), text=f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал тебе:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
 
-                        # else:
-                        #     send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]}!\nТвоя заявка аннулирована!')
                 if deal:
                     for req in invonshelf['request']:
                         requester = getUserByLogin(req['login'])
                         if requester:
                             if not requester.getLogin() == buyer.getLogin():
+                                # print(f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]}!\nТвоя заявка аннулирована!')
                                 send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]}!\nТвоя заявка аннулирована!')
 
         # selectexit
