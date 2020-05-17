@@ -3931,7 +3931,7 @@ newvalues = { "$set": { "value":
                 # {'band': 'ЩекØтилы БанȺнов'},
                 {'band': 'ǁGØodfeelȺssǁ'},
                 {'band': 'New Vegas'},
-                {'band': 'New Vegas Eas'},
+                {'band': 'New Vegas East'},
                 {'band': 'Тамплиеры'},
                 {'band': 'КiберХоxли'}
             ]
@@ -4015,8 +4015,6 @@ newvalues = { "$set":
                                             'name': 'New Vegas East',
                                             'boss': 'arangam'
                                         }
-
-                                        
                                     ],
                             'chats': 
                                     {
