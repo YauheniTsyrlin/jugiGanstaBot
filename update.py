@@ -4048,6 +4048,29 @@ newvalues = { "$set":
                                         'secret' : -491611374,
                                         'info' : -491611374
                                     }
+                        },
+                        { 
+                            'name': 'Iamlaserpewpew',
+                            'liga': 'Вторая лига',
+                            'boss': [
+                                        'i_am_not_Daniil'
+                                    ],
+                            'poweruser': 
+                                    [
+                                        'i_am_not_Daniil'
+                                    ],  
+                            'bands': 
+                                    [
+                                        {
+                                            'name': 'КiберХоxли',
+                                            'boss': 'i_am_not_Daniil'
+                                        }
+                                    ],
+                            'chats': 
+                                    {
+                                        'secret' : -0,
+                                        'info' : -0
+                                    }
                         }
                         
                     ]   
