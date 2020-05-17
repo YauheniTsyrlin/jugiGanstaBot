@@ -2833,7 +2833,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'crypto',
                                     'name': '🔘 Crypto',
-                                    'cost': 1,
+                                    'cost': 0,
                                     'type': 'currency',
                                     'quantity': None,
                                 }

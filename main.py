@@ -1702,75 +1702,115 @@ def select_shelf(call):
                     send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) забрал из магазина\n▫️ 🔘{cost} {inventory["name"]}!\nТвоя заявка аннулирована!')
 
         elif button_id == 'request':
+            # Есть ли покупатель
             buyer = getUserByLogin(call.data.split('|')[4])
-            print(buyer.getLogin())
-            if buyer:
-                deal = False
-                for req in invonshelf['request']:
-                    requester = getUserByLogin(req['login'])
-                    if requester:
-                        if requester.getLogin() == buyer.getLogin():
-                            inventory['cost'] = req['cost']
-                            buyer.addInventoryThing(inventory)
-                            crypto = buyer.getInventoryThing({'id': 'crypto'})
-                            if crypto == None or crypto['cost'] - req['cost'] < 0:
-                                print('денег нет у покупателя')
-                                newvalues = { "$set": {'request': invonshelf['request'].remove(req)} }
-                                result = shelf.update_one(
-                                    {
-                                        'state': 'NEW',
-                                        'inventory.uid' : inventory['uid']
-                                    }, newvalues)
-                                # print(f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотель тебе продать, но у тебя нет нужного количества 🔘 Crypto. Твоя заявка аннулирована :\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
-                                send_messages_big(buyer.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотель тебе продать, но у тебя нет нужного количества 🔘 Crypto. Твоя заявка аннулирована :\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
-                                bot.answer_callback_query(call.id, f'У него нет столько бабла!')
-                                break
-                            else:
-                                # print('деньги есть у покупателя')
-                                crypto.update({'cost': crypto['cost']-req['cost']})
-                                buyer.updateInventoryThing(crypto)
+            if not buyer: 
+                bot.answer_callback_query(call.id, f'Не найден покупатель')
+                return
+            
+            request = None
+            for request in invonshelf['request']:
+                if request['login'] == buyer.getLogin():
+                    break
 
-                            crypto = userseller.getInventoryThing({'id': 'crypto'})
-                            if crypto == None:
-                                # print('денег нет у продавца')
-                                crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
-                                crypto.update({'cost': req['cost']})
-                                userseller.addInventoryThing(crypto)
-                            else:
-                                # print('деньги есть у продавца')
-                                crypto.update({'cost': crypto['cost']+req['cost']})
-                                userseller.updateInventoryThing(crypto)
-                            # print(inventory['uid'])
-                            newvalues = { "$set": {'state': 'CANCEL'} }
-                            result = shelf.update_one(
-                                {
-                                    '$or': 
-                                        [
-                                            {'state': 'NEW'},
-                                            {'state': None}
-                                        ],
-                                    'inventory.uid' : inventory['uid']
-                                }, newvalues)
-                            
-                            if result.matched_count < 1:
-                                bot.answer_callback_query(call.id, f'Что пошло не так.')
-                                return
+            # Есть ли заявка от покупателя
+            if not request:
+                bot.answer_callback_query(call.id, f'Не найдена заявка')
+                return
+            
+            # Есть ли деньги у покупателя
+            cryptoBuyer = buyer.getInventoryThing({'id': 'crypto'})
+            if cryptoBuyer == None or cryptoBuyer['cost'] - request['cost'] < 0:
+                newRequests = invonshelf['request']
+                newRequests.remove(request)
+                invonshelf.update({'request': newRequests}) 
 
-                            deal = True
-                            updateUser(buyer)
-                            updateUser(userseller)
-                            send_messages_big(userseller.getChat(), text=f'🛍️✔️ Магазин!\nТы продал:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
-                            # print(f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал тебе:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+                newvalues = { "$set": {'request': newRequests} }
+                result = shelf.update_one(
+                    {
+                        '$or': 
+                        [
+                            {'state': 'NEW'},
+                            {'state': None}
+                        ],
+                        'inventory.uid' : inventory['uid']
+                    }, newvalues)
 
-                            send_messages_big(buyer.getChat(), text=f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал тебе:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+                if result.matched_count < 1:
+                    bot.answer_callback_query(call.id, f'Не смогли обновить заявки')
+                    return
 
-                if deal:
-                    for req in invonshelf['request']:
-                        requester = getUserByLogin(req['login'])
-                        if requester:
-                            if not requester.getLogin() == buyer.getLogin():
-                                # print(f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]}!\nТвоя заявка аннулирована!')
-                                send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]}!\nТвоя заявка аннулирована!')
+                print(f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотель тебе продать, но у тебя нет нужного количества 🔘 Crypto. Твоя заявка аннулирована :\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+                # send_messages_big(buyer.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотель тебе продать, но у тебя нет нужного количества 🔘 Crypto. Твоя заявка аннулирована :\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+                bot.answer_callback_query(call.id, f'У него нет столько бабла!')
+
+                for request in newRequests:
+                    userRequester = getUserByLogin(request["login"])
+                    cost = request['cost']
+                    if userRequester:
+                        btn = InlineKeyboardButton(f"🔘{cost} {userRequester.getNameAndGerb()}", callback_data=f"{button_parent['id']}|request|{stepinventory}|{inventory['uid'][:16]}|{userRequester.getLogin()}")
+                        buttons.append(btn)
+
+
+                pickup = InlineKeyboardButton(f"Забрать 📤", callback_data=f"{button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}")
+                buttons.append(pickup)
+                exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
+
+                step = 0
+                for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, back_button=None, exit_button=exit_button, forward_button=None):
+                    markupinline.row(*row) 
+
+                bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
+                return
+
+            cryptoSeller = userseller.getInventoryThing({'id': 'crypto'})
+            if cryptoSeller == None:
+                cryptoSeller = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
+            
+            # Добавили валюту продавцу
+            cryptoSeller.update({'cost': cryptoSeller['cost'] + request['cost']})
+            userseller.addInventoryThing(cryptoSeller)
+
+            # Забрали валюту у покупателя
+            cryptoBuyer.update({'cost': cryptoBuyer['cost'] - request['cost']})
+            buyer.updateInventoryThing(cryptoBuyer)
+            
+            # Добавили вещь в инвентарь покупателя
+            inventory['cost'] = request['cost']
+            buyer.addInventoryThing(inventory)
+            
+            # Закрываем заявку               
+            newvalues = { "$set": {'state': 'CANCEL'} }
+            result = shelf.update_one(
+                {
+                    '$or': 
+                        [
+                            {'state': 'NEW'},
+                            {'state': None}
+                        ],
+                    'inventory.uid' : inventory['uid']
+                }, newvalues)
+            
+            if result.matched_count < 1:
+                bot.answer_callback_query(call.id, f'Что пошло не так.')
+                return
+
+            # Уведомляем всех остальных о закрытии заявки
+            for req in invonshelf['request']:
+                requester = getUserByLogin(req['login'])
+                if requester:
+                    if not (requester.getLogin() == buyer.getLogin()):
+                        print(f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ 🔘{inventory["cost"]} {inventory["name"]}!\nТвоя заявка аннулирована!')
+                        # send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]}!\nТвоя заявка аннулирована!')
+
+            # Обновляем покупателя и продавца
+            updateUser(buyer)
+            updateUser(userseller)
+            
+            # send_messages_big(userseller.getChat(), text=f'🛍️✔️ Магазин!\nТы продал:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+            print(f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал тебе:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+            send_messages_big(buyer.getChat(), text=f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал тебе:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+
 
         # selectexit
         step = int(call.data.split('|')[2])
