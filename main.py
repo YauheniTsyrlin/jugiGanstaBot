@@ -1595,20 +1595,18 @@ def select_shelf(call):
             request = []
         for req in request:
             if req['login'] == user.getLogin():
-                your_request = f'\n▫️ Твое предложение: 🔘{req["cost"]}' 
+                your_request = f'\n▫️ {user.getGerb()} Твое предложение: 🔘{req["cost"]}' 
 
         userseller = getUserByLogin(invonshelf['login'])
         itsMy = call.from_user.username == invonshelf['login']
-
         if itsMy:
-            for req in request:
+            for req in sorted(request, key = lambda i: i['cost'], reverse=True):
                 userRequester = getUserByLogin(req["login"])
                 cost = req['cost']
                 if userRequester:
                     #s = f"{button_parent['id']}|request|{stepinventory}|{inventory['uid']}|{userRequester.getLogin()}"
                     #logger.info(str(len(s)) + '|' + s )
                     btn = InlineKeyboardButton(f"🔘{cost} {userRequester.getNameAndGerb()}", callback_data=f"{button_parent['id']}|request|{stepinventory}|{inventory['uid'][:16]}|{userRequester.getLogin()}")
-                    
                     buttons.append(btn)
 
 
@@ -1676,8 +1674,13 @@ def select_shelf(call):
             
             send_messages_big(userseller.getChat(), text=f'🛍️👋 Магазин!\n{user.getNameAndGerb()} (@{user.getLogin()}) сделал предложение в магазине!\n▫️ 🔘{cost} {inventory["name"]}')
             bot.answer_callback_query(call.id, f'Заявка подана!')
+        
+        best_request = ''
+        if len(request)>0:
+            best = max(request, key=lambda x: x['cost'])
+            best_request = f'\n▫️ 📈 Лучшее предложение: 🔘{best["cost"]}' 
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{your_request}\n▫️ Твой кошелек: 🔘{crypto['cost']}", reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{best_request}{your_request}\n▫️ {user.getGerb()} Твой кошелек: 🔘{crypto['cost']}", reply_markup=markupinline)
         return
 
     if button_id in ['pickup', 'request']:

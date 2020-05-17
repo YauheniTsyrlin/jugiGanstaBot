@@ -4098,7 +4098,7 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-if 1==1: # дедублицируем crypto 
+if 1==2: # дедублицируем crypto 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     for user in list(filter(lambda x : len(x.getInventory()) > 0, USERS_ARR)):

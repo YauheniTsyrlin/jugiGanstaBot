@@ -415,10 +415,13 @@ class User(object):
     def getName(self):
         return self.name
 
-    def getNameAndGerb(self):
+    def getGerb(self):
         gerb = self.getSettingValue(name="🃏Мой герб")
         if gerb == None: gerb = ''
-        return gerb+self.name
+        return gerb
+
+    def getNameAndGerb(self):
+        return self.getGerb()+self.name
 
     def setFraction(self, fraction):
         self.fraction = fraction
