@@ -4012,7 +4012,7 @@ newvalues = { "$set":
                                             'boss': 'SSG76reg'
                                         },
                                         {
-                                            'name': 'New Vegas Eas',
+                                            'name': 'New Vegas East',
                                             'boss': 'arangam'
                                         }
 
