@@ -565,7 +565,7 @@ def update_warior(warior: wariors.Warior):
             result.update({'new': True})
             result.update({'bm_update': True})
             res = registered_wariors.insert_one(json.loads(warior.toJSON()))
-            send_message_to_admin(f'⚠️🔫 Зарегистрирован бандит {warior.getName()}\n{warior.getProfile()}')
+            send_message_to_admin(f'🔫 Новый бандит:\n{warior.getProfile()}')
 
     
     arr = []
@@ -772,7 +772,7 @@ def infect(logins, chat_id):
                                             'dialog_flow_context': None,
                                             'text': text})
 
-                                        send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} {protected_thing["name"]} спасла от {vir["name"]}')
+                                        send_message_to_admin(f'🦇 Вирус!\n у {user.getLogin()} {protected_thing["name"]} спасла от {vir["name"]}')
                                         break
                                     else:
                                         user.removeInventoryThing(protected_thing)
@@ -790,7 +790,7 @@ def infect(logins, chat_id):
                                             'dialog_flow_text': None,
                                             'dialog_flow_context': None,
                                             'text': text})
-                                        send_message_to_admin(f'⚠️🦇 Внимание! \n у {user.getLogin()} порвалась {protected_thing["name"]}')
+                                        send_message_to_admin(f'🦇 Вирус!\n у {user.getLogin()} порвалась {protected_thing["name"]}')
                                         break
 
                         if safe_mask:
@@ -813,7 +813,7 @@ def infect(logins, chat_id):
                         'dialog_flow_text': 'virus_new_member',
                         'dialog_flow_context': None,
                         'text': f'▫️ {infect_user.getNameAndGerb()} заразил тебя {vir["name"]}'})
-                    send_message_to_admin(f'⚠️🦇 Внимание! \n {user.getLogin()} заражен вирусом {vir["name"]} с вероятностью {vir["property"]["contagiousness"]}')
+                    send_message_to_admin(f'🦇 Вирус!\n {user.getLogin()} заражен вирусом {vir["name"]} с вероятностью {vir["property"]["contagiousness"]}')
 
 def checkCure(logins, chat_id):
     chat = f'chat_{chat_id}' 
@@ -873,7 +873,7 @@ def cure(logins, chat_id):
                             addInventory(infected, protected_clothes)
                             mask_text = f'\n▫️ +{protected_clothes["name"]}'
 
-                        send_message_to_admin(f'⚠️❤️ Внимание! \n {infected.getLogin()} вылечен {medic.getLogin()} от {vir["name"]}!')
+                        send_message_to_admin(f'❤️ Доктор!\n {infected.getLogin()} вылечен {medic.getLogin()} от {vir["name"]}!')
                         updateUser(infected)
                         sec = int(randrange(int(getSetting(code='PROBABILITY', name='PANDING_WAIT_START_2')), int(getSetting(code='PROBABILITY', name='PANDING_WAIT_END_2'))))
                         pending_date = datetime.now() + timedelta(seconds=sec)
@@ -1191,12 +1191,12 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                             userIAm.removeInventoryThing(thing)
                             text = f'{userIAm.getNameAndGerb()}, у тебя испотилась вещь из инвентаря:\n▫️ {thing["name"]}'
                             send_messages_big(chat, text=text)
-                            send_message_to_admin(f'⚠️\n{text}')
+                            send_message_to_admin(f'🗑️ Сломалось\n{text}')
                         else:
                             thing['wear'].update({'value': new_value})
                             text = f'{userIAm.getNameAndGerb()}\n{getResponseDialogFlow(None, thing["skill"]["training"]["dialog_text"]).fulfillment_text}\n▫️ {thing["name"]} <b>{int(new_value*100)}%</b>'
                             send_messages_big(chat, text=text)
-                            send_message_to_admin(f'⚠️\n{text}')
+                            send_message_to_admin(f'🔧 Использован предмет\n{text}')
                         
                         count = count + thing['skill']['training']['value']
             if count <= 0:
@@ -1207,7 +1207,7 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                 addInventory(userIAm, elem)
                 percent = int((elem['storage'])*100/elem['max'])
                 send_messages_big(chat, text=f'Ты начал изучение умения:\n▫️ {elem["name"]} {percent}%') 
-                send_message_to_admin(f'⚠️🤓 {userIAm.getLogin()} начал изучение умения:\n▫️ {elem["name"]} {percent}%')
+                send_message_to_admin(f'💡 Начато изучение умения:\n▫️ {userIAm.getLogin()}\n▫️ {elem["name"]} {percent}%')
             else:
                 elem = userIAm.getInventoryThing(elem)
                 text = ''
@@ -1256,7 +1256,7 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                 elem.update({'storage': count})
                 percent = int(count*100/elem['max'])
 
-                send_message_to_admin(f'⚠️😎 {userIAm.getLogin()} продолжил изучение умения:\n▫️ {elem["name"]} {percent}% {int(elem["storage"])}/{elem["max"]}')
+                send_message_to_admin(f'💡 Изучение умения:\n▫️ {userIAm.getLogin()}\n▫️ {elem["name"]} <b>{percent}</b>% {int(elem["storage"])}/{elem["max"]}')
                 send_messages_big(chat, text=f'▫️ {elem["name"]} {percent}%')
 
             updateUser(userIAm)
@@ -2379,7 +2379,7 @@ def select_exchange(call):
                 user.updateInventoryThing(crypto)
             user.removeInventoryThing(inventory)
             updateUser(user)
-            send_message_to_admin(text=f'♻️ Сдал за {int(button_parent["discont"]*100)}% 💴!\n{user.getNameAndGerb()} (@{user.getLogin()}) сдал {inventory["name"]} за 🔘{cost}')
+            send_message_to_admin(text=f'♻️ Сдано за {int(button_parent["discont"]*100)}% 💴!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {inventory["name"]} 🔘{cost}')
             bot.answer_callback_query(call.id, f'Сдано за 🔘 {cost}')
 
         elif button_id in ['toshelf']:
@@ -2408,7 +2408,7 @@ def select_exchange(call):
             
             user.removeInventoryThing(inventory)
             updateUser(user)
-            send_message_to_admin(text=f'🛍️ Выставили на продажу!\n{user.getNameAndGerb()} (@{user.getLogin()}) выставил на продажу {inventory["name"]} за 🔘{inventory["cost"]}')
+            send_message_to_admin(text=f'🛍️ Выставили на продажу!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {inventory["name"]} 🔘{inventory["cost"]}')
             bot.answer_callback_query(call.id, f'Выставлено на продажу')
 
         elif button_id in ['toworkbench', 'toworkbenchall']:
@@ -2435,7 +2435,7 @@ def select_exchange(call):
                 user.removeInventoryThing(inventory)
 
             updateUser(user)
-            send_message_to_admin(text=f'⚙️ Положили на верстак!\n{user.getNameAndGerb()} (@{user.getLogin()}) положил на ⚙️ верстак {inventory["name"]}')
+            send_message_to_admin(text=f'⚙️ Положено на верстак!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {inventory["name"]}')
             bot.answer_callback_query(call.id, f'Положено на верстак')
 
         # Возвращаемся как selectexit
@@ -3010,7 +3010,7 @@ def main_message(message):
                     updateUser(None)
 
                     send_messages_big(message.chat.id, text=f'Поздравляю! \nТебе выдали {elem["name"]} и вытолкнули за дверь!')
-                    send_message_to_admin(f'⚠️Внимание! Зарегистрировался новый пользователь.\n {user.getProfile()}')
+                    send_message_to_admin(f'👤 Новый пользователь:\n{user.getProfile()}')
             else:
                 updatedUser = users.updateUser(user, users.getUser(user.getLogin(), registered_users))
                 dzen_rewards(updatedUser, updatedUser.getDzen(), message)
@@ -3514,7 +3514,7 @@ def main_message(message):
                             alianusersReport = alianusersReport + f'{aliancounter}. {name} {spliter}{km}км\n'
                     i = i + 1
 
-                send_message_to_admin(f'⚠️ {getUserByLogin(message.from_user.username).getNameAndGerb()}\n🤘 Панель банды <b>{band}</b>\n{message.forward_date}: {datetime.fromtimestamp(message.forward_date)}\n⏰ Время рейда: {datetime.fromtimestamp(raidDate)}')
+                send_message_to_admin(f'🤘 Панель банды <b>{band}</b>\n▫️ {getUserByLogin(message.from_user.username).getNameAndGerb()}\n▫️ {message.forward_date}: {datetime.fromtimestamp(message.forward_date)}\n▫️ ⏰ Время рейда: {datetime.fromtimestamp(raidDate)}')
                 report = report + f'🤘 <b>{band}</b>\n\n' 
                 if onraidcounter > 0:
                     report = report + f'🧘‍♂️ <b>на рейде</b>: <b>{onraidcounter}/{allcounter}</b>\n'
@@ -6667,7 +6667,7 @@ def rade():
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
             try:
-                send_message_to_admin(f'⚠️ Предупреждение {goat["name"]}!')
+                # send_message_to_admin(f'⚠️ Предупреждение {goat["name"]}!')
                 if getPlanedRaidLocation(goat['name'], planRaid = True)['rade_location']:
                     report = radeReport(goat, True)
                     # send_messages_big(497065022, text=f'<b>{str(60-now_date.minute)}</b> минут до рейда!\n' + report)
@@ -6784,7 +6784,7 @@ def rade():
                     # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {bolt["name"]}')    
                     updateUser(user)
                     antyBoltReport = antyBoltReport + f'{counter}. @{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
-        send_message_to_admin(antyBoltReport)
+        send_message_to_admin(f'🔩 Сдали болты:\n'+antyBoltReport)
 
     # Проверка на дубликаты бандитов
     # Неправильно работает - не проверяет дубли по Фракции
@@ -6817,7 +6817,7 @@ def rade():
                     registered_wariors.delete_many({'_id': m.get('_id')})
                     z = z + 1
         if i > 0:
-            send_message_to_admin(f'⚠️Выявлены и удалены дубликаты бандитов⚠️\n{result}')
+            send_message_to_admin(f'👥 Удалены дубликаты бандитов:\n{result}')
 
 
 def getPidorOfTheDay(goat, now_date):
@@ -7090,7 +7090,7 @@ def radeReport(goat, ping=False, planRaid=True):
     updateUser(None)
     
     raidInfo = getPlanedRaidLocation(goat.get('name'), planRaid)
-    send_message_to_admin(f'⚠️ radeReport ⚠️\n{datetime.fromtimestamp(raidInfo["rade_date"])}\n{raidInfo}')
+    # send_message_to_admin(f'⚠️ radeReport ⚠️\n{datetime.fromtimestamp(raidInfo["rade_date"])}\n{raidInfo}')
     logger.info(raidInfo)
 
     planed_raid_location = raidInfo['rade_location']
@@ -7165,12 +7165,12 @@ def radeReport(goat, ping=False, planRaid=True):
 
 def setGiftsForRaid(goat):
     raidPlan = getPlanedRaidLocation(goatName=goat['name'], planRaid=False)
-    send_message_to_admin(f'⚠️ setGiftsForRaid ⚠️\n{raidPlan}')
+    # send_message_to_admin(f'⚠️ setGiftsForRaid ⚠️\n{raidPlan}')
     if not raidPlan['rade_location']:
         return
 
     # raidPlan.update({'rade_date':(datetime(2020, 3, 14, 17, 0)).timestamp() })
-    send_message_to_admin(f'⚠️🔩 Раздача болтов {goat["name"]}!\nРейд {raidPlan["rade_date"]}: {datetime.fromtimestamp(raidPlan["rade_date"])}⚠️')
+    # send_message_to_admin(f'⚠️🔩 Раздача болтов {goat["name"]}!\nРейд {raidPlan["rade_date"]}: {datetime.fromtimestamp(raidPlan["rade_date"])}⚠️')
     
     
     boltReport = ''
@@ -7191,11 +7191,6 @@ def setGiftsForRaid(goat):
             users_true.append(user.getLogin())
         else:
             users_false.append(user.getLogin())
-
-    try:
-        send_message_to_admin(f'⚠️🔩 Раздача болтов {goat["name"]}!\nusers = {users_false}⚠️')
-    except:
-        pass
 
     for raid_user in users_false:
         user = getUserByLogin(raid_user)
@@ -7332,7 +7327,7 @@ def setGiftsForRaid(goat):
         antyBoltReport = '<b>Сдали болты ❎</b>\n' + antyBoltReport
 
     if (not boltReport == '') or (not antyBoltReport == ''):
-        send_message_to_admin(text=boltReport + '\n' + antyBoltReport)
+        send_message_to_admin(text='🔩 Болты:\n' + boltReport + '\n' + antyBoltReport)
         send_messages_big(goat['chats']['secret'], text=boltReport + '\n' + antyBoltReport)
 
 def statistic(goatName: str):
