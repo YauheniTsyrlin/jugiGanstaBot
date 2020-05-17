@@ -4098,6 +4098,20 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
+if 1==1: # дедублицируем crypto 
+    updateUser(None)
+    listInv = GLOBAL_VARS['inventory']
+    for user in list(filter(lambda x : len(x.getInventory()) > 0, USERS_ARR)):
+        # if not user.getLogin() == 'GonzikBenzyavsky': continue
+        lenght = len(user.getInventoryThings({'id':'crypto'}))
+        counter = 0
+        for inv in sorted(user.getInventoryThings({'id':'crypto'}), key = lambda i: i['cost'], reverse=False):
+            counter = counter + 1
+            # print(f'{user.getLogin()} {inv["cost"]}')
+            if counter < lenght:
+                user.getInventory().remove(inv)
+        updateUser(user)      
+
 
 if 1==2: # обновляем composition 
     updateUser(None)
