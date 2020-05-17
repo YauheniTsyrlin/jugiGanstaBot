@@ -1884,7 +1884,16 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
+                                },
+                                {
+                                    'id': 'speculator',
+                                    'name': '💹 Ростовский спекулянт',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
                                 }
+
+                                
                             ]
                         },
                         {
