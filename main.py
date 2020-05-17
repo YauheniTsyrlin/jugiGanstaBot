@@ -1435,8 +1435,7 @@ def select_baraholka(call):
             markupinline.row(*row)  
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
-        
-        bot.answer_callback_query(call.id, 'Все еще на реконструкции')
+
         return
 
     if button_id in ['workbench']:
@@ -2036,7 +2035,8 @@ def select_workbench(call):
         if result.matched_count < 1:
             workbench.insert_one(row)
 
-
+        send_message_to_admin(text=f'🛠️ Собрано на верстаке:\n▫️ {user.getNameAndGerb()} {user.getLogin()}\n▫️ {inventory["name"]} 🔘{inventory["cost"]}')
+            
         # user.addInventoryThing(inventory) 
         # updateUser(user)               
         # bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
