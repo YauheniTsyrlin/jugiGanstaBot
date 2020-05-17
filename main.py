@@ -1740,10 +1740,13 @@ def select_shelf(call):
                     bot.answer_callback_query(call.id, f'Не смогли обновить заявки')
                     return
 
-                print(f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотель тебе продать, но у тебя нет нужного количества 🔘 Crypto. Твоя заявка аннулирована :\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
-                # send_messages_big(buyer.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотель тебе продать, но у тебя нет нужного количества 🔘 Crypto. Твоя заявка аннулирована :\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+                # print(f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотель тебе продать {inventory["name"]}, но у тебя нет 🔘{inventory["cost"]}. Твоя заявка аннулирована :\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+                text = f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотель тебе продать {inventory["name"]}, но у тебя нет 🔘{inventory["cost"]}. Твоя заявка аннулирована :\n▫️ 🔘{inventory["cost"]} {inventory["name"]}'
+                send_messages_big(buyer.getChat(), text=text)
                 bot.answer_callback_query(call.id, f'У него нет столько бабла!')
+                send_message_to_admin(text)
 
+                # Перерисовываем кнопки без этой заявки
                 for request in newRequests:
                     userRequester = getUserByLogin(request["login"])
                     cost = request['cost']
@@ -1800,17 +1803,18 @@ def select_shelf(call):
                 requester = getUserByLogin(req['login'])
                 if requester:
                     if not (requester.getLogin() == buyer.getLogin()):
-                        print(f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ 🔘{inventory["cost"]} {inventory["name"]}!\nТвоя заявка аннулирована!')
-                        # send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]}!\nТвоя заявка аннулирована!')
+                        # print(f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ 🔘{inventory["cost"]} {inventory["name"]}!\nТвоя заявка аннулирована!')
+                        send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]}!\nТвоя заявка аннулирована!')
 
             # Обновляем покупателя и продавца
             updateUser(buyer)
             updateUser(userseller)
             
-            # send_messages_big(userseller.getChat(), text=f'🛍️✔️ Магазин!\nТы продал:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
-            print(f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал тебе:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+            send_messages_big(userseller.getChat(), text=f'🛍️✔️ Магазин!\nТы продал:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+            # print(f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал тебе:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
             send_messages_big(buyer.getChat(), text=f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал тебе:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
-
+            text = f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()}):\n▫️ 🔘{inventory["cost"]} {inventory["name"]}'
+            send_message_to_admin(text)
 
         # selectexit
         step = int(call.data.split('|')[2])
