@@ -4189,7 +4189,7 @@ def main_message(message):
                         user = getUserByName(name)
 
                     if user:
-                        if getMyGoatName(message.from_user.username) == getMyGoatName(user.getLogin()):
+                        if isAdmin(message.from_user.username) or getMyGoatName(message.from_user.username) == getMyGoatName(user.getLogin()):
                             send_messages_big(message.chat.id, text=user.getProfile('All'))
                 else:
                     send_messages_big(message.chat.id, text=f'В базе зарегистрированнных бандитов {login} не найден')
