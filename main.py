@@ -1579,6 +1579,8 @@ def select_shelf(call):
             return
         
         request = invonshelf['request']
+        if request == None:
+            request = []
         for req in request:
             if req['login'] == user.getLogin():
                 your_request = f'\n▫️ Твое предложение: 🔘{req["cost"]}' 
