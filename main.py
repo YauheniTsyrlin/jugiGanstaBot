@@ -1207,7 +1207,7 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                 addInventory(userIAm, elem)
                 percent = int((elem['storage'])*100/elem['max'])
                 send_messages_big(chat, text=f'Ты начал изучение умения:\n▫️ {elem["name"]} {percent}%') 
-                send_message_to_admin(f'💡 Начато изучение умения:\n▫️ {userIAm.getLogin()}\n▫️ {elem["name"]} {percent}%')
+                send_message_to_admin(f'💡 Начато изучение умения:\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n▫️ {elem["name"]} {percent}%')
             else:
                 elem = userIAm.getInventoryThing(elem)
                 text = ''
