@@ -1662,6 +1662,7 @@ def select_shelf(call):
     if button_id in ['pickup', 'request']:
         # {button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}
         # {button_parent['id']}|request|{stepinventory}|{inventory['uid']}|{userRequester.getLogin()}
+        print(call.data)
         inv_uid = call.data.split('|')[3]
         stepinventory = int(call.data.split('|')[2])
         user = getUserByLogin(call.from_user.username)
@@ -1702,6 +1703,7 @@ def select_shelf(call):
 
         elif button_id == 'request':
             buyer = getUserByLogin(call.data.split('|')[4])
+            print(buyer.getLogin())
             if buyer:
                 deal = False
                 for req in invonshelf['request']:
@@ -1712,6 +1714,7 @@ def select_shelf(call):
                             buyer.addInventoryThing(inventory)
                             crypto = buyer.getInventoryThing({'id': 'crypto'})
                             if crypto == None or crypto['cost'] - req['cost'] < 0:
+                                print('денег нет у покупателя')
                                 newvalues = { "$set": {'request': invonshelf['request'].remove(req)} }
                                 result = shelf.update_one(
                                     {
@@ -1722,22 +1725,31 @@ def select_shelf(call):
                                 bot.answer_callback_query(call.id, f'У него нет столько бабла!')
                                 break
                             else:
+                                print('деньги есть у покупателя')
                                 crypto.update({'cost': crypto['cost']-req['cost']})
                                 buyer.updateInventoryThing(crypto)
 
                             crypto = userseller.getInventoryThing({'id': 'crypto'})
                             if crypto == None:
+                                print('денег нет у продавца')
                                 crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
                                 crypto.update({'cost': req['cost']})
                                 userseller.addInventoryThing(crypto)
                             else:
+                                print('деньги есть у продавца')
                                 crypto.update({'cost': crypto['cost']+req['cost']})
                                 userseller.updateInventoryThing(crypto)
-
+                            print(inventory['uid'])
                             newvalues = { "$set": {'state': 'CANCEL'} }
                             result = shelf.update_one(
                                 {
-                                    'state': 'NEW',
+                
+                                    '$or': 
+                                        [
+                                            {'state': 'NEW'},
+                                            {'state': None}
+                                        ],
+                                        
                                     'inventory.uid' : inventory['uid']
                                 }, newvalues)
                             
