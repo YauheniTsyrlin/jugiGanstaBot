@@ -1413,10 +1413,8 @@ def select_baraholka(call):
         for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
             inv = invonshelf['inventory']
             request = invonshelf['request']
-            # if request == None:
-            #     request = []
-
-            logger.info(invonshelf)
+            if request == None:
+                request = []
             cost = inv['cost']
             findMyRequest = False
             for req in request:
@@ -1538,6 +1536,8 @@ def select_shelf(call):
             request = invonshelf['request']
             cost = inv['cost']
             findMyRequest = False
+            if request == None:
+                request = []
             for req in request:
                 if req['login'] == user.getLogin():
                     cost = req['cost']
