@@ -2442,9 +2442,23 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
+                                    'id': 'brake',
+                                    'name': '⚓ Тормоз',
+                                    'cost': 150,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'cast_iron',
+                                            'counter': 5
+                                        }
+                                    ]
+                                },
+                                {
                                     'id': 'deus_auto',
                                     'name': '🦼 Машинка Δeus',
-                                    'cost': 2000,
+                                    'cost': 850,
                                     'type': 'things',
                                     'quantity': None,
                                     'composition':
@@ -2454,7 +2468,7 @@ newvalues = { "$set": { "value":
                                             'counter': 4
                                         },
                                         {
-                                            'id': 'crown_pidor',
+                                            'id': 'brake',
                                             'counter': 1
                                         }
                                     ]
