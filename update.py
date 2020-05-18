@@ -4144,7 +4144,7 @@ if 1==2: # дедублицируем crypto
         updateUser(user)      
 
 
-if 1==1: # обновляем composition 
+if 1==2: # обновляем composition 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     # for z in listInv:
