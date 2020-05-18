@@ -2149,6 +2149,26 @@ def select_workbench(call):
                 
                 for comp in inventory['composition']:
                     logger.info(f'split up {comp["name"]} {comp["uid"]}')
+
+                    # Добавляем составные   объекты
+                    listInv = GLOBAL_VARS['inventory']    
+                    if 'composition' in comp:
+                        arr = []
+                        for com in comp['composition']:
+                            arr.append(com)
+
+                        comp_arr = []  
+                        comp.update({'composition': comp_arr})
+                        for com in arr:
+                            for i in range(0, com["counter"]):
+                                composit = list(filter(lambda x : x['id']==com['id'], listInv))[0].copy()
+                                composit.update({'uid':f'{uuid.uuid4()}'})
+                                if com["id"] == 'crypto':
+                                    composit["cost"] = com["counter"]
+                                    comp_arr.append(composit)
+                                    break
+                                comp_arr.append(composit)
+
                     row = {
                             'date': (datetime.now()).timestamp(),
                             'login': userseller.getLogin(),
