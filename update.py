@@ -2822,6 +2822,24 @@ newvalues = { "$set": { "value":
                                         }
                                 },
                                 {
+                                    'id': 'ps5_boxed',
+                                    'name': '📦🎮 PlayStation 5',
+                                    'cost': 101,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'playstation5',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'pip_packaging',
+                                            'counter': 1
+                                        }
+                                    ]
+                                },
+                                {
                                     'id': 'playstation5',
                                     'name': '🎮 PlayStation 5',
                                     'cost': 300,
@@ -2862,7 +2880,26 @@ newvalues = { "$set": { "value":
                                             'one_use': 0.01,
                                             'value': 1
                                         }
+                                },
+                                {
+                                    'id': 'pip_2000_boxed',
+                                    'name': '📦📟 Пип-бой 2000',
+                                    'cost': 1001,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'pip_packaging',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'pip_boy_2000',
+                                            'counter': 1
+                                        }
+                                    ]
                                 }
+                                
                                 
                             ]
                         },
