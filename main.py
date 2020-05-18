@@ -1172,7 +1172,7 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
         else:
             send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
     elif count > 1 and count < minimum:
-        send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_few_things"]).fulfillment_text)
+        send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), 'dialog_few_things').fulfillment_text)
 
 
 def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
