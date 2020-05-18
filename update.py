@@ -829,7 +829,7 @@ newvalues = { "$set": { "value":
                                 },
                                 {
                                     'id': 'fighter_2',
-                                    'name': '⚜️ Судья Клуба UFC',
+                                    'name': '⚜️ Чемпион М1',
                                     'type': 'position',
                                     'cost': 0
                                 },
@@ -1825,7 +1825,7 @@ newvalues = { "$set": { "value":
                                 },
                                 {
                                     'id': 'certificate_fighter_2',
-                                    'name': '🥇 Медаль Чемпиона клуба UFC',
+                                    'name': '🥇 Медаль Чемпиона клуба М1',
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None

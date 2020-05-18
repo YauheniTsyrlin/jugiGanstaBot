@@ -1471,6 +1471,7 @@ def select_baraholka(call):
         collect = False
         for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
             collect = False
+            if inv['type'] == 'animals': continue
             for composit in inv['composition']:
                 counter = len(list(filter(lambda x : x['id'] == composit['id'], inventories_on)))
                 if counter >= composit['counter']:
