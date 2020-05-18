@@ -1917,7 +1917,7 @@ def select_workbench(call):
         inventories_on = []
         for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
             inv = invonworkbench['inventory']
-            if inv['type'] == 'animals': continue
+            
             inventories_on.append(inv)
             btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button_parent_id}|selectinvent|{step}|{inv['uid']}")
             buttons.append(btn)
@@ -1926,6 +1926,7 @@ def select_workbench(call):
         collect = False
         for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
             collect = False
+            if inv['type'] == 'animals': continue
             for composit in inv['composition']:
                 counter = len(list(filter(lambda x : x['id'] == composit['id'], inventories_on)))
                 if counter >= composit['counter']:
@@ -1999,11 +2000,11 @@ def select_workbench(call):
         inventories_on = []
         for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
             inv = invonworkbench['inventory']
-            if inv['type'] == 'animals': continue
             inventories_on.append(inv)
 
         for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
             collect = False
+            if inv['type'] == 'animals': continue
             for composit in inv['composition']:
                 counter = len(list(filter(lambda x : x['id'] == composit['id'], inventories_on)))
                 if counter >= composit['counter']:
