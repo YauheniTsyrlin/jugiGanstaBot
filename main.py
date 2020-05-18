@@ -1596,6 +1596,13 @@ def select_shelf(call):
         request = invonshelf['request']
         if request == None:
             request = []
+
+        best_request = ''
+        best = None
+        if len(request)>0:
+            best = max(request, key=lambda x: x['cost'])
+            best_request = f'\n▫️ 📈 Лучшее предложение: 🔘{best["cost"]}' 
+
         for req in request:
             if req['login'] == user.getLogin():
                 your_request = f'\n▫️ {user.getGerb()} Твое предложение: 🔘{req["cost"]}' 
@@ -1617,6 +1624,8 @@ def select_shelf(call):
             buttons.append(pickup)
         else:
             cost = inventory['cost']
+            if best:
+                cost = best['cost']
             for req in request:
                 if req['login'] == user.getLogin():
                     cost = req['cost']
@@ -1678,10 +1687,7 @@ def select_shelf(call):
             send_messages_big(userseller.getChat(), text=f'🛍️👋 Магазин!\n{user.getNameAndGerb()} (@{user.getLogin()}) сделал предложение в магазине!\n▫️ 🔘{cost} {inventory["name"]}')
             bot.answer_callback_query(call.id, f'Заявка подана!')
         
-        best_request = ''
-        if len(request)>0:
-            best = max(request, key=lambda x: x['cost'])
-            best_request = f'\n▫️ 📈 Лучшее предложение: 🔘{best["cost"]}' 
+
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{best_request}{your_request}\n▫️ {user.getGerb()} Твой кошелек: 🔘{crypto['cost']}", reply_markup=markupinline)
         return
