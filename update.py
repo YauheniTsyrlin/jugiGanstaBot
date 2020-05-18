@@ -2457,7 +2457,6 @@ newvalues = { "$set": { "value":
                                             'id': 'crown_pidor',
                                             'counter': 1
                                         }
-
                                     ]
                                 },
                                 {
