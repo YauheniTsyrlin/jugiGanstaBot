@@ -846,6 +846,24 @@ newvalues = { "$set": { "value":
                                     'cost': 0
                                 }
                             ] 
+                        },{
+                            'id': 'ANIMALS',
+                            'name': '🧗 Должность',
+                            'value':
+                            [
+                                {
+                                    'id': 'rabbit',
+                                    'name': '🐇 Похотливый кролик',
+                                    'type': 'animals',
+                                    'cost': 50
+                                },
+                                {
+                                    'id': 'hen',
+                                    'name': '🐇 Тупая курица',
+                                    'type': 'animals',
+                                    'cost': 50
+                                }
+                            ] 
                         },
                         {
                             'id': 'CLOTHES',
@@ -1544,88 +1562,95 @@ newvalues = { "$set": { "value":
                                     'quantity': 1
                                 },
                                 {
+                                    'id': 'meat',
+                                    'name': '🥩 Мясо',
+                                    'cost': 10,
+                                    'type': 'food',
+                                    'quantity': None
+                                },
+                                {
                                     'id': 'salt',
                                     'name': '🧂 Соль на рану',
                                     'cost': 1,
                                     'type': 'food',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'cookies',
                                     'name': '🍪 Довоенное печенье',
                                     'cost': 3,
                                     'type': 'food',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'head_crombopulus',
                                     'name': '👽 Голова кромбопулуса',
                                     'cost': 7,
                                     'type': 'food',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'tomato_juice',
                                     'name': '🌡 Томатный сок',
                                     'cost': 2,
                                     'type': 'food',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'soup_set',
                                     'name': '☠️ Суповой комплект',
                                     'cost': 4,
                                     'type': 'food',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'truffle',
                                     'name': '💩 Трюфель',
                                     'cost': 10,
                                     'type': 'food',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'ears',
                                     'name': '👂 Уши из Rivet City',
                                     'cost': 5,
                                     'type': 'food',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'chocolate_and_whiskey',
                                     'name': '🍫 и 🥃',
                                     'cost': 12,
                                     'type': 'food',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'banana',
                                     'name': '🍌 Банан преданности',
                                     'cost': 6,
                                     'type': 'food',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'peach',
                                     'name': '🍑 Персик преданности',
                                     'cost': 5,
                                     'type': 'food',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'ascorbin',
                                     'name': '🤍 Аскорбинка',
                                     'cost': 8,
                                     'type': 'food',
-                                    'quantity': 1000
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'snail',
                                     'name': '🐚 Труп улитки',
                                     'cost': 1,
                                     'type': 'food',
-                                    'quantity': 1000
+                                    'quantity': None
                                 }
                             ]
                         },

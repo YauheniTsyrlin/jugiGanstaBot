@@ -1431,7 +1431,7 @@ def select_baraholka(call):
         return
 
     if button_id in ['onshelf']:
-        for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
+        for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}):
             inv = invonshelf['inventory']
             request = invonshelf['request']
             if request == None:
@@ -1551,7 +1551,7 @@ def select_shelf(call):
     if button_id in ['forward', 'back', 'selectexit']:
         step = int(call.data.split('|')[2])
 
-        for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
+        for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}):
             inv = invonshelf['inventory']
             request = invonshelf['request']
             cost = inv['cost']
@@ -1594,7 +1594,7 @@ def select_shelf(call):
             crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
             user.addInventoryThing(crypto)
         
-        for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
+        for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}):
             itsMy = False
             if invonshelf['inventory']['uid'] == inv_uid:
                 inventory = invonshelf['inventory']
@@ -1713,7 +1713,7 @@ def select_shelf(call):
         inventory = None # user.getInventoryThing({'uid': inv_uid})
         invonshelf = None
 
-        for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
+        for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}):
             itsMy = False
             if inv_uid in invonshelf['inventory']['uid']:
                 inventory = invonshelf['inventory']
@@ -1870,7 +1870,7 @@ def select_shelf(call):
 
         # selectexit
         step = int(call.data.split('|')[2])
-        for invonshelf in shelf.find({'goat': getMyGoatName(user.getLogin()), 'state': {'$ne': 'CANCEL'}}):
+        for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}):
             inv = invonshelf['inventory']
             itsMy = call.from_user.username == invonshelf['login']
             btn = InlineKeyboardButton(f"{'👤 ' if itsMy else ''}🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent_id}|selectinvent|{step}|{inv['uid']}")
