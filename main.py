@@ -2421,7 +2421,7 @@ def select_exchange(call):
             markupinline.row(*row) 
 
         
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{'🔬' if len(getInvCompositionIn(inventory))>0 else ''}\n{user.getInventoryThingInfo({'uid': inv_uid})}", reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{'▫️ 🔬 Часть чего-то\n' if len(getInvCompositionIn(inventory))>0 else ''}{user.getInventoryThingInfo({'uid': inv_uid})}", reply_markup=markupinline)
     
         # bot.answer_callback_query(call.id, f'selectinvent: {call.data}')
         return
