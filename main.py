@@ -1992,7 +1992,8 @@ def select_workbench(call):
         for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, back_button=None, exit_button=None, forward_button=None):
             markupinline.row(*row) 
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
+        part_of_composition = '▫️ 🔬 Часть чего-то' if len(getInvCompositionIn(inventory))>0 else ''
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{part_of_composition}", reply_markup=markupinline)
         return
 
     if button_id in ['collect', 'collectback', 'collectforward']:
