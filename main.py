@@ -1977,7 +1977,10 @@ def select_workbench(call):
         buttons.append(exit_button)
 
         if 'composition' in inventory:
-            splitup = InlineKeyboardButton(f"Разобрать 🛠️ {len(inventory['composition'])} ", callback_data=f"{button_parent['id']}|splitup|{stepinventory}|{inventory['uid']}")
+            doit = 'Разобрать 🛠️'
+            if inventory['type'] == 'animals':
+                doit = 'Зарезать 🔪'
+            splitup = InlineKeyboardButton(f"{doit} {len(inventory['composition'])} ", callback_data=f"{button_parent['id']}|splitup|{stepinventory}|{inventory['uid']}")
             buttons.append(splitup)
 
         pickup = InlineKeyboardButton(f"Забрать 📤", callback_data=f"{button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}")
@@ -2113,7 +2116,6 @@ def select_workbench(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n<b>Ты собрал:</b>\n{users.getThingInfo(inventory)}", reply_markup=markupinline, parse_mode='HTML')
 
         return
-
 
     if button_id in ['pickup', 'pickupall', 'splitup']:
         # {button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}

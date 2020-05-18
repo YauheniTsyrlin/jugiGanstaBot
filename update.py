@@ -855,13 +855,37 @@ newvalues = { "$set": { "value":
                                     'id': 'rabbit',
                                     'name': '🐇 Похотливый кролик',
                                     'type': 'animals',
-                                    'cost': 50
+                                    'cost': 50,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'meat',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'skin',
+                                            'counter': 1
+                                        }
+                                    ],
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'hen',
-                                    'name': '🐇 Тупая курица',
+                                    'name': '🐔 Тупая курица',
                                     'type': 'animals',
-                                    'cost': 50
+                                    'cost': 25,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'poultry_leg',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'egg',
+                                            'counter': 1
+                                        }
+                                    ],
+                                    'quantity': None
                                 }
                             ] 
                         },
@@ -926,6 +950,25 @@ newvalues = { "$set": { "value":
                                     'cost': 4,
                                     'type': 'clothes',
                                     'quantity': 10
+                                },
+                                {
+                                    'id': 'coat',
+                                    'name': '🧥 Шуба',
+                                    'cost': 3000,
+                                    'type': 'clothes',
+                                    'quantity': None,
+                                    'wear': 
+                                        {
+                                            'one_use': 0.01,
+                                            'value': 1
+                                        },
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'skin',
+                                            'counter': 10
+                                        }
+                                    ]
                                 },
                                 {
                                     'id': 'condom',
@@ -1559,12 +1602,26 @@ newvalues = { "$set": { "value":
                                     'name': '🦴 Сахарная косточка',
                                     'cost': 2,
                                     'type': 'food',
-                                    'quantity': 1
+                                    'quantity': None
+                                },
+                                {
+                                    'id': 'poultry_leg',
+                                    'name': '🍗 Ножка',
+                                    'cost': 10,
+                                    'type': 'food',
+                                    'quantity': None
+                                },
+                                {
+                                    'id': 'egg',
+                                    'name': '🥚 Яйцо',
+                                    'cost': 15,
+                                    'type': 'food',
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'meat',
                                     'name': '🥩 Мясо',
-                                    'cost': 10,
+                                    'cost': 20,
                                     'type': 'food',
                                     'quantity': None
                                 },
@@ -2444,6 +2501,13 @@ newvalues = { "$set": { "value":
                                         '🔥Сердце пламени'
                                     ],
                                     'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'skin',
+                                    'name': '👻 Шкурка кролика',
+                                    'cost': 100,
+                                    'type': 'things',
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'scalp_of_zak',
