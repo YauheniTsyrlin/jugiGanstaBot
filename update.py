@@ -3986,7 +3986,7 @@ myquery = { "code": 'ADMINISTRATOR' }
 newvalues = { "$set": { "value": 
                     [
                         {
-                            'login': '1GonzikBenzyavsky',
+                            'login': 'GonzikBenzyavsky',
                             'chat' : -420173637
                         },
                         {
