@@ -2442,6 +2442,25 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
+                                    'id': 'deus_auto',
+                                    'name': '🦼 Машинка Δeus',
+                                    'cost': 2000,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'scalp_deus',
+                                            'counter': 4
+                                        },
+                                        {
+                                            'id': 'crown_pidor',
+                                            'counter': 1
+                                        }
+
+                                    ]
+                                },
+                                {
                                     'id': 'scalp_goose',
                                     'name': '🍩 Очко гуся',
                                     'cost': 50,
