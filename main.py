@@ -2154,20 +2154,23 @@ def select_workbench(call):
                     listInv = GLOBAL_VARS['inventory']    
                     if 'composition' in comp:
                         arr = []
+                        flagSplitComposition = False
                         for com in comp['composition']:
                             arr.append(com)
+                            if 'counter' in com: flagSplitComposition = True
 
-                        comp_arr = []  
-                        comp.update({'composition': comp_arr})
-                        for com in arr:
-                            for i in range(0, com["counter"]):
-                                composit = list(filter(lambda x : x['id']==com['id'], listInv))[0].copy()
-                                composit.update({'uid':f'{uuid.uuid4()}'})
-                                if com["id"] == 'crypto':
-                                    composit["cost"] = com["counter"]
+                        if flagSplitComposition:
+                            comp_arr = []  
+                            comp.update({'composition': comp_arr})
+                            for com in arr:
+                                for i in range(0, com["counter"]):
+                                    composit = list(filter(lambda x : x['id']==com['id'], listInv))[0].copy()
+                                    composit.update({'uid':f'{uuid.uuid4()}'})
+                                    if com["id"] == 'crypto':
+                                        composit["cost"] = com["counter"]
+                                        comp_arr.append(composit)
+                                        break
                                     comp_arr.append(composit)
-                                    break
-                                comp_arr.append(composit)
 
                     row = {
                             'date': (datetime.now()).timestamp(),

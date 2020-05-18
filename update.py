@@ -3969,7 +3969,6 @@ newvalues = { "$set": { "value":
                 {'band': 'без банды'},
                 {'band': 'Crewname'},
                 {'band': 'ЭнтрǁØǁпия'},
-                # {'band': 'ЩекØтилы БанȺнов'},
                 {'band': 'ǁGØodfeelȺssǁ'},
                 {'band': 'New Vegas'},
                 {'band': 'New Vegas East'},
