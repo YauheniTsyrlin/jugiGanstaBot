@@ -214,9 +214,9 @@ GLOBAL_VARS = {
     }
 }
 
-def addInventory(user: users.User, inv):
+def addInventory(user: users.User, inv, check_skills=True):
     eco_skill = user.getInventoryThing(GLOBAL_VARS['skill']['economist'])
-    if eco_skill:
+    if check_skills and eco_skill:
         power_skill = 0
         if eco_skill['storage'] >= eco_skill['min']:
             power_skill = (eco_skill['storage'] - eco_skill['min'])/(eco_skill['max'] - eco_skill['min'])
@@ -5998,14 +5998,14 @@ def callback_query(call):
             if login.lower() == 'всем':
                 if isAdmin(call.from_user.username):
                     for useradd in list(USERS_ARR):
-                        addInventory(useradd, inv)
+                        addInventory(useradd, inv, False)
                         updateUser(useradd)
                     send_messages_big(call.message.chat.id, text= 'Бандиты!\n' + getResponseDialogFlow(call.message.from_user.username, 'new_accessory_all').fulfillment_text + f'\n\n▫️ {inv["name"]}') 
                 else:
                     send_messages_big(call.message.chat.id, text= getResponseDialogFlow(call.message.from_user.username, 'shot_message_not_admin').fulfillment_text) 
             else:
                 if isAdmin(call.from_user.username): 
-                    user.addInventoryThing(inv)
+                    addInventory(user, inv, False)
                 else:
                     userIAm.removeInventoryThing(inv)
                     user.addInventoryThing(inv)
