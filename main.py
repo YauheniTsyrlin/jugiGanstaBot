@@ -132,8 +132,8 @@ GLOBAL_VARS = {
     'eating_in_new_rino': ['опустошил бокал бурбона.', 'жадно ест сухари.'],
     'group_buttons': ['Джу, 📋 Отчет'],
     'private_buttons': ['📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика', '🧺 Комиссионка'],
-    'typeforexcenge': [ 'animals','clothes', 'food', 'decoration', 'things'],
-    'typeforcomission': [ 'clothes', 'food', 'decoration', 'things'],
+    'typeforexcenge': [ 'animals','clothes', 'food', 'decoration', 'things'], # обмен
+    'typeforcomission': [ 'animals','clothes', 'food', 'decoration', 'things'], # продажа
     'profile':
     {
         'id': 'profile',
