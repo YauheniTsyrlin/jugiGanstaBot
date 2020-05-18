@@ -4150,8 +4150,8 @@ if 1==2: # обновляем composition
     # for z in listInv:
     #     print(z)
     for user in list(filter(lambda x : len(x.getInventory()) > 0, USERS_ARR)):
-        # if not user.getLogin() == 'GonzikBenzyavsky':
-        #     continue
+        if not user.getLogin() == 'GonzikBenzyavsky':
+            continue
         #print(f'Update {user.getLogin()}')
         for inv in user.getInventory():
             elem = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None)
