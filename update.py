@@ -1700,7 +1700,12 @@ newvalues = { "$set": { "value":
                                     'name': '🥩 Мясо',
                                     'cost': 20,
                                     'type': 'food',
-                                    'quantity': None
+                                    'quantity': None,
+                                    'subjects_to_find':
+                                    [
+                                        'Сырое мясо'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
                                 },
                                 {
                                     'id': 'salt',
@@ -3063,8 +3068,6 @@ newvalues = { "$set": { "value":
                                         }
                                     ]
                                 }
-                                
-                                
                             ]
                         },
                         {
@@ -3088,42 +3091,42 @@ newvalues = { "$set": { "value":
                             [
                                 {
                                     'id': 'pip_antenna',
-                                    'name': '📟 антена от Пип-боя',
+                                    'name': '📟 Антенна от Пип-боя',
                                     'cost': 20,
                                     'type': 'things',
                                     'quantity': None
                                 },
                                 {
                                     'id': 'pip_battery',
-                                    'name': '📟 аккумулятор от Пип-боя',
+                                    'name': '📟 Аккумулятор от Пип-боя',
                                     'cost': 20,
                                     'type': 'things',
                                     'quantity': None
                                 },
                                 {
                                     'id': 'pip_packaging',
-                                    'name': '📟 упаковка от Пип-боя',
+                                    'name': '📟 Упаковка от Пип-боя',
                                     'cost': 1,
                                     'type': 'things',
                                     'quantity': None
                                 },
                                 {
                                     'id': 'pip_spare_part',
-                                    'name': '📟 запчасть от Пип-боя',
+                                    'name': '📟 Запчасть от Пип-боя',
                                     'cost': 25,
                                     'type': 'things',
                                     'quantity': None
                                 },
                                 {
                                     'id': 'pip_broken_part',
-                                    'name': '📟 сломанный Пип-бой',
+                                    'name': '📟 Сломанный Пип-бой',
                                     'cost': 50,
                                     'type': 'things',
                                     'quantity': None
                                 },
                                 {
                                     'id': 'pip_bolt',
-                                    'name': '📟 болт от Пип-боя',
+                                    'name': '📟 Болт от Пип-боя',
                                     'cost': 20,
                                     'type': 'things',
                                     'quantity': None,
@@ -4344,7 +4347,6 @@ if 1==2: # дедублицируем crypto
                 user.getInventory().remove(inv)
         updateUser(user)      
 
-
 if 1==2: # обновляем composition 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
@@ -4472,7 +4474,6 @@ if 1==2:
             print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
             print(f'=======================================================')
 
-
 thing_names = ['scalp_of_deus_ex_machina']
 if 1==2:
     updateUser(None)
@@ -4493,7 +4494,6 @@ if 1==2:
 
             updateUser(user)
             print(f'Обновили {thing_name}')
-
 
 # if 1==2:
     # if now_date.hour in (99, 19) and now_date.minute in (99, 58) and now_date.second < 15:
