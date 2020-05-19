@@ -896,7 +896,7 @@ newvalues = { "$set": { "value":
                                 },
                                 {
                                     'id': 'hen',
-                                    'name': '🐔 Тупая курица',
+                                    'name': '🦆 Ванаминго',
                                     'type': 'animals',
                                     'cost': 25,
                                     'composition':
