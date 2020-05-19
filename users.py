@@ -384,6 +384,7 @@ class User(object):
         
         if typeP in ('things', 'All'):
             inventory_category = [
+                                    {'id':'animals', 'name':'🐮 Животные'},
                                     {'id':'clothes', 'name':'🧥 Одежда'},
                                     {'id':'food', 'name':'🍗 Еда'},
                                     {'id':'things', 'name':'📦 Вещи'},

@@ -69,7 +69,7 @@ def setSetting(login: str, code: str, value: str):
 
 
 GLOBAL_VARS = {
-    'inventory':  getSetting(code='ACCESSORY_ALL', id='ANIMALS')['value'] + getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] + getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'] + getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']  ,
+    'inventory':  getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] + getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'] + getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']  ,
     'chat_id':
                 {
                     'inventory':[]
@@ -851,6 +851,7 @@ newvalues = { "$set": { "value":
                             'name': '🐮 Животные',
                             'value':
                             [
+                                # Ослика
                                 {
                                     'id': 'rabbit',
                                     'name': '🐇 Похотливый кролик',
@@ -867,7 +868,31 @@ newvalues = { "$set": { "value":
                                             'counter': 1
                                         }
                                     ],
-                                    'quantity': None
+                                    'quantity': None,
+                                    'eat':
+                                        [
+                                            {
+                                                'id': 'plantain',
+                                                'one_use': 0.2,
+                                            }
+                                        ],
+                                    'hunger': 0.1, # Сколько уйдет wear.value, если нет еды
+                                    'multiply':
+                                        {
+                                            'puberty': 0.66,
+                                            'need': 'rabbit',
+                                            'count': 2,
+                                            'probability': 0.3,
+                                            'child': 'rabbit',
+                                            'max_child': 3,
+                                        },
+                                    'wear': 
+                                        {
+                                            'one_use': 0.0333, # Живет 30 дней + 
+                                            'value': 1,
+                                            'dialog_text_born': 'rabbit_born',
+                                            'dialog_text_dead': 'rabbit_dead'
+                                        }
                                 },
                                 {
                                     'id': 'hen',
@@ -885,7 +910,54 @@ newvalues = { "$set": { "value":
                                             'counter': 1
                                         }
                                     ],
-                                    'quantity': None
+                                    'quantity': None,
+                                    'eat':
+                                        [
+                                            {
+                                                'id': 'plantain',
+                                                'one_use': 0.1,
+                                            }
+                                        ],
+                                    'hunger': 0.1, # Сколько уйдет wear.value, если нет еды
+                                    'multiply':
+                                        {
+                                            'puberty': 0.8,
+                                            'need': 'hen',
+                                            'count': 1,
+                                            'probability': 0.5,
+                                            'child': 'egg',
+                                            'max_child': 5,
+                                        },
+                                    'wear': 
+                                        {
+                                            'one_use': 0.0333, # Живет 30 дней + 
+                                            'value': 1,
+                                            'dialog_text_born': 'hen_born',
+                                            'dialog_text_dead': 'hen_dead'
+                                        }
+                                },
+                                {
+                                    'id': 'egg',
+                                    'name': '🥚 Яйцо',
+                                    'cost': 15,
+                                    'type': 'animals',
+                                    'quantity': None,
+                                    'multiply':
+                                        {
+                                            'puberty': 1,
+                                            'need': 'egg',
+                                            'count': 1,
+                                            'probability': 0.1,
+                                            'child': 'hen',
+                                            'max_child': 1,
+                                        },
+                                    'wear': 
+                                        {
+                                            'one_use': 0.0166, # Живет 60 дней + 
+                                            'value': 1,
+                                            'dialog_text_born': 'egg_born',
+                                            'dialog_text_dead': 'egg_dead'
+                                        }
                                 }
                             ] 
                         },
@@ -1573,6 +1645,18 @@ newvalues = { "$set": { "value":
                                     ]
                                 },
                                 {
+                                    'id': 'plantain',
+                                    'name': '🌱 Корм для животных',
+                                    'cost': 1,
+                                    'type': 'food',
+                                    'quantity': None,
+                                    'subjects_to_find':
+                                    [
+                                        'Подорожник'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
                                     'id': 'milk',
                                     'name': '🥛 Молоко',
                                     'cost': 2,
@@ -1608,13 +1692,6 @@ newvalues = { "$set": { "value":
                                     'id': 'poultry_leg',
                                     'name': '🍗 Ножка',
                                     'cost': 10,
-                                    'type': 'food',
-                                    'quantity': None
-                                },
-                                {
-                                    'id': 'egg',
-                                    'name': '🥚 Яйцо',
-                                    'cost': 15,
                                     'type': 'food',
                                     'quantity': None
                                 },
@@ -1974,8 +2051,6 @@ newvalues = { "$set": { "value":
                                     'type': 'marks_of_excellence',
                                     'quantity': None
                                 }
-
-                                
                             ]
                         },
                         {
