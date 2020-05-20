@@ -16,7 +16,18 @@ def getThingInfo(inv):
     wear = 1
     if 'wear' in inv:
         wear = inv['wear']['value']
-    info = info + f'├⏳ Состояние: {int(wear*100)}%\n'
+
+    puberty = False
+    if 'multiply' in inv:
+        if 'puberty' in inv['multiply']:
+            if inv['multiply']['puberty'] > wear:
+                puberty = True
+    
+    if inv['type'] == 'animals':
+        info = info + f'├❤️ Здоровье: {int(wear*100)}%\n'
+        info = info + f'├⏳ Пуберта́тный период: {"Да" if puberty else "Нет"}\n'
+    else:
+        info = info + f'├⏳ Состояние: {int(wear*100)}%\n'
 
     info = info + f'└🔘 {inv["cost"]}\n'
     if 'composition' in inv:

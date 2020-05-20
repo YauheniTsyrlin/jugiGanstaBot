@@ -1184,20 +1184,17 @@ def check_farm():
         creature = record_farm['inventory']
         user = getUserByLogin(record_farm['login'])
         
-        if 'multiply' in record_farm:
-            if 'puberty' in record_farm['multiply']:
-                print(f"{record_farm['multiply']['puberty']} {record_farm['wear']['value']}")
-                if record_farm['multiply']['puberty'] >= record_farm['wear']['value']:
+        if 'multiply' in creature:
+            if 'puberty' in creature['multiply']:
+                if creature['multiply']['puberty'] >= creature['wear']['value']:
                     # Может размножаться
-                    count_need = len(list(filter(lambda x : x['login']==user.getLogin() and x['inventory']['id'] == record_farm['multiply']['need'], creatures)))
-                    print(f'{creature["name"]} {count_need}')
-                    if count_need >= record_farm['multiply']['count']:
+                    count_need = len(list(filter(lambda x : x['login']==user.getLogin() and x['inventory']['id'] == creature['multiply']['need'], creatures)))
+                    if count_need >= creature['multiply']['count']:
                         r = random.random()
-                        print(f"random={r} меньше {record_farm['multiply']['probability']}")
-                        if r <= record_farm['multiply']['probability']:
+                        if r <= creature['multiply']['probability']:
                             creature_to_insert = []
-                            for i in range(0, random.randint(1, record_farm['multiply']['max_child'])):
-                                new_creature = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']==record_farm['multiply']['child']), None).copy()
+                            for i in range(0, random.randint(1, creature['multiply']['max_child'])):
+                                new_creature = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='ANIMALS')['value']) if x['id']==creature['multiply']['child']), None).copy()
                                 new_creature.update({'uid':f'{uuid.uuid4()}'})
                                 to_farm = {
                                         'date': (datetime.now()).timestamp(),
@@ -1208,6 +1205,8 @@ def check_farm():
                                         'inventory'  : new_creature
                                     }
                                 creature_to_insert.append(to_farm)
+
+                                send_messages_big(user.getChat(), text=f'👼 На ферме новое создание:\n▫️ {new_creature["name"]}')
                                 send_message_to_admin(f'👼 Новое создание:\n▫️ {user.getNameAndGerb()}\n▫️ {new_creature["name"]}')
                                 # wear dialog_text_born
 
@@ -1222,6 +1221,7 @@ def check_farm():
                                         'state': {'$ne': 'CANCEL'}, 
                                         'inventory.uid': creature['uid']
                                     }, newvalues)
+                                send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ При родах\n▫️ {creature["name"]}')
                                 send_message_to_admin(f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
                                 # wear dialog_text_dead
                                 
@@ -1242,11 +1242,10 @@ def check_farm():
                 }, newvalues)
 
             if new_wear <= 0:
+                send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ От старости\n▫️ {creature["name"]}')
                 send_message_to_admin(f'☠️ Погибло создание:\n▫️ Старость\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
                 # dialog_text_dead
-            else:
-                send_message_to_admin(f'👴 Постарело создание:\n▫️ Старость\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
-
+ 
 def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
     count = counterSkill
     if text:
@@ -3022,8 +3021,9 @@ def send_welcome(message):
     if not isAdmin(message.from_user.username):
         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_not_goat_boss').fulfillment_text)
         return
+    check_farm()
     try:
-        check_farm()
+        pass
     except:
         send_message_to_admin(f'⚠️🤬 Сломался тест!')
 
@@ -6955,9 +6955,9 @@ def rade():
 
 
     # Ферма
-    if now_date.hour in (9, 10, 11, 12, 13, 14, 15, 16, 17, 18) and now_date.minute == 0 and now_date.second < 15:
+    if now_date.hour in (9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20) and now_date.minute == 0 and now_date.second < 15:
         updateUser(None)
-        # check_farm()
+        check_farm()
 
             
     # Присвоение званий
