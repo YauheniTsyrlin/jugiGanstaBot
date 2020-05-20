@@ -2309,9 +2309,8 @@ def select_workbench(call):
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
-
+        time.sleep(1)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n<b>Ты собрал:</b>\n{users.getThingInfo(inventory)}", reply_markup=markupinline, parse_mode='HTML')
-
         return
 
     if button_id in ['pickup', 'pickupall', 'splitup']:
@@ -6866,20 +6865,61 @@ def rade():
     
     # День рождения
     if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
-        
-            updateUser(None)
-            for goat in getSetting(code='GOATS_BANDS'):
-                goat_bands = getGoatBands(goat['name'])
-                for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
-                    try:
-                        if user.getBirthday():
-                            bday = datetime.fromtimestamp(user.getBirthday())
-                            if now_date.day == bday.day and now_date.month == bday.month: 
-                                msg = send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()} (@{user.getLogin()})!\n{getResponseDialogFlow(user.getLogin(), "happy_birthday").fulfillment_text}')
-                                bot.pin_chat_message(goat['chats']['info'], msg.message_id )
-                    except:
-                        send_message_to_admin(f'⚠️🤬 Сломались при расчете дня рождения {user.getLogin()}!')
+        updateUser(None)
+        for goat in getSetting(code='GOATS_BANDS'):
+            goat_bands = getGoatBands(goat['name'])
+            for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
+                try:
+                    if user.getBirthday():
+                        bday = datetime.fromtimestamp(user.getBirthday())
+                        if now_date.day == bday.day and now_date.month == bday.month: 
+                            msg = send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()} (@{user.getLogin()})!\n{getResponseDialogFlow(user.getLogin(), "happy_birthday").fulfillment_text}')
+                            bot.pin_chat_message(goat['chats']['info'], msg.message_id )
+                except:
+                    send_message_to_admin(f'⚠️🤬 Сломались при расчете дня рождения {user.getLogin()}!')
 
+
+    # Ферма
+    if now_date.hour in (9, 10, 11, 12, 13, 14, 15, 16, 17, 18) and now_date.minute == 0 and now_date.second < 15:
+        updateUser(None)
+
+        creatures = []
+        for creature in farm.find({'state': {'$ne': 'CANCEL'}}):
+            creatures.append(creature)
+
+        for record_farm in creatures:
+            creature = record_farm['inventory']
+            user = getUserByLogin(record_farm['login'])
+
+            # 'multiply':
+            #     {
+            #         'puberty': 1,           # wear.value, с которого есть возможность размножаться
+            #         'need': 'egg',          # Что нужно для размножения
+            #         'count': 1,             # Сколько нужно для размножения
+            #         'probability': 0.1,     # Вероятность размножения
+            #         'child': 'hen',         # Кто рождается
+            #         'max_child': 1,         # Максимальное количество дейте при рождении
+            #         'postpartum_trauma': 1  # Постродовая травма = минус сколько wear.value при рождении
+            #     },
+            # 'wear': 
+            #     {
+            #         'one_use': 0.0166, # Живет 60 дней + 
+            #         'value': 1,
+            #         'dialog_text_born': 'egg_born',
+            #         'dialog_text_dead': 'egg_dead'
+            #     }       
+            
+            if 'multiply' in record_farm:
+                if 'puberty' in record_farm['multiply']:
+                    if record_farm['multiply']['puberty'] >= record_farm['wear']['value']:
+                        # Может размножаться
+                        count_need = len(list(filter(lambda x : x['login']==user.getLogin() and x['inventory']['id'] == record_farm['multiply']['need'], creatures)))
+                        if count_need > record_farm['multiply']['count']:
+                            pass
+
+
+
+            
     # Присвоение званий
     if now_date.hour == 10 and now_date.minute == 1   and now_date.second < 15:
         logger.info('Присвоение званий!')
