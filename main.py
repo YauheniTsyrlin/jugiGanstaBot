@@ -3282,6 +3282,12 @@ def main_message(message):
             
             return
         elif ('FIGHT!' in message.text):
+            
+            if message.forward_date < (datetime.now() - timedelta(minutes=60*24)).timestamp():
+                send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
+                return
+
+            
             filter_message = {"forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
             new_Message = messager.new_message(message, filter_message)
             if new_Message:                     
