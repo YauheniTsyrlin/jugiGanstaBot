@@ -1183,15 +1183,8 @@ def check_farm():
     for record_farm in creatures:
         creature = record_farm['inventory']
         user = getUserByLogin(record_farm['login'])
-
-        
             
         if 'multiply' in creature:
-            # Убрать
-            if 'postpartum_trauma' not in creature['multiply']: 
-                creature['multiply'].update({'postpartum_trauma': 1})
-            # До этого места
-
             if 'puberty' in creature['multiply']:
                 if creature['multiply']['puberty'] >= creature['wear']['value']:
                     # Может размножаться
