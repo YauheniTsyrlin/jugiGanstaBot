@@ -20,7 +20,7 @@ def getThingInfo(inv):
     puberty = False
     if 'multiply' in inv:
         if 'puberty' in inv['multiply']:
-            if inv['multiply']['puberty'] > wear:
+            if inv['multiply']['puberty'] >= wear:
                 puberty = True
     
     if inv['type'] == 'animals':
