@@ -11,6 +11,7 @@ import tools
 import json
 import sys
 import random
+from functools import reduce
 
 import users 
 import wariors
@@ -976,7 +977,9 @@ def getInventoryReport(user, types):
 
 stats = [{'cost': 1000, 'name': 2}, {'cost': 5000, 'name': 3}, {'cost': 200, 'name': 4}]
 stats2 = []
-result = max(stats2, key=lambda x: x['cost'])
+# result = max(stats, key=lambda x: x['cost'])
+# result = list(filter(lambda x: True, stats))
+result = [d['cost'] for d in stats]
 print(result)
 
 sys.exit(0)

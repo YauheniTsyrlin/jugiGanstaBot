@@ -2243,18 +2243,17 @@ def select_workbench(call):
                         comp_arr.append(inv)
                         inventories_on.remove(inv)
 
-                        newvalues = { "$set": {'state': 'CANCEL'} }
-                        result = workbench.update_one(
-                            {
-                                'state': 'NEW',
-                                'inventory.uid' : inv['uid']
-                            }, newvalues)
-                        
-                        if result.matched_count < 1:
-                            bot.answer_callback_query(call.id, f'Что пошло не так.')
-                            return
-                        break
+        newvalues = { "$set": {'state': 'CANCEL'} }
+        result = workbench.update_many(
+            {
+                'state': 'NEW',
+                'inventory.uid' : {'$in':[d['uid'] for d in comp_arr]}
+            }, newvalues)
         
+        if result.matched_count < 1:
+            bot.answer_callback_query(call.id, f'Что пошло не так.')
+            return
+
         if 'uid' not in inventory:
             inventory.update({'uid': f'{uuid.uuid4()}'})
 
@@ -2309,7 +2308,7 @@ def select_workbench(call):
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
-        time.sleep(1)
+
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n<b>Ты собрал:</b>\n{users.getThingInfo(inventory)}", reply_markup=markupinline, parse_mode='HTML')
         return
 
@@ -2402,8 +2401,7 @@ def select_workbench(call):
                         }, newvalues)
                     if result.matched_count < 1:
                         workbench.insert_one(row)
-                    send_message_to_admin(text=f'🔨 Разобрано\n▫️ {userseller.getNameAndGerb()} (@{userseller.getLogin()})\n▫️ {inventory["name"]}')
-            
+                send_message_to_admin(text=f'🔨 Разобрано\n▫️ {userseller.getNameAndGerb()} (@{userseller.getLogin()})\n▫️ {inventory["name"]}')
                 bot.answer_callback_query(call.id, f'Разобрали')
         
         # selectexit
