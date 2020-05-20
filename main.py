@@ -1174,7 +1174,78 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
             send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
     elif count > 1 and count < minimum:
         send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), 'dialog_few_things').fulfillment_text)
+    
+def check_farm():
+    creatures = []
+    for creature in farm.find({'state': {'$ne': 'CANCEL'}}):
+        creatures.append(creature)
+    
+    for record_farm in creatures:
+        creature = record_farm['inventory']
+        user = getUserByLogin(record_farm['login'])
+        
+        if 'multiply' in record_farm:
+            if 'puberty' in record_farm['multiply']:
+                print(f"{record_farm['multiply']['puberty']} {record_farm['wear']['value']}")
+                if record_farm['multiply']['puberty'] >= record_farm['wear']['value']:
+                    # Может размножаться
+                    count_need = len(list(filter(lambda x : x['login']==user.getLogin() and x['inventory']['id'] == record_farm['multiply']['need'], creatures)))
+                    print(f'{creature["name"]} {count_need}')
+                    if count_need >= record_farm['multiply']['count']:
+                        r = random.random()
+                        print(f"random={r} меньше {record_farm['multiply']['probability']}")
+                        if r <= record_farm['multiply']['probability']:
+                            creature_to_insert = []
+                            for i in range(0, random.randint(1, record_farm['multiply']['max_child'])):
+                                new_creature = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']==record_farm['multiply']['child']), None).copy()
+                                new_creature.update({'uid':f'{uuid.uuid4()}'})
+                                to_farm = {
+                                        'date': (datetime.now()).timestamp(),
+                                        'login': user.getLogin(),
+                                        'band' : user.getBand(),
+                                        'goat' : getMyGoatName(user.getLogin()),
+                                        'state': 'NEW',
+                                        'inventory'  : new_creature
+                                    }
+                                creature_to_insert.append(to_farm)
+                                send_message_to_admin(f'👼 Новое создание:\n▫️ {user.getNameAndGerb()}\n▫️ {new_creature["name"]}')
+                                # wear dialog_text_born
 
+                            farm.insert_many(creature_to_insert)
+                            new_wear = creature['wear']['value'] - creature['multiply']['postpartum_trauma'] 
+                            if new_wear <= 0:
+                                creature['wear']['value'] = new_wear
+                                newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
+                                result = farm.update_many(
+                                    {
+                                        'login': user.getLogin(), 
+                                        'state': {'$ne': 'CANCEL'}, 
+                                        'inventory.uid': creature['uid']
+                                    }, newvalues)
+                                send_message_to_admin(f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+                                # wear dialog_text_dead
+                                
+                                continue
+
+        if 'wear' in creature:
+            new_wear = creature['wear']['value'] - creature['wear']['one_use']
+            creature['wear']['value'] = new_wear
+            
+            newvalues = { "$set": {'inventory': creature} }
+            if new_wear <= 0:
+                newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
+            result = farm.update_many(
+                {
+                    'login': user.getLogin(), 
+                    'state': {'$ne': 'CANCEL'}, 
+                    'inventory.uid': creature['uid']
+                }, newvalues)
+
+            if new_wear <= 0:
+                send_message_to_admin(f'☠️ Погибло создание:\n▫️ Старость\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+                # dialog_text_dead
+            else:
+                send_message_to_admin(f'👴 Постарело создание:\n▫️ Старость\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
 
 def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
     count = counterSkill
@@ -2242,6 +2313,7 @@ def select_workbench(call):
                     if inv['id'] == composit['id']:
                         comp_arr.append(inv)
                         inventories_on.remove(inv)
+                        break
 
         newvalues = { "$set": {'state': 'CANCEL'} }
         result = workbench.update_many(
@@ -2950,9 +3022,8 @@ def send_welcome(message):
     if not isAdmin(message.from_user.username):
         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_not_goat_boss').fulfillment_text)
         return
-
     try:
-        send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'bolt_congratulation_bolt_1', context_param={'bolt':'🎫🍼 Билет на гигантскую бутылку'}).fulfillment_text)
+        check_farm()
     except:
         send_message_to_admin(f'⚠️🤬 Сломался тест!')
 
@@ -6886,42 +6957,7 @@ def rade():
     # Ферма
     if now_date.hour in (9, 10, 11, 12, 13, 14, 15, 16, 17, 18) and now_date.minute == 0 and now_date.second < 15:
         updateUser(None)
-
-        creatures = []
-        for creature in farm.find({'state': {'$ne': 'CANCEL'}}):
-            creatures.append(creature)
-
-        for record_farm in creatures:
-            creature = record_farm['inventory']
-            user = getUserByLogin(record_farm['login'])
-
-            # 'multiply':
-            #     {
-            #         'puberty': 1,           # wear.value, с которого есть возможность размножаться
-            #         'need': 'egg',          # Что нужно для размножения
-            #         'count': 1,             # Сколько нужно для размножения
-            #         'probability': 0.1,     # Вероятность размножения
-            #         'child': 'hen',         # Кто рождается
-            #         'max_child': 1,         # Максимальное количество дейте при рождении
-            #         'postpartum_trauma': 1  # Постродовая травма = минус сколько wear.value при рождении
-            #     },
-            # 'wear': 
-            #     {
-            #         'one_use': 0.0166, # Живет 60 дней + 
-            #         'value': 1,
-            #         'dialog_text_born': 'egg_born',
-            #         'dialog_text_dead': 'egg_dead'
-            #     }       
-            
-            if 'multiply' in record_farm:
-                if 'puberty' in record_farm['multiply']:
-                    if record_farm['multiply']['puberty'] >= record_farm['wear']['value']:
-                        # Может размножаться
-                        count_need = len(list(filter(lambda x : x['login']==user.getLogin() and x['inventory']['id'] == record_farm['multiply']['need'], creatures)))
-                        if count_need > record_farm['multiply']['count']:
-                            pass
-
-
+        # check_farm()
 
             
     # Присвоение званий

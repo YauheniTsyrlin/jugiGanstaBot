@@ -875,7 +875,6 @@ newvalues = { "$set": { "value":
                                                 'one_use': 0.2,
                                             }
                                         ],
-                                    'hunger': 0.1, # Сколько уйдет wear.value, если нет еды
                                     'multiply':
                                         {
                                             'puberty': 0.66,
@@ -891,7 +890,8 @@ newvalues = { "$set": { "value":
                                             'one_use': 0.0333, # Живет 30 дней + 
                                             'value': 1,
                                             'dialog_text_born': 'rabbit_born',
-                                            'dialog_text_dead': 'rabbit_dead'
+                                            'dialog_text_dead': 'rabbit_dead',
+                                            'hunger': 0.1, # Сколько уйдет wear.value, если нет еды
                                         }
                                 },
                                 {
@@ -918,7 +918,6 @@ newvalues = { "$set": { "value":
                                                 'one_use': 0.1,
                                             }
                                         ],
-                                    'hunger': 0.1, # Сколько уйдет wear.value, если нет еды
                                     'multiply':
                                         {
                                             'puberty': 0.8,
@@ -934,7 +933,8 @@ newvalues = { "$set": { "value":
                                             'one_use': 0.0333, # Живет 30 дней + 
                                             'value': 1,
                                             'dialog_text_born': 'hen_born',
-                                            'dialog_text_dead': 'hen_dead'
+                                            'dialog_text_dead': 'hen_dead',
+                                            'hunger': 0.1 # Сколько уйдет wear.value, если нет еды
                                         }
                                 },
                                 {
@@ -4156,7 +4156,7 @@ newvalues = { "$set": { "value":
                     [
                         {
                             'login': 'GonzikBenzyavsky',
-                            'chat' : -420173637
+                            'chat' : -420173637 # 497065022
                         },
                         {
                             'login': 'WestMoscow',
