@@ -1994,7 +1994,7 @@ def select_shelf(call):
                 req = {'login': user.getLogin(), 'cost': cost}
                 request.append(req)
 
-            newvalues = { "$set": {'request': request} }
+            newvalues = { "$set": {'date': (datetime.now()).timestamp(), 'request': request} }
             result = shelf.update_one(
                 {
                     '$or': 
