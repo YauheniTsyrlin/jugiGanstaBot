@@ -1597,7 +1597,7 @@ def select_baraholka(call):
 
         for announce in announcement.find().skip(count_announce):
             announce_user = getUserByLogin(announce['login'])
-            announcement_text = announcement_text + f'<b>{announce_user.getNameAndGerb()}</b>\n{announce["text"][:100]}\n'
+            announcement_text = announcement_text + f'<b>{announce_user.getNameAndGerb()}</b>\n{announce["text"][:100]}\n\n'
             
         for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inv = invonshelf['inventory']
@@ -1891,7 +1891,7 @@ def select_shelf(call):
 
     for announce in announcement.find().skip(count_announce):
         announce_user = getUserByLogin(announce['login'])
-        announcement_text = announcement_text + f'<b>{announce_user.getNameAndGerb()}</b>\n{announce["text"][:100]}\n'
+        announcement_text = announcement_text + f'<b>{announce_user.getNameAndGerb()}</b>\n{announce["text"][:100]}\n\n'
 
     if button_id in ['forward', 'back', 'selectexit']:
         step = int(call.data.split('|')[2])
@@ -2245,15 +2245,19 @@ def select_shelf(call):
 
     if button_id == 'announcement':
         bot.send_message(call.message.chat.id, text='📜 Введи текст своего объявления. Не больше 100 символов 📜')
-        bot.register_next_step_handler(call.message, announcement_step)     
+        bot.register_next_step_handler(call.message, announcement_step) 
+        bot.answer_callback_query(call.id, 'Подача объявления')    
 
 def announcement_step(message):
     # Делаем запись об объявлении
-    announcement_row = {'date': (datetime.now()).timestamp(),
-                        'login': message.from_user.username,
-                        'text': message.text}
-    announcement.insert_one(announcement_row)
-    bot.send_message(message.chat.id, text='📜 Записано 📜')
+    if len(message.text.strip()) == 0:
+        bot.send_message(message.chat.id, text='❌ Запись отменена ❌')
+    else:
+        announcement_row = {'date': (datetime.now()).timestamp(),
+                            'login': message.from_user.username,
+                            'text': '▫️ '+message.text}
+        announcement.insert_one(announcement_row)
+        bot.send_message(message.chat.id, text='📜 Записано 📜')
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('workbench'))
 def select_workbench(call):
