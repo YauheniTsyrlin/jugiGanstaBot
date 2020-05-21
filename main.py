@@ -1559,7 +1559,7 @@ def select_baraholka(call):
     if button_id in ['farm']:
         
         inventors = []
-        for inv in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+        for inv in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inventors.append(inv['inventory'])
         
         unic_inv = []
@@ -1585,7 +1585,7 @@ def select_baraholka(call):
         return
 
     if button_id in ['onshelf']:
-        for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+        for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inv = invonshelf['inventory']
             request = invonshelf['request']
             if request == None:
@@ -1615,7 +1615,7 @@ def select_baraholka(call):
 
     if button_id in ['workbench']:
         inventories_on = []
-        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inv = invonworkbench['inventory']
             inventories_on.append(inv)
             btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
@@ -1707,7 +1707,7 @@ def select_farm(call):
     if button_id in ['forward', 'back', 'selectgroupexit', 'selectexit']:
         step = int(call.data.split('|')[2])
         inventors = []
-        for inv in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+        for inv in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inventors.append(inv['inventory'])
         
         unic_inv = []
@@ -1813,7 +1813,7 @@ def select_farm(call):
         # selectexit
         step = int(call.data.split('|')[2])
         inventors = []
-        for inv in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+        for inv in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inventors.append(inv['inventory'])
         
         unic_inv = []
@@ -1866,7 +1866,7 @@ def select_shelf(call):
     if button_id in ['forward', 'back', 'selectexit']:
         step = int(call.data.split('|')[2])
 
-        for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+        for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inv = invonshelf['inventory']
             request = invonshelf['request']
             cost = inv['cost']
@@ -2184,7 +2184,7 @@ def select_shelf(call):
 
         # selectexit
         step = int(call.data.split('|')[2])
-        for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+        for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inv = invonshelf['inventory']
             itsMy = call.from_user.username == invonshelf['login']
             btn = InlineKeyboardButton(f"{'👤 ' if itsMy else ''}🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent_id}|selectinvent|{step}|{inv['uid']}")
@@ -2229,7 +2229,7 @@ def select_workbench(call):
     if button_id in ['forward', 'back', 'selectexit']:
         step = int(call.data.split('|')[2])
         inventories_on = []
-        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inv = invonworkbench['inventory']
             
             inventories_on.append(inv)
@@ -2314,7 +2314,7 @@ def select_workbench(call):
         # {button_parent['id']}|collect|{step}}
         step = int(call.data.split('|')[2])
         inventories_on = []
-        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inv = invonworkbench['inventory']
             inventories_on.append(inv)
 
@@ -2348,7 +2348,7 @@ def select_workbench(call):
         inventory = list(filter(lambda x : x['id'] == ivn_id, GLOBAL_VARS['inventory']))[0].copy()
 
         inventories_on = []
-        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inv = invonworkbench['inventory']
             inventories_on.append(inv)
 
@@ -2408,7 +2408,7 @@ def select_workbench(call):
         # Рисуекм кнопки назад и т.д.
         step = int(call.data.split('|')[2])
         inventories_on = []
-        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inv = invonworkbench['inventory']
             inventories_on.append(inv)
 
@@ -2444,7 +2444,7 @@ def select_workbench(call):
         inventory = None # user.getInventoryThing({'uid': inv_uid})
 
         if button_id in ['pickupall']:
-            for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+            for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
                 user.addInventoryThing(invonworkbench['inventory'])
             updateUser(user)
 
@@ -2456,7 +2456,7 @@ def select_workbench(call):
                 }, newvalues)
         else:
             inv_uid = call.data.split('|')[3]
-            for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+            for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
                 if invonworkbench['inventory']['uid'] == inv_uid:
                     inventory = invonworkbench['inventory']
                     break
@@ -2531,7 +2531,7 @@ def select_workbench(call):
         # selectexit
         step = int(call.data.split('|')[2])
         inventories_on = []
-        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort( { 'date' : -1 } ):
+        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inv = invonworkbench['inventory']
             inventories_on.append(inv)
             btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button_parent_id}|selectinvent|{step}|{inv['uid']}")
