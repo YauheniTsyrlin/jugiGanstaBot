@@ -1276,29 +1276,22 @@ def check_animal():
 
     # Старение в инвентаре пользоватлей
 
-
-    for record_farm in workbench.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
-        creature = record_farm['inventory']
-        user = getUserByLogin(record_farm['login'])
-
-        if 'wear' in creature:
-            new_wear = creature['wear']['value'] - creature['wear']['one_use']
-            creature['wear']['value'] = new_wear
-            
-            newvalues = { "$set": {'inventory': creature} }
-            if new_wear <= 0:
-                newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
-            result = workbench.update_many(
-                {
-                    'login': user.getLogin(), 
-                    'state': {'$ne': 'CANCEL'}, 
-                    'inventory.uid': creature['uid']
-                }, newvalues)
-
-            if new_wear <= 0:
-                send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {creature["name"]}')
-                send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
-                # dialog_text_dead
+    for user in list(filter(lambda x : len(x.getInventoryType({'type': 'animals'})) > 0, USERS_ARR)):
+        for record_farm in user.getInventoryType({'type': 'animals'}):
+            creature = record_farm
+            if 'wear' in creature:
+                new_wear = creature['wear']['value'] - creature['wear']['one_use']
+                creature['wear']['value'] = new_wear
+                
+                if new_wear <= 0:
+                    user.removeInventoryThing(creature)
+                else:
+                    user.updateInventoryThing(creature)
+                updateUser(user)                
+                if new_wear <= 0:
+                    send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {creature["name"]}')
+                    send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+                    # dialog_text_dead
 
 def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
     count = counterSkill
