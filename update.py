@@ -2599,6 +2599,13 @@ newvalues = { "$set": { "value":
                                     'quantity': None
                                 },
                                 {
+                                    'id': 'scalp_liter',
+                                    'name': '🤯 Скальп грОмАтея',
+                                    'cost': 50,
+                                    'type': 'things',
+                                    'quantity': None
+                                },
+                                {
                                     'id': 'scalp_of_banditos',
                                     'name': '🤯 Скальп бандита',
                                     'cost': 50,

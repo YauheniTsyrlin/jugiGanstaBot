@@ -3396,16 +3396,18 @@ def main_message(message):
                                             if loser.getGoat() == 'Δeus Σx Machina':
                                                 elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_deus'), None).copy() 
                                                 k =3
+
                                         if loser.getName() == '{^_^}': 
                                             elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_of_zak'), None).copy() 
                                             k = 5
-
-                                        if loser.getName() == 'Очко гуся': 
+                                        elif loser.getName() == 'Очко гуся': 
                                             elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_goose'), None).copy() 
                                             k = 4
-
-                                        if loser.getName() == 'Fateev': 
+                                        elif loser.getName() == 'Fateev': 
                                             elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_ass'), None).copy() 
+                                            k = 4
+                                        elif loser.getName() == 'Анклав': 
+                                            elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_liter'), None).copy() 
                                             k = 4
 
                                         elem.update({"cost": elem["cost"] * k})
