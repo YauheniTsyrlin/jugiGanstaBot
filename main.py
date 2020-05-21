@@ -1249,6 +1249,8 @@ def check_animal():
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {creature["name"]}')
                 send_message_to_admin(f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
                 # dialog_text_dead
+            else:
+                send_message_to_admin(f'☠️ Произошло старение:\n▫️ На ферме\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
 
     # Старение на верстаке
     for record_farm in workbench.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
@@ -1274,8 +1276,10 @@ def check_animal():
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {creature["name"]}')
                 send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
                 # dialog_text_dead
-    
-    print(f'Старение в инвентаре пользоватлей {len(USERS_ARR)}')
+            else:
+                send_message_to_admin(f'☠️ Произошло старение:\n▫️ На верстаке\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+
+
     # Старение в инвентаре пользоватлей
     for user in list(filter(lambda x : len(x.getInventoryType(['animals'])) > 0, USERS_ARR)):
         for record_farm in user.getInventoryType(['animals']):
@@ -1289,9 +1293,12 @@ def check_animal():
                     user.updateInventoryThing(creature)
                 updateUser(user)                
                 if new_wear <= 0:
-                    send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {creature["name"]}')
-                    send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+                    send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {creature["name"]}')
+                    send_message_to_admin(f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
                     # dialog_text_dead
+                else:
+                    send_message_to_admin(f'☠️ Произошло старение:\n▫️ В инвентаре\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+                    
 
 def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
     count = counterSkill
@@ -7004,7 +7011,7 @@ def rade():
 
 
     # Ферма
-    if now_date.hour in (9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20) and now_date.minute == 15 and now_date.second < 15:
+    if now_date.hour in (9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20) and now_date.minute == 30 and now_date.second < 15:
         updateUser(None)
         check_animal()
 
