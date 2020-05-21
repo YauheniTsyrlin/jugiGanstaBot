@@ -2164,17 +2164,6 @@ def select_shelf(call):
                 bot.answer_callback_query(call.id, f'Что пошло не так.')
                 return
 
-            # Делаем запись о сделке
-            deal_row = {'date': (datetime.now()).timestamp(),
-                'seller': userseller.getLogin(),
-                'buyer': buyer.getLogin(),
-                'cost': inventory['cost'],
-                'inventory_id': inventory['id'],
-                'inventory_name': inventory['name'],
-                'inventory'  : inventory}
-            
-            deal.insert_one(deal_row)
-
             # Уведомляем всех остальных о закрытии заявки
             for req in invonshelf['request']:
                 requester = getUserByLogin(req['login'])
@@ -2187,6 +2176,17 @@ def select_shelf(call):
             updateUser(buyer)
             updateUser(userseller)
             
+            # Делаем запись о сделке
+            deal_row = {'date': (datetime.now()).timestamp(),
+                'seller': userseller.getLogin(),
+                'buyer': buyer.getLogin(),
+                'cost': inventory['cost'],
+                'inventory_id': inventory['id'],
+                'inventory_name': inventory['name'],
+                'inventory'  : inventory}
+            
+            deal.insert_one(deal_row)
+
             send_messages_big(userseller.getChat(), text=f'🛍️✔️ Магазин!\nТы продал:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
             # print(f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал тебе:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
             send_messages_big(buyer.getChat(), text=f'🛍️✔️ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал тебе:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
