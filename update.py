@@ -25,16 +25,11 @@ pip_history     = mydb["pip_history"]
 mob             = mydb["mob"]
 boss            = mydb["boss"]
 messages        = mydb["messages"]
-
-# battle.delete_many({'login':'szpavel'})
-# competition.delete_many({'login':'szpavel'})
-# dungeons.delete_many({'login':'szpavel'})
-# man_of_day.delete_many({'login':'szpavel'})
-# pip_history.delete_many({'login':'szpavel'})
-# plan_raids.delete_many({'login':'szpavel'})
-# report_raids.delete_many({'login':'szpavel'})
-# registered_users.delete_many({'login':'szpavel'})
-# registered_wariors.delete_many({'name':'szpavel'})
+shelf           = mydb["shelf"]
+workbench       = mydb["workbench"]
+farm            = mydb["farm"]
+deal            = mydb["deal"]
+announcement    = mydb["announcement"]
 
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():

@@ -66,7 +66,7 @@ shelf           = mydb["shelf"]
 workbench       = mydb["workbench"]
 farm            = mydb["farm"]
 deal            = mydb["deal"]
-
+announcement    = mydb["announcement"]
 
 flexFlag = False
 logger = telebot.logger
@@ -1585,6 +1585,20 @@ def select_baraholka(call):
         return
 
     if button_id in ['onshelf']:
+
+        # Загружаем последние 3 объявления
+        announcement_text = f'📜 <b>Объявления</b> 📜\n\n'
+        count_announce = announcement.count_documents({})
+        N = 3
+        if count_announce > N: 
+            count_announce = count_announce - N
+        else:
+            count_announce = 0
+
+        for announce in announcement.find().skip(count_announce):
+            announce_user = getUserByLogin(announce['login'])
+            announcement_text = announcement_text + f'<b>{announce_user.getNameAndGerb()}</b>\n{announce["text"][:100]}\n'
+            
         for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inv = invonshelf['inventory']
             request = invonshelf['request']
@@ -1605,11 +1619,14 @@ def select_baraholka(call):
         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button['id']}|back|{step-1}") 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button['id']}|exit|{step}")
         forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button['id']}|forward|{step+1}")
+        announcement_button = InlineKeyboardButton(f"Подать объявление 📜", callback_data=f"{button['id']}|announcement|{step}")
+        header_buttons = [announcement_button]
+        
 
-        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, header_buttons=header_buttons, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description']+'\n\n'+announcement_text, reply_markup=markupinline, parse_mode='HTML')
 
         return
 
@@ -1863,6 +1880,19 @@ def select_shelf(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
         return
 
+    # Загружаем последние 3 объявления
+    announcement_text = f'📜 <b>Объявления</b> 📜\n\n'
+    count_announce = announcement.count_documents({})
+    N = 3
+    if count_announce > N: 
+        count_announce = count_announce - N
+    else:
+        count_announce = 0
+
+    for announce in announcement.find().skip(count_announce):
+        announce_user = getUserByLogin(announce['login'])
+        announcement_text = announcement_text + f'<b>{announce_user.getNameAndGerb()}</b>\n{announce["text"][:100]}\n'
+
     if button_id in ['forward', 'back', 'selectexit']:
         step = int(call.data.split('|')[2])
 
@@ -1886,11 +1916,13 @@ def select_shelf(call):
         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|back|{step-1}") 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
         forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
+        announcement_button = InlineKeyboardButton(f"Подать объявление 📜", callback_data=f"{button_parent['id']}|announcement|{step}")
+        header_buttons = [announcement_button]
 
-        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, header_buttons=header_buttons, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'] +'\n'+ announcement_text, reply_markup=markupinline, parse_mode='HTML')
         return
 
     if button_id in ['decrease', 'order', 'add', 'selectinvent']:
@@ -2210,6 +2242,18 @@ def select_shelf(call):
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
         return
+
+    if button_id == 'announcement':
+        bot.send_message(call.message.chat.id, text='📜 Введи текст своего объявления. Не больше 100 символов 📜')
+        bot.register_next_step_handler(call.message, announcement_step)     
+
+def announcement_step(message):
+    # Делаем запись об объявлении
+    announcement_row = {'date': (datetime.now()).timestamp(),
+                        'login': message.from_user.username,
+                        'text': message.text}
+    announcement.insert_one(announcement_row)
+    bot.send_message(message.chat.id, text='📜 Записано 📜')
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('workbench'))
 def select_workbench(call):

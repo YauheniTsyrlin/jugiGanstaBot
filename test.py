@@ -37,6 +37,11 @@ dungeons        = mydb["dungeons"]
 mob             = mydb["mob"]
 pip_history     = mydb["pip_history"]
 man_of_day      = mydb["man_of_day"]
+shelf           = mydb["shelf"]
+workbench       = mydb["workbench"]
+farm            = mydb["farm"]
+deal            = mydb["deal"]
+announcement    = mydb["announcement"]
 
 USERS_ARR = [] # Зарегистрированные пользователи
 for x in registered_users.find():
