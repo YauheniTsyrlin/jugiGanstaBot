@@ -65,7 +65,7 @@ messages        = mydb["messages"]
 shelf           = mydb["shelf"]
 workbench       = mydb["workbench"]
 farm            = mydb["farm"]
-
+deal            = mydb["deal"]
 
 
 flexFlag = False
@@ -2159,10 +2159,21 @@ def select_shelf(call):
                         ],
                     'inventory.uid' : inventory['uid']
                 }, newvalues)
-            
+
             if result.matched_count < 1:
                 bot.answer_callback_query(call.id, f'Что пошло не так.')
                 return
+
+            # Делаем запись о сделке
+            deal_row = {'date': (datetime.now()).timestamp(),
+                'seller': userseller.getLogin(),
+                'buyer': buyer.getLogin(),
+                'cost': inventory['cost'],
+                'inventory_id': inventory['id'],
+                'inventory_name': inventory['name'],
+                'inventory'  : inventory}
+            
+            deal.insert_one(deal_row)
 
             # Уведомляем всех остальных о закрытии заявки
             for req in invonshelf['request']:
