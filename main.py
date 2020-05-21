@@ -1966,7 +1966,7 @@ def select_shelf(call):
             decrease  = InlineKeyboardButton(f"-5% 🔻", callback_data=f"{button_parent['id']}|decrease|{stepinventory}|{inventory['uid']}|{cost-1 if cost*0.05 <= 1 else int(cost-cost*0.05)}")
             buttons.append(decrease)
 
-            order = InlineKeyboardButton(f"{cost}{'❗' if cost > crypto['cost'] else ''} 📝", callback_data=f"{button_parent['id']}|order|{stepinventory}|{inventory['uid']}|{cost}")
+            order = InlineKeyboardButton(f"{cost} {'❗' if cost > crypto['cost'] else ''}📝", callback_data=f"{button_parent['id']}|order|{stepinventory}|{inventory['uid']}|{cost}")
             buttons.append(order)
 
             add = InlineKeyboardButton(f"+5% 🔺", callback_data=f"{button_parent['id']}|add|{stepinventory}|{inventory['uid']}|{cost+1 if cost*0.05 <= 1 else int(cost+cost*0.05)}")
