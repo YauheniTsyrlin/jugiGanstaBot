@@ -3020,7 +3020,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'bagouser',
                                     'name': '👾 Багоюзер',
-                                    'cost': 300,
+                                    'cost': 500,
                                     'type': 'things',
                                     'quantity': None,
                                     'discont': 1 # Цена при сдаче не снижается
