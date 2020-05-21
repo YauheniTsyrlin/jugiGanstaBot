@@ -1165,7 +1165,6 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
 
     if count >= minimum:
         if not time_over:
-            logger.info(f'ADD')
             addInventory(userIAm, elem)
             updateUser(userIAm)
             text = f'{userIAm.getNameAndGerb()}, ты нашел:\n▫️ {elem["name"]}'
@@ -1904,7 +1903,7 @@ def select_shelf(call):
         invonshelf  = None
         your_request = ''
 
-        # Валюта у продавца
+        # Валюта у меня
         crypto = user.getInventoryThing({'id': 'crypto'})
         if crypto == None:
             crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
@@ -1932,7 +1931,7 @@ def select_shelf(call):
 
         for req in request:
             if req['login'] == user.getLogin():
-                your_request = f'\n▫️ {user.getGerb()} Твое предложение: 🔘{req["cost"]}' 
+                your_request = f'\n▫️ {user.getGerb()} Твое предложение: 🔘{req["cost"]} {"❗" if req["cost"] > crypto["cost"] else ""}' 
 
         userseller = getUserByLogin(invonshelf['login'])
         itsMy = call.from_user.username == invonshelf['login']
