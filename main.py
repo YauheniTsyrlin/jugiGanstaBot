@@ -2244,7 +2244,7 @@ def select_shelf(call):
         return
 
     if button_id == 'announcement':
-        bot.send_message(call.message.chat.id, text='📜 Введи текст своего объявления. Не больше 100 символов 📜')
+        bot.send_message(call.message.chat.id, text='📜 Введи текст объявления. Не больше 100 символов 📜')
         bot.register_next_step_handler(call.message, announcement_step) 
         bot.answer_callback_query(call.id, 'Подача объявления')    
 
@@ -2257,7 +2257,10 @@ def announcement_step(message):
                             'login': message.from_user.username,
                             'text': '▫️ '+message.text}
         announcement.insert_one(announcement_row)
-        bot.send_message(message.chat.id, text='📜 Записано 📜')
+        user = getUserByLogin(message.from_user.username)
+        send_message_to_admin(f'📜 Объявление!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {message.text}')
+
+        bot.send_message(message.chat.id, text='📜 Записано')
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('workbench'))
 def select_workbench(call):
