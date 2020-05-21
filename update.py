@@ -3018,6 +3018,14 @@ newvalues = { "$set": { "value":
                                     ]
                                 },
                                 {
+                                    'id': 'bagouser',
+                                    'name': '👾 Багоюзер',
+                                    'cost': 300,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'discont': 1 # Цена при сдаче не снижается
+                                },
+                                {
                                     'id': 'playstation5',
                                     'name': '🎮 PlayStation 5',
                                     'cost': 300,

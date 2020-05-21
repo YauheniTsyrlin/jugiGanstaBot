@@ -2688,7 +2688,11 @@ def select_exchange(call):
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
         if button_id in ['selectinvent']:
             toshelf = InlineKeyboardButton(f"🛍️ На продажу", callback_data=f"{button_parent['id']}|toshelf|{stepinventory}|{inventory['uid']}")
-            sell = InlineKeyboardButton(f"🔘 {int(inventory['cost']*button_parent['discont'])} Получить", callback_data=f"{button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}")
+            
+            discont = button_parent['discont']
+            if 'discont' in inventory:
+                discont = inventory['discont']
+            sell = InlineKeyboardButton(f"🔘 {int(inventory['cost']*discont)} Получить", callback_data=f"{button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}")
             buttons.append(toshelf)
             buttons.append(sell)
 
@@ -2731,7 +2735,10 @@ def select_exchange(call):
             return
 
         if button_id in ['getcrypto']:
-            cost = int(inventory["cost"]*button_parent['discont'])
+            discont = button_parent['discont']
+            if 'discont' in inventory:
+                discont = inventory['discont']
+            cost = int(inventory["cost"]*discont)
             crypto = user.getInventoryThing({'id': 'crypto'})
             if crypto == None:
                 crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
@@ -2742,7 +2749,7 @@ def select_exchange(call):
                 user.updateInventoryThing(crypto)
             user.removeInventoryThing(inventory)
             updateUser(user)
-            send_message_to_admin(text=f'♻️ Сдано за {int(button_parent["discont"]*100)}% 💴!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {inventory["name"]} 🔘{cost}')
+            send_message_to_admin(text=f'♻️ Сдано за {int(discont*100)}% 💴!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {inventory["name"]} 🔘{cost}')
             bot.answer_callback_query(call.id, f'Сдано за 🔘 {cost}')
 
         elif button_id in ['toshelf']:
