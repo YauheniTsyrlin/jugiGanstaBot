@@ -1256,6 +1256,7 @@ def check_animal():
         user = getUserByLogin(record_farm['login'])
 
         if 'wear' in creature:
+
             new_wear = creature['wear']['value'] - creature['wear']['one_use']
             creature['wear']['value'] = new_wear
             
@@ -1273,16 +1274,15 @@ def check_animal():
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {creature["name"]}')
                 send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
                 # dialog_text_dead
-
+    
+    print(f'Старение в инвентаре пользоватлей {len(USERS_ARR)}')
     # Старение в инвентаре пользоватлей
-
-    for user in list(filter(lambda x : len(x.getInventoryType({'type': 'animals'})) > 0, USERS_ARR)):
-        for record_farm in user.getInventoryType({'type': 'animals'}):
+    for user in list(filter(lambda x : len(x.getInventoryType(['animals'])) > 0, USERS_ARR)):
+        for record_farm in user.getInventoryType(['animals']):
             creature = record_farm
             if 'wear' in creature:
                 new_wear = creature['wear']['value'] - creature['wear']['one_use']
                 creature['wear']['value'] = new_wear
-                
                 if new_wear <= 0:
                     user.removeInventoryThing(creature)
                 else:
