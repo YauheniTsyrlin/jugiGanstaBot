@@ -984,12 +984,13 @@ stats = [{'cost': 1000, 'name': 2}, {'cost': 5000, 'name': 3}, {'cost': 200, 'na
 stats2 = []
 # result = max(stats, key=lambda x: x['cost'])
 # result = list(filter(lambda x: True, stats))
-# result = [d['cost'] for d in stats]
+result = max([d['cost'] for d in stats])
+print(result)
 
-c = random.randint(1, 3)
-print(f'random = {c}')
-for i in range(0, c):
-    print(f'{i}')
+# c = random.randint(1, 3)
+# print(f'random = {c}')
+# for i in range(0, c):
+#     print(f'{i}')
 
 sys.exit(0)
 

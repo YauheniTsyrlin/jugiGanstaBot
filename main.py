@@ -1606,8 +1606,9 @@ def select_baraholka(call):
                 request = []
 
             cost = inv['cost']
-            # if len(request)>0:
-            #     cost = max(request, key=lambda x: x['cost'])
+            if len(request)>0:
+                cost = max([req['cost'] for req in request])
+
             findMyRequest = False
             for req in request:
                 if req['login'] == user.getLogin():
@@ -1907,8 +1908,8 @@ def select_shelf(call):
                 request = []
             cost = inv['cost']
 
-            # if len(request)>0:
-            #     cost = max(request, key=lambda x: x['cost'])
+            if len(request)>0:
+                cost = max([req['cost'] for req in request])
 
             for req in request:
                 if req['login'] == user.getLogin():
