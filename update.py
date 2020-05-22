@@ -1640,6 +1640,35 @@ newvalues = { "$set": { "value":
                                             'counter': 1
                                         }
                                     ]
+                                }, 
+                                #  
+                                {
+                                    'id': 'fried_eggs',
+                                    'name': '🍳 Яишница',
+                                    'cost': 40,
+                                    'type': 'food',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'egg',
+                                            'counter': 2
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'omelette',
+                                    'name': '🥘 Омлет',
+                                    'cost': 80,
+                                    'type': 'food',
+                                    'quantity': None,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'egg',
+                                            'counter': 5
+                                        }
+                                    ]
                                 },
                                 {
                                     'id': 'plantain',

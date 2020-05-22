@@ -1612,7 +1612,6 @@ def select_baraholka(call):
             findMyRequest = False
             for req in request:
                 if req['login'] == user.getLogin():
-                    #cost = req['cost']
                     findMyRequest = True
                     break
 
@@ -1913,7 +1912,6 @@ def select_shelf(call):
 
             for req in request:
                 if req['login'] == user.getLogin():
-                    #cost = req['cost']  d
                     findMyRequest = True
                     break
 
@@ -2271,6 +2269,7 @@ def announcement_step(message):
         send_message_to_admin(f'📜 Объявление!\n▫️ <b>{date_str}</b> {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {message.text}')
         bot.send_message(message.chat.id, text='📜 Записано')
 
+
 @bot.callback_query_handler(func=lambda call: call.data.startswith('workbench'))
 def select_workbench(call):
     
@@ -2368,6 +2367,8 @@ def select_workbench(call):
             doit = 'Разобрать 🛠️'
             if inventory['type'] == 'animals':
                 doit = 'Зарезать 🔪'
+            elif inventory['type'] == 'food':
+                doit = 'Сожрать 🥄'
             splitup = InlineKeyboardButton(f"{doit} {len(inventory['composition'])} ", callback_data=f"{button_parent['id']}|splitup|{stepinventory}|{inventory['uid']}")
             buttons.append(splitup)
 
@@ -2555,49 +2556,52 @@ def select_workbench(call):
                 bot.answer_callback_query(call.id, f'Забрали')
 
             elif button_id in ['splitup']:
-                
-                for comp in inventory['composition']:
+                if inventory['type'] == 'food':
+                    send_message_to_admin(text=f'🥄 Сожрано\n▫️ {userseller.getNameAndGerb()} (@{userseller.getLogin()})\n▫️ {inventory["name"]}')
+                elif inventory['type'] == 'animals':
+                    send_message_to_admin(text=f'🔪 Зарезано\n▫️ {userseller.getNameAndGerb()} (@{userseller.getLogin()})\n▫️ {inventory["name"]}')
+                else:
+                    for comp in inventory['composition']:
+                        # Добавляем составные   объекты
+                        listInv = GLOBAL_VARS['inventory']    
+                        if 'composition' in comp:
+                            arr = []
+                            flagSplitComposition = False
+                            for com in comp['composition']:
+                                arr.append(com)
+                                if 'counter' in com: flagSplitComposition = True
 
-                    # Добавляем составные   объекты
-                    listInv = GLOBAL_VARS['inventory']    
-                    if 'composition' in comp:
-                        arr = []
-                        flagSplitComposition = False
-                        for com in comp['composition']:
-                            arr.append(com)
-                            if 'counter' in com: flagSplitComposition = True
-
-                        if flagSplitComposition:
-                            comp_arr = []  
-                            comp.update({'composition': comp_arr})
-                            for com in arr:
-                                for i in range(0, com["counter"]):
-                                    composit = list(filter(lambda x : x['id']==com['id'], listInv))[0].copy()
-                                    composit.update({'uid':f'{uuid.uuid4()}'})
-                                    if com["id"] == 'crypto':
-                                        composit["cost"] = com["counter"]
+                            if flagSplitComposition:
+                                comp_arr = []  
+                                comp.update({'composition': comp_arr})
+                                for com in arr:
+                                    for i in range(0, com["counter"]):
+                                        composit = list(filter(lambda x : x['id']==com['id'], listInv))[0].copy()
+                                        composit.update({'uid':f'{uuid.uuid4()}'})
+                                        if com["id"] == 'crypto':
+                                            composit["cost"] = com["counter"]
+                                            comp_arr.append(composit)
+                                            break
                                         comp_arr.append(composit)
-                                        break
-                                    comp_arr.append(composit)
 
-                    row = {
-                            'date': (datetime.now()).timestamp(),
-                            'login': userseller.getLogin(),
-                            'band' : userseller.getBand(),
-                            'goat' : getMyGoatName(userseller.getLogin()),
-                            'state': 'NEW',
-                            'inventory'  : comp
-                    }
-                    newvalues = { "$set": row }
-                    result = workbench.update_one(
-                        {
-                            'state': 'NEW',
-                            'inventory.uid' : comp['uid']
-                        }, newvalues)
-                    if result.matched_count < 1:
-                        workbench.insert_one(row)
-                send_message_to_admin(text=f'🔨 Разобрано\n▫️ {userseller.getNameAndGerb()} (@{userseller.getLogin()})\n▫️ {inventory["name"]}')
-                bot.answer_callback_query(call.id, f'Разобрали')
+                        row = {
+                                'date': (datetime.now()).timestamp(),
+                                'login': userseller.getLogin(),
+                                'band' : userseller.getBand(),
+                                'goat' : getMyGoatName(userseller.getLogin()),
+                                'state': 'NEW',
+                                'inventory'  : comp
+                        }
+                        newvalues = { "$set": row }
+                        result = workbench.update_one(
+                            {
+                                'state': 'NEW',
+                                'inventory.uid' : comp['uid']
+                            }, newvalues)
+                        if result.matched_count < 1:
+                            workbench.insert_one(row)
+
+                    send_message_to_admin(text=f'🔨 Разобрано\n▫️ {userseller.getNameAndGerb()} (@{userseller.getLogin()})\n▫️ {inventory["name"]}')
         
         # selectexit
         step = int(call.data.split('|')[2])
@@ -2960,6 +2964,28 @@ def select_exchange(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n{inventory['name']}", reply_markup=markupinline)
         
         return    
+
+#     if button_id == 'announcement':
+#         bot.send_message(call.message.chat.id, text='📜 Введи текст объявления. Не больше 100 символов 📜')
+#         bot.register_next_step_handler(call.message, announcement_step) 
+#         bot.answer_callback_query(call.id, 'Подача объявления')    
+
+# def price_step(message):
+#     # Определяем цену
+#     if len(message.text.strip()) == 0:
+#         bot.send_message(message.chat.id, text='❌ Запись отменена ❌')
+#     else:
+#         date_str = time.strftime("%d.%m %H:%M", time.gmtime( (datetime.now()).timestamp() ))
+#         announcement_row = {'date': (datetime.now()).timestamp(),
+#                             'login': message.from_user.username,
+#                             'text': f'▫️ <b>{date_str}</b>: '+message.text}
+#         announcement.insert_one(announcement_row)
+#         user = getUserByLogin(message.from_user.username)
+        
+#         send_message_to_admin(f'📜 Объявление!\n▫️ <b>{date_str}</b> {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {message.text}')
+#         bot.send_message(message.chat.id, text='📜 Записано')
+
+
 # ============================================================================
 
 @bot.message_handler(func=lambda message: message.text and ('📈 Статистика' == message.text))
