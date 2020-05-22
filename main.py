@@ -1609,7 +1609,7 @@ def select_baraholka(call):
             my_cost = list(filter(lambda x : x['login'] == call.from_user.username, request))
             if my_cost:
                 cost = my_cost[0]['cost']
-                 
+
             request = list(filter(lambda x : x['login'] == call.from_user.username, request))
             if len(request)>0:
                 cost = max([req['cost'] for req in request])
@@ -1912,6 +1912,12 @@ def select_shelf(call):
                 request = []
             cost = inv['cost']
 
+            my_cost = list(filter(lambda x : x['login'] == call.from_user.username, request))
+            if my_cost:
+                cost = my_cost[0]['cost']
+
+            request = list(filter(lambda x : x['login'] == call.from_user.username, request))
+            
             if len(request)>0:
                 cost = max([req['cost'] for req in request])
 
@@ -2863,7 +2869,7 @@ def select_exchange(call):
             updateUser(user)
             send_message_to_admin(text=f'🛍️ Выставили на продажу!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {inventory["name"]} 🔘{inventory["cost"]}')
 
-            bot.send_message(call.message.chat.id, text=f'🔘 Укажи свою цену для товара. Текущая цена {inventory["cost"]}. К примеру, "{random.randint(1, 1000)}". Для отказа введи любой символ, к примеру, "х"')
+            bot.send_message(call.message.chat.id, text=f'🔘 Укажи свою цену для товара. Текущая цена {inventory["cost"]}. Для отказа введи любой символ, к примеру, "х"')
             bot.register_next_step_handler(call.message, lambda msg: price_step(inventory, msg)) 
             bot.answer_callback_query(call.id, f'Выставлено на продажу')
 
