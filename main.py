@@ -2858,7 +2858,7 @@ def select_exchange(call):
             updateUser(user)
             send_message_to_admin(text=f'🛍️ Выставили на продажу!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {inventory["name"]} 🔘{inventory["cost"]}')
 
-            bot.send_message(call.message.chat.id, text=f'🔘 Укажи свою цену для товара. К примеру, "{random.randint(1, 1000)}". Для отказа введи любой символ, к примеру, "х"')
+            bot.send_message(call.message.chat.id, text=f'🔘 Укажи свою цену для товара. Текущая цена {inventory["cost"]}. К примеру, "{random.randint(1, 1000)}". Для отказа введи любой символ, к примеру, "х"')
             bot.register_next_step_handler(call.message, lambda msg: price_step(inventory, msg)) 
             bot.answer_callback_query(call.id, f'Выставлено на продажу')
 
