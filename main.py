@@ -1913,7 +1913,7 @@ def select_shelf(call):
 
             for req in request:
                 if req['login'] == user.getLogin():
-                    #cost = req['cost']
+                    #cost = req['cost']  d
                     findMyRequest = True
                     break
 
