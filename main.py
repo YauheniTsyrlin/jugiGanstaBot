@@ -1249,7 +1249,7 @@ def check_animal():
                 send_message_to_admin(f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
                 # dialog_text_dead
             else:
-                send_message_to_admin(f'☠️ Произошло старение:\n▫️ На ферме\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+                pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ На ферме\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
 
     # Старение на верстаке
     for record_farm in workbench.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
@@ -1276,7 +1276,7 @@ def check_animal():
                 send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
                 # dialog_text_dead
             else:
-                send_message_to_admin(f'☠️ Произошло старение:\n▫️ На верстаке\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+                pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ На верстаке\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
 
 
     # Старение в инвентаре пользоватлей
@@ -1296,7 +1296,7 @@ def check_animal():
                     send_message_to_admin(f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
                     # dialog_text_dead
                 else:
-                    send_message_to_admin(f'☠️ Произошло старение:\n▫️ В инвентаре\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+                    pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ В инвентаре\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
                     
 
 def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
