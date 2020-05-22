@@ -2256,7 +2256,7 @@ def announcement_step(message):
         date_str = time.strftime("%d.%m %H:%M", time.gmtime( (datetime.now()).timestamp() ))
         announcement_row = {'date': (datetime.now()).timestamp(),
                             'login': message.from_user.username,
-                            'text': '▫️ <b>{date_str}</b>: '+message.text}
+                            'text': f'▫️ <b>{date_str}</b>: '+message.text}
         announcement.insert_one(announcement_row)
         user = getUserByLogin(message.from_user.username)
         
