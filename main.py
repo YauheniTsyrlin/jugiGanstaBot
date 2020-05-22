@@ -1606,6 +1606,8 @@ def select_baraholka(call):
                 request = []
 
             cost = inv['cost']
+            request = filter(lambda x : not x['login'] == call.from_user.username, request)
+
             if len(request)>0:
                 cost = max([req['cost'] for req in request])
 
