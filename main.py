@@ -1606,11 +1606,13 @@ def select_baraholka(call):
                 request = []
 
             cost = inv['cost']
-            my_cost = list(filter(lambda x : x['login'] == call.from_user.username, request))
+            itsMy = call.from_user.username == invonshelf['login']
+
+            my_cost = list(filter(lambda x : x['login'] == invonshelf['login'], request))
             if my_cost:
                 cost = my_cost[0]['cost']
 
-            request = list(filter(lambda x : x['login'] == call.from_user.username, request))
+            request = list(filter(lambda x : not x['login'] == invonshelf['login'], request))
             if len(request)>0:
                 cost = max([req['cost'] for req in request])
 
@@ -1911,22 +1913,22 @@ def select_shelf(call):
             if request == None:
                 request = []
             cost = inv['cost']
+            itsMy = call.from_user.username == invonshelf['login']
 
-            my_cost = list(filter(lambda x : x['login'] == call.from_user.username, request))
+            my_cost = list(filter(lambda x : x['login'] == invonshelf['login'], request))
             if my_cost:
                 cost = my_cost[0]['cost']
 
-            request = list(filter(lambda x : x['login'] == call.from_user.username, request))
-
+            request = list(filter(lambda x : not x['login'] == invonshelf['login'], request))
             if len(request)>0:
                 cost = max([req['cost'] for req in request])
-
+            
             for req in request:
                 if req['login'] == user.getLogin():
                     findMyRequest = True
                     break
 
-            itsMy = call.from_user.username == invonshelf['login']
+            
             btn = InlineKeyboardButton(f"{'👤 ' if itsMy else ('📝 ' if findMyRequest else '')}🔘{cost} {inv['name']}", callback_data=f"{button_parent_id}|selectinvent|{step}|{inv['uid']}")
             buttons.append(btn)
 
