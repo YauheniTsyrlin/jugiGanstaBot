@@ -1989,7 +1989,7 @@ def select_shelf(call):
         userseller = getUserByLogin(invonshelf['login'])
         itsMy = call.from_user.username == invonshelf['login']
         
-        request = list(filter(lambda x : x['login'] == call.from_user.username, request))
+        request = list(filter(lambda x : x['login'] == invonshelf['login'], request))
         if itsMy:
             for req in sorted(request, key = lambda i: i['cost'], reverse=True):
                 userRequester = getUserByLogin(req["login"])
@@ -2109,6 +2109,7 @@ def select_shelf(call):
 
             userseller.addInventoryThing(inventory)
             updateUser(userseller)
+            request = list(filter(lambda x : x['login'] == invonshelf['login'], request))
             for req in invonshelf['request']:
                 requester = user.getUserByLogin(req['login'])
                 if requester:
