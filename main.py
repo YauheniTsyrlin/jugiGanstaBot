@@ -2253,14 +2253,14 @@ def announcement_step(message):
     if len(message.text.strip()) == 0:
         bot.send_message(message.chat.id, text='❌ Запись отменена ❌')
     else:
+        date_str = time.strftime("%d.%m %H:%M", time.gmtime( (datetime.now()).timestamp() ))
         announcement_row = {'date': (datetime.now()).timestamp(),
                             'login': message.from_user.username,
-                            'text': '▫️ '+message.text}
+                            'text': '▫️ <b>{date_str}</b>: '+message.text}
         announcement.insert_one(announcement_row)
         user = getUserByLogin(message.from_user.username)
-        date_str = time.strftime("%d.%m %H:%M", time.gmtime( (datetime.now()).timestamp() ))
-        send_message_to_admin(f'📜 Объявление!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {message.text}')
-
+        
+        send_message_to_admin(f'📜 Объявление!\n▫️ <b>{date_str}</b> {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {message.text}')
         bot.send_message(message.chat.id, text='📜 Записано')
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('workbench'))

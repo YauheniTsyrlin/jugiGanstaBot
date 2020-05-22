@@ -918,14 +918,14 @@ newvalues = { "$set": { "value":
                                             'puberty': 0.8,
                                             'need': 'hen',
                                             'count': 1,
-                                            'probability': 0.5,
+                                            'probability': 0.2,
                                             'child': 'egg',
-                                            'max_child': 5,
-                                            'postpartum_trauma': 0.05 # В среднем 20 яиц и ☠️ 
+                                            'max_child': 2,
+                                            'postpartum_trauma': 0.1 # В среднем 10 яиц и ☠️ 
                                         },
                                     'wear': 
                                         {
-                                            'one_use': 0.0333, # Живет 30 дней + 
+                                            'one_use': 0.0666, # Живет 15 дней + 
                                             'value': 1,
                                             'dialog_text_born': 'hen_born',
                                             'dialog_text_dead': 'hen_dead',
@@ -950,7 +950,7 @@ newvalues = { "$set": { "value":
                                         },
                                     'wear': 
                                         {
-                                            'one_use': 0.0166, # Живет 60 дней + 
+                                            'one_use': 0.0666, # Живет 15 дней + 
                                             'value': 1,
                                             'dialog_text_born': 'egg_born',
                                             'dialog_text_dead': 'egg_dead'
