@@ -2976,8 +2976,9 @@ def price_step(inventory, message):
     # Определяем цену
     try:
         cost = int(message.text)
+        request = [{'login': message.from_user.username, 'cost': cost}]
         inventory['cost'] = cost
-        newvalues = { "$set": {'inventory': inventory} }
+        newvalues = { "$set": {'request': request} }
         result = shelf.update_one(
             {
                 'login': message.from_user.username,
@@ -2986,7 +2987,7 @@ def price_step(inventory, message):
             }, newvalues)
         bot.send_message(message.chat.id, text='🔘 Цена установлена 🔘')
     except:
-        bot.send_message(message.chat.id, text='❌ Запись отменена ❌')
+        bot.send_message(message.chat.id, text=f'❌ Установлена цена по умолчанию {inventory["cost"]}')
 
 # ============================================================================
 
