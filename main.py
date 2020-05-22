@@ -2109,8 +2109,8 @@ def select_shelf(call):
 
             userseller.addInventoryThing(inventory)
             updateUser(userseller)
-            request = list(filter(lambda x : x['login'] == invonshelf['login'], request))
-            for req in invonshelf['request']:
+            request = list(filter(lambda x : x['login'] == invonshelf['login'], invonshelf['request']))
+            for req in request:
                 requester = user.getUserByLogin(req['login'])
                 if requester:
                     send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) забрал из магазина\n▫️ 🔘{cost} {inventory["name"]}!\nТвоя заявка аннулирована!')
