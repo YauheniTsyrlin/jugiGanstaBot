@@ -6530,7 +6530,10 @@ def callback_query(call):
                         {'id':'things', 'name':'📦 Вещи'}]
         report = user.getInventoryReport(inventory_category)
         text=f'{user.getNameAndGerb()}:\n{report}'
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+        if isAdmin(call.from_user.username):
+            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+        else:
+            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='Передача завершена', parse_mode='HTML', reply_markup=markupinline)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("pickup"))
 def callback_query(call):
