@@ -2558,8 +2558,12 @@ def select_workbench(call):
             elif button_id in ['splitup']:
                 if inventory['type'] == 'food':
                     send_message_to_admin(text=f'🥄 Сожрано\n▫️ {userseller.getNameAndGerb()} (@{userseller.getLogin()})\n▫️ {inventory["name"]}')
+                    send_messages_big(userseller.getChat(), text=f'🥄 Ты сожрал!:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+
                 elif inventory['type'] == 'animals':
                     send_message_to_admin(text=f'🔪 Зарезано\n▫️ {userseller.getNameAndGerb()} (@{userseller.getLogin()})\n▫️ {inventory["name"]}')
+                    send_messages_big(userseller.getChat(), text=f'🔪 Ты зарезал!:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
+
                 else:
                     for comp in inventory['composition']:
                         # Добавляем составные   объекты
