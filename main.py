@@ -2258,6 +2258,7 @@ def announcement_step(message):
                             'text': '▫️ '+message.text}
         announcement.insert_one(announcement_row)
         user = getUserByLogin(message.from_user.username)
+        date_str = time.strftime("%d.%m %H:%M", time.gmtime( (datetime.now()).timestamp() ))
         send_message_to_admin(f'📜 Объявление!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {message.text}')
 
         bot.send_message(message.chat.id, text='📜 Записано')
