@@ -2857,6 +2857,9 @@ def select_exchange(call):
             user.removeInventoryThing(inventory)
             updateUser(user)
             send_message_to_admin(text=f'🛍️ Выставили на продажу!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {inventory["name"]} 🔘{inventory["cost"]}')
+
+            bot.send_message(call.message.chat.id, text=f'🔘 Укажи свою цену для товара. К примеру, "{random.randint(1, 1000)}". Для отказа введи любой символ, к примеру, "х"')
+            bot.register_next_step_handler(call.message, lambda msg: price_step(inventory, msg)) 
             bot.answer_callback_query(call.id, f'Выставлено на продажу')
 
         elif button_id in ['toworkbench', 'toworkbenchall']:
@@ -2969,26 +2972,21 @@ def select_exchange(call):
         
         return    
 
-#     if button_id == 'announcement':
-#         bot.send_message(call.message.chat.id, text='📜 Введи текст объявления. Не больше 100 символов 📜')
-#         bot.register_next_step_handler(call.message, announcement_step) 
-#         bot.answer_callback_query(call.id, 'Подача объявления')    
-
-# def price_step(message):
-#     # Определяем цену
-#     if len(message.text.strip()) == 0:
-#         bot.send_message(message.chat.id, text='❌ Запись отменена ❌')
-#     else:
-#         date_str = time.strftime("%d.%m %H:%M", time.gmtime( (datetime.now()).timestamp() ))
-#         announcement_row = {'date': (datetime.now()).timestamp(),
-#                             'login': message.from_user.username,
-#                             'text': f'▫️ <b>{date_str}</b>: '+message.text}
-#         announcement.insert_one(announcement_row)
-#         user = getUserByLogin(message.from_user.username)
-        
-#         send_message_to_admin(f'📜 Объявление!\n▫️ <b>{date_str}</b> {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {message.text}')
-#         bot.send_message(message.chat.id, text='📜 Записано')
-
+def price_step(inventory, message):
+    # Определяем цену
+    try:
+        cost = int(message.text)
+        inventory['cost'] = cost
+        newvalues = { "$set": {'inventory': inventory} }
+        result = shelf.update_one(
+            {
+                'login': message.from_user.username,
+                'state': 'NEW',
+                'inventory.uid' : inventory['uid']
+            }, newvalues)
+        bot.send_message(message.chat.id, text='🔘 Цена установлена 🔘')
+    except:
+        bot.send_message(message.chat.id, text='❌ Запись отменена ❌')
 
 # ============================================================================
 
