@@ -984,8 +984,17 @@ stats = [{'cost': 1000, 'name': 2}, {'cost': 5000, 'name': 3}, {'cost': 200, 'na
 stats2 = []
 # result = max(stats, key=lambda x: x['cost'])
 # result = list(filter(lambda x: True, stats))
-result = max([d['cost'] for d in stats])
-print(result)
+# result = max([d['cost'] for d in stats])
+import pandas as pd
+df =  pd.DataFrame(list(deal.find()))
+df['date'] = [datetime.fromtimestamp(x).strftime("%d/%m") for x in df.date]
+del df['_id']
+del df['seller']
+del df['buyer']
+del df['inventory_id']
+del df['inventory']
+
+print(df.date.values)
 
 # c = random.randint(1, 3)
 # print(f'random = {c}')

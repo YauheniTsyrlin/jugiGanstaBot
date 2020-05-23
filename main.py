@@ -1630,6 +1630,7 @@ def select_baraholka(call):
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button['id']}|exit|{step}")
         forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button['id']}|forward|{step+1}")
         announcement_button = InlineKeyboardButton(f"Подать объявление 📜", callback_data=f"{button['id']}|announcement|{step}")
+        graf_button = InlineKeyboardButton(f"Биржа 📉", callback_data=f"{button['id']}|graf|{step}")
         header_buttons = [announcement_button]
         
 
@@ -1936,6 +1937,7 @@ def select_shelf(call):
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
         forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
         announcement_button = InlineKeyboardButton(f"Подать объявление 📜", callback_data=f"{button_parent['id']}|announcement|{step}")
+        graf_button = InlineKeyboardButton(f"Биржа 📉", callback_data=f"{button_parent['id']}|graf|{step}")
         header_buttons = [announcement_button]
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, header_buttons=header_buttons, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
@@ -2006,6 +2008,11 @@ def select_shelf(call):
             cost = inventory['cost']
             if best:
                 cost = best['cost']
+            else:
+                request_seller = list(filter(lambda x : x['login'] == invonshelf['login'], request))
+                if len(request_seller) > 0:
+                    cost = request_seller[0]['cost']
+
             for req in request:
                 if req['login'] == user.getLogin():
                     cost = req['cost']
@@ -2269,7 +2276,24 @@ def select_shelf(call):
     if button_id == 'announcement':
         bot.send_message(call.message.chat.id, text='📜 Введи текст объявления. Не больше 100 символов 📜')
         bot.register_next_step_handler(call.message, announcement_step) 
-        bot.answer_callback_query(call.id, 'Подача объявления')    
+        bot.answer_callback_query(call.id, 'Подача объявления')   
+        return
+
+    if button_id == 'graf':
+        bot.answer_callback_query(call.id, 'Биржа') 
+        counter = deal.count_documents({})
+
+        N = 0
+        if counter > 100:
+            N = 100
+        else:
+            counter = 0
+        cursor = deal.find().skip(counter - N)
+        matplot.getPlotСourse(cursor, call.from_user.username)
+        img = open(config.PATH_IMAGE + f'graf_{call.from_user.username}.png', 'rb')
+        bot.send_photo(call.message.chat.id, img)
+        
+        return 
 
 def announcement_step(message):
     # Делаем запись об объявлении
