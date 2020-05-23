@@ -2976,9 +2976,16 @@ newvalues = { "$set": { "value":
                                             'counter': 10
                                         }
                                     ],
+                                    'fix':  # чинить\кормить
+                                        [
+                                            {
+                                                'id': 'metal_detector',
+                                                'one_use': 0.1 # Сколько добавить при 1 применении к metal_detector wear value 
+                                            }   
+                                        ],
                                     'wear': 
                                         {
-                                            'one_use': 0.1,
+                                            'one_use': 0.05,
                                             'value': 1
                                         }
                                 },
@@ -3034,7 +3041,7 @@ newvalues = { "$set": { "value":
                                     'wear': 
                                         {
                                             'one_use': 0.01,
-                                            'value': 1
+                                            'value': 0.5
                                         }
                                 },
                                 {

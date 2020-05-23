@@ -1206,7 +1206,7 @@ def check_animal():
                                 creature_to_insert.append(to_farm)
 
                                 send_messages_big(user.getChat(), text=f'👼 На ферме новое создание:\n▫️ {new_creature["name"]}')
-                                send_message_to_admin(f'👼 Новое создание:\n▫️ {user.getNameAndGerb()}\n▫️ {new_creature["name"]}')
+                                send_message_to_admin(f'👼 Новое создание:\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {new_creature["name"]}')
                                 # wear dialog_text_born
 
                             farm.insert_many(creature_to_insert)
@@ -1221,7 +1221,7 @@ def check_animal():
                                         'inventory.uid': creature['uid']
                                     }, newvalues)
                                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ При родах\n▫️ {creature["name"]}')
-                                send_message_to_admin(f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+                                send_message_to_admin(f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                                 # wear dialog_text_dead
                                 continue
 
@@ -1246,7 +1246,7 @@ def check_animal():
 
             if new_wear <= 0:
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {creature["name"]}')
-                send_message_to_admin(f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+                send_message_to_admin(f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                 # dialog_text_dead
             else:
                 pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ На ферме\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
@@ -1273,7 +1273,7 @@ def check_animal():
 
             if new_wear <= 0:
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {creature["name"]}')
-                send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+                send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                 # dialog_text_dead
             else:
                 pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ На верстаке\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
@@ -1293,7 +1293,7 @@ def check_animal():
                 updateUser(user)                
                 if new_wear <= 0:
                     send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {creature["name"]}')
-                    send_message_to_admin(f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+                    send_message_to_admin(f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                     # dialog_text_dead
                 else:
                     pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ В инвентаре\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
@@ -1685,7 +1685,7 @@ def select_baraholka(call):
 
     if button_id in ['exchange']:
         inventors = []
-        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission']):
+        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission'])[::-1]:
             inventories = user.getInventoryThings({'id': inv['id']})
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
             if len(inventories) > 1:
@@ -2035,11 +2035,13 @@ def select_shelf(call):
         for row in build_menu(buttons=buttons, n_cols=3, limit=16, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-
         if button_id == 'order':
             findMyReq = False
             for req in request:
                 if req['login'] == user.getLogin():
+                    if req['cost'] == cost:
+                        bot.answer_callback_query(call.id, 'Ничего не изменилось!')
+                        return
                     req['cost'] = cost
                     findMyReq = True
                     break
@@ -2067,8 +2069,6 @@ def select_shelf(call):
             send_messages_big(userseller.getChat(), text=f'🛍️👋 Магазин!\n{user.getNameAndGerb()} (@{user.getLogin()}) сделал предложение в магазине!\n▫️ 🔘{cost} {inventory["name"]}')
             bot.answer_callback_query(call.id, f'Заявка подана!')
         
-
-
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{best_request}{your_request}\n▫️ {user.getGerb()} Твой кошелек: 🔘{crypto['cost']}", reply_markup=markupinline)
         return
 
@@ -2286,7 +2286,6 @@ def announcement_step(message):
         send_message_to_admin(f'📜 Объявление!\n▫️ <b>{date_str}</b> {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {message.text}')
         bot.send_message(message.chat.id, text='📜 Записано')
 
-
 @bot.callback_query_handler(func=lambda call: call.data.startswith('workbench'))
 def select_workbench(call):
     
@@ -2357,28 +2356,75 @@ def select_workbench(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
         return
 
-    if button_id in ['selectinvent']:
+    if button_id in ['selectinvent', 'fix']:
         # {button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}
         inv_uid = call.data.split('|')[3]
         stepinventory = int(call.data.split('|')[2])
         step = 0
         user = getUserByLogin(call.from_user.username)
         
-        inventory = None # user.getInventoryThing({'uid': inv_uid})
+        if button_id in ['fix']:
+            repear_uid = call.data.split('|')[4]
+            repear = None
+            inventories = []
+            for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
+                if inv_uid in invonworkbench['inventory']['uid']:
+                    inventory = invonworkbench['inventory']
+                if repear_uid in invonworkbench['inventory']['uid']:
+                    repear = invonworkbench['inventory']
+                inventories.append(invonworkbench['inventory'])
 
+            if inventory == None:
+                bot.answer_callback_query(call.id, f'Этой вещи уже нет на верстаке.')
+                return
+            
+            repear_new_wear_value = repear['wear']['value'] - repear['wear']['one_use']
+            repear['wear']['value'] = repear_new_wear_value
+
+            newvalues = { "$set": {'inventory': repear} }
+            if repear_new_wear_value <= 0:
+                # Сломался ремкомплект
+                newvalues = { "$set": {'state': 'CANCEL', 'inventory': repear} }
+                send_message_to_admin(f'🗑️ Сломалось!\n{user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {repear["name"]}')
+            
+            result = workbench.update_one(
+            {
+                'inventory.uid' : repear['uid']
+            }, newvalues)
+
+            fix_valu = list(filter(lambda x : x['id'] == inventory['id'], repear['fix']))[0]['one_use']
+            inventory['wear']['value'] = inventory['wear']['value'] + fix_valu
+            if inventory['wear']['value'] > 1: 
+                inventory['wear']['value'] = 1
+
+            newvalues = { "$set": {'inventory': inventory} }
+            result = workbench.update_one(
+                {
+                    'inventory.uid' : inventory['uid']
+                }, newvalues)
+
+        inventory = None # user.getInventoryThing({'uid': inv_uid})
+        inventories = []
         for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
-            if invonworkbench['inventory']['uid'] == inv_uid:
+            inventories.append(invonworkbench['inventory'])
+            if inv_uid in invonworkbench['inventory']['uid']:
                 inventory = invonworkbench['inventory']
-                break
 
         if inventory == None:
             bot.answer_callback_query(call.id, f'Этой вещи уже нет на верстаке.')
             return
         
         userseller = getUserByLogin(invonworkbench['login'])
-
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
-        buttons.append(exit_button)
+        header_buttons = []
+
+        if 'wear' in inventory and inventory['wear']['value'] < 1:
+            for fixinv in inventories:
+                if 'fix' in fixinv:
+                    for fixebleinv in fixinv['fix']:
+                        if fixebleinv['id'] == inventory['id']:
+                            fix_button = InlineKeyboardButton(f"🧰{int(fixinv['wear']['value']*100)}% {fixinv['name']}", callback_data=f"{button_parent['id']}|fix|{stepinventory}|{inventory['uid'][:16]}|{fixinv['uid'][:16]}")
+                            buttons.append(fix_button)
 
         if 'composition' in inventory:
             doit = 'Разобрать 🛠️'
@@ -2387,12 +2433,12 @@ def select_workbench(call):
             elif inventory['type'] == 'food':
                 doit = 'Сожрать 🥄'
             splitup = InlineKeyboardButton(f"{doit} {len(inventory['composition'])} ", callback_data=f"{button_parent['id']}|splitup|{stepinventory}|{inventory['uid']}")
-            buttons.append(splitup)
+            header_buttons.append(splitup)
 
         pickup = InlineKeyboardButton(f"Забрать 📤", callback_data=f"{button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}")
-        buttons.append(pickup)
+        header_buttons.append(pickup)
 
-        for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, back_button=None, exit_button=None, forward_button=None):
+        for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, header_buttons=header_buttons, back_button=None, exit_button=exit_button, forward_button=None):
             markupinline.row(*row) 
 
         part_of_composition = '▫️ 🔬 Часть чего-то' if len(getInvCompositionIn(inventory))>0 else ''
@@ -2431,6 +2477,7 @@ def select_workbench(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\nЭти вещи ты можешь собрать.", reply_markup=markupinline)
         return
 
+    # Собрать вещь
     if button_id in ['selectcollect']:
         step = int(call.data.split('|')[2])
         ivn_id = call.data.split('|')[3]
@@ -2448,10 +2495,14 @@ def select_workbench(call):
         comp_arr = []  
         inventory.update({'composition': comp_arr})
 
+        wear_value = 1 if 'wear' not in inventory else inventory['wear']['value']
+
         for composit in arr:
             for i in range(0, composit['counter']):
                 for inv in inventories_on:
                     if inv['id'] == composit['id']:
+                        if 'wear' in inv:
+                            inv['wear']['value'] = wear_value
                         comp_arr.append(inv)
                         inventories_on.remove(inv)
                         break
@@ -2525,12 +2576,12 @@ def select_workbench(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n<b>Ты собрал:</b>\n{users.getThingInfo(inventory)}", reply_markup=markupinline, parse_mode='HTML')
         return
 
-    if button_id in ['pickup', 'pickupall', 'splitup']:
+    if button_id in ['pickup', 'pickupall', 'splitup', 'fix']:
         # {button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}
 
         stepinventory = int(call.data.split('|')[2])
         user = getUserByLogin(call.from_user.username)
-        inventory = None # user.getInventoryThing({'uid': inv_uid})
+        inventory = None # 
 
         if button_id in ['pickupall']:
             for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
@@ -2582,6 +2633,10 @@ def select_workbench(call):
                     send_messages_big(userseller.getChat(), text=f'🔪 Ты зарезал!:\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
 
                 else:
+                    wear_value = 1
+                    if 'wear' in inventory:
+                         wear_value = inventory['wear']['value']
+
                     for comp in inventory['composition']:
                         # Добавляем составные   объекты
                         listInv = GLOBAL_VARS['inventory']    
@@ -2599,10 +2654,14 @@ def select_workbench(call):
                                     for i in range(0, com["counter"]):
                                         composit = list(filter(lambda x : x['id']==com['id'], listInv))[0].copy()
                                         composit.update({'uid':f'{uuid.uuid4()}'})
+                                        if 'wear' in composit: 
+                                            composit['wear'].update({'value': wear_value})
+
                                         if com["id"] == 'crypto':
+                                            if len(list(filter(lambda x : x['id']==com['id'], comp_arr)))>0: continue 
                                             composit["cost"] = com["counter"]
                                             comp_arr.append(composit)
-                                            break
+                                            
                                         comp_arr.append(composit)
 
                         row = {
@@ -2695,7 +2754,7 @@ def select_exchange(call):
         step = int(call.data.split('|')[2])
         user = getUserByLogin(call.from_user.username)
         inventors = []
-        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission']):
+        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission'])[::-1]:
             inventories = user.getInventoryThings({'id': inv['id']})
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}")
             if len(inventories) > 1:
@@ -2719,7 +2778,7 @@ def select_exchange(call):
         step = int(call.data.split('|')[2])
         user = getUserByLogin(call.from_user.username)
         inventories_arr = []
-        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission']):
+        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission'])[::-1]:
             
             inventories = user.getInventoryThings({'id': inv['id']})
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}")
@@ -2936,7 +2995,7 @@ def select_exchange(call):
         user = getUserByLogin(call.from_user.username)
                     
         inventors = []
-        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission']):
+        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission'])[::-1]:
             inventories = user.getInventoryThings({'id': inv['id']})
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}")
             if len(inventories) > 1:
@@ -2967,7 +3026,7 @@ def select_exchange(call):
         inventory = user.getInventoryThing({'id': inv_id})
         
         inventories_arr = []
-        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission']):
+        for inv in user.getInventoryType(GLOBAL_VARS['typeforcomission'])[::-1]:
             inventories = user.getInventoryThings({'id': inv['id']})
 
             btn = InlineKeyboardButton(f"🔘{inv['cost']} {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}")
