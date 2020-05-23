@@ -1979,9 +1979,9 @@ def select_shelf(call):
         best_request = ''
         best = None
 
-        request = list(filter(lambda x : not x['login'] == invonshelf['login'], request))
-        if len(request)>0:
-            best = max(request, key=lambda x: x['cost'])
+        request_best = list(filter(lambda x : not x['login'] == invonshelf['login'], request))
+        if len(request_best)>0:
+            best = max(request_best, key=lambda x: x['cost'])
             best_request = f'\n▫️ 📈 Лучшее предложение: 🔘{best["cost"]}' 
 
         for req in request:
