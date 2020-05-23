@@ -3041,7 +3041,7 @@ newvalues = { "$set": { "value":
                                     'wear': 
                                         {
                                             'one_use': 0.01,
-                                            'value': 0.5
+                                            'value': 0.25
                                         }
                                 },
                                 {
