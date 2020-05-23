@@ -1988,8 +1988,7 @@ def select_shelf(call):
 
         userseller = getUserByLogin(invonshelf['login'])
         itsMy = call.from_user.username == invonshelf['login']
-        
-        request = list(filter(lambda x : x['login'] == invonshelf['login'], request))
+
         if itsMy:
             for req in sorted(request, key = lambda i: i['cost'], reverse=True):
                 userRequester = getUserByLogin(req["login"])
