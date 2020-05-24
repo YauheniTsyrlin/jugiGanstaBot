@@ -3065,6 +3065,19 @@ newvalues = { "$set": { "value":
                                     'dialog_old_text': 'default_old_thing'
                                 },
                                 {
+                                    'id': 'quartz_sand',
+                                    'name': '🟡 Кварцевый песок',
+                                    'cost': 100,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Кварц'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
                                     'id': 'fire_сlay',
                                     'name': '🟠 Огнеупорная глина',
                                     'cost': 100,
