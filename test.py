@@ -994,8 +994,25 @@ del df['buyer']
 del df['inventory_id']
 del df['inventory']
 
-print(df.date.values)
+# print(df.date.values)
 
+import matplotlib.pyplot as plt
+
+# Независимая (x) и зависимая (y) переменные
+x = [1, 2, 3, 4, 5]
+x2 = [5, 4, 3, 3, 1]
+y = x
+
+# Построение графика
+plt.title("Линейная зависимость y = x") # заголовок
+plt.xlabel("x") # ось абсцисс
+plt.ylabel("y") # ось ординат
+plt.grid()      # включение отображение , 
+plt.plot(x, y, "r--", x, x2, "r--")  # построение графика
+
+
+
+plt.show()
 # c = random.randint(1, 3)
 # print(f'random = {c}')
 # for i in range(0, c):

@@ -839,7 +839,21 @@ newvalues = { "$set": { "value":
                                     'name': '🗃📈 Главный бухгалтер',
                                     'type': 'position',
                                     'cost': 0
+                                },
+                                {
+                                    'id': 'autoseller',
+                                    'name': '🚗 Aвтожестянщик',
+                                    'type': 'position',
+                                    'cost': 0
+                                },
+                                {
+                                    'id': 'jewelry',
+                                    'name': '👾 Ювелирный Т-1000',
+                                    'type': 'position',
+                                    'cost': 0
                                 }
+
+                                
                             ] 
                         },{
                             'id': 'ANIMALS',
@@ -1615,6 +1629,40 @@ newvalues = { "$set": { "value":
                                                 'type': 'MARKS_OF_EXCELLENCE'
                                             }
                                         }
+                                },     
+                                {
+                                    'id': 'metallurgist',
+                                    'name': '⛓ Металлург',
+                                    'cost': 0,
+                                    'type': 'skill',
+                                    'quantity': None,
+                                    'probability': 1, # Вероятность срабатывания
+                                    'value': 1,       # Рамки изменений 
+                                    'min': 10,
+                                    'max': 20,
+                                    'storage': 0,
+                                    'forgetting': 0.001, # за 1 дней -1%,
+                                    'subjects_of_study':
+                                    [
+                                        '🔥Сердце пламени'
+                                    ],
+                                    'dialog_old_text': None,
+                                    'flags': {
+                                        'congratulation_min': False,
+                                        'position_min': 'autoseller',
+                                        'present_min': 
+                                            {
+                                                'id': 'mark_autoseller',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            },
+                                        'congratulation_max': False,
+                                        'position_max': 'jewelry',
+                                        'present_max': 
+                                            {
+                                                'id': 'mark_jewelry',
+                                                'type': 'MARKS_OF_EXCELLENCE'
+                                            }
+                                        }
                                 }                                
                             ]
                         },
@@ -2081,6 +2129,20 @@ newvalues = { "$set": { "value":
                                     'cost': 0,
                                     'type': 'marks_of_excellence',
                                     'quantity': None
+                                },
+                                {
+                                    'id': 'mark_autoseller',
+                                    'name': '🚗 Удостоверение сварщика',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
+                                },
+                                {
+                                    'id': 'mark_jewelry',
+                                    'name': '🔮 Удостоверение ювелира',
+                                    'cost': 0,
+                                    'type': 'marks_of_excellence',
+                                    'quantity': None
                                 }
                             ]
                         },
@@ -2467,7 +2529,164 @@ newvalues = { "$set": { "value":
                             'name': '📦 Вещи',
                             'value':
                             [
-                                
+                                {
+                                    'id': 'bios',
+                                    'name': '📍 Чупик',
+                                    'cost': 50,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1, # Требуется
+                                    'subjects_to_find':
+                                    [
+                                        'Батарейка BIOS'
+                                    ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'thread',
+                                    'name': '🧵 Нить',
+                                    'cost': 100,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Тряпка'
+                                    ],
+                                    'subjects_count': 4, # Количетсво добавляемых вещей
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'fire_сlay',
+                                    'name': '🟠 Огнеупорная глина',
+                                    'cost': 100,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Кипарит 🔸'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'bolt_ww',
+                                    'name': '🔩 Болтик',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Болт'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'generator',
+                                    'name': '💫 Генератор',
+                                    'cost': 50,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Генератор'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'arena_pass',
+                                    'name': '💳 Пропуск на арену',
+                                    'cost': 100,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        '🧿Митспин'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'battery',
+                                    'name': '🔋 Бата.рейка',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Минизаряд'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'battery',
+                                    'name': '🔋 Бата.рейка',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Минизаряд'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'absent',
+                                    'name': '🧪 Абсент',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Абсент'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'ephedrine',
+                                    'name': '💭 Плацебо',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Эфедрин'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'wires',
+                                    'name': '〰️ Проводка',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Провода'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'blue_tape',
+                                    'name': '🌀 Синяя изолента',
+                                    'cost': 20,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Изолента'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
                                 {
                                     'id': 'gold',
                                     'name': '🥇 Золото',
@@ -2598,7 +2817,7 @@ newvalues = { "$set": { "value":
                                 },
                                 {
                                     'id': 'heart_flame',
-                                    'name': '🔥 Cердце пламени',
+                                    'name': '🔥 Огонёк',
                                     'cost': 500,
                                     'type': 'things',
                                     'quantity': None,

@@ -1165,9 +1165,15 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
 
     if count >= minimum:
         if not time_over:
-            addInventory(userIAm, elem)
+            subjects_count = 1
+            if 'subjects_count' in elem:
+                subjects_count = elem['subjects_count']
+
+            for i in range(1, subjects_count+1):
+                addInventory(userIAm, elem.copy())
+
             updateUser(userIAm)
-            text = f'{userIAm.getNameAndGerb()}, ты нашел:\n▫️ {elem["name"]}'
+            text = f'{userIAm.getNameAndGerb()}, ты нашел:\n▫️ {elem["name"]} {"" if subjects_count == 1 else str(subjects_count)+"шт."}'
             send_messages_big(chat, text=text)
         else:
             send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
@@ -3501,7 +3507,7 @@ def main_message(message):
 
     # Форварды от WastelandWarsBot
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
-        time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
+        # time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
         # Вычисление коэффициента времени фарма
         farm_k = 0
         if userIAm:
@@ -3540,7 +3546,7 @@ def main_message(message):
                 return
 
             if 'ТОП ИГРОКОВ:' in message.text:
-                filter_message = {"forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
+                filter_message = {"forward_date": message.forward_date, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message)
 
                 if new_Message:
@@ -3562,7 +3568,7 @@ def main_message(message):
 
                     # Учимся умению "Экономист"
                     logger.info(f'Обновился BM у {countLearnSkill} бандитов')
-                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='economist'), None)
+                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='economist'), None).copy()
                     if countLearnSkill > 0:
                         check_skills(None, message.chat.id, False, userIAm, elem, counterSkill=countLearnSkill)
                     else:
@@ -3572,7 +3578,7 @@ def main_message(message):
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
                 return
 
-            if time_over:
+            if time_farm_over:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
                 return
 
@@ -3617,9 +3623,8 @@ def main_message(message):
             if message.forward_date < (datetime.now() - timedelta(minutes=60*24)).timestamp():
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
                 return
-
             
-            filter_message = {"forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
+            filter_message = {"forward_date": message.forward_date, 'text': message.text}
             new_Message = messager.new_message(message, filter_message)
             if new_Message:                     
                 ww = wariors.fromFightToWarioirs(message.forward_date, message, USERS_ARR, battle)
@@ -3636,7 +3641,7 @@ def main_message(message):
                     
                     if ourBandUser.getLogin() == message.from_user.username:
                         # Учимся умению "Боец"
-                        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='fighter'), None)
+                        elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='fighter'), None).copy()
                         check_skills(None, message.chat.id, False, userIAm, elem, counterSkill=1)
 
                     for w in battle.find({
@@ -3986,26 +3991,17 @@ def main_message(message):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
                 
-                filter_message = {"username": message.from_user.username, "forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
+                filter_message = {"forward_date": message.forward_date, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message)                
                 if not new_Message:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
                     return
 
-                # if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
-                #     #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-                #     send_messages_big(message.chat.id, text='Шли мне свежее сообщение "Ты уже записался."')
-                #     return
-
-                # if '7ч.' in message.text.split('Рейд начнётся через ⏱')[1]:
-                #     send_messages_big(message.chat.id, text='Это захват на следующий рейд. Сбрось мне его позже!')
-                #     return
-
                 user = getUserByLogin(message.from_user.username)
                 user.setRaidLocation(1)
 
                 try:
-                    ticket = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='redeemed_raid_ticket'), None)             
+                    ticket = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='redeemed_raid_ticket'), None).copy()           
                     date_stamp = getRaidTimeText(message.text.split("Рейд начнётся через ⏱")[1], message.forward_date)
                     date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
                     addInventory(user, ticket)
@@ -4420,38 +4416,38 @@ def main_message(message):
             return
         elif ('❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text) or ('Экзекутос предатель, Рагнароса разбудили слишком рано, насекомое победило, правосудие свершилось. Хорошо, что никто не руинил и ты успел победить до того, как Рагна упал сам.' in message.text):
             if hasAccessToWariors(message.from_user.username):
-                if not time_over:
+                if not time_farm_over:
                     # сохраняем км, если он больше максимального
                     if '👣' in message.text: 
                         km = int(message.text.split('👣')[1].split('км')[0])
                         if userIAm.getMaxkm() < km:
                             userIAm.setMaxkm(km)
                             updateUser(userIAm)
-                filter_message = {"forward_date": message.forward_date, "forward_from_username": message.forward_from.username, 'text': message.text}
+                filter_message = {"forward_date": message.forward_date, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message) 
                 if new_Message:
-
-                    # Учимся умению "⏰ Часовщик"
-                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='watchmaker'), None).copy()
-                    check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
-                    # Учимся умению "Робототехник"
-                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='robotics'), None).copy()
-                    check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
-                    # Учимся умению "Электрик"
-                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None).copy()
-                    check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
-                    # Учимся умению "Программист"
-                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None).copy()
-                    check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
-                     # Учимся умению "Медик"
-                    elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None).copy()
-                    check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
-
+                    for skill in getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']:
+                        if 'subjects_of_study' in skill:
+                            check_skills(message.text, message.chat.id, time_farm_over, userIAm, skill.copy())
+                    
                     for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
                         check_things(message.text, message.chat.id, time_farm_over, userIAm, inv.copy())
 
-
-                
+                    # # Учимся умению "⏰ Часовщик"
+                    # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='watchmaker'), None).copy()
+                    # check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
+                    # # Учимся умению "Робототехник"
+                    # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='robotics'), None).copy()
+                    # check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
+                    # # Учимся умению "Электрик"
+                    # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None).copy()
+                    # check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
+                    # # Учимся умению "Программист"
+                    # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None).copy()
+                    # check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
+                    #  # Учимся умению "Медик"
+                    # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None).copy()
+                    # check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
                 else:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
 
@@ -4606,12 +4602,15 @@ def main_message(message):
                     send_messages_big(message.chat.id, text=warior.getProfile(userIAm.getTimeZone()))
             return
         elif (message.text.startswith('Рейд в 17:00') or message.text.startswith('Рейд в 9:00') or message.text.startswith('Рейд в 01:00')):
-            
-            # if message.forward_date < (datetime.now() - timedelta(minutes=30)).timestamp():
-            #     #send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
-            #     send_messages_big(message.chat.id, text='Поздняк! У тебя было 30 минут, чтобы прислать это. Статистика уже собрана и отправлена в библиотеку пустоши!')
-            #     return
-            
+            filter_message = {"forward_date": message.forward_date, 'text': message.text}
+            new_Message = messager.new_message(message, filter_message) 
+            if new_Message:
+                for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
+                    check_things('Получено:' + message.text.split('🕳')[1], message.chat.id, time_farm_over, userIAm, inv.copy())
+            else:
+                send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
+                return
+
             tz = config.SERVER_MSK_DIFF
             date = (datetime.fromtimestamp(message.forward_date).replace(minute=0, second=0) + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)).timestamp()
             raid = getPlanedRaidLocation(getMyGoatName(message.from_user.username), planRaid = False)
