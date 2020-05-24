@@ -1280,91 +1280,140 @@ def check_animal():
             # wear dialog_text_born
 
     # Старение на ферме
-    for record_farm in farm.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
-        creature = record_farm['inventory']
-        user = getUserByLogin(record_farm['login'])
+    for user in USERS_ARR:
+        # if not user.getLogin() == 'Digzzzy': continue
+        creatures = []
+        for creature in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
+            creatures.append(creature)
+        
+        dead_creatures = []
 
-        if 'wear' in creature:
-            new_wear = creature['wear']['value'] - creature['wear']['one_use']
-            creature['wear']['value'] = new_wear
-            
-            newvalues = { "$set": {'inventory': creature} }
-            if new_wear <= 0:
-                newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
-            result = farm.update_many(
-                {
-                    'login': user.getLogin(), 
-                    'state': {'$ne': 'CANCEL'}, 
-                    'inventory.uid': creature['uid']
-                }, newvalues)
+        for record_farm in farm.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
+            creature = record_farm['inventory']
 
-            if new_wear <= 0:
-                time.sleep(sec)
-                send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {creature["name"]}')
-                send_message_to_admin(f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
-                # dialog_text_dead
-            else:
-                pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ На ферме\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+            if 'wear' in creature:
+                new_wear = creature['wear']['value'] - creature['wear']['one_use']
+                creature['wear']['value'] = new_wear
+                
+                newvalues = { "$set": {'inventory': creature} }
+                if new_wear <= 0:
+                    newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
+                    dead_creatures.append(newvalues)
+
+                result = farm.update_many(
+                    {
+                        'state': {'$ne': 'CANCEL'}, 
+                        'inventory.uid': creature['uid']
+                    }, newvalues)
+
+        if len(dead_creatures)>0:
+            cr = {}
+            for newvalues in dead_creatures:
+                creature = newvalues['$set']
+                if creature['inventory']['name'] in cr:
+                    cr[f"{creature['inventory']['name']}"] = cr[f"{creature['inventory']['name']}"] + 1
+                else:
+                    cr.update({ f"{creature['inventory']['name']}": 1})
+                    
+            report = ''
+            for key in cr.keys():
+                report = report + f'▫️ {key} {cr[key]}шт.\n'
+
+            time.sleep(sec)
+            send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n{report}')
+            send_message_to_admin(f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
+
 
     # Старение на верстаке
-    for record_farm in workbench.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
-        creature = record_farm['inventory']
-        user = getUserByLogin(record_farm['login'])
+    for user in USERS_ARR:
+        # if not user.getLogin() == 'Digzzzy': continue
+        creatures = []
+        for creature in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
+            creatures.append(creature)
+        
+        dead_creatures = []
+        for record_farm in workbench.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
+            creature = record_farm['inventory']
 
-        if 'wear' in creature:
+            if 'wear' in creature:
+                new_wear = creature['wear']['value'] - creature['wear']['one_use']
+                creature['wear']['value'] = new_wear
+                
+                newvalues = { "$set": {'inventory': creature} }
+                if new_wear <= 0:
+                    newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
+                    dead_creatures.append(newvalues)
 
-            new_wear = creature['wear']['value'] - creature['wear']['one_use']
-            creature['wear']['value'] = new_wear
-            
-            newvalues = { "$set": {'inventory': creature} }
-            if new_wear <= 0:
-                newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
-            result = workbench.update_many(
-                {
-                    'login': user.getLogin(), 
-                    'state': {'$ne': 'CANCEL'}, 
-                    'inventory.uid': creature['uid']
-                }, newvalues)
+                result = workbench.update_many(
+                    {
+                        'state': {'$ne': 'CANCEL'}, 
+                        'inventory.uid': creature['uid']
+                    }, newvalues)
 
-            if new_wear <= 0:
-                time.sleep(sec)
-                send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {creature["name"]}')
-                send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
-                # dialog_text_dead
-            else:
-                pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ На верстаке\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+        if len(dead_creatures)>0:
+            cr = {}
+            for newvalues in dead_creatures:
+                creature = newvalues['$set']
+                if creature['inventory']['name'] in cr:
+                    cr[f"{creature['inventory']['name']}"] = cr[f"{creature['inventory']['name']}"] + 1
+                else:
+                    cr.update({ f"{creature['inventory']['name']}": 1})
+                    
+            report = ''
+            for key in cr.keys():
+                report = report + f'▫️ {key} {cr[key]}шт.\n'
+
+            time.sleep(sec)
+            send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n{report}')
+            send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
 
 
-    # Старение в магазине
-    for record_farm in shelf.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
-        creature = record_farm['inventory']
-        user = getUserByLogin(record_farm['login'])
+    # Старение В магазине
+    for user in USERS_ARR:
+        # if not user.getLogin() == 'Digzzzy': continue
+        creatures = []
+        for creature in shelf.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
+            creatures.append(creature)
+        
+        dead_creatures = []
+        for record_farm in shelf.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
+            creature = record_farm['inventory']
 
-        if 'wear' in creature:
+            if 'wear' in creature:
+                new_wear = creature['wear']['value'] - creature['wear']['one_use']
+                creature['wear']['value'] = new_wear
+                
+                newvalues = { "$set": {'inventory': creature} }
+                if new_wear <= 0:
+                    newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
+                    dead_creatures.append(newvalues)
 
-            new_wear = creature['wear']['value'] - creature['wear']['one_use']
-            creature['wear']['value'] = new_wear
-            
-            newvalues = { "$set": {'inventory': creature} }
-            if new_wear <= 0:
-                newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
-            result = shelf.update_many(
-                {
-                    'login': user.getLogin(), 
-                    'state': {'$ne': 'CANCEL'}, 
-                    'inventory.uid': creature['uid']
-                }, newvalues)
+                result = shelf.update_many(
+                    {
+                        'state': {'$ne': 'CANCEL'}, 
+                        'inventory.uid': creature['uid']
+                    }, newvalues)
 
-            if new_wear <= 0:
-                time.sleep(sec)
-                send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n▫️ {creature["name"]}')
-                send_message_to_admin(f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
-                # dialog_text_dead
-            else:
-                pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ В магазине\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+        if len(dead_creatures)>0:
+            cr = {}
+            for newvalues in dead_creatures:
+                creature = newvalues['$set']
+                if creature['inventory']['name'] in cr:
+                    cr[f"{creature['inventory']['name']}"] = cr[f"{creature['inventory']['name']}"] + 1
+                else:
+                    cr.update({ f"{creature['inventory']['name']}": 1})
+                    
+            report = ''
+            for key in cr.keys():
+                report = report + f'▫️ {key} {cr[key]}шт.\n'
+
+            time.sleep(sec)
+            send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n{report}')
+            send_message_to_admin(f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
 
     # Старение в инвентаре пользоватлей
     for user in list(filter(lambda x : len(x.getInventoryType(['animals'])) > 0, USERS_ARR)):
+        dead_creatures = []
         for record_farm in user.getInventoryType(['animals']):
             creature = record_farm
             if 'wear' in creature:
@@ -1372,17 +1421,27 @@ def check_animal():
                 creature['wear']['value'] = new_wear
                 if new_wear <= 0:
                     user.removeInventoryThing(creature)
+                    dead_creatures.append(newvalues)
                 else:
                     user.updateInventoryThing(creature)
                 updateUser(user)                
-                if new_wear <= 0:
-                    time.sleep(sec)
-                    send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {creature["name"]}')
-                    send_message_to_admin(f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
-                    # dialog_text_dead
+        
+        if len(dead_creatures)>0:
+            cr = {}
+            for creature in dead_creatures:
+                if creature['name'] in cr:
+                    cr[f"{creature['name']}"] = cr[f"{creature['name']}"] + 1
                 else:
-                    pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ В инвентаре\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
+                    cr.update({ f"{creature['name']}": 1})
                     
+            report = ''
+            for key in cr.keys():
+                report = report + f'▫️ {key} {cr[key]}шт.\n'
+
+            time.sleep(sec)
+            send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n{report}')
+            send_message_to_admin(f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
+            
 
 def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
     count = counterSkill
