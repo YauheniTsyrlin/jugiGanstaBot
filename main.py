@@ -1218,6 +1218,7 @@ def check_animal():
                             farm.insert_many(creature_to_insert)
                             new_wear = creature['wear']['value'] - creature['multiply']['postpartum_trauma'] 
                             if new_wear <= 0:
+                                time.sleep(0.5)
                                 creature['wear']['value'] = new_wear
                                 newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
                                 result = farm.update_many(
