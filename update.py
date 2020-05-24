@@ -2609,6 +2609,175 @@ newvalues = { "$set": { "value":
                             'name': '📦 Вещи',
                             'value':
                             [
+                                
+                                {
+                                    'id': 'brake',
+                                    'name': '⚓️ Тормоз',
+                                    'cost': 500,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'piston',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'caliper',
+                                            'counter': 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'brake',
+                                    'name': '⚓️ Тормоз',
+                                    'cost': 500,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'piston',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'caliper',
+                                            'counter': 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'piston',
+                                    'name': '❕ Поршень 50мм',
+                                    'cost': 400,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'silver',
+                                            'counter': 3
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'caliper',
+                                    'name': '🗜 Суппорт',
+                                    'cost': 70,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'cast_iron',
+                                            'counter': 4
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'patch',
+                                    'name': '🩹 Пластырь',
+                                    'cost': 20,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'blue_tape',
+                                            'counter': 2
+                                        },
+                                        {
+                                            'id': 'ephedrine',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'bandage',
+                                            'counter': 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'bandage',
+                                    'name': '🧻 Бинт',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'wool',
+                                            'counter': 2
+                                        },
+                                        {
+                                            'id': 'ephedrine',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'cloth',
+                                            'counter': 2
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'cloth',
+                                    'name': '🌫 Ткань',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'wool',
+                                            'counter': 2
+                                        },
+                                        {
+                                            'id': 'thread',
+                                            'counter': 2
+                                        }
+                                    ]
+                                },
                                 {
                                     'id': 'wool',
                                     'name': '🧶 Шерсть',
@@ -2932,7 +3101,11 @@ newvalues = { "$set": { "value":
                                     [
                                         'Генератор'
                                     ],
-                                    'dialog_old_text': 'default_old_thing'
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                       
+                                    ]
                                 },
                                 {
                                     'id': 'arena_pass',
@@ -3187,20 +3360,6 @@ newvalues = { "$set": { "value":
                                     'cost': 50,
                                     'type': 'things',
                                     'quantity': None
-                                },
-                                {
-                                    'id': 'brake',
-                                    'name': '⚓ Тормоз',
-                                    'cost': 150,
-                                    'type': 'things',
-                                    'quantity': None,
-                                    'composition':
-                                    [
-                                        {
-                                            'id': 'cast_iron',
-                                            'counter': 5
-                                        }
-                                    ]
                                 },
                                 {
                                     'id': 'deus_auto',

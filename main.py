@@ -1200,7 +1200,7 @@ def check_animal():
                         r = random.random()
                         logger.info(f'{user.getLogin()}:{creature["name"]}:{r}:{creature["multiply"]["probability"]}')
                         if r <= creature['multiply']['probability']:
-                            logger.info(f'{user.getLogin()}:{creature["name"]}:YES')
+                            logger.info(f'{user.getLogin()}:{creature["name"]}:{r}:{creature["multiply"]["probability"]}')
                             creature_to_insert = []
                             for i in range(0, random.randint(1, creature['multiply']['max_child'])):
                                 new_creature = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='ANIMALS')['value']) if x['id']==creature['multiply']['child']), None).copy()
@@ -4027,7 +4027,7 @@ def main_message(message):
             #write_json(message.json)
             if hasAccessToWariors(message.from_user.username):
                 
-                filter_message = {"forward_date": message.forward_date, 'text': message.text}
+                filter_message = {"username": message.from_user.username, "forward_date": message.forward_date, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message)                
                 if not new_Message:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
