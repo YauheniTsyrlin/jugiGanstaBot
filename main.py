@@ -1279,8 +1279,6 @@ def check_animal():
 
             # wear dialog_text_born
 
-    if True: return
-
     # Старение на ферме
     for record_farm in farm.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
         creature = record_farm['inventory']
