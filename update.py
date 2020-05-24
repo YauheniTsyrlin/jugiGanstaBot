@@ -1671,7 +1671,54 @@ newvalues = { "$set": { "value":
                             'name': '🍗 Еда',
                             'value':
                             [
-                                
+                                {
+                                    'id': 'medicine_tablet',
+                                    'name': '💉 У нас не курят',
+                                    'cost': 10,
+                                    'type': 'food',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'ephedrine',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'sagebrush',
+                                            'counter': 2
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'ibupro',
+                                    'name': '💊 Ибупроутюг',
+                                    'cost': 10,
+                                    'type': 'food',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'ephedrine',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'plantain',
+                                            'counter': 3
+                                        }
+                                    ]
+                                },
                                 {
                                     'id': 'alcohol',
                                     'name': '💧 Спирт',
@@ -2562,6 +2609,7 @@ newvalues = { "$set": { "value":
                             'name': '📦 Вещи',
                             'value':
                             [
+                                
                                 {
                                     'id': 'auto_battery',
                                     'name': '🧮 Аккумулятор',
