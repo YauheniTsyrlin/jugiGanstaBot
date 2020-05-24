@@ -1998,7 +1998,7 @@ def select_shelf(call):
         itsMy = call.from_user.username == invonshelf['login']
 
         if itsMy:
-            for req in sorted(request, key = lambda i: i['cost'], reverse=True):
+            for req in sorted(request_best, key = lambda i: i['cost'], reverse=True):
                 userRequester = getUserByLogin(req["login"])
                 cost = req['cost']
                 if userRequester:
