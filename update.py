@@ -3726,6 +3726,14 @@ newvalues = { "$set": { "value":
                                     ]
                                 },
                                 {
+                                    'id': 'bagonub',
+                                    'name': '👾 Багонуб',
+                                    'cost': 250,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'discont': 1 # Цена при сдаче не снижается
+                                },
+                                {
                                     'id': 'bagouser',
                                     'name': '👾 Багоюзер',
                                     'cost': 500,
