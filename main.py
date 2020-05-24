@@ -1189,6 +1189,7 @@ def check_animal():
     for record_farm in creatures:
         creature = record_farm['inventory']
         user = getUserByLogin(record_farm['login'])
+        if not user.getLogin() == 'Digzzzy': continue
         
         logger.info(f'{user.getLogin()}:{creature["name"]}')
 
@@ -1239,6 +1240,7 @@ def check_animal():
                                 # send_message_to_admin(f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                                 # wear dialog_text_dead
                                 continue
+    if False: return
 
     # Старение на ферме
     for record_farm in farm.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
