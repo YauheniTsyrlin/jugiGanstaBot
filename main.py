@@ -4494,7 +4494,7 @@ def main_message(message):
                             updateUser(userIAm)
                 filter_message = {"forward_date": message.forward_date, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message) 
-                if True or new_Message:
+                if new_Message:
                     for skill in getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']:
                         if 'subjects_of_study' in skill:
                             check_skills(message.text, message.chat.id, time_farm_over, userIAm, skill.copy())
