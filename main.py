@@ -117,16 +117,6 @@ GLOBAL_VARS = {
                 {
                     'inventory':[]
                 },
-    'skill':
-                {
-                    'programmer': next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None),
-                    'watchmaker':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='watchmaker'), None),
-                    'economist':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='economist'), None),
-                    'fighter':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='fighter'), None),
-                    'robotics':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='robotics'), None),
-                    'electrician':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None),
-                    'medic':next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None)
-                },
     'fractions':  ['⚙️Убежище 4', '⚙️Убежище 11', '🔪Головорезы', '💣Мегатонна', '⚛️Республика', '👙Клуб бикини', '🔰Конкорд'],
     'bosses': ['Танкобот','Яо-гай','Супермутант-конг','Квантиум','Коготь смерти','Вечный Горос','Вечный Квантиума'],
     'fight_log_message' : ['отдал на съедение кротокрысам', 'одержал победу над', 'не оставил живого места от', 'гордо наступил на полудохлого', 'оставил бездыханное тело', 'сделал сиротами детишек', 'добил с пинка', 'добил лежачего', 'выписал пропуск в Вальхаллу', 'добил фаталити', 'стоит над поверженным', 'одержал победу над'],
@@ -4504,29 +4494,13 @@ def main_message(message):
                             updateUser(userIAm)
                 filter_message = {"forward_date": message.forward_date, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message) 
-                if new_Message:
+                if True or new_Message:
                     for skill in getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']:
                         if 'subjects_of_study' in skill:
                             check_skills(message.text, message.chat.id, time_farm_over, userIAm, skill.copy())
                     
                     for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
                         check_things(message.text, message.chat.id, time_farm_over, userIAm, inv.copy())
-
-                    # # Учимся умению "⏰ Часовщик"
-                    # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='watchmaker'), None).copy()
-                    # check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
-                    # # Учимся умению "Робототехник"
-                    # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='robotics'), None).copy()
-                    # check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
-                    # # Учимся умению "Электрик"
-                    # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='electrician'), None).copy()
-                    # check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
-                    # # Учимся умению "Программист"
-                    # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='programmer'), None).copy()
-                    # check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
-                    #  # Учимся умению "Медик"
-                    # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']=='medic'), None).copy()
-                    # check_skills(message.text, message.chat.id, time_farm_over, userIAm, elem)
                 else:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
 

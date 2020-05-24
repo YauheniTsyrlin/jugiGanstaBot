@@ -3134,19 +3134,6 @@ newvalues = { "$set": { "value":
                                     'dialog_old_text': 'default_old_thing'
                                 },
                                 {
-                                    'id': 'battery',
-                                    'name': '🔋 Бата.рейка',
-                                    'cost': 10,
-                                    'type': 'things',
-                                    'quantity': None,
-                                    'subjects_quantum': 1,
-                                    'subjects_to_find':
-                                    [
-                                        'Минизаряд'
-                                    ],
-                                    'dialog_old_text': 'default_old_thing'
-                                },
-                                {
                                     'id': 'wires',
                                     'name': '〰️ Проводка',
                                     'cost': 10,
