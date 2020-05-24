@@ -1288,7 +1288,7 @@ def check_animal():
         
         dead_creatures = []
 
-        for record_farm in farm.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
+        for record_farm in creatures:
             creature = record_farm['inventory']
 
             if 'wear' in creature:
@@ -1332,7 +1332,7 @@ def check_animal():
             creatures.append(creature)
         
         dead_creatures = []
-        for record_farm in workbench.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
+        for record_farm in creatures:
             creature = record_farm['inventory']
 
             if 'wear' in creature:
@@ -1376,7 +1376,7 @@ def check_animal():
             creatures.append(creature)
         
         dead_creatures = []
-        for record_farm in shelf.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
+        for record_farm in creatures:
             creature = record_farm['inventory']
 
             if 'wear' in creature:
