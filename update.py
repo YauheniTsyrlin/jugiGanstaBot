@@ -1779,7 +1779,7 @@ newvalues = { "$set": { "value":
                                 #  
                                 {
                                     'id': 'fried_eggs',
-                                    'name': '🍳 Яишница',
+                                    'name': '🍳 Яичница',
                                     'cost': 40,
                                     'type': 'food',
                                     'quantity': None,
