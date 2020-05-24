@@ -1246,7 +1246,7 @@ def check_animal():
             
             report = ''
             for key in cr.keys():
-                report = report + f'▫️ {key} {cr[key]}шт.'
+                report = report + f'▫️ {key} {cr[key]}шт.\n'
             
             time.sleep(sec)
             send_messages_big(user.getChat(), text=f'👼 На ферме новые создания:\n{report}')
@@ -1271,7 +1271,7 @@ def check_animal():
                     
             report = ''
             for key in cr.keys():
-                report = report + f'▫️ {key} {cr[key]}шт.'
+                report = report + f'▫️ {key} {cr[key]}шт.\n'
 
             time.sleep(sec)
             send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ При родах\n{report}')
