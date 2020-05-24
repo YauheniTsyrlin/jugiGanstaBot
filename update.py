@@ -1671,29 +1671,32 @@ newvalues = { "$set": { "value":
                             'name': '🍗 Еда',
                             'value':
                             [
+                                
                                 {
-                                    'id': 'absent',
-                                    'name': '🧪 Абсент',
+                                    'id': 'alcohol',
+                                    'name': '💧 Спирт',
                                     'cost': 10,
                                     'type': 'food',
                                     'quantity': None,
                                     'subjects_quantum': 1,
                                     'subjects_to_find':
                                     [
-                                        'Абсент'
+                                        
                                     ],
-                                    'dialog_old_text': 'default_old_thing',
-                                    'composition':
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'sagebrush',
+                                    'name': '🍃 Полынь',
+                                    'cost': 10,
+                                    'type': 'food',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
                                     [
-                                        # {
-                                        #     'id': 'milk',
-                                        #     'counter': 1
-                                        # },
-                                        # {
-                                        #     'id': 'coffee_grains',
-                                        #     'counter': 1
-                                        # }
-                                    ]
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
                                 },
                                 {
                                     'id': 'ephedrine',
@@ -2497,13 +2500,6 @@ newvalues = { "$set": { "value":
                                     'quantity': 75
                                 },
                                 {
-                                    'id': 'something',
-                                    'name': '🧫 Нечто',
-                                    'cost': 50,
-                                    'type': 'decoration',
-                                    'quantity': 1
-                                },
-                                {
                                     'id': 'punching_bag',
                                     'name': '🦙 Груша для битья',
                                     'cost': 50,
@@ -2566,6 +2562,129 @@ newvalues = { "$set": { "value":
                             'name': '📦 Вещи',
                             'value':
                             [
+                                {
+                                    'id': 'auto_battery',
+                                    'name': '🧮 Аккумулятор',
+                                    'cost': 1000,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'crown',
+                                            'counter': 8
+                                        },
+                                        {
+                                            'id': 'something_more',
+                                            'counter': 8
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'crown',
+                                    'name': '🛢 Крона',
+                                    'cost': 140,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'battery',
+                                            'counter': 8
+                                        },
+                                        {
+                                            'id': 'something_more',
+                                            'counter': 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'something_more',
+                                    'name': '⚠️ Чего-то',
+                                    'cost': 40,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'something',
+                                            'counter': 8
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'something',
+                                    'name': '❔ Что-то',
+                                    'cost': 5,
+                                    'type': 'things',
+                                    'quantity': None
+                                },
+                                {
+                                    'id': 'alc_canister',
+                                    'name': '💦 Канистра спирта',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'alcohol',
+                                            'counter': 5
+                                        },
+                                        {
+                                            'id': 'something',
+                                            'counter': 10
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'absent',
+                                    'name': '🧪 Абсент',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Абсент'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'sagebrush',
+                                            'counter': 3
+                                        },
+                                        {
+                                            'id': 'alcohol',
+                                            'counter': 2
+                                        }
+                                    ]
+                                },
                                 {
                                     'id': 'wiring_coil',
                                     'name': '➰ Моток проводки',
