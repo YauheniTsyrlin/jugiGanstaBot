@@ -7358,7 +7358,7 @@ def rade():
                 send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
 
     # Раздача рейдовых болтов
-    if now_date.hour in (1, 9, 17, 18) and now_date.minute in (31 , 8) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 99) and now_date.minute in (31 , 99) and now_date.second < 15:
         logger.info('raid bolt info!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
