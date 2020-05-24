@@ -3971,7 +3971,7 @@ def main_message(message):
 
                         if user:
                             
-                            if dark_zone and (not time_over) and (not userIAm.getLogin()==user.getLogin()) and (not privateChat) :
+                            if dark_zone and (not time_farm_over) and (not userIAm.getLogin()==user.getLogin()) and (not privateChat) :
                                 user_in_dark_zone.append(user.getLogin())  
                             # Обновляем Bm у нашего бойца                            
                             if warior:
