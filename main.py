@@ -1927,7 +1927,10 @@ def select_farm(call):
         selectall = InlineKeyboardButton(f"Выбрать все 💰", callback_data=f"{button_parent['id']}|selectall|{stepinventory}|{inventory['id']}|{stepexit}") 
         
         for inv in inventories: 
-            btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}|{stepexit}")
+            wear = 100
+            if 'wear' in inv:
+                wear =  int(inv['wear']['value']*100)
+            btn = InlineKeyboardButton(f"{wear}% {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}|{stepexit}")
             buttons.append(btn)
 
         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|{inventory['id']}|{stepexit}") 
