@@ -1201,8 +1201,8 @@ def check_animal():
                         count_need = len(list(filter(lambda x : x['login']==user.getLogin() and x['inventory']['id'] == creature['multiply']['need'], creatures)))
                         if count_need >= creature['multiply']['count']:
                             r = random.random()
-                            # logger.info(f'{user.getLogin()}:{creature["name"]}:{r}:{creature["multiply"]["probability"]}')
                             if r <= creature['multiply']['probability']:
+                                logger.info(f'{user.getLogin()}:{creature["name"]}:{r}:{creature["multiply"]["probability"]}')
                                 for i in range(0, random.randint(1, creature['multiply']['max_child'])):
                                     new_creature = next((x for i, x in enumerate(GLOBAL_VARS['inventory']) if x['id']==creature['multiply']['child']), None).copy()
                                     new_creature.update({'uid':f'{uuid.uuid4()}'})
