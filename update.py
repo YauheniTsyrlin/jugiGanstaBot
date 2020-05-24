@@ -2701,7 +2701,7 @@ newvalues = { "$set": { "value":
                                 {
                                     'id': 'thread',
                                     'name': '🧵 Нить',
-                                    'cost': 100,
+                                    'cost': 5,
                                     'type': 'things',
                                     'quantity': None,
                                     'subjects_quantum': 1,
