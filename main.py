@@ -1414,8 +1414,7 @@ def check_animal():
     # Старение в инвентаре пользоватлей
     for user in list(filter(lambda x : len(x.getInventoryType(['animals'])) > 0, USERS_ARR)):
         dead_creatures = []
-        for record_farm in user.getInventoryType(['animals']):
-            creature = record_farm
+        for creature in user.getInventoryType(['animals']):
             if 'wear' in creature:
                 new_wear = creature['wear']['value'] - creature['wear']['one_use']
                 creature['wear']['value'] = new_wear
@@ -1442,7 +1441,6 @@ def check_animal():
             send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n{report}')
             send_message_to_admin(f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
             
-
 def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
     count = counterSkill
     if text:
@@ -1708,8 +1706,11 @@ def select_baraholka(call):
         
         unic_inv = []
         for inv in inventors:
+            wear = 100
+            if 'wear' in inv:
+                wear =  int(inv['wear']['value']*100)
             counter = len(list(filter(lambda x : x['id'] == inv['id'], inventors)))
-            btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}|{stepexit}")
+            btn = InlineKeyboardButton(f"{wear}% {inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}|{stepexit}")
             if counter > 1:
                 btn = InlineKeyboardButton(f"💰{counter} {inv['name']}", callback_data=f"{button['id']}|selectgroup|{step}|{inv['id']}|{stepexit}")
 
@@ -1884,8 +1885,12 @@ def select_farm(call):
         
         unic_inv = []
         for inv in inventors:
+            wear = 100
+            if 'wear' in inv:
+                wear =  int(inv['wear']['value']*100)
+
             counter = len(list(filter(lambda x : x['id'] == inv['id'], inventors)))
-            btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}|{step}")
+            btn = InlineKeyboardButton(f"{wear}% {inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}|{step}")
             if counter > 1:
                 btn = InlineKeyboardButton(f"💰{counter} {inv['name']}", callback_data=f"{button_parent['id']}|selectgroup|{step}|{inv['id']}|{step}")
 
