@@ -1215,15 +1215,16 @@ def check_animal():
                                         'inventory'  : new_creature
                                     }
                                 creature_to_insert.append(to_farm)
-                                time.sleep(sec)
+                                time.sleep(sec/2)
                                 send_messages_big(user.getChat(), text=f'👼 На ферме новое создание:\n▫️ {new_creature["name"]}')
+                                time.sleep(sec/2)
                                 send_message_to_admin(f'👼 Новое создание:\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {new_creature["name"]}')
                                 # wear dialog_text_born
 
                             farm.insert_many(creature_to_insert)
                             new_wear = creature['wear']['value'] - creature['multiply']['postpartum_trauma'] 
                             if new_wear <= 0:
-                                time.sleep(sec)
+                                time.sleep(sec/2)
                                 creature['wear']['value'] = new_wear
                                 newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
                                 result = farm.update_many(
@@ -1257,7 +1258,7 @@ def check_animal():
                 }, newvalues)
 
             if new_wear <= 0:
-                time.sleep(sec)
+                time.sleep(sec/2)
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {creature["name"]}')
                 send_message_to_admin(f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                 # dialog_text_dead
@@ -1285,7 +1286,7 @@ def check_animal():
                 }, newvalues)
 
             if new_wear <= 0:
-                time.sleep(sec)
+                time.sleep(sec/2)
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {creature["name"]}')
                 send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                 # dialog_text_dead
@@ -1314,7 +1315,7 @@ def check_animal():
                 }, newvalues)
 
             if new_wear <= 0:
-                time.sleep(sec)
+                time.sleep(sec/2)
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n▫️ {creature["name"]}')
                 send_message_to_admin(f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                 # dialog_text_dead
@@ -1334,7 +1335,7 @@ def check_animal():
                     user.updateInventoryThing(creature)
                 updateUser(user)                
                 if new_wear <= 0:
-                    time.sleep(sec)
+                    time.sleep(sec/2)
                     send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {creature["name"]}')
                     send_message_to_admin(f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                     # dialog_text_dead
