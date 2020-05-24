@@ -1183,64 +1183,103 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
 def check_animal():
     sec = 1.5
     # Проверка на размножение на ферме
-    creatures = []
-    for creature in farm.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
-        creatures.append(creature)
-    for record_farm in creatures:
-        creature = record_farm['inventory']
-        user = getUserByLogin(record_farm['login'])
+
+    for user in USERS_ARR:
         # if not user.getLogin() == 'Digzzzy': continue
+        creatures = []
+        for creature in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
+            creatures.append(creature)
+        
+        creature_to_insert = []
+        dead_creatures = []
+        for record_farm in creatures:
+            creature = record_farm['inventory']
+            if 'multiply' in creature:
+                if 'puberty' in creature['multiply']:
+                    if creature['multiply']['puberty'] >= creature['wear']['value']:
+                        # Может размножаться
+                        count_need = len(list(filter(lambda x : x['login']==user.getLogin() and x['inventory']['id'] == creature['multiply']['need'], creatures)))
+                        if count_need >= creature['multiply']['count']:
+                            r = random.random()
+                            # logger.info(f'{user.getLogin()}:{creature["name"]}:{r}:{creature["multiply"]["probability"]}')
+                            if r <= creature['multiply']['probability']:
+                                for i in range(0, random.randint(1, creature['multiply']['max_child'])):
+                                    new_creature = next((x for i, x in enumerate(GLOBAL_VARS['inventory']) if x['id']==creature['multiply']['child']), None).copy()
+                                    new_creature.update({'uid':f'{uuid.uuid4()}'})
+                                    to_farm = {
+                                            'date': (datetime.now()).timestamp(),
+                                            'login': user.getLogin(),
+                                            'band' : user.getBand(),
+                                            'goat' : getMyGoatName(user.getLogin()),
+                                            'state': 'NEW',
+                                            'inventory'  : new_creature
+                                        }
+                                    creature_to_insert.append(to_farm)
+                                    # time.sleep(sec/2)
+                                    # send_messages_big(user.getChat(), text=f'👼 На ферме новое создание:\n▫️ {new_creature["name"]}')
+                                    # time.sleep(sec/2)
+                                    # send_message_to_admin(f'👼 Новое создание:\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {new_creature["name"]}')
+                                    # wear dialog_text_born
 
-        logger.info(f'{user.getLogin()}:{creature["name"]}')
+                                new_wear = creature['wear']['value'] - creature['multiply']['postpartum_trauma'] 
+                                if new_wear <= 0:
+                                    creature['wear']['value'] = new_wear
+                                    newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
+                                    dead_creatures.append(newvalues)
+                                    # print(creature['name'])
+                                    # time.sleep(sec/2)
+                                    # send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ При родах\n▫️ {creature["name"]}')
+                                    # time.sleep(sec/2)
+                                    # send_message_to_admin(f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
+                                    # wear dialog_text_dead
+                                    continue
+        if len(creature_to_insert)>0:
+            farm.insert_many(creature_to_insert)
 
-        if 'multiply' in creature:
-            if 'puberty' in creature['multiply']:
-                if creature['multiply']['puberty'] >= creature['wear']['value']:
-                    # Может размножаться
-                    count_need = len(list(filter(lambda x : x['login']==user.getLogin() and x['inventory']['id'] == creature['multiply']['need'], creatures)))
-                    if count_need >= creature['multiply']['count']:
-                        r = random.random()
-                        logger.info(f'{user.getLogin()}:{creature["name"]}:{r}:{creature["multiply"]["probability"]}')
-                        if r <= creature['multiply']['probability']:
-                            logger.info(f'{user.getLogin()}:{creature["name"]}:{r}:{creature["multiply"]["probability"]}')
-                            creature_to_insert = []
-                            for i in range(0, random.randint(1, creature['multiply']['max_child'])):
-                                new_creature = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='ANIMALS')['value']) if x['id']==creature['multiply']['child']), None).copy()
-                                new_creature.update({'uid':f'{uuid.uuid4()}'})
-                                to_farm = {
-                                        'date': (datetime.now()).timestamp(),
-                                        'login': user.getLogin(),
-                                        'band' : user.getBand(),
-                                        'goat' : getMyGoatName(user.getLogin()),
-                                        'state': 'NEW',
-                                        'inventory'  : new_creature
-                                    }
-                                creature_to_insert.append(to_farm)
-                                time.sleep(sec/2)
-                                send_messages_big(user.getChat(), text=f'👼 На ферме новое создание:\n▫️ {new_creature["name"]}')
-                                time.sleep(sec/2)
-                                send_message_to_admin(f'👼 Новое создание:\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {new_creature["name"]}')
-                                # wear dialog_text_born
+        if len(creature_to_insert)>0:
+            cr = {}
+            for creature in creature_to_insert:
+                if creature['inventory']['name'] in cr:
+                    cr[f"{creature['inventory']['name']}"] = cr[f"{creature['inventory']['name']}"] + 1
+                else:
+                    cr.update({ f"{creature['inventory']['name']}": 1})
+            
+            report = ''
+            for key in cr.keys():
+                report = report + f'▫️ {key} {cr[key]}шт.'
+            
+            time.sleep(sec)
+            send_messages_big(user.getChat(), text=f'👼 На ферме новые создания:\n{report}')
+            send_message_to_admin(f'👼 На ферме новые создания:\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
+        
 
-                            farm.insert_many(creature_to_insert)
-                            new_wear = creature['wear']['value'] - creature['multiply']['postpartum_trauma'] 
-                            if new_wear <= 0:
-                                
-                                creature['wear']['value'] = new_wear
-                                newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
-                                result = farm.update_many(
-                                    {
-                                        'login': user.getLogin(), 
-                                        'state': {'$ne': 'CANCEL'}, 
-                                        'inventory.uid': creature['uid']
-                                    }, newvalues)
-                                time.sleep(sec/2)
-                                send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ При родах\n▫️ {creature["name"]}')
-                                time.sleep(sec/2)
-                                # send_message_to_admin(f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
-                                # wear dialog_text_dead
-                                continue
-    # if False: return
+
+        if len(dead_creatures)>0:
+            cr = {}
+            for newvalues in dead_creatures:
+                result = farm.update_one(
+                {
+                    'state': {'$ne': 'CANCEL'}, 
+                    'inventory.uid': newvalues['$set']['inventory']['uid']
+                }, newvalues)  
+
+                creature = newvalues['$set']
+                if creature['inventory']['name'] in cr:
+                    cr[f"{creature['inventory']['name']}"] = cr[f"{creature['inventory']['name']}"] + 1
+                else:
+                    cr.update({ f"{creature['inventory']['name']}": 1})
+                    
+            report = ''
+            for key in cr.keys():
+                report = report + f'▫️ {key} {cr[key]}шт.'
+
+            time.sleep(sec)
+            send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ При родах\n{report}')
+            send_message_to_admin(f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
+
+            # wear dialog_text_born
+
+    if True: return
 
     # Старение на ферме
     for record_farm in farm.find({'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
@@ -1262,10 +1301,9 @@ def check_animal():
                 }, newvalues)
 
             if new_wear <= 0:
-                time.sleep(sec/2)
+                time.sleep(sec)
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {creature["name"]}')
-                time.sleep(sec/2)
-                # send_message_to_admin(f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
+                send_message_to_admin(f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                 # dialog_text_dead
             else:
                 pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ На ферме\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
@@ -1291,10 +1329,9 @@ def check_animal():
                 }, newvalues)
 
             if new_wear <= 0:
-                time.sleep(sec/2)
+                time.sleep(sec)
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {creature["name"]}')
-                time.sleep(sec/2)
-                # send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
+                send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                 # dialog_text_dead
             else:
                 pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ На верстаке\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
@@ -1321,10 +1358,9 @@ def check_animal():
                 }, newvalues)
 
             if new_wear <= 0:
-                time.sleep(sec/2)
+                time.sleep(sec)
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n▫️ {creature["name"]}')
-                time.sleep(sec/2)
-                # send_message_to_admin(f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
+                send_message_to_admin(f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                 # dialog_text_dead
             else:
                 pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ В магазине\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
@@ -1342,10 +1378,9 @@ def check_animal():
                     user.updateInventoryThing(creature)
                 updateUser(user)                
                 if new_wear <= 0:
-                    time.sleep(sec/2)
+                    time.sleep(sec)
                     send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {creature["name"]}')
-                    time.sleep(sec/2)
-                    # send_message_to_admin(f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
+                    send_message_to_admin(f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                     # dialog_text_dead
                 else:
                     pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ В инвентаре\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
@@ -1401,7 +1436,7 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                 if count >= elem['max']:
                     count = elem['max']
                     if elem['flags']['congratulation_max']:
-                        send_messages_big(chat, text=f'Ты уже достиг всего в этом умении\n▫️ {elem["name"]} {100}%')
+                        send_messages_big(chat, text=f'Ты уже достиг всего в этом умен��и\n▫️ {elem["name"]} {100}%')
                         return
 
                 # проверяем, а не поздравляли ли мы его за достижение минимума?
@@ -7267,7 +7302,10 @@ def rade():
     # Ферма
     if now_date.hour in (9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20) and now_date.minute == 30 and now_date.second < 15:
         updateUser(None)
-        check_animal()
+        try:
+            check_animal()
+        except:
+            pass
 
             
     # Присвоение званий
