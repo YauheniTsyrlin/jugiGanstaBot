@@ -4560,7 +4560,7 @@ def main_message(message):
                 if name == '':
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
             return
-        elif ('❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text) or ('Экзекутос предатель, Рагнароса разбудили слишком рано, насекомое победило, правосудие свершилось. Хорошо, что никто не руинил и ты успел победить до того, как Рагна упал сам.' in message.text):
+        elif ('❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text) or ('Экзекутос предатель, Рагнароса разбудили слишком рано, насекомое победило, правосудие свершилось. Хорошо, что никто не руинил и ты успел победить до того, как Рагна упал сам.' in message.text) or ('Как оказалось, даже в канализации ты умудрился найти что-то полезное.' in message.text):
             if hasAccessToWariors(message.from_user.username):
                 if not time_farm_over:
                     # сохраняем км, если он больше максимального
@@ -4571,13 +4571,13 @@ def main_message(message):
                             updateUser(userIAm)
                 filter_message = {"forward_date": message.forward_date, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message) 
-                if new_Message:
+                if True or new_Message:
                     for skill in getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']:
                         if 'subjects_of_study' in skill:
                             check_skills(message.text, message.chat.id, time_farm_over, userIAm, skill.copy())
                     
                     for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
-                        check_things(message.text, message.chat.id, time_farm_over, userIAm, inv.copy())
+                        check_things(message.text, message.chat.id, False, userIAm, inv.copy())
                 else:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
 
