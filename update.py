@@ -2609,7 +2609,23 @@ newvalues = { "$set": { "value":
                             'name': '📦 Вещи',
                             'value':
                             [
-                                
+                                {
+                                    'id': 'wool',
+                                    'name': '🧶 Шерсть',
+                                    'cost': 10,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        
+                                    ]
+                                },
                                 {
                                     'id': 'auto_battery',
                                     'name': '🧮 Аккумулятор',

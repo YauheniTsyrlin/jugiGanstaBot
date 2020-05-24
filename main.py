@@ -1188,7 +1188,9 @@ def check_animal():
     for record_farm in creatures:
         creature = record_farm['inventory']
         user = getUserByLogin(record_farm['login'])
-            
+        
+        logger.info(f'{user.getLogin()}:{creature["name"]}')
+
         if 'multiply' in creature:
             if 'puberty' in creature['multiply']:
                 if creature['multiply']['puberty'] >= creature['wear']['value']:
@@ -1196,7 +1198,9 @@ def check_animal():
                     count_need = len(list(filter(lambda x : x['login']==user.getLogin() and x['inventory']['id'] == creature['multiply']['need'], creatures)))
                     if count_need >= creature['multiply']['count']:
                         r = random.random()
+                        logger.info(f'{user.getLogin()}:{creature["name"]}:{r}:{creature["multiply"]["probability"]}')
                         if r <= creature['multiply']['probability']:
+                            logger.info(f'{user.getLogin()}:{creature["name"]}:YES')
                             creature_to_insert = []
                             for i in range(0, random.randint(1, creature['multiply']['max_child'])):
                                 new_creature = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='ANIMALS')['value']) if x['id']==creature['multiply']['child']), None).copy()
