@@ -1236,7 +1236,7 @@ def check_animal():
                                 time.sleep(sec/2)
                                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ При родах\n▫️ {creature["name"]}')
                                 time.sleep(sec/2)
-                                send_message_to_admin(f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
+                                # send_message_to_admin(f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                                 # wear dialog_text_dead
                                 continue
 
@@ -1263,7 +1263,7 @@ def check_animal():
                 time.sleep(sec/2)
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {creature["name"]}')
                 time.sleep(sec/2)
-                send_message_to_admin(f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
+                # send_message_to_admin(f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                 # dialog_text_dead
             else:
                 pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ На ферме\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
@@ -1292,7 +1292,7 @@ def check_animal():
                 time.sleep(sec/2)
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {creature["name"]}')
                 time.sleep(sec/2)
-                send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
+                # send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                 # dialog_text_dead
             else:
                 pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ На верстаке\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
@@ -1322,7 +1322,7 @@ def check_animal():
                 time.sleep(sec/2)
                 send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n▫️ {creature["name"]}')
                 time.sleep(sec/2)
-                send_message_to_admin(f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
+                # send_message_to_admin(f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                 # dialog_text_dead
             else:
                 pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ В магазине\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
@@ -1343,7 +1343,7 @@ def check_animal():
                     time.sleep(sec/2)
                     send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {creature["name"]}')
                     time.sleep(sec/2)
-                    send_message_to_admin(f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
+                    # send_message_to_admin(f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
                     # dialog_text_dead
                 else:
                     pass #send_message_to_admin(f'☠️ Произошло старение:\n▫️ В инвентаре\n▫️ {user.getNameAndGerb()}\n▫️ {creature["name"]}')
