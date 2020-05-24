@@ -1672,6 +1672,43 @@ newvalues = { "$set": { "value":
                             'value':
                             [
                                 {
+                                    'id': 'absent',
+                                    'name': '🧪 Абсент',
+                                    'cost': 10,
+                                    'type': 'food',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Абсент'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        # {
+                                        #     'id': 'milk',
+                                        #     'counter': 1
+                                        # },
+                                        # {
+                                        #     'id': 'coffee_grains',
+                                        #     'counter': 1
+                                        # }
+                                    ]
+                                },
+                                {
+                                    'id': 'ephedrine',
+                                    'name': '💭 Плацебо',
+                                    'cost': 10,
+                                    'type': 'food',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'subjects_to_find':
+                                    [
+                                        'Эфедрин'
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
                                     'id': 'coffee',
                                     'name': '☕ Горячий кофе',
                                     'cost': 10,
@@ -2530,6 +2567,124 @@ newvalues = { "$set": { "value":
                             'value':
                             [
                                 {
+                                    'id': 'wiring_coil',
+                                    'name': '➰ Моток проводки',
+                                    'cost': 150,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1, # Требуется
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'subjects_count': 0, # Количетсво добавляемых вещей
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'wires',
+                                            'counter': 10
+                                        },
+                                        {
+                                            'id': 'blue_tape',
+                                            'counter': 2
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'nipple_clamp',
+                                    'name': '🗜 Зажим на соски',
+                                    'cost': 50,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1, # Требуется
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'subjects_count': 0, # Количетсво добавляемых вещей
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'cast_iron',
+                                            'counter': 3
+                                        },
+                                        {
+                                            'id': 'bolt_ww',
+                                            'counter': 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'butt_plug',
+                                    'name': '🕹️ Анальная пробка',
+                                    'cost': 175,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1, # Требуется
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'subjects_count': 0, # Количетсво добавляемых вещей
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'vibrator',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'bios',
+                                            'counter': 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'vibrator',
+                                    'name': '🖲 Вибратор',
+                                    'cost': 125,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1, # Требуется
+                                    'subjects_to_find':
+                                    [
+                                        
+                                    ],
+                                    'subjects_count': 0, # Количетсво добавляемых вещей
+                                    'dialog_old_text': 'default_old_thing',
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'porn_hub',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'wires',
+                                            'counter': 2
+                                        },
+                                        {
+                                            'id': 'blue_tape',
+                                            'counter': 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    'id': 'porn_hub',
+                                    'name': '🎚 Посещение Porn Хаб',
+                                    'cost': 25,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1, # Требуется
+                                    'subjects_to_find':
+                                    [
+                                        'Потенциометр'
+                                    ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
                                     'id': 'bios',
                                     'name': '📍 Чупик',
                                     'cost': 50,
@@ -2632,32 +2787,6 @@ newvalues = { "$set": { "value":
                                     'subjects_to_find':
                                     [
                                         'Минизаряд'
-                                    ],
-                                    'dialog_old_text': 'default_old_thing'
-                                },
-                                {
-                                    'id': 'absent',
-                                    'name': '🧪 Абсент',
-                                    'cost': 10,
-                                    'type': 'things',
-                                    'quantity': None,
-                                    'subjects_quantum': 1,
-                                    'subjects_to_find':
-                                    [
-                                        'Абсент'
-                                    ],
-                                    'dialog_old_text': 'default_old_thing'
-                                },
-                                {
-                                    'id': 'ephedrine',
-                                    'name': '💭 Плацебо',
-                                    'cost': 10,
-                                    'type': 'things',
-                                    'quantity': None,
-                                    'subjects_quantum': 1,
-                                    'subjects_to_find':
-                                    [
-                                        'Эфедрин'
                                     ],
                                     'dialog_old_text': 'default_old_thing'
                                 },
@@ -2961,20 +3090,6 @@ newvalues = { "$set": { "value":
                                     'id': 'sticks',
                                     'name': '🥢 Близкая дружба',
                                     'cost': 1,
-                                    'type': 'things',
-                                    'quantity': 10
-                                },
-                                {
-                                    'id': 'nipple_clamp',
-                                    'name': '🗜 Зажим на соски',
-                                    'cost': 10,
-                                    'type': 'things',
-                                    'quantity': 10
-                                },
-                                {
-                                    'id': 'butt_plug',
-                                    'name': '🕹️ Анальная пробка',
-                                    'cost': 10,
                                     'type': 'things',
                                     'quantity': 10
                                 },
