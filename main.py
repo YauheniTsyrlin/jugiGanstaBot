@@ -1491,7 +1491,7 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                 if count >= elem['max']:
                     count = elem['max']
                     if elem['flags']['congratulation_max']:
-                        send_messages_big(chat, text=f'Ты уже достиг всего в этом умен��и\n▫️ {elem["name"]} {100}%')
+                        send_messages_big(chat, text=f'Ты уже достиг всего в этом умении\n▫️ {elem["name"]} {100}%')
                         return
 
                 # проверяем, а не поздравляли ли мы его за достижение минимума?
