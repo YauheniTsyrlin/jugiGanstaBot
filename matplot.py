@@ -100,7 +100,8 @@ def getPlotСourse(cursor, username: str):
         del df['buyer']
         del df['inventory_id']
         del df['inventory']
-
+        del df['inventory_name']
+    print(df)
     columns_name = {
             'cost'     :'Цена'
             }
@@ -116,18 +117,18 @@ def getPlotСourse(cursor, username: str):
 
     y_MAX = []
     y_MIN = []
-    columns = df.columns[1:2]  
+    columns = df.columns[1:]  
     for i, column in enumerate(columns):    
         plt.plot(df.date.values, df[column].values, lw=1.5, color=columns_color[column]) 
-        # plt.text(df.shape[0]+1, df[column].values[-1], f'{column} {df[column].max()}')
         plt.scatter(df.date.values, df[column].values, edgecolors=columns_color[column], c=columns_color[column], s=40)
         y_MAX.append(int(df[column].max().max()))
         y_MIN.append(int(df[column].min().min()))
         ax.plot(df.date.values, df[column].values, label = f'{df[column].max()} {columns_name[column]}', color=columns_color[column])
 
     y_interval = 50
-
-
+    
+    # [datetime.fromtimestamp(x).strftime("%d/%m") for x in df.date]
+    
     # Draw Tick lines  
     # for y in range(0, max(y_LL), y_interval):    
     #     plt.hlines(y, xmin=0, xmax=10, colors='black', alpha=0.3, linestyles="--", lw=0.5)
@@ -141,18 +142,27 @@ def getPlotСourse(cursor, username: str):
     plt.gca().spines["bottom"].set_alpha(.3)
     plt.gca().spines["right"].set_alpha(.3)
     plt.gca().spines["left"].set_alpha(.3)
-    plt.title(f'Сделки', fontsize=22)
+    plt.title(f'Курс', fontsize=22)
 
+    N = 14
     plt.yticks(range( 0, max(y_MAX) + y_interval, y_interval), [str(y) for y in range( 0, max(y_MAX) + y_interval  , y_interval)], fontsize=12)    
-    plt.xticks(range(0, 20), df.date.values, horizontalalignment='left', fontsize=12)    
+    plt.xticks(range(0, N), df.date.values, horizontalalignment='left', fontsize=12)    
     plt.ylim( int( min(y_MIN) - y_interval ), int( max(y_MAX) + y_interval) )    
-    plt.xlim(0, 20) 
+    plt.xlim(0, N) 
     ax.legend()
 
     # Shrink current axis's height by 10% on the bottom
     box = ax.get_position()
     ax.set_position([box.x0, box.y0 + box.height * 0.1,
                     box.width, box.height * 0.9])
+
+    # ax.set_xticklabels(df.date.values,
+    #                fontsize = 15,    #  Размер шрифта
+    #                color = 'b',    #  Цвет текста
+    #                rotation = 90,    #  Поворот текста
+    #                verticalalignment =  'center')    #  Вертикальное выравнивание
+
+
 
     # Put a legend below current axis
     ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),

@@ -2214,7 +2214,7 @@ def select_shelf(call):
         header_buttons = []
         counter = deal.count_documents({'inventory_id': inventory['id']})
         if counter > 0:
-            graf_button = InlineKeyboardButton(f"Биржа 📉", callback_data=f"{button_parent['id']}|graf|{counter}|{inventory['id']}")
+            graf_button = InlineKeyboardButton(f"Курс 📉", callback_data=f"{button_parent['id']}|graf|{counter}|{inventory['id']}")
             header_buttons = [graf_button]
 
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
@@ -2466,17 +2466,13 @@ def select_shelf(call):
     if button_id == 'graf':
         inv_id = call.data.split('|')[3]
         counter = int(call.data.split('|')[2])
-        # counter = deal.count_documents({'inventory_id': inv_id})
-        # if counter == 0:
-        #     bot.answer_callback_query(call.id, 'Нет данных')
-        #     return 
 
         N = 0
-        if counter > 100:
-            N = 100
+        if counter > 14:
+            N = 14
         else:
             counter = 0
-        print(inv_id)
+
         cursor = deal.find({'inventory_id': inv_id}).skip(counter - N)
         matplot.getPlotСourse(cursor, call.from_user.username)
         img = open(config.PATH_IMAGE + f'graf_{call.from_user.username}.png', 'rb')
