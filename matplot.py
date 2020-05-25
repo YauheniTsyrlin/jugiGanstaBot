@@ -93,7 +93,6 @@ def getPlotСourse(cursor, username: str):
     df =  pd.DataFrame(list(cursor))
     df['date'] = [datetime.fromtimestamp(x).strftime("%d/%m") for x in df.date]
     
-    print(df['date'])
     # # Delete the _id ...
     if True:
         del df['_id']
@@ -103,29 +102,18 @@ def getPlotСourse(cursor, username: str):
         del df['inventory']
 
     columns_name = {
-            'cost'     :'Цена',
-            'inventory_name'  :'Имя',
-            'health'    :'Здоровье',
-            'agility'   :'Ловкость',
-            'charisma'  :'Харизма'
+            'cost'     :'Цена'
             }
 
     columns_color = {
-            'cost'     :'gold',
-            'inventory_name'  :'tab:green',
-            'health'    :'tab:red',
-            'agility'   :'darkgrey',
-            'charisma'  :'mediumblue'
+            'cost'     :'tab:green'
             }
-
-
 
     # Define the upper limit, lower limit, interval of Y axis and colors
 
     # Draw Plot and Annotate
     fig, ax = plt.subplots(1, 1, figsize=(10, 10), dpi= 80)  
 
-    print(df)
     y_MAX = []
     y_MIN = []
     columns = df.columns[1:2]  
@@ -137,7 +125,7 @@ def getPlotСourse(cursor, username: str):
         y_MIN.append(int(df[column].min().min()))
         ax.plot(df.date.values, df[column].values, label = f'{df[column].max()} {columns_name[column]}', color=columns_color[column])
 
-    y_interval = 100
+    y_interval = 50
 
 
     # Draw Tick lines  
@@ -145,15 +133,15 @@ def getPlotСourse(cursor, username: str):
     #     plt.hlines(y, xmin=0, xmax=10, colors='black', alpha=0.3, linestyles="--", lw=0.5)
 
 
-#     # Decorations    
-#     plt.tick_params(axis="both", which="both", bottom=False, top=False, labelbottom=True, left=False, right=False, labelleft=True)        
+    # Decorations    
+    plt.tick_params(axis="both", which="both", bottom=False, top=False, labelbottom=True, left=False, right=False, labelleft=True)        
 
-#     # Lighten borders
-#     plt.gca().spines["top"].set_alpha(.3)
-#     plt.gca().spines["bottom"].set_alpha(.3)
-#     plt.gca().spines["right"].set_alpha(.3)
-#     plt.gca().spines["left"].set_alpha(.3)
-#     plt.title(f'Прогресс Пип-боев {username}', fontsize=22)
+    # Lighten borders
+    plt.gca().spines["top"].set_alpha(.3)
+    plt.gca().spines["bottom"].set_alpha(.3)
+    plt.gca().spines["right"].set_alpha(.3)
+    plt.gca().spines["left"].set_alpha(.3)
+    plt.title(f'Сделки', fontsize=22)
 
     plt.yticks(range( 0, max(y_MAX) + y_interval, y_interval), [str(y) for y in range( 0, max(y_MAX) + y_interval  , y_interval)], fontsize=12)    
     plt.xticks(range(0, 20), df.date.values, horizontalalignment='left', fontsize=12)    
@@ -161,13 +149,13 @@ def getPlotСourse(cursor, username: str):
     plt.xlim(0, 20) 
     ax.legend()
 
-#     # Shrink current axis's height by 10% on the bottom
-#     box = ax.get_position()
-#     ax.set_position([box.x0, box.y0 + box.height * 0.1,
-#                     box.width, box.height * 0.9])
+    # Shrink current axis's height by 10% on the bottom
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0 + box.height * 0.1,
+                    box.width, box.height * 0.9])
 
-#     # Put a legend below current axis
-#     ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
-#             fancybox=True, shadow=True, ncol=5, prop={'size': 12})
-#     ax.grid()
+    # Put a legend below current axis
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
+            fancybox=True, shadow=True, ncol=5, prop={'size': 12})
+    ax.grid()
     fig.savefig(config.PATH_IMAGE + f'graf_{username}.png', dpi=fig.dpi)
