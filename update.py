@@ -1378,6 +1378,7 @@ newvalues = { "$set": { "value":
                                         'Потенциометр',
                                         'Абсент'
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_things',
                                     'flags': {
                                         'congratulation_min': False,
@@ -1441,6 +1442,7 @@ newvalues = { "$set": { "value":
                                     [
                                         'Кварц 🔹', 'Минизаряд'
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'old_watchmaker',
                                     'flags': {
                                         'congratulation_min': False,
@@ -1476,6 +1478,7 @@ newvalues = { "$set": { "value":
                                     [
                                         # Учимся на количестве обновленных бандитов из wwtop
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'old_report_wwtop',
                                     'flags': {
                                         'congratulation_min': False,
@@ -1510,6 +1513,7 @@ newvalues = { "$set": { "value":
                                     [
                                         'FIGHT!'
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': None,
                                     'flags': {
                                         'congratulation_min': False,
@@ -1544,6 +1548,7 @@ newvalues = { "$set": { "value":
                                     [
                                         'Барахло','Малыш','Дефолт','Шерлокдрон','Robot Rock','Рад-дрон','Протекдрон','AWESOM-O'
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'old_robotics',
                                     'flags': {
                                         'congratulation_min': False,
@@ -1646,6 +1651,7 @@ newvalues = { "$set": { "value":
                                     [
                                         '🔥Сердце пламени'
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': None,
                                     'flags': {
                                         'congratulation_min': False,
@@ -1682,6 +1688,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -1706,6 +1713,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -1730,6 +1738,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing'
                                 },
                                 {
@@ -1743,6 +1752,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing'
                                 },
                                 {
@@ -1756,6 +1766,7 @@ newvalues = { "$set": { "value":
                                     [
                                         'Эфедрин'
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing'
                                 },
                                 {
@@ -1815,6 +1826,7 @@ newvalues = { "$set": { "value":
                                     [
                                         'Подорожник'
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing'
                                 },
                                 {
@@ -1828,6 +1840,7 @@ newvalues = { "$set": { "value":
                                     [
                                         'Молоко брамина'
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'old_milk'
                                 },
                                 {
@@ -1840,6 +1853,7 @@ newvalues = { "$set": { "value":
                                     [
                                         'Абрик*с'
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'old_grains'
                                 },
                                 {
@@ -1866,6 +1880,7 @@ newvalues = { "$set": { "value":
                                     [
                                         'Сырое мясо'
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing'
                                 },
                                 {
@@ -2621,6 +2636,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2645,6 +2661,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2669,6 +2686,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2689,6 +2707,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2709,6 +2728,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2737,6 +2757,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2765,6 +2786,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2789,6 +2811,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2806,6 +2829,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2830,6 +2854,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2854,6 +2879,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2881,6 +2907,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2905,6 +2932,7 @@ newvalues = { "$set": { "value":
                                     [
                                         'Абсент'
                                     ],
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2929,7 +2957,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
-                                    'subjects_count': 0, # Количетсво добавляемых вещей
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2954,7 +2982,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
-                                    'subjects_count': 0, # Количетсво добавляемых вещей
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -2979,7 +3007,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
-                                    'subjects_count': 0, # Количетсво добавляемых вещей
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
@@ -3004,7 +3032,7 @@ newvalues = { "$set": { "value":
                                     [
                                         
                                     ],
-                                    'subjects_count': 0, # Количетсво добавляемых вещей
+                                    'subjects_count': 1, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [

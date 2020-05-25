@@ -1185,13 +1185,16 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
     minimum = 1
     if 'subjects_quantum' in elem:
         minimum = elem['subjects_quantum']
-
+    
     if count >= minimum:
         if not time_over:
             subjects_count = 1
             if 'subjects_count' in elem:
                 subjects_count = elem['subjects_count']
 
+            if subjects_count == 1 and minimum == 1:
+                subjects_count = subjects_count * count
+            
             for i in range(1, subjects_count+1):
                 addInventory(userIAm, elem.copy())
 
