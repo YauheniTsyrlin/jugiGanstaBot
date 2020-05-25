@@ -1803,7 +1803,6 @@ def select_baraholka(call):
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button['id']}|exit|{step}")
         forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button['id']}|forward|{step+1}")
         announcement_button = InlineKeyboardButton(f"Подать объявление 📜", callback_data=f"{button['id']}|announcement|{step}")
-        graf_button = InlineKeyboardButton(f"Биржа 📉", callback_data=f"{button['id']}|graf|{step}")
         header_buttons = [announcement_button]
         
 
@@ -2117,7 +2116,6 @@ def select_shelf(call):
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|exit|{step}")
         forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|forward|{step+1}")
         announcement_button = InlineKeyboardButton(f"Подать объявление 📜", callback_data=f"{button_parent['id']}|announcement|{step}")
-        graf_button = InlineKeyboardButton(f"Биржа 📉", callback_data=f"{button_parent['id']}|graf|{step}")
         header_buttons = [announcement_button]
 
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, header_buttons=header_buttons, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
@@ -2213,13 +2211,16 @@ def select_shelf(call):
             add = InlineKeyboardButton(f"+5% 🔺", callback_data=f"{button_parent['id']}|add|{stepinventory}|{inventory['uid']}|{cost+1 if cost*0.05 <= 1 else int(cost+cost*0.05)}")
             buttons.append(add)
 
+        graf_button = InlineKeyboardButton(f"Биржа 📉", callback_data=f"{button_parent['id']}|graf|{stepinventory}|inventory['id']")
+        header_buttons = [announcement_button]
+
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
         step = 0
         back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|selectback|{step-1}") 
         forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|selectforward|{step+1}")
 
         # TODO limit=16! Нужно сделать обработку вперед / назад
-        for row in build_menu(buttons=buttons, n_cols=3, limit=16, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+        for row in build_menu(buttons=buttons, n_cols=3, limit=16, step=step, header_buttons=header_buttons, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
         if button_id == 'order':
@@ -2462,13 +2463,14 @@ def select_shelf(call):
     if button_id == 'graf':
         bot.answer_callback_query(call.id, 'Биржа') 
         counter = deal.count_documents({})
+        inv_id = call.data.split('|')[3]
 
         N = 0
         if counter > 100:
             N = 100
         else:
             counter = 0
-        cursor = deal.find().skip(counter - N)
+        cursor = deal.find({'inventory_id': inv_id}).skip(counter - N)
         matplot.getPlotСourse(cursor, call.from_user.username)
         img = open(config.PATH_IMAGE + f'graf_{call.from_user.username}.png', 'rb')
         bot.send_photo(call.message.chat.id, img)
