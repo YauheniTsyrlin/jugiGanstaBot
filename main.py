@@ -6348,7 +6348,7 @@ def callback_query(call):
        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
        return
  
-    hashstr = call.data.split('|')[2]
+    hashstr = call.data.split('|')[1]
     bossinbd = getBossByHash(hashstr)
 
     dresult = boss.aggregate([ 
