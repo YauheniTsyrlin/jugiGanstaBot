@@ -3106,7 +3106,7 @@ newvalues = { "$set": { "value":
                                     'dialog_old_text': 'default_old_thing'
                                 },
                                 {
-                                    'id': 'fire_сlay',
+                                    'id': 'fire_Brick',
                                     'name': '🟧 Огнеупорный Кирпич',
                                     'cost': 400,
                                     'type': 'things',
