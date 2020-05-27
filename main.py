@@ -4562,24 +4562,25 @@ def main_message(message):
                             boss.insert_one(row)
                             #logger.info(f'insert_one {row}')
 
-                    dresult = boss.aggregate([ 
-                        {   "$group": {
-                            "_id": { "boss_name":"$boss_name" }, 
-                            "count": {
-                                "$sum": 1}}},
+                    # dresult = boss.aggregate([ 
+                    #     {   "$group": {
+                    #         "_id": { "boss_name":"$boss_name" }, 
+                    #         "count": {
+                    #             "$sum": 1}}},
                             
-                        {   "$sort" : { "count" : -1 } }
-                        ])
+                    #     {   "$sort" : { "count" : -1 } }
+                    #     ])
                     
+                    hashstr = getMobHash(name, 'boss')
                     buttons = []
-                    for d in sorted(dresult, key = lambda i: tools.deEmojify(i["_id"]["boss_name"]), reverse=False):
-                        boss_name = d["_id"]["boss_name"] 
-                        #if boss_name == name: continue
-                        hashstr = getMobHash(boss_name, 'boss')
-                        boss_name_small = boss_name
-                        for n_boss in GLOBAL_VARS['bosses']:
-                            boss_name_small = boss_name_small.replace(n_boss, '') 
-                        buttons.append(InlineKeyboardButton(boss_name_small, callback_data=f"boss_info|{hashstr}"))
+                    # for d in sorted(dresult, key = lambda i: tools.deEmojify(i["_id"]["boss_name"]), reverse=False):
+                    #     boss_name = d["_id"]["boss_name"] 
+                    #     #if boss_name == name: continue
+                    #     hashstr = getMobHash(boss_name, 'boss')
+                    #     boss_name_small = boss_name
+                    #     for n_boss in GLOBAL_VARS['bosses']:
+                    #         boss_name_small = boss_name_small.replace(n_boss, '') 
+                    buttons.append(InlineKeyboardButton('⚜️ Все боссы', callback_data=f"boss_info|hashstr"))
 
                     markupinline = InlineKeyboardMarkup(row_width=3)
                     for row in build_menu(buttons=buttons, n_cols=3):
@@ -6347,7 +6348,7 @@ def callback_query(call):
        bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
        return
  
-    hashstr = call.data.split('|')[1]
+    hashstr = call.data.split('|')[2]
     bossinbd = getBossByHash(hashstr)
 
     dresult = boss.aggregate([ 
