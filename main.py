@@ -6350,6 +6350,11 @@ def callback_query(call):
        return
  
     hashstr = call.data.split('|')[1]
+
+    if hashstr == 'exit':
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='⚜️ Босс', parse_mode='HTML', reply_markup=markupinline)
+        return
+
     bossinbd = getBossByHash(hashstr)
 
     dresult = boss.aggregate([ 
@@ -6372,8 +6377,10 @@ def callback_query(call):
             boss_name_small = boss_name_small.replace(n_boss, '') 
         buttons.append(InlineKeyboardButton(boss_name_small, callback_data=f"boss_info|{hashstr}"))
 
+    exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"boss_info|exit")
+
     markupinline = InlineKeyboardMarkup(row_width=3)
-    for row in build_menu(buttons=buttons, n_cols=3):
+    for row in build_menu(buttons=buttons, n_cols=3, exit_button=exit_button):
         markupinline.row(*row)    
 
     text = getBossReport(bossinbd['boss_name'])
