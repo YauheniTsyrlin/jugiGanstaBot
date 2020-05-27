@@ -6304,32 +6304,32 @@ def callback_query(call):
 
     textPing = f'{hwois}\n@{login}, родной!\nТы в опасности!'
     
-    if darkzone:
-        buttons = []
-        for s in call.message.text.split('\n'):
-            if s.strip().startswith('┌'):
-                
-                tmp = s.strip().replace('┌','').replace('👶','').replace('👦','').replace('👨','').replace('👨‍🦳','').replace('👴','')
-                fraction = getWariorFraction(tmp)
-                name = tmp.replace(getFractionSmall(fraction), '').strip()
-                userW = getUserByName(name, fraction)
-                if userW and (not userW.getLogin() == user.getLogin()):
-                    buttons.append(InlineKeyboardButton(f'@{userW.getLogin()}', callback_data=f"ping_user|{userW.getLogin()}|{count+1}"))
 
-        markupinline = InlineKeyboardMarkup(row_width=2)
-        for row in build_menu(buttons=buttons, n_cols=2):
-            markupinline.row(*row)
+    buttons = []
+    for s in call.message.text.split('\n'):
+        if s.strip().startswith('┌'):
+            
+            tmp = s.strip().replace('┌','').replace('👶','').replace('👦','').replace('👨','').replace('👨‍🦳','').replace('👴','')
+            fraction = getWariorFraction(tmp)
+            name = tmp.replace(getFractionSmall(fraction), '').strip()
+            userW = getUserByName(name, fraction)
+            if userW and (not userW.getLogin() == user.getLogin()):
+                buttons.append(InlineKeyboardButton(f'@{userW.getLogin()}', callback_data=f"ping_user|{userW.getLogin()}|{count+1}"))
 
-        
-        if count+1 < 6: 
-            text = call.message.text.split('\n▫️ Пинганули')[0]+f'\n▫️ Пинганули {count+1}' 
-            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
-            send_messages_big(call.message.chat.id, text=textPing)
-            bot.answer_callback_query(call.id, f"{login} предупрежден!")
-        else:
-            text = call.message.text.split('\n▫️ Пинганули')[0]+f'\n▫️ Пинганули {count}' 
-            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=None)
-            bot.answer_callback_query(call.id, f"Хватит пинговать!")
+    markupinline = InlineKeyboardMarkup(row_width=2)
+    for row in build_menu(buttons=buttons, n_cols=2):
+        markupinline.row(*row)
+
+    
+    if count+1 < 6: 
+        text = call.message.text.split('\n▫️ Пинганули')[0]+f'\n▫️ Пинганули {count+1}' 
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
+        send_messages_big(call.message.chat.id, text=textPing)
+        bot.answer_callback_query(call.id, f"{login} предупрежден!")
+    else:
+        text = call.message.text.split('\n▫️ Пинганули')[0]+f'\n▫️ Пинганули {count}' 
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=None)
+        bot.answer_callback_query(call.id, f"Хватит пинговать!")
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("boss_info"))
 def callback_query(call):
