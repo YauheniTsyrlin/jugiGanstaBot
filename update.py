@@ -5198,7 +5198,7 @@ if 1==2: # Обновляем атрибуты навыков
         updateUser(user)
         print(f'Update {user.getLogin()}')
 
-if 1==1:
+if 1==2:
     # Запускать один раз! Иначе затрет
     old_login = 'Brodskey'
     new_login = 'OverSid'

@@ -1543,12 +1543,13 @@ def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
                 # проверяем, а не поздравляли ли мы его за достижение максимума?
                 if count >= elem['max'] and not elem['flags']['congratulation_max']:
                     elem['flags'].update({'congratulation_max': True})
-                    send_messages_big(chat, text=f'Поздравляю 🥳! Ты стал профессионалом 🤩 в умение {elem["name"]}!')
+                    
 
                     # Корочка
                     present = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id=elem['flags']['present_max']['type'])['value']) if x['id']==elem['flags']['present_max']['id']), None)
                     if present and not userIAm.isInventoryThing(present):
                         addInventory(userIAm, present)
+                        send_messages_big(chat, text=f'Поздравляю 🥳! Ты стал профессионалом 🤩 в умение {elem["name"]}!')
                         send_messages_big(chat, text=userIAm.getNameAndGerb() + '!\n' + getResponseDialogFlow(userIAm.getLogin(), 'new_accessory_add').fulfillment_text + f'\n\n▫️ {present["name"]}') 
                     # Должность
                     position = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value']) if x['id']==elem['flags']['position_max']), None)
