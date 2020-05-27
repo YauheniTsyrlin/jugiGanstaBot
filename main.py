@@ -6311,7 +6311,11 @@ def callback_query(call):
             
             tmp = s.strip().replace('┌','').replace('👶','').replace('👦','').replace('👨','').replace('👨‍🦳','').replace('👴','')
             fraction = getWariorFraction(tmp)
-            name = tmp.replace(getFractionSmall(fraction), '').strip()
+            if fraction:
+                name = tmp.replace(getFractionSmall(fraction), '').strip()
+            else:
+                name = tmp.strip()
+
             userW = getUserByName(name, fraction)
             if userW and (not userW.getLogin() == user.getLogin()):
                 buttons.append(InlineKeyboardButton(f'@{userW.getLogin()}', callback_data=f"ping_user|{userW.getLogin()}|{count+1}"))
