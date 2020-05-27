@@ -3107,6 +3107,22 @@ newvalues = { "$set": { "value":
                                 },
                                 {
                                     'id': 'fire_сlay',
+                                    'name': '🟧 Огнеупорный Кирпич',
+                                    'cost': 400,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'subjects_quantum': 1,
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'fire_сlay',
+                                            'counter': 4
+                                        }
+                                    ],
+                                    'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'fire_сlay',
                                     'name': '🟠 Огнеупорная глина',
                                     'cost': 100,
                                     'type': 'things',
