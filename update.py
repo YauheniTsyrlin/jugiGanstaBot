@@ -5066,6 +5066,29 @@ newvalues = { "$set":
                                     }
                         },
                         { 
+                            'name': 'Тени Инсмута',
+                            'liga': 'Первая лига',
+                            'boss': [
+                                        'OverSid'
+                                    ],
+                            'poweruser': 
+                                    [
+                                        'OverSid'
+                                    ],  
+                            'bands': 
+                                    [
+                                        {
+                                            'name': 'Тени Инсмута',
+                                            'boss': 'OverSid'
+                                        }
+                                    ],
+                            'chats': 
+                                    {
+                                        'secret' : -1001240140243,
+                                        'info' : -1001255189634
+                                    }
+                        },
+                        { 
                             'name': 'Iamlaserpewpew',
                             'liga': 'Вторая лига',
                             'boss': [
