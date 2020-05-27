@@ -524,18 +524,19 @@ def getWariorFraction(string: str):
             return f[-1]                       
 
 def getFractionSmall(string: str):
-    if (string.startswith('⚙️')):
-        return '⚙️'
-    elif (string.startswith('🔪')):
-        return '🔪'
-    elif (string.startswith('💣')):
-        return '💣'
-    elif (string.startswith('⚛️')):
-        return '⚛️'
-    elif (string.startswith('👙')):
-        return '👙'
-    elif (string.startswith('🔰')):
-        return '🔰'
+    if string:
+        if (string.startswith('⚙️')):
+            return '⚙️'
+        elif (string.startswith('🔪')):
+            return '🔪'
+        elif (string.startswith('💣')):
+            return '💣'
+        elif (string.startswith('⚛️')):
+            return '⚛️'
+        elif (string.startswith('👙')):
+            return '👙'
+        elif (string.startswith('🔰')):
+            return '🔰'
 
     return None
 
