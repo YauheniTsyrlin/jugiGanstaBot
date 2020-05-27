@@ -6340,6 +6340,7 @@ def callback_query(call):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("boss_info"))
 def callback_query(call):
+    bot.answer_callback_query(call.id, f"{call.data}")
     # logger.info(f'{call.from_user.username} {call.data}')
     #     0              1           2        
     # boss_info|{hashstr}
