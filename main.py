@@ -2352,7 +2352,6 @@ def select_shelf(call):
                     bot.answer_callback_query(call.id, f'Не смогли обновить заявки')
                     return
 
-                # print(f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотел тебе продать {inventory["name"]}, но у тебя нет 🔘{inventory["cost"]}. Твоя заявка аннулирована :\n▫️ 🔘{inventory["cost"]} {inventory["name"]}')
                 text = f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) хотел тебе продать {inventory["name"]}, но у тебя нет 🔘{inventory["cost"]}. Твоя заявка аннулирована :\n▫️ 🔘{inventory["cost"]} {inventory["name"]}'
                 send_messages_big(buyer.getChat(), text=text)
                 bot.answer_callback_query(call.id, f'У него нет столько бабла!')
@@ -2413,11 +2412,11 @@ def select_shelf(call):
                 return
 
             # Уведомляем всех остальных о закрытии заявки
-            for req in invonshelf['request']:
+            request = list(filter(lambda x : not x['login'] == invonshelf['login'], invonshelf['request']))
+            for req in request:
                 requester = getUserByLogin(req['login'])
                 if requester:
                     if not (requester.getLogin() == buyer.getLogin()):
-                        # print(f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ 🔘{inventory["cost"]} {inventory["name"]}!\nТвоя заявка аннулирована!')
                         send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) продал {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ {inventory["name"]} за 🔘{inventory["cost"]}!\nТвоя заявка аннулирована!')
 
             # Обновляем покупателя и продавца
