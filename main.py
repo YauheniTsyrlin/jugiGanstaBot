@@ -4660,7 +4660,7 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'update_pip').fulfillment_text) 
                         return
 
-                    if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
+                    if time_farm_over:
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'old_forward').fulfillment_text) 
                         return
 
@@ -4726,17 +4726,17 @@ def main_message(message):
                         if result.matched_count < 1:
                             mob.insert_one(row)
 
-                        if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
-                            report = getMobReport(mob_name, mob_class, dark_zone)
-                            hashstr = getMobHash(mob_name, mob_class)
-                            markupinline = InlineKeyboardMarkup()
-                            markupinline.add(
-                                InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
-                                )
+                        # if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
+                        #     report = getMobReport(mob_name, mob_class, dark_zone)
+                        #     hashstr = getMobHash(mob_name, mob_class)
+                        #     markupinline = InlineKeyboardMarkup()
+                        #     markupinline.add(
+                        #         InlineKeyboardButton('🔆' if dark_zone else '🚷', callback_data=f"mob_info|{hashstr}|{not dark_zone}")
+                        #         )
                     
-                            send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
-                        else:
-                            send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
+                        #     send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
+                        # else:
+                        send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
                 return
         elif (message.text.startswith('Неподалеку ты заметил другого выжившего.') or message.text.startswith('Неподалеку ты заметил какую-то потасовку.')):
             #arr = ['отдал на съедение кротокрысам', 'одержал победу над', 'не оставил живого места от', 'гордо наступил на полудохлого', 'оставил бездыханное тело', 'сделал сиротами детишек', 'добил с пинка', 'добил лежачего', 'выписал пропуск в Вальхаллу', 'добил фаталити', 'стоит над поверженным', 'одержал победу над']
