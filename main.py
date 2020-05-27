@@ -6352,7 +6352,7 @@ def callback_query(call):
     hashstr = call.data.split('|')[1]
 
     if hashstr == 'exit':
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='⚜️ Босс', parse_mode='HTML', reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='⚜️ Босс', parse_mode='HTML', reply_markup=None)
         return
 
     bossinbd = getBossByHash(hashstr)
