@@ -5198,10 +5198,10 @@ if 1==2: # Обновляем атрибуты навыков
         updateUser(user)
         print(f'Update {user.getLogin()}')
 
-if 1==2:
+if 1==1:
     # Запускать один раз! Иначе затрет
-    old_login = 'Mefabest'
-    new_login = 'Y0ur_sugar'
+    old_login = 'Brodskey'
+    new_login = 'OverSid'
 
     # Убиваем пользователя с новым логином
     myquery = {'login': new_login}
