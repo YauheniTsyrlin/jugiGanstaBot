@@ -4580,7 +4580,7 @@ def main_message(message):
                     #     boss_name_small = boss_name
                     #     for n_boss in GLOBAL_VARS['bosses']:
                     #         boss_name_small = boss_name_small.replace(n_boss, '') 
-                    buttons.append(InlineKeyboardButton('⚜️ Все боссы', callback_data=f"boss_info|hashstr"))
+                    buttons.append(InlineKeyboardButton('⚜️ Все боссы', callback_data=f"boss_info|{hashstr}"))
 
                     markupinline = InlineKeyboardMarkup(row_width=3)
                     for row in build_menu(buttons=buttons, n_cols=3):
@@ -6340,7 +6340,7 @@ def callback_query(call):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("boss_info"))
 def callback_query(call):
-    bot.answer_callback_query(call.id, f"{call.data}")
+    # bot.answer_callback_query(call.id, f"{call.data}")
     # logger.info(f'{call.from_user.username} {call.data}')
     #     0              1           2        
     # boss_info|{hashstr}
