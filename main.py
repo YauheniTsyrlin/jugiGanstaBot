@@ -2485,7 +2485,7 @@ def select_shelf(call):
 
 def announcement_step(message):
     # Делаем запись об объявлении
-    if len(message.text.strip()) == 0 or message.text in private_buttons:
+    if len(message.text.strip()) == 0 or message.text in GLOBAL_VARS['private_buttons']:
         bot.send_message(message.chat.id, text='❌ Запись отменена ❌')
     else:
         date_str = time.strftime("%d.%m %H:%M", time.gmtime( (datetime.now()).timestamp() ))
