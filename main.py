@@ -1178,11 +1178,13 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
         for s in text.split('\n'):
             for thing in elem['subjects_to_find']:
                 if (s.startswith('Получено:') or s.startswith('Найдено:') or s.startswith('Бонус:') or (s.startswith('💰')) ) and thing in s:
-                    if ' x' in s or ' ×' in s:
-                        for x in [' x', ' ×']:
-                            if x in s:
-                                count = count + int(s.replace('/buy_trash','').split(x)[1].split(',')[0].strip())
-                    else: count = count + 1
+                    for ss in s.split(','):
+                        if thing in ss:
+                            if ' x' in ss or ' ×' in ss:
+                                for x in [' x', ' ×']:
+                                    if x in ss:
+                                        count = count + int(ss.replace('/buy_trash','').split(x)[1].split(',')[0].strip())
+                            else: count = count + 1
     minimum = 1
     if 'subjects_quantum' in elem:
         minimum = elem['subjects_quantum']
@@ -4606,11 +4608,11 @@ def main_message(message):
                             updateUser(userIAm)
                 filter_message = {"forward_date": message.forward_date, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message) 
-                if new_Message:
+                if True or new_Message:
                     for skill in getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']:
                         if 'subjects_of_study' in skill:
                             check_skills(message.text, message.chat.id, time_farm_over, userIAm, skill.copy())
-                    
+                    time_farm_over = False
                     for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
                         check_things(message.text, message.chat.id, time_farm_over, userIAm, inv.copy())
                 else:
