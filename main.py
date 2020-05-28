@@ -6387,7 +6387,7 @@ def callback_query(call):
         boss_name_small = boss_name
         for n_boss in GLOBAL_VARS['bosses']:
             boss_name_small = boss_name_small.replace(n_boss, '') 
-        buttons.append(InlineKeyboardButton(boss_name_small, callback_data=f"boss_info||one|{hashstr}|{hashstrfirst}"))
+        buttons.append(InlineKeyboardButton(boss_name_small, callback_data=f"boss_info|one|{hashstr}|{hashstrfirst}"))
 
     exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"boss_info|exit|{hashstr}|{hashstrfirst}")
     for row in build_menu(buttons=buttons, n_cols=3, exit_button=exit_button):
