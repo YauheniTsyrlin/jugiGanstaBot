@@ -6297,6 +6297,7 @@ def callback_query(call):
     count = int(call.data.split('|')[2])
     hwois = f'🗣 <b>{call.from_user.username}</b>'
     user = getUserByLogin(call.from_user.username)
+    pingUser = getUserByLogin(login)
     if user:
         hwois = f'🗣 <b>{user.getLogin()}</b>'
 
@@ -6331,8 +6332,9 @@ def callback_query(call):
     
     if count+1 < 6: 
         text = call.message.text.split('\n▫️ Пинганули')[0]+f'\n▫️ Пинганули {count+1}' 
+        send_messages_big(pingUser.getChat(), text=textPing)
+        bot.send_sticker(pingUser.getChat(), random.sample(getSetting(code='STICKERS', name='PINGUSER'), 1)[0]['value'])
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
-        send_messages_big(call.message.chat.id, text=textPing)
         bot.answer_callback_query(call.id, f"{login} предупрежден!")
     else:
         text = call.message.text.split('\n▫️ Пинганули')[0]+f'\n▫️ Пинганули {count}' 

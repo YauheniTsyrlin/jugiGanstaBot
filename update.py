@@ -4545,8 +4545,26 @@ newvalues = { "$set": { "value":
                                     'value': 'CAACAgIAAxkBAAECXj5ercl5kyy8XAzzKH2dfZpjNSuokwACGAADkaI7BudYKDBs40YmGQQ'
                                 },
                                 {
-                                    'name': '1',
+                                    'name': '2',
                                     'value': 'CAACAgIAAxkBAAECXkRercmoA48Y-oDA6h4Gj3uBiOTC1wACIgAD8gQgFhbcd1mXrcBaGQQ'
+                                }
+                            ] 
+                        },
+                        {
+                            'name': 'PINGUSER',
+                            'value':
+                            [
+                                {
+                                    'name': '1',
+                                    'value': 'CAACAgIAAxkBAAEEMShez2pHxvvfsPiZ7C7oAnolXy3y4AACTwAD8gQgFgQ61XupGBubGQQ'
+                                },
+                                {
+                                    'name': '2',
+                                    'value': 'CAACAgIAAxkBAAEEMTBez2pmRs0eCDk5O-qxFyIWCWgT8wACBAAD8gQgFsqYz36_uHqqGQQ'
+                                },
+                                {
+                                    'name': '3',
+                                    'value': 'CAACAgIAAxkBAAEEMThez2qMsJ9EtRH_3W_bCtGU4XZEfwACMAADWmd_DAj7ZSMFjwZ3GQQ'
                                 }
                             ] 
                         },
