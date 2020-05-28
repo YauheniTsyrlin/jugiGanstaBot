@@ -6355,12 +6355,18 @@ def callback_query(call):
     hashstrfirst = call.data.split('|')[3]
     command = call.data.split('|')[1]
     bossinbd = getBossByHash(hashstr)
+    buttons = []
+    markupinline = InlineKeyboardMarkup(row_width=3)
 
     if command == 'exit':
         bossinbd = getBossByHash(hashstrfirst)
         text = getBossReport(bossinbd['boss_name'])
         buttons.append(InlineKeyboardButton('⚜️ Все боссы', callback_data=f"boss_info|all|{hashstr}|{hashstrfirst}"))
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=None)
+        
+        for row in build_menu(buttons=buttons, n_cols=3):
+            markupinline.row(*row)    
+
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
         return
 
     bossinbd = getBossByHash(hashstr)
@@ -6372,9 +6378,8 @@ def callback_query(call):
             
         {   "$sort" : { "count" : -1 } }
         ])
+        
     
-    
-    buttons = []
     for d in sorted(dresult, key = lambda i: tools.deEmojify(i["_id"]["boss_name"]), reverse=False):
         boss_name = d["_id"]["boss_name"] 
         #if boss_name == bossinbd['boss_name']: continue
@@ -6385,8 +6390,6 @@ def callback_query(call):
         buttons.append(InlineKeyboardButton(boss_name_small, callback_data=f"boss_info||one|{hashstr}|{hashstrfirst}"))
 
     exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"boss_info|exit|{hashstr}|{hashstrfirst}")
-
-    markupinline = InlineKeyboardMarkup(row_width=3)
     for row in build_menu(buttons=buttons, n_cols=3, exit_button=exit_button):
         markupinline.row(*row)    
 
