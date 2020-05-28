@@ -2488,7 +2488,7 @@ def announcement_step(message):
     if len(message.text.strip()) == 0 or message.text in GLOBAL_VARS['private_buttons']:
         bot.send_message(message.chat.id, text='❌ Запись отменена ❌')
     else:
-        date_str = time.strftime("%d.%m %H:%M", time.gmtime( (datetime.now()).timestamp() ))
+        date_str = time.strftime("%d.%m", time.gmtime( (datetime.now()).timestamp() ))
         announcement_row = {'date': (datetime.now()).timestamp(),
                             'login': message.from_user.username,
                             'text': f'▫️ <b>{date_str}</b>: '+message.text}
