@@ -3106,7 +3106,7 @@ newvalues = { "$set": { "value":
                                     'dialog_old_text': 'default_old_thing'
                                 },
                                 {
-                                    'id': 'fire_Brick',
+                                    'id': 'fire_brick',
                                     'name': '🟧 Огнеупорный Кирпич',
                                     'cost': 400,
                                     'type': 'things',
@@ -5289,8 +5289,8 @@ if 1==2:
             print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
             print(f'=======================================================')
 
-thing_names = ['scalp_of_deus_ex_machina']
-if 1==2:
+thing_names = ['fire_Brick']
+if 1==1:
     updateUser(None)
     for thing_name in thing_names:
         # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 
@@ -5304,7 +5304,7 @@ if 1==2:
                 # if 'cost' in inv:
                 #    inv.update({'cost': elem['cost']})
                 # Заменяем id
-                inv.update({'id': 'scalp_deus'})
+                inv.update({'id': 'fire_brick'})
 
 
             updateUser(user)
