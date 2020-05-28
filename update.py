@@ -5290,7 +5290,7 @@ if 1==2:
             print(f'=======================================================')
 
 thing_names = ['fire_Brick']
-if 1==1:
+if 1==2:
     updateUser(None)
     for thing_name in thing_names:
         # elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']==thing_name), None) 

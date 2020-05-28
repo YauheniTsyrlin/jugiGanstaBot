@@ -232,7 +232,7 @@ def addInventory(user: users.User, inv, check_skills=True):
 
     # Добавляем составные   объекты
     listInv = GLOBAL_VARS['inventory']    
-    if 'composition' in inv:
+    if 'composition' in inv and len(inv['composition'])>0:
         arr = []
         for com in inv['composition']:
            arr.append(com)
@@ -1573,7 +1573,7 @@ def getInvCompositionIn(thing):
     result = []
     listInv = GLOBAL_VARS['inventory']
     for inventory in listInv:
-        if 'composition' in inventory:
+        if 'composition' in inventory and len(inventory['composition'])>0:
             for com in inventory['composition']:
                 if thing['id'] == com['id']:
                     if inventory not in result:
@@ -1825,7 +1825,7 @@ def select_baraholka(call):
 
         # Добавление кнопки Собрать 🔧
         collect = False
-        for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
+        for inv in list(filter(lambda x : 'composition' in x and len(x['composition'])>0, GLOBAL_VARS['inventory'])):
             collect = False
             if inv['type'] == 'animals': continue
             for composit in inv['composition']:
@@ -2534,7 +2534,7 @@ def select_workbench(call):
 
         # Добавление кнопки Собрать 🔧
         collect = False
-        for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
+        for inv in list(filter(lambda x : 'composition' in x and len(x['composition'])>0, GLOBAL_VARS['inventory'])):
             collect = False
             if inv['type'] == 'animals': continue
             for composit in inv['composition']:
@@ -2636,7 +2636,7 @@ def select_workbench(call):
                             fix_button = InlineKeyboardButton(f"🧰{int(fixinv['wear']['value']*100)}% {fixinv['name']}", callback_data=f"{button_parent['id']}|fix|{stepinventory}|{inventory['uid'][:16]}|{fixinv['uid'][:16]}")
                             buttons.append(fix_button)
 
-        if 'composition' in inventory:
+        if 'composition' in inventory and len(inventory['composition'])>0:
             doit = 'Разобрать 🛠️'
             if inventory['type'] == 'animals':
                 doit = 'Зарезать 🔪'
@@ -2663,7 +2663,7 @@ def select_workbench(call):
             inv = invonworkbench['inventory']
             inventories_on.append(inv)
 
-        for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
+        for inv in list(filter(lambda x : 'composition' in x and len(x['composition'])>0, GLOBAL_VARS['inventory'])):
             collect = False
             if inv['type'] == 'animals': continue
             for composit in inv['composition']:
@@ -2762,7 +2762,7 @@ def select_workbench(call):
             inv = invonworkbench['inventory']
             inventories_on.append(inv)
 
-        for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
+        for inv in list(filter(lambda x : 'composition' in x and len(x['composition'])>0, GLOBAL_VARS['inventory'])):
             collect = False
             if inv['type'] == 'animals': continue
             for composit in inv['composition']:
@@ -2850,7 +2850,7 @@ def select_workbench(call):
                     for comp in inventory['composition']:
                         # Добавляем составные   объекты
                         listInv = GLOBAL_VARS['inventory']    
-                        if 'composition' in comp:
+                        if 'composition' in comp and len(comp['composition'])>0:
                             arr = []
                             flagSplitComposition = False
                             for com in comp['composition']:
@@ -2904,7 +2904,7 @@ def select_workbench(call):
 
         # Добавление кнопки Собрать 🔧
         collect = False
-        for inv in list(filter(lambda x : 'composition' in x, GLOBAL_VARS['inventory'])):
+        for inv in list(filter(lambda x : 'composition' in x and len(x['composition'])>0, GLOBAL_VARS['inventory'])):
             collect = False
             for composit in inv['composition']:
                 counter = len(list(filter(lambda x : x['id'] == composit['id'], inventories_on)))
