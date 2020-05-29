@@ -5167,8 +5167,7 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-shelf.delete_many({'login': None})
-announcement.delete_many({'login': None})
+
 
 if 1==2: # дедублицируем crypto 
     updateUser(None)
@@ -5401,6 +5400,8 @@ if 1==2: # Изменение уровня обучения навыку
         print(skill)
         updateUser(user)
 
+# shelf.delete_many({'login': None})
+# announcement.delete_many({'login': None})
 # x = plan_raids.delete_many({'rade_date':1580162400.0})
 # print(x.deleted_count)
 

@@ -1773,10 +1773,9 @@ def select_baraholka(call):
             count_announce = 0
 
         for announce in announcement.find().skip(count_announce):
-            send_message_to_admin(f'🛍️❌ Магазин!\n{announce}')
-
             announce_user = getUserByLogin(announce['login'])
-            announcement_text = announcement_text + f'<b>{announce_user.getNameAndGerb()}</b>\n{announce["text"][:100]}\n\n'
+            if announce_user:
+                announcement_text = announcement_text + f'<b>{announce_user.getNameAndGerb()}</b>\n{announce["text"][:100]}\n\n'
             
         for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inv = invonshelf['inventory']
@@ -2087,7 +2086,8 @@ def select_shelf(call):
 
     for announce in announcement.find().skip(count_announce):
         announce_user = getUserByLogin(announce['login'])
-        announcement_text = announcement_text + f'<b>{announce_user.getNameAndGerb()}</b>\n{announce["text"][:100]}\n\n'
+        if announce_user:
+            announcement_text = announcement_text + f'<b>{announce_user.getNameAndGerb()}</b>\n{announce["text"][:100]}\n\n'
 
     if button_id in ['forward', 'back', 'selectexit']:
         step = int(call.data.split('|')[2])
