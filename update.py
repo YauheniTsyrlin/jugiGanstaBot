@@ -5400,8 +5400,12 @@ if 1==2: # Изменение уровня обучения навыку
         print(skill)
         updateUser(user)
 
-# shelf.delete_many({'login': None})
-# announcement.delete_many({'login': None})
+shelf.delete_many({'login': 'Brodskey'})
+announcement.delete_many({'login': 'Brodskey'})
+
+shelf.delete_many({'login': 'sosopiple'})
+announcement.delete_many({'login': 'sosopiple'})
+
 # x = plan_raids.delete_many({'rade_date':1580162400.0})
 # print(x.deleted_count)
 
