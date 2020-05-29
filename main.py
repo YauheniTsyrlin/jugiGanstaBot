@@ -1687,7 +1687,7 @@ def select_profile(call):
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'{description}\n{user.getProfile(button_id)}', parse_mode='HTML', reply_markup=markup)
 
 # ================================== Комиссионка ==================================== and 'private' == message.chat.type
-@bot.message_handler(func=lambda message: message.text and ('🧺 Комиссионка' == message.text) )
+@bot.message_handler(func=lambda message: message.text and ('🧺 Комиссионка' == message.text) and not message.from_user.username == None and 'private' == message.chat.type )
 def send_baraholka(message):
     # if not isAdmin(message.from_user.username):
     #     send_welcome(message)
@@ -3633,7 +3633,9 @@ def main_message(message):
     chat = message.chat.id
     privateChat = ('private' in message.chat.type)
     logger.info(f'chat:{message.chat.id}:{"private" if privateChat else "Group"}:{message.from_user.username}:{datetime.fromtimestamp(message.forward_date) if message.forward_date else ""}:{message.text}')
-    if message.from_user.username == None: return
+    if message.from_user.username == None: 
+        send_messages_big(message.chat.id, text=f'Для общения с Джу ты должен завести логин в телеге', reply_markup=None)
+        return
     
     # Проверка на присутствие в черном списке
     black_list = getSetting(code='BLACK_LIST', name=message.from_user.username)
