@@ -1775,7 +1775,6 @@ def select_baraholka(call):
         for announce in announcement.find().skip(count_announce):
             announce_user = getUserByLogin(announce['login'])
             if announce_user:
-                send_message_to_admin(announce_user.getLogin())
                 announcement_text = announcement_text + f'<b>{announce_user.getNameAndGerb()}</b>\n{announce["text"][:100]}\n\n'
             
         for invonshelf in shelf.find({'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
@@ -2174,6 +2173,10 @@ def select_shelf(call):
                 your_request = f'\n▫️ {user.getGerb()} Твое предложение: 🔘{req["cost"]}' 
 
         userseller = getUserByLogin(invonshelf['login'])
+        if not userseller:
+            send_message_to_admin(f'🛍️❌ Магазин!\n{invonshelf["login"]} уволен. Надо удалить')
+
+            
         itsMy = call.from_user.username == invonshelf['login']
 
         if itsMy:
@@ -2266,6 +2269,7 @@ def select_shelf(call):
             
             send_messages_big(userseller.getChat(), text=f'🛍️👋 Магазин!\n{user.getNameAndGerb()} (@{user.getLogin()}) сделал предложение в магазине!\n▫️ 🔘{cost} {inventory["name"]}')
             bot.answer_callback_query(call.id, f'Заявка подана!')
+        
         
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{best_request}{your_request}\n▫️ {user.getGerb()} Твой кошелек: 🔘{crypto['cost']}", reply_markup=markupinline)
         return
