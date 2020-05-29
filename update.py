@@ -5168,6 +5168,7 @@ print("#==========================#")
 
 
 shelf.delete_many({'login': None})
+announcement.delete_many({'login': None})
 
 if 1==2: # дедублицируем crypto 
     updateUser(None)
