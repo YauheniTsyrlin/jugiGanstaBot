@@ -3852,7 +3852,7 @@ def main_message(message):
                                         elif loser.getName() == 'Очко гуся': 
                                             elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_goose'), None).copy() 
                                             k = 4
-                                        elif loser.getName() == 'Fateev': 
+                                        elif loser.getName() in ['Fateev', '𝕯𝖛𝖚𝖘𝖍𝖐𝖆']: 
                                             elem = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='THINGS')['value']) if x['id']=='scalp_ass'), None).copy() 
                                             k = 4
                                         elif loser.getName() == 'Анклав': 
