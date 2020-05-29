@@ -5166,6 +5166,9 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
+
+shelf.delete_many({'login': None})
+
 if 1==2: # дедублицируем crypto 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
