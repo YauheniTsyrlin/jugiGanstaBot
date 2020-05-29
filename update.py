@@ -5251,6 +5251,23 @@ if 1==2:
             { 'login': new_login } 
         }
     )
+    shelf.update_many({'login': old_login},
+        { '$set': 
+            { 'login': new_login } 
+        })
+    farm.update_many({'login': old_login},
+        { '$set': 
+            { 'login': new_login } 
+        })
+    workbench.update_many({'login': old_login},
+        { '$set': 
+            { 'login': new_login } 
+        })
+    announcement.update_many({'login': old_login},
+        { '$set': 
+            { 'login': new_login } 
+        })
+
     print(f'Бандиту {old_login} заменена логин на {new_login}')
 
 viruses = ['girlfriend_bouquet', 'covid-19', 'mirror_disease']
@@ -5400,11 +5417,15 @@ if 1==2: # Изменение уровня обучения навыку
         print(skill)
         updateUser(user)
 
-shelf.delete_many({'login': 'Brodskey'})
-announcement.delete_many({'login': 'Brodskey'})
+# shelf.delete_many({'login': 'Brodskey'})
+farm.delete_many({'login': 'Brodskey'})
+workbench.delete_many({'login': 'Brodskey'})
+# announcement.delete_many({'login': 'Brodskey'})
 
-shelf.delete_many({'login': 'sosopiple'})
-announcement.delete_many({'login': 'sosopiple'})
+# shelf.delete_many({'login': 'sosopiple'})
+farm.delete_many({'login': 'sosopiple'})
+workbench.delete_many({'login': 'sosopiple'})
+# announcement.delete_many({'login': 'sosopiple'})
 
 # x = plan_raids.delete_many({'rade_date':1580162400.0})
 # print(x.deleted_count)

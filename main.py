@@ -5056,6 +5056,13 @@ def main_message(message):
 
             myquery = { "login": f"{user.getLogin()}" }
             doc = registered_users.delete_one(myquery)
+
+
+            shelf.delete_many({'login': user.getLogin()})
+            farm.delete_many({'login': user.getLogin()})
+            workbench.delete_many({'login': user.getLogin()})
+            announcement.delete_many({'login': user.getLogin()})
+
             updateUser(None)
 
             if doc.deleted_count == 0:
