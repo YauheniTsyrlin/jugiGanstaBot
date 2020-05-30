@@ -1207,24 +1207,24 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, message_d
             text = f'{userIAm.getNameAndGerb()}, ты нашел:\n▫️ {elem["name"]} {"" if subjects_count == 1 else str(subjects_count)+"шт."}'
             send_messages_big(chat, text=text)
         else:
-            if k_farm:
-                text = getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text
+            # if k_farm:
+            #     text = getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text
                 
-                tz = config.SERVER_MSK_DIFF
-                date_stamp = (datetime.now() - timedelta(minutes=5 + farm_k) + timedelta(hours=tz.hour)).timestamp()
-                date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
+            #     tz = config.SERVER_MSK_DIFF
+            #     date_stamp = (datetime.now() - timedelta(minutes=5 + farm_k) + timedelta(hours=tz.hour)).timestamp()
+            #     date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
 
-                date_str_forward = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.fromtimestamp(message_date) + timedelta(hours=tz.hour) ).timestamp()    ))
-                date_stamp_to = (datetime.now() - timedelta(minutes=5+farm_k) +  timedelta(hours=tz.hour)).timestamp()
-                date_str_farm_to = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp_to))
+            #     date_str_forward = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.fromtimestamp(message_date) + timedelta(hours=tz.hour) ).timestamp()    ))
+            #     date_stamp_to = (datetime.now() - timedelta(minutes=5+farm_k) +  timedelta(hours=tz.hour)).timestamp()
+            #     date_str_farm_to = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp_to))
 
-                text = text + f'\n▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str_farm_to}'
+            #     text = text + f'\n▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str_farm_to}'
 
-                send_messages_big(chat, text=text)
-                send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n{text}')
+            #     send_messages_big(chat, text=text)
+            #     send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n{text}')
 
-            else:
-                send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
+            # else:
+            send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
 
     elif count > 1 and count < minimum:
         send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), 'dialog_few_things').fulfillment_text)
