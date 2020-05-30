@@ -1209,8 +1209,6 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, farm_k=No
             send_messages_big(chat, text=text)
         else:
             if not farm_k==None:
-                text = getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text
-                
                 tz = config.SERVER_MSK_DIFF
                 date_stamp = (datetime.now() - timedelta(minutes=5 + farm_k) + timedelta(hours=tz.hour)).timestamp()
                 date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
@@ -1219,13 +1217,14 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, farm_k=No
                 date_stamp_to = (datetime.now() - timedelta(minutes=5+farm_k) +  timedelta(hours=tz.hour)).timestamp()
                 date_str_farm_to = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp_to))
 
-                text = text + f'\n▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str_farm_to}'
-
-                # send_messages_big(chat, text=text)
+                text = f'▫️ {elem["name"]}\n▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str_farm_to}'
                 send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n{text}')
 
+                text = getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text
+                send_messages_big(chat, text=text)
+
             else:
-                send_messages_big(chat, text='⏰ ' + getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
+                send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
 
     elif count > 1 and count < minimum:
         send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), 'dialog_few_things').fulfillment_text)
