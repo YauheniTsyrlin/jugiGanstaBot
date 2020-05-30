@@ -1215,7 +1215,7 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, farm_k=No
                 date_stamp = (datetime.now() - timedelta(minutes=5 + farm_k) + timedelta(hours=tz.hour)).timestamp()
                 date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
 
-                date_str_forward = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.fromtimestamp(message_date) + timedelta(hours=tz.hour) ).timestamp()    ))
+                date_str_forward = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.fromtimestamp(forward_date) + timedelta(hours=tz.hour) ).timestamp()    ))
                 date_stamp_to = (datetime.now() - timedelta(minutes=5+farm_k) +  timedelta(hours=tz.hour)).timestamp()
                 date_str_farm_to = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp_to))
 
