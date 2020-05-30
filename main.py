@@ -5045,15 +5045,14 @@ def main_message(message):
             name = tools.deEmojify(message.text.split('@')[1].strip())
             
             if isGoatBoss(message.from_user.username):
-                login = message.text.split('@')[1].strip()
-                if isRegisteredUserName(name) or isRegisteredUserLogin(login):
-                    user = getUserByLogin(login)
-                    if not user:
-                        user = getUserByName(name)
+                #login = message.text.split('@')[1].strip()
+                user = getUserByLogin(name)
+                if not user:
+                    user = getUserByName(name)
 
-                    if user:
-                        if isAdmin(message.from_user.username) or getMyGoatName(message.from_user.username) == getMyGoatName(user.getLogin()):
-                            send_messages_big(message.chat.id, text=user.getProfile('All'))
+                if user:
+                    if isAdmin(message.from_user.username) or getMyGoatName(message.from_user.username) == getMyGoatName(user.getLogin()):
+                        send_messages_big(message.chat.id, text=user.getProfile('All'))
                 else:
                     send_messages_big(message.chat.id, text=f'В базе зарегистрированнных бандитов {login} не найден')
 
