@@ -1225,7 +1225,7 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, farm_k=No
                 send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n{text}')
 
             else:
-                send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
+                send_messages_big(chat, text='⏰ ' + getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
 
     elif count > 1 and count < minimum:
         send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), 'dialog_few_things').fulfillment_text)
@@ -1265,10 +1265,6 @@ def check_animal():
                                             'inventory'  : new_creature
                                         }
                                     creature_to_insert.append(to_farm)
-                                    # time.sleep(sec/2)
-                                    # send_messages_big(user.getChat(), text=f'👼 На ферме новое создание:\n▫️ {new_creature["name"]}')
-                                    # time.sleep(sec/2)
-                                    # send_message_to_admin(f'👼 Новое создание:\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {new_creature["name"]}')
                                     # wear dialog_text_born
 
                                 new_wear = creature['wear']['value'] - creature['multiply']['postpartum_trauma'] 
@@ -1276,12 +1272,6 @@ def check_animal():
                                     creature['wear']['value'] = new_wear
                                     newvalues = { "$set": {'state': 'CANCEL', 'inventory': creature} }
                                     dead_creatures.append(newvalues)
-                                    # print(creature['name'])
-                                    # time.sleep(sec/2)
-                                    # send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ При родах\n▫️ {creature["name"]}')
-                                    # time.sleep(sec/2)
-                                    # send_message_to_admin(f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {creature["name"]}')
-                                    # wear dialog_text_dead
                                     continue
         if len(creature_to_insert)>0:
             farm.insert_many(creature_to_insert)
@@ -4651,7 +4641,7 @@ def main_message(message):
                             check_skills(message.text, message.chat.id, time_farm_over, userIAm, skill.copy())
                     
                     for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
-                        
+
                         check_things(message.text, message.chat.id, time_farm_over, userIAm, inv.copy(), farm_k=farm_k, forward_date=message.forward_date)
                 else:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
