@@ -1752,7 +1752,7 @@ def select_baraholka(call):
     if button_id in ['farm']:
         
         inventors = []
-        for inv in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
+        for inv in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("inventory.wear.value", pymongo.ASCENDING)]):
             inventors.append(inv['inventory'])
         
         unic_inv = []
@@ -1931,7 +1931,7 @@ def select_farm(call):
     if button_id in ['forward', 'back', 'selectgroupexit', 'selectexit']:
         step = int(call.data.split('|')[2])
         inventors = []
-        for inv in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
+        for inv in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("inventory.wear.value", pymongo.ASCENDING)]):
             inventors.append(inv['inventory'])
         
         unic_inv = []
