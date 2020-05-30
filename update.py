@@ -3919,18 +3919,7 @@ newvalues = { "$set": { "value":
                                     'name': '📟 Болт от Пип-боя',
                                     'cost': 20,
                                     'type': 'things',
-                                    'quantity': None,
-                                    'composition':
-                                    [
-                                        {
-                                            'id': 'bolt_1',
-                                            'counter': 1
-                                        },
-                                        {
-                                            'id': 'crypto',
-                                            'counter': 1000
-                                        }
-                                    ]
+                                    'quantity': None
                                 }
                             ] 
                         }
@@ -5167,8 +5156,6 @@ print("#         BATTLE           #")
 print("#==========================#")
 
 
-
-
 if 1==2: # дедублицируем crypto 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
@@ -5327,6 +5314,7 @@ if 1==2:
             print(f'after {user.getLogin()} {user.getInventoryThing(elem)}')
             print(f'=======================================================')
 
+# Update id
 thing_names = ['fire_Brick']
 if 1==2:
     updateUser(None)

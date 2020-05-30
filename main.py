@@ -3495,8 +3495,11 @@ def send_welcome(message):
     if not isAdmin(message.from_user.username):
         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_not_goat_boss').fulfillment_text)
         return
-    check_animal()
+    # check_animal()
+    
     try:
+        for user in registered_users.find({'login': 'Detective_Kate'})
+            send_message_to_admin(f'⚠️ ТЕСТ!\n{user}')
         pass
     except:
         send_message_to_admin(f'⚠️🤬 Сломался тест!')
