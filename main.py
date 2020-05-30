@@ -3650,7 +3650,7 @@ def get_message_stiker(message):
         else:
             send_messages_big(message.chat.id, text=f'🗣<b>{message.from_user.username}</b> что-то сказал, но я ничего не понял!')
 
-def isTimeFarmOver(userIAm, forward_date):
+def isTimeFarmOver(userIAm, forward_date, chat):
     # Вычисление коэффициента времени фарма
     farm_k = 0
     storage = 0
@@ -3662,12 +3662,12 @@ def isTimeFarmOver(userIAm, forward_date):
 
     for thing in list(filter(lambda x : 'skill' in x and 'storage' in x['skill'] and x['skill']['storage']['id'] == 'watchmaker', userIAm.getInventoryType(['things']))) :
         storage = storage + thing['skill']['storage']['value'] 
-        # Испольовали вещь, лна немножко сломалась
+        # Испольовали вещь, она немножко сломалась
         newValue = thing['wear']['value'] - thing['wear']['one_use']
         if newValue <= 0:
             userIAm.removeInventoryThing(thing)
             text = f'{userIAm.getNameAndGerb()}!\nУ тебя испортилась вещь из инвентаря:\n▫️ {thing["name"]}'
-            send_messages_big(message.chat.id, text=f'{text}')
+            send_messages_big(chat, text=f'{text}')
             send_message_to_admin(f'🗑️ Сломалось:\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n▫️ {thing["name"]}')
         else:
             thing['wear'].update({'value': newValue})
@@ -3766,7 +3766,7 @@ def main_message(message):
                 new_Message = messager.new_message(message, filter_message)
 
                 if new_Message:
-                    if isTimeFarmOver(userIAm, message.forward_date):
+                    if isTimeFarmOver(userIAm, message.forward_date, message.chat.id):
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
                         return
 
@@ -4643,7 +4643,7 @@ def main_message(message):
                 
                 if new_Message:
 
-                    time_over = isTimeFarmOver(userIAm, message.forward_date)
+                    time_over = isTimeFarmOver(userIAm, message.forward_date, message.chat.id)
                     for skill in getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']:
                         if 'subjects_of_study' in skill:
                             check_skills(message.text, message.chat.id, time_over, userIAm, skill.copy())
@@ -4805,7 +4805,7 @@ def main_message(message):
             new_Message = messager.new_message(message, filter_message) 
             if new_Message:
                 # Ищим митспин для выдачи талона в аренду
-                time_over = isTimeFarmOver(userIAm, message.forward_date)
+                time_over = isTimeFarmOver(userIAm, message.forward_date, message.chat.id)
                 for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
                     check_things('Получено:' + message.text.split('🕳')[1], message.chat.id, time_over, userIAm, inv.copy())
             else:
