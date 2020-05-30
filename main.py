@@ -1243,8 +1243,8 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, farm_k=No
     
 def check_animal():
     sec = 1.5
+    
     # Проверка на размножение на ферме
-
     for user in USERS_ARR:
         # if not user.getLogin() == 'Digzzzy': continue
         creatures = []
@@ -1263,7 +1263,7 @@ def check_animal():
                         if count_need >= creature['multiply']['count']:
                             r = random.random()
                             if r <= creature['multiply']['probability']:
-                                logger.info(f'{user.getLogin()}:{creature["name"]}:{r}:{creature["multiply"]["probability"]}')
+                                # logger.info(f'{user.getLogin()}:{creature["name"]}:{r}:{creature["multiply"]["probability"]}')
                                 for i in range(0, random.randint(1, creature['multiply']['max_child'])):
                                     new_creature = next((x for i, x in enumerate(GLOBAL_VARS['inventory']) if x['id']==creature['multiply']['child']), None).copy()
                                     new_creature.update({'uid':f'{uuid.uuid4()}'})
@@ -1302,8 +1302,6 @@ def check_animal():
             time.sleep(sec)
             send_messages_big(user.getChat(), text=f'👼 На ферме новые создания:\n{report}')
             send_message_to_admin(f'👼 На ферме новые создания:\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
-        
-
 
         if len(dead_creatures)>0:
             cr = {}
@@ -1327,7 +1325,6 @@ def check_animal():
             time.sleep(sec)
             send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ При родах\n{report}')
             send_message_to_admin(f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
-
             # wear dialog_text_born
 
     # Старение на ферме
@@ -1374,7 +1371,6 @@ def check_animal():
             send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n{report}')
             send_message_to_admin(f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
 
-
     # Старение на верстаке
     for user in USERS_ARR:
         # if not user.getLogin() == 'Digzzzy': continue
@@ -1417,7 +1413,6 @@ def check_animal():
             time.sleep(sec)
             send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n{report}')
             send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
-
 
     # Старение В магазине
     for user in USERS_ARR:
@@ -3655,6 +3650,38 @@ def get_message_stiker(message):
         else:
             send_messages_big(message.chat.id, text=f'🗣<b>{message.from_user.username}</b> что-то сказал, но я ничего не понял!')
 
+def isTimeFarmOver(userIAm, forward_date):
+    # Вычисление коэффициента времени фарма
+    farm_k = 0
+    storage = 0
+    flagUserModified = False
+    skill = userIAm.getInventoryThing({'id':'watchmaker','type':'skill'})
+    if skill == None:
+        skill = GLOBAL_VARS['skill']['watchmaker']    
+    storage = skill['storage']
+
+    for thing in list(filter(lambda x : 'skill' in x and 'storage' in x['skill'] and x['skill']['storage']['id'] == 'watchmaker', userIAm.getInventoryType(['things']))) :
+        storage = storage + thing['skill']['storage']['value'] 
+        # Испольовали вещь, лна немножко сломалась
+        newValue = thing['wear']['value'] - thing['wear']['one_use']
+        if newValue <= 0:
+            userIAm.removeInventoryThing(thing)
+            text = f'{userIAm.getNameAndGerb()}!\nУ тебя испортилась вещь из инвентаря:\n▫️ {thing["name"]}'
+            send_messages_big(message.chat.id, text=f'{text}')
+            send_message_to_admin(f'🗑️ Сломалось:\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n▫️ {thing["name"]}')
+        else:
+            thing['wear'].update({'value': newValue})
+        flagUserModified = True
+
+    if storage > skill['min']:
+        power_skill = (storage - skill['min'])/(skill['max'] - skill['min'])
+        farm_k = int(power_skill * 10)
+    
+    if flagUserModified:
+        updateUser(userIAm)
+
+    return forward_date < (datetime.now() - timedelta(minutes= 5 + farm_k)).timestamp()
+
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
@@ -3720,39 +3747,8 @@ def main_message(message):
 
     # Форварды от WastelandWarsBot
     if (message.forward_from and message.forward_from.username == 'WastelandWarsBot'):
-        # time_over = message.forward_date < (datetime.now() - timedelta(minutes=5)).timestamp()
-        # Вычисление коэффициента времени фарма
-        farm_k = 0
-        if userIAm:
-            for thing in userIAm.getInventoryType(['things']):
-                try:
-                    if 'skill' in thing and 'storage' in thing['skill'] and thing['skill']['storage']['id'] == 'watchmaker':
-                        skill = userIAm.getInventoryThing({'id':'watchmaker','type':'skill'})
-                        if skill == None:
-                            skill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==thing['skill']['storage']['id']), None)
 
-                        storage = skill['storage'] + thing['skill']['storage']['value'] 
-                        if storage > skill['min']:
-                            power_skill = (storage - skill['min'])/(skill['max'] - skill['min'])
-                            farm_k = int(power_skill * 10 / 1)
-                            
-                            # tz = config.SERVER_MSK_DIFF
-                            # date_stamp = (datetime.now() - timedelta(minutes=5 + farm_k) + timedelta(hours=tz.hour)).timestamp()
-                            # date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
-                            #send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n▫️ Сила умения {power_skill}\n▫️ Период фарма 5+{farm_k} мин.\n▫️ Время фарма {date_str} МСК')
-
-                        newValue = thing['wear']['value'] - thing['wear']['one_use']
-                        if newValue < 0:
-                            userIAm.removeInventoryThing(thing)
-                            text = f'{userIAm.getNameAndGerb()}!\nУ тебя испортилась вещь из инвентаря:\n▫️ {thing["name"]}'
-                            # send_messages_big(message.chat.id, text=f'{text}')
-                            # send_message_to_admin(f'🗑️ Сломалось:\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n▫️ {thing["name"]}')
-                        else:
-                            thing['wear'].update({'value': newValue})
-                        updateUser(userIAm)
-                except:
-                    traceback.print_exc()
-        time_farm_over = message.forward_date < (datetime.now() - timedelta(minutes=5+farm_k)).timestamp()
+        time_five_over = message.forward_date < (datetime.now() - timedelta(minutes= 5)).timestamp()
 
         if (message.text.startswith('📟Пип-бой 3000')):
             if ('/killdrone' in message.text or 
@@ -3770,7 +3766,7 @@ def main_message(message):
                 new_Message = messager.new_message(message, filter_message)
 
                 if new_Message:
-                    if time_farm_over:
+                    if isTimeFarmOver(userIAm, message.forward_date):
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
                         return
 
@@ -3798,7 +3794,7 @@ def main_message(message):
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
                 return
 
-            if time_farm_over:
+            if time_five_over:
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'deceive').fulfillment_text)
                 return
 
@@ -3988,8 +3984,6 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_you_cant').fulfillment_text)
             return
         elif ('Ты оценил обстановку вокруг.' in message.text and 'Рядом кто-то есть.' in message.text):
-            #write_json(message.json)
-
             if hasAccessToWariors(message.from_user.username):
                 goat_bands = getGoatBands(getMyGoatName(message.from_user.username))
                 k_bm = []
@@ -4048,7 +4042,7 @@ def main_message(message):
 
                         if user:
                             # 
-                            if dark_zone and (not time_farm_over) and (not userIAm.getLogin()==user.getLogin()):
+                            if dark_zone and (not time_five_over) and (not userIAm.getLogin()==user.getLogin()):
                                 user_in_dark_zone.append(user.getLogin())  
                             # Обновляем Bm у нашего бойца                            
                             if warior:
@@ -4637,7 +4631,7 @@ def main_message(message):
             return
         elif ('❤️' in message.text and '🍗' in message.text and '🔋' in message.text and '👣' in message.text) or ('Экзекутос предатель, Рагнароса разбудили слишком рано, насекомое победило, правосудие свершилось. Хорошо, что никто не руинил и ты успел победить до того, как Рагна упал сам.' in message.text) or ('Как оказалось, даже в канализации ты умудрился найти что-то полезное.' in message.text):
             if hasAccessToWariors(message.from_user.username):
-                if not time_farm_over:
+                if not time_five_over:
                     # сохраняем км, если он больше максимального
                     if '👣' in message.text: 
                         km = int(message.text.split('👣')[1].split('км')[0])
@@ -4646,17 +4640,16 @@ def main_message(message):
                             updateUser(userIAm)
                 filter_message = {"forward_date": message.forward_date, 'text': message.text}
                 new_Message = messager.new_message(message, filter_message) 
+                
                 if new_Message:
+
+                    time_over = isTimeFarmOver(userIAm, message.forward_date)
                     for skill in getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']:
                         if 'subjects_of_study' in skill:
-                            check_skills(message.text, message.chat.id, time_farm_over, userIAm, skill.copy())
+                            check_skills(message.text, message.chat.id, time_over, userIAm, skill.copy())
                     
                     for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
-
-                        check_things(message.text, message.chat.id, time_farm_over, userIAm, inv.copy(), farm_k=farm_k, forward_date=message.forward_date)
-                else:
-                    send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
-
+                        check_things(message.text, message.chat.id, time_over, userIAm, inv.copy(), farm_k=farm_k, forward_date=message.forward_date)
 
                 if 'Во время вылазки на тебя напал' in message.text:
                     if userIAm == None:
@@ -4702,8 +4695,8 @@ def main_message(message):
                         send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'update_pip').fulfillment_text) 
                         return
 
-                    if time_farm_over:
-                        send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'old_forward').fulfillment_text) 
+                    if not new_Message:
+                        send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
                         return
 
                     strings = message.text.split('\n')
@@ -4812,8 +4805,9 @@ def main_message(message):
             new_Message = messager.new_message(message, filter_message) 
             if new_Message:
                 # Ищим митспин для выдачи талона в аренду
+                time_over = isTimeFarmOver(userIAm, message.forward_date)
                 for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
-                    check_things('Получено:' + message.text.split('🕳')[1], message.chat.id, time_farm_over, userIAm, inv.copy())
+                    check_things('Получено:' + message.text.split('🕳')[1], message.chat.id, time_over, userIAm, inv.copy())
             else:
                 send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
                 return
