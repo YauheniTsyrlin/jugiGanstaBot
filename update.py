@@ -5170,7 +5170,7 @@ if 1==2: # дедублицируем crypto
                 user.getInventory().remove(inv)
         updateUser(user)      
 
-if 1==1: # обновляем pip_bolt 
+if 1==2: # обновляем pip_bolt 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     for user in list(filter(lambda x : len(x.getInventory()) > 0, USERS_ARR)):
