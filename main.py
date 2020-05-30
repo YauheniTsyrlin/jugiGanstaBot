@@ -1171,7 +1171,7 @@ def dzen_rewards(user, num_dzen, message):
                 send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
 
 # , message_date=None, k_farm=None
-def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, farm_k=None, forward_date=None):
+def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
     count = counterSkill
     if 'Найдено:' in text:
         text = text.split('Найдено:')[0]+'\nНайдено: ' + text.replace('\n', '').split('Найдено:')[1]
@@ -1208,35 +1208,7 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, farm_k=No
             text = f'{userIAm.getNameAndGerb()}, ты нашел:\n▫️ {elem["name"]} {"" if subjects_count == 1 else str(subjects_count)+"шт."}'
             send_messages_big(chat, text=text)
         else:
-            if not farm_k==None:
-                power_skill = 0
-                skill = userIAm.getInventoryThing({'id':'watchmaker','type':'skill'})
-                if skill:
-                    if skill['storage'] > skill['min']:
-                        # 100 - 50 / 200 - 50  -- 50/150 = 0.3 * 10 = 3 мин
-                        # 150 - 50 / 200 - 50  -- 100/150 = 0.66 * 10 = 6 мин
-                        # 190 - 50 / 200 - 50  -- 140/150 = 0.93 * 10 = 9 мин
-
-                        power_skill = int( (skill['storage'] - skill['min'])/(skill['max'] - skill['min']) * 100)
-
-                tz = config.SERVER_MSK_DIFF
-                date_stamp = (datetime.now() - timedelta(minutes=5 + farm_k) + timedelta(hours=tz.hour)).timestamp()
-                date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
-
-                date_str_forward = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.fromtimestamp(forward_date) + timedelta(hours=tz.hour) ).timestamp()    ))
-                date_stamp_to = (datetime.now() - timedelta(minutes=5+farm_k) +  timedelta(hours=tz.hour)).timestamp()
-                date_str_farm_to = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp_to))
-                date_str_now = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.now() + timedelta(hours=tz.hour) ).timestamp()    ))
-
-
-                text = f'▫️ {elem["name"]}\n▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str_farm_to}\n▫️ А сейчас {date_str_now}\n▫️ ⏰ сила умения {power_skill}%'
-                send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n{text}')
-
-                text = getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text
-                send_messages_big(chat, text=text)
-
-            else:
-                send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
+            send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
 
     elif count > 1 and count < minimum:
         send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), 'dialog_few_things').fulfillment_text)
@@ -3654,6 +3626,7 @@ def isTimeFarmOver(userIAm, forward_date, chat):
     # Вычисление коэффициента времени фарма
     farm_k = 0
     storage = 0
+    power_skill = 0
     flagUserModified = False
     skill = userIAm.getInventoryThing({'id':'watchmaker','type':'skill'})
     if skill == None:
@@ -3674,13 +3647,32 @@ def isTimeFarmOver(userIAm, forward_date, chat):
         flagUserModified = True
 
     if storage > skill['min']:
+        # farm_k = 100 - 50 / 200 - 50  -- 50/150 = 0.3 * 10 = 3 мин
+        # farm_k = 150 - 50 / 200 - 50  -- 100/150 = 0.66 * 10 = 6 мин
+        # farm_k = 190 - 50 / 200 - 50  -- 140/150 = 0.93 * 10 = 9 мин
         power_skill = (storage - skill['min'])/(skill['max'] - skill['min'])
         farm_k = int(power_skill * 10)
     
     if flagUserModified:
         updateUser(userIAm)
 
-    return forward_date < (datetime.now() - timedelta(minutes= 5 + farm_k)).timestamp()
+    timeover = forward_date < (datetime.now() - timedelta(minutes= 5 + farm_k)).timestamp()
+
+    if timeover:
+        tz = config.SERVER_MSK_DIFF
+        date_stamp = (datetime.now() - timedelta(minutes=5 + farm_k) + timedelta(hours=tz.hour)).timestamp()
+        date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
+
+        date_str_forward = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.fromtimestamp(forward_date) + timedelta(hours=tz.hour) ).timestamp()    ))
+        date_stamp_to = (datetime.now() - timedelta(minutes=5+farm_k) +  timedelta(hours=tz.hour)).timestamp()
+        
+        date_str_farm_to = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp_to))
+        date_str_now = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.now() + timedelta(hours=tz.hour) ).timestamp()    ))
+
+        text = f'▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str_farm_to}\n▫️ А сейчас {date_str_now}\n▫️ ⏰ сила умения {power_skill}%'
+        send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n{text}')
+
+    return timeover
 
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
@@ -4649,7 +4641,7 @@ def main_message(message):
                             check_skills(message.text, message.chat.id, time_over, userIAm, skill.copy())
                     
                     for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
-                        check_things(message.text, message.chat.id, time_over, userIAm, inv.copy(), farm_k=0, forward_date=message.forward_date)
+                        check_things(message.text, message.chat.id, time_over, userIAm, inv.copy())
 
                 if 'Во время вылазки на тебя напал' in message.text:
                     if userIAm == None:
