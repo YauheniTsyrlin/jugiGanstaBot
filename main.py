@@ -1209,6 +1209,16 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, farm_k=No
             send_messages_big(chat, text=text)
         else:
             if not farm_k==None:
+                power_skill = 0
+                skill = userIAm.getInventoryThing({'id':'watchmaker','type':'skill'})
+                if skill:
+                    if skill['storage'] > skill['min']:
+                        # 100 - 50 / 200 - 50  -- 50/150 = 0.3 * 10 = 3 мин
+                        # 150 - 50 / 200 - 50  -- 100/150 = 0.66 * 10 = 6 мин
+                        # 190 - 50 / 200 - 50  -- 140/150 = 0.93 * 10 = 9 мин
+
+                        power_skill = int( (skill['storage'] - skill['min'])/(skill['max'] - skill['min']) * 100)
+
                 tz = config.SERVER_MSK_DIFF
                 date_stamp = (datetime.now() - timedelta(minutes=5 + farm_k) + timedelta(hours=tz.hour)).timestamp()
                 date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
@@ -1219,7 +1229,7 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, farm_k=No
                 date_str_now = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.now() + timedelta(hours=tz.hour) ).timestamp()    ))
 
 
-                text = f'▫️ {elem["name"]}\n▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str_farm_to}\n▫️ А сейчас {date_str_now}'
+                text = f'▫️ {elem["name"]}\n▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str_farm_to}\n▫️ А сейчас {date_str_now}\n▫️ ⏰ сила умения {power_skill}%'
                 send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n{text}')
 
                 text = getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text
@@ -3722,7 +3732,7 @@ def main_message(message):
                             skill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==thing['skill']['storage']['id']), None)
 
                         storage = skill['storage'] + thing['skill']['storage']['value'] 
-                        if storage >= skill['min']:
+                        if storage > skill['min']:
                             power_skill = (storage - skill['min'])/(skill['max'] - skill['min'])
                             farm_k = int(power_skill * 10 / 1)
                             
