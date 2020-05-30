@@ -3498,7 +3498,7 @@ def send_welcome(message):
     # check_animal()
     
     try:
-        for user in registered_users.find({'login': 'Detective_Kate'})
+        for user in registered_users.find({'login': 'Detective_Kate'}):
             send_message_to_admin(f'⚠️ ТЕСТ!\n{user}')
         pass
     except:
