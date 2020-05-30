@@ -4649,7 +4649,7 @@ def main_message(message):
                             check_skills(message.text, message.chat.id, time_over, userIAm, skill.copy())
                     
                     for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
-                        check_things(message.text, message.chat.id, time_over, userIAm, inv.copy(), farm_k=farm_k, forward_date=message.forward_date)
+                        check_things(message.text, message.chat.id, time_over, userIAm, inv.copy(), farm_k=0, forward_date=message.forward_date)
 
                 if 'Во время вылазки на тебя напал' in message.text:
                     if userIAm == None:
