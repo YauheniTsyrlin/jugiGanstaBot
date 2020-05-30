@@ -5172,6 +5172,7 @@ if 1==2: # дедублицируем crypto
 
 if 1==1: # обновляем pip_bolt 
     updateUser(None)
+    listInv = GLOBAL_VARS['inventory']
     for user in list(filter(lambda x : len(x.getInventory()) > 0, USERS_ARR)):
         for inv in list(filter(lambda x : x['id'] == 'pip_bolt' , user.getInventory())):
             inv = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None).copy()
