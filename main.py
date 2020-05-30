@@ -1170,7 +1170,8 @@ def dzen_rewards(user, num_dzen, message):
             else:
                 send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
 
-def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, message_date=None, k_farm=None):
+# , message_date=None, k_farm=None
+def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
     count = counterSkill
     if 'Найдено:' in text:
         text = text.split('Найдено:')[0]+'\nНайдено: ' + text.replace('\n', '').split('Найдено:')[1]
@@ -3724,7 +3725,7 @@ def main_message(message):
                     if 'skill' in thing and 'storage' in thing['skill'] and thing['skill']['storage']['id'] == 'watchmaker':
                         skill = userIAm.getInventoryThing({'id':'watchmaker','type':'skill'})
                         if skill == None:
-                            skill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==thing['skill']['storage']['id']), None).copy()
+                            skill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==thing['skill']['storage']['id']), None)
 
                         storage = skill['storage'] + thing['skill']['storage']['value'] 
                         if storage >= skill['min']:
@@ -3741,7 +3742,7 @@ def main_message(message):
                             userIAm.removeInventoryThing(thing)
                             text = f'{userIAm.getNameAndGerb()}!\nУ тебя испортилась вещь из инвентаря:\n▫️ {thing["name"]}'
                             # send_messages_big(message.chat.id, text=f'{text}')
-                            send_message_to_admin(f'🗑️ Сломалось:\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n▫️ {thing["name"]}')
+                            # send_message_to_admin(f'🗑️ Сломалось:\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n▫️ {thing["name"]}')
                         else:
                             thing['wear'].update({'value': newValue})
                         updateUser(userIAm)
@@ -4647,7 +4648,7 @@ def main_message(message):
                             check_skills(message.text, message.chat.id, time_farm_over, userIAm, skill.copy())
                     
                     for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
-                        check_things(message.text, message.chat.id, time_farm_over, userIAm, inv.copy(), message.forward_date, farm_k)
+                        check_things(message.text, message.chat.id, time_farm_over, userIAm, inv.copy())
                 else:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
 
