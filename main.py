@@ -4651,6 +4651,7 @@ def main_message(message):
                             check_skills(message.text, message.chat.id, time_farm_over, userIAm, skill.copy())
                     
                     for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
+                        
                         check_things(message.text, message.chat.id, time_farm_over, userIAm, inv.copy(), farm_k=farm_k, forward_date=message.forward_date)
                 else:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
