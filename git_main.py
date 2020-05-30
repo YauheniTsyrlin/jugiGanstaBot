@@ -56,9 +56,10 @@ def main_loop():
             logger.info('restar bot Jugi')
             call('sudo systemctl restart bot', shell=True)
             logger.info('OK bot')
-            logger.info('restar bot Bozya')
-            call('sudo systemctl restart bozya', shell=True)
-            logger.info('OK Bozya')
+
+            # logger.info('restar bot Bozya')
+            # call('sudo systemctl restart bozya', shell=True)
+            # logger.info('OK Bozya')
             return web.Response()
         else:
             return web.Response(status=403)
