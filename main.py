@@ -3731,17 +3731,17 @@ def main_message(message):
                             power_skill = (storage - skill['min'])/(skill['max'] - skill['min'])
                             farm_k = int(power_skill * 10 / 1)
                             
-                            tz = config.SERVER_MSK_DIFF
-                            date_stamp = (datetime.now() - timedelta(minutes=5 + farm_k) + timedelta(hours=tz.hour)).timestamp()
-                            date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
+                            # tz = config.SERVER_MSK_DIFF
+                            # date_stamp = (datetime.now() - timedelta(minutes=5 + farm_k) + timedelta(hours=tz.hour)).timestamp()
+                            # date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
                             #send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n▫️ Сила умения {power_skill}\n▫️ Период фарма 5+{farm_k} мин.\n▫️ Время фарма {date_str} МСК')
 
                         newValue = thing['wear']['value'] - thing['wear']['one_use']
                         if newValue < 0:
                             userIAm.removeInventoryThing(thing)
                             text = f'{userIAm.getNameAndGerb()}!\nУ тебя испортилась вещь из инвентаря:\n▫️ {thing["name"]}'
-                            send_messages_big(message.chat.id, text=f'{text}')
-                            #send_message_to_admin(f'🗑️ Сломалось:\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n▫️ {thing["name"]}')
+                            # send_messages_big(message.chat.id, text=f'{text}')
+                            send_message_to_admin(f'🗑️ Сломалось:\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n▫️ {thing["name"]}')
                         else:
                             thing['wear'].update({'value': newValue})
                         updateUser(userIAm)
