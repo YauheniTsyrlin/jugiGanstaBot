@@ -1207,7 +1207,7 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, message_d
             text = f'{userIAm.getNameAndGerb()}, ты нашел:\n▫️ {elem["name"]} {"" if subjects_count == 1 else str(subjects_count)+"шт."}'
             send_messages_big(chat, text=text)
         else:
-            # if k_farm:
+            ## if k_farm:
             #     text = getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text
                 
             #     tz = config.SERVER_MSK_DIFF
