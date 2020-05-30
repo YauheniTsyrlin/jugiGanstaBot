@@ -1968,7 +1968,7 @@ def select_farm(call):
         
         inventory = None
         inventories = []
-        for inv in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.id': inv_id}):
+        for inv in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.id': inv_id}).sort([("inventory.wear.value", pymongo.ASCENDING)]):
             inventory = inv['inventory']
             inventories.append(inventory)
 
