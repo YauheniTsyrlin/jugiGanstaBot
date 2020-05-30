@@ -440,7 +440,7 @@ def getUserByLogin(login: str):
 
 def getUserByName(name: str, fraction=None):
     for user in list(USERS_ARR):
-        if tools.deEmojify(name).lower().strip() == user.getName().lower().strip(): 
+        if tools.deEmojify(name).lower().strip() == tools.deEmojify(user.getName()).lower().strip(): 
             if fraction:
                 if user.getFraction() == fraction:
                     return user
