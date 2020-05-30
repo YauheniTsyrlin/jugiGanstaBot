@@ -1216,8 +1216,10 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, farm_k=No
                 date_str_forward = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.fromtimestamp(forward_date) + timedelta(hours=tz.hour) ).timestamp()    ))
                 date_stamp_to = (datetime.now() - timedelta(minutes=5+farm_k) +  timedelta(hours=tz.hour)).timestamp()
                 date_str_farm_to = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp_to))
+                date_str_now = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.now() + timedelta(hours=tz.hour) ).timestamp()    ))
 
-                text = f'▫️ {elem["name"]}\n▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str_farm_to}'
+
+                text = f'▫️ {elem["name"]}\n▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str_farm_to}\n▫️ А сейчас {date_str_now}'
                 send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n{text}')
 
                 text = getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text
