@@ -1170,7 +1170,7 @@ def dzen_rewards(user, num_dzen, message):
             else:
                 send_messages_big(message.chat.id, text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(message.from_user.username, 'new_accessory_not_in_stock').fulfillment_text + f'\n\n▫️ {elem["name"]} 🔘{elem["cost"]}') 
 
-def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
+def check_things(text, chat, time_over, userIAm, elem, counterSkill=0, message_date=None, k_farm=None):
     count = counterSkill
     if 'Найдено:' in text:
         text = text.split('Найдено:')[0]+'\nНайдено: ' + text.replace('\n', '').split('Найдено:')[1]
@@ -1207,7 +1207,25 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
             text = f'{userIAm.getNameAndGerb()}, ты нашел:\n▫️ {elem["name"]} {"" if subjects_count == 1 else str(subjects_count)+"шт."}'
             send_messages_big(chat, text=text)
         else:
-            send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
+            if k_farm:
+                text = getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text
+                
+                tz = config.SERVER_MSK_DIFF
+                date_stamp = (datetime.now() - timedelta(minutes=5 + farm_k) + timedelta(hours=tz.hour)).timestamp()
+                date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
+
+                date_str_forward = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.fromtimestamp(message_date) + timedelta(hours=tz.hour) ).timestamp()    ))
+                date_stamp_to = (datetime.now() - timedelta(minutes=5+farm_k) +  timedelta(hours=tz.hour)).timestamp()
+                date_str_farm_to = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp_to))
+
+                text = text + f'\n▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str_farm_to}'
+
+                send_messages_big(chat, text=text)
+                send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n{text}')
+
+            else:
+                send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), elem["dialog_old_text"]).fulfillment_text)
+
     elif count > 1 and count < minimum:
         send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), 'dialog_few_things').fulfillment_text)
     
@@ -3635,7 +3653,6 @@ def get_message_stiker(message):
 # Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def main_message(message):
-    # message.from_user.username = "Brodskey"
     # write_json(message.json)
     chat = message.chat.id
     privateChat = ('private' in message.chat.type)
@@ -3648,7 +3665,7 @@ def main_message(message):
     black_list = getSetting(code='BLACK_LIST', name=message.from_user.username)
     if black_list:
         send_messages_big(message.chat.id, text=f'{message.from_user.username} заслужил пожизненный бан {black_list}', reply_markup=None)
-        send_message_to_admin(f'⚠️Внимание! \n {message.from_user.username} написал Джу:\n\n {message.text}')
+        send_message_to_admin(f'⚠️ Внимание!\n {message.from_user.username} написал Джу:\n\n {message.text}')
         return
 
     check_and_register_tg_user(message.from_user.username)
@@ -3707,23 +3724,30 @@ def main_message(message):
                     if 'skill' in thing and 'storage' in thing['skill'] and thing['skill']['storage']['id'] == 'watchmaker':
                         skill = userIAm.getInventoryThing({'id':'watchmaker','type':'skill'})
                         if skill == None:
-                            skill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==thing['skill']['storage']['id']), None) 
+                            skill = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='SKILLS')['value']) if x['id']==thing['skill']['storage']['id']), None).copy()
 
                         storage = skill['storage'] + thing['skill']['storage']['value'] 
                         if storage >= skill['min']:
                             power_skill = (storage - skill['min'])/(skill['max'] - skill['min'])
                             farm_k = int(power_skill * 10 / 1)
-                            logger.info(f'Коэффициент времени фарма: +{farm_k} мин.')
+                            
+                            tz = config.SERVER_MSK_DIFF
+                            date_stamp = (datetime.now() - timedelta(minutes=5 + farm_k) + timedelta(hours=tz.hour)).timestamp()
+                            date_str = time.strftime("%d.%m %H:%M", time.gmtime( date_stamp ))
+                            send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n▫️ Сила умения {power_skill}\n▫️ Период фарма 5+{farm_k} мин.\n▫️ Время фарма {date_str} МСК')
+
                         newValue = thing['wear']['value'] - thing['wear']['one_use']
                         if newValue < 0:
                             userIAm.removeInventoryThing(thing)
-                            text = f'{user.getNameAndGerb()}, у тебя испортилась вещь из инвентаря:\n▫️ {thing["name"]}'
+                            text = f'{userIAm.getNameAndGerb()}!\nУ тебя испортилась вещь из инвентаря:\n▫️ {thing["name"]}'
+                            send_messages_big(message.chat.id, text=f'{text}')
+                            send_message_to_admin(f'🗑️ Сломалось:\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n▫️ {thing["name"]}')
                         else:
                             thing['wear'].update({'value': newValue})
                         updateUser(userIAm)
                 except:
                     traceback.print_exc()
-        time_farm_over = message.forward_date < (datetime.now() - timedelta(minutes= 5+farm_k)).timestamp()
+        time_farm_over = message.forward_date < (datetime.now() - timedelta(minutes=5+farm_k)).timestamp()
 
         if (message.text.startswith('📟Пип-бой 3000')):
             if ('/killdrone' in message.text or 
@@ -4623,7 +4647,7 @@ def main_message(message):
                             check_skills(message.text, message.chat.id, time_farm_over, userIAm, skill.copy())
                     
                     for inv in list(filter(lambda x : 'subjects_to_find' in x, GLOBAL_VARS['inventory'])):
-                        check_things(message.text, message.chat.id, time_farm_over, userIAm, inv.copy())
+                        check_things(message.text, message.chat.id, time_farm_over, userIAm, inv.copy(), message.forward_date, farm_k)
                 else:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
 
