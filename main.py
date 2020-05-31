@@ -2259,7 +2259,7 @@ def select_shelf(call):
             
             markupinline_seller = InlineKeyboardMarkup(row_width=2) 
             btn_yes = InlineKeyboardButton(f"Продать 📝", callback_data=f"{button_parent['id']}|request|0|{inventory['uid'][:16]}|{user.getLogin()}")
-            btn_yes = InlineKeyboardButton(f"Отказать ❌", callback_data=f"{button_parent['id']}|closereq|0|{inventory['uid'][:16]}|{user.getLogin()}")
+            btn_no = InlineKeyboardButton(f"Отказать ❌", callback_data=f"{button_parent['id']}|closereq|0|{inventory['uid'][:16]}|{user.getLogin()}")
             markupinline_seller.add(btn_yes, btn_no)
 
             send_messages_big(userseller.getChat(), text=f'🛍️👋 Магазин!\n{user.getNameAndGerb()} (@{user.getLogin()}) сделал предложение в магазине!\n▫️ 🔘{cost} {inventory["name"]}', reply_markup=markupinline_seller)
