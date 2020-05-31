@@ -4971,11 +4971,14 @@ newvalues = { "$set": { "value":
                 {'band': 'Crewname'},
                 {'band': 'ЭнтрǁØǁпия'},
                 {'band': 'ǁGØodfeelȺssǁ'},
+
                 {'band': 'New Vegas'},
                 {'band': 'New Vegas East'},
+
                 {'band': 'Тамплиеры'},
                 {'band': 'КiберХоxли'},
-                {'band': 'Тени Инсмута'}
+                {'band': 'Тени Инсмута'},
+                {'band': 'Каганат ВХ'}
                 
             ]
         } 
@@ -5128,6 +5131,29 @@ newvalues = { "$set":
                                         {
                                             'name': 'КiберХоxли',
                                             'boss': 'i_am_not_Daniil'
+                                        }
+                                    ],
+                            'chats': 
+                                    {
+                                        'secret' : -0,
+                                        'info' : -0
+                                    }
+                        },
+                        { 
+                            'name': 'Каганат ВХ',
+                            'liga': 'Савант-лига',
+                            'boss': [
+                                        'Nortrton1747'
+                                    ],
+                            'poweruser': 
+                                    [
+                                        'Nortrton1747'
+                                    ],  
+                            'bands': 
+                                    [
+                                        {
+                                            'name': 'Великие Ханы',
+                                            'boss': 'Nortrton1747'
                                         }
                                     ],
                             'chats': 
