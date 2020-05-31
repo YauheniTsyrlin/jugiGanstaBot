@@ -1719,11 +1719,11 @@ newvalues = { "$set": { "value":
                                     [
                                         {
                                             'id': 'ephedrine',
-                                            'counter': 1
+                                            'counter': 8
                                         },
                                         {
                                             'id': 'plantain',
-                                            'counter': 3
+                                            'counter': 4
                                         }
                                     ]
                                 },
@@ -2692,7 +2692,7 @@ newvalues = { "$set": { "value":
                                     [
                                         {
                                             'id': 'silver',
-                                            'counter': 3
+                                            'counter': 4
                                         }
                                     ]
                                 },
@@ -2734,15 +2734,15 @@ newvalues = { "$set": { "value":
                                     [
                                         {
                                             'id': 'blue_tape',
-                                            'counter': 2
+                                            'counter': 4
                                         },
                                         {
                                             'id': 'ephedrine',
-                                            'counter': 1
+                                            'counter': 2
                                         },
                                         {
                                             'id': 'bandage',
-                                            'counter': 1
+                                            'counter': 2
                                         }
                                     ]
                                 },
@@ -2767,7 +2767,7 @@ newvalues = { "$set": { "value":
                                         },
                                         {
                                             'id': 'ephedrine',
-                                            'counter': 1
+                                            'counter': 4
                                         },
                                         {
                                             'id': 'cloth',
@@ -2913,11 +2913,11 @@ newvalues = { "$set": { "value":
                                     [
                                         {
                                             'id': 'alcohol',
-                                            'counter': 5
+                                            'counter': 8
                                         },
                                         {
                                             'id': 'something',
-                                            'counter': 10
+                                            'counter': 2
                                         }
                                     ]
                                 },
@@ -2938,7 +2938,7 @@ newvalues = { "$set": { "value":
                                     [
                                         {
                                             'id': 'sagebrush',
-                                            'counter': 3
+                                            'counter': 4
                                         },
                                         {
                                             'id': 'alcohol',
@@ -2963,11 +2963,11 @@ newvalues = { "$set": { "value":
                                     [
                                         {
                                             'id': 'wires',
-                                            'counter': 10
+                                            'counter': 16
                                         },
                                         {
                                             'id': 'blue_tape',
-                                            'counter': 2
+                                            'counter': 4
                                         }
                                     ]
                                 },
@@ -2988,7 +2988,7 @@ newvalues = { "$set": { "value":
                                     [
                                         {
                                             'id': 'cast_iron',
-                                            'counter': 3
+                                            'counter': 4
                                         },
                                         {
                                             'id': 'bolt_ww',
