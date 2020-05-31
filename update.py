@@ -3087,7 +3087,7 @@ newvalues = { "$set": { "value":
                                     'subjects_quantum': 1,
                                     'subjects_to_find':
                                     [
-                                        'Тряпка', '🕳304 и 📦313'
+                                        'Тряпка'
                                     ],
                                     'subjects_count': 4, # Количетсво добавляемых вещей
                                     'dialog_old_text': 'default_old_thing'
