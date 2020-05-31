@@ -1225,6 +1225,11 @@ def check_animal():
         for creature in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
             creatures.append(creature)
         
+        if len(creatures) > 100:
+            send_messages_big(user.getChat(), text=f'👥 Перенаселение\n▫️ На ферме\n▫️ Животные не размножаются')
+            send_message_to_admin(f'👥 Перенаселение\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ На ферме\n▫️ Животные не размножаются')
+            continue
+        
         creature_to_insert = []
         dead_creatures = []
         for record_farm in creatures:
