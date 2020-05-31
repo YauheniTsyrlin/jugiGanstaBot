@@ -1225,7 +1225,7 @@ def check_animal():
         for creature in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
             creatures.append(creature)
         
-        if len(creatures) > 100:
+        if len(creatures) > 1000:
             send_messages_big(user.getChat(), text=f'👥 Перенаселение\n▫️ На ферме\n▫️ Животные не размножаются')
             send_message_to_admin(f'👥 Перенаселение\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ На ферме\n▫️ Животные не размножаются')
             continue
@@ -3169,7 +3169,7 @@ def select_exchange(call):
                     discont = inventory['discont']
                 cost = cost + inventory["cost"]*discont
                 user.removeInventoryThing(inventory)
-                
+
             cost = int(cost)
             crypto.update({'cost': crypto['cost'] + cost})
             user.updateInventoryThing(crypto)
