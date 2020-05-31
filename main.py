@@ -1198,8 +1198,10 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
 
             if subjects_count == 1 and minimum == 1:
                 subjects_count = subjects_count * count
-            else:
+            elif minimum > 1:
                 subjects_count = int(count/minimum)
+            else:
+                pass
 
             for i in range(1, subjects_count+1):
                 addInventory(userIAm, elem.copy())
