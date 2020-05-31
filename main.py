@@ -3120,7 +3120,9 @@ def select_exchange(call):
             if button_id in ['selectall']:
                 discont = button_parent['discont']
                 tofarm = InlineKeyboardButton(f"🐮 На ферму", callback_data=f"{button_parent['id']}|tofarmall|{stepinventory}|{inventory['id']}")
-                sellall = InlineKeyboardButton(f"🔘 {str(int(sum([d['cost'] for d in inventory])*discont))} 🔪 Под нож", callback_data=f"{button_parent['id']}|getcryptoall|{stepinventory}|{inventory['id']}")
+                
+                allcost = sum([d['cost'] for d in inventory]) * discont
+                sellall = InlineKeyboardButton(f"🔘 {allcost} 🔪 Под нож", callback_data=f"{button_parent['id']}|getcryptoall|{stepinventory}|{inventory['id']}")
                 buttons.append(sellall)
             buttons.append(tofarm)
             
