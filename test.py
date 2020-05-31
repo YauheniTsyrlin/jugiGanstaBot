@@ -840,8 +840,8 @@ def getPidorOfTheDay(goat, now_date):
 
 
 # print(report_man_of_day('GonzikBenzyavsky'))
-tz = config.SERVER_MSK_DIFF
-now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+# tz = config.SERVER_MSK_DIFF
+# now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
 # print(getPidorOfTheDay('New Vegas', now_date))
 
 # tt = ['7ч. 27мин.', '3ч. 0мин.', '1 мин.', '10 сек.', '1ч. 15мин.']
@@ -984,19 +984,25 @@ stats = [{'cost': 1000, 'name': 2}, {'cost': 5000, 'name': 3}, {'cost': 200, 'na
 stats2 = []
 # result = max(stats, key=lambda x: x['cost'])
 # result = list(filter(lambda x: True, stats))
-# result = max([d['cost'] for d in stats])
-import pandas as pd
-df =  pd.DataFrame(list(deal.find()))
-df['date'] = [datetime.fromtimestamp(x).strftime("%d/%m") for x in df.date]
-del df['_id']
-del df['seller']
-del df['buyer']
-del df['inventory_id']
-del df['inventory']
+# 
 
-# print(df.date.values)
+result = sum([d['cost'] for d in stats])
+print(result)
 
-import matplotlib.pyplot as plt
+
+
+# import pandas as pd
+# df =  pd.DataFrame(list(deal.find()))
+# df['date'] = [datetime.fromtimestamp(x).strftime("%d/%m") for x in df.date]
+# del df['_id']
+# del df['seller']
+# del df['buyer']
+# del df['inventory_id']
+# del df['inventory']
+
+# # print(df.date.values)
+
+# import matplotlib.pyplot as plt
 
 # Независимая (x) и зависимая (y) переменные
 # x = [1, 2, 3, 4, 5]

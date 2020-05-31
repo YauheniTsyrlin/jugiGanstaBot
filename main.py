@@ -1229,7 +1229,7 @@ def check_animal():
             send_messages_big(user.getChat(), text=f'👥 Перенаселение\n▫️ На ферме\n▫️ Животные не размножаются')
             send_message_to_admin(f'👥 Перенаселение\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ На ферме\n▫️ Животные не размножаются')
             continue
-        
+
         creature_to_insert = []
         dead_creatures = []
         for record_farm in creatures:
@@ -3118,8 +3118,13 @@ def select_exchange(call):
         if inventory['type'] in ['animals']:
             tofarm = InlineKeyboardButton(f"🐮 На ферму", callback_data=f"{button_parent['id']}|tofarm|{stepinventory}|{inventory['uid']}")
             if button_id in ['selectall']:
+                discont = button_parent['discont']
                 tofarm = InlineKeyboardButton(f"🐮 На ферму", callback_data=f"{button_parent['id']}|tofarmall|{stepinventory}|{inventory['id']}")
+                sellall = InlineKeyboardButton(f"🔘 {sum([d['cost'] for d in inventory])*discont} 🔪 Под нож", callback_data=f"{button_parent['id']}|getcryptoall|{stepinventory}|{inventory['id']}")
+            
             buttons.append(tofarm)
+            buttons.append(sellall)
+
         
         for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, back_button=None, exit_button=exit_button, forward_button=None):
             markupinline.row(*row) 
@@ -3130,7 +3135,7 @@ def select_exchange(call):
         # bot.answer_callback_query(call.id, f'selectinvent: {call.data}')
         return
 
-    if button_id in ['getcrypto', 'toshelf', 'toworkbench', 'toworkbenchall', 'tofarm', 'tofarmall']:
+    if button_id in ['getcrypto', 'getcryptoall', 'toshelf', 'toworkbench', 'toworkbenchall', 'tofarm', 'tofarmall']:
         # {button_parent['id']}|getcrypto|{stepinventory}|{inventory['uid']}
         inv_uid = call.data.split('|')[3]
         stepinventory = int(call.data.split('|')[2])
@@ -3138,7 +3143,7 @@ def select_exchange(call):
         user = getUserByLogin(call.from_user.username)
 
         filterInv = {'uid': inv_uid}
-        if button_id in ['toworkbenchall', 'tofarmall']:
+        if button_id in ['toworkbenchall', 'tofarmall', 'getcryptoall']:
             filterInv = {'id': inv_uid}
         inventory = user.getInventoryThing(filterInv)
 
@@ -3148,21 +3153,25 @@ def select_exchange(call):
             bot.answer_callback_query(call.id, f'Ну ты и пидор! Попытаться сдать корону - это запредельно!')
             return
 
-        if button_id in ['getcrypto']:
-            discont = button_parent['discont']
-            if 'discont' in inventory:
-                discont = inventory['discont']
-            cost = int(inventory["cost"]*discont)
+        if button_id in ['getcrypto', 'getcryptoall']:
+            
             crypto = user.getInventoryThing({'id': 'crypto'})
             if crypto == None:
                 crypto = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value']) if x['id']=='crypto'), None).copy()
-                crypto.update({'cost': cost})
                 addInventory(user, crypto)
-            else:
-                crypto.update({'cost': crypto['cost']+cost})
-                user.updateInventoryThing(crypto)
-            user.removeInventoryThing(inventory)
+            cost = 0
+
+            for inventory in user.getInventoryThings(filterInv):
+                discont = button_parent['discont']
+                if 'discont' in inventory:
+                    discont = inventory['discont']
+                cost = cost + int(inventory["cost"]*discont)
+                user.removeInventoryThing(inventory)
+
+            crypto.update({'cost': crypto['cost'] + cost})
+            user.updateInventoryThing(crypto)
             updateUser(user)
+
             send_message_to_admin(text=f'♻️ Сдано за {int(discont*100)}% 💴!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {inventory["name"]} 🔘{cost}')
             bot.answer_callback_query(call.id, f'Сдано за 🔘 {cost}')
 
