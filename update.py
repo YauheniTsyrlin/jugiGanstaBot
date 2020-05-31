@@ -5155,6 +5155,14 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
+if 1==1: # отбираем crypto  @Java_dentist @WestMoscow 
+    updateUser(None)
+    listInv = GLOBAL_VARS['inventory']
+    for user in list(filter(lambda x : x.getLogin() in ['Java_dentist', 'WestMoscow'], USERS_ARR)):
+        # if not user.getLogin() == 'GonzikBenzyavsky': continue
+        crypto = user.getInventoryThings({'id':'crypto'})
+        crypto['cost'] = crypto['cost'] - 9000 
+        updateUser(user)    
 
 if 1==2: # дедублицируем crypto 
     updateUser(None)
