@@ -980,11 +980,11 @@ def getInventoryReport(user, types):
 # print(f"{report_raids.count_documents({'band': {'$in': getGoatBands('FǁȺǁggǁØǁAT')}, 'date': 1589032800, 'planed_location': {'&gt': 0} })}")
 # print(f"{report_raids.count_documents({'band': {'$in': getGoatBands('FǁȺǁggǁØǁAT')}, 'date': 1589032800, 'planed_location': {'$gt': 0} })}")
 
-stats = [{'cost': 1000, 'name': 2}, {'cost': 5000, 'name': 3}, {'cost': 200, 'name': 4}]
 stats2 = []
 # result = max(stats, key=lambda x: x['cost'])
 # result = list(filter(lambda x: True, stats))
 # 
+stats = [{'cost': 1000, 'name': 2}, {'cost': 5000, 'name': 3}, {'cost': 200, 'name': 4}]
 
 result = sum([d['cost'] for d in stats])
 print(result)
