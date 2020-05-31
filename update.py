@@ -5169,7 +5169,7 @@ if 1==2: # дедублицируем crypto
                 user.getInventory().remove(inv)
         updateUser(user)  
 
-if 1==1: # отбираем crypto  @Java_dentist @WestMoscow 
+if 1==2: # отбираем crypto  @Java_dentist @WestMoscow 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     for user in list(filter(lambda x : x.getLogin() in ['WestMoscow'], USERS_ARR)):

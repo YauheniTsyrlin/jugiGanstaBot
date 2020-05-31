@@ -2259,20 +2259,18 @@ def select_shelf(call):
             
             markupinline_seller = InlineKeyboardMarkup(row_width=2) 
 
-            if userseller.getLogin() == 'GonzikBenzyavsky':
-                btn_yes = InlineKeyboardButton(f"Продать", callback_data=f"{button_parent['id']}|request|0|{inventory['uid'][:16]}|{user.getLogin()}")
-                markupinline_seller.add(btn_yes, btn_yes)
+            if userseller.getLogin() == 'GonzikBenzyavsky': 
+                btn_yes = InlineKeyboardButton(f"Продать 📝", callback_data=f"{button_parent['id']}|request|0|{inventory['uid'][:16]}|{user.getLogin()}")
+                btn_yes = InlineKeyboardButton(f"Отказать ❌", callback_data=f"{button_parent['id']}|closereq|0|{inventory['uid'][:16]}|{user.getLogin()}")
+                markupinline_seller.add(btn_yes, btn_no)
 
             send_messages_big(userseller.getChat(), text=f'🛍️👋 Магазин!\n{user.getNameAndGerb()} (@{user.getLogin()}) сделал предложение в магазине!\n▫️ 🔘{cost} {inventory["name"]}', reply_markup=markupinline_seller)
-
-            
             bot.answer_callback_query(call.id, f'Заявка подана!')
-        
         
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{best_request}{your_request}\n▫️ {user.getGerb()} Твой кошелек: 🔘{crypto['cost']}", reply_markup=markupinline)
         return
 
-    if button_id in ['pickup', 'request']:
+    if button_id in ['pickup', 'request', 'closereq']:
         # {button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}
         # {button_parent['id']}|request|{stepinventory}|{inventory['uid']}|{userRequester.getLogin()}
         inv_uid = call.data.split('|')[3]
@@ -2313,6 +2311,48 @@ def select_shelf(call):
                 requester = user.getUserByLogin(req['login'])
                 if requester:
                     send_messages_big(requester.getChat(), text=f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) забрал из магазина\n▫️ 🔘{cost} {inventory["name"]}!\nТвоя заявка аннулирована!')
+
+        elif button_id == 'closereq':
+            # Есть ли покупатель
+            buyer = getUserByLogin(call.data.split('|')[4])
+            if not buyer: 
+                bot.answer_callback_query(call.id, f'Не найден покупатель')
+                return
+            
+            request = None
+            for request in invonshelf['request']:
+                if request['login'] == buyer.getLogin():
+                    break
+
+            # Есть ли заявка от покупателя
+            if not request:
+                bot.answer_callback_query(call.id, f'Не найдена заявка')
+                return
+
+            newRequests = invonshelf['request']
+            newRequests.remove(request)
+            invonshelf.update({'request': newRequests}) 
+
+            newvalues = { "$set": {'request': newRequests} }
+            result = shelf.update_one(
+                {
+                    '$or': 
+                    [
+                        {'state': 'NEW'},
+                        {'state': None}
+                    ],
+                    'inventory.uid' : inventory['uid']
+                }, newvalues)
+
+            if result.matched_count < 1:
+                bot.answer_callback_query(call.id, f'Не смогли обновить заявки')
+                return
+
+            text = f'🛍️❌ Магазин!\n{userseller.getNameAndGerb()} (@{userseller.getLogin()}) отказал тебе в продаже за 🔘{request["cost"]} {inventory["name"]}. Твоя заявка аннулирована.'
+            send_messages_big(buyer.getChat(), text=text)
+            send_message_to_admin(f'🛍️❌ Магазин!\n▫️ {userseller.getNameAndGerb()} (@{userseller.getLogin()})\n▫️ Отказал\n▫️ {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ 🔘{request["cost"]} {inventory["name"]}')
+
+
 
         elif button_id == 'request':
             # Есть ли покупатель
@@ -3690,7 +3730,7 @@ def isTimeFarmOver(userIAm, forward_date, chat):
         date_str_farm_to = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp_to))
         date_str_now = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.now() + timedelta(hours=tz.hour) ).timestamp()    ))
 
-        text = f'▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str_farm_to}\n▫️ А сейчас {date_str_now}\n▫️ ⏰ сила умения {power_skill}%'
+        text = f'▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str_farm_to}\n▫️ А сейчас {date_str_now}\n▫️ ⏰ сила умения {int(power_skill)}%'
         send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n{text}')
 
     return timeover
