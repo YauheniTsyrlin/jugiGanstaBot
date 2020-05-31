@@ -5155,16 +5155,7 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-if 1==1: # отбираем crypto  @Java_dentist @WestMoscow 
-    updateUser(None)
-    listInv = GLOBAL_VARS['inventory']
-    for user in list(filter(lambda x : x.getLogin() in ['Java_dentist', 'WestMoscow'], USERS_ARR)):
-        # if not user.getLogin() == 'GonzikBenzyavsky': continue
-        crypto = user.getInventoryThings({'id':'crypto'})
-        crypto['cost'] = crypto['cost'] - 9000 
-        updateUser(user)    
-
-if 1==2: # дедублицируем crypto 
+if 1==1: # дедублицируем crypto 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     for user in list(filter(lambda x : len(x.getInventory()) > 0, USERS_ARR)):
@@ -5176,7 +5167,18 @@ if 1==2: # дедублицируем crypto
             # print(f'{user.getLogin()} {inv["cost"]}')
             if counter < lenght:
                 user.getInventory().remove(inv)
-        updateUser(user)      
+        updateUser(user)  
+
+if 1==1: # отбираем crypto  @Java_dentist @WestMoscow 
+    updateUser(None)
+    listInv = GLOBAL_VARS['inventory']
+    for user in list(filter(lambda x : x.getLogin() in ['Java_dentist', 'WestMoscow'], USERS_ARR)):
+        # if not user.getLogin() == 'GonzikBenzyavsky': continue
+        crypto = user.getInventoryThings({'id':'crypto'})
+        crypto.update({'cost': crypto['cost'] - 9000})  
+        updateUser(user)    
+
+    
 
 if 1==2: # обновляем pip_bolt 
     updateUser(None)
