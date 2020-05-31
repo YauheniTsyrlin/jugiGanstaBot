@@ -3172,7 +3172,7 @@ def select_exchange(call):
             user.updateInventoryThing(crypto)
             updateUser(user)
 
-            send_message_to_admin(text=f'♻️ Сдано за {int(discont*100)}% 💴!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {inventory["name"]} 🔘{cost}')
+            send_message_to_admin(text=f'♻️ Сдано за {int(button_parent["discont"]*100)}% 💴!\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {inventory["name"]} 🔘{cost}')
             bot.answer_callback_query(call.id, f'Сдано за 🔘 {cost}')
 
         elif button_id in ['toshelf']:
