@@ -3113,7 +3113,7 @@ def select_exchange(call):
         toworkbench = InlineKeyboardButton(f"⚙️ На верстак", callback_data=f"{button_parent['id']}|toworkbench|{stepinventory}|{inventory['uid']}")
         if button_id in ['selectall']:
             toworkbench = InlineKeyboardButton(f"⚙️ На верстак", callback_data=f"{button_parent['id']}|toworkbenchall|{stepinventory}|{inventory['id']}")
-
+            discont = button_parent['discont']
             allcost = sum([d['cost'] for d in user.getInventoryThings(filterInv)]) 
             sellall = InlineKeyboardButton(f"🔘 {int(allcost * discont)} Получить", callback_data=f"{button_parent['id']}|getcryptoall|{stepinventory}|{inventory['id']}")
             buttons.append(sellall)
@@ -3123,7 +3123,7 @@ def select_exchange(call):
         if inventory['type'] in ['animals']:
             tofarm = InlineKeyboardButton(f"🐮 На ферму", callback_data=f"{button_parent['id']}|tofarm|{stepinventory}|{inventory['uid']}")
             if button_id in ['selectall']:
-                discont = button_parent['discont']
+                
                 tofarm = InlineKeyboardButton(f"🐮 На ферму", callback_data=f"{button_parent['id']}|tofarmall|{stepinventory}|{inventory['id']}")
 
             buttons.append(tofarm)
