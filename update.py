@@ -5181,6 +5181,15 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
+if 1==1: # На ферме 
+    for user in USERS_ARR:
+        # if not user.getLogin() == 'Digzzzy': continue
+        creatures = []
+        for creature in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
+            creatures.append(creature)
+        if len(creatures)> 0:
+            print(f'{user.getLogin()} : {len(creatures)}')
+
 if 1==2: # дедублицируем crypto 
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
