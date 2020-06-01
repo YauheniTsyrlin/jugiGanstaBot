@@ -5181,7 +5181,7 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-if 1==1: # На ферме 
+if 1==2: # На ферме 
     for user in USERS_ARR:
         # if not user.getLogin() == 'Digzzzy': continue
         creatures = []
