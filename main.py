@@ -1201,7 +1201,7 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
             elif minimum > 1:
                 subjects_count = int(count/minimum)
             else:
-                pass
+                pass 
 
             for i in range(1, subjects_count+1):
                 addInventory(userIAm, elem.copy())
@@ -1214,9 +1214,9 @@ def check_things(text, chat, time_over, userIAm, elem, counterSkill=0):
 
     elif count > 1 and count < minimum:
         send_messages_big(chat, text=getResponseDialogFlow(userIAm.getLogin(), 'dialog_few_things').fulfillment_text)
-    
+
 def check_animal():
-    sec = 1.5
+    sec = 1
     
     # Проверка на размножение на ферме
     for user in USERS_ARR:
@@ -1226,8 +1226,13 @@ def check_animal():
             creatures.append(creature)
         
         if len(creatures) > 100:
-            send_messages_big(user.getChat(), text=f'👥 Перенаселение\n▫️ На ферме\n▫️ Животные не размножаются')
-            send_message_to_admin(f'👥 Перенаселение\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ На ферме\n▫️ Животные не размножаются')
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(user.getChat(), text=f'👥 Перенаселение\n▫️ На ферме\n▫️ Животные не размножаются', time=time)
+            
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(None, f'👥 Перенаселение\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ На ферме\n▫️ Животные не размножаются', time=time)
             continue
 
         creature_to_insert = []
@@ -1278,9 +1283,13 @@ def check_animal():
             for key in cr.keys():
                 report = report + f'▫️ {key} {cr[key]}шт.\n'
             
-            time.sleep(sec)
-            send_messages_big(user.getChat(), text=f'👼 На ферме новые создания:\n{report}')
-            send_message_to_admin(f'👼 На ферме новые создания:\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(user.getChat(), text=f'👼 На ферме новые создания:\n{report}', time=time)
+
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(None, f'👼 На ферме новые создания:\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}', time=time)
 
         if len(dead_creatures)>0:
             cr = {}
@@ -1301,9 +1310,13 @@ def check_animal():
             for key in cr.keys():
                 report = report + f'▫️ {key} {cr[key]}шт.\n'
 
-            time.sleep(sec)
-            send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ При родах\n{report}')
-            send_message_to_admin(f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(user.getChat(), text=f'☠️ Погибло создание:\n▫️ При родах\n{report}', time=time)
+
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(None, f'☠️ Погибло создание:\n▫️ Роды\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}', time=time)
             # wear dialog_text_born
 
     # Старение на ферме
@@ -1346,9 +1359,12 @@ def check_animal():
             for key in cr.keys():
                 report = report + f'▫️ {key} {cr[key]}шт.\n'
 
-            time.sleep(sec)
-            send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n{report}')
-            send_message_to_admin(f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n{report}', time=time)
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(None, f'☠️ Погибло создание:\n▫️ На ферме\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}', time=time)
 
     # Старение на верстаке
     for user in USERS_ARR:
@@ -1389,9 +1405,13 @@ def check_animal():
             for key in cr.keys():
                 report = report + f'▫️ {key} {cr[key]}шт.\n'
 
-            time.sleep(sec)
-            send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n{report}')
-            send_message_to_admin(f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(user.getChat(), text=f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n{report}', time=time)
+            
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(None, f'☠️ Погибло создание:\n▫️ На верстаке\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}', time=time)
 
     # Старение В магазине
     for user in USERS_ARR:
@@ -1432,9 +1452,13 @@ def check_animal():
             for key in cr.keys():
                 report = report + f'▫️ {key} {cr[key]}шт.\n'
 
-            time.sleep(sec)
-            send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n{report}')
-            send_message_to_admin(f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n{report}', time=time)
+
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(None, f'☠️ Погибло создание:\n▫️ В магазине\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}', time=time)
 
     # Старение в инвентаре пользоватлей
     for user in list(filter(lambda x : len(x.getInventoryType(['animals'])) > 0, USERS_ARR)):
@@ -1462,9 +1486,13 @@ def check_animal():
             for key in cr.keys():
                 report = report + f'▫️ {key} {cr[key]}шт.\n'
 
-            time.sleep(sec)
-            send_messages_big(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n{report}')
-            send_message_to_admin(f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}')
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(user.getChat(), text=f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n{report}', time=time)
+
+            sec = sec + 1
+            time = datetime.now() + timedelta(seconds=sec)
+            send_pending_message(None, f'☠️ Погибло создание:\n▫️ В инвентаре\n▫️ От старости\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n{report}', time=time)
             
 def check_skills(text, chat, time_over, userIAm, elem, counterSkill=0):
     count = counterSkill
@@ -7359,6 +7387,24 @@ def reply_to_big(message: str, text: str):
 
     result = bot.reply_to(msg, text=tmp, parse_mode='HTML')
     return result
+
+def send_pending_message(chat, text, login='Jugi', time=datetime.now()):
+    if chat == None:
+        for adm in getSetting(code='ADMINISTRATOR'):
+            if adm['chat']: 
+                chat = adm['chat']
+                break  
+     
+    pending_messages.insert_one({ 
+        'chat_id': chat,
+        'reply_message': None,
+        'create_date': datetime.now().timestamp(),
+        'user_id': login,
+        'state': 'WAIT',
+        'pending_date': time.timestamp(),
+        'dialog_flow_text': None,
+        'dialog_flow_context': None,
+        'text': text})
 
 def pending_message():
     ids = []
