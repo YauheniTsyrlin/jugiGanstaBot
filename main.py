@@ -1123,6 +1123,10 @@ def getBossReport(boss_name: str):
 
         try:
             report = report + f'📋 <b>Записались {bo["onboss"]}</b>\n'
+            if onbossusers in bo:
+                for u in bo["onbossusers"]:
+                    report = report + f'▫️ {u}\n'
+
         except: pass
         report = report + f'⏰ Замечен {time.strftime("%d.%m.%Y %H:%M", time.gmtime(date))} МСК'
 
@@ -4594,6 +4598,8 @@ def main_message(message):
                     
                 counter = 0
                 onboss = 0
+                isonbossusers = False
+                isclearusers = False
                 health = 0
                 damage = []
                 beaten = []
@@ -4612,12 +4618,14 @@ def main_message(message):
                         if s.startswith('💀'):
                             killed.append(s.split('💀')[1].strip())
                     onboss = 0
+                    isclearusers = True
                 elif (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.text):
                     name = message.text.split('\n')[3].strip()
                     onboss = int(message.text.split('\n')[7].split('/')[0].strip())
                 elif 'Ты присоединился к группе, которая собирается атаковать' in message.text:
                     name = message.text.split('Ты присоединился к группе, которая собирается атаковать')[1].split('.')[0].strip()
                     onboss = 4 - int(message.text.split('Для битвы нужно еще')[1].split('человек')[0].strip())
+                    isonbossusers = True
                 elif message.text.startswith('ХОД БИТВЫ:'):
                     for s in message.text.split('\n'):
                         counter = counter + 1
@@ -4648,7 +4656,7 @@ def main_message(message):
                     row.update({'killed': killed})
                     row.update({'kr': kr})
                     row.update({'mat': mat})
-                    row.update({'onboss': onboss})
+                    row.update({'onboss': onboss}
                     row.update({'forward_date': forward_date})
                     
 
@@ -4675,6 +4683,17 @@ def main_message(message):
                         
                         mat = bo['mat']+ mat
                         row.update({'mat': mat})
+                    
+                        onbossusers = []
+                        if 'onbossusers' in bo:
+                            onbossusers = bo['onbossusers']
+                        row.update({'onbossusers': onbossusers})
+
+                        if isonbossusers:
+                            if message.from_user.username not in onbossusers:
+                                onbossusers.append()
+                        elif isclearusers:
+                            onbossusers = []
 
                         if message.forward_date in bo['forward_date']:
                             pass
@@ -4688,41 +4707,20 @@ def main_message(message):
                         result = boss.update_one({
                             'boss_name': name
                             }, newvalues)
-                        #logger.info(f'UPDATE {newvalues}')
+
                         if result.matched_count < 1:
                             boss.insert_one(row)
-                            #logger.info(f'insert_one {row}')
-
-                    # dresult = boss.aggregate([ 
-                    #     {   "$group": {
-                    #         "_id": { "boss_name":"$boss_name" }, 
-                    #         "count": {
-                    #             "$sum": 1}}},
-                            
-                    #     {   "$sort" : { "count" : -1 } }
-                    #     ])
                     
                     hashstr = getMobHash(name, 'boss')
                     buttons = []
-                    # for d in sorted(dresult, key = lambda i: tools.deEmojify(i["_id"]["boss_name"]), reverse=False):
-                    #     boss_name = d["_id"]["boss_name"] 
-                    #     #if boss_name == name: continue
-                    #     hashstr = getMobHash(boss_name, 'boss')
-                    #     boss_name_small = boss_name
-                    #     for n_boss in GLOBAL_VARS['bosses']:
-                    #         boss_name_small = boss_name_small.replace(n_boss, '') 
                     buttons.append(InlineKeyboardButton('⚜️ Все боссы', callback_data=f"boss_info|all|{hashstr}|{hashstr}"))
 
                     markupinline = InlineKeyboardMarkup(row_width=3)
                     for row in build_menu(buttons=buttons, n_cols=3):
                         markupinline.row(*row)   
 
-
-                    #if privateChat or isGoatSecretChat(message.from_user.username, message.chat.id):
                     report = getBossReport(name)
                     send_messages_big(message.chat.id, text=report, reply_markup=markupinline)
-                    #else:
-                    #    send_messages_big(message.chat.id, text=getResponseDialogFlow(message, 'shot_message_zbs').fulfillment_text)
 
                 if name == '':
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text)
