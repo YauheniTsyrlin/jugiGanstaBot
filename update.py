@@ -5188,6 +5188,7 @@ if 1==1: # На ферме
         for creature in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
             a = creature['login']
             creatures.append(creature)
+            pass
         if len(creatures)> 0:
             print(f'{user.getLogin()} : {len(creatures)}')
 
