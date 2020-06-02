@@ -92,7 +92,8 @@ def getPlotСourse(cursor, username: str):
     # Expand the cursor and construct the DataFrame
     df =  pd.DataFrame(list(cursor))
     df['date'] = [datetime.fromtimestamp(x).strftime("%d/%m") for x in df.date]
-    
+    inventory_name = df['inventory_name'][0]
+
     # # Delete the _id ...
     if True:
         del df['_id']
@@ -142,7 +143,7 @@ def getPlotСourse(cursor, username: str):
     plt.gca().spines["bottom"].set_alpha(.3)
     plt.gca().spines["right"].set_alpha(.3)
     plt.gca().spines["left"].set_alpha(.3)
-    plt.title(f'Курс', fontsize=22)
+    plt.title(f'{inventory_name}', fontsize=22)
 
     N = 14
     plt.yticks(range( 0, max(y_MAX) + y_interval, y_interval), [str(y) for y in range( 0, max(y_MAX) + y_interval  , y_interval)], fontsize=12)    
