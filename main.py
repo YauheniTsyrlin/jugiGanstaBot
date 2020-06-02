@@ -4656,9 +4656,8 @@ def main_message(message):
                     row.update({'killed': killed})
                     row.update({'kr': kr})
                     row.update({'mat': mat})
-                    row.update({'onboss': onboss}
-                    row.update({'forward_date': forward_date})
-                    
+                    row.update({'onboss': onboss})
+                    row.update({'forward_date': forward_date})                    
 
                     for bo in boss.find({'boss_name': name}):
                         if bo['date'] > row['date']:
