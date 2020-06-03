@@ -7026,8 +7026,9 @@ def callback_query(call):
     markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"pickup_exit|{login}"))
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
 
-@bot.callback_query_handler(func=lambda call: call.data.startswith("pinraid_"))
+@bot.callback_query_handler(func=lambda call: call.data.startswith("pinraid_") or call.data.startswith('p_u'))
 def callback_query(call):
+    #bot.answer_callback_query(call.id, call.data)
     privateChat = ('private' in call.message.chat.type)
     # pinonraid_actions_{goat}_{band}_{raid_date.timestamp()}
     if isUserBan(call.from_user.username):
@@ -7069,7 +7070,7 @@ def callback_query(call):
     if call.data.startswith('p_u'):
         #   0      1               2             3       4
         # p_u_{raid_date.timestamp()}_{band}_allbanditos
-        bot.answer_callback_query(call.id, call.data)
+        
         raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
         user_login = call.data.split("_"+call.data.split('_')[3]+"_")[1]
         if user_login == 'allbanditos':
