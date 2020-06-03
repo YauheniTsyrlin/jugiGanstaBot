@@ -7059,9 +7059,6 @@ def callback_query(call):
             planed_location_str = ''
             if planed_location:
                 planed_location_str = f'📍{planed_location} ' if planed_location > 0 else ''
-            
-            logger.info(f"p_u_{raid_date.timestamp()}_{band}_{user.getLogin()}")
-            logger.info(len(f"p_u_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
 
             buttons.append(InlineKeyboardButton(f"{planed_location_str}{user.getNameAndGerb()}", callback_data=f"p_u_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
         
@@ -7072,6 +7069,7 @@ def callback_query(call):
     if call.data.startswith('p_u'):
         #   0      1               2             3       4
         # p_u_{raid_date.timestamp()}_{band}_allbanditos
+        bot.answer_callback_query(call.id, call.data)
         raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
         user_login = call.data.split("_"+call.data.split('_')[3]+"_")[1]
         if user_login == 'allbanditos':
@@ -7248,7 +7246,7 @@ def callback_query(call):
     for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
         markupinline.row(*row)  
 
-    bot.answer_callback_query(call.id, call.data)
+    
     text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username if privateChat else None)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘 <b>{band}</b> <b>{selected_name}</b>\n{text}', parse_mode='HTML', reply_markup=markupinline)
     return
