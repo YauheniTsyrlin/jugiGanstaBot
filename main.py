@@ -4583,7 +4583,8 @@ def main_message(message):
                 send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'shot_message_zbs').fulfillment_text, reply_markup=markupinline)
         elif (message.text.startswith('ХОД БИТВЫ:') or 'Ты присоединился к группе, которая собирается атаковать' in message.text or message.text.startswith('Победа!') or (message.text.startswith('⚜️Боссы.') and '❌Нацарапать крестик' in message.text)):
             if hasAccessToWariors(message.from_user.username):
-        
+                dublicate = False
+
                 if userIAm == None:
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'no_user').fulfillment_text) 
                     return
@@ -4600,7 +4601,7 @@ def main_message(message):
                 new_Message = messager.new_message(message, filter_message)                
                 if not new_Message:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
-                    return
+                    dublicate = False
 
                 counter = 0
                 onboss = 0
@@ -4711,14 +4712,14 @@ def main_message(message):
                         #     forward_date = bo['forward_date'] + forward_date
                         #     row.update({'forward_date': forward_date})
 
-                    # if not dublicate:
-                    newvalues = { "$set": row }
-                    result = boss.update_one({
-                        'boss_name': name
-                        }, newvalues)
+                    if not dublicate:
+                        newvalues = { "$set": row }
+                        result = boss.update_one({
+                            'boss_name': name
+                            }, newvalues)
 
-                    if result.matched_count < 1:
-                        boss.insert_one(row)
+                        if result.matched_count < 1:
+                            boss.insert_one(row)
                     
                     hashstr = getMobHash(name, 'boss')
                     buttons = []
