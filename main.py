@@ -4613,7 +4613,7 @@ def main_message(message):
                 kr = []
                 mat = []
                 name = ''
-                forward_date = [message.forward_date]
+                # forward_date = [message.forward_date]
                 if message.text.startswith('Победа!'):
                     for s in message.text.split('\n'):
                         if s.startswith('🔥'):
