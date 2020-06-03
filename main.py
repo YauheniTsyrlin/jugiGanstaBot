@@ -4604,6 +4604,7 @@ def main_message(message):
 
                 counter = 0
                 onboss = 0
+                onbossusers = []
                 isonbossusers = False
                 isclearusers = False
                 health = 0
@@ -4652,7 +4653,7 @@ def main_message(message):
                 if name == '':
                     pass
                 else:
-                    dublicate = False
+                    # dublicate = False
                     row = {}
                     row.update({'date': message.forward_date})
                     row.update({'boss_name': name})
@@ -4689,7 +4690,7 @@ def main_message(message):
                         mat = bo['mat']+ mat
                         row.update({'mat': mat})
                     
-                        onbossusers = []
+                        
                         if 'onbossusers' in bo:
                             onbossusers = bo['onbossusers']
 
@@ -4699,8 +4700,8 @@ def main_message(message):
                         elif isclearusers:
                             onbossusers = []
                         
-                        row.update({'onbossusers': onbossusers})
-                        logger.info(row['onbossusers'])
+                    row.update({'onbossusers': onbossusers})
+                    logger.info(row)
 
                         # if message.forward_date in bo['forward_date']:
                         #     pass
