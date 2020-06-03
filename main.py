@@ -7060,8 +7060,8 @@ def callback_query(call):
             if planed_location:
                 planed_location_str = f'📍{planed_location} ' if planed_location > 0 else ''
             
-            logger.info(f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
-            logger.info(len(f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}")))
+            logger.info(f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}")
+            logger.info(len(f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
 
             buttons.append(InlineKeyboardButton(f"{planed_location_str}{user.getNameAndGerb()}", callback_data=f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
         
