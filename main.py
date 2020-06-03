@@ -7060,18 +7060,18 @@ def callback_query(call):
             if planed_location:
                 planed_location_str = f'📍{planed_location} ' if planed_location > 0 else ''
             
-            logger.info(f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}")
-            logger.info(len(f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
+            logger.info(f"pinr_usr_{raid_date.timestamp()}_{band}_{user.getLogin()}")
+            logger.info(len(f"pinr_usr_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
 
-            buttons.append(InlineKeyboardButton(f"{planed_location_str}{user.getNameAndGerb()}", callback_data=f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
+            buttons.append(InlineKeyboardButton(f"{planed_location_str}{user.getNameAndGerb()}", callback_data=f"pinr_usr_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
         
-        all_banditos=InlineKeyboardButton(f"👥 Все бандиты", callback_data=f"pinraid_user_{raid_date.timestamp()}_{band}_allbanditos")
+        all_banditos=InlineKeyboardButton(f"👥 Все бандиты", callback_data=f"pinr_usr_{raid_date.timestamp()}_{band}_allbanditos")
         buttons.append(all_banditos)
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}")
     
-    if call.data.startswith('pinraid_user'):
+    if call.data.startswith('pinr_usr'):
         #   0      1               2             3       4
-        # pinraid_user_{raid_date.timestamp()}_{band}_allbanditos
+        # pinr_usr_{raid_date.timestamp()}_{band}_allbanditos
         raid_date = datetime.fromtimestamp(float(call.data.split('_')[2]))
         user_login = call.data.split("_"+call.data.split('_')[3]+"_")[1]
         if user_login == 'allbanditos':
@@ -7123,11 +7123,11 @@ def callback_query(call):
             if planed_location:
                 planed_location_str = f'📍{planed_location} ' if planed_location > 0 else ''
             
-            buttons.append(InlineKeyboardButton(f"{planed_location_str}{user.getNameAndGerb()}", callback_data=f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
+            buttons.append(InlineKeyboardButton(f"{planed_location_str}{user.getNameAndGerb()}", callback_data=f"pinr_usr_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
             if goat == '':
                 goat = getMyGoatName(user.getLogin())
 
-        all_banditos=InlineKeyboardButton(f"👥 Все бандиты", callback_data=f"pinraid_user_{raid_date.timestamp()}_{band}_allbanditos")
+        all_banditos=InlineKeyboardButton(f"👥 Все бандиты", callback_data=f"pinr_usr_{raid_date.timestamp()}_{band}_allbanditos")
         buttons.append(all_banditos)
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"capture_pin_{raid_date.timestamp()}_{goat}")
 
