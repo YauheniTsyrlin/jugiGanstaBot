@@ -7248,7 +7248,7 @@ def callback_query(call):
         markupinline.row(*row)  
 
     for  button in buttons:
-        logger.info(f"{button}")
+        logger.info(f"{button.data}")
                 
 
     text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username if privateChat else None)
