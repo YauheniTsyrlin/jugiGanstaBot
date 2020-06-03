@@ -4694,7 +4694,7 @@ def main_message(message):
                             onbossusers = []
                         
                         row.update({'onbossusers': onbossusers})
-                        logger.info(rowp['onbossusers'])
+                        logger.info(row['onbossusers'])
 
                         if message.forward_date in bo['forward_date']:
                             pass
