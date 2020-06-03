@@ -4595,7 +4595,13 @@ def main_message(message):
                 if message.forward_date < (datetime.now() - timedelta(days=1)).timestamp():
                     send_messages_big(message.chat.id, text=getResponseDialogFlow(message.from_user.username, 'old_forward').fulfillment_text) 
                     return
-                    
+                
+                filter_message = {"username": message.from_user.username, "forward_date": message.forward_date, 'text': message.text}
+                new_Message = messager.new_message(message, filter_message)                
+                if not new_Message:
+                    send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
+                    return
+
                 counter = 0
                 onboss = 0
                 isonbossusers = False
@@ -4657,7 +4663,7 @@ def main_message(message):
                     row.update({'kr': kr})
                     row.update({'mat': mat})
                     row.update({'onboss': onboss})
-                    row.update({'forward_date': forward_date})                    
+                    # row.update({'forward_date': forward_date})                    
 
                     for bo in boss.find({'boss_name': name}):
                         if bo['date'] > row['date']:
@@ -4696,22 +4702,22 @@ def main_message(message):
                         row.update({'onbossusers': onbossusers})
                         logger.info(row['onbossusers'])
 
-                        if message.forward_date in bo['forward_date']:
-                            pass
-                            dublicate = True
-                            logger.info('Дубликат!')
-                        else:
-                            forward_date = bo['forward_date'] + forward_date
-                            row.update({'forward_date': forward_date})
+                        # if message.forward_date in bo['forward_date']:
+                        #     pass
+                        #     dublicate = True
+                        #     logger.info('Дубликат!')
+                        # else:
+                        #     forward_date = bo['forward_date'] + forward_date
+                        #     row.update({'forward_date': forward_date})
 
-                    if not dublicate:
-                        newvalues = { "$set": row }
-                        result = boss.update_one({
-                            'boss_name': name
-                            }, newvalues)
+                    # if not dublicate:
+                    newvalues = { "$set": row }
+                    result = boss.update_one({
+                        'boss_name': name
+                        }, newvalues)
 
-                        if result.matched_count < 1:
-                            boss.insert_one(row)
+                    if result.matched_count < 1:
+                        boss.insert_one(row)
                     
                     hashstr = getMobHash(name, 'boss')
                     buttons = []
