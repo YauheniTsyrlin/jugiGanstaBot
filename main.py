@@ -4690,7 +4690,7 @@ def main_message(message):
 
                         if isonbossusers:
                             if message.from_user.username not in onbossusers:
-                                onbossusers.append()
+                                onbossusers.append(message.from_user.username)
                         elif isclearusers:
                             onbossusers = []
 
