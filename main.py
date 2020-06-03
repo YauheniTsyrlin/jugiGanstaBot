@@ -7092,8 +7092,6 @@ def callback_query(call):
         
         for loc in getSetting(code='RAIDLOCATIONS'):
             if loc['liga'] == liga:
-                logger.info(f"p_l_{raid_date.timestamp()}_{loc['id']}_{band}_{user_login}")
-                logger.info(len(f"p_l_{raid_date.timestamp()}_{loc['id']}_{band}_{user_login}"))
                 buttons.append(InlineKeyboardButton(f"{loc['name']}", callback_data=f"p_l_{raid_date.timestamp()}_{loc['id']}_{band}_{user_login}"))
         
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}")
@@ -7249,7 +7247,10 @@ def callback_query(call):
     for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
         markupinline.row(*row)  
 
-    
+    for  button in buttons:
+        logger.info(f"{button}")
+                
+
     text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username if privateChat else None)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘 <b>{band}</b> <b>{selected_name}</b>\n{text}', parse_mode='HTML', reply_markup=markupinline)
     return
