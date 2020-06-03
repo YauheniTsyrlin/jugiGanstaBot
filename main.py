@@ -1123,7 +1123,7 @@ def getBossReport(boss_name: str):
 
         try:
             report = report + f'📋 <b>Записались {bo["onboss"]}</b>\n'
-            if onbossusers in bo:
+            if 'onbossusers' in bo:
                 for u in bo["onbossusers"]:
                     report = report + f'▫️ {u}\n'
 
