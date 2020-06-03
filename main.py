@@ -4694,10 +4694,12 @@ def main_message(message):
                             onbossusers = []
                         
                         row.update({'onbossusers': onbossusers})
+                        logger.info(rowp['onbossusers'])
 
                         if message.forward_date in bo['forward_date']:
                             pass
                             dublicate = True
+                            logger.info('Дубликат!')
                         else:
                             forward_date = bo['forward_date'] + forward_date
                             row.update({'forward_date': forward_date})
