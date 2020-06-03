@@ -7092,6 +7092,8 @@ def callback_query(call):
         
         for loc in getSetting(code='RAIDLOCATIONS'):
             if loc['liga'] == liga:
+                logger.info(f"p_l_{raid_date.timestamp()}_{loc['id']}_{band}_{user_login}")
+                logger.info(len(f"p_l_{raid_date.timestamp()}_{loc['id']}_{band}_{user_login}"))
                 buttons.append(InlineKeyboardButton(f"{loc['name']}", callback_data=f"p_l_{raid_date.timestamp()}_{loc['id']}_{band}_{user_login}"))
         
         exit_button = InlineKeyboardButton(f"Вернуться ❌", callback_data=f"pinraid_band_{goat}_{band}_{raid_date.timestamp()}")
