@@ -4686,13 +4686,14 @@ def main_message(message):
                         onbossusers = []
                         if 'onbossusers' in bo:
                             onbossusers = bo['onbossusers']
-                        row.update({'onbossusers': onbossusers})
 
                         if isonbossusers:
                             if message.from_user.username not in onbossusers:
                                 onbossusers.append(message.from_user.username)
                         elif isclearusers:
                             onbossusers = []
+                        
+                        row.update({'onbossusers': onbossusers})
 
                         if message.forward_date in bo['forward_date']:
                             pass
