@@ -7028,7 +7028,7 @@ def callback_query(call):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("pinraid_") or call.data.startswith('p_u'))
 def callback_query(call):
-    #bot.answer_callback_query(call.id, call.data)
+    bot.answer_callback_query(call.id, call.data)
     privateChat = ('private' in call.message.chat.type)
     # pinonraid_actions_{goat}_{band}_{raid_date.timestamp()}
     if isUserBan(call.from_user.username):
