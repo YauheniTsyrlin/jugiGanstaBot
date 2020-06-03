@@ -6975,7 +6975,7 @@ def callback_query(call):
 @bot.callback_query_handler(func=lambda call: call.data.startswith("pickup"))
 def callback_query(call):
     # pickupaccessory|{login}|{acc}
-    logger.info(call.data)
+    # logger.info(call.data)
     if isUserBan(call.from_user.username):
         bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
         return
@@ -7247,6 +7247,7 @@ def callback_query(call):
     for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
         markupinline.row(*row)  
 
+    bot.answer_callback_query(call.id, call.data)
     text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username if privateChat else None)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘 <b>{band}</b> <b>{selected_name}</b>\n{text}', parse_mode='HTML', reply_markup=markupinline)
     return
