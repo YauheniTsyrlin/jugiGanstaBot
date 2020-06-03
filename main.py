@@ -4601,7 +4601,7 @@ def main_message(message):
                 new_Message = messager.new_message(message, filter_message)                
                 if not new_Message:
                     send_messages_big(chat, text=getResponseDialogFlow(message.from_user.username, 'duplicate').fulfillment_text) 
-                    dublicate = False
+                    dublicate = True
 
                 counter = 0
                 onboss = 0
@@ -4703,14 +4703,6 @@ def main_message(message):
                         
                     row.update({'onbossusers': onbossusers})
                     logger.info(row)
-
-                        # if message.forward_date in bo['forward_date']:
-                        #     pass
-                        #     dublicate = True
-                        #     logger.info('Дубликат!')
-                        # else:
-                        #     forward_date = bo['forward_date'] + forward_date
-                        #     row.update({'forward_date': forward_date})
 
                     if not dublicate:
                         newvalues = { "$set": row }
