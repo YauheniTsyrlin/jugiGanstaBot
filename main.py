@@ -7059,6 +7059,10 @@ def callback_query(call):
             planed_location_str = ''
             if planed_location:
                 planed_location_str = f'📍{planed_location} ' if planed_location > 0 else ''
+            
+            logger.info(f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
+            logger.info(len(f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}")))
+
             buttons.append(InlineKeyboardButton(f"{planed_location_str}{user.getNameAndGerb()}", callback_data=f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
         
         all_banditos=InlineKeyboardButton(f"👥 Все бандиты", callback_data=f"pinraid_user_{raid_date.timestamp()}_{band}_allbanditos")
@@ -7119,9 +7123,6 @@ def callback_query(call):
             if planed_location:
                 planed_location_str = f'📍{planed_location} ' if planed_location > 0 else ''
             
-            logger.info(f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}")
-            logger.info(len(f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
-
             buttons.append(InlineKeyboardButton(f"{planed_location_str}{user.getNameAndGerb()}", callback_data=f"pinraid_user_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
             if goat == '':
                 goat = getMyGoatName(user.getLogin())
@@ -7247,7 +7248,7 @@ def callback_query(call):
     for row in build_menu(buttons=buttons, n_cols=2, exit_button=exit_button):
         markupinline.row(*row)  
 
-    bot.answer_callback_query(call.id, call.data)
+    # bot.answer_callback_query(call.id, call.data)
     text = get_raid_plan(raid_date.timestamp(), goat, call.from_user.username if privateChat else None)
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'🤘 <b>{band}</b> <b>{selected_name}</b>\n{text}', parse_mode='HTML', reply_markup=markupinline)
     return
