@@ -7063,7 +7063,7 @@ def callback_query(call):
             logger.info(f"pn_usr_{raid_date.timestamp()}_{band}_{user.getLogin()}")
             logger.info(len(f"pn_usr_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
 
-            buttons.append(InlineKeyboardButton(f"{planed_location_str}{user.getNameAndGerb()}", callback_data=f"pn_usr_{raid_date.timestamp()}_{band}_{user.getLogin()}"))
+            buttons.append(InlineKeyboardButton(f"{planed_location_str}{user.getNameAndGerb()}", callback_data=f"pn_usr_{raid_date.timestamp()}_{band}_{user.getLogin()[:16]}"))
         
         all_banditos=InlineKeyboardButton(f"👥 Все бандиты", callback_data=f"pn_usr_{raid_date.timestamp()}_{band}_allbanditos")
         buttons.append(all_banditos)
