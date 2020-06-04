@@ -3148,7 +3148,7 @@ newvalues = { "$set": { "value":
                                     'dialog_old_text': 'default_old_thing'
                                 },
                                 {
-                                    'id': 'generator',
+                                    'id': 'generator', 
                                     'name': '💫 Генератор',
                                     'cost': 50,
                                     'type': 'things',
@@ -3161,7 +3161,19 @@ newvalues = { "$set": { "value":
                                     'dialog_old_text': 'default_old_thing',
                                     'composition':
                                     [
-                                       
+                                        {
+                                            'id': 'copper',
+                                            'counter': 1
+                                        }
+                                        # ,
+                                        # {
+                                        #     'id': 'cast_iron',
+                                        #     'counter': 1
+                                        # },
+                                        # {
+                                        #     'id': 'bolt_ww',
+                                        #     'counter': 1
+                                        # }
                                     ]
                                 },
                                 {
@@ -3241,6 +3253,13 @@ newvalues = { "$set": { "value":
                                         '🔗Осмий'
                                     ],
                                     'dialog_old_text': 'default_old_thing'
+                                },
+                                {
+                                    'id': 'copper',
+                                    'name': '📯 Медь',
+                                    'cost': 15,
+                                    'type': 'things',
+                                    'quantity': None
                                 },
                                 {
                                     'id': 'bronze',
@@ -3812,12 +3831,16 @@ newvalues = { "$set": { "value":
                                     'composition':
                                     [
                                         {
-                                            'id': 'playstation5',
-                                            'counter': 100
+                                            'id': 'copper',
+                                            'counter': 16
                                         },
                                         {
-                                            'id': 'pip_packaging',
-                                            'counter': 100
+                                            'id': 'cast_iron',
+                                            'counter': 32
+                                        },
+                                        {
+                                            'id': 'fire_brick',
+                                            'counter': 32
                                         }
                                     ]
                                 },
@@ -5204,7 +5227,7 @@ print("#==========================#")
 print("#         BATTLE           #")              
 print("#==========================#")
 
-if 1==1: # На ферме 
+if 1==2: # На ферме 
     for user in USERS_ARR:
         # if not user.getLogin() == 'Digzzzy': continue
         creatures = []
@@ -5248,7 +5271,7 @@ if 1==2: # обновляем pip_bolt
             inv = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None).copy()
         updateUser(user)
 
-if 1==2: # обновляем composition 
+if 1==1: # обновляем composition  generator
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     # for z in listInv:
