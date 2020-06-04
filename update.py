@@ -5306,7 +5306,7 @@ if 1==1: # обновляем composition  generator
                             print(f'         {user.getLogin()} {inv["id"]} {com["id"]} {com["counter"]}')
                             break
                         comp_arr.append(composit)
-                        # print(f'         {composit["name"]}')
+                        print(f'         {composit["name"]}')
                 #print(f'    {inv}')
         # print(f'    {user.getInventory()}')           
         updateUser(user)     
