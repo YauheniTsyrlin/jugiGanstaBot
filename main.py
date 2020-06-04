@@ -189,7 +189,7 @@ GLOBAL_VARS = {
             {
                 'id': 'onshelf',
                 'name': '🛍️ Магазин',
-                'description':'🛍️ Здесь можно посмотреть товара, которые бандиты выставили на продажу.',
+                'description':'🛍️ Здесь можно посмотреть товара, которые бандиты выставили на продажу.\nТорги проходят в онлайн-режиме здесь (<a href="https://t.me/joinchat/DMTCtk4S7de1Wo2GaCz84g">Буржа</a>)"',
                 'buttons': []
             },
             {
@@ -5649,13 +5649,13 @@ def main_message(message):
                             if len(listInv)<10:
                                 markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit|||{userIAm.getLogin()}"))
 
-                            if user:
+                            if userIAm:
                                 inventory_category = [{'id':'food', 'name':'🍗 Еда'},
                                                     {'id':'decoration', 'name':'🎁 Подарки'},
                                                     {'id':'things', 'name':'📦 Вещи'}]
 
-                                report = user.getInventoryReport(inventory_category)
-                                msg = send_messages_big(message.chat.id, text=f'{user.getNameAndGerb()}:\n{report}', reply_markup=markupinline)
+                                report = userIAm.getInventoryReport(inventory_category)
+                                msg = send_messages_big(message.chat.id, text=f'{userIAm.getNameAndGerb()}:\n{report}', reply_markup=markupinline)
                             else:
                                 msg = send_messages_big(message.chat.id, text=f'Всем бандитам будет выдан...' , reply_markup=markupinline)
 
@@ -6894,8 +6894,8 @@ def callback_query(call):
         inventory_category = [{'id':'food', 'name':'🍗 Еда'},
                                 {'id':'decoration', 'name':'🎁 Подарки'},
                                 {'id':'things', 'name':'📦 Вещи'}]
-        report = user.getInventoryReport(inventory_category)
-        text=f'{user.getNameAndGerb()}:\n{report}'
+        report = userIAm.getInventoryReport(inventory_category)
+        text=f'{userIAm.getNameAndGerb()}:\n{report}'
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, parse_mode='HTML', reply_markup=markupinline)
         return
 

@@ -3799,6 +3799,29 @@ newvalues = { "$set": { "value":
                                     'discont': 1 # Цена при сдаче не снижается
                                 },
                                 {
+                                    'id': 'induction_oven',
+                                    'name': '🎇 Индукционная Печь',
+                                    'cost': 100,
+                                    'type': 'things',
+                                    'quantity': None,
+                                    'wear': 
+                                        {
+                                            'one_use': 0.1,
+                                            'value': 1
+                                        },
+                                    'composition':
+                                    [
+                                        {
+                                            'id': 'playstation5',
+                                            'counter': 100
+                                        },
+                                        {
+                                            'id': 'pip_packaging',
+                                            'counter': 100
+                                        }
+                                    ]
+                                },
+                                {
                                     'id': 'playstation5',
                                     'name': '🎮 PlayStation 5',
                                     'cost': 300,
