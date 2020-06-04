@@ -189,7 +189,7 @@ GLOBAL_VARS = {
             {
                 'id': 'onshelf',
                 'name': '🛍️ Магазин',
-                'description':'🛍️ Здесь можно посмотреть товара, которые бандиты выставили на продажу.\nТорги проходят в онлайн-режиме здесь (<a href="https://t.me/joinchat/DMTCtk4S7de1Wo2GaCz84g">Буржа</a>)"',
+                'description':'🛍️ Здесь можно посмотреть товара, которые бандиты выставили на продажу.\nТорги проходят в онлайн-режиме здесь (<a href="https://t.me/joinchat/DMTCtk4S7de1Wo2GaCz84g">Буржа</a>)',
                 'buttons': []
             },
             {
@@ -1734,7 +1734,7 @@ def send_baraholka(message):
     for row in build_menu(buttons=buttons, n_cols=3, exit_button=exit_button):
         markup.row(*row)  
     
-    bot.send_message(message.chat.id, text=f'{button["description"]}', reply_markup=markup)
+    bot.send_message(message.chat.id, text=f'{button["description"]}', parse_mode='HTML', reply_markup=markup)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith(GLOBAL_VARS['commission']['id']))
 def select_baraholka(call):
@@ -1783,7 +1783,7 @@ def select_baraholka(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], parse_mode='HTML', reply_markup=markupinline)
 
         return
 
@@ -1840,7 +1840,7 @@ def select_baraholka(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, header_buttons=header_buttons, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description']+'\n\n'+announcement_text, reply_markup=markupinline, parse_mode='HTML')
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description']+'\n\n'+announcement_text, parse_mode='HTML', reply_markup=markupinline, parse_mode='HTML')
 
         return
 
@@ -1884,7 +1884,7 @@ def select_baraholka(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, header_buttons=header_buttons, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['exchange']:
@@ -1906,7 +1906,7 @@ def select_baraholka(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('farm'))
@@ -1932,7 +1932,7 @@ def select_farm(call):
         for row in build_menu(buttons=buttons, n_cols=3, exit_button = exit_button):
             markupinline.row(*row)  
         
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['forward', 'back', 'selectgroupexit', 'selectexit']:
@@ -1963,7 +1963,7 @@ def select_farm(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['selectgroupforward', 'selectgroupback', 'selectgroup']:
@@ -1999,7 +1999,7 @@ def select_farm(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, header_buttons=[selectall], back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row) 
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n▫️ {inventory['name']}\n▫️ {len(inventories)} шт.", reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n▫️ {inventory['name']}\n▫️ {len(inventories)} шт.", parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['selectinvent', 'selectall']:
@@ -2024,7 +2024,7 @@ def select_farm(call):
             markupinline.row(*row) 
 
         count_str = f'▫️ {len(inventories)} шт.\n' if len(inventories) > 1 else ''  
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{count_str}{users.getThingInfo(inventory)}", reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{count_str}{users.getThingInfo(inventory)}", parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['pickup', 'pickupall']:
@@ -2072,7 +2072,7 @@ def select_farm(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('onshelf'))
@@ -2098,7 +2098,7 @@ def select_shelf(call):
         for row in build_menu(buttons=buttons, n_cols=3, exit_button = exit_button):
             markupinline.row(*row)  
         
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
     # Загружаем последние 3 объявления
@@ -2302,7 +2302,7 @@ def select_shelf(call):
             send_messages_big(userseller.getChat(), text=f'🛍️👋 Магазин!\n{user.getNameAndGerb()} (@{user.getLogin()}) сделал предложение в магазине!\n▫️ 🔘{cost} {inventory["name"]}', reply_markup=markupinline_seller)
             bot.answer_callback_query(call.id, f'Заявка подана!')
         
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{best_request}{your_request}\n▫️ {user.getGerb()} Твой кошелек: 🔘{crypto['cost']}", reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{best_request}{your_request}\n▫️ {user.getGerb()} Твой кошелек: 🔘{crypto['cost']}", parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['pickup', 'request', 'closereq']:
@@ -2387,8 +2387,6 @@ def select_shelf(call):
             send_messages_big(buyer.getChat(), text=text)
             send_message_to_admin(f'🛍️❌ Магазин!\n▫️ {userseller.getNameAndGerb()} (@{userseller.getLogin()})\n▫️ Отказал\n▫️ {buyer.getNameAndGerb()} (@{buyer.getLogin()})\n▫️ 🔘{request["cost"]} {inventory["name"]}')
 
-
-
         elif button_id == 'request':
             # Есть ли покупатель
             buyer = getUserByLogin(call.data.split('|')[4])
@@ -2456,7 +2454,7 @@ def select_shelf(call):
                 for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, back_button=None, exit_button=exit_button, forward_button=None):
                     markupinline.row(*row) 
 
-                bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}", reply_markup=markupinline)
+                bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}", parse_mode='HTML', reply_markup=markupinline)
                 return
 
             # Валюта у продавца
@@ -2537,7 +2535,7 @@ def select_shelf(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id == 'announcement':
@@ -2601,7 +2599,7 @@ def select_workbench(call):
         for row in build_menu(buttons=buttons, n_cols=3, exit_button = exit_button):
             markupinline.row(*row)  
         
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['forward', 'back', 'selectexit']:
@@ -2645,7 +2643,7 @@ def select_workbench(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, header_buttons=header_buttons, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['selectinvent', 'fix']:
@@ -2734,7 +2732,7 @@ def select_workbench(call):
             markupinline.row(*row) 
 
         part_of_composition = '▫️ 🔬 Часть чего-то' if len(getInvCompositionIn(inventory))>0 else ''
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{part_of_composition}", reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{part_of_composition}", parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['collect', 'collectback', 'collectforward']:
@@ -2766,7 +2764,7 @@ def select_workbench(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\nЭти вещи ты можешь собрать.", reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\nЭти вещи ты можешь собрать.", parse_mode='HTML', reply_markup=markupinline)
         return
 
     # Собрать вещь
@@ -2865,7 +2863,7 @@ def select_workbench(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n<b>Ты собрал:</b>\n{users.getThingInfo(inventory)}", reply_markup=markupinline, parse_mode='HTML')
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n<b>Ты собрал:</b>\n{users.getThingInfo(inventory)}", parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['pickup', 'pickupall', 'splitup', 'fix']:
@@ -3014,7 +3012,7 @@ def select_workbench(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, header_buttons=header_buttons, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('exchange'))
@@ -3039,7 +3037,7 @@ def select_exchange(call):
         for row in build_menu(buttons=buttons, n_cols=3, exit_button = exit_button):
             markupinline.row(*row)  
         
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['forward', 'back', 'selectexit']:
@@ -3063,7 +3061,7 @@ def select_exchange(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['selectgroupexit', '']:
@@ -3088,7 +3086,7 @@ def select_exchange(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text = button_parent['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text = button_parent['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['selectgroupforward', 'selectgroupback', 'selectgroup']:
@@ -3117,7 +3115,7 @@ def select_exchange(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, header_buttons=[selectall], back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row) 
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n▫️ {inventory['name']}\n▫️ {len(inventories)} шт.", reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n▫️ {inventory['name']}\n▫️ {len(inventories)} шт.", parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['selectinvent', 'selectall']:
@@ -3166,7 +3164,7 @@ def select_exchange(call):
             markupinline.row(*row) 
 
         part_of_composition = '▫️ 🔬 Часть чего-то' if len(getInvCompositionIn(inventory))>0 else ''
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{user.getInventoryThingInfo({'uid': inv_uid})}{part_of_composition}", reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{user.getInventoryThingInfo({'uid': inv_uid})}{part_of_composition}", parse_mode='HTML', reply_markup=markupinline)
     
         # bot.answer_callback_query(call.id, f'selectinvent: {call.data}')
         return
@@ -3318,7 +3316,7 @@ def select_exchange(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=step, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row)  
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text = button_parent['description'], reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text = button_parent['description'], parse_mode='HTML', reply_markup=markupinline)
         
         return
 
@@ -3350,7 +3348,7 @@ def select_exchange(call):
         for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, back_button=back_button, exit_button=exit_button, forward_button=forward_button):
             markupinline.row(*row) 
 
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n{inventory['name']}", reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n{inventory['name']}", parse_mode='HTML', reply_markup=markupinline)
         
         return    
 
