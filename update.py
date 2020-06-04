@@ -3165,15 +3165,15 @@ newvalues = { "$set": { "value":
                                             'id': 'copper',
                                             'counter': 1
                                         }
-                                        # ,
-                                        # {
-                                        #     'id': 'cast_iron',
-                                        #     'counter': 1
-                                        # },
-                                        # {
-                                        #     'id': 'bolt_ww',
-                                        #     'counter': 1
-                                        # }
+                                        ,
+                                        {
+                                            'id': 'cast_iron',
+                                            'counter': 1
+                                        },
+                                        {
+                                            'id': 'bolt_ww',
+                                            'counter': 1
+                                        }
                                     ]
                                 },
                                 {
