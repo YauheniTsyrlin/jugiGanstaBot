@@ -248,7 +248,7 @@ def addInventory(user: users.User, inv, check_skills=True):
                     comp_arr.append(composit)
                     break
                 comp_arr.append(composit)
-
+    
     return user.addInventoryThing(inv)
 
 def check_and_register_tg_user(tg_login: str):
@@ -1255,6 +1255,8 @@ def check_animal():
                                 for i in range(0, random.randint(1, creature['multiply']['max_child'])):
                                     new_creature = next((x for i, x in enumerate(GLOBAL_VARS['inventory']) if x['id']==creature['multiply']['child']), None).copy()
                                     new_creature.update({'uid':f'{uuid.uuid4()}'})
+                                    if new_creature['type'] == 'animals':
+                                        new_creature.update({'birthday': datetime.now().timestamp()})
                                     to_farm = {
                                             'date': (datetime.now()).timestamp(),
                                             'login': user.getLogin(),

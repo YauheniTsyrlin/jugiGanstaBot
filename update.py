@@ -865,6 +865,7 @@ newvalues = { "$set": { "value":
                                     'name': '🐇 Похотливый кролик',
                                     'type': 'animals',
                                     'cost': 50,
+                                    'birthday': None,
                                     'composition':
                                     [
                                         {
@@ -908,6 +909,7 @@ newvalues = { "$set": { "value":
                                     'name': '🦆 Ванаминго',
                                     'type': 'animals',
                                     'cost': 25,
+                                    'birthday': None,
                                     'composition':
                                     [
                                         {
@@ -952,6 +954,7 @@ newvalues = { "$set": { "value":
                                     'cost': 15,
                                     'type': 'animals',
                                     'quantity': None,
+                                    'birthday': None,
                                     'multiply':
                                         {
                                             'puberty': 1,           # wear.value, с которого есть возможность размножаться
@@ -5271,7 +5274,7 @@ if 1==2: # обновляем pip_bolt
             inv = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None).copy()
         updateUser(user)
 
-if 1==1: # обновляем composition  generator
+if 1==2: # обновляем composition  generator
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     # for z in listInv:
