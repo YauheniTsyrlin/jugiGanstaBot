@@ -931,7 +931,7 @@ newvalues = { "$set": { "value":
                                             'puberty': 1,
                                             'need': 'rubber_swimmer',
                                             'count': 1,
-                                            'probability': 0.3,
+                                            'probability': 0.33,
                                             'child': 'wool',
                                             'max_child': 2,
                                             'postpartum_trauma': 0
