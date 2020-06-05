@@ -1,6 +1,6 @@
 import pymongo
 import json
-import datetime
+from datetime import datetime
 import time
 import users
 import tools
@@ -919,11 +919,11 @@ newvalues = { "$set": { "value":
                                             },
                                             {
                                                 'id': 'nipple_clamp',
-                                                'counter': 2
+                                                'counter': 4
                                             },
                                             {
-                                                'id': 'pip_battery',
-                                                'counter': 1
+                                                'id': 'crown',
+                                                'counter': 2
                                             }
                                         ],
                                     'multiply':
@@ -4998,14 +4998,14 @@ newvalues = { "$set": { "value":
                         {
                             'name': 'KILLERS',
                             'value': {
-                                'from_date': datetime.datetime(2020, 1, 31, 6, 0, 0).timestamp(), 
+                                'from_date': datetime(2020, 1, 31, 6, 0, 0).timestamp(), 
                                 'to_date': None
                             }
                         },
                         {
                             'name': 'RAIDS',
                             'value': {
-                                'from_date': datetime.datetime(2020, 3, 11, 6, 0, 0).timestamp(), 
+                                'from_date': datetime(2020, 3, 11, 6, 0, 0).timestamp(), 
                                 'to_date': None
                             }
                         }
@@ -5293,7 +5293,7 @@ if 1==2: # обновляем pip_bolt
             inv = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None).copy()
         updateUser(user)
 
-if 1==1: # обновляем rubber_swimmer  
+if 1==2 : # обновляем rubber_swimmer  
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     for user in list(filter(lambda x : len(x.getInventoryThings({'id': 'rubber_swimmer'})) > 0, USERS_ARR)):
@@ -5311,6 +5311,7 @@ if 1==1: # обновляем rubber_swimmer
                 comp_arr = [] 
                 inv = elem
                 inv.update({'composition': comp_arr})
+                inv.update({'birthday': datetime.now().timestamp()})
 
                 for com in arr:
                     for i in range(0, com["counter"]):
