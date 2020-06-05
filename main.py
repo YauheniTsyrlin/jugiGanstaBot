@@ -7430,7 +7430,7 @@ def pending_message():
         
         try:
             count = count + 1
-            if count > 15:
+            if count > 5:
                 break
 
             text = pending_message.get('text')
