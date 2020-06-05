@@ -7430,8 +7430,8 @@ def pending_message():
         
         try:
             count = count + 1
-            # if count > 5:
-            #     break
+            if count > 10:
+                break
 
             text = pending_message.get('text')
             if text == None:
@@ -7443,7 +7443,7 @@ def pending_message():
                 reply_to_big(pending_message.get('reply_message'), text)
             else:
                 logger.info(f'{count}: {text}')
-                #send_messages_big(pending_message.get('chat_id'), text, None)
+                send_messages_big(pending_message.get('chat_id'), text, None)
             
             ids.append(pending_message.get('_id'))
         except:
