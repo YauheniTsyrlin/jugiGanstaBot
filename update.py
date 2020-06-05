@@ -5370,7 +5370,7 @@ if 1==2: # Обновляем атрибуты навыков
         updateUser(user)
         print(f'Update {user.getLogin()}')
 
-if 1==2: # Замена логина
+if 1==1: # Замена логина
     # Запускать один раз! Иначе затрет
     old_login = 'Koshku_ne_zovite_ona_ushla'
     new_login = 'Koshku_ne_zovite'
