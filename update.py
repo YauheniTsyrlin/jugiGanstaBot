@@ -905,6 +905,47 @@ newvalues = { "$set": { "value":
                                         }
                                 },
                                 {
+                                    'id': 'rubber_swimmer',
+                                    'name': '🐏 Резиновая электроовца',
+                                    'cost': 100,
+                                    'type': 'animals',
+                                    'quantity': None,
+                                    'birthday': None,
+                                    'composition':
+                                        [
+                                            {
+                                                'id': 'butt_plug',
+                                                'counter': 1
+                                            },
+                                            {
+                                                'id': 'nipple_clamp',
+                                                'counter': 2
+                                            },
+                                            {
+                                                'id': 'pip_battery',
+                                                'counter': 1
+                                            }
+                                        ],
+                                    'multiply':
+                                        {
+                                            'puberty': 1,
+                                            'need': 'rubber_swimmer',
+                                            'count': 1,
+                                            'probability': 0.3,
+                                            'child': 'wool',
+                                            'max_child': 2,
+                                            'postpartum_trauma': 0
+                                        },
+                                    'wear': 
+                                        {
+                                            'one_use': 0.00333, # Живет 300 дней + 
+                                            'value': 1,
+                                            'dialog_text_born': 'default_born',
+                                            'dialog_text_dead': 'default_dead',
+                                            'hunger': 0.1, # Сколько уйдет wear.value, если нет еды
+                                        }
+                                },
+                                {
                                     'id': 'hen',
                                     'name': '🦆 Ванаминго',
                                     'type': 'animals',
@@ -2357,28 +2398,6 @@ newvalues = { "$set": { "value":
                                     'type': 'decoration',
                                     'quantity': 1
 
-                                },
-                                {
-                                    'id': 'rubber_swimmer',
-                                    'name': '🐏 Резиновая электроовца',
-                                    'cost': 100,
-                                    'type': 'decoration',
-                                    'quantity': None,
-                                    'composition':
-                                    [
-                                        {
-                                            'id': 'butt_plug',
-                                            'counter': 1
-                                        },
-                                        {
-                                            'id': 'nipple_clamp',
-                                            'counter': 2
-                                        },
-                                        {
-                                            'id': 'pip_battery',
-                                            'counter': 1
-                                        }
-                                    ]
                                 },
                                 {
                                     'id': 'jugi_model',
@@ -5274,23 +5293,48 @@ if 1==2: # обновляем pip_bolt
             inv = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None).copy()
         updateUser(user)
 
-if 1==2: # обновляем composition  generator
+if 1==1: # обновляем rubber_swimmer  
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
-    # for z in listInv:
-    #     print(z)
-    for user in list(filter(lambda x : len(x.getInventory()) > 0, USERS_ARR)):
-        # if not user.getLogin() == 'GonzikBenzyavsky':
-        #     continue
-        #print(f'Update {user.getLogin()}')
-        for inv in user.getInventory():
+    for user in list(filter(lambda x : len(x.getInventoryThings({'id': 'rubber_swimmer'})) > 0, USERS_ARR)):
+        for inv in user.getInventoryThings({'id': 'rubber_swimmer'}):
             elem = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None)
-            
             if elem == None:
                 continue
+
             elem = elem.copy()
-            #print(f'inv composition {inv["id"]}')
-            # inv = inv.copy()
+            if 'composition' in elem:
+                arr = []
+                for com in elem['composition']:
+                    arr.append(com)
+
+                comp_arr = [] 
+                inv = elem
+                inv.update({'composition': comp_arr})
+
+                for com in arr:
+                    for i in range(0, com["counter"]):
+                        composit = list(filter(lambda x : x['id']==com['id'], GLOBAL_VARS['inventory']))[0].copy()
+                        composit.update({'uid':f'{uuid.uuid4()}'})
+                        if com["id"] == 'crypto':
+                            composit["cost"] = com["counter"]
+                            comp_arr.append(composit)
+                            break
+                        comp_arr.append(composit)
+                print(f'         {inv}')
+        updateUser(user) 
+
+if 1==2: # обновляем composition  
+    updateUser(None)
+    listInv = GLOBAL_VARS['inventory']
+    for user in list(filter(lambda x : len(x.getInventory()) > 0, USERS_ARR)):
+        for inv in user.getInventory():
+            elem = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None)
+            if elem == None:
+                continue
+
+            elem = elem.copy()
+
             if 'composition' in elem:
                 arr = []
                 for com in elem['composition']:
@@ -5310,8 +5354,7 @@ if 1==2: # обновляем composition  generator
                             break
                         comp_arr.append(composit)
                         print(f'         {composit["name"]}')
-                #print(f'    {inv}')
-        # print(f'    {user.getInventory()}')           
+         
         updateUser(user)     
 
 if 1==2: # Обновляем атрибуты навыков
