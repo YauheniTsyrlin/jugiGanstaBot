@@ -5293,7 +5293,7 @@ if 1==2: # обновляем pip_bolt
             inv = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None).copy()
         updateUser(user)
 
-if 1==1 : # обновляем rubber_swimmer  
+if 1==2 : # обновляем rubber_swimmer  
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     for user in list(filter(lambda x : len(x.getInventoryThings({'id': 'rubber_swimmer'})) > 0, USERS_ARR)):
@@ -5370,10 +5370,10 @@ if 1==2: # Обновляем атрибуты навыков
         updateUser(user)
         print(f'Update {user.getLogin()}')
 
-if 1==2:
+if 1==2: # Замена логина
     # Запускать один раз! Иначе затрет
-    old_login = 'Brodskey'
-    new_login = 'OverSid'
+    old_login = 'Koshku_ne_zovite_ona_ushla'
+    new_login = 'Koshku_ne_zovite'
 
     # Убиваем пользователя с новым логином
     myquery = {'login': new_login}
