@@ -5322,7 +5322,7 @@ if 1==1 : # обновляем rubber_swimmer
                             comp_arr.append(composit)
                             break
                         comp_arr.append(composit)
-                print(f'         {inv}')
+                print(f'           {inv}')
         updateUser(user) 
 
 if 1==2: # обновляем composition  
