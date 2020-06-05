@@ -7442,7 +7442,8 @@ def pending_message():
             if pending_message.get('reply_message'):
                 reply_to_big(pending_message.get('reply_message'), text)
             else:
-                send_messages_big(pending_message.get('chat_id'), text, None)
+                logger.info(text)
+                #send_messages_big(pending_message.get('chat_id'), text, None)
             
             ids.append(pending_message.get('_id'))
         except:
