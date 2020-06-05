@@ -7411,6 +7411,7 @@ def send_pending_message(chat, text, login='Jugi', time=datetime.now()):
 
 def pending_message():
     ids = []
+    count = 0
     for pending_message in pending_messages.find(
             {
                 '$and' : [
@@ -7427,26 +7428,31 @@ def pending_message():
             }
         ):
         
-        text = pending_message.get('text')
-        if text == None:
-            text = ''
-        if pending_message.get('dialog_flow_text'):
-            text = getResponseDialogFlow(pending_message['user_id'], pending_message.get('dialog_flow_text'), context_param=pending_message.get('dialog_flow_context')).fulfillment_text + '\n' + text
-        
         try:
+            count = count + 1
+            if count > 15:
+                break
+
+            text = pending_message.get('text')
+            if text == None:
+                text = ''
+            if pending_message.get('dialog_flow_text'):
+                text = getResponseDialogFlow(pending_message['user_id'], pending_message.get('dialog_flow_text'), context_param=pending_message.get('dialog_flow_context')).fulfillment_text + '\n' + text
+            
             if pending_message.get('reply_message'):
                 reply_to_big(pending_message.get('reply_message'), text)
             else:
                 send_messages_big(pending_message.get('chat_id'), text, None)
+            
+            ids.append(pending_message.get('_id'))
         except:
             send_message_to_admin(f'⚠️ Ошибка оправки отложенного сообщения в чат {pending_message.get("chat_id")}\n\n{text}')
-                
-        ids.append(pending_message.get('_id')) 
-
-    for id_str in ids:
-        myquery = {"_id": ObjectId(id_str)}
-        newvalues = { "$set": { "state": 'CANCEL'} }
-        u = pending_messages.update_one(myquery, newvalues)
+            
+    if len(ids)>0:
+        for id_str in ids:
+            myquery = {"_id": ObjectId(id_str)}
+            newvalues = { "$set": { "state": 'CANCEL'} }
+            u = pending_messages.update_one(myquery, newvalues)
 
 def isUserVotedRaid(login, raidInfo, goatName):
     find = False
