@@ -5318,6 +5318,7 @@ if 1==1 : # обновляем rubber_swimmer
 
                 comp_arr = [] 
                 inv = elem
+                inv.update({'type': elem['type']})
                 inv.update({'composition': comp_arr})
                 inv.update({'birthday': datetime.now().timestamp()})
 
