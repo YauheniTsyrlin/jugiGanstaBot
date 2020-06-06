@@ -7771,6 +7771,7 @@ def rade():
         updateUser(None)
         try:
             check_animal()
+            
         except:
             pass
 
