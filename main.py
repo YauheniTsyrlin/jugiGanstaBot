@@ -7411,7 +7411,6 @@ def send_pending_message(chat, text, login='Jugi', time=datetime.now()):
 
 def pending_message():
     ids = []
-    count = 0
     for pending_message in pending_messages.find(
             {
                 '$and' : [
@@ -7429,10 +7428,6 @@ def pending_message():
         ):
         
         try:
-            count = count + 1
-            if count > 10:
-                break
-
             text = pending_message.get('text')
             if text == None:
                 text = ''
@@ -7445,6 +7440,7 @@ def pending_message():
                 logger.info(f'{count}: {text}')
                 send_messages_big(pending_message.get('chat_id'), text, None)
             
+            time.sleep(0.74) # <<<ПАУЗА
             ids.append(pending_message.get('_id'))
         except:
             send_message_to_admin(f'⚠️ Ошибка оправки отложенного сообщения в чат {pending_message.get("chat_id")}\n\n{text}')
@@ -8520,6 +8516,7 @@ def main_loop():
         
         # Remove webhook, it fails sometimes the set if there is a previous webhook
         bot.remove_webhook()
+        time.sleep(5) # <<<ПАУЗА
         # Set webhook
         bot.set_webhook(url=f"https://{config.WEBHOOK_HOST}/bot/{str(config.WEBHOOK_PORT)[3:4]}")
         # Build ssl context
