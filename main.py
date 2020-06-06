@@ -3131,6 +3131,8 @@ def select_exchange(call):
             filterInv = {'id': inv_uid}
         inventory = user.getInventoryThing(filterInv)
 
+        logger.info(inventory)
+
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
         if button_id in ['selectinvent']:
             toshelf = InlineKeyboardButton(f"🛍️ На продажу", callback_data=f"{button_parent['id']}|toshelf|{stepinventory}|{inventory['uid']}")

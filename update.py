@@ -5309,7 +5309,8 @@ if 1==1 : # обновляем rubber_swimmer
         for inv in user.getInventory():
             if not inv['id'] == 'rubber_swimmer':
                 continue
-            elem = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None).copy()
+            elem = next((x for i, x in enumerate(listInv) if x['id']=='rubber_swimmer'), None).copy()
+
             if 'composition' in elem:
                 arr = []
                 for com in elem['composition']:
@@ -5331,6 +5332,7 @@ if 1==1 : # обновляем rubber_swimmer
                             comp_arr.append(composit)
                             break
                         comp_arr.append(composit)
+            
             print(f'{user.getLogin()}       {inv}')
         updateUser(user) 
 
