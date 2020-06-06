@@ -5306,7 +5306,9 @@ if 1==1 : # обновляем rubber_swimmer
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     for user in list(filter(lambda x : len(x.getInventoryThings({'id': 'rubber_swimmer'})) > 0, USERS_ARR)):
-        for inv in user.getInventoryThings({'id': 'rubber_swimmer'}):
+        for inv in user.getInventory():
+            if not inv['id'] == 'rubber_swimmer':
+                continue
             elem = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None).copy()
             if 'composition' in elem:
                 arr = []
@@ -5315,8 +5317,8 @@ if 1==1 : # обновляем rubber_swimmer
 
                 comp_arr = [] 
                 inv = elem
-                inv.update({'type': elem['type']})
-                inv.update({'name': elem['name'] + ' I'})
+                # inv.update({'type': elem['type']})
+                # inv.update({'name': elem['name'] + ' I'})
                 inv.update({'composition': comp_arr})
                 inv.update({'birthday': datetime.now().timestamp()})
 
