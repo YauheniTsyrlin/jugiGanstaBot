@@ -182,7 +182,7 @@ def updateUser(newuser: users.User):
     else:
         newvalues = { "$set": json.loads(newuser.toJSON()) }
         result = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
-        logger.info(result.matched_count)
+        print(result.matched_count)
     USERS_ARR.clear()
     for x in registered_users.find():
         USERS_ARR.append(users.importUser(x))
