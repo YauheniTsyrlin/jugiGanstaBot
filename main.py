@@ -3779,7 +3779,7 @@ def isTimeFarmOver(userIAm, forward_date, chat):
         date_str_farm_to = time.strftime("%d.%m %H:%M", time.gmtime(date_stamp_to))
         date_str_now = time.strftime("%d.%m %H:%M", time.gmtime(   (datetime.now() + timedelta(hours=tz.hour) ).timestamp()    ))
 
-        text = f'▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str}\n▫️ А сейчас {date_str_now}\n▫️ ⏰ сила умения {int(power_skill)}%'
+        text = f'▫️ Время находки {date_str_forward}\n▫️ Период фарма {int(5+farm_k)} мин.\n▫️ Не позже {date_str}\n▫️ А сейчас {date_str_now}\n▫️ ⏰ сила умения {int(power_skill*100)}%'
         send_message_to_admin(f'⏰ Часовщик\n▫️ {userIAm.getNameAndGerb()} (@{userIAm.getLogin()})\n{text}')
 
     return timeover
