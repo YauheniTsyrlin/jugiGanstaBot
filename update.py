@@ -5311,6 +5311,11 @@ if 1==1 : # обновляем rubber_swimmer
             if not inv['id'] == 'rubber_swimmer':
                 continue
             elem = next((x for i, x in enumerate(listInv) if x['id']=='rubber_swimmer'), None).copy()
+            
+            inv['multiply'] = elem['multiply'] 
+            inv['type'] = elem['type'] 
+            inv['wear'] = elem['wear'] 
+            inv['birthday'] = datetime.now().timestamp() 
 
             if 'composition' in elem:
                 arr = []
@@ -5318,12 +5323,7 @@ if 1==1 : # обновляем rubber_swimmer
                     arr.append(com)
 
                 comp_arr = [] 
-                inv = elem
-                # inv.update({'type': elem['type']})
-                # inv.update({'name': elem['name'] + ' I'})
                 inv.update({'composition': comp_arr})
-                inv.update({'birthday': datetime.now().timestamp()})
-
                 for com in arr:
                     for i in range(0, com["counter"]):
                         composit = list(filter(lambda x : x['id']==com['id'], GLOBAL_VARS['inventory']))[0].copy()
