@@ -3131,8 +3131,6 @@ def select_exchange(call):
             filterInv = {'id': inv_uid}
         inventory = user.getInventoryThing(filterInv)
 
-        logger.info(inventory)
-
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
         if button_id in ['selectinvent']:
             toshelf = InlineKeyboardButton(f"🛍️ На продажу", callback_data=f"{button_parent['id']}|toshelf|{stepinventory}|{inventory['uid']}")
@@ -3154,7 +3152,7 @@ def select_exchange(call):
 
         buttons.append(toworkbench)
 
-        if inventory['type'] in ['animals']:
+        if inventory['type'] in ['animals', 'robot']:
             tofarm = InlineKeyboardButton(f"🐮 На ферму", callback_data=f"{button_parent['id']}|tofarm|{stepinventory}|{inventory['uid']}")
             if button_id in ['selectall']:
                 
@@ -6964,7 +6962,8 @@ def callback_query(call):
         markupinline.add(InlineKeyboardButton(f"Выйти ❌", callback_data=f"toreward_exit|||{userIAm.getLogin()}"))
 
     if user:
-        inventory_category = [{'id':'animals', 'name':'🐮 Животные'},
+        inventory_category = [{'id':'robot', 'name':'🤖 Роботы'},
+                        {'id':'animals', 'name':'🐮 Животные'},
                         {'id':'food', 'name':'🍗 Еда'},
                         {'id':'decoration', 'name':'🎁 Подарки'},
                         {'id':'things', 'name':'📦 Вещи'}]

@@ -47,7 +47,6 @@ def getSetting(code: str, name=None, value=None, id=None):
         elif value:
             for arr in result.get('value'):
                 if arr['value'] == value:
-                    print()
                     return arr['name'] 
         elif id:
             for arr in result.get('value'):
@@ -182,8 +181,6 @@ def updateUser(newuser: users.User):
     else:
         newvalues = { "$set": json.loads(newuser.toJSON()) }
         result = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
-        print(f"newvalues: \n{newuser.getInventoryThing({'id':'rubber_swimmer'})}")
-        print(f'UPDATE USER {newuser.getLogin()} {result.matched_count} запись')
     USERS_ARR.clear()
     for x in registered_users.find():
         USERS_ARR.append(users.importUser(x))
@@ -5303,7 +5300,7 @@ if 1==2: # обновляем pip_bolt
             inv = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None).copy()
         updateUser(user)
 
-if 1==1 : # обновляем rubber_swimmer  
+if 1==2 : # обновляем rubber_swimmer  
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     for user in list(filter(lambda x : len(x.getInventoryThings({'id': 'rubber_swimmer'})) > 0, USERS_ARR)):
