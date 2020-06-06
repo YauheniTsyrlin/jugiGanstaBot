@@ -64,7 +64,7 @@ def setSetting(login: str, code: str, value: str):
 
 
 GLOBAL_VARS = {
-    'inventory':  getSetting(code='ACCESSORY_ALL', id='ANIMALS')['value'] + getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] + getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'] + getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']  ,
+    'inventory':  getSetting(code='ACCESSORY_ALL', id='ROBOT')['value'] + getSetting(code='ACCESSORY_ALL', id='ANIMALS')['value'] + getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] + getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'] + getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']  ,
     'chat_id':
                 {
                     'inventory':[]
@@ -855,7 +855,56 @@ newvalues = { "$set": { "value":
 
                                 
                             ] 
-                        },{
+                        },
+                        {
+                            'id': 'ROBOT',
+                            'name': '🐮 Животные',
+                            'value':
+                            [
+                                {
+                                    'id': 'rubber_swimmer',
+                                    'name': '🐏 Резиновая электроовца',
+                                    'cost': 100,
+                                    'type': 'robot',
+                                    'quantity': None,
+                                    'birthday': None,
+                                    'composition':
+                                        [
+                                            {
+                                                'id': 'butt_plug',
+                                                'counter': 1
+                                            },
+                                            {
+                                                'id': 'nipple_clamp',
+                                                'counter': 4
+                                            },
+                                            {
+                                                'id': 'crown',
+                                                'counter': 2
+                                            }
+                                        ],
+                                    'multiply':
+                                        {
+                                            'puberty': 1,
+                                            'need': 'rubber_swimmer',
+                                            'count': 1,
+                                            'probability': 0.33,
+                                            'child': 'wool',
+                                            'max_child': 2,
+                                            'postpartum_trauma': 0
+                                        },
+                                    'wear': 
+                                        {
+                                            'one_use': 0.00333, # Живет 300 дней + 
+                                            'value': 1,
+                                            'dialog_text_born': 'default_born',
+                                            'dialog_text_dead': 'default_dead',
+                                            'hunger': 0.1, # Сколько уйдет wear.value, если нет еды
+                                        }
+                                }
+                            ] 
+                        },
+                        {
                             'id': 'ANIMALS',
                             'name': '🐮 Животные',
                             'value':
@@ -5293,7 +5342,7 @@ if 1==2: # обновляем pip_bolt
             inv = next((x for i, x in enumerate(listInv) if x['id']==inv['id']), None).copy()
         updateUser(user)
 
-if 1==1 : # обновляем rubber_swimmer  
+if 1==2 : # обновляем rubber_swimmer  
     updateUser(None)
     listInv = GLOBAL_VARS['inventory']
     for user in list(filter(lambda x : len(x.getInventoryThings({'id': 'rubber_swimmer'})) > 0, USERS_ARR)):

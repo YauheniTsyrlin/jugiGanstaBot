@@ -112,7 +112,7 @@ def getSetting(code: str, name=None, value=None, id=None):
             return result.get('value')
 
 GLOBAL_VARS = {
-    'inventory': getSetting(code='ACCESSORY_ALL', id='ANIMALS')['value'] + getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] + getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'] + getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value'] + getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] ,
+    'inventory': getSetting(code='ACCESSORY_ALL', id='ROBOT')['value'] + getSetting(code='ACCESSORY_ALL', id='ANIMALS')['value'] + getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] + getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'] + getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value'] + getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] ,
     'chat_id':
                 {
                     'inventory':[]
@@ -7549,66 +7549,10 @@ def get_raid_plan(raid_date, goat, login):
 
     return plan_for_date + f'\n{planed_location_str}'
 
-def rade():
+def ww():
     tz = config.SERVER_MSK_DIFF
     now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
-
-    # Новый год!
-    if now_date.day == 1 and now_date.month == 1 and now_date.hour == 0 and now_date.minute in (0,10,15,20,25,35,35,50) and now_date.second < 15:
-        for goat in getSetting(code='GOATS_BANDS'):
-            report = ''
-            try:
-                r = requests.get(f'{config.ANECDOT_URL}={16}', verify=False, timeout=7)
-                report = r.text[12:-2]
-            except:
-                report = 'Чёт я приуныл... Ничего в голову не идет... С новым годом!'
-            send_messages_big(goat['chats']['info'], report)
-            bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='NEW_YEAR'), 1)[0]['value']) 
-
-    # 14 февраля!
-    if now_date.day == 14 and now_date.month == 2 and now_date.hour == 10 and now_date.minute in (0,10,15,20,25,35,35,50) and now_date.second < 15:
-        for goat in getSetting(code='GOATS_BANDS'):
-            report = ''
-            try:
-                r = requests.get(f'{config.ANECDOT_URL}={16}', verify=False, timeout=7)
-                report = r.text[12:-2]
-            except:
-                report = 'Чёт я приуныл... Ничего в голову не идет... С днем всех влюблённых!'
-            send_messages_big(goat['chats']['info'], report)
-            bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='LOVE_DAY'), 1)[0]['value']) 
-    
-    # 8 марта!
-    if now_date.day == 8 and now_date.month == 3 and now_date.hour == 9 and now_date.minute in (0,10,15,20,25,35,40,45,50,55) and now_date.second < 15:
-        for goat in getSetting(code='GOATS_BANDS'):
-            report = 'Девашки! Я ваз лублу!'
-            send_messages_big(goat['chats']['info'], report)
-            bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='8_MARCH'), 1)[0]['value']) 
-    
-    # День рождения
-    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
-        updateUser(None)
-        for goat in getSetting(code='GOATS_BANDS'):
-            goat_bands = getGoatBands(goat['name'])
-            for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
-                try:
-                    if user.getBirthday():
-                        bday = datetime.fromtimestamp(user.getBirthday())
-                        if now_date.day == bday.day and now_date.month == bday.month: 
-                            msg = send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()} (@{user.getLogin()})!\n{getResponseDialogFlow(user.getLogin(), "happy_birthday").fulfillment_text}')
-                            bot.pin_chat_message(goat['chats']['info'], msg.message_id )
-                except:
-                    send_message_to_admin(f'⚠️🤬 Сломались при расчете дня рождения {user.getLogin()}!')
-
-
-    # Ферма
-    if now_date.hour in (9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20) and now_date.minute == 30 and now_date.second < 15:
-        updateUser(None)
-        try:
-            check_animal()
-        except:
-            pass
-
-            
+           
     # Присвоение званий
     if now_date.hour == 10 and now_date.minute == 1   and now_date.second < 15:
         logger.info('Присвоение званий!')
@@ -7641,18 +7585,6 @@ def rade():
                 report = ''
         except:
             send_message_to_admin(f'⚠️🤬 Сломалось Присвоение званий!')
-
-    # Пидор дня
-    if now_date.hour == 11 and now_date.minute == 11 and now_date.second < 15:
-        
-        logger.info('Pidor of the day!')
-        updateUser(None)
-        
-        for goat in getSetting(code='GOATS_BANDS'):
-            try:
-                getPidorOfTheDay(goat, now_date)
-            except:
-                send_message_to_admin(f'⚠️🤬 Сломался Pidor of the day!\n▫️ {goat["name"]}')
 
     # Предупреждение о рейде за час, полчаса, 10 минут
     if now_date.hour in (0, 8, 16) and now_date.minute in (0, 30, 50) and now_date.second < 15:
@@ -7697,7 +7629,7 @@ def rade():
                 send_message_to_admin(f'⚠️🤬 Сломался Отчет по рейду!')
 
     # Раздача рейдовых болтов
-    if now_date.hour in (1, 9, 17, 99) and now_date.minute in (31 , 99) and now_date.second < 15:
+    if now_date.hour in (1, 9, 17, 99) and now_date.minute in (50 , 99) and now_date.second < 15:
         logger.info('raid bolt info!')
         updateUser(None)
         for goat in getSetting(code='GOATS_BANDS'):
@@ -7706,33 +7638,6 @@ def rade():
                 setGiftsForRaid(goat)
             except:
                 send_message_to_admin(f'⚠️🤬 Сломалась Раздача рейдовых болтов по {goat["name"]}')
-    
-    # Забывание навыков
-    if now_date.hour in (14, 99) and now_date.minute in (28 , 99) and now_date.second < 15:
-        logger.info('skill forgetting!')
-        updateUser(None)
-        for goat in getSetting(code='GOATS_BANDS'):
-            
-                goat_bands = getGoatBands(goat['name'])
-                for user in list(filter(lambda x : x.getBand() in goat_bands and len(x.getInventoryType(['skill'])) > 0, USERS_ARR)):
-                    for skill in user.getInventoryType(['skill']):
-                        try:            
-                            if 'forgetting' in skill:
-                                newStorage = skill['storage'] -  skill['storage'] * skill['forgetting']
-                                if newStorage > 0:
-                                    skill.update({'storage': newStorage})
-
-                                    if skill['flags']['congratulation_max'] == True and newStorage < skill['max']:
-                                        skill['flags'].update({'congratulation_max': False})
-
-                                    if skill['flags']['congratulation_min'] == True and newStorage < skill['min']:
-                                        skill['flags'].update({'congratulation_min': False})
-                                else:
-                                    user.removeInventoryThing(skill)
-                                    send_messages_big(goat['chats']['info'], text=f'{user.getNameAndGerb()} (@{user.getLogin()}) совсем разучился в умении:\n▫️ {skill["name"]}') 
-                        except:
-                            send_message_to_admin(f'⚠️🤬 Для бандита {user.getNameAndGerb()} (@{user.getLogin()}) сломалось забывание скила {skill["name"]} по {goat["name"]}')
-                    updateUser(user)
 
     # Отъем болтов
     if now_date.hour in (99, 99) and now_date.minute in (99, 99) and now_date.second < 15:
@@ -7810,6 +7715,103 @@ def rade():
                     z = z + 1
         if i > 0:
             send_message_to_admin(f'👥 Удалены дубликаты бандитов:\n{result}')
+
+def rade():
+    tz = config.SERVER_MSK_DIFF
+    now_date = datetime.now() + timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+
+    # Новый год!
+    if now_date.day == 1 and now_date.month == 1 and now_date.hour == 0 and now_date.minute in (0,10,15,20,25,35,35,50) and now_date.second < 15:
+        for goat in getSetting(code='GOATS_BANDS'):
+            report = ''
+            try:
+                r = requests.get(f'{config.ANECDOT_URL}={16}', verify=False, timeout=7)
+                report = r.text[12:-2]
+            except:
+                report = 'Чёт я приуныл... Ничего в голову не идет... С новым годом!'
+            send_messages_big(goat['chats']['info'], report)
+            bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='NEW_YEAR'), 1)[0]['value']) 
+
+    # 14 февраля!
+    if now_date.day == 14 and now_date.month == 2 and now_date.hour == 10 and now_date.minute in (0,10,15,20,25,35,35,50) and now_date.second < 15:
+        for goat in getSetting(code='GOATS_BANDS'):
+            report = ''
+            try:
+                r = requests.get(f'{config.ANECDOT_URL}={16}', verify=False, timeout=7)
+                report = r.text[12:-2]
+            except:
+                report = 'Чёт я приуныл... Ничего в голову не идет... С днем всех влюблённых!'
+            send_messages_big(goat['chats']['info'], report)
+            bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='LOVE_DAY'), 1)[0]['value']) 
+    
+    # 8 марта!
+    if now_date.day == 8 and now_date.month == 3 and now_date.hour == 9 and now_date.minute in (0,10,15,20,25,35,40,45,50,55) and now_date.second < 15:
+        for goat in getSetting(code='GOATS_BANDS'):
+            report = 'Девашки! Я ваз лублу!'
+            send_messages_big(goat['chats']['info'], report)
+            bot.send_sticker(goat['chats']['info'], random.sample(getSetting(code='STICKERS', name='8_MARCH'), 1)[0]['value']) 
+    
+    # День рождения
+    if now_date.hour == 10 and now_date.minute == 0 and now_date.second < 15:
+        updateUser(None)
+        for goat in getSetting(code='GOATS_BANDS'):
+            goat_bands = getGoatBands(goat['name'])
+            for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
+                try:
+                    if user.getBirthday():
+                        bday = datetime.fromtimestamp(user.getBirthday())
+                        if now_date.day == bday.day and now_date.month == bday.month: 
+                            msg = send_messages_big(goat['chats']['info'], f'{user.getNameAndGerb()} (@{user.getLogin()})!\n{getResponseDialogFlow(user.getLogin(), "happy_birthday").fulfillment_text}')
+                            bot.pin_chat_message(goat['chats']['info'], msg.message_id )
+                except:
+                    send_message_to_admin(f'⚠️🤬 Сломались при расчете дня рождения {user.getLogin()}!')
+
+    # Ферма
+    if now_date.hour in (9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20) and now_date.minute == 30 and now_date.second < 15:
+        updateUser(None)
+        try:
+            check_animal()
+        except:
+            pass
+
+    # Пидор дня
+    if now_date.hour == 11 and now_date.minute == 11 and now_date.second < 15:
+        
+        logger.info('Pidor of the day!')
+        updateUser(None)
+        
+        for goat in getSetting(code='GOATS_BANDS'):
+            try:
+                getPidorOfTheDay(goat, now_date)
+            except:
+                send_message_to_admin(f'⚠️🤬 Сломался Pidor of the day!\n▫️ {goat["name"]}')
+
+    # Забывание навыков
+    if now_date.hour in (14, 99) and now_date.minute in (28 , 99) and now_date.second < 15:
+        logger.info('skill forgetting!')
+        updateUser(None)
+        for goat in getSetting(code='GOATS_BANDS'):
+            
+                goat_bands = getGoatBands(goat['name'])
+                for user in list(filter(lambda x : x.getBand() in goat_bands and len(x.getInventoryType(['skill'])) > 0, USERS_ARR)):
+                    for skill in user.getInventoryType(['skill']):
+                        try:            
+                            if 'forgetting' in skill:
+                                newStorage = skill['storage'] -  skill['storage'] * skill['forgetting']
+                                if newStorage > 0:
+                                    skill.update({'storage': newStorage})
+
+                                    if skill['flags']['congratulation_max'] == True and newStorage < skill['max']:
+                                        skill['flags'].update({'congratulation_max': False})
+
+                                    if skill['flags']['congratulation_min'] == True and newStorage < skill['min']:
+                                        skill['flags'].update({'congratulation_min': False})
+                                else:
+                                    user.removeInventoryThing(skill)
+                                    send_messages_big(goat['chats']['info'], text=f'{user.getNameAndGerb()} (@{user.getLogin()}) совсем разучился в умении:\n▫️ {skill["name"]}') 
+                        except:
+                            send_message_to_admin(f'⚠️🤬 Для бандита {user.getNameAndGerb()} (@{user.getLogin()}) сломалось забывание скила {skill["name"]} по {goat["name"]}')
+                    updateUser(user)
 
 
 def getPidorOfTheDay(goat, now_date):
@@ -8489,6 +8491,13 @@ def rade_job():
         rade()
         time.sleep(15)
 
+
+def ww_job():
+    while True:
+        ww()
+        time.sleep(15)
+
+
 def flex_job(counter: int, chatid: str):
     send_messages_big(chatid, f'Ща заебашу {counter} стикеров!')
     bot.send_sticker(chatid, random.sample(getSetting(code='STICKERS', name='BOT_GO_FLEX'), 1)[0]['value'])
@@ -8541,6 +8550,9 @@ if __name__ == '__main__':
         proccessPending_messages.start() # Start new thread
 
         proccessRade = Process(target=rade_job, args=())
+        proccessRade.start() # Start new thread 
+
+        proccessRade = Process(target=ww_job, args=())
         proccessRade.start() # Start new thread 
 
         main_loop()      
