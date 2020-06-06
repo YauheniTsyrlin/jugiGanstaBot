@@ -7411,6 +7411,7 @@ def send_pending_message(chat, text, login='Jugi', time=datetime.now()):
 
 def pending_message():
     ids = []
+    count = 0
     for pending_message in pending_messages.find(
             {
                 '$and' : [
@@ -7428,6 +7429,7 @@ def pending_message():
         ):
         
         try:
+            count = count + 1
             text = pending_message.get('text')
             if text == None:
                 text = ''
