@@ -23,11 +23,27 @@ def getThingInfo(inv):
             if inv['multiply']['puberty'] >= wear:
                 puberty = True
     
+    birthday = None
+    if 'birthday' in inv:
+        if not inv['birthday'] == None:
+            day = datetime.fromtimestamp(inv['birthday'])
+            day_from = datetime.now() - day # timedelta(seconds=tz.second, minutes=tz.minute, hours=tz.hour)
+            seconds = day_from.total_seconds()
+            if seconds < 60 * 60:
+                birthday = f'{int(seconds/60)} мин.'    
+            elif seconds < 60 * 60 * 24:
+                birthday = f'{int(seconds/60/60)} час.'
+            else:
+                birthday = f'{int(seconds/60/60/24)} дней.'
+
     if inv['type'] == 'animals':
-        info = info + f'├❤️ Здоровье: {int(wear*100)}%\n'
+        info = info + f'├❤️ Здоровье: {int(wear*100)}%\n'if puberty else "Нет"}\n'
         info = info + f'├⏳ Пуберта́тный период: {"Да" if puberty else "Нет"}\n'
     else:
         info = info + f'├⏳ Состояние: {int(wear*100)}%\n'
+
+    if birthday:
+        info = info + f'├⏳ Со дня рождения: {birthday}\n'
 
     info = info + f'└🔘 {inv["cost"]}\n'
     if 'composition' in inv:
