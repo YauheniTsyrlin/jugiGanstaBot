@@ -64,7 +64,7 @@ def setSetting(login: str, code: str, value: str):
 
 
 GLOBAL_VARS = {
-    'inventory':  getSetting(code='ACCESSORY_ALL', id='ROBOT')['value'] + getSetting(code='ACCESSORY_ALL', id='ANIMALS')['value'] + getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] + getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'] + getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']  ,
+    'inventory':  getSetting(code='ACCESSORY_ALL', id='ANIMALS')['value'] + getSetting(code='ACCESSORY_ALL', id='CURRENCY')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value'] + getSetting(code='ACCESSORY_ALL', id='PIP_BOY')['value'] + getSetting(code='ACCESSORY_ALL', id='REWARDS')['value'] + getSetting(code='ACCESSORY_ALL', id='THINGS')['value'] + getSetting(code='ACCESSORY_ALL', id='EDIBLE')['value'] + getSetting(code='ACCESSORY_ALL', id='TATU')['value'] + getSetting(code='ACCESSORY_ALL', id='CLOTHES')['value'] + getSetting(code='ACCESSORY_ALL', id='MARKS_OF_EXCELLENCE')['value'] + getSetting(code='ACCESSORY_ALL', id='POSITIONS')['value'] + getSetting(code='ACCESSORY_ALL', id='VIRUSES')['value']  ,
     'chat_id':
                 {
                     'inventory':[]
