@@ -182,7 +182,7 @@ def updateUser(newuser: users.User):
     else:
         newvalues = { "$set": json.loads(newuser.toJSON()) }
         result = registered_users.update_one({"login": f"{newuser.getLogin()}"}, newvalues)
-        print(result.matched_count)
+        print(f'UPDATE USER {newuser.getLogin()} {result.matched_count} запись')
     USERS_ARR.clear()
     for x in registered_users.find():
         USERS_ARR.append(users.importUser(x))
@@ -5329,7 +5329,7 @@ if 1==1 : # обновляем rubber_swimmer
                             comp_arr.append(composit)
                             break
                         comp_arr.append(composit)
-                print(f'{user.getLogin()}       {inv}')
+            print(f'{user.getLogin()}       {inv}')
         updateUser(user) 
 
 if 1==2: # обновляем composition  
