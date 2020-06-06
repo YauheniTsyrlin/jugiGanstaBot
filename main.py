@@ -133,8 +133,8 @@ GLOBAL_VARS = {
     'eating_in_new_rino': ['опустошил бокал бурбона.', 'жадно ест сухари.'],
     'group_buttons': [],
     'private_buttons': ['📋 Отчет', '📜 Профиль', f'⏰ План рейда', '📈 Статистика', '🧺 Комиссионка'],
-    'typeforexcenge': [ 'animals','clothes', 'food', 'decoration', 'things'], # обмен
-    'typeforcomission': [ 'animals','clothes', 'food', 'decoration', 'things'], # продажа
+    'typeforexcenge': [ 'robot', 'animals','clothes', 'food', 'decoration', 'things'], # обмен
+    'typeforcomission': [ 'robot', 'animals','clothes', 'food', 'decoration', 'things'], # продажа
     'profile':
     {
         'id': 'profile',
@@ -1226,7 +1226,7 @@ def check_animal():
     for user in USERS_ARR:
         # if not user.getLogin() == 'Digzzzy': continue
         creatures = []
-        for creature in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.type': 'animals'}):
+        for creature in farm.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.type': {'$in':['animals', 'robot']}}):
             creatures.append(creature)
         
         if len(creatures) > 100:
@@ -7771,7 +7771,7 @@ def rade():
         updateUser(None)
         try:
             check_animal()
-            
+
         except:
             pass
 
