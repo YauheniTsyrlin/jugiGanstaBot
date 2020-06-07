@@ -57,8 +57,18 @@ def getThingInfo(inv):
         len_ps = len([] if inv['composition'] == None else inv['composition'])
         counter = 0
         if inv['composition']:
+            compositions_unic = []
+
             for composit in inv['composition']:
                 if 'name' not in composit: continue 
+
+                count_composit = 1
+                if not composit['id'] in compositions_unic:
+                    compositions_unic.append(composit['id'])
+                    count_composit = len( list(filter(lambda x : x['id'] == composit['id'], inv['composition'])) )
+                else:
+                    continue
+
                 counter = counter + 1
                 
                 if len_ps == 1:
@@ -68,10 +78,15 @@ def getThingInfo(inv):
                         ps = '├'
                     if counter == len_ps:
                         ps = '└'
+                
                 cost = ''
                 if composit['id'] == 'crypto':
-                    cost = f"🔘{composit['cost']}"
-                info = info + f'   {ps}▫️{composit["name"]} {cost}\n'
+                    cost = f" 🔘{composit['cost']}"
+
+                count_composit_str = ''
+                if count_composit > 1:
+                    count_composit_str = f' ({count_composit})'
+                info = info + f'   {ps}▫️{composit["name"]}{count_composit_str}{cost}\n'
     return info
 
 def normalize(string):
