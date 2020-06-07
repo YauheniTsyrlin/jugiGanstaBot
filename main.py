@@ -1855,10 +1855,10 @@ def select_baraholka(call):
         #     buttons.append(btn)
         
         inventors = []
-        for inv in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
-            if inv['inventory']['id'] in inventors:
+        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
+            if invonworkbench['inventory']['id'] in inventors:
                 continue
-
+            inv = invonworkbench['inventory']
             inventories = []
             for inv_c in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.id': inv['id'] }):
                 inventories.append(inv_c['inventory'])
@@ -4720,7 +4720,7 @@ def main_message(message):
                             onbossusers = []
                         
                     row.update({'onbossusers': onbossusers})
-                    logger.info(row)
+                    # logger.info(row)
 
                     if not dublicate:
                         newvalues = { "$set": row }
