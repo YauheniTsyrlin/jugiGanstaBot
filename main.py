@@ -1847,12 +1847,29 @@ def select_baraholka(call):
         return
 
     if button_id in ['workbench']:
-        inventories_on = []
-        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
-            inv = invonworkbench['inventory']
-            inventories_on.append(inv)
+        # inventories_on = []
+        # for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
+        #     inv = invonworkbench['inventory']
+        #     inventories_on.append(inv)
+        #     btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
+        #     buttons.append(btn)
+        
+        inventors = []
+        for inv in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
+            if inv['inventory']['id'] in inventors:
+                continue
+
+            inventories = []
+            for inv_c in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.id': inv['id'] }):
+                inventories.append(inv_c['inventory'])
+
             btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
-            buttons.append(btn)
+            if len(inventories) > 1:
+                btn = InlineKeyboardButton(f"💰{len(inventories)} {inv['name']}", callback_data=f"{button['id']}|selectgroup|{step}|{inv['id']}")
+
+            if inv['id'] not in inventors:
+                inventors.append(inv['id'])
+                buttons.append(btn)
 
         # Добавление кнопки Собрать 🔧
         collect = False
