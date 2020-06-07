@@ -39,7 +39,7 @@ def getThingInfo(inv):
     if inv['type'] in ['animals', 'robot']:
         type = inv['type']
         info = info + f'├{"🧬 Животное" if type == "animals" else "🤖 Робот"}\n'
-        info = info + f'├❤️ Здоровье: {int(wear*100)}%\n'if puberty else "Нет"}\n'
+        info = info + f'├❤️ Здоровье: {int(wear*100)}%\n'
         info = info + f'├⏳ Пуберта́тный период: {"Да" if puberty else "Нет"}\n'
     else:
         info = info + f'├⏳ Состояние: {int(wear*100)}%\n'
