@@ -1847,13 +1847,6 @@ def select_baraholka(call):
         return
 
     if button_id in ['workbench']:
-        # inventories_on = []
-        # for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
-        #     inv = invonworkbench['inventory']
-        #     inventories_on.append(inv)
-        #     btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
-        #     buttons.append(btn)
-        
         inventories_on = []
         inventors = []
         for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
@@ -2624,7 +2617,7 @@ def select_workbench(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button['description'], parse_mode='HTML', reply_markup=markupinline)
         return
 
-    if button_id in ['forward', 'back', 'selectexit']:
+    if button_id in ['forward', 'back', 'selectexit', 'selectgroupexit']:
         step = int(call.data.split('|')[2])
         inventories_on = []
         inventors = []
@@ -2678,6 +2671,39 @@ def select_workbench(call):
             markupinline.row(*row)  
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=button_parent['description'], parse_mode='HTML', reply_markup=markupinline)
+        return
+
+    if button_id in ['selectgroupforward', 'selectgroupback', 'selectgroup']:
+        stepinventory = int(call.data.split('|')[2])
+        inv_id = call.data.split('|')[3]
+        stepexit = call.data.split('|')[4]
+
+        user = getUserByLogin(call.from_user.username)
+        
+        inventory = None
+        inventories = []
+        for inv in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.id': inv_id}).sort([("inventory.wear.value", pymongo.ASCENDING)]):
+            inventory = inv['inventory']
+            inventories.append(inventory)
+
+        if button_id in ['selectgroup']:
+            stepinventory = 0
+        
+        selectall = InlineKeyboardButton(f"Выбрать все 💰", callback_data=f"{button_parent['id']}|selectall|{stepinventory}|{inventory['id']}|{stepexit}") 
+        
+        for inv in inventories: 
+            btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}|{stepexit}")
+            buttons.append(btn)
+
+        back_button = InlineKeyboardButton(f"Назад 🔙", callback_data=f"{button_parent['id']}|selectgroupback|{stepinventory-1}|{inventory['id']}|{stepexit}") 
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectgroupexit|{stepexit}")
+        forward_button = InlineKeyboardButton(f"Далее 🔜", callback_data=f"{button_parent['id']}|selectgroupforward|{stepinventory+1}|{inventory['id']}|{stepexit}")
+
+    
+        for row in build_menu(buttons=buttons, n_cols=2, limit=6, step=stepinventory, header_buttons=[selectall], back_button=back_button, exit_button=exit_button, forward_button=forward_button):
+            markupinline.row(*row) 
+
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n▫️ {inventory['name']}\n▫️ {len(inventories)} шт.", parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['selectinvent', 'fix']:
