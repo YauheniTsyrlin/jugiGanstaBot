@@ -7500,7 +7500,7 @@ def pending_message():
                 reply_to_big(pending_message.get('reply_message'), text)
             else:
                 logger.info(f'{count}: {text}')
-                if not pending_message.get('chat_id') == -420173637
+                if not pending_message.get('chat_id') == -420173637:
                     send_messages_big(pending_message.get('chat_id'), text, None)
             
             # time.sleep(2) # <<<ПАУЗА
