@@ -2682,7 +2682,7 @@ def select_workbench(call):
         
         inventory = None
         inventories = []
-        for inv in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.id': inv_id}).sort([("inventory.wear.value", pymongo.ASCENDING)]):
+        for inv in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.id': inv_id}).sort([("date", pymongo.DESCENDING)]):
             inventory = inv['inventory']
             inventories.append(inventory)
 
@@ -2704,6 +2704,31 @@ def select_workbench(call):
             markupinline.row(*row) 
 
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n▫️ {inventory['name']}\n▫️ {len(inventories)} шт.", parse_mode='HTML', reply_markup=markupinline)
+        return
+
+    if button_id in ['selectall']:
+        inv_uid = call.data.split('|')[3]
+        stepinventory = int(call.data.split('|')[2])
+        stepexit = call.data.split('|')[4]
+        user = getUserByLogin(call.from_user.username)
+        filterInv = 'uid'
+        if button_id in ['selectall']:
+            filterInv = 'id'
+        
+        inventory = None
+        inventories = []
+        for inv in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, f'inventory.{filterInv}': inv_uid}):
+            inventory = inv['inventory']
+            inventories.append(inventory)
+
+        pickup = InlineKeyboardButton(f"Забрать 📤", callback_data=f"{button_parent['id']}|{'pickup' if (filterInv == 'uid') else 'pickupall'}|{stepinventory}|{inventory[filterInv]}|{stepexit}")
+        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
+
+        for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=0, header_buttons=[exit_button, pickup], back_button=None, exit_button=None, forward_button=None):
+            markupinline.row(*row) 
+
+        count_str = f'▫️ {len(inventories)} шт.\n' if len(inventories) > 1 else ''  
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{count_str}{users.getThingInfo(inventory)}", parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['selectinvent', 'fix']:
