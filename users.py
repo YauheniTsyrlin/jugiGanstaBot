@@ -32,9 +32,12 @@ def getThingInfo(inv):
             if seconds < 60 * 60:
                 birthday = f'{int(seconds/60)} мин.'    
             elif seconds < 60 * 60 * 24:
-                birthday = f'{int(seconds/60/60)} час.'
+                hour = int(seconds/60/60)
+                birthday = f'{hour} час.'
             else:
-                birthday = f'{int(seconds/60/60/24)} дней.'
+                days = int(seconds/60/60/24)
+                hour = int( (seconds - days*60*60*24)/60/60 )
+                birthday = f'{days} дн. {hour} час.'
 
     if inv['type'] in ['animals', 'robot']:
         type = inv['type']
