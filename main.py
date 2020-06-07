@@ -7500,9 +7500,10 @@ def pending_message():
                 reply_to_big(pending_message.get('reply_message'), text)
             else:
                 logger.info(f'{count}: {text}')
-                send_messages_big(pending_message.get('chat_id'), text, None)
+                if not pending_message.get('chat_id') == -420173637
+                    send_messages_big(pending_message.get('chat_id'), text, None)
             
-            time.sleep(2) # <<<ПАУЗА
+            # time.sleep(2) # <<<ПАУЗА
             ids.append(pending_message.get('_id'))
         except:
             send_message_to_admin(f'⚠️ Ошибка оправки отложенного сообщения в чат {pending_message.get("chat_id")}\n\n{text}')
