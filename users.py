@@ -67,6 +67,7 @@ def getThingInfo(inv):
                     compositions_unic.append(composit['id'])
                     count_composit = len( list(filter(lambda x : x['id'] == composit['id'], inv['composition'])) )
                 else:
+                    len_ps = len_ps - 1
                     continue
 
                 counter = counter + 1
