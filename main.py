@@ -1859,9 +1859,9 @@ def select_baraholka(call):
             for inv_c in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.id': inv['id'] }):
                 inventories.append(inv_c['inventory'])
 
-            btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
+            btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}|{stepexit}")
             if len(inventories) > 1:
-                btn = InlineKeyboardButton(f"💰{len(inventories)} {inv['name']}", callback_data=f"{button['id']}|selectgroup|{step}|{inv['id']}")
+                btn = InlineKeyboardButton(f"💰{len(inventories)} {inv['name']}", callback_data=f"{button['id']}|selectgroup|{step}|{inv['id']}|{stepexit}")
 
             if inv['id'] not in inventors:
                 inventors.append(inv['id'])
@@ -2631,9 +2631,9 @@ def select_workbench(call):
             for inv_c in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.id': inv['id'] }):
                 inventories.append(inv_c['inventory'])
 
-            btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}")
+            btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button_parent['id']}|selectinvent|{step}|{inv['uid']}|{step}")
             if len(inventories) > 1:
-                btn = InlineKeyboardButton(f"💰{len(inventories)} {inv['name']}", callback_data=f"{button_parent['id']}|selectgroup|{step}|{inv['id']}")
+                btn = InlineKeyboardButton(f"💰{len(inventories)} {inv['name']}", callback_data=f"{button_parent['id']}|selectgroup|{step}|{inv['id']}|{step}")
 
             if inv['id'] not in inventors:
                 inventors.append(inv['id'])
