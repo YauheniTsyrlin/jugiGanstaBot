@@ -1854,11 +1854,14 @@ def select_baraholka(call):
         #     btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
         #     buttons.append(btn)
         
+        inventories_on = []
         inventors = []
         for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
+            inv = invonworkbench['inventory']
+            inventories_on.append(inv)
             if invonworkbench['inventory']['id'] in inventors:
                 continue
-            inv = invonworkbench['inventory']
+            
             inventories = []
             for inv_c in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.id': inv['id'] }):
                 inventories.append(inv_c['inventory'])
