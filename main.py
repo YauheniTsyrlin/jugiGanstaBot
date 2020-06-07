@@ -2707,6 +2707,7 @@ def select_workbench(call):
         return
 
     if button_id in ['selectinvent', 'selectall', 'fix']:
+        bot.answer_callback_query(call.id, call.data)
         # {button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}
         inv_uid = call.data.split('|')[3]
         stepinventory = int(call.data.split('|')[2])
@@ -2788,7 +2789,7 @@ def select_workbench(call):
 
         pickup = InlineKeyboardButton(f"Забрать 📤", callback_data=f"{button_parent['id']}|{'pickup' if (filterInv == 'uid') else 'pickupallgroup'}|{stepinventory}|{inventory[filterInv]}|{stepexit}")
         header_buttons.append(pickup)
-
+        logger.info(stepexit)
         for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=stepexit, header_buttons=header_buttons, back_button=None, exit_button=exit_button, forward_button=None):
             markupinline.row(*row) 
 
@@ -2930,7 +2931,7 @@ def select_workbench(call):
 
     if button_id in ['pickup', 'pickupall', 'pickupallgroup', 'splitup', 'fix']:
         # {button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}
-        bot.answer_callback_query(call.id, call.data)
+        
         stepinventory = int(call.data.split('|')[2])
         user = getUserByLogin(call.from_user.username)
         inventory = None # 
