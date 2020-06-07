@@ -651,8 +651,12 @@ class User(object):
                 if list(group)[-1]["type"] == 'skill':
                     try:
                         storage = list(group)[-1]['storage']
+                        minimum = list(group)[-1]['min']
+                        maximum = list(group)[-1]['max']
                         if storage > 0:
-                            percent = int(storage*100/list(group)[-1]['max'])
+                            percent = int((storage - minimum)/(maximum - minimum)*100)
+
+                            #percent = int(storage*100/list(group)[-1]['max'])
                     except: pass
 
                 elif list(group)[-1]["type"] in ('clothes', 'things'):
