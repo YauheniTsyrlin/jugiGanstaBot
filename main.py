@@ -2788,8 +2788,8 @@ def select_workbench(call):
             header_buttons.append(splitup)
 
         pickup = InlineKeyboardButton(f"Забрать 📤", callback_data=f"{button_parent['id']}|{'pickup' if (filterInv == 'uid') else 'pickupallgroup'}|{stepinventory}|{inventory[filterInv]}|{stepexit}")
-        header_buttons.append(pickup)
-        logger.info(stepexit)
+        buttons.append(pickup)
+        # logger.info(stepexit)
         for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=stepexit, header_buttons=header_buttons, back_button=None, exit_button=exit_button, forward_button=None):
             markupinline.row(*row) 
 
