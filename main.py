@@ -2787,7 +2787,7 @@ def select_workbench(call):
             splitup = InlineKeyboardButton(f"{doit} {len(inventory['composition'])} ", callback_data=f"{button_parent['id']}|splitup|{stepinventory}|{inventory['uid']}")
             header_buttons.append(splitup)
 
-        pickup = InlineKeyboardButton(f"Забрать 📤", callback_data=f"{button_parent['id']}|{'pickup' if (filterInv == 'uid') else 'pickupall'}|{stepinventory}|{inventory[filterInv]}|{stepexit}")
+        pickup = InlineKeyboardButton(f"Забрать 📤", callback_data=f"{button_parent['id']}|{'pickup' if (filterInv == 'uid') else 'pickupallgroup'}|{stepinventory}|{inventory[filterInv]}|{stepexit}")
         header_buttons.append(pickup)
 
         for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, header_buttons=header_buttons, back_button=None, exit_button=exit_button, forward_button=None):
@@ -2929,7 +2929,7 @@ def select_workbench(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n<b>Ты собрал:</b>\n{users.getThingInfo(inventory)}", parse_mode='HTML', reply_markup=markupinline)
         return
 
-    if button_id in ['pickup', 'pickupall', 'splitup', 'fix']:
+    if button_id in ['pickup', 'pickupall', 'pickupallgroup', 'splitup', 'fix']:
         # {button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}
 
         stepinventory = int(call.data.split('|')[2])
@@ -2946,6 +2946,19 @@ def select_workbench(call):
                 {
                     'state': 'NEW',
                     'login' : user.getLogin()
+                }, newvalues)
+        elif button_id in ['pickupallgroup']:
+            inv_uid = call.data.split('|')[3]
+            for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.id': inv_uid}).sort([("date", pymongo.DESCENDING)]):
+                user.addInventoryThing(invonworkbench['inventory'])
+            updateUser(user)
+
+            newvalues = { "$set": {'state': 'CANCEL'} }
+            result = workbench.update_many(
+                {
+                    'state': 'NEW',
+                    'login' : user.getLogin(),
+                    'inventory.id': inv_uid
                 }, newvalues)
         else:
             inv_uid = call.data.split('|')[3]
