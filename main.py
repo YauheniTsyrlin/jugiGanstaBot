@@ -2593,7 +2593,7 @@ def announcement_step(message):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('workbench'))
 def select_workbench(call):
-    bot.answer_callback_query(call.id, call.data)
+    # bot.answer_callback_query(call.id, call.data)
     if isUserBan(call.from_user.username):
         bot.answer_callback_query(call.id, "У тебя ядрёный бан, дружище!")
         return
