@@ -2789,7 +2789,7 @@ def select_workbench(call):
         pickup = InlineKeyboardButton(f"Забрать 📤", callback_data=f"{button_parent['id']}|{'pickup' if (filterInv == 'uid') else 'pickupallgroup'}|{stepinventory}|{inventory[filterInv]}|{stepexit}")
         header_buttons.append(pickup)
 
-        for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, header_buttons=header_buttons, back_button=None, exit_button=exit_button, forward_button=None):
+        for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=stepexit, header_buttons=header_buttons, back_button=None, exit_button=exit_button, forward_button=None):
             markupinline.row(*row) 
 
         count_str = f'▫️ {len(inventories)} шт.\n' if len(inventories) > 1 else ''
