@@ -1984,7 +1984,7 @@ def select_farm(call):
     if button_id in ['selectgroupforward', 'selectgroupback', 'selectgroup']:
         stepinventory = int(call.data.split('|')[2])
         inv_id = call.data.split('|')[3]
-        stepexit = call.data.split('|')[4]
+        stepexit = int(call.data.split('|')[4])
 
         user = getUserByLogin(call.from_user.username)
         
@@ -2020,7 +2020,7 @@ def select_farm(call):
     if button_id in ['selectinvent', 'selectall']:
         inv_uid = call.data.split('|')[3]
         stepinventory = int(call.data.split('|')[2])
-        stepexit = call.data.split('|')[4]
+        stepexit = int(call.data.split('|')[4])
         user = getUserByLogin(call.from_user.username)
         filterInv = 'uid'
         if button_id in ['selectall']:
@@ -2711,7 +2711,7 @@ def select_workbench(call):
         # {button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}
         inv_uid = call.data.split('|')[3]
         stepinventory = int(call.data.split('|')[2])
-        stepexit = call.data.split('|')[4]
+        stepexit = int(call.data.split('|')[4])
         user = getUserByLogin(call.from_user.username)
         filterInv = 'uid'
         if button_id in ['selectall']:
@@ -2788,7 +2788,7 @@ def select_workbench(call):
             header_buttons.append(splitup)
 
         pickup = InlineKeyboardButton(f"Забрать 📤", callback_data=f"{button_parent['id']}|{'pickup' if (filterInv == 'uid') else 'pickupallgroup'}|{stepinventory}|{inventory[filterInv]}|{stepexit}")
-        buttons.append(pickup)
+        header_buttons.append(pickup)
         # logger.info(stepexit)
         for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=stepexit, header_buttons=header_buttons, back_button=None, exit_button=exit_button, forward_button=None):
             markupinline.row(*row) 
