@@ -2931,7 +2931,7 @@ def select_workbench(call):
 
     if button_id in ['pickup', 'pickupall', 'pickupallgroup', 'splitup', 'fix']:
         # {button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}
-
+        bot.answer_callback_query(call.id, call.data)
         stepinventory = int(call.data.split('|')[2])
         user = getUserByLogin(call.from_user.username)
         inventory = None # 
