@@ -2627,12 +2627,24 @@ def select_workbench(call):
     if button_id in ['forward', 'back', 'selectexit']:
         step = int(call.data.split('|')[2])
         inventories_on = []
+        inventors = []
         for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}).sort([("date", pymongo.DESCENDING)]):
             inv = invonworkbench['inventory']
-            
             inventories_on.append(inv)
-            btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button_parent_id}|selectinvent|{step}|{inv['uid']}")
-            buttons.append(btn)
+            if invonworkbench['inventory']['id'] in inventors:
+                continue
+            
+            inventories = []
+            for inv_c in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, 'inventory.id': inv['id'] }):
+                inventories.append(inv_c['inventory'])
+
+            btn = InlineKeyboardButton(f"{inv['name']}", callback_data=f"{button['id']}|selectinvent|{step}|{inv['uid']}")
+            if len(inventories) > 1:
+                btn = InlineKeyboardButton(f"💰{len(inventories)} {inv['name']}", callback_data=f"{button['id']}|selectgroup|{step}|{inv['id']}")
+
+            if inv['id'] not in inventors:
+                inventors.append(inv['id'])
+                buttons.append(btn)
 
         # Добавление кнопки Собрать 🔧
         collect = False
