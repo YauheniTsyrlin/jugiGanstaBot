@@ -2706,7 +2706,7 @@ def select_workbench(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n▫️ {inventory['name']}\n▫️ {len(inventories)} шт.", parse_mode='HTML', reply_markup=markupinline)
         return
 
-    if button_id in ['selectinvent', 'selectall','fix']:
+    if button_id in ['selectinvent', 'selectall', 'fix']:
         # {button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}
         inv_uid = call.data.split('|')[3]
         stepinventory = int(call.data.split('|')[2])
@@ -2758,15 +2758,14 @@ def select_workbench(call):
 
         inventory = None # user.getInventoryThing({'uid': inv_uid})
         inventories = []
-        for inv in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, f'inventory.{filterInv}': inv_uid}):
-            inventory = inv['inventory']
+        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, f'inventory.{filterInv}': inv_uid}):
+            inventory = invonworkbench['inventory']
             inventories.append(inventory)
 
         if inventory == None:
             bot.answer_callback_query(call.id, f'Этой вещи уже нет на верстаке.')
             return
-        
-        userseller = getUserByLogin(invonworkbench['login'])
+
         exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
         header_buttons = []
 
@@ -2795,7 +2794,7 @@ def select_workbench(call):
 
         count_str = f'▫️ {len(inventories)} шт.\n' if len(inventories) > 1 else ''
         part_of_composition = '▫️ 🔬 Часть чего-то\n' if len(getInvCompositionIn(inventory))>0 else ''
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{part_of_composition}{count_str}", parse_mode='HTML', reply_markup=markupinline)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{user.getNameAndGerb()} (@{user.getLogin()})\n{users.getThingInfo(inventory)}{part_of_composition}{count_str}", parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['collect', 'collectback', 'collectforward']:
