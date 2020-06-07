@@ -36,14 +36,16 @@ def getThingInfo(inv):
             else:
                 birthday = f'{int(seconds/60/60/24)} дней.'
 
-    if inv['type'] == 'animals':
+    if inv['type'] in ['animals', 'robot']:
+        type = inv['type']
+        info = info + f'├{"🧬 Животное" if type == "animals" else "🤖 Робот"}\n'
         info = info + f'├❤️ Здоровье: {int(wear*100)}%\n'if puberty else "Нет"}\n'
         info = info + f'├⏳ Пуберта́тный период: {"Да" if puberty else "Нет"}\n'
     else:
         info = info + f'├⏳ Состояние: {int(wear*100)}%\n'
 
     if birthday:
-        info = info + f'├⏳ Со дня рождения: {birthday}\n'
+        info = info + f'├⏱️ Со дня рождения: {birthday}\n'
 
     info = info + f'└🔘 {inv["cost"]}\n'
     if 'composition' in inv:
