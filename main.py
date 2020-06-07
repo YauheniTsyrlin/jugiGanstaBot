@@ -2706,7 +2706,8 @@ def select_workbench(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n▫️ {inventory['name']}\n▫️ {len(inventories)} шт.", parse_mode='HTML', reply_markup=markupinline)
         return
 
-    if button_id in ['selectall']:
+    if button_id in ['selectinvent', 'selectall','fix']:
+        # {button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}
         inv_uid = call.data.split('|')[3]
         stepinventory = int(call.data.split('|')[2])
         stepexit = call.data.split('|')[4]
@@ -2714,29 +2715,6 @@ def select_workbench(call):
         filterInv = 'uid'
         if button_id in ['selectall']:
             filterInv = 'id'
-        
-        inventory = None
-        inventories = []
-        for inv in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, f'inventory.{filterInv}': inv_uid}):
-            inventory = inv['inventory']
-            inventories.append(inventory)
-
-        pickup = InlineKeyboardButton(f"Забрать 📤", callback_data=f"{button_parent['id']}|{'pickup' if (filterInv == 'uid') else 'pickupall'}|{stepinventory}|{inventory[filterInv]}|{stepexit}")
-        exit_button = InlineKeyboardButton(f"Выйти ❌", callback_data=f"{button_parent['id']}|selectexit|{stepinventory}")
-
-        for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=0, header_buttons=[exit_button, pickup], back_button=None, exit_button=None, forward_button=None):
-            markupinline.row(*row) 
-
-        count_str = f'▫️ {len(inventories)} шт.\n' if len(inventories) > 1 else ''  
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{count_str}{users.getThingInfo(inventory)}", parse_mode='HTML', reply_markup=markupinline)
-        return
-
-    if button_id in ['selectinvent', 'fix']:
-        # {button_parent['id']}|selectinvent|{stepinventory}|{inv['uid']}
-        inv_uid = call.data.split('|')[3]
-        stepinventory = int(call.data.split('|')[2])
-        step = 0
-        user = getUserByLogin(call.from_user.username)
         
         if button_id in ['fix']:
             repear_uid = call.data.split('|')[4]
@@ -2780,10 +2758,9 @@ def select_workbench(call):
 
         inventory = None # user.getInventoryThing({'uid': inv_uid})
         inventories = []
-        for invonworkbench in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}}):
-            inventories.append(invonworkbench['inventory'])
-            if inv_uid in invonworkbench['inventory']['uid']:
-                inventory = invonworkbench['inventory']
+        for inv in workbench.find({'login': user.getLogin(), 'state': {'$ne': 'CANCEL'}, f'inventory.{filterInv}': inv_uid}):
+            inventory = inv['inventory']
+            inventories.append(inventory)
 
         if inventory == None:
             bot.answer_callback_query(call.id, f'Этой вещи уже нет на верстаке.')
@@ -2810,14 +2787,15 @@ def select_workbench(call):
             splitup = InlineKeyboardButton(f"{doit} {len(inventory['composition'])} ", callback_data=f"{button_parent['id']}|splitup|{stepinventory}|{inventory['uid']}")
             header_buttons.append(splitup)
 
-        pickup = InlineKeyboardButton(f"Забрать 📤", callback_data=f"{button_parent['id']}|pickup|{stepinventory}|{inventory['uid']}")
+        pickup = InlineKeyboardButton(f"Забрать 📤", callback_data=f"{button_parent['id']}|{'pickup' if (filterInv == 'uid') else 'pickupall'}|{stepinventory}|{inventory[filterInv]}|{stepexit}")
         header_buttons.append(pickup)
 
         for row in build_menu(buttons=buttons, n_cols=3, limit=6, step=step, header_buttons=header_buttons, back_button=None, exit_button=exit_button, forward_button=None):
             markupinline.row(*row) 
 
-        part_of_composition = '▫️ 🔬 Часть чего-то' if len(getInvCompositionIn(inventory))>0 else ''
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{part_of_composition}", parse_mode='HTML', reply_markup=markupinline)
+        count_str = f'▫️ {len(inventories)} шт.\n' if len(inventories) > 1 else ''
+        part_of_composition = '▫️ 🔬 Часть чего-то\n' if len(getInvCompositionIn(inventory))>0 else ''
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{button_parent['description']}\n\n{userseller.getNameAndGerb()} (@{userseller.getLogin()})\n{users.getThingInfo(inventory)}{part_of_composition}{count_str}", parse_mode='HTML', reply_markup=markupinline)
         return
 
     if button_id in ['collect', 'collectback', 'collectforward']:
