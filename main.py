@@ -8266,6 +8266,9 @@ def setGiftsForRaid(goat):
     users_true = []
     users_false = []
     goat_bands = getGoatBands(goat['name'])
+
+
+
     for user in list(filter(lambda x : x.getBand() in goat_bands, USERS_ARR)):
         find = False
         for uonr in report_raids.find({'login': user.getLogin(), 'date': raidPlan['rade_date']}):
@@ -8278,45 +8281,48 @@ def setGiftsForRaid(goat):
         else:
             users_false.append(user.getLogin())
 
-    for raid_user in users_false:
-        user = getUserByLogin(raid_user)
-        if user:
-            counter = counter + 1
-            #acc = '🔩 Болт М69, возложенный на рейд'
-            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_1'), None)
-
-            if user.isInventoryThing(bolt):
-                #acc = '🔩🔩 Болт М228, возложенный на рейд'
-                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_2'), None)
+    for band in goat_bands:
+        boltReport = boltReport + f'<b>{band}</b>\n'
+        for raid_user in list(filter(lambda x : x.getBand() == band, users_false)):
+            user = getUserByLogin(raid_user)
+            if user:
+                counter = counter + 1
+                #acc = '🔩 Болт М69, возложенный на рейд'
+                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_1'), None)
 
                 if user.isInventoryThing(bolt):
-                    #acc = '🔩🔩🔩 Болт М404, возложенный на рейд'
-                    bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_3'), None)
+                    #acc = '🔩🔩 Болт М228, возложенный на рейд'
+                    bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_2'), None)
 
                     if user.isInventoryThing(bolt):
-                        #acc = '🔩🔩🔩🔩 Болт М1488, возложенный на рейд'
-                        bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_4'), None)
+                        #acc = '🔩🔩🔩 Болт М404, возложенный на рейд'
+                        bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_3'), None)
 
                         if user.isInventoryThing(bolt):
-                            #acc = '🎫🍼 Билет на гигантскую бутылку'
-                            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_5'), None)
+                            #acc = '🔩🔩🔩🔩 Болт М1488, возложенный на рейд'
+                            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_4'), None)
 
                             if user.isInventoryThing(bolt):
-                                boltReport = boltReport + f'{counter}. ⚠️ {user.getLogin()} {user.getNameAndGerb()}\n'
-                                #send_message_to_admin(f'⚠️ {user.getNameAndGerb()} {user.getLogin()}\nНа выход за проёбы рейдов!')
-                                continue
+                                #acc = '🎫🍼 Билет на гигантскую бутылку'
+                                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_5'), None)
 
-            # send_message_to_admin(f'⚠️ {user.getNameAndGerb()} @{user.getLogin()}\n▫️ {bolt["name"]}!')
-            addInventory(user, bolt)
-            #send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {bolt["name"]}')    
-            users_on_raid.append(
-                        {
-                            'login': user.getLogin(),
-                            'bolt': bolt
-                        }
-                    )
-            updateUser(user)
-            boltReport = boltReport + f'{counter}. {"@" if user.isPing() else ""}{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
+                                if user.isInventoryThing(bolt):
+                                    boltReport = boltReport + f'{counter}. ⚠️ {user.getLogin()} {user.getNameAndGerb()}\n'
+                                    #send_message_to_admin(f'⚠️ {user.getNameAndGerb()} {user.getLogin()}\nНа выход за проёбы рейдов!')
+                                    continue
+
+                # send_message_to_admin(f'⚠️ {user.getNameAndGerb()} @{user.getLogin()}\n▫️ {bolt["name"]}!')
+                addInventory(user, bolt)
+                #send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + getResponseDialogFlow(None, 'new_accessory_add').fulfillment_text + f'\n\n▫️ {bolt["name"]}')    
+                users_on_raid.append(
+                            {
+                                'login': user.getLogin(),
+                                'bolt': bolt
+                            }
+                        )
+                updateUser(user)
+                boltReport = boltReport + f'{counter}. {"@" if user.isPing() else ""}{user.getLogin()} {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
+    
     if counter > 0:
         for userWin in random.sample(users_on_raid, 2):
             sec = int(10)
@@ -8338,63 +8344,65 @@ def setGiftsForRaid(goat):
     antyBoltReport = ''
     counter = 0
 
-    for raid_user in users_true:
-        user = getUserByLogin(raid_user)
-        # Снимаем больы, если последние два рейда были зачетными
-        counter_r = report_raids.find({'login': user.getLogin()}).count()
-        N = 2
-        if counter_r < N:
+    for band in goat_bands:
+        antyBoltReport = antyBoltReport + f'<b>{band}</b>\n'
+        for raid_user in list(filter(lambda x : x.getBand() == band, users_true)):
+            user = getUserByLogin(raid_user)
+            # Снимаем больы, если последние два рейда были зачетными
+            counter_r = report_raids.find({'login': user.getLogin()}).count()
+            N = 2
+            if counter_r < N:
+                    continue
+            cursor = report_raids.find({'login': user.getLogin()}).skip(counter_r - N)
+            alltrue = True
+            for x in cursor:
+                if "on_raid" in x and not x["on_raid"]:
+                    alltrue = False 
+            if not alltrue: 
                 continue
-        cursor = report_raids.find({'login': user.getLogin()}).skip(counter_r - N)
-        alltrue = True
-        for x in cursor:
-            if "on_raid" in x and not x["on_raid"]:
-                alltrue = False 
-        if not alltrue: 
-            continue
 
-        if user:
-            
-            #acc = '🎫🍼 Билет на гигантскую бутылку'
-            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_5'), None)
-            if user.isInventoryThing(bolt):
-                pass
-            else:
-                #acc = '🔩🔩🔩🔩 Болт М1488, возложенный на рейд'
-                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_4'), None)
+            if user:
+                
+                #acc = '🎫🍼 Билет на гигантскую бутылку'
+                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_5'), None)
                 if user.isInventoryThing(bolt):
                     pass
                 else:
-                    #acc = '🔩🔩🔩 Болт М404, возложенный на рейд'
-                    bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_3'), None)
+                    #acc = '🔩🔩🔩🔩 Болт М1488, возложенный на рейд'
+                    bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_4'), None)
                     if user.isInventoryThing(bolt):
                         pass
                     else:
-                        #acc = '🔩🔩 Болт М228, возложенный на рейд'
-                        bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_2'), None)
+                        #acc = '🔩🔩🔩 Болт М404, возложенный на рейд'
+                        bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_3'), None)
                         if user.isInventoryThing(bolt):
                             pass
                         else:
-                            #acc = '🔩 Болт М69, возложенный на рейд'
-                            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_1'), None)
+                            #acc = '🔩🔩 Болт М228, возложенный на рейд'
+                            bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_2'), None)
                             if user.isInventoryThing(bolt):
                                 pass
                             else:
-                                continue
+                                #acc = '🔩 Болт М69, возложенный на рейд'
+                                bolt = next((x for i, x in enumerate(getSetting(code='ACCESSORY_ALL', id='RAID_BOLTS')['value']) if x['id']=='bolt_1'), None)
+                                if user.isInventoryThing(bolt):
+                                    pass
+                                else:
+                                    continue
 
-            if user.isInventoryThing(bolt):
-                counter = counter + 1
-                # send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {bolt["name"]}!')
-                user.removeInventoryThing(bolt)
-                # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {bolt["name"]}')    
-                antyBoltReport = antyBoltReport + f'{counter}. {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
-            users_on_raid.append(
-                    {
-                        'login': user.getLogin(),
-                        'bolt': bolt
-                    }
-                )
-            updateUser(user)
+                if user.isInventoryThing(bolt):
+                    counter = counter + 1
+                    # send_message_to_admin(f'❎ {user.getNameAndGerb()} @{user.getLogin()}\nЗабрали:\n▫️ {bolt["name"]}!')
+                    user.removeInventoryThing(bolt)
+                    # send_messages_big(goat['chats']['secret'], text=user.getNameAndGerb() + '!\n' + '❎ Ты сдал в общак банды:' + f'\n\n▫️ {bolt["name"]}')    
+                    antyBoltReport = antyBoltReport + f'{counter}. {user.getNameAndGerb()} {bolt["name"].split(" ")[0]}\n'
+                users_on_raid.append(
+                        {
+                            'login': user.getLogin(),
+                            'bolt': bolt
+                        }
+                    )
+                updateUser(user)
     if counter > 0:
         for userWin in random.sample(users_on_raid, 2):
             sec = int(20)
