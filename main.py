@@ -2892,7 +2892,7 @@ def select_workbench(call):
         if result.matched_count < 1:
             workbench.insert_one(row)
 
-        send_message_to_admin(text=f'🛠️ Собрано на верстаке:\n▫️ {user.getNameAndGerb()} {user.getLogin()}\n▫️ {inventory["name"]} 🔘{inventory["cost"]}')
+        send_message_to_admin(text=f'🛠️ Собрано на верстаке:\n▫️ {user.getNameAndGerb()} (@{user.getLogin()})\n▫️ {inventory["name"]} 🔘{inventory["cost"]}')
             
         # user.addInventoryThing(inventory) 
         # updateUser(user)               
