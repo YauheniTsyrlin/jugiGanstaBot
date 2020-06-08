@@ -675,8 +675,8 @@ class User(object):
                 
                 power_skill_str = ''
                 if power_skill > 0:
-                    power_skill_str = f' (💪 {power_skill})%'
-                report = report + f'▫️ {list(group)[-1]["name"]} {"<b>" + str(percent)+"%</b>"+power_skill_str if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""} {"("+str(elem_cost)+")" if elem_cost > 0 else ""}\n'
+                    power_skill_str = f' (💪<b>{power_skill}</b>%)'
+                report = report + f'▫️ {list(group)[-1]["name"]} {"" + str(percent)+"%"+power_skill_str if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""} {"("+str(elem_cost)+")" if elem_cost > 0 else ""}\n'
 
             if not report == '':
                 report = type['name'] + (f' (🔘 {cost}):\n' if cost>0 else ':\n') + report + '\n'
