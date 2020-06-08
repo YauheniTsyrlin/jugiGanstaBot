@@ -648,15 +648,15 @@ class User(object):
                 group = list(gr)
                 
                 percent = 0
+                power_skill = 0
                 if list(group)[-1]["type"] == 'skill':
                     try:
                         storage = list(group)[-1]['storage']
                         minimum = list(group)[-1]['min']
                         maximum = list(group)[-1]['max']
                         if storage > 0:
-                            percent = int((storage - minimum)/(maximum - minimum)*100)
-
-                            #percent = int(storage*100/list(group)[-1]['max'])
+                            power_skill = int((storage - minimum)/(maximum - minimum)*100)
+                            percent = int(storage*100/list(group)[-1]['max'])
                     except: pass
 
                 elif list(group)[-1]["type"] in ('clothes', 'things'):
@@ -672,7 +672,11 @@ class User(object):
                         if elem["id"] == 'crypto':
                             elem_cost = elem_cost + elem["cost"]
                         cost = cost + elem["cost"]
-                report = report + f'▫️ {list(group)[-1]["name"]} {"<b>" + str(percent)+"%</b>" if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""} {"("+str(elem_cost)+")" if elem_cost > 0 else ""}\n'
+                
+                power_skill_str = ''
+                if power_skill > 0:
+                    power_skill_str = f' (💪 {power_skill})%'
+                report = report + f'▫️ {list(group)[-1]["name"]} {"<b>" + str(percent)+"%</b>"+power_skill_str if percent>0 else ""}{"("+str(len(list(group)))+")" if len(list(group))>1 else ""} {"("+str(elem_cost)+")" if elem_cost > 0 else ""}\n'
 
             if not report == '':
                 report = type['name'] + (f' (🔘 {cost}):\n' if cost>0 else ':\n') + report + '\n'
